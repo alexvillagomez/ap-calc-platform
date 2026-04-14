@@ -1,0 +1,350 @@
+[
+  {
+    "id": "1_1",
+    "unit": "Unit 1",
+    "name": "Estimating Limit Values from Graphs",
+    "description": "read a limit value directly from a graph"
+  },
+  {
+    "id": "1_2",
+    "unit": "Unit 1",
+    "name": "Estimating Limit Values from Tables",
+    "description": "read a limit value from a numeric table"
+  },
+  {
+    "id": "1_3",
+    "unit": "Unit 1",
+    "name": "Determining Limits Using Algebraic Properties",
+    "description": "factor, rationalize, or substitute to evaluate a limit algebraically"
+  },
+  {
+    "id": "1_4",
+    "unit": "Unit 1",
+    "name": "Types of Discontinuities",
+    "description": "classify or identify removable, jump, or infinite discontinuities"
+  },
+  {
+    "id": "1_5",
+    "unit": "Unit 1",
+    "name": "Defining Continuity at a Point and over an Interval",
+    "description": "apply the continuity definition"
+  },
+  {
+    "id": "1_6",
+    "unit": "Unit 1",
+    "name": "Infinite Limits and Vertical Asymptotes",
+    "description": "evaluate a limit that goes to +/-inf as x approaches a"
+  },
+  {
+    "id": "1_7",
+    "unit": "Unit 1",
+    "name": "Limits at Infinity and Horizontal Asymptotes",
+    "description": "find end behavior by comparing degrees or using dominant terms"
+  },
+  {
+    "id": "1_8",
+    "unit": "Unit 1",
+    "name": "Intermediate Value Theorem",
+    "description": "invoke IVT to guarantee existence of a value on an interval"
+  },
+  {
+    "id": "1_9",
+    "unit": "Unit 1",
+    "name": "Trig Limits from Squeeze Theorem",
+    "description": "Applying sinx/x"
+  },
+  {
+    "id": "2_1",
+    "unit": "Unit 2",
+    "name": "Average Rate of Change",
+    "description": "compute the slope of a secant line or estimate a derivative numerically"
+  },
+  {
+    "id": "2_2",
+    "unit": "Unit 2",
+    "name": "Defining the Derivative; Derivative Notation",
+    "description": "use the limit definition of the derivative"
+  },
+  {
+    "id": "2_3",
+    "unit": "Unit 2",
+    "name": "Differentiability",
+    "description": "applying differentiability definition"
+  },
+  {
+    "id": "2_4",
+    "unit": "Unit 2",
+    "name": "Power Rule",
+    "description": "differentiate x^n"
+  },
+  {
+    "id": "2_5",
+    "unit": "Unit 2",
+    "name": "Constant, Sum, Difference, Constant Multiple Rules",
+    "description": "combine basic derivative rules linearly"
+  },
+  {
+    "id": "2_6",
+    "unit": "Unit 2",
+    "name": "Derivatives of trig functions, e^x, lnx",
+    "description": "apply standard transcendental derivative formulas"
+  },
+  {
+    "id": "2_7",
+    "unit": "Unit 2",
+    "name": "Product Rule",
+    "description": "differentiate a product of two functions"
+  },
+  {
+    "id": "2_8",
+    "unit": "Unit 2",
+    "name": "Quotient Rule",
+    "description": "differentiate a ratio of two functions"
+  },
+  {
+    "id": "3_1",
+    "unit": "Unit 3",
+    "name": "Chain Rule",
+    "description": "differentiate a composite function"
+  },
+  {
+    "id": "3_2",
+    "unit": "Unit 3",
+    "name": "Implicit Differentiation",
+    "description": "differentiate an equation in x and y implicitly to find dy/dx"
+  },
+  {
+    "id": "3_3",
+    "unit": "Unit 3",
+    "name": "Differentiating Inverse Functions",
+    "description": "apply the (f inverse) prime formula"
+  },
+  {
+    "id": "3_4",
+    "unit": "Unit 3",
+    "name": "Differentiating Inverse Trig Functions",
+    "description": "differentiate arcsin, arccos, arctan, etc."
+  },
+  {
+    "id": "3_5",
+    "unit": "Unit 3",
+    "name": "Higher-Order Derivatives",
+    "description": "compute f double prime, f triple prime, or higher"
+  },
+  {
+    "id": "4_1",
+    "unit": "Unit 4",
+    "name": "Interpreting the Derivative in Context",
+    "description": "state units or real-world meaning of f prime in an applied scenario"
+  },
+  {
+    "id": "4_2",
+    "unit": "Unit 4",
+    "name": "Straight-Line Motion Differentiation",
+    "description": "relate position, velocity, and acceleration using derivatives"
+  },
+  {
+    "id": "4_3",
+    "unit": "Unit 4",
+    "name": "Related Rates",
+    "description": "differentiate an equation relating two changing quantities"
+  },
+  {
+    "id": "4_4",
+    "unit": "Unit 4",
+    "name": "Local Linearity and Linearization",
+    "description": "build or use a tangent-line approximation L(x)"
+  },
+  {
+    "id": "4_5",
+    "unit": "Unit 4",
+    "name": "L Hopital Rule",
+    "description": "resolve a 0/0 or inf/inf indeterminate form by differentiating numerator and denominator"
+  },
+  {
+    "id": "5_1",
+    "unit": "Unit 5",
+    "name": "Mean Value Theorem",
+    "description": "invoke MVT to guarantee existence of c where f prime(c) equals the average rate"
+  },
+  {
+    "id": "5_2",
+    "unit": "Unit 5",
+    "name": "Optimization",
+    "description": "find an absolute max or min in an applied context using calculus"
+  },
+  {
+    "id": "5_3",
+    "unit": "Unit 5",
+    "name": "EVT, Critical Points",
+    "description": "identify critical points; apply EVT on a closed interval"
+  },
+  {
+    "id": "5_4",
+    "unit": "Unit 5",
+    "name": "Increasing/Decreasing Intervals",
+    "description": "use the sign of f prime to determine where f rises or falls"
+  },
+  {
+    "id": "5_5",
+    "unit": "Unit 5",
+    "name": "First Derivative Test and Local Min/Max",
+    "description": "classify relative extrema by the sign change of f prime at a critical point"
+  },
+  {
+    "id": "5_6",
+    "unit": "Unit 5",
+    "name": "Candidates Test",
+    "description": "find absolute extrema on a closed interval by comparing critical point and endpoint values"
+  },
+  {
+    "id": "5_7",
+    "unit": "Unit 5",
+    "name": "Concavity",
+    "description": "use the sign of f double prime to determine concave up/down; locate inflection points"
+  },
+  {
+    "id": "5_8",
+    "unit": "Unit 5",
+    "name": "Second Derivative Test",
+    "description": "classify a critical point as relative max/min using the sign of f double prime"
+  },
+  {
+    "id": "5_9",
+    "unit": "Unit 5",
+    "name": "Sketching Graphs of f and f prime",
+    "description": "connect graph features to derivative behavior"
+  },
+  {
+    "id": "6_1",
+    "unit": "Unit 6",
+    "name": "Riemann Sum Approximations",
+    "description": "estimate area using left, right, midpoint, or trapezoidal sums"
+  },
+  {
+    "id": "6_2",
+    "unit": "Unit 6",
+    "name": "Riemann Sums, Summation Notation, Definite Integral Notation",
+    "description": "set up or interpret sigma or integral notation"
+  },
+  {
+    "id": "6_3",
+    "unit": "Unit 6",
+    "name": "FTC Part 1 Accumulation Functions",
+    "description": "differentiate g(x) = integral from a to x of f(t) dt, using chain rule if needed"
+  },
+  {
+    "id": "6_4",
+    "unit": "Unit 6",
+    "name": "Interpreting Accumulation Functions",
+    "description": "describe behavior of F(x) = integral of f in terms of net area or rate"
+  },
+  {
+    "id": "6_5",
+    "unit": "Unit 6",
+    "name": "FTC Part 2 Evaluating Definite Integrals",
+    "description": "compute integral from a to b of f dx = F(b) minus F(a)"
+  },
+  {
+    "id": "6_6",
+    "unit": "Unit 6",
+    "name": "Antiderivatives and Indefinite Integrals",
+    "description": "apply basic antiderivative rules; include +C"
+  },
+  {
+    "id": "6_7",
+    "unit": "Unit 6",
+    "name": "U-Substitution",
+    "description": "use u-substitution to evaluate an integral"
+  },
+  {
+    "id": "7_1",
+    "unit": "Unit 7",
+    "name": "Verifying Solutions to Differential Equations",
+    "description": "substitute a function into a DE to confirm it satisfies the equation"
+  },
+  {
+    "id": "7_2",
+    "unit": "Unit 7",
+    "name": "Slope Fields",
+    "description": "read or match a slope field to a differential equation"
+  },
+  {
+    "id": "7_3",
+    "unit": "Unit 7",
+    "name": "Separation of Variables General Solution",
+    "description": "separate dy and dx; integrate both sides; solve for y"
+  },
+  {
+    "id": "7_4",
+    "unit": "Unit 7",
+    "name": "Separation of Variables Particular Solution",
+    "description": "apply an initial condition after separating variables"
+  },
+  {
+    "id": "7_5",
+    "unit": "Unit 7",
+    "name": "Exponential Growth/Decay Models",
+    "description": "solve dy/dt = ky; interpret k and the model in context"
+  },
+  {
+    "id": "8_1",
+    "unit": "Unit 8",
+    "name": "Average Value of a Function",
+    "description": "compute (1/(b-a)) times integral from a to b of f dx"
+  },
+  {
+    "id": "8_2",
+    "unit": "Unit 8",
+    "name": "Position/Velocity/Acceleration via Integrals",
+    "description": "recover position or displacement by integrating velocity"
+  },
+  {
+    "id": "8_3",
+    "unit": "Unit 8",
+    "name": "Accumulation in Applied Contexts",
+    "description": "compute net change or total amount as a definite integral in a real scenario"
+  },
+  {
+    "id": "8_4",
+    "unit": "Unit 8",
+    "name": "Area Between Curves Functions of x",
+    "description": "integrate |f(x) - g(x)| with respect to x"
+  },
+  {
+    "id": "8_5",
+    "unit": "Unit 8",
+    "name": "Area Between Curves Functions of y",
+    "description": "integrate with respect to y"
+  },
+  {
+    "id": "8_6",
+    "unit": "Unit 8",
+    "name": "Volumes with Cross-Sections",
+    "description": "integrate A(x) or A(y) for a known cross-sectional shape"
+  },
+  {
+    "id": "8_7",
+    "unit": "Unit 8",
+    "name": "Disk Method Around x or y Axis",
+    "description": "integrate pi times [f(x)] squared"
+  },
+  {
+    "id": "8_8",
+    "unit": "Unit 8",
+    "name": "Disk Method Around Other Axes",
+    "description": "shift the radius when revolving around a non-coordinate axis"
+  },
+  {
+    "id": "8_9",
+    "unit": "Unit 8",
+    "name": "Washer Method Around x or y Axis",
+    "description": "integrate pi times ([f(x)] squared minus [g(x)] squared)"
+  },
+  {
+    "id": "8_10",
+    "unit": "Unit 8",
+    "name": "Washer Method Around Other Axes",
+    "description": "adjust inner and outer radii for a non-coordinate axis"
+  }
+]

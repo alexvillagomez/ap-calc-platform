@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* KaTeX: display math defaults to text-align:center — wide stems overflow the card */
+.ap-calc-preview .katex-display {
+  text-align: left;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+/* Display / long \\text{...} blocks: allow wrapping */
+.ap-calc-preview .katex-display > .katex {
+  white-space: normal;
+  text-align: left;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+/* Inline formulas should stay intact; text-heavy inline chunks should wrap naturally */
+.ap-calc-preview .katex-inline-math .katex {
+  white-space: nowrap;
+}
+.ap-calc-preview .katex-inline-text .katex {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+/* KaTeX \\text{...} spans inside math */
+.ap-calc-preview .katex .text {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* Prose-math stems: \text{} + bare math with no $...$ delimiters.
+   Render as inline KaTeX but allow wrapping and normalise font size to match body text. */
+.ap-calc-preview .katex-prose .katex {
+  white-space: normal;
+  font-size: 1em !important;
+  font-family: KaTeX_Main, "Times New Roman", serif !important;
+}
+.ap-calc-preview .katex-prose .katex-html {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+/* Ensure the preview container uses KaTeX's own font so prose and math are cohesive */
+.ap-calc-preview {
+  font-family: KaTeX_Main, "Times New Roman", serif;
+}

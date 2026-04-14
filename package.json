@@ -1,0 +1,25 @@
+{
+  "name": "ap-calc-platform",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "clean": "turbo clean && rm -rf node_modules",
+    "seed:topics": "tsx scripts/seed-topics.ts"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.47.0",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.19.0",
+    "turbo": "^2.3.0"
+  },
+  "packageManager": "npm@10.8.2",
+  "engines": {
+    "node": ">=18"
+  }
+}
