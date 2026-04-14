@@ -1,0 +1,157 @@
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.809 0.105 251.813);
+    --chart-2: oklch(0.623 0.214 259.815);
+    --chart-3: oklch(0.546 0.245 262.881);
+    --chart-4: oklch(0.488 0.243 264.376);
+    --chart-5: oklch(0.424 0.199 265.638);
+    --radius: 0.625rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0)
+  }
+  .dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.809 0.105 251.813);
+    --chart-2: oklch(0.623 0.214 259.815);
+    --chart-3: oklch(0.546 0.245 262.881);
+    --chart-4: oklch(0.488 0.243 264.376);
+    --chart-5: oklch(0.424 0.199 265.638);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0)
+  }
+  .theme {
+    --font-sans: var(--font-sans)
+  }
+  * {
+    @apply border-border;
+    outline-color: oklch(0.708 0 0 / 0.5);
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+
+  /* Preview: make KaTeX math use Times New Roman and scale down ~15% */
+  .preview-times .katex {
+    font-family: "Times New Roman", Times, serif !important;
+    font-size: 0.96em !important;
+  }
+  .preview-times .katex * {
+    font-family: "Times New Roman", Times, serif !important;
+  }
+
+  /* Ensure KaTeX's accessibility MathML does not show as duplicate text */
+  .preview-times .katex-mathml {
+    display: none !important;
+  }
+
+  /* Left-align display math blocks inside the preview */
+  .preview-times .katex-display {
+    text-align: left !important;
+    display: block !important;
+    width: 100% !important;
+  }
+  /*
+   * Do NOT use `> .katex * { text-align: left }`: it breaks KaTeX vertical layout (fractions,
+   * surds, etc.) which rely on inline-table / vlist internals. Left-align the root .katex only.
+   */
+  .preview-times .katex-display > .katex {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    text-align: left !important;
+  }
+
+  /* Slightly separate rows in aligned / matrix-style tables (cleaner numbered steps) */
+  .preview-times .katex-display .mtable .mtr .mtd {
+    padding-top: 0.15em;
+    padding-bottom: 0.15em;
+  }
+
+  /*
+   * align / aligned / split use odd columns as mathrel "before &" slots (KaTeX: col-align-r).
+   * Single-column rows (no &) therefore sit in a right-aligned column; force left for preview.
+   * Multi-column &= layouts keep aligned equals signs; only spacing before "=" changes slightly.
+   */
+  .preview-times .katex .mtable .col-align-r > .vlist-t {
+    text-align: left !important;
+  }
+
+  /*
+   * Playground / plain KaTeX (no Times): same layout as preview-times but default KaTeX fonts.
+   */
+  .preview-katex-plain .katex-mathml {
+    display: none !important;
+  }
+  .preview-katex-plain .katex-display {
+    text-align: left !important;
+    display: block !important;
+    width: 100% !important;
+  }
+  .preview-katex-plain .katex-display > .katex {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    text-align: left !important;
+  }
+  .preview-katex-plain .katex-display .mtable .mtr .mtd {
+    padding-top: 0.15em;
+    padding-bottom: 0.15em;
+  }
+  .preview-katex-plain .katex .mtable .col-align-r > .vlist-t {
+    text-align: left !important;
+  }
+}
