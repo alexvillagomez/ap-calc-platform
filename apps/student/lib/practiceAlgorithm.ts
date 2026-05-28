@@ -17,7 +17,8 @@ export interface ScoredProblem {
   id: string;
   difficulty: number;
   estimated_difficulty?: number | null;
-  topic_weights: Record<string, number>;
+  topic_weights?: Record<string, number>;
+  keyword_weights?: Record<string, number>;
   avg_rating: number | null;
   score: number;
 }
@@ -159,4 +160,57 @@ export function updateStrengths(
     }
   }
   return updated;
+}
+
+export function scoreProblemByKeyword(
+  problem: { difficulty: number; estimated_difficulty?: number | null; keyword_weights?: Record<string, number>; avg_rating: number | null },
+  keywordStrengths: Record<string, number>,
+  targetDifficulty: number
+): number {
+  const kw = problem.keyword_weights ?? {};
+  const ids = Object.keys(kw);
+  let weightedWeakness = 0;
+  let totalWeight = 0;
+  for (const [id, w] of Object.entries(kw)) {
+    if (w > 0) {
+      weightedWeakness += w * (1 - (keywordStrengths[id] ?? 0.5));
+      totalWeight += w;
+    }
+  }
+  const topicScore = ids.length === 0 ? 0.5 : totalWeight > 0 ? weightedWeakness / totalWeight : 0.5;
+  const effectiveDifficulty = problem.estimated_difficulty ?? problem.difficulty ?? 3;
+  const diff = effectiveDifficulty - targetDifficulty;
+  const diffScore = Math.exp(-0.5 * diff * diff);
+  const ratingScore = problem.avg_rating != null ? 0.7 + 0.3 * (problem.avg_rating / 5) : 0.8;
+  return topicScore * diffScore * ratingScore;
+}
+
+// Spaced repetition intervals in days: review 1, 3, 7, 14, 30, 60 days after mastery
+const REVIEW_INTERVALS = [1, 3, 7, 14, 30, 60];
+
+export function computeNextReviewDate(inDepthScore: number, reviewCount: number): Date {
+  const idx = Math.min(reviewCount, REVIEW_INTERVALS.length - 1);
+  const baseDays = REVIEW_INTERVALS[idx];
+  // Stronger students get slightly longer intervals
+  const multiplier = 0.8 + inDepthScore * 0.4;
+  const days = Math.round(baseDays * multiplier);
+  const next = new Date();
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+export function isReviewDue(spacedReviewDueAt: string | null): boolean {
+  if (!spacedReviewDueAt) return false;
+  return new Date(spacedReviewDueAt) <= new Date();
+}
+
+export function getLearningPhase(
+  inDepthScore: number,
+  consecutiveCorrect: number,
+  spacedReviewDueAt: string | null,
+  state: string
+): string {
+  if (state === "mastered") return isReviewDue(spacedReviewDueAt) ? "spaced_review" : "mastered";
+  if (inDepthScore >= 0.7 && consecutiveCorrect >= 2) return "interleaved";
+  return "blocked";
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Preview } from "@/components/Preview";
 import { cn } from "@/lib/cn";
@@ -23,6 +23,14 @@ type Phase = "loading" | "question" | "revealed" | "tip" | "quiz_offer" | "error
 type TipData = { tip_latex: string } | null;
 
 export default function PracticePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><p className="text-sm text-gray-400">Loading…</p></div>}>
+      <PracticePageInner />
+    </Suspense>
+  );
+}
+
+function PracticePageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const keywordId = searchParams.get("keyword") ?? "product_of_powers";

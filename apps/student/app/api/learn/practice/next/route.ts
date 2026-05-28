@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SupabaseInstance = SupabaseClient<any>;
 import {
-  scoreProblem,
+  scoreProblemByKeyword,
   selectProblem,
   type ScoredProblem,
   getLearningPhase,
@@ -29,9 +33,8 @@ interface PracticeCandidate {
   keyword_weights?: Record<string, number>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function fetchCandidatesForKeyword(
-  supabase: SupabaseClient<any>,
+  supabase: SupabaseInstance,
   keyword_id: string,
   diffLow: number,
   diffHigh: number,
@@ -83,9 +86,8 @@ async function fetchCandidatesForKeyword(
   return [...(candidates ?? []), ...ragCandidates];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function ensureCandidates(
-  supabase: SupabaseClient<any>,
+  supabase: SupabaseInstance,
   keyword_id: string,
   diffLow: number,
   diffHigh: number,
@@ -191,7 +193,7 @@ export async function POST(request: Request) {
           estimated_difficulty: null,
           keyword_weights: weights,
           avg_rating: null,
-          score: scoreProblem(
+          score: scoreProblemByKeyword(
             { difficulty: p.difficulty, estimated_difficulty: null, keyword_weights: weights, avg_rating: null },
             reviewStrengths,
             reviewTarget
@@ -283,7 +285,7 @@ export async function POST(request: Request) {
           estimated_difficulty: null,
           keyword_weights: weights,
           avg_rating: null,
-          score: scoreProblem(
+          score: scoreProblemByKeyword(
             { difficulty: p.difficulty, estimated_difficulty: null, keyword_weights: weights, avg_rating: null },
             keywordStrengths,
             effectiveTarget
@@ -308,7 +310,7 @@ export async function POST(request: Request) {
       estimated_difficulty: null,
       keyword_weights: weights,
       avg_rating: null,
-      score: scoreProblem(
+      score: scoreProblemByKeyword(
         { difficulty: p.difficulty, estimated_difficulty: null, keyword_weights: weights, avg_rating: null },
         keywordStrengths,
         finalTarget

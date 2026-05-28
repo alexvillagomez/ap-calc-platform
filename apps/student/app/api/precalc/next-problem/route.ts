@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { scoreProblem, selectProblem, computeTargetDifficulty } from "@/lib/practiceAlgorithm";
+import { scoreProblemByKeyword, selectProblem, computeTargetDifficulty } from "@/lib/practiceAlgorithm";
 import type { ScoredProblem } from "@/lib/practiceAlgorithm";
 
 interface PrecalcCandidate extends ScoredProblem {
@@ -114,7 +114,7 @@ export async function POST(request: Request) {
   // Score candidates
   const scored: PrecalcCandidate[] = allCandidates.map(p => ({
     ...p,
-    score: scoreProblem(p, keywordStrengths, targetDiff),
+    score: scoreProblemByKeyword(p, keywordStrengths, targetDiff),
   }));
 
   const selected = selectProblem(scored) as PrecalcCandidate | null;
