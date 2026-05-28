@@ -13,89 +13,131 @@ npm run clean        # Remove .next dirs and node_modules
 npm run seed:topics  # Seed topic_metadata table from packages/constants/topics.json
 ```
 
-There are no automated tests in this project.
+The admin app currently has pre-existing build errors (missing exports in `lib/ai/prompts.ts`). The student app builds cleanly. There are no automated tests.
 
 ## Architecture
 
 This is a Turbo monorepo with two Next.js 15 (React 19) apps and three shared packages.
 
 ### Apps
-- **`apps/admin`** (port 3001) — Problem authoring tool for teachers/admins
-- **`apps/student`** (port 3002) — Student-facing practice interface (minimal, in progress)
+- **`apps/admin`** (port 3001) — Problem authoring, keyword management, RAG agent, tagging tools
+- **`apps/student`** (port 3002) — Student-facing precalc practice platform
 
 ### Shared Packages
 - **`@ap-calc/types`** (`packages/types/src/index.ts`) — `Problem`, `ProblemInsert`, `TopicWeights`, `APCalcUnit` types
-- **`@ap-calc/supabase`** (`packages/supabase/src/index.ts`) — Singleton Supabase client (uses `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY`)
-- **`@ap-calc/constants`** (`packages/constants/topics.json`) — All 68+ AP Calc AB topic definitions (Units 1–10)
+- **`@ap-calc/supabase`** (`packages/supabase/src/index.ts`) — Singleton Supabase client
+- **`@ap-calc/constants`** (`packages/constants/`) — AP Calc topics, precalc keywords, unit→keyword map
 
 Both apps must transpile shared packages via `transpilePackages` in `next.config.ts`.
 
-### Admin App Data Flow
+---
 
-1. Admin selects topics/difficulty/type on `/generate` (`topicIds` must be valid catalog ids — the API uses only that pool, not the full topic list)
-2. Frontend POSTs to `/api/generate-problem` with selections + optional refinement feedback
-3. API builds format-specific system prompts via `buildCreateSystemPrompt` / `buildRefineSystemPrompt` (`lib/ai/prompts.ts`) plus canonical topics. **MCQ:** server picks a random emphasis topic from the pool; `topic_weights` must be `{ emphasis_id: 1 }`. **FRQ:** server picks a random archetype (1–7) mapped to TYPE A–G; calculator is never allowed. Difficulty uses narrative lines from `lib/ai/examPrepConstants.ts` (levels 1–5).
-4. OpenAI returns JSON: `{ latex_content, solution_latex, choices?, correct_index?, rubric?, topic_weights, generation_meta? }` (`generation_meta` preserves emphasis / FRQ archetype for refinement)
-5. Frontend renders live preview via `components/Preview.tsx` (KaTeX + custom visualizations)
-6. Admin rates/tweaks, then saves to Supabase `problems` table
+## Student App
 
-### Key Admin Components
+### Pages
+- **`/precalc`** — Auth portal (sign in / register) + mode selector (Recommended Path, Free Practice, Lessons, Problem Lookup, My Progress)
+- **`/precalc/diagnostic`** — Adaptive diagnostic (15–30 questions, stops when API signals `done` or MAX reached)
+- **`/precalc/practice`** — Free practice: auto-starts immediately, no keyword selection, pulls from full `problems`+`rag_examples` pool
+- **`/learn`** — Structured lesson flow: diagnostic → lesson → practice → mastery quiz
+- **`/lookup`** — Semantic problem search (embedding-based + keyword fallback)
+- **`/progress`** — Student keyword strength visualization
 
-- **`Preview.tsx`** — Core renderer: single-pass tokenizer splits text into `$...$` (inline) and `$$...$$` (display) math, renders via KaTeX, and handles custom `<SlopeField />` and `<FunctionGraph />` XML tags embedded in LaTeX content. Both admin and student apps share identical renderer logic; CSS overrides live in each app's `globals.css` under `.ap-calc-preview`.
-- **`SlopeField.tsx`** — Canvas-based slope field for differential equations
-- **`FunctionGraph.tsx`** — Canvas-based function plotter
+### Student Data Flow
 
-### Student App Data Flow
-
-1. Auth guard on `/` reads `ap_calc_account_id` from localStorage; redirects to `/login` if absent
-2. Login/register via `/api/auth/login` and `/api/auth/register`; stores `ap_calc_account_id`, `ap_calc_username`, `ap_calc_student_session_id` in localStorage
-3. Session strengths loaded via `POST /api/session`; student selects topics
-4. `POST /api/next-problem` scores unseen approved MCQ problems using `scoreProblem()` (topic weakness × difficulty proximity × quality), picks via weighted random from top-8
-5. Student answers → `POST /api/record-attempt`: records attempt, updates session strengths via `updateStrengths()`, and calibrates `estimated_difficulty` on the problem via IRT-EMA
-6. If no unseen problems remain, fallback generates one via admin app `/api/generate-problem`
+1. Auth guard reads `ap_calc_account_id` from localStorage; redirects to `/precalc` if absent
+2. Login/register via `/api/auth/login` and `/api/auth/register`
+3. Session loads via `POST /api/session` — returns `strengths` (legacy topic EMA) and `keyword_strengths` (precalc keyword EMA)
+4. **Free Practice**: `POST /api/precalc/next-problem` — no keyword selection required; scores entire `problems`+`rag_examples` pool against `keyword_strengths` (defaults 0.5 for unknown), picks via weighted random from top-8
+5. Student answers → `POST /api/record-attempt` — records attempt (FK violations for unregistered rag_examples are non-fatal), updates `keyword_strengths` via EMA, calibrates `estimated_difficulty` via IRT-EMA
+6. **Lookup**: `POST /api/lookup` — embeds query, cosine-matches against `problems`→`rag_examples`→`learn_practice_problems`→`learn_diagnostic_problems` embeddings; keyword fallback uses `topic_id` directly from matched keyword
 
 ### Practice Algorithm (`apps/student/lib/practiceAlgorithm.ts`)
 
-- **`computeTargetDifficulty(strengths, topicIds)`** — maps average student strength [0,1] → target difficulty [1,4]
-- **`computeStudentSkill(strengths, topicWeights)`** — maps weighted topic strength → 1–5 scale for IRT calibration
-- **`scoreProblem(problem, strengths, topicIds, targetDifficulty)`** — combines topic weakness score, Gaussian difficulty proximity (uses `estimated_difficulty ?? difficulty`), and avg_rating nudge
-- **`updateStrengths(strengths, topicWeights, correct)`** — weighted EMA; correct → strength toward 1, wrong → toward 0 (α = 0.12)
-- **`selectProblem(candidates)`** — weighted random pick from top-8 scored candidates
+- **`scoreProblemByKeyword(problem, keywordStrengths, targetDifficulty)`** — weakness-weighted score: `(1 - strength) × difficulty_proximity × rating_nudge`. All unknown keywords default to 0.5.
+- **`computeTargetDifficulty(strengths, keywordIds)`** — maps avg strength [0,1] → target difficulty [1,4]; returns 2.5 for empty sessions
+- **`updateStrengths(strengths, weights, correct)`** — weighted EMA (α=0.12); correct → toward 1, wrong → toward 0
+- **`selectProblem(candidates)`** — weighted random from top-8 scored candidates
+- **`computeNextReviewDate(inDepth, reviewCount)`** — spaced repetition intervals: [1,3,7,14,30,60] days × strength multiplier
+- **`getLearningPhase(inDepth, consecutive, dueAt, state)`** — returns `"blocked"` | `"interleaved"` | `"spaced_review"` | `"mastered"`
+- **`isReviewDue(dueAt)`** — true if spaced review date has passed
 
 ### Dynamic Difficulty Calibration
 
-Each student attempt updates `problems.estimated_difficulty` via IRT-inspired EMA (α = 0.15):
-- Student skill computed from pre-attempt topic strengths: `1 + avg_strength * 4`
+Each attempt updates `problems.estimated_difficulty` via IRT-EMA (α=0.15):
+- Student skill: `1 + avg_keyword_strength × 4`
 - Target: `skill - 0.5` on correct, `skill + 0.5` on wrong
-- `new = clamp(old + 0.15 * (target - old), 1, 5)`; seeded from static `difficulty` on first attempt
-- `attempt_count` / `success_count` also tracked on `problems` for observability
-- `scoreProblem()` uses `estimated_difficulty` when available, falls back to static `difficulty`
+- `new = clamp(old + 0.15 × (target - old), 1, 5)`; seeded from static `difficulty` on first attempt
 
-### Database (Supabase/PostgreSQL)
+### Diagnostic (`/precalc/diagnostic`)
+
+- Fetches problems one at a time from `POST /api/learn/diagnostic`
+- Scores candidates from `problems` + `rag_examples` (both queried in parallel) by information gain: `Σ uncertainty(kwScore) × weight`
+- Stops at MAX=30 questions, or when API returns `done: true` AND ≥15 questions answered
+- Routes student to lesson/practice based on `computeRoute()` in `diagnosticScoring.ts`
+
+### Keyword Strength Storage
+
+Two separate strength systems:
+- **`student_sessions.keyword_strengths`** (JSONB) — precalc keyword EMA `{keywordId: 0–1}`; used by free practice and problem lookup
+- **`learn_student_keyword_states`** table — rich per-keyword state machine for the structured learn system (state, in_depth_score, umbrella_score, consecutive_correct, spaced_review_due_at, etc.)
+
+### Graph Rendering (`apps/student/lib/safeExpression.ts`)
+
+`parseFunctionEquation` and `parseSlopeEquation` strip LHS prefixes (`y =`, `f(x) =`, `dy/dx =`, `y' =`) before evaluation. Bad points return `NaN` (skipped by `Number.isFinite` guard in `FunctionGraph.tsx`/`SlopeField.tsx`).
+
+---
+
+## Admin App
+
+### Key Pages
+- **`/generate`** — Problem authoring (MCQ/FRQ generation via OpenAI)
+- **`/rag-agent`** — Batch MCQ generation from PDF templates using `rag_examples`
+- **`/keywords`** — Keyword management (add, approve, dedup, embed)
+- **`/tagging`** — Retroactively tag problems with keyword_weights
+- **`/compare`** — Side-by-side problem comparison
+- **`/lookup`** — Direct ID-based problem/rag_example lookup
+
+### Key Admin Components
+
+- **`Preview.tsx`** — Core renderer: tokenizes `$...$` / `$$...$$` math via KaTeX, handles `<SlopeField />` and `<FunctionGraph />` XML tags. Both apps use identical renderer logic; CSS overrides in each app's `globals.css` under `.ap-calc-preview`.
+- **`SlopeField.tsx`** — SVG slope field for differential equations
+- **`FunctionGraph.tsx`** — SVG function plotter (uses `safeExpression.ts` for evaluation)
+
+---
+
+## Database (Supabase/PostgreSQL)
 
 Key tables in `supabase/migrations/`:
-- **`problems`** — `latex_content`, `solution_latex`, `choices` (jsonb), `correct_index`, `difficulty` (1–5, static/authored), `topic_weights` (jsonb, sparse), `subtopic_relevance` (jsonb, expanded), `rubric`, `type` (`multiple_choice`|`free_response`), `status` (`pending_review`|`approved`|`rejected`), `avg_rating`, `rating_count`, `attempt_count`, `success_count`, `estimated_difficulty` (numeric, IRT-calibrated; null until first attempt)
-- **`topic_metadata`** — `id` (e.g. `"1_1"`), `description`
-- **`student_sessions`** — `id` (UUID, client-generated), `strengths` (jsonb `{topic_id: 0–1}`), timestamps
-- **`student_problem_attempts`** — `session_id`, `problem_id`, `selected_index`, `correct`, `rating` (1–5, optional), `attempted_at`; unique on `(session_id, problem_id)`
-- **`student_accounts`** — `id`, `username`, `password_hash`, `session_id` (FK to student_sessions)
+
+| Table | Purpose | Key columns |
+|-------|---------|-------------|
+| **`problems`** | Canonical problem store | `latex_content`, `solution_latex`, `choices`, `correct_index`, `difficulty`, `keyword_weights` (jsonb), `topic_weights` (jsonb), `status`, `estimated_difficulty`, `embedding` (jsonb) |
+| **`rag_examples`** | Problem templates / seeds | Same content fields + `course`, `keyword_weights`, `promoted_problem_id`, `embedding` |
+| **`student_sessions`** | Per-session state | `strengths` (legacy topic EMA), `keyword_strengths` (precalc keyword EMA) |
+| **`student_problem_attempts`** | Attempt log | `session_id`, `problem_id` (FK→problems), `correct`, `rating`; unique on `(session_id, problem_id)` |
+| **`student_accounts`** | Auth | `username`, `password_hash`, `session_id` |
+| **`learn_keywords`** | Precalc keyword catalog | `id`, `label`, `tier` (`in_depth`/`umbrella`/`tag`), `category_id`, `topic_id`, `status`, `embedding` |
+| **`learn_student_keyword_states`** | Rich keyword learning state | `in_depth_score`, `umbrella_score`, `state`, `consecutive_correct`, `spaced_review_due_at` |
+| **`learn_practice_problems`** | Learn-system MCQs | `keyword_id`, `difficulty`, `hint_latex`, `embedding` |
+| **`learn_diagnostic_problems`** | Legacy diagnostic problems | `topic_id`, `in_depth_keywords`, `embedding` |
+
+`problems.problem_id` FK constraint: `student_problem_attempts.problem_id` must exist in `problems`. When a `rag_example` is promoted on first serve, it gets inserted into `problems`; if promotion fails, the attempt upsert throws FK violation (error code `23503`) — handled non-fatally in `record-attempt`.
 
 RLS: anonymous users read approved problems only; service role used in API routes.
 
-### AI Prompts (`apps/admin/lib/ai/prompts.ts`, `lib/ai/examPrepConstants.ts`)
+---
 
-- `buildCreateSystemPrompt(format)` / `buildRefineSystemPrompt(format)` — System message for one format (MCQ or FRQ) plus `CANONICAL_TOPICS_TEXT`
-- `buildApCalcMCQUserPrompt` / `buildApCalcFRQUserPrompt` — User messages (difficulty narratives from `examPrepConstants`, FRQ archetype text, topic pool lines)
-- `AP_CALC_GENERATION_SYSTEM` / `AP_CALC_REFINEMENT_SYSTEM` — Deprecated concatenation of both formats (still exported)
-- `CANONICAL_TOPICS_TEXT` — All AP Calc AB topic ids/descriptions for valid `topic_weights` keys
-
-### Environment Variables
+## Environment Variables
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=    # Required for API routes and seed script
-OPENAI_API_KEY=               # Required for problem generation
+SUPABASE_SERVICE_ROLE_KEY=    # Required for API routes and seed scripts
+OPENAI_API_KEY=               # Required for problem generation and embeddings
 ```
 
-Root `.env.local` is read by both apps and the seed script.
+Root `.env.local` is read by both apps and seed scripts. Each app also has its own `.env.local` for app-specific overrides.
+
+## Deployment
+
+Student app is deployed on Vercel (`ap-calc-platform-student`). Admin app is not yet deployed. The student app deploys from the monorepo root — Vercel runs `turbo run build` scoped to the `student` package. Shared workspace packages (`@ap-calc/supabase`, `@ap-calc/types`) must not be published to npm; they are local workspace deps only.
