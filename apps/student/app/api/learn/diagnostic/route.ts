@@ -75,32 +75,27 @@ export async function POST(request: Request) {
 
   const topicKeywordSet = new Set(allKeywordIds);
 
-  // Fetch candidate problems: try learn_diagnostic_problems first, fall back to rag_examples
-  let candidates: Array<{ id: string; latex_content: string; choices: string[]; correct_index: number; difficulty: number; keyword_weights: Record<string, number> }> = [];
+  // Fetch candidate problems from problems + rag_examples in parallel
+  type CandidateRow = { id: string; latex_content: string; choices: string[]; correct_index: number; difficulty: number; keyword_weights: Record<string, number> };
 
-  const { data: diagProblems } = await supabase
-    .from("learn_diagnostic_problems")
-    .select("id, latex_content, choices, correct_index, difficulty, in_depth_keywords")
-    .not("choices", "is", null);
-
-  if (diagProblems && diagProblems.length > 0) {
-    candidates = diagProblems.map((p: { id: string; latex_content: string; choices: string[]; correct_index: number; difficulty: number; in_depth_keywords: Record<string, number> }) => ({
-      ...p,
-      keyword_weights: p.in_depth_keywords ?? {},
-    }));
-  } else {
-    // Fall back to rag_examples
-    const { data: ragCandidates, error } = await supabase
+  const [problemsRes, ragRes] = await Promise.all([
+    supabase
+      .from("problems")
+      .select("id, latex_content, choices, correct_index, difficulty, keyword_weights")
+      .eq("status", "approved")
+      .not("choices", "is", null)
+      .not("keyword_weights", "is", null),
+    supabase
       .from("rag_examples")
       .select("id, latex_content, choices, correct_index, difficulty, keyword_weights")
-      .eq("course", "precalc")
-      .not("choices", "is", null);
+      .not("choices", "is", null)
+      .not("keyword_weights", "is", null),
+  ]);
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-    candidates = (ragCandidates ?? []) as typeof candidates;
-  }
+  const candidates: CandidateRow[] = [
+    ...((problemsRes.data ?? []) as CandidateRow[]),
+    ...((ragRes.data ?? []) as CandidateRow[]),
+  ];
 
   // Filter out already-answered, keep only those with keyword overlap
   const filtered = candidates.filter((row) => {

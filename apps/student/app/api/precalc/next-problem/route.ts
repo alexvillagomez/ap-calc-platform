@@ -20,98 +20,77 @@ export async function POST(request: Request) {
 
   const body = await request.json() as {
     sessionId: string;
-    selectedKeywordIds: string[];
     desiredDifficulty?: number;
   };
 
-  const { sessionId, selectedKeywordIds = [], desiredDifficulty } = body;
-  if (!sessionId || selectedKeywordIds.length === 0) {
-    return NextResponse.json({ error: "sessionId and selectedKeywordIds required" }, { status: 400 });
+  const { sessionId, desiredDifficulty } = body;
+  if (!sessionId) {
+    return NextResponse.json({ error: "sessionId required" }, { status: 400 });
   }
 
   const supabase = createClient(supabaseUrl, key);
 
-  // Load student's keyword strengths
-  const { data: session } = await supabase
-    .from("student_sessions")
-    .select("keyword_strengths")
-    .eq("id", sessionId)
-    .maybeSingle();
+  // Load student's keyword strengths and seen problems in parallel
+  const [sessionRes, attemptsRes, problemsRes, ragRes] = await Promise.all([
+    supabase.from("student_sessions").select("keyword_strengths").eq("id", sessionId).maybeSingle(),
+    supabase.from("student_problem_attempts").select("problem_id").eq("session_id", sessionId),
+    supabase
+      .from("problems")
+      .select("id, latex_content, solution_latex, choices, correct_index, difficulty, estimated_difficulty, keyword_weights, avg_rating")
+      .eq("status", "approved")
+      .not("choices", "is", null)
+      .not("keyword_weights", "is", null),
+    supabase
+      .from("rag_examples")
+      .select("id, latex_content, solution_latex, choices, correct_index, difficulty, keyword_weights")
+      .not("choices", "is", null)
+      .not("keyword_weights", "is", null),
+  ]);
 
-  const keywordStrengths: Record<string, number> = session?.keyword_strengths ?? {};
+  const keywordStrengths: Record<string, number> = sessionRes.data?.keyword_strengths ?? {};
+  const seenIds = new Set<string>((attemptsRes.data ?? []).map((a: { problem_id: string }) => a.problem_id));
 
-  // Load seen problem IDs for this session
-  const { data: attempts } = await supabase
-    .from("student_problem_attempts")
-    .select("problem_id")
-    .eq("session_id", sessionId);
+  // Target difficulty derived from all known keyword strengths (defaults to 2.5 for new sessions)
+  const knownKeywordIds = Object.keys(keywordStrengths);
+  const targetDiff = desiredDifficulty ?? computeTargetDifficulty(keywordStrengths, knownKeywordIds);
 
-  const seenIds = new Set<string>((attempts ?? []).map((a: { problem_id: string }) => a.problem_id));
+  // Combine all unseen candidates — problems table first (canonical), then rag_examples
+  type RawProblem = { id: string; latex_content: string; solution_latex: string; choices: string[]; correct_index: number; difficulty: number; estimated_difficulty?: number; keyword_weights: Record<string, number>; avg_rating?: number };
 
-  const keywordSet = new Set(selectedKeywordIds);
-
-  // Compute target difficulty
-  const targetDiff = desiredDifficulty ?? computeTargetDifficulty(keywordStrengths, selectedKeywordIds);
-
-  // --- Source 1: problems table ---
-  const { data: dbProblems } = await supabase
-    .from("problems")
-    .select("id, latex_content, solution_latex, choices, correct_index, difficulty, estimated_difficulty, keyword_weights, avg_rating")
-    .eq("status", "approved")
-    .not("choices", "is", null)
-    .not("keyword_weights", "is", null);
-
-  // Filter in JS: keyword overlap, not seen
-  const filtered = (dbProblems ?? []).filter((p: { id: string; keyword_weights: Record<string, number> }) => {
-    if (seenIds.has(p.id)) return false;
-    const kws = p.keyword_weights ?? {};
-    return Object.keys(kws).some(k => keywordSet.has(k));
-  });
-
-  // --- Source 2: rag_examples (precalc, not yet promoted/seen) ---
-  const { data: ragRows } = await supabase
-    .from("rag_examples")
-    .select("id, latex_content, solution_latex, choices, correct_index, difficulty, keyword_weights")
-    .eq("course", "precalc")
-    .not("choices", "is", null);
-
-  const ragFiltered = (ragRows ?? []).filter((r: { id: string; keyword_weights: Record<string, number>; promoted_problem_id?: string }) => {
-    if (seenIds.has(r.id)) return false;
-    const kws = r.keyword_weights ?? {};
-    return Object.keys(kws).some(k => keywordSet.has(k));
-  });
-
-  // Combine candidates (db problems preferred)
   const allCandidates: Omit<PrecalcCandidate, "score">[] = [
-    ...filtered.map((p: { id: string; latex_content: string; solution_latex: string; choices: string[]; correct_index: number; difficulty: number; estimated_difficulty?: number; keyword_weights: Record<string, number>; avg_rating?: number }) => ({
-      id: p.id,
-      latex_content: p.latex_content,
-      solution_latex: p.solution_latex,
-      choices: p.choices,
-      correct_index: p.correct_index,
-      difficulty: p.estimated_difficulty ?? p.difficulty,
-      keyword_weights: p.keyword_weights,
-      avg_rating: p.avg_rating ?? null,
-      fromRag: false,
-    })),
-    ...ragFiltered.map((r: { id: string; latex_content: string; solution_latex: string; choices: string[]; correct_index: number; difficulty: number; keyword_weights: Record<string, number> }) => ({
-      id: r.id,
-      latex_content: r.latex_content,
-      solution_latex: r.solution_latex,
-      choices: r.choices,
-      correct_index: r.correct_index,
-      difficulty: r.difficulty,
-      keyword_weights: r.keyword_weights,
-      avg_rating: null,
-      fromRag: true,
-    })),
+    ...((problemsRes.data ?? []) as RawProblem[])
+      .filter(p => !seenIds.has(p.id))
+      .map(p => ({
+        id: p.id,
+        latex_content: p.latex_content,
+        solution_latex: p.solution_latex ?? "",
+        choices: p.choices,
+        correct_index: p.correct_index,
+        difficulty: p.estimated_difficulty ?? p.difficulty,
+        keyword_weights: p.keyword_weights,
+        avg_rating: p.avg_rating ?? null,
+        fromRag: false,
+      })),
+    ...((ragRes.data ?? []) as RawProblem[])
+      .filter(r => !seenIds.has(r.id))
+      .map(r => ({
+        id: r.id,
+        latex_content: r.latex_content,
+        solution_latex: r.solution_latex ?? "",
+        choices: r.choices,
+        correct_index: r.correct_index,
+        difficulty: r.difficulty,
+        keyword_weights: r.keyword_weights,
+        avg_rating: null,
+        fromRag: true,
+      })),
   ];
 
   if (allCandidates.length === 0) {
-    return NextResponse.json({ error: "No problems available for selected keywords. Try different keywords or come back later." }, { status: 404 });
+    return NextResponse.json({ error: "No problems available. Come back later as more are added." }, { status: 404 });
   }
 
-  // Score candidates
+  // Score all candidates: weakness-weighted by keyword_strengths × difficulty proximity
   const scored: PrecalcCandidate[] = allCandidates.map(p => ({
     ...p,
     score: scoreProblemByKeyword(p, keywordStrengths, targetDiff),
@@ -122,9 +101,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Could not select a problem" }, { status: 404 });
   }
 
-  // If selected from rag_examples, promote to problems table
+  // Promote rag_example to problems table on first serve
   let finalProblem: PrecalcCandidate = selected;
-  let generated = false;
 
   if (selected.fromRag) {
     const { data: promoted } = await supabase
@@ -144,14 +122,8 @@ export async function POST(request: Request) {
       .maybeSingle();
 
     if (promoted?.id) {
-      // Update rag_example promoted_problem_id (fire and forget)
-      void supabase
-        .from("rag_examples")
-        .update({ promoted_problem_id: promoted.id })
-        .eq("id", selected.id);
-
+      void supabase.from("rag_examples").update({ promoted_problem_id: promoted.id }).eq("id", selected.id);
       finalProblem = { ...selected, id: promoted.id };
-      generated = true;
     }
   }
 
@@ -166,6 +138,5 @@ export async function POST(request: Request) {
       keyword_weights: finalProblem.keyword_weights,
       avg_rating: finalProblem.avg_rating,
     },
-    generated,
   });
 }

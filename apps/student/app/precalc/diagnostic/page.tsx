@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { Preview } from "@/components/Preview";
 import {
   applyAnswerToScores,
-  DIAGNOSTIC_MIN_QUESTIONS,
-  DIAGNOSTIC_MAX_QUESTIONS,
 } from "@/lib/diagnosticScoring";
 import type { Answer, KeywordScores } from "@/lib/diagnosticScoring";
 import { cn } from "@/lib/cn";
@@ -38,8 +36,8 @@ const TOPIC_LABELS: Record<string, string> = {
   trigonometry: "Trigonometry",
 };
 
-const GENERAL_DIAGNOSTIC_MIN = 10;
-const GENERAL_DIAGNOSTIC_MAX = 18;
+const GENERAL_DIAGNOSTIC_MIN = 15;
+const GENERAL_DIAGNOSTIC_MAX = 30;
 
 type Phase = "loading" | "error" | "diagnostic" | "results";
 
@@ -85,11 +83,11 @@ function GeneralDiagnosticInner() {
 
   // Fetch first question on mount
   useEffect(() => {
-    fetchNextQuestion([], {});
+    fetchNextQuestion([], {}, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function fetchNextQuestion(answeredIds: string[], keywordScores: KeywordScores) {
+  async function fetchNextQuestion(answeredIds: string[], keywordScores: KeywordScores, answerCount: number) {
     setFetchingNext(true);
     try {
       const res = await fetch("/api/learn/diagnostic", {
@@ -101,6 +99,11 @@ function GeneralDiagnosticInner() {
       if (data.error && !data.problem) {
         setErrorMsg(data.error);
         setPhase("error");
+        return;
+      }
+      // Stop if API signals done and we've hit the minimum
+      if (data.done === true && answerCount >= GENERAL_DIAGNOSTIC_MIN) {
+        await finalize();
         return;
       }
       if (!data.problem) {
@@ -159,16 +162,15 @@ function GeneralDiagnosticInner() {
     setInDepthScores(newI);
     setAnswers(nextAnswers);
 
-    // Check stopping condition
-    const shouldStop = nextAnswers.length >= GENERAL_DIAGNOSTIC_MIN &&
-      nextAnswers.length >= GENERAL_DIAGNOSTIC_MAX;
+    // Check stopping condition: stop at max, or let fetchNextQuestion handle done+min
+    const shouldStop = nextAnswers.length >= GENERAL_DIAGNOSTIC_MAX;
 
     if (shouldStop) {
       await finalize(nextAnswers);
       return;
     }
 
-    await fetchNextQuestion(nextAnswers.map(a => a.problem_id), newI);
+    await fetchNextQuestion(nextAnswers.map(a => a.problem_id), newI, nextAnswers.length);
   }
 
   async function handleForgotten() {
@@ -183,9 +185,9 @@ function GeneralDiagnosticInner() {
     );
     const nextAnswers = [...answers, answer];
     setUmbrellaScores(newU); setInDepthScores(newI); setAnswers(nextAnswers);
-    const shouldStop = nextAnswers.length >= GENERAL_DIAGNOSTIC_MIN && nextAnswers.length >= GENERAL_DIAGNOSTIC_MAX;
+    const shouldStop = nextAnswers.length >= GENERAL_DIAGNOSTIC_MAX;
     if (shouldStop) { await finalize(nextAnswers); return; }
-    await fetchNextQuestion(nextAnswers.map(a => a.problem_id), newI);
+    await fetchNextQuestion(nextAnswers.map(a => a.problem_id), newI, nextAnswers.length);
   }
 
   async function handleFlag(problemId: string) {
@@ -212,9 +214,9 @@ function GeneralDiagnosticInner() {
     );
     const nextAnswers = [...answers, answer];
     setUmbrellaScores(newU); setInDepthScores(newI); setAnswers(nextAnswers);
-    const shouldStop = nextAnswers.length >= GENERAL_DIAGNOSTIC_MIN && nextAnswers.length >= GENERAL_DIAGNOSTIC_MAX;
+    const shouldStop = nextAnswers.length >= GENERAL_DIAGNOSTIC_MAX;
     if (shouldStop) { await finalize(nextAnswers); return; }
-    await fetchNextQuestion(nextAnswers.map(a => a.problem_id), newI);
+    await fetchNextQuestion(nextAnswers.map(a => a.problem_id), newI, nextAnswers.length);
   }
 
   // ── Loading / Error ──
@@ -299,7 +301,7 @@ function GeneralDiagnosticInner() {
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-semibold text-gray-600">
                   {LABELS[i]}
                 </span>
-                <span className="flex-1 min-w-0">
+                <span className="flex-1 min-w-0 break-words overflow-hidden">
                   <Preview latexContent={choice} />
                 </span>
               </button>

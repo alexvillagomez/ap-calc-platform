@@ -18,24 +18,34 @@ export async function POST(request: Request) {
   // Try to fetch existing session first
   const { data: existing } = await supabase
     .from("student_sessions")
-    .select("id, strengths")
+    .select("id, strengths, keyword_strengths")
     .eq("id", sessionId)
     .maybeSingle();
 
   if (existing) {
-    return NextResponse.json({ id: existing.id, strengths: existing.strengths ?? {}, isNew: false });
+    return NextResponse.json({
+      id: existing.id,
+      strengths: existing.strengths ?? {},
+      keyword_strengths: existing.keyword_strengths ?? {},
+      isNew: false,
+    });
   }
 
-  // Create new session with empty strengths (0.5 is the in-memory default)
+  // Create new session — strengths start empty (0.5 is the in-memory default everywhere)
   const { data: created, error } = await supabase
     .from("student_sessions")
     .insert({ id: sessionId, strengths: {} })
-    .select("id, strengths")
+    .select("id, strengths, keyword_strengths")
     .single();
 
   if (error || !created) {
     return NextResponse.json({ error: error?.message ?? "Failed to create session" }, { status: 500 });
   }
 
-  return NextResponse.json({ id: created.id, strengths: created.strengths ?? {}, isNew: true });
+  return NextResponse.json({
+    id: created.id,
+    strengths: created.strengths ?? {},
+    keyword_strengths: created.keyword_strengths ?? {},
+    isNew: true,
+  });
 }

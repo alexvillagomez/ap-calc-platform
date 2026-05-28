@@ -470,8 +470,8 @@ function LearnPageInner() {
 
   function PageShell({ children }: { children: React.ReactNode }) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col px-4 py-10">
-        <div className="max-w-4xl mx-auto w-full space-y-4">{children}</div>
+      <div className="min-h-screen bg-gray-50 flex flex-col px-4 py-10 overflow-x-hidden">
+        <div className="max-w-2xl mx-auto w-full space-y-4">{children}</div>
       </div>
     );
   }

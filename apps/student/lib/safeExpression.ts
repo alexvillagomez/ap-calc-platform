@@ -19,29 +19,35 @@ const MATH_SCOPE: Record<string, Value> = {
 };
 
 export function parseSlopeEquation(equation: string): (x: number, y: number) => number {
-  const trimmed = (equation ?? "").trim();
-  if (!trimmed) return () => 0;
+  let trimmed = (equation ?? "").trim();
+  if (!trimmed) return () => NaN;
+  // Strip common LHS prefixes: "dy/dx = ", "y' = " etc.
+  trimmed = trimmed.replace(/^(?:dy\s*\/\s*dx|y'|dydx)\s*=\s*/i, "");
+  if (!trimmed) return () => NaN;
   const parser = new Parser();
   let expr;
-  try { expr = parser.parse(trimmed); } catch { return () => 0; }
+  try { expr = parser.parse(trimmed); } catch { return () => NaN; }
   return (x: number, y: number) => {
     try {
       const value = expr.evaluate({ x, y, ...MATH_SCOPE });
-      return typeof value === "number" && Number.isFinite(value) ? value : 0;
-    } catch { return 0; }
+      return typeof value === "number" && Number.isFinite(value) ? value : NaN;
+    } catch { return NaN; }
   };
 }
 
 export function parseFunctionEquation(equation: string): (x: number) => number {
-  const trimmed = (equation ?? "").trim();
-  if (!trimmed) return () => 0;
+  let trimmed = (equation ?? "").trim();
+  if (!trimmed) return () => NaN;
+  // Strip common LHS prefixes: "y = ", "f(x) = ", "y=" etc.
+  trimmed = trimmed.replace(/^[yYfF]\s*(?:\(\s*x\s*\))?\s*=\s*/, "");
+  if (!trimmed) return () => NaN;
   const parser = new Parser();
   let expr;
-  try { expr = parser.parse(trimmed); } catch { return () => 0; }
+  try { expr = parser.parse(trimmed); } catch { return () => NaN; }
   return (x: number) => {
     try {
       const value = expr.evaluate({ x, ...MATH_SCOPE });
-      return typeof value === "number" && Number.isFinite(value) ? value : 0;
-    } catch { return 0; }
+      return typeof value === "number" && Number.isFinite(value) ? value : NaN;
+    } catch { return NaN; }
   };
 }

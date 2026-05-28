@@ -330,7 +330,10 @@ export default function LookupPage() {
                   </h3>
                 </div>
                 <div className="p-6">
-                  <Preview latexContent={problem.solution_latex} />
+                  {problem.solution_latex
+                    ? <Preview latexContent={problem.solution_latex} />
+                    : <p className="text-sm text-gray-400 italic">No solution available for this problem.</p>
+                  }
                 </div>
               </div>
             )}

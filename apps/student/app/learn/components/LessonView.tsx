@@ -12,7 +12,7 @@ export function LessonView({ title, latexContent, onComplete }: Props) {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-4 py-10 pb-28">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 py-10 pb-28">
         <div className="max-w-xl mx-auto space-y-6">
           <h1 className="text-xl font-semibold text-gray-900">{title}</h1>
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 ap-calc-preview">

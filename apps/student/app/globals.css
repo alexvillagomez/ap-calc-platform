@@ -47,3 +47,8 @@
 .ap-calc-preview {
   font-family: KaTeX_Main, "Times New Roman", serif;
 }
+
+/* Inside overflow-constrained containers (e.g. choice buttons), allow inline math to wrap */
+.ap-calc-preview .overflow-hidden .katex {
+  white-space: normal;
+}

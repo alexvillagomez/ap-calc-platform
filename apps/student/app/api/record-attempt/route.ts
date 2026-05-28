@@ -15,10 +15,11 @@ export async function POST(request: Request) {
     selectedIndex?: number;
     correct?: boolean;
     topicWeights?: Record<string, number>;
+    keywordWeights?: Record<string, number>;
     rating?: number | null;
   };
 
-  const { sessionId, problemId, selectedIndex, correct, topicWeights, rating } = body;
+  const { sessionId, problemId, selectedIndex, correct, topicWeights, keywordWeights, rating } = body;
 
   if (!sessionId || !problemId || typeof selectedIndex !== "number" || typeof correct !== "boolean") {
     return NextResponse.json({ error: "sessionId, problemId, selectedIndex, correct are required" }, { status: 400 });
@@ -35,8 +36,12 @@ export async function POST(request: Request) {
     );
 
   if (attemptError) {
-    console.error("record-attempt: upsert error", attemptError.message);
-    return NextResponse.json({ error: attemptError.message }, { status: 500 });
+    // FK violation = rag_example served before promotion — non-fatal, still update strengths
+    if ((attemptError as { code?: string }).code !== "23503") {
+      console.error("record-attempt: upsert error", attemptError.message);
+      return NextResponse.json({ error: attemptError.message }, { status: 500 });
+    }
+    console.warn("record-attempt: skipping attempt log (problem not yet in problems table)");
   }
 
   // Update strengths in the session and calibrate estimated_difficulty
@@ -85,6 +90,25 @@ export async function POST(request: Request) {
     ]);
 
     return NextResponse.json({ strengths: newStrengths });
+  }
+
+  // Update keyword_strengths when keywordWeights provided (e.g. from problem lookup)
+  if (keywordWeights && typeof keywordWeights === "object" && Object.keys(keywordWeights).length > 0) {
+    const { data: sessionData } = await supabase
+      .from("student_sessions")
+      .select("keyword_strengths")
+      .eq("id", sessionId)
+      .maybeSingle();
+
+    const currentKwStrengths = (sessionData?.keyword_strengths ?? {}) as Record<string, number>;
+    const newKwStrengths = updateStrengths(currentKwStrengths, keywordWeights, correct);
+
+    await supabase
+      .from("student_sessions")
+      .update({ keyword_strengths: newKwStrengths })
+      .eq("id", sessionId);
+
+    return NextResponse.json({ keyword_strengths: newKwStrengths });
   }
 
   return NextResponse.json({ strengths: null });

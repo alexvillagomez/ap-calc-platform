@@ -70,8 +70,21 @@ export async function POST(request: Request) {
     avg_rating?: number | null;
   };
 
-  // 2. Primary: match against problem content embeddings (learn_practice_problems + learn_diagnostic_problems)
-  const [practiceRes, diagRes] = await Promise.all([
+  // 2. Primary: search problems + rag_examples by embedding, then learn tables as fallback
+  const [problemsRes, ragRes, practiceRes, diagRes] = await Promise.all([
+    supabase
+      .from("problems")
+      .select("id, latex_content, solution_latex, choices, correct_index, difficulty, keyword_weights, avg_rating, embedding")
+      .eq("status", "approved")
+      .not("choices", "is", null)
+      .not("solution_latex", "is", null)
+      .not("embedding", "is", null),
+    supabase
+      .from("rag_examples")
+      .select("id, latex_content, solution_latex, choices, correct_index, difficulty, keyword_weights, embedding")
+      .not("choices", "is", null)
+      .not("solution_latex", "is", null)
+      .not("embedding", "is", null),
     supabase
       .from("learn_practice_problems")
       .select("id, latex_content, solution_latex, choices, correct_index, difficulty, keyword_id, hint_latex, embedding")
@@ -82,10 +95,38 @@ export async function POST(request: Request) {
       .not("embedding", "is", null),
   ]);
 
-  type ScoredProblem = ProblemRow & { similarity: number; source: "practice" | "diag" };
+  type ScoredProblem = ProblemRow & { similarity: number; source: "problems" | "rag" | "practice" | "diag" };
 
   const scoredProblems: ScoredProblem[] = [];
 
+  // problems — canonical, most important
+  for (const row of (problemsRes.data ?? []) as Array<ProblemRow & { embedding: unknown }>) {
+    if (excludeSet.has(row.id)) continue;
+    const emb = row.embedding as number[] | null;
+    if (!Array.isArray(emb) || emb.length === 0) continue;
+    scoredProblems.push({
+      ...row,
+      solution_latex: row.solution_latex ?? "",
+      similarity: cosineSimilarity(queryEmbedding, emb),
+      source: "problems",
+    });
+  }
+
+  // rag_examples — templates not yet promoted to problems
+  for (const row of (ragRes.data ?? []) as Array<ProblemRow & { embedding: unknown }>) {
+    if (excludeSet.has(row.id)) continue;
+    const emb = row.embedding as number[] | null;
+    if (!Array.isArray(emb) || emb.length === 0) continue;
+    scoredProblems.push({
+      ...row,
+      solution_latex: row.solution_latex ?? "",
+      hint_latex: null,
+      similarity: cosineSimilarity(queryEmbedding, emb),
+      source: "rag",
+    });
+  }
+
+  // learn_practice_problems — fallback
   for (const row of (practiceRes.data ?? []) as Array<ProblemRow & { embedding: unknown }>) {
     if (excludeSet.has(row.id)) continue;
     const emb = row.embedding as number[] | null;
@@ -99,6 +140,7 @@ export async function POST(request: Request) {
     });
   }
 
+  // learn_diagnostic_problems — fallback
   for (const row of (diagRes.data ?? []) as Array<{ id: string; latex_content: string; choices: string[]; correct_index: number; difficulty: number; in_depth_keywords?: Record<string, number> | null; embedding: unknown }>) {
     if (excludeSet.has(row.id)) continue;
     const emb = row.embedding as number[] | null;
@@ -151,7 +193,7 @@ export async function POST(request: Request) {
   // 3. Fallback: keyword embedding search (used when problems have no embeddings yet)
   const { data: keywords, error: kwErr } = await supabase
     .from("learn_keywords")
-    .select("id, name, label, tier, category_id, embedding")
+    .select("id, name, label, tier, category_id, topic_id, embedding")
     .eq("status", "approved")
     .not("embedding", "is", null);
 
@@ -160,8 +202,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "No problems found for that topic" });
   }
 
-  type ScoredKeyword = { id: string; label: string; category_id: string | null; similarity: number };
-  const scored: ScoredKeyword[] = (keywords as Array<{ id: string; name: string | null; label: string | null; tier: string | null; category_id: string | null; embedding: unknown }>)
+  type ScoredKeyword = { id: string; label: string; category_id: string | null; topic_id: string | null; similarity: number };
+  const scored: ScoredKeyword[] = (keywords as Array<{ id: string; name: string | null; label: string | null; tier: string | null; category_id: string | null; topic_id: string | null; embedding: unknown }>)
     .filter((k) => k.tier !== "tag")
     .map((kw) => {
       const emb = kw.embedding as number[] | null;
@@ -170,6 +212,7 @@ export async function POST(request: Request) {
         id: kw.id,
         label: kw.label ?? kw.name ?? kw.id,
         category_id: kw.category_id,
+        topic_id: kw.topic_id ?? null,
         similarity: cosineSimilarity(queryEmbedding, emb),
       };
     })
@@ -210,7 +253,8 @@ export async function POST(request: Request) {
 
   // Fallback C: learn_diagnostic_problems by topic_id
   if (candidates.length === 0) {
-    const topicId = bestKeyword.category_id ? CATEGORY_TO_TOPIC[bestKeyword.category_id] ?? null : null;
+    const topicId = bestKeyword.topic_id
+      ?? (bestKeyword.category_id ? CATEGORY_TO_TOPIC[bestKeyword.category_id] ?? null : null);
     const diagQuery = supabase
       .from("learn_diagnostic_problems")
       .select("id, latex_content, choices, correct_index, difficulty, in_depth_keywords, topic_id")
