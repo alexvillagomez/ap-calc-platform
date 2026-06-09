@@ -779,6 +779,8 @@ export default function DemoPage() {
 
   const showFeedback = answeredCount >= 5;
 
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+
   const handleRestart = () => {
     clearDiagnosticState();
     seenIdsRef.current = new Set();
@@ -794,8 +796,50 @@ export default function DemoPage() {
     setPhase("idle");
   };
 
+  // Full reset: wipe server-side progress (keyword states, completion flag, saved
+  // practice position) and local hints, then restart the diagnostic from scratch.
+  const handleResetEverything = async () => {
+    setShowResetConfirm(false);
+    try {
+      await fetch("/api/demo/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountId, sessionId }),
+      });
+    } catch { /* best-effort */ }
+    try { localStorage.removeItem(DIAG_DONE_KEY); } catch {}
+    handleRestart();
+  };
+
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50">
+      {/* Reset confirmation — warns that restarting erases all progress */}
+      {showResetConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl space-y-4">
+            <h3 className="text-base font-semibold text-gray-900">Restart diagnostic?</h3>
+            <p className="text-sm text-gray-600">
+              This will <span className="font-medium text-gray-900">erase all your progress</span> —
+              your diagnostic results, skill scores, and practice position — and start over from the
+              first question. This can&apos;t be undone.
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowResetConfirm(false)}
+                className="flex-1 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleResetEverything}
+                className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold transition-colors"
+              >
+                Reset everything
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* ── Left sidebar ─────────────────────────────────────────────── */}
       <aside className="w-64 flex-shrink-0 flex flex-col border-r border-gray-200 bg-white overflow-y-auto">
         <div className="px-4 py-4 border-b border-gray-100">
@@ -901,7 +945,7 @@ export default function DemoPage() {
             </button>
             <button
               className="w-full py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-medium transition-colors"
-              onClick={handleRestart}
+              onClick={() => setShowResetConfirm(true)}
             >
               Restart diagnostic instead
             </button>

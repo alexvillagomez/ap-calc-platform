@@ -147,6 +147,7 @@ export default function DemoPracticePage() {
 
   // Auth
   const [sessionId, setSessionId] = useState<string>("");
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   // Page phase
   const [phase, setPhase] = useState<Phase>("loading");
@@ -766,8 +767,50 @@ export default function DemoPracticePage() {
 
   // ─── Render ────────────────────────────────────────────────────────────────
 
+  const handleResetEverything = async () => {
+    setShowResetConfirm(false);
+    const accountId = localStorage.getItem(ACCOUNT_KEY);
+    const sid = localStorage.getItem(SESSION_KEY) ?? sessionId;
+    try {
+      await fetch("/api/demo/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountId, sessionId: sid }),
+      });
+    } catch { /* best-effort */ }
+    try { localStorage.removeItem("ap_calc_diagnostic_done"); } catch {}
+    router.push("/demo");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Reset confirmation — warns that restarting erases all progress */}
+      {showResetConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl space-y-4">
+            <h3 className="text-base font-semibold text-gray-900">Restart diagnostic?</h3>
+            <p className="text-sm text-gray-600">
+              This will <span className="font-medium text-gray-900">erase all your progress</span> —
+              your diagnostic results, skill scores, and practice position — and start over from the
+              first question. This can&apos;t be undone.
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowResetConfirm(false)}
+                className="flex-1 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleResetEverything}
+                className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold transition-colors"
+              >
+                Reset everything
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Top bar with logout */}
       <div className="max-w-2xl mx-auto px-6 pt-4 flex justify-end">
         <button
@@ -1303,7 +1346,7 @@ export default function DemoPracticePage() {
               </button>
               <button
                 type="button"
-                onClick={() => router.push("/demo")}
+                onClick={() => setShowResetConfirm(true)}
                 className="w-full px-6 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-600 text-sm font-medium transition-colors"
               >
                 Restart diagnostic
