@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "turbo run build --filter=student",
+  "installCommand": "npm install",
+  "outputDirectory": "apps/student/.next"
+}
