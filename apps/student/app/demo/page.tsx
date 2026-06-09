@@ -360,13 +360,18 @@ export default function DemoPage() {
       id: p.id,
       difficulty: p.difficulty ?? 3,
       avg_rating: p.avg_rating,
+      // ±15% random jitter so identical cold-start states (every fresh account
+      // starts with all strengths at 0.5, making the "best" problems identical)
+      // don't keep surfacing the same handful — adds variety across sessions.
       score: scoreProblemByKeyword(
         { difficulty: p.difficulty ?? 3, estimated_difficulty: null, keyword_weights: p.keyword_weights ?? {}, avg_rating: p.avg_rating },
         keywordStrengths,
         targetDifficulty
-      ),
+      ) * (0.85 + 0.3 * Math.random()),
     }));
-    const pickedId = selectProblem(scored)?.id;
+    // Sample from a wide candidate pool (top 40, not the default top 8) so the
+    // diagnostic draws broadly from the ~300-problem bank instead of repeating.
+    const pickedId = selectProblem(scored, 40)?.id;
     const next = remaining.find((p) => p.id === pickedId) ?? remaining[0]!;
 
     // Swap the picked problem into the current slot so queueIdx still advances correctly
