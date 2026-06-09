@@ -1,15 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const ACCOUNT_KEY = "ap_calc_account_id";
 const USERNAME_KEY = "ap_calc_username";
 const SESSION_KEY = "ap_calc_student_session_id";
+const DIAG_DONE_KEY = "ap_calc_diagnostic_done";
 
-export default function LoginPage() {
+// Inner component that actually calls useSearchParams — must be wrapped in <Suspense>
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [mode, setMode] = useState<"login" | "register">("login");
+
+  // Read ?register=1 on mount and switch to register tab
+  useEffect(() => {
+    if (searchParams.get("register") === "1") {
+      setMode("register");
+    }
+  }, [searchParams]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -23,28 +33,44 @@ export default function LoginPage() {
     const endpoint = mode === "login" ? "/api/auth/login" : "/api/auth/register";
 
     try {
+      const payload: { username: string; password: string; existingSessionId?: string } = {
+        username: username.trim(),
+        password,
+      };
+      if (mode === "register") {
+        const guestSessionId = localStorage.getItem(SESSION_KEY);
+        if (guestSessionId) payload.existingSessionId = guestSessionId;
+      }
+
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: username.trim(), password }),
+        body: JSON.stringify(payload),
       });
 
       const data = (await res.json()) as {
         accountId?: string;
         username?: string;
         sessionId?: string;
+        diagnosticCompletedAt?: string | null;
         error?: string;
       };
 
-      if (!res.ok || !data.accountId) {
+      if (!res.ok || !data.accountId || !data.sessionId) {
         setError(data.error ?? "Something went wrong. Please try again.");
         return;
       }
 
       localStorage.setItem(ACCOUNT_KEY, data.accountId);
       localStorage.setItem(USERNAME_KEY, data.username ?? username);
-      localStorage.setItem(SESSION_KEY, data.sessionId ?? "");
-      router.push("/");
+      localStorage.setItem(SESSION_KEY, data.sessionId);
+      if (data.diagnosticCompletedAt) {
+        localStorage.setItem(DIAG_DONE_KEY, "1");
+        router.push("/demo-practice");
+      } else {
+        localStorage.removeItem(DIAG_DONE_KEY);
+        router.push("/demo");
+      }
     } catch {
       setError("Network error. Please try again.");
     } finally {
@@ -55,11 +81,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        {/* Logo / title */}
+        {/* Title */}
         <div className="text-center mb-8">
-          <div className="text-4xl mb-3">📐</div>
-          <h1 className="text-xl font-semibold text-gray-900">AP Calculus AB</h1>
-          <p className="text-sm text-gray-500 mt-1">Practice Portal</p>
+          <h1 className="text-xl font-semibold text-gray-900">Login</h1>
         </div>
 
         {/* Card */}
@@ -70,6 +94,7 @@ export default function LoginPage() {
               <button
                 key={m}
                 type="button"
+                aria-label={m === "register" ? "Switch to create account" : "Switch to log in"}
                 className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-colors ${
                   mode === m
                     ? "bg-white text-gray-900 shadow-sm"
@@ -84,8 +109,9 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Username</label>
+              <label htmlFor="login-username" className="block text-xs font-medium text-gray-700 mb-1">Username</label>
               <input
+                id="login-username"
                 type="text"
                 autoComplete="username"
                 required
@@ -97,8 +123,9 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Password</label>
+              <label htmlFor="login-password" className="block text-xs font-medium text-gray-700 mb-1">Password</label>
               <input
+                id="login-password"
                 type="password"
                 autoComplete={mode === "login" ? "current-password" : "new-password"}
                 required
@@ -134,5 +161,17 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Default export wraps LoginForm in Suspense so useSearchParams() is valid
+// during the production build's static generation pass.
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4" />
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

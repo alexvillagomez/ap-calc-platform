@@ -1,143 +1,68 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code working in this repo. This file holds only the always-needed essentials; detailed, area-specific docs live in `docs/` and should be read **on demand** when a task touches that area.
+
+## Docs map — read when relevant
+| Doc | Read when… |
+|-----|-----------|
+| [docs/key-pages.md](docs/key-pages.md) | Working on any page's routing or behavior (admin + student). |
+| [docs/journey-routing.md](docs/journey-routing.md) | Touching the onboarding → diagnostic → practice flow, auth routing, stage/resume state. |
+| [docs/student.md](docs/student.md) | Student app architecture, data flow, practice algorithm, graph rendering. |
+| [docs/admin.md](docs/admin.md) | Admin app pages, problem authoring workflow, four-dimensional keyword system. |
+| [docs/database.md](docs/database.md) | Table schemas, RLS, FK constraints. |
+| [docs/learn-system.md](docs/learn-system.md) | The `/learn` keyword-mastery subsystem, learn API routes, scoring. |
+| [docs/content-pipeline.md](docs/content-pipeline.md) | `rag_examples` enrichment, keyword tagging, on-demand learn content (lessons/refreshers/tips/problems), LaTeX format contract. |
+| [docs/diagnostic-convergence.md](docs/diagnostic-convergence.md) | Tuning the `/demo` diagnostic — convergence, propagation layer, stop conditions, report. |
+| [docs/difficulty-scales.md](docs/difficulty-scales.md) | Anything involving `difficulty` / `estimated_difficulty` / `targetDifficulty`. |
+| [docs/progress-report.md](docs/progress-report.md) | The `/progress` report and `learn_student_keyword_states`. |
+| [docs/weights-research.md](docs/weights-research.md) | Design + simulation behind the diagnostic evidence-propagation layer. |
+| [docs/platform-overview.md](docs/platform-overview.md) | A full prose walkthrough of the whole platform (long-form onboarding read). |
+| [docs/research-index.md](docs/research-index.md) | Index of all research/notes files in the repo. |
+
+---
 
 ## Commands
-
 ```bash
 npm install          # Install all workspace dependencies
-npm run dev          # Start both apps (admin: :3001, student: :3002)
+npm run dev          # Start both apps (admin :3001, student :3002)
 npm run build        # Build all apps and packages via Turbo
 npm run lint         # Lint all packages
 npm run clean        # Remove .next dirs and node_modules
-npm run seed:topics  # Seed topic_metadata table from packages/constants/topics.json
+npm run seed:topics  # Seed topic_metadata from packages/constants/topics.json
 ```
 
-The admin app currently has pre-existing build errors (missing exports in `lib/ai/prompts.ts`). The student app builds cleanly. There are no automated tests.
+The admin app has pre-existing build errors (missing exports in `lib/ai/prompts.ts`); the student app builds cleanly. `next build` runs ESLint and **fails on errors** (e.g. `prefer-const`, unused vars) — keep code clean.
+
+> **Verifying a build without disturbing a running dev server:** `next.config.ts` honors `NEXT_DIST_DIR`, so `cd apps/student && NEXT_DIST_DIR=/tmp/iso npx next build` (then `next start`) builds to an isolated dir. A running `next dev` writing to the shared `.next` can otherwise contaminate a `next start` (stale/404 chunks → broken hydration).
+
+Playwright e2e tests live in `e2e/` (`playwright.config.ts`, baseURL `:3002`). Run `npx playwright test`. `e2e/demo-diagnostic.spec.ts` has two tests: the **diagnostic** journey (register → answer correctly → verify keyword states ≥ 0.70 + ratings in DB) and the **demo-practice** flow (seed `needs_lesson` → `/demo-practice` → lesson API 200 → stored in `learn_lessons`).
+
+---
 
 ## Architecture
+Turbo monorepo — two Next.js 15 (React 19) apps, three shared packages.
+- **`apps/admin`** (:3001) — problem authoring, keyword management, RAG agent.
+- **`apps/student`** (:3002) — student-facing precalc/AP Calc practice platform.
 
-This is a Turbo monorepo with two Next.js 15 (React 19) apps and three shared packages.
+Shared packages (local workspace only — **never published to npm**):
+- **`@ap-calc/types`** (`packages/types/src/index.ts`) — `Problem`, `ProblemInsert`, `TopicWeights`, `APCalcUnit`.
+- **`@ap-calc/supabase`** (`packages/supabase/src/index.ts`) — singleton Supabase client.
+- **`@ap-calc/constants`** (`packages/constants/`) — AP Calc topics, precalc keywords, unit→keyword map.
 
-### Apps
-- **`apps/admin`** (port 3001) — Problem authoring, keyword management, RAG agent, tagging tools
-- **`apps/student`** (port 3002) — Student-facing precalc practice platform
-
-### Shared Packages
-- **`@ap-calc/types`** (`packages/types/src/index.ts`) — `Problem`, `ProblemInsert`, `TopicWeights`, `APCalcUnit` types
-- **`@ap-calc/supabase`** (`packages/supabase/src/index.ts`) — Singleton Supabase client
-- **`@ap-calc/constants`** (`packages/constants/`) — AP Calc topics, precalc keywords, unit→keyword map
-
-Both apps must transpile shared packages via `transpilePackages` in `next.config.ts`.
-
----
-
-## Student App
-
-### Pages
-- **`/precalc`** — Auth portal (sign in / register) + mode selector (Recommended Path, Free Practice, Lessons, Problem Lookup, My Progress)
-- **`/precalc/diagnostic`** — Adaptive diagnostic (15–30 questions, stops when API signals `done` or MAX reached)
-- **`/precalc/practice`** — Free practice: auto-starts immediately, no keyword selection, pulls from full `problems`+`rag_examples` pool
-- **`/learn`** — Structured lesson flow: diagnostic → lesson → practice → mastery quiz
-- **`/lookup`** — Semantic problem search (embedding-based + keyword fallback)
-- **`/progress`** — Student keyword strength visualization
-
-### Student Data Flow
-
-1. Auth guard reads `ap_calc_account_id` from localStorage; redirects to `/precalc` if absent
-2. Login/register via `/api/auth/login` and `/api/auth/register`
-3. Session loads via `POST /api/session` — returns `strengths` (legacy topic EMA) and `keyword_strengths` (precalc keyword EMA)
-4. **Free Practice**: `POST /api/precalc/next-problem` — no keyword selection required; scores entire `problems`+`rag_examples` pool against `keyword_strengths` (defaults 0.5 for unknown), picks via weighted random from top-8
-5. Student answers → `POST /api/record-attempt` — records attempt (FK violations for unregistered rag_examples are non-fatal), updates `keyword_strengths` via EMA, calibrates `estimated_difficulty` via IRT-EMA
-6. **Lookup**: `POST /api/lookup` — embeds query, cosine-matches against `problems`→`rag_examples`→`learn_practice_problems`→`learn_diagnostic_problems` embeddings; keyword fallback uses `topic_id` directly from matched keyword
-
-### Practice Algorithm (`apps/student/lib/practiceAlgorithm.ts`)
-
-- **`scoreProblemByKeyword(problem, keywordStrengths, targetDifficulty)`** — weakness-weighted score: `(1 - strength) × difficulty_proximity × rating_nudge`. All unknown keywords default to 0.5.
-- **`computeTargetDifficulty(strengths, keywordIds)`** — maps avg strength [0,1] → target difficulty [1,4]; returns 2.5 for empty sessions
-- **`updateStrengths(strengths, weights, correct)`** — weighted EMA (α=0.12); correct → toward 1, wrong → toward 0
-- **`selectProblem(candidates)`** — weighted random from top-8 scored candidates
-- **`computeNextReviewDate(inDepth, reviewCount)`** — spaced repetition intervals: [1,3,7,14,30,60] days × strength multiplier
-- **`getLearningPhase(inDepth, consecutive, dueAt, state)`** — returns `"blocked"` | `"interleaved"` | `"spaced_review"` | `"mastered"`
-- **`isReviewDue(dueAt)`** — true if spaced review date has passed
-
-### Dynamic Difficulty Calibration
-
-Each attempt updates `problems.estimated_difficulty` via IRT-EMA (α=0.15):
-- Student skill: `1 + avg_keyword_strength × 4`
-- Target: `skill - 0.5` on correct, `skill + 0.5` on wrong
-- `new = clamp(old + 0.15 × (target - old), 1, 5)`; seeded from static `difficulty` on first attempt
-
-### Diagnostic (`/precalc/diagnostic`)
-
-- Fetches problems one at a time from `POST /api/learn/diagnostic`
-- Scores candidates from `problems` + `rag_examples` (both queried in parallel) by information gain: `Σ uncertainty(kwScore) × weight`
-- Stops at MAX=30 questions, or when API returns `done: true` AND ≥15 questions answered
-- Routes student to lesson/practice based on `computeRoute()` in `diagnosticScoring.ts`
-
-### Keyword Strength Storage
-
-Two separate strength systems:
-- **`student_sessions.keyword_strengths`** (JSONB) — precalc keyword EMA `{keywordId: 0–1}`; used by free practice and problem lookup
-- **`learn_student_keyword_states`** table — rich per-keyword state machine for the structured learn system (state, in_depth_score, umbrella_score, consecutive_correct, spaced_review_due_at, etc.)
-
-### Graph Rendering (`apps/student/lib/safeExpression.ts`)
-
-`parseFunctionEquation` and `parseSlopeEquation` strip LHS prefixes (`y =`, `f(x) =`, `dy/dx =`, `y' =`) before evaluation. Bad points return `NaN` (skipped by `Number.isFinite` guard in `FunctionGraph.tsx`/`SlopeField.tsx`).
-
----
-
-## Admin App
-
-### Key Pages
-- **`/generate`** — Problem authoring (MCQ/FRQ generation via OpenAI)
-- **`/rag-agent`** — Batch MCQ generation from PDF templates using `rag_examples`
-- **`/keywords`** — Keyword management (add, approve, dedup, embed)
-- **`/tagging`** — Retroactively tag problems with keyword_weights
-- **`/compare`** — Side-by-side problem comparison
-- **`/lookup`** — Direct ID-based problem/rag_example lookup
-
-### Key Admin Components
-
-- **`Preview.tsx`** — Core renderer: tokenizes `$...$` / `$$...$$` math via KaTeX, handles `<SlopeField />` and `<FunctionGraph />` XML tags. Both apps use identical renderer logic; CSS overrides in each app's `globals.css` under `.ap-calc-preview`.
-- **`SlopeField.tsx`** — SVG slope field for differential equations
-- **`FunctionGraph.tsx`** — SVG function plotter (uses `safeExpression.ts` for evaluation)
-
----
-
-## Database (Supabase/PostgreSQL)
-
-Key tables in `supabase/migrations/`:
-
-| Table | Purpose | Key columns |
-|-------|---------|-------------|
-| **`problems`** | Canonical problem store | `latex_content`, `solution_latex`, `choices`, `correct_index`, `difficulty`, `keyword_weights` (jsonb), `topic_weights` (jsonb), `status`, `estimated_difficulty`, `embedding` (jsonb) |
-| **`rag_examples`** | Problem templates / seeds | Same content fields + `course`, `keyword_weights`, `promoted_problem_id`, `embedding` |
-| **`student_sessions`** | Per-session state | `strengths` (legacy topic EMA), `keyword_strengths` (precalc keyword EMA) |
-| **`student_problem_attempts`** | Attempt log | `session_id`, `problem_id` (FK→problems), `correct`, `rating`; unique on `(session_id, problem_id)` |
-| **`student_accounts`** | Auth | `username`, `password_hash`, `session_id` |
-| **`learn_keywords`** | Precalc keyword catalog | `id`, `label`, `tier` (`in_depth`/`umbrella`/`tag`), `category_id`, `topic_id`, `status`, `embedding` |
-| **`learn_student_keyword_states`** | Rich keyword learning state | `in_depth_score`, `umbrella_score`, `state`, `consecutive_correct`, `spaced_review_due_at` |
-| **`learn_practice_problems`** | Learn-system MCQs | `keyword_id`, `difficulty`, `hint_latex`, `embedding` |
-| **`learn_diagnostic_problems`** | Legacy diagnostic problems | `topic_id`, `in_depth_keywords`, `embedding` |
-
-`problems.problem_id` FK constraint: `student_problem_attempts.problem_id` must exist in `problems`. When a `rag_example` is promoted on first serve, it gets inserted into `problems`; if promotion fails, the attempt upsert throws FK violation (error code `23503`) — handled non-fatally in `record-attempt`.
-
-RLS: anonymous users read approved problems only; service role used in API routes.
+Both apps transpile shared packages via `transpilePackages` in `next.config.ts`.
 
 ---
 
 ## Environment Variables
-
 ```
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=    # Required for API routes and seed scripts
-OPENAI_API_KEY=               # Required for problem generation and embeddings
+SUPABASE_SERVICE_ROLE_KEY=    # API routes + seed scripts
+OPENAI_API_KEY=               # Problem/content generation + embeddings
 ```
+Root `.env.local` is read by both apps and seed scripts; each app also has its own `.env.local` for overrides. API routes use the service-role key (bypasses RLS) — pattern in `apps/student/app/api/session/route.ts`.
 
-Root `.env.local` is read by both apps and seed scripts. Each app also has its own `.env.local` for app-specific overrides.
+---
 
 ## Deployment
-
-Student app is deployed on Vercel (`ap-calc-platform-student`). Admin app is not yet deployed. The student app deploys from the monorepo root — Vercel runs `turbo run build` scoped to the `student` package. Shared workspace packages (`@ap-calc/supabase`, `@ap-calc/types`) must not be published to npm; they are local workspace deps only.
+Student app deployed on Vercel (`ap-calc-platform-student`); admin not yet deployed. Vercel runs `turbo run build` scoped to the `student` package from the monorepo root. Shared packages must not be published to npm. DB migrations are plain SQL in `supabase/migrations/` — apply new ones in the Supabase SQL editor.

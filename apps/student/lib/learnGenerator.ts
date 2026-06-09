@@ -7,40 +7,44 @@
 import OpenAI from "openai";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-const GEN_MODEL = "gemini-3.5-flash";
+const GEN_MODEL = "gpt-5.4-mini";
 
 function createGenClient(): OpenAI {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) throw new Error("GEMINI_API_KEY not set");
-  return new OpenAI({ apiKey: key, baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/" });
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) throw new Error("OPENAI_API_KEY not set");
+  return new OpenAI({ apiKey: key });
 }
 
 // ─── Prompts ──────────────────────────────────────────────────────────────────
 
-const EXAMPLE_FORMAT = `
-example_latex format — use this structure (separate every paragraph with \\n\\n in the JSON string):
-  "\\\\text{Setup prose.}\\n\\n$$displayed math here$$\\n\\n\\\\text{Conclusion prose.}\\n\\n<FunctionGraph equation=\\"expr\\" rangeX=\\"-3,3\\" rangeY=\\"-4,6\\" />"
+// Universal format: plain-text prose with every expression inline in $...$.
+// You do NOT need \n\n or \text{} — just write it the way you'd write it on paper.
+const FORMAT_RULES = `FORMATTING:
+• Write prose as PLAIN TEXT — never use \\\\text{}.
+• Wrap every variable, symbol, or expression in $...$, e.g. "Use $A^2-B^2=(A-B)(A+B)$ with $A=m^2n$ and $B=4$."
+• Plain-text prose must contain no backslash, ^, _, or { } — anything that needs them goes inside $...$.`;
 
-Rules:
-• Use $$...$$ for displayed math blocks. Do NOT use \\\\begin{aligned} in example_latex.
-• Use \\\\text{...} for all English prose — never write bare words outside \\\\text{}.
-• Separate every paragraph with exactly \\n\\n. Never use a single \\n.
-• Include a FunctionGraph for visual topics (intervals, shapes, transformations, graphs).
-• FunctionGraph equation: * for multiply, ^ for power. No implicit multiplication (2*x not 2x).
-• Show 3–4 concrete function values to illustrate the concept.`;
+// Worked-example / solution illustration, in the universal format.
+const WORKED_EXAMPLE = `"Recognize each term as a square. $m^4n^2=(m^2n)^2$ because squaring $m^2n$ gives $m^4n^2$. Also $16=4^2$. Use $A^2-B^2=(A-B)(A+B)$ with $A=m^2n$ and $B=4$, so $m^4n^2-16=(m^2n-4)(m^2n+4)$."`;
+
+const EXAMPLE_FORMAT = `
+example_latex format — a worked example showing every step, plain text with math in $...$:
+  ${WORKED_EXAMPLE}
+
+${FORMAT_RULES}
+• Show every intermediate step — never jump from the problem straight to the answer.
+• Only include a FunctionGraph when a picture genuinely helps (graphing a function, transformations, intervals, end behavior, shape). For purely algebraic skills (expanding, FOIL, factoring, simplifying, solving) do NOT include a graph — it adds nothing.
+• FunctionGraph (only when used): * for multiply, ^ for power, no implicit multiplication (2*x not 2x): <FunctionGraph equation=\\"expr\\" rangeX=\\"-3,3\\" rangeY=\\"-4,6\\" />`;
 
 const SOLUTION_FORMAT = `
-solution_latex format:
-  "\\\\text{Prose setup.}\\n\\n$$\\\\begin{aligned} f(1) &= 3 \\\\\\\\ f(2) &= 7 \\\\end{aligned}$$\\n\\n\\\\text{Conclusion.}"
+solution_latex format — the worked solution showing every step, plain text with math in $...$:
+  ${WORKED_EXAMPLE}
 
-Rules:
-• Use $$\\\\begin{aligned}...\\\\end{aligned}$$ for multi-step calculations.
-• Inside \\\\begin{aligned}, line breaks are \\\\\\\\ (four backslashes in JSON = two in string = KaTeX line break).
-• All prose in \\\\text{...} outside the $$...$$ block.`;
+${FORMAT_RULES}`;
 
 const LESSON_SYSTEM = `You are a precalculus tutor writing micro-lessons. NO derivatives, NO calculus — students identify behavior from function values and graphs only.
 
-GROUND-UP INSTRUCTION: Start at the most elementary version of the concept. Assume the student has never seen this topic before. Step 1 must use the simplest possible case with no added complexity. Each subsequent step adds exactly one new idea.
+GROUND-UP INSTRUCTION: Start at the most elementary version of the concept. Assume the student has NEVER seen this topic before. Think carefully about what such a student would find confusing. Step 1 must use the SIMPLEST possible case — single-term, no edge cases, minimal complexity. Each subsequent step adds exactly one new idea and explicitly references what was learned in the previous step.
 
 Return a JSON object: { "micro_steps": [ MicroStep, ... ] }
 
@@ -62,30 +66,34 @@ MicroStep:
 }
 
 has_check pattern:
-• Steps 1–2: content-only steps. Set has_check: false. check_question fields are empty strings "". hint_latex is "".
-• Steps 3–4 (final 1–2 steps): set has_check: true with a real check_question and hint_latex.
+• ALL steps have has_check: true. Every step includes a real check_question and hint_latex.
+• Step 1 check: easy — confirm the student understood the most basic idea just introduced.
+• Step 2 check: medium — apply the idea from step 1 in a slightly different form.
+• Steps 3–4 check: harder — require genuine understanding, not just recognition.
 
 ━━━ explanation_latex ━━━
-1–3 clear sentences introducing the concept. Prose in \\text{...}, math outside. Max 60 words.
+2–4 clear sentences introducing the concept. Max 90 words.
+• If the skill has a standard named method or mnemonic, NAME it explicitly and unpack what each part means. For multiplying two binomials, name and teach FOIL — First, Outer, Inner, Last — and explain that it is just the distributive property applied so that every term in the first binomial multiplies every term in the second. Do not merely state the rule; explain WHY it works.
+• Steps 2–4 MUST begin with a sentence that explicitly connects to the previous step (e.g. "Now that we know X, we can ...").
+• Explain the WHY behind the concept, not just the procedure.
 
 Formatting rules for explanation_latex:
-• All English prose MUST be inside \\text{...}. Never write bare English words outside \\text{}.
-• After a closing } of \\text{...}, always include a space before the next token: \\text{Example}, not \\text{Example},
-• Commas and periods that follow a \\text{} block must be placed INSIDE the braces: \\text{Conclusion.} not \\text{Conclusion}.
-• Never place a bare comma or period directly after a closing } — always include a space: \\text{foo}, \\text{bar} is wrong; write \\text{foo,} \\text{bar} or \\text{foo} and continue inside \\text{}.
+${FORMAT_RULES}
 
 ━━━ example_latex ━━━
 ${EXAMPLE_FORMAT}
+• After showing the computation, add a sentence of reasoning that explains WHY the result is what it is — connect the answer back to the concept.
 
-━━━ check_question (only when has_check: true) ━━━
-• latex_content: clear problem statement. Prose in \\text{...}.
+━━━ check_question (every step has one) ━━━
+• latex_content: clear problem statement as plain text with math in $...$, e.g. "A student claims $x=-2$ solves $x^3+2x^2-5x-6=0$. Is the student correct?" Never use \\text{}.
 • choices: exactly 4 DISTINCT options. Each in $...$. No duplicates.
 • correct_index: 0–3.
+• DISTRACTORS MUST reflect realistic student mistakes — each wrong choice should correspond to a specific common error (e.g. off-by-one, sign error, wrong operation, forgetting a rule). Do NOT use random or implausible values.
 • solution_latex:
 ${SOLUTION_FORMAT}
 
-━━━ hint_latex (only when has_check: true) ━━━
-One sentence, max 15 words. Prose in \\text{}, math outside.
+━━━ hint_latex (every step) ━━━
+One sentence, max 15 words. Plain text, math in $...$ (never \\text{}). Guide the student toward the correct approach without giving it away.
 
 Return valid JSON only. No markdown.`;
 
@@ -104,7 +112,7 @@ Return a JSON object:
 }
 
 ━━━ rule_latex ━━━
-1–2 sentences. State the rule clearly. Prose in \\text{...}.
+1–2 sentences. State the rule clearly as plain text, math in $...$ (never \\text{}).
 
 ━━━ example_latex ━━━
 ${EXAMPLE_FORMAT}
@@ -121,9 +129,9 @@ const TIP_SYSTEM = `You are a precalculus tutor. Generate a one-line tip for a s
 Return: { "tip_latex": string }
 
 Rules:
-• ONE short KaTeX string. Max 20 words.
-• Start with \\text{Remember: } or \\text{Tip: } or \\text{Watch out: }
-• Prose in \\text{}, math outside.
+• ONE short line. Max 20 words.
+• Start with "Remember: ", "Tip: ", or "Watch out: " as plain text.
+• Write prose as PLAIN TEXT — never use \\text{}. Put any math inside $...$.
 • No markdown. Return raw JSON only.`;
 
 const PROBLEMS_SYSTEM = `You are a precalculus problem author. Generate multiple-choice problems for ONE keyword skill.
@@ -141,10 +149,11 @@ PracticeProb:
 
 Difficulty: 1 = single step, 2 = two steps, 3 = unfamiliar form.
 • Each problem directly tests the keyword.
+• latex_content: full problem statement as PLAIN TEXT with all math in $...$, e.g. "Expand and simplify: $(x-4)(x+2)$." or "A student claims $x=-2$ solves $x^3+2x^2-5x-6=0$. Is the student correct?" Never use \\\\text{} — write words as plain text and wrap only math in $...$.
 • choices: 4 distinct strings in $...$. Distractors reflect real mistakes.
 • solution_latex:
 ${SOLUTION_FORMAT}
-• hint_latex: one sentence. Prose in \\text{}.
+• hint_latex: one sentence as plain text with math in $...$. Never use \\\\text{}.
 • Return valid JSON only. No markdown.`;
 
 const QUIZ_SYSTEM = `You are a precalculus assessment author. Generate a mastery quiz of exactly 4 questions.
@@ -162,6 +171,7 @@ QuizProb:
 
 • All 4 questions difficulty 3 or 4.
 • At least one question in unfamiliar or reversed form.
+• latex_content: plain text with all math in $...$, e.g. "A student claims $x=-2$ solves $x^3+2x^2-5x-6=0$. Is the student correct?" Never use \\\\text{}.
 • choices: 4 distinct strings in $...$. Include realistic traps.
 • solution_latex:
 ${SOLUTION_FORMAT}
@@ -195,6 +205,18 @@ function sanitizeLearnLatex(s: string): string {
   return fixBackslashEscaping(fixTextSpacing(s));
 }
 
+/**
+ * Fix \text{ that was corrupted by JSON tab-escape expansion.
+ * When an LLM outputs \text{ with a single backslash in JSON, the JSON parser
+ * interprets \t as a literal tab character (U+0009), yielding "<TAB>ext{...}".
+ * KaTeX then renders "extExpand..." instead of the intended instruction text.
+ * This sanitizer replaces every occurrence of <TAB>ext{ with \text{.
+ */
+function fixTabCorruptedText(s: string): string {
+  // \t in a JS regex character class is a literal tab (U+0009)
+  return s.replace(/\text\{/g, "\\text{");
+}
+
 // ─── Helper ───────────────────────────────────────────────────────────────────
 
 async function callGen(system: string, user: string): Promise<Record<string, unknown>> {
@@ -213,7 +235,7 @@ async function callGen(system: string, user: string): Promise<Record<string, unk
 
 // ─── Exported generators ──────────────────────────────────────────────────────
 
-type KwMeta = { id: string; label: string; description: string | null; topic_id: string };
+type KwMeta = { id: string; label: string; description: string | null; category_id: string };
 
 export async function generateAndStoreLesson(
   supabase: SupabaseClient,
@@ -221,7 +243,14 @@ export async function generateAndStoreLesson(
 ): Promise<{ micro_steps: unknown[] } | null> {
   const parsed = await callGen(
     LESSON_SYSTEM,
-    `keyword: ${kw.id}\nLabel: ${kw.label}\nDescription: ${kw.description ?? ""}\nTopic: ${kw.topic_id}\n\nBuild from the absolute simplest case. Start as if the student has never encountered this concept before.`
+    `Keyword ID: ${kw.id}
+Label: ${kw.label}
+Topic/Category: ${kw.category_id}
+
+Concept description (read carefully — this defines the exact skill to teach):
+${kw.description ?? "(none provided)"}
+
+Think carefully about what a student who has NEVER seen this concept before would find confusing. Build from the absolute simplest case. Step 1 must be a single, minimal example with no edge cases. Every step must have a check question.`
   );
   if (!Array.isArray(parsed.micro_steps) || parsed.micro_steps.length === 0) return null;
 
@@ -301,13 +330,15 @@ export async function generateAndStoreProblems(
   type PRow = { latex_content: string; choices: string[]; correct_index: number; solution_latex?: string; hint_latex?: string };
   const rows = (parsed.problems as PRow[]).map((p) => ({
     keyword_id: kw.id,
-    topic_id: kw.topic_id,
-    latex_content: sanitizeLearnLatex(p.latex_content),
-    solution_latex: sanitizeLearnLatex(p.solution_latex ?? ""),
-    choices: p.choices,
+    topic_id: kw.category_id,
+    // fixTabCorruptedText runs first: repairs <TAB>ext{ → \text{ before the
+    // backslash-normalisation pass in sanitizeLearnLatex.
+    latex_content: sanitizeLearnLatex(fixTabCorruptedText(p.latex_content)),
+    solution_latex: sanitizeLearnLatex(fixTabCorruptedText(p.solution_latex ?? "")),
+    choices: p.choices.map((c) => fixTabCorruptedText(c)),
     correct_index: p.correct_index,
     difficulty,
-    hint_latex: p.hint_latex ?? null,
+    hint_latex: p.hint_latex ? fixTabCorruptedText(p.hint_latex) : null,
   }));
 
   await supabase.from("learn_practice_problems").insert(rows);

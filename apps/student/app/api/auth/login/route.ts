@@ -34,9 +34,23 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid username or password" }, { status: 401 });
   }
 
+  // Read the diagnostic-completion flag separately and defensively: the column
+  // may not exist yet (migration not applied), in which case we default to null
+  // (treated as "not completed") rather than breaking login.
+  let diagnosticCompletedAt: string | null = null;
+  const { data: flag } = await supabase
+    .from("student_accounts")
+    .select("diagnostic_completed_at")
+    .eq("id", account.id)
+    .maybeSingle();
+  if (flag && "diagnostic_completed_at" in flag) {
+    diagnosticCompletedAt = (flag as { diagnostic_completed_at: string | null }).diagnostic_completed_at ?? null;
+  }
+
   return NextResponse.json({
     accountId: account.id,
     username: account.username,
     sessionId: account.session_id,
+    diagnosticCompletedAt,
   });
 }

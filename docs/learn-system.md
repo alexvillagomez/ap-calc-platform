@@ -120,31 +120,23 @@ Each student attempt updates `problems.estimated_difficulty` (α=0.15 EMA):
 
 These contracts are enforced by system prompts in `learnGenerator.ts`.
 
-### `example_latex` — paragraph-based format
+All generators share one universal format via the `FORMAT_RULES` constant. See [content-pipeline.md](content-pipeline.md) → "LaTeX format contract" for the canonical version.
 
-- Prose in `\text{...}` outside math blocks. Never bare English words.
-- Displayed equations use `$...$` (single-dollar display via the Preview paragraph renderer).
-- Multi-step aligned work uses `$$\begin{aligned}...\end{aligned}$$` with `\\` line breaks and `&=` alignment.
-- Paragraphs separated by `\n\n`. Never single `\n`.
-- Include `<FunctionGraph equation="..." rangeX="..." rangeY="..." />` for visual topics. FunctionGraph equation uses expr-eval syntax (`*` for multiply, `^` for power, no implicit multiplication).
+### Universal format (`example_latex`, `solution_latex`, `explanation_latex`, `rule_latex`, `hint_latex`, `tip_latex`)
 
-### `solution_latex` (check question solutions, practice problems)
-
-- Prose in `\text{...}` OUTSIDE math blocks, separated by `\n\n`.
-- Multi-step work in `$$\begin{aligned}...\end{aligned}$$`. Line breaks are `\\`. Alignment with `&=`.
-
-### `explanation_latex`, `rule_latex`, `hint_latex`
-
-- All prose in `\text{...}`, inline math outside. Max 60 words for explanations, 15 words for hints.
+- **Prose is plain text — never `\text{}`.** (Older builds wrapped prose in `\text{}`; that broke line wrapping and is no longer emitted.)
+- Inline math in `$...$`; displayed/multi-step math in `$$...$$` or `$$\begin{aligned}...\end{aligned}$$` (line breaks `\\`, alignment `&=`).
+- Plain prose must contain no `\`, `^`, `_`, or `{}` — anything needing those goes inside `$...$`.
+- No forced `\n\n`; write it the way you'd write it on paper.
+- `<FunctionGraph equation="..." rangeX="..." rangeY="..." />` only for genuinely visual topics (graphing/transformations/intervals) — not for algebraic manipulation. Equation uses expr-eval syntax (`*` multiply, `^` power, no implicit multiplication).
 
 ### Lesson `has_check` pattern
 
-- Steps 1–2: content-only (`has_check: false`). `check_question` fields are empty strings. No hint.
-- Steps 3–4: `has_check: true` with a real `check_question` and `hint_latex`.
+- **Every step has `has_check: true`** with a real `check_question` (text field `latex_content`) and `hint_latex`. Difficulty ramps: step 1 easy → later steps require genuine understanding. Distractors must reflect real student mistakes.
 
-### Backslash normalization (`fixBackslashEscaping` in `learnGenerator.ts`)
+### Backslash & tab normalization (`learnGenerator.ts`)
 
-Gemini sometimes over-escapes LaTeX. Applied to all stored content:
+`fixTabCorruptedText` repairs `<TAB>ext{` → `\text{` (stray single-backslash `\text` corrupted by JSON tab-escaping). `fixBackslashEscaping` repairs over-escaped LaTeX, applied to all stored content:
 1. `\\\\letter` → `\letter` (fully doubled command)
 2. `\\letter` → `\letter` (single-over-escaped)
 3. `\\\\` not before letter → `\\` (preserves `\begin{aligned}` line breaks)
