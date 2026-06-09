@@ -355,24 +355,35 @@ export default function DemoPage() {
     // them, then weighted-randomly pick from the top scorers. This converges
     // toward the student's ability as keywordStrengths update each answer.
     const remaining = queue.slice(idx);
-    const targetDifficulty = computeDemoTargetDifficulty(keywordStrengths);
-    const scored: ScoredProblem[] = remaining.map((p) => ({
-      id: p.id,
-      difficulty: p.difficulty ?? 3,
-      avg_rating: p.avg_rating,
-      // ±15% random jitter so identical cold-start states (every fresh account
-      // starts with all strengths at 0.5, making the "best" problems identical)
-      // don't keep surfacing the same handful — adds variety across sessions.
-      score: scoreProblemByKeyword(
-        { difficulty: p.difficulty ?? 3, estimated_difficulty: null, keyword_weights: p.keyword_weights ?? {}, avg_rating: p.avg_rating },
-        keywordStrengths,
-        targetDifficulty
-      ) * (0.85 + 0.3 * Math.random()),
-    }));
-    // Sample from a wide candidate pool (top 40, not the default top 8) so the
-    // diagnostic draws broadly from the ~300-problem bank instead of repeating.
-    const pickedId = selectProblem(scored, 40)?.id;
-    const next = remaining.find((p) => p.id === pickedId) ?? remaining[0]!;
+
+    // Exploration vs. exploitation. Early in the run every keyword strength is the
+    // same (0.5), so adaptive scoring would surface the same "best" problems on
+    // every account. Instead, start almost fully random — sampling UNIFORMLY across
+    // the whole remaining pool so every problem in the bank is weighted evenly — and
+    // decay toward adaptive, ability-targeted selection as answers accumulate and
+    // strengths become informative. A 0.25 floor keeps lasting variety throughout.
+    const exploreProb = Math.max(0.25, 1 - answeredCount / 8);
+    let next: DemoProblem;
+    if (Math.random() < exploreProb) {
+      // Uniform random across the remaining pool — even coverage of all problems.
+      next = remaining[Math.floor(Math.random() * remaining.length)]!;
+    } else {
+      const targetDifficulty = computeDemoTargetDifficulty(keywordStrengths);
+      const scored: ScoredProblem[] = remaining.map((p) => ({
+        id: p.id,
+        difficulty: p.difficulty ?? 3,
+        avg_rating: p.avg_rating,
+        // ±15% jitter so the adaptive branch also doesn't fixate on the same items.
+        score: scoreProblemByKeyword(
+          { difficulty: p.difficulty ?? 3, estimated_difficulty: null, keyword_weights: p.keyword_weights ?? {}, avg_rating: p.avg_rating },
+          keywordStrengths,
+          targetDifficulty
+        ) * (0.85 + 0.3 * Math.random()),
+      }));
+      // Wide candidate pool (top 40, not the default top 8) for additional spread.
+      const pickedId = selectProblem(scored, 40)?.id;
+      next = remaining.find((p) => p.id === pickedId) ?? remaining[0]!;
+    }
 
     // Swap the picked problem into the current slot so queueIdx still advances correctly
     const pickedPos = queue.findIndex((p) => p.id === next.id);
