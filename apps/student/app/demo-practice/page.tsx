@@ -32,6 +32,8 @@ interface KeywordEntry {
   tested: boolean;
   total_attempts: number;
   low_sample: boolean;
+  umbrellaId: string;
+  spaced_review_due_at: string | null;
 }
 
 interface UmbrellaGroup {
@@ -66,6 +68,7 @@ interface AttemptResponse {
   state: string;
   in_depth_score: number;
   consecutive_correct: number;
+  total_attempts: number;
   show_tip: boolean;
   offer_mastery_quiz: boolean;
   mastery_achieved: boolean;
@@ -117,13 +120,22 @@ const SESSION_KEY = "ap_calc_student_session_id";
 const ACCOUNT_KEY = "ap_calc_account_id";
 const MAX_KEYWORDS = 8;
 
-const STATE_PRIORITY: Record<KeywordState, number> = {
-  needs_lesson: 0,
-  needs_practice: 1,
-  in_progress: 2,
-  not_started: 3,
-  mastered: 99,
-};
+// Spaced / interleaved practice constants
+const BLOCK_SIZE = 3;
+const INTERLEAVE_PROB = 0.3;
+
+const UMBRELLA_ORDER = [
+  "polynomial_structure_and_classification",
+  "polynomial_values_and_identities",
+  "polynomial_addition_and_subtraction",
+  "polynomial_multiplication_and_special_products",
+  "gcf_factoring_and_grouping",
+  "quadratic_and_special_form_factoring",
+  "polynomial_division_and_factor_theorems",
+  "polynomial_equations_and_roots",
+  "polynomial_zeros_and_graph_behavior",
+  "polynomial_tables_and_finite_differences",
+];
 
 function stateBadge(state: KeywordState): { label: string; className: string } {
   switch (state) {
@@ -167,9 +179,13 @@ export default function DemoPracticePage() {
   const excludedIdsRef = useRef<string[]>([]);
   const answerStartTimeRef = useRef<number>(Date.now());
 
-  // Consecutive tracking
-  const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
+  // Consecutive tracking (wrong streak only; correct streak no longer drives advancement)
   const [consecutiveWrong, setConsecutiveWrong] = useState(0);
+
+  // Block-based progression
+  const [blockCount, setBlockCount] = useState(0); // problems done on current focus keyword this block
+  const [reviewPool, setReviewPool] = useState<KeywordEntry[]>([]); // keywords practiced this session
+  const [isReviewCard, setIsReviewCard] = useState(false); // whether current problem is a review interleave
 
   // Lesson
   const [lesson, setLesson] = useState<LessonData | null>(null);
@@ -276,16 +292,30 @@ export default function DemoPracticePage() {
           ? polyCategory.umbrellas
           : data.categories.flatMap((c) => c.umbrellas);
 
+        const now = new Date();
         for (const umbrella of source) {
           for (const kw of umbrella.keywords) {
-            allKeywords.push(kw);
+            // Multi-pass: include mastered-but-due keywords in addition to non-mastered
+            const isDue =
+              kw.spaced_review_due_at != null &&
+              new Date(kw.spaced_review_due_at) <= now;
+            if (kw.state !== "mastered" || isDue) {
+              allKeywords.push({ ...kw, umbrellaId: umbrella.id });
+            }
           }
         }
 
-        // Sort by priority, skip mastered
-        allKeywords = allKeywords
-          .filter((kw) => kw.state !== "mastered")
-          .sort((a, b) => STATE_PRIORITY[a.state] - STATE_PRIORITY[b.state]);
+        // Sort by curriculum order (umbrella), then weakest score first
+        allKeywords = allKeywords.sort((a, b) => {
+          const aOrder = UMBRELLA_ORDER.indexOf(a.umbrellaId);
+          const bOrder = UMBRELLA_ORDER.indexOf(b.umbrellaId);
+          const aIdx = aOrder === -1 ? 999 : aOrder;
+          const bIdx = bOrder === -1 ? 999 : bOrder;
+          if (aIdx !== bIdx) return aIdx - bIdx;
+          const aScore = a.in_depth_score ?? 0.5;
+          const bScore = b.in_depth_score ?? 0.5;
+          return aScore - bScore;
+        });
 
         // Take top 8
         const topKeywords = allKeywords.slice(0, MAX_KEYWORDS);
@@ -591,28 +621,64 @@ export default function DemoPracticePage() {
       const correct = choiceIndex === problem.correct_index;
       const timeSpentMs = Date.now() - answerStartTimeRef.current;
 
-      // Record attempt (fire and don't block UI)
-      fetch("/api/learn/practice/attempt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId,
-          keyword_id: currentKeyword.id,
-          topic_id: "polynomials",
-          correct,
-          time_spent_ms: timeSpentMs,
-        }),
-      }).catch(() => {});
+      // Count this problem in the block (only for the focus keyword, not review cards)
+      if (!isReviewCard) {
+        setBlockCount((n) => n + 1);
+      }
 
       if (correct) {
-        setConsecutiveCorrect((n) => n + 1);
         setConsecutiveWrong(0);
       } else {
         setConsecutiveWrong((n) => n + 1);
-        setConsecutiveCorrect(0);
+      }
+
+      // Record attempt and read back fresh stats to update queue
+      try {
+        const res = await fetch("/api/learn/practice/attempt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sessionId,
+            keyword_id: currentKeyword.id,
+            topic_id: "polynomials",
+            correct,
+            time_spent_ms: timeSpentMs,
+          }),
+        });
+        if (res.ok) {
+          const attemptData = (await res.json()) as AttemptResponse;
+          // Update the keyword entry in the queue with fresh server stats
+          setQueue((prev) =>
+            prev.map((kw) =>
+              kw.id === currentKeyword.id
+                ? {
+                    ...kw,
+                    state: attemptData.state as KeywordState,
+                    in_depth_score: attemptData.in_depth_score,
+                    total_attempts: attemptData.total_attempts,
+                  }
+                : kw
+            )
+          );
+          // Also update review pool entries with fresh stats
+          setReviewPool((prev) =>
+            prev.map((kw) =>
+              kw.id === currentKeyword.id
+                ? {
+                    ...kw,
+                    state: attemptData.state as KeywordState,
+                    in_depth_score: attemptData.in_depth_score,
+                    total_attempts: attemptData.total_attempts,
+                  }
+                : kw
+            )
+          );
+        }
+      } catch {
+        // best-effort — don't block UI on network error
       }
     },
-    [problem, currentKeyword, phase, sessionId]
+    [problem, currentKeyword, phase, sessionId, isReviewCard]
   );
 
   // ── Handle "I don't know this" ──────────────────────────────────────────────
@@ -626,28 +692,125 @@ export default function DemoPracticePage() {
   const handleNext = useCallback(() => {
     if (!currentKeyword) return;
 
-    if (consecutiveCorrect >= 3) {
-      // Advance to next keyword
-      advanceKeyword();
+    // After a review card, return to the focus keyword's block without counting
+    if (isReviewCard) {
+      setIsReviewCard(false);
+      loadPracticeProblem(currentKeyword.id);
       return;
     }
 
+    // Too many wrong in a row — show lesson
     if (consecutiveWrong >= 2) {
-      // Too many wrong — show lesson
       loadLesson(currentKeyword.id);
       return;
     }
 
-    // Continue with next problem for same keyword
+    // Read the latest state from the queue (updated after attempt response)
+    const latestKw = queue.find((k) => k.id === currentKeyword.id) ?? currentKeyword;
+
+    // Advance early if server marked keyword mastered
+    if (latestKw.state === "mastered") {
+      advanceKeyword();
+      return;
+    }
+
+    // Advance after BLOCK_SIZE problems on this keyword
+    if (blockCount >= BLOCK_SIZE) {
+      advanceKeyword();
+      return;
+    }
+
+    // Interleave: maybe serve a review problem before the next focus problem
+    if (reviewPool.length >= 2 && Math.random() < INTERLEAVE_PROB) {
+      const now = new Date();
+      // Prefer past-due keywords, then weakest by score
+      const pastDue = reviewPool.filter(
+        (kw) => kw.spaced_review_due_at != null && new Date(kw.spaced_review_due_at) <= now
+      );
+      const candidates = pastDue.length > 0 ? pastDue : reviewPool;
+      const reviewKw = candidates.reduce((best, kw) => {
+        const bestScore = best.in_depth_score ?? 0.5;
+        const kwScore = kw.in_depth_score ?? 0.5;
+        return kwScore < bestScore ? kw : best;
+      });
+      setIsReviewCard(true);
+      loadPracticeProblem(reviewKw.id);
+      return;
+    }
+
+    // Continue with next problem for the same focus keyword
     loadPracticeProblem(currentKeyword.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentKeyword, consecutiveCorrect, consecutiveWrong, loadPracticeProblem]);
+  }, [currentKeyword, consecutiveWrong, blockCount, reviewPool, isReviewCard, queue, loadPracticeProblem]);
 
   // ── Advance to next keyword ─────────────────────────────────────────────────
   const advanceKeyword = useCallback(() => {
+    // Add the current keyword to the review pool if not already present
+    if (currentKeyword) {
+      setReviewPool((prev) => {
+        const already = prev.some((k) => k.id === currentKeyword.id);
+        if (already) return prev;
+        // Use latest queue stats for the pool entry
+        const latestKw = queue.find((k) => k.id === currentKeyword.id) ?? currentKeyword;
+        return [...prev, latestKw];
+      });
+    }
+
     const nextIndex = queueIndex + 1;
     if (nextIndex >= queue.length) {
-      setPhase("done");
+      // Multi-pass: re-fetch progress; only show done if everything is solid
+      const sid = localStorage.getItem(SESSION_KEY) ?? "";
+      fetch(`/api/learn/progress?sessionId=${encodeURIComponent(sid)}`)
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data: { categories: CategoryGroup[] } | null) => {
+          if (!data) { setPhase("done"); return; }
+          const now = new Date();
+          const poly = data.categories.find((c) => c.category_id === "polynomials");
+          const source = poly ? poly.umbrellas : data.categories.flatMap((c) => c.umbrellas);
+          const stillNeeded = source.some((umbrella) =>
+            umbrella.keywords.some((kw) => {
+              if (kw.state !== "mastered") return (kw.in_depth_score ?? 0) < 0.75;
+              return kw.spaced_review_due_at != null && new Date(kw.spaced_review_due_at) <= now;
+            })
+          );
+          if (!stillNeeded) {
+            setPhase("done");
+            return;
+          }
+          // Rebuild queue from fresh data
+          let refreshed: KeywordEntry[] = [];
+          for (const umbrella of source) {
+            for (const kw of umbrella.keywords) {
+              const isDue =
+                kw.spaced_review_due_at != null &&
+                new Date(kw.spaced_review_due_at) <= now;
+              if (kw.state !== "mastered" || isDue) {
+                refreshed.push({ ...kw, umbrellaId: umbrella.id });
+              }
+            }
+          }
+          refreshed = refreshed.sort((a, b) => {
+            const aOrder = UMBRELLA_ORDER.indexOf(a.umbrellaId);
+            const bOrder = UMBRELLA_ORDER.indexOf(b.umbrellaId);
+            const aIdx = aOrder === -1 ? 999 : aOrder;
+            const bIdx = bOrder === -1 ? 999 : bOrder;
+            if (aIdx !== bIdx) return aIdx - bIdx;
+            return (a.in_depth_score ?? 0.5) - (b.in_depth_score ?? 0.5);
+          });
+          const next = refreshed.slice(0, MAX_KEYWORDS);
+          if (next.length === 0) { setPhase("done"); return; }
+          setQueue(next);
+          setQueueIndex(0);
+          setBlockCount(0);
+          setConsecutiveWrong(0);
+          excludedIdsRef.current = [];
+          const nextKw = next[0]!;
+          setTransitionMsg(`Keep going! Moving to "${nextKw.label}"…`);
+          setPhase("transition");
+          savePosition({ keywordId: nextKw.id, phase: "transition", problemId: null });
+          setTimeout(() => { startKeyword(nextKw); }, 1200);
+        })
+        .catch(() => setPhase("done"));
       return;
     }
 
@@ -656,8 +819,9 @@ export default function DemoPracticePage() {
     setPhase("transition");
 
     setQueueIndex(nextIndex);
-    setConsecutiveCorrect(0);
+    setBlockCount(0);
     setConsecutiveWrong(0);
+    setIsReviewCard(false);
     excludedIdsRef.current = [];
     // Persist the keyword we're transitioning to
     savePosition({ keywordId: nextKw.id, phase: "transition", problemId: null });
@@ -665,7 +829,7 @@ export default function DemoPracticePage() {
     setTimeout(() => {
       startKeyword(nextKw);
     }, 1200);
-  }, [queueIndex, queue, startKeyword, savePosition]);
+  }, [queueIndex, queue, currentKeyword, startKeyword, savePosition]);
 
   // ── Load lesson ─────────────────────────────────────────────────────────────
   const loadLesson = useCallback(async (keywordId: string) => {
@@ -708,8 +872,8 @@ export default function DemoPracticePage() {
     if (!lesson || !currentKeyword) return;
     const nextStep = lessonStepIdx + 1;
     if (nextStep >= lesson.micro_steps.length) {
-      // Lesson complete — back to practice
-      setConsecutiveCorrect(0);
+      // Lesson complete — back to practice; reset block so student gets BLOCK_SIZE problems
+      setBlockCount(0);
       setConsecutiveWrong(0);
       loadPracticeProblem(currentKeyword.id);
     } else {
@@ -903,25 +1067,30 @@ export default function DemoPracticePage() {
           <>
             {/* Header */}
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+              <div className="flex items-center gap-2 min-w-0">
+                <p className="text-xs text-gray-400 uppercase tracking-wide font-medium truncate">
                   {currentKeyword.label}
                 </p>
+                {isReviewCard && (
+                  <span className="flex-shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
+                    Review
+                  </span>
+                )}
               </div>
-              {/* Streak indicator: 3 dots showing consecutive-correct progress */}
-              <div className="flex items-center gap-1.5" title="Get 3 correct in a row to advance">
-                {[0, 1, 2].map((i) => (
+              {/* Mastery progress bar */}
+              <div
+                className="flex items-center gap-2"
+                title={`Mastery: ${Math.round((currentKeyword.in_depth_score ?? 0) * 100)}%`}
+              >
+                <div className="w-20 h-1.5 rounded-full bg-gray-200 overflow-hidden">
                   <div
-                    key={i}
-                    className={cn(
-                      "w-2.5 h-2.5 rounded-full border-2 transition-colors",
-                      i < consecutiveCorrect
-                        ? "bg-green-500 border-green-500"
-                        : "bg-transparent border-gray-300"
-                    )}
+                    className="h-1.5 rounded-full bg-blue-500 transition-all"
+                    style={{ width: `${Math.round((currentKeyword.in_depth_score ?? 0) * 100)}%` }}
                   />
-                ))}
-                <span className="text-xs text-gray-400 ml-1">streak</span>
+                </div>
+                <span className="text-xs text-gray-400">
+                  {Math.round((currentKeyword.in_depth_score ?? 0) * 100)}%
+                </span>
               </div>
             </div>
 
@@ -1045,7 +1214,7 @@ export default function DemoPracticePage() {
                         }}
                         className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
                       >
-                        {consecutiveCorrect >= 2
+                        {blockCount >= BLOCK_SIZE
                           ? queueIndex + 1 >= queue.length
                             ? "Finish →"
                             : "Next keyword →"
