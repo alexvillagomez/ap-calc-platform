@@ -20,22 +20,22 @@ export async function GET() {
 
   const supabase = createClient(supabaseUrl, key);
 
-  // Get all distinct topic_ids from learn_keywords that have rag_examples coverage
+  // Get all distinct category_ids from learn_keywords (column is category_id, not topic_id)
   const { data } = await supabase
     .from("learn_keywords")
-    .select("topic_id")
+    .select("category_id")
     .eq("tier", "in_depth")
-    .not("topic_id", "is", null)
+    .not("category_id", "is", null)
     .limit(500);
 
   // Deduplicate
   const seen = new Set<string>();
   const topics: { id: string; label: string }[] = [];
   for (const row of data ?? []) {
-    if (!seen.has(row.topic_id)) {
-      seen.add(row.topic_id);
-      const label = TOPIC_LABELS[row.topic_id] ?? row.topic_id;
-      topics.push({ id: row.topic_id, label });
+    if (!seen.has(row.category_id)) {
+      seen.add(row.category_id);
+      const label = TOPIC_LABELS[row.category_id] ?? row.category_id;
+      topics.push({ id: row.category_id, label });
     }
   }
 

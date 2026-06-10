@@ -10,7 +10,17 @@ import type { Answer, KeywordScores } from "@/lib/diagnosticScoring";
 import { cn } from "@/lib/cn";
 
 const SESSION_KEY = "ap_calc_student_session_id";
+const ACCOUNT_KEY = "ap_calc_account_id";
+const DRAFT_KEY_PREFIX = "ap_calc_diagnostic_draft_";
 const LABELS = ["A", "B", "C", "D"];
+
+type DiagnosticDraft = {
+  phase: "diagnostic";
+  answers: (Answer & { problem_id: string })[];
+  umbrellaScores: KeywordScores;
+  inDepthScores: KeywordScores;
+  currentQuestion: DBQuestion;
+};
 
 const ALL_TOPIC_IDS = [
   "exponent_rules",
@@ -81,8 +91,43 @@ function GeneralDiagnosticInner() {
   const [classifying, setClassifying] = useState(false);
   const [flaggedIds, setFlaggedIds] = useState<Set<string>>(new Set());
 
-  // Fetch first question on mount
+  const draftKey = sessionId ? `${DRAFT_KEY_PREFIX}${sessionId}` : "";
+
+  function clearDraft() {
+    if (!draftKey) return;
+    try { localStorage.removeItem(draftKey); } catch {}
+  }
+
+  // Persist a resumable snapshot any time the in-progress diagnostic state changes
   useEffect(() => {
+    if (!draftKey || phase !== "diagnostic" || !currentQuestion) return;
+    const draft: DiagnosticDraft = { phase: "diagnostic", answers, umbrellaScores, inDepthScores, currentQuestion };
+    try { localStorage.setItem(draftKey, JSON.stringify(draft)); } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [draftKey, phase, currentQuestion, answers, umbrellaScores, inDepthScores]);
+
+  // Require an account before serving diagnostic questions
+  useEffect(() => {
+    const accountId = localStorage.getItem(ACCOUNT_KEY);
+    if (!accountId) { router.replace("/login"); return; }
+
+    if (draftKey) {
+      try {
+        const raw = localStorage.getItem(draftKey);
+        if (raw) {
+          const draft = JSON.parse(raw) as DiagnosticDraft;
+          if (draft.phase === "diagnostic" && draft.currentQuestion) {
+            setAnswers(draft.answers);
+            setUmbrellaScores(draft.umbrellaScores);
+            setInDepthScores(draft.inDepthScores);
+            setCurrentQuestion(draft.currentQuestion);
+            setPhase("diagnostic");
+            return;
+          }
+        }
+      } catch {}
+    }
+
     fetchNextQuestion([], {}, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -135,6 +180,7 @@ function GeneralDiagnosticInner() {
     } catch {
       setResults({});
     } finally {
+      clearDraft();
       setClassifying(false);
       setPhase("results");
     }
@@ -150,6 +196,7 @@ function GeneralDiagnosticInner() {
       selectedIndex: idx,
       flaggedForgotten: false,
       flaggedNeverSeen: false,
+      flaggedDontKnow: false,
       correct,
     };
 
@@ -178,7 +225,7 @@ function GeneralDiagnosticInner() {
     const q = currentQuestion;
     const answer: Answer & { problem_id: string } = {
       questionId: q.id, problem_id: q.id, selectedIndex: null,
-      flaggedForgotten: true, flaggedNeverSeen: false, correct: false,
+      flaggedForgotten: true, flaggedNeverSeen: false, flaggedDontKnow: false, correct: false,
     };
     const { umbrellaScores: newU, inDepthScores: newI } = applyAnswerToScores(
       umbrellaScores, inDepthScores, q.umbrella_keywords, q.in_depth_keywords, answer
@@ -207,7 +254,24 @@ function GeneralDiagnosticInner() {
     const q = currentQuestion;
     const answer: Answer & { problem_id: string } = {
       questionId: q.id, problem_id: q.id, selectedIndex: null,
-      flaggedForgotten: false, flaggedNeverSeen: true, correct: null,
+      flaggedForgotten: false, flaggedNeverSeen: true, flaggedDontKnow: false, correct: null,
+    };
+    const { umbrellaScores: newU, inDepthScores: newI } = applyAnswerToScores(
+      umbrellaScores, inDepthScores, q.umbrella_keywords, q.in_depth_keywords, answer
+    );
+    const nextAnswers = [...answers, answer];
+    setUmbrellaScores(newU); setInDepthScores(newI); setAnswers(nextAnswers);
+    const shouldStop = nextAnswers.length >= GENERAL_DIAGNOSTIC_MAX;
+    if (shouldStop) { await finalize(nextAnswers); return; }
+    await fetchNextQuestion(nextAnswers.map(a => a.problem_id), newI, nextAnswers.length);
+  }
+
+  async function handleDontKnow() {
+    if (!currentQuestion || fetchingNext) return;
+    const q = currentQuestion;
+    const answer: Answer & { problem_id: string } = {
+      questionId: q.id, problem_id: q.id, selectedIndex: null,
+      flaggedForgotten: false, flaggedNeverSeen: false, flaggedDontKnow: true, correct: false,
     };
     const { umbrellaScores: newU, inDepthScores: newI } = applyAnswerToScores(
       umbrellaScores, inDepthScores, q.umbrella_keywords, q.in_depth_keywords, answer
@@ -240,7 +304,7 @@ function GeneralDiagnosticInner() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="max-w-sm text-center space-y-3">
           <p className="text-sm text-red-600">{errorMsg}</p>
-          <button onClick={() => router.push("/precalc")} className="text-sm text-blue-600 underline">Back to portal</button>
+          <button onClick={() => router.push("/demo")} className="text-sm text-blue-600 underline">Back to portal</button>
         </div>
       </div>
     );
@@ -261,7 +325,7 @@ function GeneralDiagnosticInner() {
             <span className="text-sm font-medium text-gray-500">
               Question {answers.length + 1} of ~{GENERAL_DIAGNOSTIC_MAX}
             </span>
-            <button onClick={() => router.push("/precalc")} className="text-xs text-gray-400 hover:text-gray-600">
+            <button onClick={() => router.push("/demo")} className="text-xs text-gray-400 hover:text-gray-600">
               ← Exit
             </button>
           </div>
@@ -324,6 +388,13 @@ function GeneralDiagnosticInner() {
               className="text-sm text-gray-400 hover:text-gray-700 underline underline-offset-2 text-center transition-colors disabled:opacity-50"
             >
               I&apos;ve never seen this
+            </button>
+            <button
+              onClick={handleDontKnow}
+              disabled={fetchingNext}
+              className="text-sm text-gray-400 hover:text-gray-700 underline underline-offset-2 text-center transition-colors disabled:opacity-50"
+            >
+              I don&apos;t know how to do this
             </button>
             <div className="flex justify-end pt-1">
               <button
@@ -421,7 +492,7 @@ function GeneralDiagnosticInner() {
               Go to practice →
             </button>
             <button
-              onClick={() => router.push("/precalc")}
+              onClick={() => router.push("/demo")}
               className="w-full text-sm text-gray-400 hover:text-gray-600 underline"
             >
               Back to portal

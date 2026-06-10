@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Preview } from "@/components/Preview";
+import { ContentFeedback } from "@/components/ContentFeedback";
 import { DiagnosticQuestionView } from "./components/DiagnosticQuestion";
 import { DiagnosticResults } from "./components/DiagnosticResults";
 import { FeedbackButtons } from "./components/FeedbackButtons";
@@ -22,6 +23,7 @@ import type {
 import { cn } from "@/lib/cn";
 
 const SESSION_KEY = "ap_calc_student_session_id";
+const ACCOUNT_KEY = "ap_calc_account_id";
 const LABELS = ["A", "B", "C", "D"];
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -52,6 +54,7 @@ type MicroStep = {
 };
 
 type RefresherData = {
+  id?: string;
   keyword_id: string;
   rule_latex: string;
   example_latex: string;
@@ -117,6 +120,7 @@ function LearnPageInner() {
 
   // ── Lesson state ──
   const [lessonSteps, setLessonSteps] = useState<MicroStep[]>([]);
+  const [lessonContentId, setLessonContentId] = useState("");
   const [stepIndex, setStepIndex] = useState(0);
   const [stepPhase, setStepPhase] = useState<StepPhase>("read");
   const [showHint, setShowHint] = useState(false);
@@ -124,6 +128,7 @@ function LearnPageInner() {
 
   // ── Refresher state ──
   const [refresherData, setRefresherData] = useState<RefresherData | null>(null);
+  const [refresherContentId, setRefresherContentId] = useState("");
   const [refresherPhase, setRefresherPhase] = useState<StepPhase>("read");
   const [refresherShowHint, setRefresherShowHint] = useState(false);
   const [refresherFeedbackShown, setRefresherFeedbackShown] = useState(false);
@@ -137,6 +142,8 @@ function LearnPageInner() {
   // ─── On mount: check for existing keyword states, skip diagnostic if found ──
 
   useEffect(() => {
+    const accountId = localStorage.getItem(ACCOUNT_KEY);
+    if (!accountId) { router.replace("/login"); return; }
     if (!sessionId) {
       startFreshDiagnostic();
       return;
@@ -197,9 +204,10 @@ function LearnPageInner() {
     setPhase("lesson_loading");
     try {
       const res = await fetch(`/api/learn/lesson/${kw}`);
-      const data = await res.json() as { micro_steps?: MicroStep[]; error?: string };
+      const data = await res.json() as { id?: string; micro_steps?: MicroStep[]; error?: string };
       if (!res.ok || !data.micro_steps?.length) throw new Error(data.error ?? "No lesson");
       setLessonSteps(data.micro_steps);
+      setLessonContentId(data.id ?? "");
       setStepIndex(0);
       setStepPhase("read");
       setShowHint(false);
@@ -218,6 +226,7 @@ function LearnPageInner() {
       const data = await res.json() as RefresherData & { error?: string };
       if (!res.ok || !data.rule_latex) throw new Error(data.error ?? "No refresher");
       setRefresherData(data);
+      setRefresherContentId(data.id ?? "");
       setRefresherPhase("read");
       setRefresherShowHint(false);
       setRefresherFeedbackShown(false);
@@ -325,15 +334,15 @@ function LearnPageInner() {
 
   function handleDiagnosticMCQ(idx: number) {
     const q = currentQuestion!;
-    void recordDiagnosticAnswer({ questionId: q.id, problem_id: q.id, selectedIndex: idx, flaggedForgotten: false, flaggedNeverSeen: false, correct: idx === q.correct_index });
+    void recordDiagnosticAnswer({ questionId: q.id, problem_id: q.id, selectedIndex: idx, flaggedForgotten: false, flaggedNeverSeen: false, flaggedDontKnow: false, correct: idx === q.correct_index });
   }
   function handleDiagnosticForgotten() {
     const q = currentQuestion!;
-    void recordDiagnosticAnswer({ questionId: q.id, problem_id: q.id, selectedIndex: null, flaggedForgotten: true, flaggedNeverSeen: false, correct: false });
+    void recordDiagnosticAnswer({ questionId: q.id, problem_id: q.id, selectedIndex: null, flaggedForgotten: true, flaggedNeverSeen: false, flaggedDontKnow: false, correct: false });
   }
   function handleDiagnosticNeverSeen() {
     const q = currentQuestion!;
-    void recordDiagnosticAnswer({ questionId: q.id, problem_id: q.id, selectedIndex: null, flaggedForgotten: false, flaggedNeverSeen: true, correct: null });
+    void recordDiagnosticAnswer({ questionId: q.id, problem_id: q.id, selectedIndex: null, flaggedForgotten: false, flaggedNeverSeen: true, flaggedDontKnow: false, correct: null });
   }
 
   // ─── Results → routing ─────────────────────────────────────────────────────
@@ -579,7 +588,7 @@ function LearnPageInner() {
             <span className="text-sm font-medium text-gray-700">
               Your Learning Plan
             </span>
-            <button onClick={() => router.push("/precalc")} className="text-xs text-gray-400 hover:text-gray-600">← Back</button>
+            <button onClick={() => router.push("/demo")} className="text-xs text-gray-400 hover:text-gray-600">← Back</button>
           </div>
           <div className="flex items-center gap-3 mb-1">
             <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -726,6 +735,9 @@ function LearnPageInner() {
           <>
             <PreviewCard label="Explanation" latex={step.explanation_latex} colorClass="bg-white border-gray-100" />
             <PreviewCard label="Example" latex={step.example_latex} colorClass="bg-gray-50 border-gray-200" />
+            {lessonContentId && (
+              <ContentFeedback key={lessonContentId} sessionId={sessionId} contentType="lesson" contentId={lessonContentId} label="Rate this lesson" />
+            )}
           </>
         )}
 
@@ -808,6 +820,9 @@ function LearnPageInner() {
           <>
             <PreviewCard label="Rule" latex={refresherData.rule_latex} colorClass="bg-white border-gray-100" />
             <PreviewCard label="Example" latex={refresherData.example_latex} colorClass="bg-gray-50 border-gray-200" />
+            {refresherContentId && (
+              <ContentFeedback key={refresherContentId} sessionId={sessionId} contentType="refresher" contentId={refresherContentId} label="Rate this refresher" />
+            )}
           </>
         )}
 

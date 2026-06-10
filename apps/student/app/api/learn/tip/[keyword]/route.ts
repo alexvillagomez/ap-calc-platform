@@ -27,7 +27,7 @@ export async function GET(
   const tip = data ?? await (async () => {
     const { data: kw } = await supabase
       .from("learn_keywords")
-      .select("id, label, description, topic_id")
+      .select("id, label, description, category_id")
       .eq("id", keyword)
       .maybeSingle();
     if (!kw) return null;

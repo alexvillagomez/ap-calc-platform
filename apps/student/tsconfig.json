@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -13,9 +17,39 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "plugins": [{ "name": "next" }],
-    "paths": { "@/*": ["./*"] }
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "/tmp/iso_code/types/**/*.ts",
+    "/tmp/iso_final/types/**/*.ts",
+    "/tmp/iso_fix/types/**/*.ts",
+    "/tmp/iso_gate1/types/**/*.ts",
+    "/tmp/iso_gate2/types/**/*.ts",
+    "/tmp/iso_gate3/types/**/*.ts",
+    "/tmp/iso_la/types/**/*.ts",
+    "/tmp/iso_qa/types/**/*.ts",
+    "/tmp/iso_reset/types/**/*.ts",
+    "/tmp/iso_var/types/**/*.ts",
+    "/tmp/iso_var2/types/**/*.ts",
+    "/tmp/iso_walk/types/**/*.ts",
+    "/tmp/next_student_build/types/**/*.ts",
+    "/tmp/student_prod_iso/types/**/*.ts",
+    "next-env.d.ts",
+    "/tmp/iso_la2/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

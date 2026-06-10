@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Preview } from "@/components/Preview";
+import { ContentFeedback } from "@/components/ContentFeedback";
 import { cn } from "@/lib/cn";
 
 interface Problem {
@@ -15,6 +16,7 @@ interface Problem {
   difficulty: number;
   keyword_weights?: Record<string, number> | null;
   avg_rating: number | null;
+  feedback_content_type?: "problem" | "rag_example";
 }
 
 type Phase = "loading" | "answering" | "revealed";
@@ -23,9 +25,13 @@ const SESSION_KEY = "ap_calc_student_session_id";
 const ACCOUNT_KEY = "ap_calc_account_id";
 const USERNAME_KEY = "ap_calc_username";
 const CHOICE_LABELS = ["A", "B", "C", "D"];
-const DIFFICULTY_LABELS: Record<number, string> = {
-  1: "Easy", 2: "Medium-Easy", 3: "Medium", 4: "Medium-Hard", 5: "Hard",
-};
+function difficultyLabel(d: number): string {
+  if (d < 0.3) return "Easy";
+  if (d < 0.5) return "Medium-Easy";
+  if (d < 0.7) return "Medium";
+  if (d < 0.9) return "Medium-Hard";
+  return "Hard";
+}
 
 function generateSessionId(): string {
   try {
@@ -46,16 +52,12 @@ export default function PrecalcPracticePage() {
   const [problem, setProblem] = useState<Problem | null>(null);
   const [phase, setPhase] = useState<Phase>("loading");
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
-  const [rating, setRating] = useState<number | null>(null);
-  const [flagged, setFlagged] = useState(false);
   const [loadingSimilar, setLoadingSimilar] = useState(false);
 
   const loadNextProblem = useCallback(async () => {
     setPhase("loading");
     setProblem(null);
     setSelectedChoice(null);
-    setRating(null);
-    setFlagged(false);
     setLoadingSimilar(false);
 
     try {
@@ -80,7 +82,7 @@ export default function PrecalcPracticePage() {
   // Init: auth guard + load session + first problem
   useEffect(() => {
     const accountId = localStorage.getItem(ACCOUNT_KEY);
-    if (!accountId) { router.replace("/precalc"); return; }
+    if (!accountId) { router.replace("/demo"); return; }
 
     setLoggedInUsername(localStorage.getItem(USERNAME_KEY));
 
@@ -88,15 +90,15 @@ export default function PrecalcPracticePage() {
     sessionIdRef.current = storedSession || generateSessionId();
     if (!storedSession) localStorage.setItem(SESSION_KEY, sessionIdRef.current);
 
-    // Load keyword_strengths then fetch first problem
+    // Load topic_strengths then fetch first problem
     fetch("/api/session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sessionId: sessionIdRef.current }),
     })
       .then(r => r.json())
-      .then((data: { keyword_strengths?: Record<string, number>; strengths?: Record<string, number> }) => {
-        setKeywordStrengths(data.keyword_strengths ?? data.strengths ?? {});
+      .then((data: { topic_strengths?: Record<string, number> }) => {
+        setKeywordStrengths(data.topic_strengths ?? {});
       })
       .catch(() => {})
       .finally(() => { void loadNextProblem(); });
@@ -124,45 +126,9 @@ export default function PrecalcPracticePage() {
           keywordWeights: problem.keyword_weights ?? undefined,
         }),
       });
-      const data = (await res.json()) as { keyword_strengths?: Record<string, number> };
-      if (data.keyword_strengths) setKeywordStrengths(data.keyword_strengths);
+      const data = (await res.json()) as { topic_strengths?: Record<string, number> };
+      if (data.topic_strengths) setKeywordStrengths(data.topic_strengths);
     } catch {}
-  };
-
-  const handleRate = async (stars: number) => {
-    if (!problem) return;
-    setRating(stars);
-    try {
-      await fetch("/api/record-attempt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId: sessionIdRef.current,
-          problemId: problem.id,
-          selectedIndex: selectedChoice ?? 0,
-          correct: selectedChoice === problem.correct_index,
-          rating: stars,
-        }),
-      });
-    } catch {}
-  };
-
-  const handleFlag = async () => {
-    if (!problem || flagged) return;
-    setFlagged(true);
-    try {
-      await fetch("/api/record-attempt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId: sessionIdRef.current,
-          problemId: problem.id,
-          selectedIndex: selectedChoice ?? 0,
-          correct: selectedChoice === problem.correct_index,
-          flagged: true,
-        }),
-      });
-    } catch { setFlagged(false); }
   };
 
   const handleSimilarProblem = async () => {
@@ -179,8 +145,6 @@ export default function PrecalcPracticePage() {
         setProblem(data.problem);
         setPhase("answering");
         setSelectedChoice(null);
-        setRating(null);
-        setFlagged(false);
       }
     } catch {}
     finally { setLoadingSimilar(false); }
@@ -199,7 +163,7 @@ export default function PrecalcPracticePage() {
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
-              onClick={() => router.push("/precalc")}
+              onClick={() => router.push("/demo")}
               className="text-gray-400 hover:text-gray-600 transition-colors"
               aria-label="Back"
             >
@@ -243,11 +207,11 @@ export default function PrecalcPracticePage() {
             <div className="flex flex-wrap items-center gap-2">
               <span className={cn(
                 "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-                problem.difficulty <= 2 ? "bg-green-100 text-green-800" :
-                problem.difficulty === 3 ? "bg-yellow-100 text-yellow-800" :
+                problem.difficulty < 0.5 ? "bg-green-100 text-green-800" :
+                problem.difficulty < 0.7 ? "bg-yellow-100 text-yellow-800" :
                 "bg-red-100 text-red-800"
               )}>
-                {DIFFICULTY_LABELS[problem.difficulty] ?? `Difficulty ${problem.difficulty}`}
+                {difficultyLabel(problem.difficulty)}
               </span>
             </div>
 
@@ -311,43 +275,13 @@ export default function PrecalcPracticePage() {
 
             {/* Rating + Flag */}
             {phase === "revealed" && (
-              <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm flex items-center gap-4 flex-wrap">
-                <span className="text-sm text-gray-600">Rate this problem:</span>
-                <div className="flex items-center gap-0.5">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      onClick={() => handleRate(star)}
-                      className={cn(
-                        "text-2xl transition-all hover:scale-110 leading-none",
-                        rating != null && star <= rating ? "text-yellow-400" : "text-gray-200 hover:text-yellow-300"
-                      )}
-                    >★</button>
-                  ))}
-                </div>
-                {rating && (
-                  <span className="text-xs text-gray-400">
-                    {["", "Poor", "Fair", "OK", "Good", "Excellent"][rating]}
-                  </span>
-                )}
-                <div className="ml-auto">
-                  <button
-                    onClick={handleFlag}
-                    disabled={flagged}
-                    className={cn(
-                      "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors",
-                      flagged
-                        ? "bg-orange-50 border-orange-300 text-orange-600 cursor-default"
-                        : "border-gray-200 text-gray-400 hover:border-orange-300 hover:text-orange-500 hover:bg-orange-50"
-                    )}
-                  >
-                    <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor">
-                      <path d="M2 2a.5.5 0 0 1 .5-.5h.535c.127 0 .25.05.34.14L4.5 2.75l.625-.11A8.4 8.4 0 0 1 6.5 2.5c1.2 0 2.1.3 3 .6.9.3 1.8.6 3 .6a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5c-1.2 0-2.1-.3-3-.6-.9-.3-1.8-.6-3-.6-.48 0-.93.04-1.375.11L4.5 8.75 3.375 7.64A.5.5 0 0 0 3 7.5H2.5V14a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 2 2z" />
-                    </svg>
-                    {flagged ? "Reported" : "Report"}
-                  </button>
-                </div>
-              </div>
+              <ContentFeedback
+                key={problem.id}
+                sessionId={sessionIdRef.current}
+                contentType={problem.feedback_content_type ?? "problem"}
+                contentId={problem.id}
+                label="Rate this problem"
+              />
             )}
 
             {/* Similar problem */}

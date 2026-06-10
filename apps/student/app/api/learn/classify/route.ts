@@ -46,6 +46,7 @@ export async function POST(request: Request) {
   const { data: ragProblems } = await supabase
     .from("rag_examples")
     .select("id, keyword_weights")
+    .eq("course", "precalc")
     .in("id", problemIds);
 
   // Map topic IDs → category IDs (learn_keywords uses category_id not topic_id)
@@ -66,6 +67,7 @@ export async function POST(request: Request) {
       categoryToTopic.get(k.category_id) ?? topicIds[0]!,
     ])
   );
+  const validLearnKeywordIds = new Set(keywordToTopic.keys());
 
   // Group in-depth keywords by topic
   const keywordsByTopic = new Map<string, string[]>();
@@ -172,6 +174,7 @@ export async function POST(request: Request) {
     if (upsertErr) {
       console.error("classify upsert error:", upsertErr.message);
     }
+
   }
 
   // Single-topic backwards-compatible response

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { createClient } from "@supabase/supabase-js";
 
-const GEN_MODEL = "gemini-3.5-flash";
+const GEN_MODEL = "gpt-5.4-mini";
 
 function createGenClient(): OpenAI {
   const key = process.env.GEMINI_API_KEY;

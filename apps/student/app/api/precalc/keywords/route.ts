@@ -28,22 +28,23 @@ export async function GET() {
 
   const supabase = createClient(supabaseUrl, key);
 
+  // learn_keywords uses category_id (not topic_id)
   const { data, error } = await supabase
     .from("learn_keywords")
-    .select("id, label, topic_id, tier")
+    .select("id, label, category_id, tier")
     .eq("tier", "in_depth")
-    .in("topic_id", Object.keys(TOPIC_LABELS))
+    .in("category_id", Object.keys(TOPIC_LABELS))
     .eq("status", "approved")
-    .order("topic_id")
+    .order("category_id")
     .order("id");
 
   if (error) return NextResponse.json({ keywords: [] });
 
-  const keywords: PrecalcKeyword[] = (data ?? []).map((row: { id: string; label: string; topic_id: string; tier: string }) => ({
+  const keywords: PrecalcKeyword[] = (data ?? []).map((row: { id: string; label: string; category_id: string; tier: string }) => ({
     id: row.id,
     label: row.label ?? row.id.replace(/_/g, " "),
-    topic_id: row.topic_id,
-    topic_label: TOPIC_LABELS[row.topic_id] ?? row.topic_id,
+    topic_id: row.category_id,
+    topic_label: TOPIC_LABELS[row.category_id] ?? row.category_id,
     tier: row.tier,
   }));
 

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import OpenAI from "openai";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SupabaseInstance = SupabaseClient<any>;
@@ -12,6 +13,189 @@ import {
   isReviewDue,
 } from "@/lib/practiceAlgorithm";
 import { generateAndStoreProblems } from "@/lib/learnGenerator";
+
+export const runtime = "nodejs";
+
+const GEN_MODEL = "gpt-5.4-mini";
+
+const VARIANT_SYSTEM = `You are a precalculus problem author. Given a template problem, generate a NEW problem that tests the SAME skill but uses different values, numbers, or a slightly different scenario. The structure and difficulty should match the template.
+
+Return JSON: {
+  "latex_content": string,
+  "solution_latex": string,
+  "choices": ["$...$", "$...$", "$...$", "$...$"],
+  "correct_index": 0-3
+}
+
+Rules:
+- The new problem must have a DIFFERENT correct answer from the template (different correct_index or different values)
+- All 4 choices must be distinct
+- Keep the same difficulty level
+- Prose in \\text{}, math outside. Use $$...$$ for displayed math.
+- Return valid JSON only.`;
+
+type RagTemplateRow = {
+  id: string;
+  latex_content: string;
+  solution_latex: string | null;
+  choices: string[] | unknown;
+  correct_index: number;
+  difficulty: number | null;
+  keyword_weights: Record<string, number> | null;
+  action_weights: Record<string, number> | null;
+  representation_weights: Record<string, number> | null;
+  prerequisite_weights: Record<string, number> | null;
+};
+
+/**
+ * Generate a variant of a rag_example and store it in `learn_practice_problems`
+ * (so it is discoverable by fetchCandidatesForKeyword on future calls) and also
+ * mirror a record to `problems` with is_sibling=true for admin visibility.
+ * Returns a PracticeCandidate on success, null on failure.
+ */
+async function generateVariantFromTemplate(
+  supabase: SupabaseInstance,
+  template: RagTemplateRow,
+  keywordId: string,
+  keywordLabel: string
+): Promise<PracticeCandidate | null> {
+  const openaiKey = process.env.OPENAI_API_KEY;
+  if (!openaiKey) return null;
+
+  const client = new OpenAI({ apiKey: openaiKey });
+
+  const userMessage = `Template problem:
+latex_content: ${template.latex_content}
+choices: ${JSON.stringify(template.choices)}
+correct_index: ${template.correct_index}
+difficulty: ${template.difficulty ?? 2}/5
+keyword: ${keywordLabel}
+
+Generate a variant problem testing the same skill with different numbers/values.`;
+
+  try {
+    const completion = await client.chat.completions.create({
+      model: GEN_MODEL,
+      messages: [
+        { role: "system", content: VARIANT_SYSTEM },
+        { role: "user", content: userMessage },
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.85,
+    });
+
+    const raw = completion.choices[0]?.message?.content ?? "{}";
+    const parsed = JSON.parse(raw) as {
+      latex_content?: unknown;
+      solution_latex?: unknown;
+      choices?: unknown;
+      correct_index?: unknown;
+    };
+
+    if (
+      typeof parsed.latex_content !== "string" ||
+      typeof parsed.solution_latex !== "string" ||
+      !Array.isArray(parsed.choices) ||
+      (parsed.choices as unknown[]).length !== 4 ||
+      typeof parsed.correct_index !== "number" ||
+      parsed.correct_index < 0 ||
+      parsed.correct_index > 3
+    ) {
+      return null;
+    }
+
+    const difficulty = template.difficulty ?? 2;
+
+    // Store in learn_practice_problems so fetchCandidatesForKeyword can find it on
+    // subsequent requests (fetchCandidatesForKeyword queries learn_practice_problems,
+    // not the problems table).
+    const { data: inserted, error: insertError } = await supabase
+      .from("learn_practice_problems")
+      .insert({
+        keyword_id: keywordId,
+        topic_id: keywordId, // use keyword id as topic placeholder; topic_id is informational here
+        latex_content: parsed.latex_content,
+        solution_latex: parsed.solution_latex,
+        choices: parsed.choices,
+        correct_index: parsed.correct_index,
+        difficulty,
+        hint_latex: null,
+      })
+      .select("id, latex_content, solution_latex, choices, correct_index, difficulty")
+      .single();
+
+    if (insertError || !inserted) {
+      console.error("learn/practice/next: variant insert (learn_practice_problems) error:", insertError);
+      return null;
+    }
+
+    // Also mirror to problems table with is_sibling=true for admin visibility.
+    // Failures here are non-fatal — the variant is already stored in learn_practice_problems.
+    void supabase
+      .from("problems")
+      .insert({
+        latex_content: parsed.latex_content,
+        solution_latex: parsed.solution_latex,
+        choices: parsed.choices,
+        correct_index: parsed.correct_index,
+        difficulty,
+        keyword_weights: template.keyword_weights ?? {},
+        topic_weights: template.keyword_weights ?? {},
+        is_sibling: true,
+        status: "approved",
+      })
+      .then(({ error }) => {
+        if (error) {
+          console.warn("learn/practice/next: problems mirror insert failed (non-fatal):", error.message);
+        }
+      });
+
+    type InsertedRow = { id: string; latex_content: string; solution_latex: string | null; choices: string[] | unknown; correct_index: number; difficulty: number };
+    const row = inserted as InsertedRow;
+
+    return {
+      id: row.id,
+      latex_content: row.latex_content,
+      choices: Array.isArray(row.choices) ? row.choices as string[] : [],
+      correct_index: row.correct_index,
+      difficulty: row.difficulty,
+      hint_latex: null,
+      solution_latex: row.solution_latex,
+      keyword_weights: template.keyword_weights ?? { [keywordId]: 1 },
+      avg_rating: null,
+      feedback_content_type: "learn_practice_problem",
+    };
+  } catch (err) {
+    console.error("learn/practice/next: variant generation failed:", err instanceof Error ? err.message : err);
+    return null;
+  }
+}
+
+/**
+ * Fetch a random rag_example that covers the given keyword, then generate and store a variant.
+ * Returns a PracticeCandidate or null if no template or generation fails.
+ */
+async function generateVariantFallback(
+  supabase: SupabaseInstance,
+  keywordId: string,
+  keywordLabel: string
+): Promise<PracticeCandidate | null> {
+  const { data: ragRows } = await supabase
+    .from("rag_examples")
+    .select(
+      "id, latex_content, solution_latex, choices, correct_index, difficulty, keyword_weights, action_weights, representation_weights, prerequisite_weights"
+    )
+    .eq("course", "precalc")
+    .not(`keyword_weights->>'${keywordId}'`, "is", null)
+    .limit(10);
+
+  if (!ragRows || ragRows.length === 0) return null;
+
+  // Pick a random template
+  const template = ragRows[Math.floor(Math.random() * ragRows.length)] as RagTemplateRow;
+
+  return generateVariantFromTemplate(supabase, template, keywordId, keywordLabel);
+}
 
 interface KeywordState {
   keyword_id: string;
@@ -31,6 +215,8 @@ interface PracticeCandidate {
   hint_latex: string | null;
   solution_latex: string | null;
   keyword_weights?: Record<string, number>;
+  avg_rating?: number | null;
+  feedback_content_type?: "rag_example" | "learn_practice_problem";
 }
 
 async function fetchCandidatesForKeyword(
@@ -40,28 +226,41 @@ async function fetchCandidatesForKeyword(
   diffHigh: number,
   excludeIds: string[]
 ): Promise<PracticeCandidate[]> {
+  // Split excludeIds into learn_practice_problems UUIDs and rag_example raw UUIDs.
+  // rag_example IDs are stored prefixed as "rag_<uuid>" on the client but the DB
+  // stores them as plain UUIDs, so we strip the prefix before filtering.
+  const excludeLearnIds = excludeIds.filter((id) => !id.startsWith("rag_"));
+  const excludeRagUuids = excludeIds
+    .filter((id) => id.startsWith("rag_"))
+    .map((id) => id.slice(4)); // strip "rag_" prefix
+
   let query = supabase
     .from("learn_practice_problems")
-    .select("id, latex_content, choices, correct_index, difficulty, hint_latex, solution_latex")
+    .select("id, latex_content, choices, correct_index, difficulty, hint_latex, solution_latex, avg_rating")
     .eq("keyword_id", keyword_id)
     .gte("difficulty", diffLow)
     .lte("difficulty", diffHigh);
 
-  if (excludeIds.length > 0) {
-    query = query.not("id", "in", `(${excludeIds.join(",")})`);
+  if (excludeLearnIds.length > 0) {
+    query = query.not("id", "in", `(${excludeLearnIds.join(",")})`);
   }
 
   const { data: candidates } = await query.limit(20);
 
-  // Also fetch from rag_examples (precalc)
-  const { data: ragData } = await supabase
+  // Also fetch from rag_examples (precalc), excluding already-seen ones
+  let ragQuery = supabase
     .from("rag_examples")
-    .select("id, latex_content, choices, correct_index, difficulty, solution_latex, keyword_weights")
+    .select("id, latex_content, choices, correct_index, difficulty, solution_latex, keyword_weights, avg_rating")
     .eq("course", "precalc")
     .not(`keyword_weights->>'${keyword_id}'`, "is", null)
     .gte("difficulty", diffLow)
-    .lte("difficulty", diffHigh)
-    .limit(20);
+    .lte("difficulty", diffHigh);
+
+  if (excludeRagUuids.length > 0) {
+    ragQuery = ragQuery.not("id", "in", `(${excludeRagUuids.join(",")})`);
+  }
+
+  const { data: ragData } = await ragQuery.limit(20);
 
   type RagRow = {
     id: string;
@@ -71,19 +270,27 @@ async function fetchCandidatesForKeyword(
     difficulty: number | null;
     solution_latex: string | null;
     keyword_weights: Record<string, number> | null;
+    avg_rating: number | null;
   };
   const ragCandidates: PracticeCandidate[] = ((ragData ?? []) as RagRow[]).map((r) => ({
     id: `rag_${r.id}`,
     latex_content: r.latex_content,
     choices: Array.isArray(r.choices) ? r.choices as string[] : (r.choices as unknown as string[]),
     correct_index: r.correct_index,
-    difficulty: r.difficulty ?? 3,
+    difficulty: r.difficulty ?? 0.6,
     hint_latex: null as string | null,
     solution_latex: r.solution_latex,
     keyword_weights: r.keyword_weights as Record<string, number>,
+    avg_rating: r.avg_rating,
+    feedback_content_type: "rag_example",
   }));
 
-  return [...(candidates ?? []), ...ragCandidates];
+  const learnCandidates = ((candidates ?? []) as PracticeCandidate[]).map((candidate) => ({
+    ...candidate,
+    feedback_content_type: "learn_practice_problem" as const,
+  }));
+
+  return [...learnCandidates, ...ragCandidates];
 }
 
 async function ensureCandidates(
@@ -99,13 +306,21 @@ async function ensureCandidates(
   if (all.length === 0) {
     const { data: kw } = await supabase
       .from("learn_keywords")
-      .select("id, label, description, topic_id")
+      .select("id, label, description, category_id")
       .eq("id", keyword_id)
       .maybeSingle();
 
     if (kw) {
       await generateAndStoreProblems(supabase, kw, diffRound, 3);
       all = await fetchCandidatesForKeyword(supabase, keyword_id, diffLow, diffHigh, excludeIds);
+
+      // If generateAndStoreProblems also produced nothing, try a rag_example variant
+      if (all.length === 0) {
+        const variant = await generateVariantFallback(supabase, keyword_id, kw.label as string);
+        if (variant) {
+          all = [variant];
+        }
+      }
     }
   }
 
@@ -192,9 +407,9 @@ export async function POST(request: Request) {
           difficulty: p.difficulty,
           estimated_difficulty: null,
           keyword_weights: weights,
-          avg_rating: null,
+          avg_rating: p.avg_rating ?? null,
           score: scoreProblemByKeyword(
-            { difficulty: p.difficulty, estimated_difficulty: null, keyword_weights: weights, avg_rating: null },
+            { difficulty: p.difficulty, estimated_difficulty: null, keyword_weights: weights, avg_rating: p.avg_rating ?? null },
             reviewStrengths,
             reviewTarget
           ),
@@ -274,7 +489,26 @@ export async function POST(request: Request) {
         excludeIds
       );
       if (fallbackCandidates.length === 0) {
-        return NextResponse.json({ error: "Generation failed — no problems available" }, { status: 500 });
+        // Last resort: generate a rag_example variant for the original keyword_id
+        const { data: kwMeta } = await supabase
+          .from("learn_keywords")
+          .select("label")
+          .eq("id", keyword_id)
+          .maybeSingle();
+        const variantFallback = await generateVariantFallback(
+          supabase,
+          keyword_id,
+          (kwMeta?.label as string) ?? keyword_id
+        );
+        if (!variantFallback) {
+          return NextResponse.json({ error: "Generation failed — no problems available" }, { status: 500 });
+        }
+        return NextResponse.json({
+          problem: variantFallback,
+          targetDifficulty: effectiveTarget,
+          servedKeywordId: keyword_id,
+          phase: "blocked",
+        });
       }
       const keywordStrengths = { [keyword_id]: effectiveInDepth };
       const scored: ScoredProblem[] = fallbackCandidates.map((p) => {
@@ -284,9 +518,9 @@ export async function POST(request: Request) {
           difficulty: p.difficulty,
           estimated_difficulty: null,
           keyword_weights: weights,
-          avg_rating: null,
+          avg_rating: p.avg_rating ?? null,
           score: scoreProblemByKeyword(
-            { difficulty: p.difficulty, estimated_difficulty: null, keyword_weights: weights, avg_rating: null },
+            { difficulty: p.difficulty, estimated_difficulty: null, keyword_weights: weights, avg_rating: p.avg_rating ?? null },
             keywordStrengths,
             effectiveTarget
           ),
@@ -297,6 +531,8 @@ export async function POST(request: Request) {
       const full = fallbackCandidates.find((c) => c.id === picked.id)!;
       return NextResponse.json({ problem: full, targetDifficulty: effectiveTarget, servedKeywordId: keyword_id, phase: "blocked" });
     }
+    // targetKeywordId === keyword_id and still empty — this shouldn't happen since ensureCandidates
+    // already tried variant generation, but guard just in case
     return NextResponse.json({ error: "Generation failed — no problems available" }, { status: 500 });
   }
 
@@ -309,9 +545,9 @@ export async function POST(request: Request) {
       difficulty: p.difficulty,
       estimated_difficulty: null,
       keyword_weights: weights,
-      avg_rating: null,
+      avg_rating: p.avg_rating ?? null,
       score: scoreProblemByKeyword(
-        { difficulty: p.difficulty, estimated_difficulty: null, keyword_weights: weights, avg_rating: null },
+        { difficulty: p.difficulty, estimated_difficulty: null, keyword_weights: weights, avg_rating: p.avg_rating ?? null },
         keywordStrengths,
         finalTarget
       ),

@@ -31,19 +31,19 @@ export async function POST(request: Request) {
 
   // Load session strengths and seen problem IDs in parallel
   const [sessionRes, attemptsRes] = await Promise.all([
-    supabase.from("student_sessions").select("strengths").eq("id", sessionId).maybeSingle(),
+    supabase.from("student_sessions").select("topic_strengths").eq("id", sessionId).maybeSingle(),
     supabase.from("student_problem_attempts").select("problem_id").eq("session_id", sessionId),
   ]);
 
-  const strengths = (sessionRes.data?.strengths ?? {}) as Record<string, number>;
+  const strengths = (sessionRes.data?.topic_strengths ?? {}) as Record<string, number>;
   const seenIds = new Set((attemptsRes.data ?? []).map((a: { problem_id: string }) => a.problem_id));
 
-  // Fetch all approved MCQ problems not yet seen by this student
+  // Fetch all precalc rag_examples not yet seen by this student
   const { data: problems, error: probError } = await supabase
-    .from("problems")
-    .select("id, latex_content, solution_latex, choices, correct_index, difficulty, estimated_difficulty, topic_weights, avg_rating")
-    .eq("type", "multiple_choice")
-    .eq("status", "approved");
+    .from("rag_examples")
+    .select("id, latex_content, solution_latex, choices, correct_index, difficulty, estimated_difficulty, keyword_weights, topic_weights, avg_rating")
+    .eq("course", "precalc")
+    .not("choices", "is", null);
 
   if (probError) {
     return NextResponse.json({ error: probError.message }, { status: 500 });
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
     const picked = selectProblem(scored);
     if (picked) {
       const full = relevant.find((p) => p.id === picked.id)!;
-      return NextResponse.json({ problem: full, generated: false });
+      return NextResponse.json({ problem: { ...full, feedback_content_type: "rag_example" }, generated: false });
     }
   }
 
@@ -113,72 +113,9 @@ export async function POST(request: Request) {
     const picked = selectProblem(scored.filter((s) => s.score > 0));
     if (picked) {
       const full = unseen.find((p) => p.id === picked.id)!;
-      return NextResponse.json({ problem: full, generated: false });
+      return NextResponse.json({ problem: { ...full, feedback_content_type: "rag_example" }, generated: false });
     }
   }
 
-  // Final fallback: generate a new problem via the admin API
-  const adminUrl = process.env.ADMIN_APP_URL ?? "http://localhost:3001";
-  const targetDiffInt = Math.min(5, Math.max(1, Math.round(targetDifficulty)));
-
-  try {
-    const genRes = await fetch(`${adminUrl}/api/generate-problem`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        topicIds: selectedTopicIds,
-        difficulty: targetDiffInt,
-        questionType: "multiple_choice",
-      }),
-    });
-
-    if (!genRes.ok) {
-      return NextResponse.json({ error: "No suitable problems available and generation failed." }, { status: 404 });
-    }
-
-    const genData = (await genRes.json()) as Record<string, unknown>;
-
-    // Assess difficulty and topic_weights for the generated problem
-    const assessRes = await fetch(`${adminUrl}/api/assess-problem`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        latex_content: genData.latex_content,
-        solution_latex: genData.solution_latex,
-        choices: genData.choices,
-        type: "multiple_choice",
-        topicIds: selectedTopicIds,
-      }),
-    });
-
-    const assessData = assessRes.ok ? ((await assessRes.json()) as { difficulty?: number; topic_weights?: Record<string, number> }) : {};
-
-    const newProblem = {
-      latex_content: genData.latex_content as string,
-      solution_latex: genData.solution_latex as string,
-      choices: genData.choices as string[],
-      correct_index: genData.correct_index as number,
-      difficulty: assessData.difficulty ?? targetDiffInt,
-      topic_weights: assessData.topic_weights ?? {},
-      type: "multiple_choice",
-      status: "approved",
-    };
-
-    // Save to DB so the problem persists for future sessions
-    const { data: saved, error: saveError } = await supabase
-      .from("problems")
-      .insert(newProblem)
-      .select("id, latex_content, solution_latex, choices, correct_index, difficulty, estimated_difficulty, topic_weights, avg_rating")
-      .single();
-
-    if (saveError || !saved) {
-      console.error("next-problem: failed to save generated problem", saveError?.message);
-      return NextResponse.json({ error: "Generation succeeded but could not save problem." }, { status: 500 });
-    }
-
-    return NextResponse.json({ problem: saved, generated: true });
-  } catch (err) {
-    console.error("next-problem: generation error", err);
-    return NextResponse.json({ error: "No suitable problems available." }, { status: 404 });
-  }
+  return NextResponse.json({ error: "No suitable problems available." }, { status: 404 });
 }

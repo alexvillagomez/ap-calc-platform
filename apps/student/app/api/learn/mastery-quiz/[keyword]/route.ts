@@ -21,7 +21,7 @@ export async function GET(
     .not("choices", "is", null)
     .not("solution_latex", "is", null)
     .neq("solution_latex", "")
-    .lte("difficulty", 2.5)
+    .lte("difficulty", 0.5)
     .order("difficulty", { ascending: true })
     .limit(20);
 
@@ -65,7 +65,7 @@ export async function GET(
   // Generation fallback
   const { data: kw } = await supabase
     .from("learn_keywords")
-    .select("id, label, description, topic_id")
+    .select("id, label, description, category_id")
     .eq("id", keyword)
     .maybeSingle();
 

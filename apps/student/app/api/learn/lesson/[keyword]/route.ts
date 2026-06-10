@@ -26,7 +26,7 @@ export async function GET(
   // Not in DB — generate on demand
   const { data: kw } = await supabase
     .from("learn_keywords")
-    .select("id, label, description, topic_id")
+    .select("id, label, description, category_id")
     .eq("id", keyword)
     .maybeSingle();
 
@@ -35,5 +35,11 @@ export async function GET(
   const generated = await generateAndStoreLesson(supabase, kw);
   if (!generated) return NextResponse.json({ error: "Generation failed — invalid model output" }, { status: 500 });
 
-  return NextResponse.json({ keyword_id: keyword, micro_steps: generated.micro_steps });
+  const { data: inserted } = await supabase
+    .from("learn_lessons")
+    .select("id, keyword_id, micro_steps, generated_at")
+    .eq("keyword_id", keyword)
+    .maybeSingle();
+
+  return NextResponse.json(inserted ?? { keyword_id: keyword, micro_steps: generated.micro_steps });
 }

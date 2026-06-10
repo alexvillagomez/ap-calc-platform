@@ -93,15 +93,18 @@ function shouldMergeSplitInline(a: string, b: string): boolean {
   return false;
 }
 
+function autoWrapBareLatex(content: string): string {
+  if (!content.includes('$') && /[\\^_{]/.test(content)) {
+    return `$${content}$`;
+  }
+  return content;
+}
+
 function isUndelimited(trimmed: string) {
   return /^\\begin\{(aligned|array|matrix|gathered|cases|pmatrix|bmatrix|split)\b/.test(trimmed);
 }
 function looksRaw(trimmed: string) { return /\\/.test(trimmed); }
 function normalizeAlignedBreaks(latex: string) { return latex.replace(/\\{3,}(?=\[)/g, "\\\\"); }
-function inlineContainsText(latex: string) { return /\\text\s*\{/.test(latex); }
-
-
-
 
 function renderMath(latex: string, display: boolean): string {
   try {
@@ -122,30 +125,18 @@ export function Preview({ latexContent, className = "" }: PreviewProps) {
       continue;
     }
     if (seg.type === "functionGraph") {
-      nodes.push(<FunctionGraph key={k++} equation={seg.equation} rangeX={parseRangePair(seg.rangeX, [-3, 3])} rangeY={parseRangePair(seg.rangeY, [-3, 3])} points={parsePoints(seg.points ?? "")} />);
+      const equalScale = seg.equalScale.trim().toLowerCase() !== "false";
+      nodes.push(<FunctionGraph key={k++} equation={seg.equation} rangeX={parseRangePair(seg.rangeX, [-3, 3])} rangeY={parseRangePair(seg.rangeY, [-3, 3])} points={parsePoints(seg.points ?? "")} equalScale={equalScale} />);
       continue;
     }
 
     for (const para of seg.value.split(/\n\s*\n/)) {
       const trimmed = para.trim();
-      const segs = mergeAdjacentInlineMath(splitMath(para));
+      const segs = mergeAdjacentInlineMath(splitMath(autoWrapBareLatex(para)));
       const paraNodes: React.ReactNode[] = [];
 
       if (trimmed && segs.length === 1 && segs[0].type === "text" && (isUndelimited(trimmed) || looksRaw(trimmed))) {
-        if (inlineContainsText(trimmed)) {
-          // Render as a single inline KaTeX block so everything uses KaTeX fonts.
-          // Force .katex-html to display:block + max-width:100% so it is bounded by the
-          // card, then white-space:normal on .katex lets \text{} content wrap naturally.
-          paraNodes.push(
-            <div key={k++}
-              className="my-2 max-w-full min-w-0 text-left [overflow-wrap:break-word] [&_.katex]:!whitespace-normal [&_.katex]:!text-[1em] [&_.katex-html]:!block [&_.katex-html]:!max-w-full"
-              dangerouslySetInnerHTML={{ __html: renderMath(trimmed, false) }}
-            />
-          );
-        } else {
-          // Pure LaTeX (no \text{}) — render as display math.
-          paraNodes.push(<div key={k++} className="katex-display my-2 max-w-full min-w-0 text-left" dangerouslySetInnerHTML={{ __html: renderMath(trimmed, true) }} />);
-        }
+        paraNodes.push(<div key={k++} className="katex-display my-2 max-w-full min-w-0 text-left" dangerouslySetInnerHTML={{ __html: renderMath(trimmed, true) }} />);
       } else {
         for (const cs of segs) {
           if (cs.type === "text") {
@@ -156,10 +147,7 @@ export function Preview({ latexContent, className = "" }: PreviewProps) {
               </span>
             );
           } else if (cs.type === "inline") {
-            const inlineClass = inlineContainsText(cs.value)
-              ? "katex-inline katex-inline-text"
-              : "katex-inline katex-inline-math";
-            paraNodes.push(<span key={k++} className={inlineClass} dangerouslySetInnerHTML={{ __html: renderMath(cs.value, false) }} />);
+            paraNodes.push(<span key={k++} className="katex-inline" dangerouslySetInnerHTML={{ __html: renderMath(cs.value, false) }} />);
           } else {
             paraNodes.push(<div key={k++} className="katex-display my-2 max-w-full min-w-0 text-left" dangerouslySetInnerHTML={{ __html: renderMath(cs.value, true) }} />);
           }

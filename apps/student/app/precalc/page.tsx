@@ -222,7 +222,7 @@ export default function PrecalcPortal() {
                 <p className="text-sm text-gray-400">Loading topics…</p>
               ) : topics.length === 0 ? (
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
-                  No topics available yet. Run the seed script to add diagnostic problems.
+                  Lessons are being prepared. Try the recommended path or free practice for now.
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -276,6 +276,7 @@ export default function PrecalcPortal() {
               Sign In
             </button>
             <button
+              aria-label="Switch to create account"
               onClick={() => { setTab("register"); setError(""); }}
               className={`flex-1 text-sm font-medium py-2 rounded-lg transition-colors ${
                 tab === "register" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
@@ -288,8 +289,9 @@ export default function PrecalcPortal() {
           {/* Form */}
           <form onSubmit={handleAuth} className="space-y-3">
             <div>
-              <label className="text-xs font-medium text-gray-600 block mb-1">Username</label>
+              <label htmlFor="precalc-username" className="text-xs font-medium text-gray-600 block mb-1">Username</label>
               <input
+                id="precalc-username"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -300,8 +302,9 @@ export default function PrecalcPortal() {
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-600 block mb-1">Password</label>
+              <label htmlFor="precalc-password" className="text-xs font-medium text-gray-600 block mb-1">Password</label>
               <input
+                id="precalc-password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Preview } from "@/components/Preview";
+import { ContentFeedback } from "@/components/ContentFeedback";
 import { cn } from "@/lib/cn";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -17,6 +18,7 @@ interface Problem {
   difficulty: number;
   keyword_weights?: Record<string, number> | null;
   avg_rating: number | null;
+  feedback_content_type?: "rag_example" | "learn_practice_problem" | "learn_diagnostic_problem";
 }
 
 type Phase = "idle" | "searching" | "answering" | "revealed";
@@ -24,13 +26,13 @@ type Phase = "idle" | "searching" | "answering" | "revealed";
 const SESSION_KEY = "ap_calc_student_session_id";
 const ACCOUNT_KEY = "ap_calc_account_id";
 const CHOICE_LABELS = ["A", "B", "C", "D"];
-const DIFFICULTY_LABELS: Record<number, string> = {
-  1: "Easy",
-  2: "Medium-Easy",
-  3: "Medium",
-  4: "Medium-Hard",
-  5: "Hard",
-};
+function difficultyLabel(d: number): string {
+  if (d < 0.3) return "Easy";
+  if (d < 0.5) return "Medium-Easy";
+  if (d < 0.7) return "Medium";
+  if (d < 0.9) return "Medium-Hard";
+  return "Hard";
+}
 
 function generateSessionId(): string {
   try {
@@ -61,7 +63,7 @@ export default function LookupPage() {
   useEffect(() => {
     const accountId = localStorage.getItem(ACCOUNT_KEY);
     if (!accountId) {
-      router.replace("/precalc");
+      router.replace("/demo");
       return;
     }
     const storedSession = localStorage.getItem(SESSION_KEY);
@@ -264,14 +266,14 @@ export default function LookupPage() {
               <span
                 className={cn(
                   "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-                  problem.difficulty <= 2
+                  problem.difficulty < 0.5
                     ? "bg-green-100 text-green-800"
-                    : problem.difficulty === 3
+                    : problem.difficulty < 0.7
                     ? "bg-yellow-100 text-yellow-800"
                     : "bg-red-100 text-red-800"
                 )}
               >
-                {DIFFICULTY_LABELS[problem.difficulty] ?? `Difficulty ${problem.difficulty}`}
+                {difficultyLabel(problem.difficulty)}
               </span>
             </div>
 
@@ -336,6 +338,17 @@ export default function LookupPage() {
                   }
                 </div>
               </div>
+            )}
+
+            {/* Next similar problem button */}
+            {phase === "revealed" && (
+              <ContentFeedback
+                key={problem.id}
+                sessionId={sessionIdRef.current}
+                contentType={problem.feedback_content_type ?? "rag_example"}
+                contentId={problem.id}
+                label="Rate this problem"
+              />
             )}
 
             {/* Next similar problem button */}

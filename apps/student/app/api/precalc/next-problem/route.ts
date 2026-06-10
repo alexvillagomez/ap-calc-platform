@@ -31,48 +31,46 @@ export async function POST(request: Request) {
   const supabase = createClient(supabaseUrl, key);
 
   // Load student's keyword strengths and seen problems in parallel
-  const [sessionRes, attemptsRes, problemsRes, ragRes] = await Promise.all([
-    supabase.from("student_sessions").select("keyword_strengths").eq("id", sessionId).maybeSingle(),
+  const [kwStatesRes, attemptsRes, ragRes, keywordRes] = await Promise.all([
+    supabase.from("learn_student_keyword_states").select("keyword_id, in_depth_score").eq("session_id", sessionId),
     supabase.from("student_problem_attempts").select("problem_id").eq("session_id", sessionId),
     supabase
-      .from("problems")
-      .select("id, latex_content, solution_latex, choices, correct_index, difficulty, estimated_difficulty, keyword_weights, avg_rating")
-      .eq("status", "approved")
+      .from("rag_examples")
+      .select("id, latex_content, solution_latex, choices, correct_index, difficulty, keyword_weights, avg_rating")
+      .eq("course", "precalc")
       .not("choices", "is", null)
       .not("keyword_weights", "is", null),
     supabase
-      .from("rag_examples")
-      .select("id, latex_content, solution_latex, choices, correct_index, difficulty, keyword_weights")
-      .not("choices", "is", null)
-      .not("keyword_weights", "is", null),
+      .from("learn_keywords")
+      .select("id")
+      .eq("status", "approved"),
   ]);
 
-  const keywordStrengths: Record<string, number> = sessionRes.data?.keyword_strengths ?? {};
+  const validKeywordIds = new Set((keywordRes.data ?? []).map((kw: { id: string }) => kw.id));
+  const keywordStrengths = Object.fromEntries(
+    (kwStatesRes.data ?? [])
+      .filter((r: { keyword_id: string }) => validKeywordIds.has(r.keyword_id))
+      .map((r: { keyword_id: string; in_depth_score: number }) => [r.keyword_id, r.in_depth_score ?? 0.5])
+  );
   const seenIds = new Set<string>((attemptsRes.data ?? []).map((a: { problem_id: string }) => a.problem_id));
 
   // Target difficulty derived from all known keyword strengths (defaults to 2.5 for new sessions)
   const knownKeywordIds = Object.keys(keywordStrengths);
   const targetDiff = desiredDifficulty ?? computeTargetDifficulty(keywordStrengths, knownKeywordIds);
 
-  // Combine all unseen candidates — problems table first (canonical), then rag_examples
-  type RawProblem = { id: string; latex_content: string; solution_latex: string; choices: string[]; correct_index: number; difficulty: number; estimated_difficulty?: number; keyword_weights: Record<string, number>; avg_rating?: number };
+  // All candidates come from rag_examples (precalc course only)
+  type RawProblem = { id: string; latex_content: string; solution_latex: string; choices: string[]; correct_index: number; difficulty: number; keyword_weights: Record<string, number>; avg_rating: number | null };
 
   const allCandidates: Omit<PrecalcCandidate, "score">[] = [
-    ...((problemsRes.data ?? []) as RawProblem[])
-      .filter(p => !seenIds.has(p.id))
-      .map(p => ({
-        id: p.id,
-        latex_content: p.latex_content,
-        solution_latex: p.solution_latex ?? "",
-        choices: p.choices,
-        correct_index: p.correct_index,
-        difficulty: p.estimated_difficulty ?? p.difficulty,
-        keyword_weights: p.keyword_weights,
-        avg_rating: p.avg_rating ?? null,
-        fromRag: false,
-      })),
     ...((ragRes.data ?? []) as RawProblem[])
       .filter(r => !seenIds.has(r.id))
+      .map(r => ({
+        ...r,
+        keyword_weights: Object.fromEntries(
+          Object.entries(r.keyword_weights ?? {}).filter(([keywordId]) => validKeywordIds.has(keywordId))
+        ) as Record<string, number>,
+      }))
+      .filter(r => Object.keys(r.keyword_weights).length > 0)
       .map(r => ({
         id: r.id,
         latex_content: r.latex_content,
@@ -81,7 +79,7 @@ export async function POST(request: Request) {
         correct_index: r.correct_index,
         difficulty: r.difficulty,
         keyword_weights: r.keyword_weights,
-        avg_rating: null,
+        avg_rating: r.avg_rating,
         fromRag: true,
       })),
   ];
@@ -112,7 +110,7 @@ export async function POST(request: Request) {
         solution_latex: selected.solution_latex,
         choices: selected.choices,
         correct_index: selected.correct_index,
-        difficulty: Math.round(selected.difficulty),
+        difficulty: selected.difficulty,
         estimated_difficulty: selected.difficulty,
         keyword_weights: selected.keyword_weights,
         status: "approved",
@@ -134,9 +132,10 @@ export async function POST(request: Request) {
       solution_latex: finalProblem.solution_latex,
       choices: finalProblem.choices,
       correct_index: finalProblem.correct_index,
-      difficulty: Math.round(finalProblem.difficulty),
+      difficulty: finalProblem.difficulty,
       keyword_weights: finalProblem.keyword_weights,
       avg_rating: finalProblem.avg_rating,
+      feedback_content_type: finalProblem.fromRag ? "rag_example" : "problem",
     },
   });
 }

@@ -24,7 +24,7 @@ export async function GET(
 
   const { data: kw } = await supabase
     .from("learn_keywords")
-    .select("id, label, description, topic_id")
+    .select("id, label, description, category_id")
     .eq("id", keyword)
     .maybeSingle();
 
@@ -33,5 +33,11 @@ export async function GET(
   const generated = await generateAndStoreRefresher(supabase, kw);
   if (!generated) return NextResponse.json({ error: "Generation failed" }, { status: 500 });
 
-  return NextResponse.json({ keyword_id: keyword, ...generated });
+  const { data: inserted } = await supabase
+    .from("learn_refreshers")
+    .select("id, keyword_id, rule_latex, example_latex, check_question")
+    .eq("keyword_id", keyword)
+    .maybeSingle();
+
+  return NextResponse.json(inserted ?? { keyword_id: keyword, ...generated });
 }

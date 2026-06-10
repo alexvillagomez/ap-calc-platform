@@ -78,8 +78,10 @@ export async function POST(request: Request) {
   const scaledUmbrellaWeight = { [topic_id]: emaMultiplier };
 
   // Update EMA scores
-  const newInDepthScores = updateScores({ [keyword_id]: prev.in_depth_score }, scaledKwWeight, correct);
-  const newUmbrellaScores = updateScores({ [topic_id]: prev.umbrella_score }, scaledUmbrellaWeight, correct);
+  const inDepthSeed = existing ? { [keyword_id]: prev.in_depth_score } : {};
+  const umbrellaSeed = existing ? { [topic_id]: prev.umbrella_score } : {};
+  const newInDepthScores = updateScores(inDepthSeed, scaledKwWeight, correct);
+  const newUmbrellaScores = updateScores(umbrellaSeed, scaledUmbrellaWeight, correct);
 
   const newConsecutiveCorrect = correct ? prev.consecutive_correct + 1 : 0;
   const newTotalAttempts = prev.total_attempts + 1;

@@ -3,7 +3,7 @@ import { normalizeRichMathSource } from "@/lib/latexRichMathNormalize";
 export type VizSegment =
   | { type: "latex"; value: string }
   | { type: "slopeField"; equation: string; rangeX: string; rangeY: string }
-  | { type: "functionGraph"; equation: string; rangeX: string; rangeY: string; points: string };
+  | { type: "functionGraph"; equation: string; rangeX: string; rangeY: string; points: string; equalScale: string };
 
 export function parseVizSegments(raw: string): VizSegment[] {
   const normalized = normalizeRichMathSource(raw);
@@ -28,7 +28,7 @@ export function parseVizSegments(raw: string): VizSegment[] {
     if (tagName === "slopefield") {
       segments.push({ type: "slopeField", equation: attrs.equation ?? "", rangeX: attrs.rangex ?? "", rangeY: attrs.rangey ?? "" });
     } else {
-      segments.push({ type: "functionGraph", equation: attrs.equation ?? "", rangeX: attrs.rangex ?? "", rangeY: attrs.rangey ?? "", points: attrs.points ?? "" });
+      segments.push({ type: "functionGraph", equation: attrs.equation ?? "", rangeX: attrs.rangex ?? "", rangeY: attrs.rangey ?? "", points: attrs.points ?? "", equalScale: attrs.equalscale ?? "" });
     }
     lastEnd = m.index + m[0].length;
   }

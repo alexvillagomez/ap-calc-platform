@@ -83,11 +83,13 @@ export async function POST(request: Request) {
       .from("problems")
       .select("id, latex_content, choices, correct_index, difficulty, keyword_weights")
       .eq("status", "approved")
+      .eq("course", "precalc")
       .not("choices", "is", null)
       .not("keyword_weights", "is", null),
     supabase
       .from("rag_examples")
       .select("id, latex_content, choices, correct_index, difficulty, keyword_weights")
+      .eq("course", "precalc")
       .not("choices", "is", null)
       .not("keyword_weights", "is", null),
   ]);

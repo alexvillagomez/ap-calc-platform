@@ -18,15 +18,16 @@ export async function POST(request: Request) {
   // Try to fetch existing session first
   const { data: existing } = await supabase
     .from("student_sessions")
-    .select("id, strengths, keyword_strengths")
+    .select("id, topic_strengths, action_strengths, representation_strengths")
     .eq("id", sessionId)
     .maybeSingle();
 
   if (existing) {
     return NextResponse.json({
       id: existing.id,
-      strengths: existing.strengths ?? {},
-      keyword_strengths: existing.keyword_strengths ?? {},
+      topic_strengths: existing.topic_strengths ?? {},
+      action_strengths: existing.action_strengths ?? {},
+      representation_strengths: existing.representation_strengths ?? {},
       isNew: false,
     });
   }
@@ -34,8 +35,8 @@ export async function POST(request: Request) {
   // Create new session — strengths start empty (0.5 is the in-memory default everywhere)
   const { data: created, error } = await supabase
     .from("student_sessions")
-    .insert({ id: sessionId, strengths: {} })
-    .select("id, strengths, keyword_strengths")
+    .insert({ id: sessionId, topic_strengths: {}, action_strengths: {}, representation_strengths: {} })
+    .select("id, topic_strengths, action_strengths, representation_strengths")
     .single();
 
   if (error || !created) {
@@ -44,8 +45,9 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     id: created.id,
-    strengths: created.strengths ?? {},
-    keyword_strengths: created.keyword_strengths ?? {},
+    topic_strengths: created.topic_strengths ?? {},
+    action_strengths: created.action_strengths ?? {},
+    representation_strengths: created.representation_strengths ?? {},
     isNew: true,
   });
 }

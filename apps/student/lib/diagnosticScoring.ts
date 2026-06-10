@@ -5,6 +5,7 @@ export type Answer = {
   selectedIndex: number | null;
   flaggedForgotten: boolean;
   flaggedNeverSeen: boolean;
+  flaggedDontKnow: boolean;
   correct: boolean | null;
 };
 
@@ -23,21 +24,28 @@ export type DiagnosticResult = {
 };
 
 const ALPHA_CORRECT = 0.25;
-const ALPHA_WRONG = 0.20;
+const ALPHA_WRONG = 0.35;
+const ALPHA_DONT_KNOW = 0.45;
 const DEFAULT_SCORE = 0.5;
 
 export function updateScores(
   scores: KeywordScores,
   keywords: Record<string, number>,
-  correct: boolean
+  correct: boolean,
+  wrongAlpha: number = ALPHA_WRONG
 ): KeywordScores {
   const next = { ...scores };
   for (const [kw, weight] of Object.entries(keywords)) {
-    const s = next[kw] ?? DEFAULT_SCORE;
+    if (next[kw] === undefined) {
+      const firstAnswerTarget = correct ? 0.75 : 0.25;
+      next[kw] = Math.min(1, Math.max(0, DEFAULT_SCORE + (firstAnswerTarget - DEFAULT_SCORE) * weight));
+      continue;
+    }
+    const s = next[kw];
     if (correct) {
       next[kw] = s + ALPHA_CORRECT * weight * (1 - s);
     } else {
-      next[kw] = Math.max(0, s - ALPHA_WRONG * weight * s);
+      next[kw] = Math.max(0, s - wrongAlpha * weight * s);
     }
   }
   return next;
@@ -53,6 +61,13 @@ export function applyAnswerToScores(
   // Never seen → excluded from EMA entirely
   if (answer.flaggedNeverSeen) {
     return { umbrellaScores, inDepthScores };
+  }
+  // Don't know → treated as wrong, but with a heavier penalty than a normal miss
+  if (answer.flaggedDontKnow) {
+    return {
+      umbrellaScores: updateScores(umbrellaScores, umbrellaKeywords, false, ALPHA_DONT_KNOW),
+      inDepthScores: updateScores(inDepthScores, inDepthKeywords, false, ALPHA_DONT_KNOW),
+    };
   }
   // Forgotten → same decay as wrong answer
   const correct = answer.flaggedForgotten ? false : (answer.correct ?? false);

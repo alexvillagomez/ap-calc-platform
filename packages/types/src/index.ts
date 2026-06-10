@@ -47,6 +47,22 @@ export interface Problem {
   rubric?: string | null;
   /** Question type: multiple_choice or free_response */
   type?: string | null;
+  /** In-depth skill/concept keyword weights for adaptive retrieval. */
+  keyword_weights?: Record<string, number>;
+  /** Plain-English description of what topic/skill this problem tests. */
+  topic_description?: string | null;
+  /** Action keyword weights — the cognitive verb (solve, factor, evaluate, etc.). */
+  action_weights?: Record<string, number>;
+  /** Plain-English description of what action/verb this problem requires. */
+  action_description?: string | null;
+  /** Representation keyword weights — the format presented (equation, graph, table, etc.). */
+  representation_weights?: Record<string, number>;
+  /** Plain-English description of how the problem is represented. */
+  representation_description?: string | null;
+  /** Prerequisite topic keyword weights — prior knowledge required to solve. */
+  prerequisite_weights?: Record<string, number>;
+  /** Plain-English description of prerequisite knowledge needed. */
+  prerequisite_description?: string | null;
 }
 
 /** Payload for inserting a new problem (omits id, created_at). */

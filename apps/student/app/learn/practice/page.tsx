@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Preview } from "@/components/Preview";
+import { ContentFeedback } from "@/components/ContentFeedback";
 import { cn } from "@/lib/cn";
 
 const SESSION_KEY = "ap_calc_student_session_id";
@@ -16,6 +17,7 @@ type Problem = {
   solution_latex: string;
   hint_latex: string | null;
   difficulty: number;
+  feedback_content_type?: "rag_example" | "learn_practice_problem";
 };
 
 type Phase = "loading" | "question" | "revealed" | "tip" | "quiz_offer" | "error";
@@ -186,7 +188,7 @@ function PracticePageInner() {
             <span className="text-xs bg-blue-100 text-blue-700 font-medium px-2 py-1 rounded-full">
               Practice
             </span>
-            <span className="text-xs text-gray-400">Difficulty {problem.difficulty}/5</span>
+            <span className="text-xs text-gray-400">{problem.difficulty < 0.3 ? "Easy" : problem.difficulty < 0.5 ? "Medium-Easy" : problem.difficulty < 0.7 ? "Medium" : problem.difficulty < 0.9 ? "Medium-Hard" : "Hard"}</span>
           </div>
           <div className="flex items-center gap-3">
             {consecutiveCorrect > 0 && (
@@ -260,6 +262,16 @@ function PracticePageInner() {
               </div>
             )}
           </div>
+        )}
+
+        {(phase === "revealed" || phase === "tip") && (
+          <ContentFeedback
+            key={problem.id}
+            sessionId={sessionId}
+            contentType={problem.feedback_content_type ?? (problem.id.startsWith("rag_") ? "rag_example" : "learn_practice_problem")}
+            contentId={problem.id}
+            label="Rate this problem"
+          />
         )}
 
         {/* Tip popup */}
