@@ -12,7 +12,9 @@ Guidance for Claude Code working in this repo. This file holds only the always-n
 | [docs/database.md](docs/database.md) | Table schemas, RLS, FK constraints. |
 | [docs/learn-system.md](docs/learn-system.md) | The `/learn` keyword-mastery subsystem, learn API routes, scoring. |
 | [docs/content-pipeline.md](docs/content-pipeline.md) | `rag_examples` enrichment, keyword tagging, on-demand learn content (lessons/refreshers/tips/problems), LaTeX format contract. |
-| [docs/diagnostic-convergence.md](docs/diagnostic-convergence.md) | Tuning the `/demo` diagnostic — convergence, propagation layer, stop conditions, report. |
+| [docs/diagnostic-convergence.md](docs/diagnostic-convergence.md) | Tuning the `/demo` diagnostic — convergence, propagation layer, stop conditions, report, problem-selection variety. |
+| [docs/practice-flow.md](docs/practice-flow.md) | The `/demo-practice` Duolingo-style spaced/interleaved practice — block progression, interleaving, curriculum order, server-driven mastery, no auto-advance. |
+| [docs/deployment.md](docs/deployment.md) | Deploying the student app to Vercel — build scoping, env vars, the commit-everything gotcha, migrations. |
 | [docs/difficulty-scales.md](docs/difficulty-scales.md) | Anything involving `difficulty` / `estimated_difficulty` / `targetDifficulty`. |
 | [docs/progress-report.md](docs/progress-report.md) | The `/progress` report and `learn_student_keyword_states`. |
 | [docs/weights-research.md](docs/weights-research.md) | Design + simulation behind the diagnostic evidence-propagation layer. |
@@ -65,4 +67,4 @@ Root `.env.local` is read by both apps and seed scripts; each app also has its o
 ---
 
 ## Deployment
-Student app deployed on Vercel (`ap-calc-platform-student`); admin not yet deployed. Vercel runs `turbo run build` scoped to the `student` package from the monorepo root. Shared packages must not be published to npm. DB migrations are plain SQL in `supabase/migrations/` — apply new ones in the Supabase SQL editor.
+The student app **auto-deploys to Vercel production on push to `main`** (GitHub integration). The build is scoped to the student app (admin is excluded — it has pre-existing errors), **requires env vars set on the Vercel project**, and — because the git-based build only sees **committed** files — every source file must be committed (uncommitted routes/components break it even when it builds locally). Migrations are plain SQL in `supabase/migrations/`, applied manually in the Supabase SQL editor. Full details: **[docs/deployment.md](docs/deployment.md)**.
