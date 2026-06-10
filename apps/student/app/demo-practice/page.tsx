@@ -206,16 +206,7 @@ export default function DemoPracticePage() {
   // restored so the hub auto-start effect does not double-fire.
   const resumedRef = useRef(false);
 
-  // Auto-advance countdown (practice revealed phase)
-  const [countdownPaused, setCountdownPaused] = useState(false);
-  const countdownStartRef = useRef<number | null>(null);
-  const countdownRafRef = useRef<number | null>(null);
-  const [countdownProgress, setCountdownProgress] = useState(1); // 1 = full bar, 0 = empty
 
-  // Auto-advance countdown (lesson non-check steps)
-  const [lessonCountdownProgress, setLessonCountdownProgress] = useState(1);
-  const lessonCountdownStartRef = useRef<number | null>(null);
-  const lessonCountdownRafRef = useRef<number | null>(null);
 
   // ── Persist position (fire-and-forget) ─────────────────────────────────────
   // Accepts optional overrides so callers can pass the *new* values before React
@@ -411,147 +402,11 @@ export default function DemoPracticePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, queue]);
 
-  // ── Auto-advance after practice answer revealed (3s countdown) ─────────────
-  useEffect(() => {
-    if (phase !== "revealed") {
-      // Clean up if phase changes away
-      if (countdownRafRef.current !== null) {
-        cancelAnimationFrame(countdownRafRef.current);
-        countdownRafRef.current = null;
-      }
-      countdownStartRef.current = null;
-      setCountdownProgress(1);
-      setCountdownPaused(false);
-      return;
-    }
+  // No auto-advance after a practice answer is revealed — the solution stays on
+  // screen until the student clicks "Next" so they can read it at their own pace.
 
-    const DURATION = 3000; // ms
-    countdownStartRef.current = performance.now();
-    setCountdownProgress(1);
-    setCountdownPaused(false);
-
-    const tick = (now: number) => {
-      if (countdownStartRef.current === null) return;
-      const elapsed = now - countdownStartRef.current;
-      const remaining = Math.max(0, 1 - elapsed / DURATION);
-      setCountdownProgress(remaining);
-      if (remaining > 0) {
-        countdownRafRef.current = requestAnimationFrame(tick);
-      } else {
-        countdownRafRef.current = null;
-        handleNext();
-      }
-    };
-
-    countdownRafRef.current = requestAnimationFrame(tick);
-
-    return () => {
-      if (countdownRafRef.current !== null) {
-        cancelAnimationFrame(countdownRafRef.current);
-        countdownRafRef.current = null;
-      }
-    };
-    // handleNext is stable enough — we intentionally omit it to avoid restart
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase]);
-
-  // Pause / resume the practice countdown when countdownPaused changes
-  useEffect(() => {
-    if (phase !== "revealed") return;
-
-    if (countdownPaused) {
-      // Cancel the running animation frame; freeze the bar at its current value
-      if (countdownRafRef.current !== null) {
-        cancelAnimationFrame(countdownRafRef.current);
-        countdownRafRef.current = null;
-      }
-      return;
-    }
-
-    // Resume: re-anchor start time so the remaining fraction continues from now
-    const DURATION = 3000;
-    const resumeFrom = performance.now();
-    const elapsedEquivalent = (1 - countdownProgress) * DURATION;
-    countdownStartRef.current = resumeFrom - elapsedEquivalent;
-
-    const tick = (now: number) => {
-      if (countdownStartRef.current === null) return;
-      const elapsed = now - countdownStartRef.current;
-      const remaining = Math.max(0, 1 - elapsed / DURATION);
-      setCountdownProgress(remaining);
-      if (remaining > 0) {
-        countdownRafRef.current = requestAnimationFrame(tick);
-      } else {
-        countdownRafRef.current = null;
-        handleNext();
-      }
-    };
-
-    countdownRafRef.current = requestAnimationFrame(tick);
-
-    return () => {
-      if (countdownRafRef.current !== null) {
-        cancelAnimationFrame(countdownRafRef.current);
-        countdownRafRef.current = null;
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countdownPaused]);
-
-  // ── Auto-advance lesson non-check steps (4s countdown) ────────────────────
-  // We derive whether the current lesson step is a non-check step inside the
-  // effect so we don't need the step object as a dependency primitive.
-  const isNonCheckLessonStep =
-    phase === "lesson" &&
-    lesson !== null &&
-    !lessonLoading &&
-    (() => {
-      const step = lesson.micro_steps[lessonStepIdx];
-      if (!step) return false;
-      return (
-        step.has_check === false ||
-        !step.check_question.choices.some((c) => c.trim() !== "")
-      );
-    })();
-
-  useEffect(() => {
-    if (!isNonCheckLessonStep) {
-      if (lessonCountdownRafRef.current !== null) {
-        cancelAnimationFrame(lessonCountdownRafRef.current);
-        lessonCountdownRafRef.current = null;
-      }
-      lessonCountdownStartRef.current = null;
-      setLessonCountdownProgress(1);
-      return;
-    }
-
-    const DURATION = 4000;
-    lessonCountdownStartRef.current = performance.now();
-    setLessonCountdownProgress(1);
-
-    const tick = (now: number) => {
-      if (lessonCountdownStartRef.current === null) return;
-      const elapsed = now - lessonCountdownStartRef.current;
-      const remaining = Math.max(0, 1 - elapsed / DURATION);
-      setLessonCountdownProgress(remaining);
-      if (remaining > 0) {
-        lessonCountdownRafRef.current = requestAnimationFrame(tick);
-      } else {
-        lessonCountdownRafRef.current = null;
-        handleLessonNext();
-      }
-    };
-
-    lessonCountdownRafRef.current = requestAnimationFrame(tick);
-
-    return () => {
-      if (lessonCountdownRafRef.current !== null) {
-        cancelAnimationFrame(lessonCountdownRafRef.current);
-        lessonCountdownRafRef.current = null;
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isNonCheckLessonStep, lessonStepIdx]);
+  // Lesson explanation steps do NOT auto-advance — students read at their own pace
+  // and click "Next" manually so they can finish reading the explanation/solution.
 
   // ── Start a keyword (auto-route to lesson if score is very low) ─────────────
   const startKeyword = useCallback(
@@ -1177,41 +1032,19 @@ export default function DemoPracticePage() {
                         <Preview latexContent={problem.solution_latex} />
                       </div>
 
-                      {/* Countdown bar */}
-                      <div className="h-1 bg-gray-100 w-full">
-                        <div
-                          className={cn(
-                            "h-1 transition-none",
-                            selectedChoice === problem.correct_index
-                              ? "bg-green-500"
-                              : "bg-orange-400"
-                          )}
-                          style={{ width: `${countdownProgress * 100}%` }}
-                        />
-                      </div>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <button
                         type="button"
-                        onClick={() => {
-                          setCountdownPaused(true);
-                          loadRefresher(currentKeyword.id);
-                        }}
+                        onClick={() => loadRefresher(currentKeyword.id)}
                         className="text-sm text-gray-400 hover:text-gray-700 underline underline-offset-2 transition-colors"
                       >
                         Quick refresher
                       </button>
                       <button
                         type="button"
-                        onClick={() => {
-                          // Cancel countdown and advance immediately
-                          if (countdownRafRef.current !== null) {
-                            cancelAnimationFrame(countdownRafRef.current);
-                            countdownRafRef.current = null;
-                          }
-                          handleNext();
-                        }}
+                        onClick={handleNext}
                         className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
                       >
                         {blockCount >= BLOCK_SIZE
@@ -1363,34 +1196,20 @@ export default function DemoPracticePage() {
                   </div>
                   )}
 
-                  {/* For non-check steps: countdown bar + Next button */}
+                  {/* For non-check steps: a manual Next button — no auto-advance,
+                      so students can finish reading the explanation/solution. */}
                   {(step.has_check === false || !step.check_question.choices.some((c) => c.trim() !== "")) && (
-                    <>
-                      {/* Lesson countdown bar */}
-                      <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
-                        <div
-                          className="h-1 bg-blue-400 transition-none"
-                          style={{ width: `${lessonCountdownProgress * 100}%` }}
-                        />
-                      </div>
-                      <div className="flex justify-end">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (lessonCountdownRafRef.current !== null) {
-                              cancelAnimationFrame(lessonCountdownRafRef.current);
-                              lessonCountdownRafRef.current = null;
-                            }
-                            handleLessonNext();
-                          }}
-                          className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
-                        >
-                          {lessonStepIdx + 1 >= lesson.micro_steps.length
-                            ? "Back to practice →"
-                            : "Next →"}
-                        </button>
-                      </div>
-                    </>
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        onClick={handleLessonNext}
+                        className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
+                      >
+                        {lessonStepIdx + 1 >= lesson.micro_steps.length
+                          ? "Back to practice →"
+                          : "Next →"}
+                      </button>
+                    </div>
                   )}
                 </div>
               );
