@@ -156,7 +156,16 @@ Return JSON with this exact shape:
 
       enrichedCount++;
     } catch (err) {
-      console.error(`Enrichment failed for card ${card.id}:`, err);
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`Enrichment failed for card ${card.id}:`, msg);
+      // An auth/quota failure will hit every card identically — fail fast with a
+      // clear reason instead of silently returning { enriched: 0 }.
+      if (/401|invalid_api_key|incorrect api key|429|quota|insufficient_quota/i.test(msg)) {
+        return NextResponse.json(
+          { error: "Enrichment unavailable — AI provider rejected the request", detail: msg, enriched: enrichedCount },
+          { status: 502 }
+        );
+      }
     }
   }
 

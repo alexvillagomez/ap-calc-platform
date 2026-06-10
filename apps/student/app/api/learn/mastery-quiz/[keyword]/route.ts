@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { generateAndStoreMasteryQuiz } from "@/lib/learnGenerator";
+import { generateAndStoreMasteryQuiz, LearnGenError } from "@/lib/learnGenerator";
 
 export async function GET(
   _request: Request,
@@ -63,16 +63,25 @@ export async function GET(
   if (data && data.length > 0) return NextResponse.json({ problems: data });
 
   // Generation fallback
-  const { data: kw } = await supabase
+  const { data: kw, error: kwError } = await supabase
     .from("learn_keywords")
     .select("id, label, description, category_id")
     .eq("id", keyword)
     .maybeSingle();
 
+  if (kwError) return NextResponse.json({ error: kwError.message }, { status: 500 });
   if (!kw) return NextResponse.json({ error: `Keyword not found: ${keyword}` }, { status: 404 });
 
-  const rows = await generateAndStoreMasteryQuiz(supabase, kw);
-  if (!rows) return NextResponse.json({ error: "Generation failed" }, { status: 500 });
+  let rows;
+  try {
+    rows = await generateAndStoreMasteryQuiz(supabase, kw);
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : "Unknown error";
+    console.error(`Mastery quiz generation failed for ${keyword}:`, detail);
+    const status = err instanceof LearnGenError ? err.status : 502;
+    return NextResponse.json({ error: "Mastery quiz generation failed", detail }, { status });
+  }
+  if (!rows) return NextResponse.json({ error: "Mastery quiz generation failed", detail: "invalid model output" }, { status: 502 });
 
   return NextResponse.json({ problems: rows });
 }
