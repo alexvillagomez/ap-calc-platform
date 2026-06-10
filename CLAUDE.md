@@ -64,7 +64,11 @@ OPENAI_API_KEY=               # Problem/content generation + embeddings
 ```
 Root `.env.local` is read by both apps and seed scripts; each app also has its own `.env.local` for overrides. API routes use the service-role key (bypasses RLS) — pattern in `apps/student/app/api/session/route.ts`.
 
+> On-demand AI generators (`apps/student/lib/learnGenerator.ts`) fail **soft**: a bad/missing `OPENAI_API_KEY`, network error, or non-JSON model output throws a typed `LearnGenError`, and the lesson/refresher/tip/mastery-quiz routes return a structured `{ error, detail }` with status **502** instead of an opaque empty 500. If a key is set on Vercel but invalid, every AI feature 502s — check the key, not the code.
+
 ---
 
 ## Deployment
 The student app **auto-deploys to Vercel production on push to `main`** (GitHub integration). The build is scoped to the student app (admin is excluded — it has pre-existing errors), **requires env vars set on the Vercel project**, and — because the git-based build only sees **committed** files — every source file must be committed (uncommitted routes/components break it even when it builds locally). Migrations are plain SQL in `supabase/migrations/`, applied manually in the Supabase SQL editor. Full details: **[docs/deployment.md](docs/deployment.md)**.
+
+> **IRT difficulty calibration** writes `estimated_difficulty` on both `problems` and `rag_examples`. The `rag_examples` column is added by migration `20260609000000_rag_examples_estimated_difficulty.sql` — if it hasn't been applied to the live DB, `/demo` calibration degrades gracefully (resilient fallback) but won't converge. The `/demo` diagnostic is **test-like**: no per-question solution/answer reveal; the results screen auto-shows the score and offers a click-in review of right/wrong answers + solutions.
