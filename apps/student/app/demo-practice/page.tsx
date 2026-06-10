@@ -199,6 +199,10 @@ export default function DemoPracticePage() {
   const [refresherLoading, setRefresherLoading] = useState(false);
   const [refresherAnswer, setRefresherAnswer] = useState<number | null>(null);
 
+  // One-line tip shown after the student struggles (server sets show_tip after
+  // repeated wrong answers). Cleared at the start of each new answer.
+  const [tip, setTip] = useState<string | null>(null);
+
   // Transition message
   const [transitionMsg, setTransitionMsg] = useState("");
 
@@ -472,6 +476,7 @@ export default function DemoPracticePage() {
       if (!problem || !currentKeyword || phase !== "practicing") return;
       setSelectedChoice(choiceIndex);
       setPhase("revealed");
+      setTip(null);
 
       const correct = choiceIndex === problem.correct_index;
       const timeSpentMs = Date.now() - answerStartTimeRef.current;
@@ -528,6 +533,16 @@ export default function DemoPracticePage() {
                 : kw
             )
           );
+          // After repeated wrong answers the server flags show_tip — fetch a
+          // one-line tip and surface it in the revealed panel (best-effort).
+          if (attemptData.show_tip) {
+            fetch(`/api/learn/tip/${encodeURIComponent(currentKeyword.id)}?sessionId=${encodeURIComponent(sessionId)}`)
+              .then((r) => (r.ok ? r.json() : null))
+              .then((d: { tip_latex?: string } | null) => {
+                if (d?.tip_latex) setTip(d.tip_latex);
+              })
+              .catch(() => {});
+          }
         }
       } catch {
         // best-effort — don't block UI on network error
@@ -699,7 +714,15 @@ export default function DemoPracticePage() {
     savePosition({ keywordId, phase: "lesson", lessonStepIdx: 0, problemId: null });
     try {
       const res = await fetch(`/api/learn/lesson/${encodeURIComponent(keywordId)}`);
-      if (!res.ok) throw new Error(`Lesson fetch failed: ${res.status}`);
+      if (!res.ok) {
+        const body = (await res.json().catch(() => null)) as { error?: string; detail?: string } | null;
+        const reason = body?.detail || body?.error || `HTTP ${res.status}`;
+        throw new Error(
+          res.status >= 500
+            ? `We couldn't generate this lesson right now (${reason}). You can skip it and keep practicing.`
+            : reason
+        );
+      }
       const data = (await res.json()) as LessonData;
       setLesson(data);
     } catch (err) {
@@ -1022,6 +1045,14 @@ export default function DemoPracticePage() {
                 {/* Revealed: solution + actions */}
                 {phase === "revealed" && (
                   <>
+                    {tip && (
+                      <div className="bg-amber-50 rounded-xl border border-amber-200 px-5 py-3 flex items-start gap-2">
+                        <span className="text-amber-500 mt-0.5">💡</span>
+                        <div className="flex-1 min-w-0 text-sm text-amber-900">
+                          <Preview latexContent={tip} />
+                        </div>
+                      </div>
+                    )}
                     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                       <div className="px-5 py-2.5 bg-gray-50 border-b border-gray-100">
                         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">

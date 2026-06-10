@@ -120,7 +120,9 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ problem: inserted });
-  } catch {
-    return NextResponse.json({ error: "Could not generate similar problem" }, { status: 500 });
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : "Unknown error";
+    console.error("similar-problem error:", detail);
+    return NextResponse.json({ error: "Could not generate similar problem", detail }, { status: 502 });
   }
 }

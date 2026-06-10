@@ -4,7 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Preview } from "@/components/Preview";
 import { FeedbackReport, type StudentStrengths } from "@/components/FeedbackReport";
-import { updateStrengths, updateStrengthsDiagnostic, normalizeDifficulty, scoreProblemByKeyword, selectProblem, propagateEvidence, buildGraphFromProblems, type ScoredProblem } from "@/lib/practiceAlgorithm";
+import { updateStrengthsDiagnostic, normalizeDifficulty, scoreProblemByKeyword, selectProblem, propagateEvidence, buildGraphFromProblems, type ScoredProblem } from "@/lib/practiceAlgorithm";
 
 // Prerequisites are not their own dimension — a correct answer nudges each
 // prerequisite keyword's topic strength up slightly; a wrong answer leaves it untouched.
@@ -21,6 +21,8 @@ interface DemoProblem {
   choices: string[];
   correct_index: number;
   difficulty: number | null;
+  /** IRT-calibrated [0,1] difficulty; null until the bank has been calibrated. */
+  estimated_difficulty: number | null;
   keyword_weights: Record<string, number> | null;
   action_weights: Record<string, number> | null;
   representation_weights: Record<string, number> | null;
@@ -35,6 +37,17 @@ interface DemoProblem {
 type Phase = "idle" | "loading" | "answering" | "revealed" | "done" | "empty";
 
 type UmbrellaInfo = { id: string; label: string };
+
+// One record per answered question, used to build the end-of-diagnostic review.
+interface AnswerLogEntry {
+  latex_content: string;
+  choices: string[];
+  correct_index: number;
+  /** null when the student picked "I don't know". */
+  selected: number | null;
+  correct: boolean;
+  solution_latex: string;
+}
 
 const CHOICE_LABELS = ["A", "B", "C", "D"];
 const ACCOUNT_KEY = "ap_calc_account_id";
@@ -82,11 +95,23 @@ function clearDiagnosticState(): void {
 // The demo is currently scoped to Polynomials only — this is how many attempts
 // an umbrella keyword needs before we consider it "well tested" and can stop.
 const UMBRELLA_WELL_TESTED_THRESHOLD = 3;
-// Hard ceiling so the diagnostic can't loop forever if some umbrellas never converge.
-const DEMO_DIAGNOSTIC_MAX_QUESTIONS = 25;
+// Hard ceiling. Lowered 25→20: with the evidence-propagation layer crediting
+// untested umbrellas from tested siblings/prerequisites, umbrella-level accuracy
+// is equivalent at 20 (docs/diagnostic-convergence.md), so the worst case is
+// shorter and the diagnostic feels more test-like.
+const DEMO_DIAGNOSTIC_MAX_QUESTIONS = 20;
+// Never end the run before this many questions, so a couple of lucky/unlucky early
+// answers (or fast-firing confidence gates) can't end the diagnostic prematurely.
+const DEMO_DIAGNOSTIC_MIN_QUESTIONS = 6;
 // If an umbrella's average in-depth keyword strength exceeds this, we treat it
 // as well-tested immediately — strong students don't need 3 mechanical touches.
 const UMBRELLA_MASTERY_STRENGTH_GATE = 0.72;
+// Symmetric lower gate: if an umbrella's average in-depth strength is confidently
+// LOW we're equally certain the student is weak there — credit it as tested so a
+// struggling student also exits quickly instead of running to the ceiling. Only
+// reachable after real wrong / "I don't know" evidence pushes children below the
+// 0.5 prior, so it can't fire on the untouched default.
+const UMBRELLA_WEAK_STRENGTH_GATE = 0.30;
 
 // The demo ties keyword weights to the student's account, so it reuses the
 // account's session id rather than minting a separate anonymous one.
@@ -127,112 +152,6 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-// ─── Star rating widget ───────────────────────────────────────────────────────
-
-function StarRating({
-  currentAvg,
-  ratingCount,
-  onRate,
-  rated,
-}: {
-  currentAvg: number | null;
-  ratingCount: number;
-  onRate: (stars: number, note: string) => Promise<void>;
-  rated: boolean;
-}) {
-  const [hovered, setHovered] = useState(0);
-  const [done, setDone] = useState(rated);
-
-  if (done) {
-    return (
-      <div className="flex items-center gap-2 text-sm text-gray-500">
-        <span className="text-yellow-500">★</span>
-        <span>
-          {currentAvg !== null ? currentAvg.toFixed(1) : "—"}
-          <span className="text-gray-400 ml-1">({ratingCount})</span>
-        </span>
-        <span className="text-green-600 text-xs font-medium ml-1">✓ Rated</span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex items-center gap-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          onMouseEnter={() => setHovered(star)}
-          onMouseLeave={() => setHovered(0)}
-          onClick={() => { void onRate(star, ""); setDone(true); }}
-          className="text-xl leading-none transition-colors"
-          style={{ color: star <= hovered ? "#f59e0b" : "#d1d5db" }}
-        >
-          ★
-        </button>
-      ))}
-      {currentAvg !== null && (
-        <span className="ml-2 text-xs text-gray-400">
-          avg {currentAvg.toFixed(1)} ({ratingCount})
-        </span>
-      )}
-    </div>
-  );
-}
-
-// ─── Flag widget ──────────────────────────────────────────────────────────────
-
-function FlagButton({ onFlag }: { onFlag: (reason: string) => Promise<void> }) {
-  const [open, setOpen] = useState(false);
-  const [reason, setReason] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState(false);
-
-  const handleSubmit = async () => {
-    if (submitting) return;
-    setSubmitting(true);
-    await onFlag(reason.trim());
-    setDone(true);
-    setSubmitting(false);
-    setOpen(false);
-  };
-
-  if (done) return <span className="text-xs text-orange-500 font-medium">⚑ Flagged</span>;
-
-  return (
-    <div className="space-y-1.5">
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        className="text-xs text-gray-400 hover:text-orange-500 transition-colors"
-      >
-        ⚑ Flag issue
-      </button>
-      {open && (
-        <div className="flex items-center gap-2">
-          <input
-            type="text"
-            placeholder="Reason (optional)"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            className="flex-1 text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 outline-none focus:border-orange-400"
-            autoFocus
-          />
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={submitting}
-            className="text-xs px-3 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white font-medium disabled:opacity-50 transition-colors"
-          >
-            {submitting ? "…" : "Report"}
-          </button>
-          <button type="button" onClick={() => setOpen(false)} className="text-xs text-gray-400 hover:text-gray-600">✕</button>
-        </div>
-      )}
-    </div>
-  );
-}
-
 // ─── Demo page ────────────────────────────────────────────────────────────────
 
 export default function DemoPage() {
@@ -263,9 +182,10 @@ export default function DemoPage() {
   const nextButtonRef = useRef<HTMLButtonElement>(null);
 
   // Per-problem feedback state (reset on next)
-  const [currentAvg, setCurrentAvg] = useState<number | null>(null);
-  const [ratingCount, setRatingCount] = useState(0);
-  const [rated, setRated] = useState(false);
+  // Per-question answer log (for the end-of-diagnostic review). In-memory for the
+  // session; the review covers the questions answered this run.
+  const [answerLog, setAnswerLog] = useState<AnswerLogEntry[]>([]);
+  const [showReview, setShowReview] = useState(false);
 
   // keyword_weights tracking (topic dimension for sidebar)
   const [keywordStrengths, setKeywordStrengths] = useState<Record<string, number>>({});
@@ -335,7 +255,10 @@ export default function DemoPage() {
   );
 
   const loadNext = useCallback(() => {
-    if (umbrellasWellTested || answeredCount >= DEMO_DIAGNOSTIC_MAX_QUESTIONS) {
+    if (
+      (umbrellasWellTested && answeredCount >= DEMO_DIAGNOSTIC_MIN_QUESTIONS) ||
+      answeredCount >= DEMO_DIAGNOSTIC_MAX_QUESTIONS
+    ) {
       setPhase("done");
       return;
     }
@@ -375,7 +298,7 @@ export default function DemoPage() {
         avg_rating: p.avg_rating,
         // ±15% jitter so the adaptive branch also doesn't fixate on the same items.
         score: scoreProblemByKeyword(
-          { difficulty: p.difficulty ?? 3, estimated_difficulty: null, keyword_weights: p.keyword_weights ?? {}, avg_rating: p.avg_rating },
+          { difficulty: p.difficulty ?? 3, estimated_difficulty: p.estimated_difficulty ?? null, keyword_weights: p.keyword_weights ?? {}, avg_rating: p.avg_rating },
           keywordStrengths,
           targetDifficulty
         ) * (0.85 + 0.3 * Math.random()),
@@ -394,9 +317,6 @@ export default function DemoPage() {
     setProblem(next);
     setPhase("answering");
     setSelectedChoice(null);
-    setCurrentAvg(next.avg_rating ?? null);
-    setRatingCount(next.rating_count ?? 0);
-    setRated(false);
     answerStartTimeRef.current = Date.now(); // stamp when problem is presented
   }, [keywordStrengths, problems, umbrellasWellTested, answeredCount]);
 
@@ -556,7 +476,10 @@ export default function DemoPage() {
       if (inDepthIds.length === 0) continue;
       const strengths = inDepthIds.map((id) => nextStrengths[id] ?? 0.5);
       const avg = strengths.reduce((a, b) => a + b, 0) / strengths.length;
-      if (avg > UMBRELLA_MASTERY_STRENGTH_GATE) {
+      // Confident either way → stop probing this umbrella. Strong: avg above the
+      // mastery gate. Weak: avg confidently below the lower gate (only reachable
+      // once real wrong/"I don't know" evidence drops children below the 0.5 prior).
+      if (avg > UMBRELLA_MASTERY_STRENGTH_GATE || avg < UMBRELLA_WEAK_STRENGTH_GATE) {
         toCredit.push(umbrellaId);
       }
     }
@@ -596,14 +519,11 @@ export default function DemoPage() {
 
     setKeywordStrengths((prev) => {
       let next = updateStrengthsDiagnostic(prev, mergedWeights, correct, nd);
-      // Evidence propagation: infer untested skills from tested ones via the co-occurrence
-      // graph and umbrella sibling correlation. This is additive and runs before heavyPenalty
-      // so an explicit "I don't know" still overrides any propagated estimate on tested keywords.
-      // NOTE: the UPSTREAM pass below overlaps conceptually with the per-problem `pw` boost
-      // further down (updateStrengths(next, pw, true, PREREQ_LEARNING_RATE)). Both are
-      // intentionally kept: the `pw` boost uses per-problem prerequisite_weights (sparser,
-      // more precise); this graph-based pass uses the denser co-occurrence graph (broader
-      // coverage). The reviewer can evaluate removing one once real prerequisite data is richer.
+      // Evidence propagation: infer untested skills from tested ones via the
+      // co-occurrence graph (built from these same prerequisite_weights) and umbrella
+      // sibling correlation. Its UPSTREAM pass credits prerequisites on a correct answer.
+      // This is additive and runs before heavyPenalty so an explicit "I don't know"
+      // still overrides any propagated estimate on tested keywords.
       if (graphRef.current) {
         next = propagateEvidence(next, mergedWeights, graphRef.current, correct, nd, inDepthToUmbrellaRef.current);
       }
@@ -613,11 +533,12 @@ export default function DemoPage() {
           if (mergedWeights[id] > 0) next[id] = 0;
         }
       }
-      // Prerequisites only ever boost — correct answers nudge each prerequisite keyword's
-      // topic strength up slightly; wrong answers leave them untouched.
-      if (correct && Object.keys(pw).length > 0) {
-        next = updateStrengths(next, pw, true, PREREQ_LEARNING_RATE);
-      }
+      // NOTE: the previous separate per-problem prerequisite boost
+      // (updateStrengths(next, pw, true, PREREQ_LEARNING_RATE)) was removed here. It
+      // double-counted prerequisite evidence on every correct answer — propagateEvidence's
+      // UPSTREAM pass above already credits the same prerequisites from the same data, and
+      // prerequisite_weights coverage is now dense (~100% of the bank), so the extra boost
+      // only inflated prerequisite strength and risked false-positive umbrella crediting.
       // Umbrella propagation: when an in-depth skill crosses 0.65 on a correct answer,
       // nudge its umbrella parent upward — knowing the specific skill implies knowing
       // the broader topic area at a moderate level.
@@ -701,6 +622,19 @@ export default function DemoPage() {
     }
 
     setAnsweredCount((n) => n + 1);
+
+    // Record for the end-of-diagnostic review (right/wrong + solution per question).
+    setAnswerLog((prev) => [
+      ...prev,
+      {
+        latex_content: problem.latex_content,
+        choices: problem.choices,
+        correct_index: problem.correct_index,
+        selected: choiceIndex,
+        correct,
+        solution_latex: problem.solution_latex,
+      },
+    ]);
   };
 
   const handleAnswer = (choiceIndex: number) => {
@@ -717,45 +651,6 @@ export default function DemoPage() {
     queueIdx.current += 1;
     loadNext();
   };
-
-  const handleRate = useCallback(async (stars: number, note: string) => {
-    if (!problem || !sessionId) return;
-    try {
-      await fetch("/api/content-feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId,
-          contentType: "rag_example",
-          contentId: problem.id,
-          rating: stars,
-          ...(note ? { reason: note } : {}),
-        }),
-      });
-      setRated(true);
-      const newCount = ratingCount + 1;
-      const newAvg = ((currentAvg ?? stars) * ratingCount + stars) / newCount;
-      setCurrentAvg(Math.round(newAvg * 10) / 10);
-      setRatingCount(newCount);
-    } catch { /* silent */ }
-  }, [problem, sessionId, currentAvg, ratingCount]);
-
-  const handleFlag = useCallback(async (reason: string) => {
-    if (!problem || !sessionId) return;
-    try {
-      await fetch("/api/content-feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId,
-          contentType: "rag_example",
-          contentId: problem.id,
-          report: true,
-          reason: reason || undefined,
-        }),
-      });
-    } catch { /* silent */ }
-  }, [problem, sessionId]);
 
   // Build StudentStrengths for FeedbackReport.
   // Topic keywords are scoped strictly to Polynomials: only include in-depth keywords
@@ -803,6 +698,8 @@ export default function DemoPage() {
     queueRef.current = shuffle(problems);
     queueIdx.current = 0;
     setAnsweredCount(0);
+    setAnswerLog([]);
+    setShowReview(false);
     setTouched(new Set());
     setKeywordStrengths(Object.fromEntries(Object.keys(allKeywords).map((k) => [k, 0.5])));
     setActionStrengths({});
@@ -952,7 +849,73 @@ export default function DemoPage() {
                 {umbrellasWellTested ? " — every skill area sampled" : ""}
               </p>
             </div>
+
+            {/* Score is shown automatically. */}
+            {answerLog.length > 0 && (
+              <div className="text-center bg-white rounded-xl border border-gray-200 py-5 shadow-sm">
+                <div className="text-3xl font-bold text-gray-800">
+                  {answerLog.filter((e) => e.correct).length}
+                  <span className="text-gray-400"> / {answerLog.length}</span>
+                </div>
+                <p className="text-xs text-gray-500 uppercase tracking-wide mt-1">Score</p>
+              </div>
+            )}
+
             <FeedbackReport strengths={buildStrengths()} answeredCount={answeredCount} mode="full" />
+
+            {/* Right/wrong + solutions are NOT shown automatically — they live behind
+                this toggle so the results screen stays clean and test-like. */}
+            {answerLog.length > 0 && (
+              <div>
+                <button
+                  className="w-full py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-colors"
+                  onClick={() => setShowReview((v) => !v)}
+                >
+                  {showReview ? "Hide answer review" : "Review answers & solutions →"}
+                </button>
+                {showReview && (
+                  <div className="mt-4 space-y-4 text-left">
+                    {answerLog.map((e, qi) => (
+                      <div key={qi} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-semibold text-gray-400">Question {qi + 1}</span>
+                          <span className={cn(
+                            "text-xs font-semibold px-2 py-0.5 rounded-full",
+                            e.correct ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                          )}>
+                            {e.correct ? "Correct" : e.selected === null ? "Skipped" : "Incorrect"}
+                          </span>
+                        </div>
+                        <Preview latexContent={e.latex_content} />
+                        <div className="space-y-1.5">
+                          {e.choices.map((c, ci) => {
+                            const isCorrect = ci === e.correct_index;
+                            const isPicked = ci === e.selected;
+                            return (
+                              <div key={ci} className={cn(
+                                "flex items-start gap-2 px-3 py-2 rounded-lg border text-sm",
+                                isCorrect && "bg-green-50 border-green-300",
+                                !isCorrect && isPicked && "bg-red-50 border-red-300",
+                                !isCorrect && !isPicked && "bg-white border-gray-200"
+                              )}>
+                                <span className="flex-shrink-0 w-5 h-5 rounded-full border flex items-center justify-center text-[10px] font-bold mt-0.5">
+                                  {isCorrect ? "✓" : isPicked ? "✗" : CHOICE_LABELS[ci]}
+                                </span>
+                                <div className="flex-1 min-w-0"><Preview latexContent={c} /></div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide mb-1">Solution</p>
+                          <Preview latexContent={e.solution_latex} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
             <button
               className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors shadow-sm"
               onClick={() => router.push("/demo-practice")}
@@ -984,11 +947,11 @@ export default function DemoPage() {
             {/* Choices */}
             <div className="space-y-2" data-problem-id={problem.id}>
               {problem.choices.map((choice, i) => {
-                let state: "default" | "correct" | "wrong" = "default";
-                if (phase === "revealed") {
-                  if (i === problem.correct_index) state = "correct";
-                  else if (i === selectedChoice) state = "wrong";
-                }
+                // Test-like diagnostic: do NOT reveal correctness after answering.
+                // The only post-answer styling is a neutral highlight of the choice the
+                // student picked — no green/red, no ✓/✗ — so they can't tell if they
+                // were right and the run keeps moving.
+                const isPicked = phase === "revealed" && i === selectedChoice;
                 return (
                   <button
                     key={i}
@@ -996,20 +959,17 @@ export default function DemoPage() {
                     onClick={() => handleAnswer(i)}
                     className={cn(
                       "w-full flex items-start gap-3 px-4 py-3 rounded-xl border text-left transition-colors",
-                      state === "default" && phase === "answering" && "bg-white border-gray-200 hover:border-blue-400 hover:bg-blue-50",
-                      state === "default" && phase === "revealed" && "bg-white border-gray-200 opacity-50",
-                      state === "correct" && "bg-green-50 border-green-400",
-                      state === "wrong" && "bg-red-50 border-red-400",
+                      phase === "answering" && "bg-white border-gray-200 hover:border-blue-400 hover:bg-blue-50",
+                      phase === "revealed" && isPicked && "bg-blue-50 border-blue-300",
+                      phase === "revealed" && !isPicked && "bg-white border-gray-200 opacity-50",
                       phase === "revealed" && "cursor-default"
                     )}
                   >
                     <span className={cn(
                       "flex-shrink-0 w-7 h-7 rounded-full border-2 flex items-center justify-center text-xs font-bold mt-0.5",
-                      state === "default" && "border-gray-300 text-gray-500",
-                      state === "correct" && "bg-green-500 border-green-500 text-white",
-                      state === "wrong" && "bg-red-500 border-red-500 text-white",
+                      isPicked ? "border-blue-400 text-blue-600" : "border-gray-300 text-gray-500",
                     )}>
-                      {state === "correct" ? "✓" : state === "wrong" ? "✗" : CHOICE_LABELS[i]}
+                      {CHOICE_LABELS[i]}
                     </span>
                     <div className="flex-1 min-w-0 pt-0.5">
                       <Preview latexContent={choice} />
@@ -1029,31 +989,11 @@ export default function DemoPage() {
               </button>
             )}
 
-            {/* Solution + rating + flag + next */}
+            {/* Test-like diagnostic: after answering we reveal NOTHING — no solution,
+                no correct/wrong, no rating. Just a Next button. Right/wrong answers and
+                solutions are available on the results screen behind a click. */}
             {phase === "revealed" && (
               <>
-                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                  <div className="px-5 py-2.5 bg-gray-50 border-b border-gray-100">
-                    <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Solution</h3>
-                  </div>
-                  <div className="p-5">
-                    <Preview latexContent={problem.solution_latex} />
-                  </div>
-                </div>
-
-                {/* Rating + flag */}
-                <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm space-y-3">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Rate this problem</p>
-                  <StarRating
-                    key={`rating-${problem.id}`}
-                    currentAvg={currentAvg}
-                    ratingCount={ratingCount}
-                    onRate={handleRate}
-                    rated={rated}
-                  />
-                  <FlagButton key={`flag-${problem.id}`} onFlag={handleFlag} />
-                </div>
-
                 <button
                   ref={nextButtonRef}
                   className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors shadow-sm"

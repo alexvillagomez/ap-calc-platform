@@ -180,10 +180,11 @@ Generate a variant problem testing the same skill with different numbers/values.
 
     return NextResponse.json({ problem: inserted });
   } catch (err) {
-    console.error("generate-variant error:", err instanceof Error ? err.message : err);
+    const detail = err instanceof Error ? err.message : "Unknown error";
+    console.error("generate-variant error:", detail);
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
+      { error: "Could not generate problem variant", detail },
+      { status: 502 }
     );
   }
 }

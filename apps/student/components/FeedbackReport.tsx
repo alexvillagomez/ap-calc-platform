@@ -252,9 +252,9 @@ export function FeedbackReport({
       {/* Topic skills grouped by umbrella */}
       <TopicSection items={strengths.topic} />
 
-      {/* Other dimensions — flat lists */}
-      <Section title="Action skills" items={strengths.action} />
-      <Section title="Representation" items={strengths.representation} />
+      {/* Action skills and Representation are intentionally NOT shown on the report —
+          they add noise and aren't useful to the student. The data is still computed
+          (it drives scoring/propagation), just not displayed here. */}
       <Section title="Prerequisites" items={strengths.prereq} />
     </div>
   );

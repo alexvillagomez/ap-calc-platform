@@ -104,11 +104,17 @@ export async function POST(req: NextRequest) {
   // still converge toward their true difficulty over time.
   if (problemId && keywordWeights && Object.keys(keywordWeights).length > 0) {
     try {
-      const { data: ragRow } = await supabase
+      const { data: ragRow, error: ragSelErr } = await supabase
         .from("rag_examples")
         .select("difficulty, estimated_difficulty")
         .eq("id", problemId)
         .maybeSingle();
+
+      if (ragSelErr) {
+        // e.g. "column rag_examples.estimated_difficulty does not exist" — surfaces
+        // schema drift instead of silently skipping calibration on every attempt.
+        console.error("demo/attempt: rag_examples calibration read failed", ragSelErr.message);
+      }
 
       if (ragRow) {
         // Compute weighted-average student skill for this problem's keyword coverage.
@@ -133,10 +139,13 @@ export async function POST(req: NextRequest) {
           ?? normalizeDifficulty(rawDiff);
         const newEstimated = Math.max(0, Math.min(1, seed + 0.15 * (target - seed)));
 
-        await supabase
+        const { error: ragUpdErr } = await supabase
           .from("rag_examples")
           .update({ estimated_difficulty: newEstimated })
           .eq("id", problemId);
+        if (ragUpdErr) {
+          console.error("demo/attempt: rag_examples estimated_difficulty update failed", ragUpdErr.message);
+        }
       }
     } catch (err) {
       // Non-fatal — keyword state updates above already succeeded.

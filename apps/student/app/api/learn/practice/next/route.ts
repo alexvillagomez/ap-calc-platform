@@ -334,12 +334,17 @@ export async function POST(request: Request) {
 
   const supabase = createClient(supabaseUrl, key);
 
-  const body = (await request.json()) as {
+  let body: {
     sessionId: string;
     keyword_id: string;
     targetDifficulty?: number;
     excludeIds?: string[];
   };
+  try {
+    body = (await request.json()) as typeof body;
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 
   const { sessionId, keyword_id, targetDifficulty = 2, excludeIds = [] } = body;
   if (!sessionId || !keyword_id) return NextResponse.json({ error: "sessionId and keyword_id required" }, { status: 400 });

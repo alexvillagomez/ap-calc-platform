@@ -35,11 +35,16 @@ export async function POST(request: Request) {
   if (!supabaseUrl || !key) return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
   if (!openaiKey) return NextResponse.json({ error: "OPENAI_API_KEY not set" }, { status: 500 });
 
-  const body = (await request.json()) as {
+  let body: {
     query?: string;
     sessionId?: string;
     excludeIds?: string[];
   };
+  try {
+    body = (await request.json()) as typeof body;
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 
   const { query, excludeIds = [] } = body;
   if (!query?.trim()) return NextResponse.json({ error: "query is required" }, { status: 400 });
@@ -48,11 +53,18 @@ export async function POST(request: Request) {
   const openai = new OpenAI({ apiKey: openaiKey });
 
   // 1. Embed the query
-  const embRes = await openai.embeddings.create({
-    model: "text-embedding-3-small",
-    input: query.trim(),
-  });
-  const queryEmbedding = embRes.data[0]?.embedding;
+  let queryEmbedding: number[] | undefined;
+  try {
+    const embRes = await openai.embeddings.create({
+      model: "text-embedding-3-small",
+      input: query.trim(),
+    });
+    queryEmbedding = embRes.data[0]?.embedding;
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : "Unknown error";
+    console.error("lookup embedding failed:", detail);
+    return NextResponse.json({ error: "Search is temporarily unavailable", detail }, { status: 502 });
+  }
   if (!queryEmbedding) return NextResponse.json({ error: "Embedding failed" }, { status: 500 });
 
   const excludeSet = new Set(excludeIds);

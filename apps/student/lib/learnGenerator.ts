@@ -219,18 +219,45 @@ function fixTabCorruptedText(s: string): string {
 
 // ─── Helper ───────────────────────────────────────────────────────────────────
 
+/**
+ * Thrown when on-demand content generation fails. Carries an HTTP status so the
+ * route can surface a meaningful response instead of an opaque empty-body 500.
+ * Every failure mode — missing/invalid OPENAI_API_KEY (401), network error,
+ * rate limit (429), or non-JSON model output — funnels through here.
+ */
+export class LearnGenError extends Error {
+  status: number;
+  constructor(message: string, status = 502) {
+    super(message);
+    this.name = "LearnGenError";
+    this.status = status;
+  }
+}
+
 async function callGen(system: string, user: string): Promise<Record<string, unknown>> {
-  const client = createGenClient();
-  const completion = await client.chat.completions.create({
-    model: GEN_MODEL,
-    messages: [
-      { role: "system", content: system },
-      { role: "user", content: user },
-    ],
-    response_format: { type: "json_object" },
-  });
-  const text = completion.choices[0]?.message?.content ?? "{}";
-  return JSON.parse(text) as Record<string, unknown>;
+  let text: string;
+  try {
+    const client = createGenClient();
+    const completion = await client.chat.completions.create({
+      model: GEN_MODEL,
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: user },
+      ],
+      response_format: { type: "json_object" },
+    });
+    text = completion.choices[0]?.message?.content ?? "{}";
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    // 401 (bad key) and 429 (quota) are upstream config/billing problems, not a
+    // bug in our request — surface them as 502 Bad Gateway with the real reason.
+    throw new LearnGenError(`AI provider request failed: ${msg}`);
+  }
+  try {
+    return JSON.parse(text) as Record<string, unknown>;
+  } catch {
+    throw new LearnGenError("AI provider returned non-JSON output");
+  }
 }
 
 // ─── Exported generators ──────────────────────────────────────────────────────
@@ -271,9 +298,10 @@ Think carefully about what a student who has NEVER seen this concept before woul
     };
   });
 
-  await supabase
+  const { error: writeErr } = await supabase
     .from("learn_lessons")
     .upsert({ keyword_id: kw.id, micro_steps: cleanedSteps, model: GEN_MODEL }, { onConflict: "keyword_id" });
+  if (writeErr) console.error(`learn_lessons upsert failed for ${kw.id}:`, writeErr.message);
 
   return { micro_steps: cleanedSteps };
 }
