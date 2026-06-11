@@ -64,7 +64,13 @@ function LoginForm() {
       localStorage.setItem(ACCOUNT_KEY, data.accountId);
       localStorage.setItem(USERNAME_KEY, data.username ?? username);
       localStorage.setItem(SESSION_KEY, data.sessionId);
-      if (data.diagnosticCompletedAt) {
+      // Honor an explicit ?next= destination (e.g. the MCAT app) when present.
+      const next = searchParams.get("next");
+      if (next && next.startsWith("/")) {
+        if (data.diagnosticCompletedAt) localStorage.setItem(DIAG_DONE_KEY, "1");
+        else localStorage.removeItem(DIAG_DONE_KEY);
+        router.push(next);
+      } else if (data.diagnosticCompletedAt) {
         localStorage.setItem(DIAG_DONE_KEY, "1");
         router.push("/demo-practice");
       } else {

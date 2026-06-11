@@ -1,0 +1,142 @@
+/**
+ * GET /api/mcat/lesson/[keywordId]
+ * Cache-or-generate MCAT Biology micro-lesson for a keyword.
+ * Returns { id, keyword_id, keyword_label, micro_steps, generated_at }
+ */
+import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { generateMcatLesson, McatGenError } from "@/lib/mcatGenerator";
+import { outlineContextForCategory } from "@/lib/mcatContentOutline";
+
+export const runtime = "nodejs";
+
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ keywordId: string }> }
+) {
+  const { keywordId } = await params;
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ??
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !key) {
+    return NextResponse.json(
+      { error: "Supabase not configured" },
+      { status: 500 }
+    );
+  }
+
+  const supabase = createClient(supabaseUrl, key);
+
+  // 1. Try DB first
+  const { data: existing, error: selectError } = await supabase
+    .from("mcat_lessons")
+    .select("id, keyword_id, micro_steps, generated_at")
+    .eq("keyword_id", keywordId)
+    .maybeSingle();
+
+  if (selectError) {
+    return NextResponse.json({ error: selectError.message }, { status: 500 });
+  }
+
+  if (existing) {
+    // Fetch keyword label for the response
+    const { data: kw } = await supabase
+      .from("mcat_keywords")
+      .select("label")
+      .eq("id", keywordId)
+      .maybeSingle();
+
+    return NextResponse.json({
+      id: existing.id,
+      keyword_id: existing.keyword_id,
+      keyword_label: (kw?.label as string) ?? null,
+      micro_steps: existing.micro_steps,
+      generated_at: existing.generated_at,
+    });
+  }
+
+  // 2. Not in DB — fetch keyword metadata
+  const { data: kwRow, error: kwError } = await supabase
+    .from("mcat_keywords")
+    .select("id, label, description, category_id")
+    .eq("id", keywordId)
+    .maybeSingle();
+
+  if (kwError) {
+    return NextResponse.json({ error: kwError.message }, { status: 500 });
+  }
+  if (!kwRow) {
+    return NextResponse.json(
+      { error: `Keyword not found: ${keywordId}` },
+      { status: 404 }
+    );
+  }
+
+  // 3. Generate
+  const outlineContext = outlineContextForCategory(kwRow.category_id as string);
+  let generated;
+  try {
+    generated = await generateMcatLesson(
+      {
+        id: kwRow.id as string,
+        label: kwRow.label as string,
+        description: (kwRow.description as string) ?? "",
+      },
+      outlineContext
+    );
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : "Unknown error";
+    console.error(`MCAT lesson generation failed for ${keywordId}:`, detail);
+    const status = err instanceof McatGenError ? err.status : 502;
+    return NextResponse.json(
+      { error: "Lesson generation failed", detail },
+      { status }
+    );
+  }
+
+  // 4. Upsert into mcat_lessons
+  const { error: upsertError } = await supabase
+    .from("mcat_lessons")
+    .upsert(
+      {
+        keyword_id: kwRow.id as string,
+        micro_steps: generated.micro_steps,
+        model: "gpt-5.4-mini",
+      },
+      { onConflict: "keyword_id" }
+    );
+
+  if (upsertError) {
+    console.error(
+      `mcat_lessons upsert failed for ${keywordId}:`,
+      upsertError.message
+    );
+  }
+
+  // 5. Re-fetch to get the assigned id + generated_at
+  const { data: inserted } = await supabase
+    .from("mcat_lessons")
+    .select("id, keyword_id, micro_steps, generated_at")
+    .eq("keyword_id", keywordId)
+    .maybeSingle();
+
+  return NextResponse.json(
+    inserted
+      ? {
+          id: inserted.id,
+          keyword_id: inserted.keyword_id,
+          keyword_label: kwRow.label as string,
+          micro_steps: inserted.micro_steps,
+          generated_at: inserted.generated_at,
+        }
+      : {
+          id: null,
+          keyword_id: keywordId,
+          keyword_label: kwRow.label as string,
+          micro_steps: generated.micro_steps,
+          generated_at: null,
+        }
+  );
+}

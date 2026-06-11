@@ -10,7 +10,11 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "clean": "turbo clean && rm -rf node_modules",
-    "seed:topics": "tsx scripts/seed-topics.ts"
+    "seed:topics": "tsx scripts/seed-topics.ts",
+    "seed:mcat": "tsx scripts/seed-mcat-taxonomy.ts",
+    "mcat:expand": "tsx scripts/expand-mcat-keywords.ts",
+    "mcat:embed": "tsx scripts/embed-mcat.ts",
+    "mcat:clean-unembedded": "tsx scripts/delete-unembedded-mcat.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
