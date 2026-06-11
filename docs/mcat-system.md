@@ -88,7 +88,35 @@ Model **`gpt-5.4-mini`**, JSON mode, no streaming, typed `McatGenError` → 502 
 1. **Template cards** — `fetchTemplateCards()` (`lib/mcatTemplateCards.ts`) pulls real facts from the MileDown anki deck in `anki_cards`, matched by the category's `CATEGORY_TO_TAG_PREFIXES` tag prefixes + term overlap.
 2. **AAMC content outline** — `outlineContextForCategory(categoryId)` (`lib/mcatContentOutline.ts`) returns the official AAMC content-category (1A–3B) scope + canonical topic list, so generated content stays in the scope/depth/terminology the real MCAT tests. Injected above the template-card block.
 
-**Choice shuffling** — every generated MCQ (questions, similar, lesson check questions) passes through `shuffleChoices()` (Fisher–Yates, recomputes `correct_index`, skips on duplicate/≠4 choices). This kills the index-0 bias the LLM otherwise produces. Existing stored rows were fixed once via `npm run mcat:rebalance` (see scripts).
+**Reason-first generation + code-assigned answer index** (questions & similar) — to stop wrong answer keys (the model committing to an answer before reasoning, e.g. an explanation concluding "−1" while `correct_index` marks "−2"): the requested JSON order is `stem → explanation (worked solution) → choices`, and `correct_index` is **not model-chosen**. The code picks a random `target_index` (0–3) per question, passes it as an ANSWER PLACEMENT directive, and sets `correct_index` from it after validation — so the key can't drift from the model's reasoning, and the index is uniformly random by construction (no index-0 bias, so `shuffleChoices` is no longer applied to questions; it's still used for **lesson check questions** via `shuffleLessonStep`). Validation requires exactly 4 **distinct** choices.
+
+---
+
+## Content correctness — fast verification (`mcatGenerator.ts`)
+
+Generation is cheap/creative; a **separate, fast verification pass gates what gets stored/served**. It runs inline (students wait during generation), overlapped with the embedding step, and **fails open** (a timeout/error never blocks serving). Only *newly generated* content is verified — cached/stored content is served as-is.
+
+- **Questions** (`verifyQuestionFast` / `verifyQuestionsFast`): one `gpt-5.4-mini` **blind solve** — the verifier independently answers the question *without seeing the key* and must agree with `correct_index`. Wired into `next-question`, `quiz`, `similar`: only questions that pass are stored/served; if all in a batch fail, serve best-effort (fail-safe). Catches the fatal "wrong answer key" error (~1s, AbortController timeout ~4s).
+- **Lessons** (lesson route): every micro-step **check question** is blind-solve-verified before the lesson is cached; if any fail, the lesson is regenerated once and the version with fewer failures is kept (fail-open).
+- **Flashcards** (`verifyFlashcardFast` / `verifyFlashcardsFast`): a fast fact-check that the **back correctly answers the front**; only valid cards are inserted (fail-safe to keeping all if every card is rejected).
+
+This is the *correctness* analog of the blueprint (which governs *scope*). NOT yet built: a thorough async strong-model pass (multi-vote + adversarial critic) for offline pool re-checks.
+
+---
+
+## Concept blueprints — per-keyword scope contracts (`lib/mcatBlueprint.ts`)
+
+Lessons and questions for a keyword are independent LLM calls; without a shared contract they drift (e.g. a sign-of-ΔG keyword getting questions that test the ΔG = ΔH − TΔS formula). The **`ConceptBlueprint`** (stored JSONB on `mcat_keywords.concept_blueprint`) is that contract: `in_scope_concepts`, `in_scope_formulas` (empty for conceptual keywords), `out_of_scope`, `key_terms`, `boundary_statement`.
+
+- **Generated once per keyword** by `generateConceptBlueprint`, **sibling-grounded** (the keyword's siblings are passed in so `out_of_scope` sharply names adjacent territory) + AAMC outline. Encodes a **primary-skill vs shared-outcome** distinction: `out_of_scope` lists concepts that are a *different tested skill* owned by a sibling, NOT shared conclusion vocabulary (e.g. "spontaneous" is a shared outcome, not exclusive to one keyword).
+- **Injected** into all four generators via `buildBlueprintBlock` (a forceful "SCOPE CONTRACT" block) — so lessons and questions obey one contract. Routes load `concept_blueprint` (via `loadTargetKeywords` / direct selects) and thread it through.
+- **Audit** (`mcat:audit-scope`): an LLM judges each stored question against its keyword's blueprint — flags only when an out-of-scope concept is the *primary tested skill* (not an incidental mention); `--apply` quarantines violators (`status='out_of_scope'`).
+
+## AAMC yield — topic importance (`yield_level` / `yield_rationale`)
+
+Generated in the **same call** as the blueprint (free): `yield_level` ∈ {high, medium, low} + a one-sentence `yield_rationale`, grounded in the AAMC outline (high = explicitly elaborated / foundational / recurring; low = niche). Calibrated to ~25–35% high / 40–50% medium / 20–30% low (not everything "high"). Coerce-with-default ("medium") so it never fails a blueprint. Stored on `mcat_keywords.yield_level` / `yield_rationale`.
+- **Surfaced**: `taxonomy` route returns `yield_level` per keyword + an aggregated level per umbrella; `YieldBadge` renders High/Med/Low in the browse + progress pages.
+- **Prioritized**: a bounded yield nudge (`high −0.12 / med 0 / low +0.10` on the effective weakness score) in `practice-queue`, `next-question`, and `quiz` — high-yield topics surface earlier without overriding weakness; an explicitly pinned `keyword_id`/`keyword_ids` is never reordered.
 
 ---
 
@@ -128,8 +156,11 @@ Per attempt, for each keyword in the question's `keyword_weights`:
 | `npm run seed:mcat` | `seed-mcat-taxonomy.ts` | Seed `mcat_categories` + `mcat_keywords` from `mcat-keywords.txt`. `--dry-run`. |
 | `npm run mcat:expand` | `expand-mcat-keywords.ts` | Generate 5–8 in_depth keywords per childless umbrella. `--dry-run`, `--limit N`, `--category <id>`. Idempotent (skips umbrellas that already have children). |
 | `npm run mcat:embed` | `embed-mcat.ts` | Embed keywords/questions/flashcards + retag. `--dry-run`. |
-| `npm run mcat:rebalance` | `rebalance-mcat-correct-index.ts` | One-time: shuffle stored questions' choices to fix index-0 bias. `--dry-run`. |
+| `npm run mcat:blueprints` | `backfill-mcat-blueprints.ts` | Generate + store `concept_blueprint` **and** `yield_level`/`yield_rationale` per keyword (one LLM call each). **Fill-missing** by default (full blueprint where absent, yield-only where the blueprint exists but yield is null); `--force` re-generates. Scope with `--umbrella`/`--category`/`--keyword`/`--limit`; `--dry-run`. Retries transient OpenAI errors. |
+| `npm run mcat:audit-scope` | `audit-mcat-scope.ts` | LLM-audit stored questions vs their keyword's blueprint (primary-skill, not incidental mentions). Report-only by default; `--apply` quarantines violators (`status='out_of_scope'`). Scope with `--umbrella`/`--category`/`--keyword`. |
+| `npm run mcat:rebalance` | `rebalance-mcat-correct-index.ts` | One-time/legacy: shuffle stored questions' choices to fix index-0 bias (superseded for new questions by code-assigned random `target_index`). `--dry-run`. |
 | `npm run mcat:clean-unembedded` | `delete-unembedded-mcat.ts` | Delete unembedded content. Dry-run unless `--apply`. |
+| (no npm alias) | `test-blueprint-scope.ts` | Read-only harness: generates a keyword's blueprint + yield in-memory and measures question scope-drift with vs without it. `--keyword`/`--count`/`--rounds`. |
 
 > **Env quirk:** root `.env.local` has an **invalid** `OPENAI_API_KEY`; the valid one is in `apps/student/.env.local`. Scripts that call OpenAI override `process.env.OPENAI_API_KEY` from the app env (run them as `DOTENV_CONFIG_PATH=apps/student/.env.local npx tsx -r dotenv/config <script>` if needed). Supabase keys are valid in the root `.env.local`.
 
@@ -142,8 +173,10 @@ Per attempt, for each keyword in the question's `keyword_weights`:
 | `20260610000000_mcat_biology.sql` | `mcat_categories`, `mcat_keywords`, `mcat_questions`, `mcat_flashcards`, `mcat_question_attempts`, `mcat_flashcard_attempts`, `mcat_student_keyword_states`. |
 | `20260611000000_mcat_v2.sql` | `embedding` on keywords/questions; `avg_rating`/`rating_count`/`flag_count` on questions/flashcards; `spaced_review_*` on states; `mcat_lessons`; `mcat_content_feedback`. |
 | `20260612000000_mcat_flashcard_embedding.sql` | `embedding` on `mcat_flashcards`. |
+| `20260613000000_mcat_concept_blueprint.sql` | `concept_blueprint` (JSONB scope contract) on `mcat_keywords`. |
+| `20260613000001_mcat_keyword_yield.sql` | `yield_level` + `yield_rationale` (AAMC importance) on `mcat_keywords`. |
 
-All `mcat_*` tables are documented in [database.md](database.md). Migrations are applied via `supabase db push` (or the Supabase SQL editor).
+All `mcat_*` tables are documented in [database.md](database.md). Migrations are applied via `supabase db push` (or the Supabase SQL editor). **Apply the migration before deploying code that selects a new column** — e.g. the taxonomy/practice/quiz routes select `yield_level`, so deploying them against a DB without that column breaks the MCAT pages.
 
 ---
 

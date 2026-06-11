@@ -5,7 +5,7 @@
  */
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { generateMcatLesson, McatGenError } from "@/lib/mcatGenerator";
+import { generateMcatLesson, McatGenError, verifyQuestionsFast } from "@/lib/mcatGenerator";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
 import { ConceptBlueprint } from "@/lib/mcatBlueprint";
 
@@ -96,6 +96,58 @@ export async function GET(
       { error: "Lesson generation failed", detail },
       { status }
     );
+  }
+
+  // 3b. Verify check questions; retry once if any fail (fail-open)
+  const kwMeta = {
+    id: kwRow.id as string,
+    label: kwRow.label as string,
+    description: (kwRow.description as string) ?? "",
+    blueprint: (kwRow.concept_blueprint as ConceptBlueprint | null) ?? null,
+  };
+
+  const verifySteps = async (lesson: { micro_steps: { check_question: { latex_content: string; choices: string[]; correct_index: number } }[] }) =>
+    verifyQuestionsFast(
+      lesson.micro_steps.map((s) => ({
+        stem: s.check_question.latex_content,
+        choices: s.check_question.choices,
+        correct_index: s.check_question.correct_index,
+      }))
+    );
+
+  const firstResults = await verifySteps(generated);
+  const firstFailCount = firstResults.filter((r) => r.ok && !r.agrees).length;
+
+  if (firstFailCount > 0) {
+    // Regenerate once and compare failure counts
+    let retryLesson: typeof generated | null = null;
+    try {
+      retryLesson = await generateMcatLesson(kwMeta, outlineContext);
+    } catch {
+      // swallow — keep original
+    }
+
+    if (retryLesson) {
+      const retryResults = await verifySteps(retryLesson);
+      const retryFailCount = retryResults.filter((r) => r.ok && !r.agrees).length;
+
+      if (retryFailCount <= firstFailCount) {
+        generated = retryLesson;
+        if (retryFailCount > 0) {
+          console.warn(
+            `[lesson/${keywordId}] Verification still failing after retry: ${retryFailCount} step(s) — serving retry lesson`
+          );
+        }
+      } else {
+        console.warn(
+          `[lesson/${keywordId}] Retry had more failures (${retryFailCount} vs ${firstFailCount}) — keeping original`
+        );
+      }
+    } else {
+      console.warn(
+        `[lesson/${keywordId}] Verification failed for ${firstFailCount} step(s); retry generation also failed — serving original`
+      );
+    }
   }
 
   // 4. Upsert into mcat_lessons

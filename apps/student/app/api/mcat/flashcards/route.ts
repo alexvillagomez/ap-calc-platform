@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { fetchTemplateCards } from "@/lib/mcatTemplateCards";
-import { generateMcatFlashcards, McatGenError } from "@/lib/mcatGenerator";
+import { generateMcatFlashcards, McatGenError, verifyFlashcardsFast } from "@/lib/mcatGenerator";
 import { loadTargetKeywords } from "@/lib/mcatTagging";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
 import { ConceptBlueprint } from "@/lib/mcatBlueprint";
@@ -221,9 +221,29 @@ export async function POST(request: Request) {
           outlineContext,
         });
 
+        // Verify generated flashcards; keep only valid ones (fail-safe: keep all if none pass)
+        let keptResults = genResults;
         if (genResults.length > 0) {
+          const verifyResults = await verifyFlashcardsFast(
+            genResults.map((c) => ({ front: c.front, back: c.back }))
+          );
+          const validResults = genResults.filter((_, i) => {
+            const r = verifyResults[i];
+            // Keep if valid OR if verifier didn't run cleanly (fail-open on !ok)
+            return !r || !r.ok || r.valid;
+          });
+          if (validResults.length === 0) {
+            console.warn(
+              `[mcat/flashcards] verifyFlashcardsFast rejected all ${genResults.length} card(s) — keeping all (fail-safe)`
+            );
+          } else {
+            keptResults = validResults;
+          }
+        }
+
+        if (keptResults.length > 0) {
           const sourceCardIds = templateCards.map((c) => c.id);
-          const rows = genResults.map((fc) => ({
+          const rows = keptResults.map((fc) => ({
             section: "biology",
             category_id,
             front: fc.front,

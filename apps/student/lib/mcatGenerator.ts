@@ -771,6 +771,100 @@ export async function verifyQuestionsFast(
   return Promise.all(qs.map((q) => verifyQuestionFast(q, opts)));
 }
 
+// ─── Fast flashcard fact-checker ──────────────────────────────────────────────
+
+export interface FastFlashcardVerifyResult {
+  /** true when the verifier confirms BACK correctly answers FRONT */
+  valid: boolean;
+  /** false if the verifier call errored/timed out — fail-open: treat as valid */
+  ok: boolean;
+}
+
+const FLASHCARD_VERIFY_SYSTEM =
+  'You are a careful MCAT Biology fact-checker. ' +
+  'Given a flashcard FRONT (prompt) and BACK (answer), decide whether the BACK is a correct and accurate answer to the FRONT. ' +
+  'Return JSON {"correct": true|false, "reason": "<=1 sentence"}.';
+
+const FLASHCARD_VERIFY_TIMEOUT_MS = 4000;
+
+/**
+ * Fact-checks a single flashcard by asking a gpt-5.4-mini call whether the
+ * BACK correctly answers the FRONT. Fail-open: any error/timeout/unparseable
+ * response returns { valid: true, ok: false } and never throws.
+ */
+export async function verifyFlashcardFast(
+  card: { front: string; back: string },
+  opts?: { timeoutMs?: number }
+): Promise<FastFlashcardVerifyResult> {
+  const timeoutMs = opts?.timeoutMs ?? FLASHCARD_VERIFY_TIMEOUT_MS;
+
+  const userPrompt =
+    `FRONT: ${card.front}\n\nBACK: ${card.back}\n\nIs the BACK a correct and accurate answer to the FRONT?`;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const key = process.env.OPENAI_API_KEY;
+    if (!key) {
+      return { valid: true, ok: false };
+    }
+    const client = new OpenAI({ apiKey: key });
+
+    const completion = await client.chat.completions.create(
+      {
+        model: GEN_MODEL,
+        messages: [
+          { role: "system", content: FLASHCARD_VERIFY_SYSTEM },
+          { role: "user", content: userPrompt },
+        ],
+        response_format: { type: "json_object" },
+        max_completion_tokens: 80,
+      },
+      { signal: controller.signal }
+    );
+
+    clearTimeout(timer);
+
+    const text = completion.choices[0]?.message?.content ?? "{}";
+    let parsed: Record<string, unknown>;
+    try {
+      parsed = JSON.parse(text) as Record<string, unknown>;
+    } catch {
+      return { valid: true, ok: false };
+    }
+
+    const correct = parsed.correct;
+    if (typeof correct !== "boolean") {
+      return { valid: true, ok: false };
+    }
+
+    return { valid: correct === true, ok: true };
+  } catch (err) {
+    clearTimeout(timer);
+    const isAbort =
+      err instanceof Error &&
+      (err.name === "AbortError" || err.message.toLowerCase().includes("abort"));
+    if (isAbort) {
+      console.warn("[verifyFlashcardFast] timed out after", timeoutMs, "ms — failing open");
+    } else {
+      console.warn("[verifyFlashcardFast] error — failing open:", err instanceof Error ? err.message : String(err));
+    }
+    return { valid: true, ok: false };
+  }
+}
+
+/**
+ * Runs verifyFlashcardFast concurrently on all cards so total latency ≈ one
+ * call, not N. Each card fails open independently.
+ */
+export async function verifyFlashcardsFast(
+  cards: { front: string; back: string }[],
+  opts?: { timeoutMs?: number }
+): Promise<FastFlashcardVerifyResult[]> {
+  return Promise.all(cards.map((c) => verifyFlashcardFast(c, opts)));
+}
+
 // ─── Flashcard generator ──────────────────────────────────────────────────────
 
 /**
