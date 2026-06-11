@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { generateSimilarQuestion, McatGenError } from "@/lib/mcatGenerator";
 import { loadTargetKeywords, embedText, tagByEmbedding } from "@/lib/mcatTagging";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
+import { ConceptBlueprint } from "@/lib/mcatBlueprint";
 
 export const runtime = "nodejs";
 
@@ -54,7 +55,7 @@ export async function POST(request: Request) {
   const { data: kwMeta } = kwIds.length > 0
     ? await supabase
         .from("mcat_keywords")
-        .select("id, label, description")
+        .select("id, label, description, concept_blueprint")
         .in("id", kwIds)
     : { data: [] };
 
@@ -62,6 +63,7 @@ export async function POST(request: Request) {
     id: k.id as string,
     label: k.label as string,
     description: (k.description as string) ?? "",
+    blueprint: (k.concept_blueprint as ConceptBlueprint | null) ?? null,
   }));
 
   // Fall back to all category keywords if no valid ones found
@@ -69,7 +71,7 @@ export async function POST(request: Request) {
   if (finalKeywords.length === 0) {
     const { data: catKws } = await supabase
       .from("mcat_keywords")
-      .select("id, label, description")
+      .select("id, label, description, concept_blueprint")
       .eq("category_id", sourceQ.category_id as string)
       .eq("status", "approved")
       .limit(5);
@@ -77,6 +79,7 @@ export async function POST(request: Request) {
       id: k.id as string,
       label: k.label as string,
       description: (k.description as string) ?? "",
+      blueprint: (k.concept_blueprint as ConceptBlueprint | null) ?? null,
     }));
   }
 

@@ -121,7 +121,7 @@ export async function GET(request: Request) {
         const { data: umbRow } = await supabase
           .from("mcat_keywords")
           .select(
-            "id, label, description, tier, parent_keyword_id, category_id, embedding"
+            "id, label, description, tier, parent_keyword_id, category_id, embedding, concept_blueprint"
           )
           .eq("id", umbrellaId)
           .eq("status", "approved")
@@ -137,6 +137,7 @@ export async function GET(request: Request) {
                   (umbRow.parent_keyword_id as string | null) ?? null,
                 category_id: umbRow.category_id as string,
                 embedding: umbRow.embedding,
+                concept_blueprint: umbRow.concept_blueprint ?? null,
               },
             ]
           : allKeywords; // last-resort: whole category

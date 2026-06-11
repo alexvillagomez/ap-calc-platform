@@ -14,7 +14,9 @@
     "seed:mcat": "tsx scripts/seed-mcat-taxonomy.ts",
     "mcat:expand": "tsx scripts/expand-mcat-keywords.ts",
     "mcat:embed": "tsx scripts/embed-mcat.ts",
-    "mcat:clean-unembedded": "tsx scripts/delete-unembedded-mcat.ts"
+    "mcat:clean-unembedded": "tsx scripts/delete-unembedded-mcat.ts",
+    "mcat:blueprints": "tsx scripts/backfill-mcat-blueprints.ts",
+    "mcat:audit-scope": "tsx scripts/audit-mcat-scope.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
@@ -27,5 +29,8 @@
   "packageManager": "npm@10.8.2",
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
   }
 }

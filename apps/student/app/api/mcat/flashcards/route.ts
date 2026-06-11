@@ -4,6 +4,7 @@ import { fetchTemplateCards } from "@/lib/mcatTemplateCards";
 import { generateMcatFlashcards, McatGenError } from "@/lib/mcatGenerator";
 import { loadTargetKeywords } from "@/lib/mcatTagging";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
+import { ConceptBlueprint } from "@/lib/mcatBlueprint";
 
 export const runtime = "nodejs";
 
@@ -150,13 +151,13 @@ export async function POST(request: Request) {
       (statesRes.data ?? []).map((s) => [s.keyword_id as string, s])
     );
 
-    let weakestKws: { id: string; label: string; description: string }[];
+    let weakestKws: { id: string; label: string; description: string; blueprint?: ConceptBlueprint | null }[];
 
     if (keyword_id) {
       // Single-keyword: generate only for that keyword
       const { data: kwRow } = await supabase
         .from("mcat_keywords")
-        .select("id, label, description")
+        .select("id, label, description, concept_blueprint")
         .eq("id", keyword_id)
         .maybeSingle();
 
@@ -166,6 +167,7 @@ export async function POST(request: Request) {
               id: kwRow.id as string,
               label: kwRow.label as string,
               description: (kwRow.description as string) ?? "",
+              blueprint: (kwRow.concept_blueprint as ConceptBlueprint | null) ?? null,
             },
           ]
         : [];
@@ -183,6 +185,7 @@ export async function POST(request: Request) {
           id: kw.id,
           label: kw.label,
           description: kw.description ?? "",
+          blueprint: kw.concept_blueprint,
         }));
     } else {
       // Category scope: pick 3 weakest overall
@@ -197,6 +200,7 @@ export async function POST(request: Request) {
           id: kw.id,
           label: kw.label,
           description: kw.description ?? "",
+          blueprint: kw.concept_blueprint,
         }));
     }
 

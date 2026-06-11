@@ -236,6 +236,7 @@ export async function POST(request: Request) {
       id: kw.id,
       label: kw.label,
       description: kw.description ?? "",
+      blueprint: kw.concept_blueprint,
     }));
 
     if (genKws.length > 0) {

@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { generateMcatLesson, McatGenError } from "@/lib/mcatGenerator";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
+import { ConceptBlueprint } from "@/lib/mcatBlueprint";
 
 export const runtime = "nodejs";
 
@@ -60,7 +61,7 @@ export async function GET(
   // 2. Not in DB — fetch keyword metadata
   const { data: kwRow, error: kwError } = await supabase
     .from("mcat_keywords")
-    .select("id, label, description, category_id")
+    .select("id, label, description, category_id, concept_blueprint")
     .eq("id", keywordId)
     .maybeSingle();
 
@@ -83,6 +84,7 @@ export async function GET(
         id: kwRow.id as string,
         label: kwRow.label as string,
         description: (kwRow.description as string) ?? "",
+        blueprint: (kwRow.concept_blueprint as ConceptBlueprint | null) ?? null,
       },
       outlineContext
     );

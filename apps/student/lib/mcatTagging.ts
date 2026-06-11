@@ -8,6 +8,7 @@
 import OpenAI from "openai";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { McatGenError } from "@/lib/mcatGenerator";
+import { ConceptBlueprint } from "@/lib/mcatBlueprint";
 
 // ─── Cosine similarity ────────────────────────────────────────────────────────
 
@@ -91,6 +92,7 @@ export type TargetKeyword = {
   parent_keyword_id: string | null;
   category_id: string;
   embedding: unknown;
+  concept_blueprint: ConceptBlueprint | null;
 };
 
 /**
@@ -107,7 +109,7 @@ export async function loadTargetKeywords(
   const { data, error } = await supabase
     .from("mcat_keywords")
     .select(
-      "id, label, description, tier, parent_keyword_id, category_id, embedding"
+      "id, label, description, tier, parent_keyword_id, category_id, embedding, concept_blueprint"
     )
     .in("category_id", categoryIds)
     .eq("status", "approved")

@@ -4,6 +4,7 @@
  * Throws McatGenError on failure — routes surface this as 502.
  */
 import OpenAI from "openai";
+import { buildBlueprintBlock, type ConceptBlueprint } from "./mcatBlueprint";
 
 const GEN_MODEL = "gpt-5.4-mini";
 
@@ -43,7 +44,7 @@ export interface GeneratedFlashcard {
   keyword_weights: Record<string, number>;
 }
 
-type KeywordMeta = { id: string; label: string; description: string };
+type KeywordMeta = { id: string; label: string; description: string; blueprint?: ConceptBlueprint | null };
 
 // ─── Shuffle helper ────────────────────────────────────────────────────────────
 
@@ -329,8 +330,19 @@ export async function generateMcatQuestions(opts: {
   const allowedIds = new Set(keywords.map((k) => k.id));
 
   const keywordBlock = keywords
-    .map((k) => `  - id: "${k.id}"\n    label: "${k.label}"\n    description: "${k.description}"`)
+    .map((k) => {
+      const base = `  - id: "${k.id}"\n    label: "${k.label}"\n    description: "${k.description}"`;
+      const blueprintText = buildBlueprintBlock(k.blueprint);
+      if (!blueprintText) return base;
+      const indented = blueprintText.split("\n").map((line) => `    ${line}`).join("\n");
+      return `${base}\n${indented}`;
+    })
     .join("\n");
+
+  const hasBlueprintKeyword = keywords.some((k) => !!k.blueprint);
+  const scopeEnforcement = hasBlueprintKeyword
+    ? `SCOPE ENFORCEMENT: Each item targets exactly ONE keyword. You MUST obey that keyword's SCOPE CONTRACT (shown under it): test only its in-scope concepts, never require a concept or formula listed OUT OF SCOPE for it. A question/flashcard that requires an out-of-scope concept is INVALID — regenerate it within scope.\n\n`
+    : "";
 
   const templateBlock =
     templateCards.length > 0
@@ -344,7 +356,7 @@ export async function generateMcatQuestions(opts: {
 
   const userPrompt = `Generate ${count} MCAT Biology multiple-choice questions.
 
-${outlineBlock}${difficultyInstruction(effectiveTarget)}
+${outlineBlock}${scopeEnforcement}${difficultyInstruction(effectiveTarget)}
 
 KEYWORDS TO TEST (use ONLY these keyword ids in keyword_weights):
 ${keywordBlock}
@@ -394,8 +406,19 @@ export async function generateSimilarQuestion(opts: {
   const allowedIds = new Set(keywords.map((k) => k.id));
 
   const keywordBlock = keywords
-    .map((k) => `  - id: "${k.id}"\n    label: "${k.label}"\n    description: "${k.description}"`)
+    .map((k) => {
+      const base = `  - id: "${k.id}"\n    label: "${k.label}"\n    description: "${k.description}"`;
+      const blueprintText = buildBlueprintBlock(k.blueprint);
+      if (!blueprintText) return base;
+      const indented = blueprintText.split("\n").map((line) => `    ${line}`).join("\n");
+      return `${base}\n${indented}`;
+    })
     .join("\n");
+
+  const hasBlueprintKeyword = keywords.some((k) => !!k.blueprint);
+  const scopeEnforcement = hasBlueprintKeyword
+    ? `SCOPE ENFORCEMENT: Each item targets exactly ONE keyword. You MUST obey that keyword's SCOPE CONTRACT (shown under it): test only its in-scope concepts, never require a concept or formula listed OUT OF SCOPE for it. A question/flashcard that requires an out-of-scope concept is INVALID — regenerate it within scope.\n\n`
+    : "";
 
   const outlineBlock =
     opts.outlineContext
@@ -404,7 +427,7 @@ export async function generateSimilarQuestion(opts: {
 
   const userPrompt = `Generate a NEW question testing the same concept from a different angle.
 
-${outlineBlock}${difficultyInstruction(effectiveTarget)}
+${outlineBlock}${scopeEnforcement}${difficultyInstruction(effectiveTarget)}
 
 ORIGINAL QUESTION:
 Stem: ${question.stem}
@@ -574,6 +597,7 @@ export async function generateMcatLesson(
     label: string;
     description: string;
     examples?: string;
+    blueprint?: ConceptBlueprint | null;
   },
   outlineContext?: string
 ): Promise<GeneratedMcatLesson> {
@@ -582,11 +606,13 @@ export async function generateMcatLesson(
       ? `${outlineContext}\n\nUse the outline above to keep the lesson content within the scope the MCAT tests for this area: prefer the listed canonical topics, use MCAT-appropriate terminology, and do not drift into out-of-scope trivia.\n\n`
       : "";
 
-  const userPrompt = `${outlineBlock}Keyword ID: ${keyword.id}
+  const scopeBlock = keyword.blueprint ? buildBlueprintBlock(keyword.blueprint) + "\n\n" : "";
+
+  const userPrompt = `${scopeBlock}${outlineBlock}Keyword ID: ${keyword.id}
 Label: ${keyword.label}
 Description: ${keyword.description}${keyword.examples ? `\nExamples: ${keyword.examples}` : ""}
 
-Think carefully about what a student who has NEVER seen this MCAT Biology concept before would find confusing. Build from the absolute simplest case. Every step must have a check question with distractors based on real MCAT misconceptions.`;
+Think carefully about what a student who has NEVER seen this MCAT Biology concept before would find confusing. Build from the absolute simplest case. Every step must have a check question with distractors based on real MCAT misconceptions. Teach EXACTLY the in-scope concepts listed in the scope contract above, and ensure every check question stays within that scope contract.`;
 
   let parsed = await callGen(MCAT_LESSON_SYSTEM, userPrompt);
   let lesson = validateLesson(parsed);
@@ -621,8 +647,19 @@ export async function generateMcatFlashcards(opts: {
   const { keywords, templateCards, count } = opts;
 
   const keywordBlock = keywords
-    .map((k) => `  - id: "${k.id}"\n    label: "${k.label}"\n    description: "${k.description}"`)
+    .map((k) => {
+      const base = `  - id: "${k.id}"\n    label: "${k.label}"\n    description: "${k.description}"`;
+      const blueprintText = buildBlueprintBlock(k.blueprint);
+      if (!blueprintText) return base;
+      const indented = blueprintText.split("\n").map((line) => `    ${line}`).join("\n");
+      return `${base}\n${indented}`;
+    })
     .join("\n");
+
+  const hasBlueprintKeyword = keywords.some((k) => !!k.blueprint);
+  const scopeEnforcement = hasBlueprintKeyword
+    ? `SCOPE ENFORCEMENT: Each item targets exactly ONE keyword. You MUST obey that keyword's SCOPE CONTRACT (shown under it): test only its in-scope concepts, never require a concept or formula listed OUT OF SCOPE for it. A question/flashcard that requires an out-of-scope concept is INVALID — regenerate it within scope.\n\n`
+    : "";
 
   const templateBlock =
     templateCards.length > 0
@@ -636,7 +673,7 @@ export async function generateMcatFlashcards(opts: {
 
   const userPrompt = `Generate ${count} MCAT Biology flashcards.
 
-${outlineBlock}KEYWORDS TO COVER (use ONLY these keyword ids in keyword_weights):
+${outlineBlock}${scopeEnforcement}KEYWORDS TO COVER (use ONLY these keyword ids in keyword_weights):
 ${keywordBlock}
 ${templateBlock}`;
 

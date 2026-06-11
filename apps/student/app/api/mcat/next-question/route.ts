@@ -349,6 +349,7 @@ export async function POST(request: Request) {
     id: kw.id,
     label: kw.label,
     description: kw.description ?? "",
+    blueprint: kw.concept_blueprint,
   }));
 
   const templateCards = await fetchTemplateCards(
@@ -369,6 +370,7 @@ export async function POST(request: Request) {
               id: k.id,
               label: k.label,
               description: k.description ?? "",
+              blueprint: k.concept_blueprint,
             })),
       templateCards,
       count: 3,
