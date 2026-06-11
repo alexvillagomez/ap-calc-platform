@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
+import MathText from "@/components/mcat/MathText";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
 const QUIZ_COUNT = 8;
@@ -304,8 +305,8 @@ function McatQuizInner({
 
             {/* Stem */}
             <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-              <p className="text-sm font-medium text-gray-900 leading-relaxed whitespace-pre-line">
-                {currentQ.stem}
+              <p className="text-sm font-medium text-gray-900 leading-relaxed">
+                <MathText>{currentQ.stem}</MathText>
               </p>
             </div>
 
@@ -394,8 +395,8 @@ function McatQuizInner({
                         >
                           {correct ? "✓" : ans.dont_know ? "?" : "✗"}
                         </span>
-                        <p className="text-sm text-gray-900 font-medium leading-snug whitespace-pre-line">
-                          {ans.question.stem}
+                        <p className="text-sm text-gray-900 font-medium leading-snug">
+                          <MathText>{ans.question.stem}</MathText>
                         </p>
                       </div>
 
@@ -416,7 +417,7 @@ function McatQuizInner({
                               <span className="font-mono font-bold">
                                 {String.fromCharCode(65 + i)}.
                               </span>
-                              <span className="whitespace-pre-line">{choice}</span>
+                              <MathText>{choice}</MathText>
                             </div>
                           );
                         })}
@@ -430,8 +431,8 @@ function McatQuizInner({
 
                       {ans.question.explanation && (
                         <div className="bg-blue-50 rounded-lg px-3 py-2">
-                          <p className="text-xs text-blue-700 leading-relaxed whitespace-pre-line">
-                            {ans.question.explanation}
+                          <p className="text-xs text-blue-700 leading-relaxed">
+                            <MathText>{ans.question.explanation}</MathText>
                           </p>
                         </div>
                       )}

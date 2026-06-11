@@ -1,3 +1,5 @@
+import MathText from "@/components/mcat/MathText";
+
 const LABELS = ["A", "B", "C", "D"];
 
 type ChoiceState = "default" | "selected" | "correct" | "wrong" | "dimmed";
@@ -56,8 +58,8 @@ export function ChoiceButton({
       onClick={onClick}
     >
       <span className={badgeCls}>{badgeContent}</span>
-      <span className="flex-1 min-w-0 pt-0.5 text-sm leading-relaxed whitespace-pre-line">
-        {text}
+      <span className="flex-1 min-w-0 pt-0.5 text-sm leading-relaxed">
+        <MathText>{text}</MathText>
       </span>
     </button>
   );

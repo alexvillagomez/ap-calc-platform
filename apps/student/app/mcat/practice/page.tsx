@@ -6,6 +6,7 @@ import { ScoreBar } from "@/components/mcat/ScoreBar";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
+import MathText from "@/components/mcat/MathText";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -868,8 +869,8 @@ export default function McatPracticePage() {
                 <>
                   {/* Stem */}
                   <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                    <p className="text-sm font-medium text-gray-900 leading-relaxed whitespace-pre-line">
-                      {currentQuestion.stem}
+                    <p className="text-sm font-medium text-gray-900 leading-relaxed">
+                      <MathText>{currentQuestion.stem}</MathText>
                     </p>
                   </div>
 
@@ -935,8 +936,8 @@ export default function McatPracticePage() {
                           <p className="text-xs font-semibold text-blue-600 mb-1 uppercase tracking-wide">
                             Explanation
                           </p>
-                          <p className="text-sm text-blue-800 leading-relaxed whitespace-pre-line">
-                            {explanation}
+                          <p className="text-sm text-blue-800 leading-relaxed">
+                            <MathText>{explanation}</MathText>
                           </p>
                         </div>
                       )}

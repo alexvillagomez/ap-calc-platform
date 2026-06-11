@@ -8,6 +8,7 @@ import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import { ScoreBar } from "@/components/mcat/ScoreBar";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import { LessonView } from "@/components/mcat/LessonView";
+import MathText from "@/components/mcat/MathText";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -996,8 +997,8 @@ function McatPracticeInner({
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                     Front
                   </p>
-                  <p className="text-base font-medium text-gray-900 leading-relaxed whitespace-pre-line">
-                    {currentFc.front}
+                  <p className="text-base font-medium text-gray-900 leading-relaxed">
+                    <MathText>{currentFc.front}</MathText>
                   </p>
                 </div>
               ) : (
@@ -1005,8 +1006,8 @@ function McatPracticeInner({
                   <p className="text-xs font-semibold text-teal-500 uppercase tracking-wide mb-3">
                     Back
                   </p>
-                  <p className="text-base text-gray-800 leading-relaxed whitespace-pre-line">
-                    {currentFc.back}
+                  <p className="text-base text-gray-800 leading-relaxed">
+                    <MathText>{currentFc.back}</MathText>
                   </p>
                 </div>
               )}
@@ -1087,8 +1088,8 @@ function McatPracticeInner({
 
             {/* Stem */}
             <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-              <p className="text-sm font-medium text-gray-900 leading-relaxed whitespace-pre-line">
-                {question.stem}
+              <p className="text-sm font-medium text-gray-900 leading-relaxed">
+                <MathText>{question.stem}</MathText>
               </p>
             </div>
 
@@ -1133,8 +1134,8 @@ function McatPracticeInner({
                 <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-1.5">
                   Explanation
                 </p>
-                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
-                  {question.explanation}
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  <MathText>{question.explanation}</MathText>
                 </p>
               </div>
             )}
