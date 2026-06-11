@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { fetchTemplateCards } from "@/lib/mcatTemplateCards";
-import { generateMcatQuestions, McatGenError } from "@/lib/mcatGenerator";
+import { generateMcatQuestions, McatGenError, verifyQuestionsFast } from "@/lib/mcatGenerator";
 import { loadTargetKeywords } from "@/lib/mcatTagging";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
 
@@ -291,7 +291,7 @@ export async function POST(request: Request) {
 
             if (genResults.length > 0) {
               const sourceCardIds = templateCards.map((c) => c.id);
-              const rows = genResults.map((q) => ({
+              const allRows = genResults.map((q) => ({
                 section: "biology",
                 category_id,
                 stem: q.stem,
@@ -304,6 +304,26 @@ export async function POST(request: Request) {
                 generated_by: "gpt-5.4-mini",
                 status: "active",
               }));
+
+              // Verify concurrently — fail-open if all fail
+              const verifyResults = await verifyQuestionsFast(
+                genResults.map((q) => ({
+                  stem: q.stem,
+                  choices: q.choices,
+                  correct_index: q.correct_index,
+                }))
+              );
+              let keptIndices = verifyResults
+                .map((r, i) => (r.agrees ? i : -1))
+                .filter((i) => i !== -1);
+              if (keptIndices.length === 0) {
+                console.warn(
+                  `[quiz] mixed tier=${tier}: all generated questions failed fast-verify; serving best-effort`
+                );
+                keptIndices = allRows.map((_, i) => i);
+              }
+              const keptSet = new Set(keptIndices);
+              const rows = allRows.filter((_, i) => keptSet.has(i));
 
               const { data: inserted } = await supabase
                 .from("mcat_questions")
@@ -331,7 +351,7 @@ export async function POST(request: Request) {
 
           if (genResults.length > 0) {
             const sourceCardIds = templateCards.map((c) => c.id);
-            const rows = genResults.map((q) => ({
+            const allRows = genResults.map((q) => ({
               section: "biology",
               category_id,
               stem: q.stem,
@@ -344,6 +364,26 @@ export async function POST(request: Request) {
               generated_by: "gpt-5.4-mini",
               status: "active",
             }));
+
+            // Verify concurrently — fail-open if all fail
+            const verifyResults = await verifyQuestionsFast(
+              genResults.map((q) => ({
+                stem: q.stem,
+                choices: q.choices,
+                correct_index: q.correct_index,
+              }))
+            );
+            let keptIndices = verifyResults
+              .map((r, i) => (r.agrees ? i : -1))
+              .filter((i) => i !== -1);
+            if (keptIndices.length === 0) {
+              console.warn(
+                "[quiz] all generated questions failed fast-verify; serving best-effort"
+              );
+              keptIndices = allRows.map((_, i) => i);
+            }
+            const keptSet = new Set(keptIndices);
+            const rows = allRows.filter((_, i) => keptSet.has(i));
 
             const { data: inserted } = await supabase
               .from("mcat_questions")

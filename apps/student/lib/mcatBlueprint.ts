@@ -323,7 +323,6 @@ export async function generateConceptBlueprint(opts: {
   };
 
   const runOnce = async (): Promise<ConceptBlueprint | null> => {
-    let text: string;
     const client = createGenClient();
     const completion = await withTransientRetry(
       () => client.chat.completions.create({
@@ -336,7 +335,7 @@ export async function generateConceptBlueprint(opts: {
       }),
       `blueprint:${opts.keyword.id}`
     );
-    text = completion.choices[0]?.message?.content ?? "{}";
+    const text = completion.choices[0]?.message?.content ?? "{}";
 
     let parsed: Record<string, unknown>;
     try {

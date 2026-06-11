@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { generateSimilarQuestion, McatGenError } from "@/lib/mcatGenerator";
+import { generateSimilarQuestion, McatGenError, verifyQuestionFast } from "@/lib/mcatGenerator";
 import { loadTargetKeywords, embedText, tagByEmbedding } from "@/lib/mcatTagging";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
 import { ConceptBlueprint } from "@/lib/mcatBlueprint";
@@ -94,21 +94,23 @@ export async function POST(request: Request) {
   const sourceDifficulty = (sourceQ.difficulty as number) ?? undefined;
   const outlineContext = outlineContextForCategory(sourceQ.category_id as string);
 
+  const genArgs = {
+    question: {
+      stem: sourceQ.stem as string,
+      choices: sourceQ.choices as string[],
+      correct_index: sourceQ.correct_index as number,
+      explanation: sourceQ.explanation as string,
+      keyword_weights: kwWeights,
+      difficulty: sourceDifficulty,
+    },
+    keywords: finalKeywords,
+    targetDifficulty: sourceDifficulty,
+    outlineContext,
+  };
+
   let generated;
   try {
-    generated = await generateSimilarQuestion({
-      question: {
-        stem: sourceQ.stem as string,
-        choices: sourceQ.choices as string[],
-        correct_index: sourceQ.correct_index as number,
-        explanation: sourceQ.explanation as string,
-        keyword_weights: kwWeights,
-        difficulty: sourceDifficulty,
-      },
-      keywords: finalKeywords,
-      targetDifficulty: sourceDifficulty,
-      outlineContext,
-    });
+    generated = await generateSimilarQuestion(genArgs);
   } catch (err) {
     if (err instanceof McatGenError) {
       return NextResponse.json(
@@ -117,6 +119,30 @@ export async function POST(request: Request) {
       );
     }
     throw err;
+  }
+
+  // Verify the generated question — retry once if it fails (fail-open)
+  const firstVerify = await verifyQuestionFast({
+    stem: generated.stem,
+    choices: generated.choices,
+    correct_index: generated.correct_index,
+  });
+  if (firstVerify.agrees === false && firstVerify.ok === true) {
+    // First attempt failed hard — try once more
+    try {
+      const retry = await generateSimilarQuestion(genArgs);
+      const retryVerify = await verifyQuestionFast({
+        stem: retry.stem,
+        choices: retry.choices,
+        correct_index: retry.correct_index,
+      });
+      // Prefer the passing result; if neither passes, keep the retry (fail-open)
+      if (retryVerify.agrees || !(firstVerify.agrees === false && firstVerify.ok)) {
+        generated = retry;
+      }
+    } catch {
+      // Retry generation failed — fall back to the original (fail-open)
+    }
   }
 
   // Embed + retag before insert (try/catch — non-fatal)

@@ -633,6 +633,109 @@ Think carefully about what a student who has NEVER seen this MCAT Biology concep
   };
 }
 
+// ─── Fast correctness verifier ────────────────────────────────────────────────
+
+export interface FastVerifyResult {
+  /** verifier's independent answer matches correct_index */
+  agrees: boolean;
+  predicted_index: number | null;
+  /** false if the verifier call errored/timed out — fail-open: treat as agrees */
+  ok: boolean;
+}
+
+const VERIFY_SYSTEM =
+  'You are a careful MCAT question solver. Solve the question independently. ' +
+  'Pick the single best answer. Return JSON {"answer_index": 0-3, "reason": "<=1 short sentence"}.';
+
+const VERIFY_TIMEOUT_MS = 4000;
+
+/**
+ * Runs a single fast, latency-conscious correctness check on a generated
+ * MCAT question. Makes one gpt-5.4-mini call in JSON mode without revealing
+ * the correct answer. Returns fail-open on any error or timeout.
+ */
+export async function verifyQuestionFast(
+  q: { stem: string; choices: string[]; correct_index: number },
+  opts?: { timeoutMs?: number }
+): Promise<FastVerifyResult> {
+  const timeoutMs = opts?.timeoutMs ?? VERIFY_TIMEOUT_MS;
+
+  const choiceLines = q.choices
+    .map((c, i) => `${i}: ${c}`)
+    .join("\n");
+
+  const userPrompt =
+    `Question:\n${q.stem}\n\nChoices:\n${choiceLines}\n\nWhich choice (0–3) is the single best answer?`;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const key = process.env.OPENAI_API_KEY;
+    if (!key) {
+      return { agrees: true, predicted_index: null, ok: false };
+    }
+    const client = new OpenAI({ apiKey: key });
+
+    const completion = await client.chat.completions.create(
+      {
+        model: GEN_MODEL,
+        messages: [
+          { role: "system", content: VERIFY_SYSTEM },
+          { role: "user", content: userPrompt },
+        ],
+        response_format: { type: "json_object" },
+        max_completion_tokens: 80,
+      },
+      { signal: controller.signal }
+    );
+
+    clearTimeout(timer);
+
+    const text = completion.choices[0]?.message?.content ?? "{}";
+    let parsed: Record<string, unknown>;
+    try {
+      parsed = JSON.parse(text) as Record<string, unknown>;
+    } catch {
+      return { agrees: true, predicted_index: null, ok: false };
+    }
+
+    const raw = parsed.answer_index;
+    if (typeof raw !== "number" || !Number.isInteger(raw) || raw < 0 || raw > 3) {
+      return { agrees: true, predicted_index: null, ok: false };
+    }
+
+    const predicted_index = raw as number;
+    return {
+      agrees: predicted_index === q.correct_index,
+      predicted_index,
+      ok: true,
+    };
+  } catch (err) {
+    clearTimeout(timer);
+    const isAbort =
+      err instanceof Error &&
+      (err.name === "AbortError" || err.message.toLowerCase().includes("abort"));
+    if (isAbort) {
+      console.warn("[verifyQuestionFast] timed out after", timeoutMs, "ms — failing open");
+    } else {
+      console.warn("[verifyQuestionFast] error — failing open:", err instanceof Error ? err.message : String(err));
+    }
+    return { agrees: true, predicted_index: null, ok: false };
+  }
+}
+
+/**
+ * Runs verifyQuestionFast concurrently on all items so total latency ≈ one
+ * call, not N. Each item fails open independently.
+ */
+export async function verifyQuestionsFast(
+  qs: { stem: string; choices: string[]; correct_index: number }[],
+  opts?: { timeoutMs?: number }
+): Promise<FastVerifyResult[]> {
+  return Promise.all(qs.map((q) => verifyQuestionFast(q, opts)));
+}
+
 // ─── Flashcard generator ──────────────────────────────────────────────────────
 
 /**
