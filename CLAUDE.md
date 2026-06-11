@@ -43,7 +43,7 @@ The admin app has pre-existing build errors (missing exports in `lib/ai/prompts.
 
 > **Verifying a build without disturbing a running dev server:** `next.config.ts` honors `NEXT_DIST_DIR`, so `cd apps/student && NEXT_DIST_DIR=/tmp/iso npx next build` (then `next start`) builds to an isolated dir. A running `next dev` writing to the shared `.next` can otherwise contaminate a `next start` (stale/404 chunks → broken hydration).
 
-Playwright e2e tests live in `e2e/` (`playwright.config.ts`, baseURL `:3002`). Run `npx playwright test`. `e2e/demo-diagnostic.spec.ts` has two tests: the **diagnostic** journey (register → answer correctly → verify keyword states ≥ 0.70 + ratings in DB) and the **demo-practice** flow (seed `needs_lesson` → `/demo-practice` → lesson API 200 → stored in `learn_lessons`). `e2e/mcat-flow.spec.ts` walks the whole MCAT feature (landing → drill-down → practice/quiz/flashcards → progress) and screenshots each surface.
+Playwright e2e tests live in `e2e/` (`playwright.config.ts`, baseURL `:3002`). Run `npx playwright test`. `e2e/demo-diagnostic.spec.ts` has two tests: the **diagnostic** journey (register → answer correctly → verify keyword states ≥ 0.70 + ratings in DB) and the **demo-practice** flow (seed `needs_lesson` → `/demo-practice` → lesson API 200 → stored in `learn_lessons`). `e2e/mcat-flow.spec.ts` walks the whole MCAT feature (landing → drill-down → practice/quiz/flashcards → progress) and screenshots each surface; its `beforeEach` registers an account + seeds auth localStorage since **MCAT is login-gated**.
 
 ---
 

@@ -23,7 +23,7 @@ Read when working on routing, page behavior, or the demo journey. For deeper arc
 | `/precalc` | Main student portal — Recommended Path, Free Practice, Lessons, Lookup, Progress modes. |
 | `/precalc/practice` | Adaptive free practice (requires login). |
 | `/precalc/diagnostic` | Diagnostic mode (requires login). |
-| `/mcat` | **MCAT Biology** landing — General Practice card + 10 category cards (Practice/Flashcards/Quiz + "Explore topics →"). Login/logout in header. |
+| `/mcat` | **MCAT Biology** landing — General Practice card + 10 category cards (Practice/Flashcards/Quiz + "Explore topics →"). **Login-gated** (all `/mcat` pages redirect to `/login?next=` via `getOrCreateMcatSession`). First-visit `McatOnboarding` overlay; login/logout in header. |
 | `/mcat/[categoryId]` | Browse / drill-down: umbrellas (expandable to in_depth keywords), each level with Practice/Flashcards/Quiz/Lesson. |
 | `/mcat/[categoryId]/{practice,quiz,flashcards}` | Scoped activities (`?umbrella=` / `?keyword=`). Practice = mastery-gated spaced loop with flashcard warm-up + difficulty selector. |
 | `/mcat/lesson/[keywordId]` | Standalone generated lesson (any keyword). |
