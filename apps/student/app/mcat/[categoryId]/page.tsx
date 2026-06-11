@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from "react";
 import Link from "next/link";
 import { ScoreBar } from "@/components/mcat/ScoreBar";
+import { YieldBadge } from "@/components/mcat/YieldBadge";
 import AuthButtons from "@/components/mcat/AuthButtons";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
@@ -12,6 +13,7 @@ interface InDepthChild {
   id: string;
   label: string;
   description: string;
+  yield_level?: "high" | "medium" | "low" | null;
   score: number | null;
   total_attempts: number;
   correct_attempts: number;
@@ -24,6 +26,7 @@ interface Umbrella {
   id: string;
   label: string;
   description: string;
+  yield_level?: "high" | "medium" | "low" | null;
   score: number | null;
   total_attempts: number;
   correct_attempts: number;
@@ -171,7 +174,10 @@ function UmbrellaRow({
               </button>
             )}
             <div className="min-w-0">
-              <p className="text-sm font-medium text-gray-800 leading-snug">{umbrella.label}</p>
+              <span className="inline-flex items-center gap-1.5 flex-wrap">
+                <p className="text-sm font-medium text-gray-800 leading-snug">{umbrella.label}</p>
+                <YieldBadge level={umbrella.yield_level} />
+              </span>
               {attempts > 0 && (
                 <p className="text-xs text-gray-400 mt-0.5">{attempts} attempt{attempts !== 1 ? "s" : ""}</p>
               )}
@@ -234,6 +240,7 @@ function ChildRow({
       <div className="flex items-start justify-between gap-2 mb-1">
         <div className="flex items-center gap-1.5 min-w-0 flex-1">
           <span className="text-sm text-gray-700 leading-snug truncate">{child.label}</span>
+          <YieldBadge level={child.yield_level} />
           {child.state === "mastered" && (
             <span title="Mastered" className="text-green-500 text-xs shrink-0">✓</span>
           )}
