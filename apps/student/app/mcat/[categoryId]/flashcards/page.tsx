@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
+import MathText from "@/components/mcat/MathText";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
 const CARD_COUNT = 10;
@@ -270,8 +271,8 @@ function McatFlashcardsInner({
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                     Front
                   </p>
-                  <p className="text-base font-medium text-gray-900 leading-relaxed whitespace-pre-line">
-                    {current.front}
+                  <p className="text-base font-medium text-gray-900 leading-relaxed">
+                    <MathText>{current.front}</MathText>
                   </p>
                 </div>
               ) : (
@@ -279,8 +280,8 @@ function McatFlashcardsInner({
                   <p className="text-xs font-semibold text-blue-500 uppercase tracking-wide mb-3">
                     Back
                   </p>
-                  <p className="text-base text-gray-800 leading-relaxed whitespace-pre-line">
-                    {current.back}
+                  <p className="text-base text-gray-800 leading-relaxed">
+                    <MathText>{current.back}</MathText>
                   </p>
                 </div>
               )}

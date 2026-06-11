@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
+import MathText from "@/components/mcat/MathText";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -238,8 +239,8 @@ export function LessonView({
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
                   Explanation
                 </p>
-                <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-line">
-                  {step.explanation_latex}
+                <p className="text-sm text-gray-800 leading-relaxed">
+                  <MathText>{step.explanation_latex}</MathText>
                 </p>
               </div>
 
@@ -249,8 +250,8 @@ export function LessonView({
                   <p className="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-2">
                     Example
                   </p>
-                  <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-line">
-                    {step.example_latex}
+                  <p className="text-sm text-gray-800 leading-relaxed">
+                    <MathText>{step.example_latex}</MathText>
                   </p>
                 </div>
               )}
@@ -272,8 +273,8 @@ export function LessonView({
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
                   Check your understanding
                 </p>
-                <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-line">
-                  {step.check_question.latex_content}
+                <p className="text-sm text-gray-800 leading-relaxed">
+                  <MathText>{step.check_question.latex_content}</MathText>
                 </p>
               </div>
 
@@ -304,8 +305,8 @@ export function LessonView({
                 <div className="bg-green-50 rounded-xl border border-green-200 p-4 space-y-2">
                   <p className="text-sm font-semibold text-green-800">Correct!</p>
                   {step.check_question.solution_latex && (
-                    <p className="text-sm text-green-700 whitespace-pre-line leading-relaxed">
-                      {step.check_question.solution_latex}
+                    <p className="text-sm text-green-700 leading-relaxed">
+                      <MathText>{step.check_question.solution_latex}</MathText>
                     </p>
                   )}
                   <div className="flex justify-end pt-1">
@@ -334,8 +335,8 @@ export function LessonView({
                   )}
 
                   {showHint && step.hint_latex && (
-                    <p className="text-sm text-red-700 whitespace-pre-line leading-relaxed">
-                      {step.hint_latex}
+                    <p className="text-sm text-red-700 leading-relaxed">
+                      <MathText>{step.hint_latex}</MathText>
                     </p>
                   )}
 
