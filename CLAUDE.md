@@ -14,6 +14,7 @@ Guidance for Claude Code working in this repo. This file holds only the always-n
 | [docs/content-pipeline.md](docs/content-pipeline.md) | `rag_examples` enrichment, keyword tagging, on-demand learn content (lessons/refreshers/tips/problems), LaTeX format contract. |
 | [docs/diagnostic-convergence.md](docs/diagnostic-convergence.md) | Tuning the `/demo` diagnostic — convergence, propagation layer, stop conditions, report, problem-selection variety. |
 | [docs/practice-flow.md](docs/practice-flow.md) | The `/demo-practice` Duolingo-style spaced/interleaved practice — block progression, interleaving, curriculum order, server-driven mastery, no auto-advance. |
+| [docs/mcat-system.md](docs/mcat-system.md) | The student **`/mcat`** Biology feature — `mcat_*` tables, drill-down navigation, generation + AAMC-outline grounding, mastery-gated spaced practice, difficulty model, embedding/tagging, scripts. **Read for anything `mcat`.** |
 | [docs/deployment.md](docs/deployment.md) | Deploying the student app to Vercel — build scoping, env vars, the commit-everything gotcha, migrations. |
 | [docs/difficulty-scales.md](docs/difficulty-scales.md) | Anything involving `difficulty` / `estimated_difficulty` / `targetDifficulty`. |
 | [docs/progress-report.md](docs/progress-report.md) | The `/progress` report and `learn_student_keyword_states`. |
@@ -31,13 +32,18 @@ npm run build        # Build all apps and packages via Turbo
 npm run lint         # Lint all packages
 npm run clean        # Remove .next dirs and node_modules
 npm run seed:topics  # Seed topic_metadata from packages/constants/topics.json
+npm run seed:mcat    # Seed MCAT Biology taxonomy from mcat-keywords.txt
+npm run mcat:expand  # Generate in-depth MCAT keywords per umbrella
+npm run mcat:embed   # Embed + retag MCAT keywords/questions/flashcards
 ```
+
+The MCAT (`/mcat`) Biology feature is fully documented in [docs/mcat-system.md](docs/mcat-system.md) — it uses isolated `mcat_*` tables and never touches the precalc `learn_*`/`problems` pools. **Biology only; do not expand to other sections unless asked.**
 
 The admin app has pre-existing build errors (missing exports in `lib/ai/prompts.ts`); the student app builds cleanly. `next build` runs ESLint and **fails on errors** (e.g. `prefer-const`, unused vars) — keep code clean.
 
 > **Verifying a build without disturbing a running dev server:** `next.config.ts` honors `NEXT_DIST_DIR`, so `cd apps/student && NEXT_DIST_DIR=/tmp/iso npx next build` (then `next start`) builds to an isolated dir. A running `next dev` writing to the shared `.next` can otherwise contaminate a `next start` (stale/404 chunks → broken hydration).
 
-Playwright e2e tests live in `e2e/` (`playwright.config.ts`, baseURL `:3002`). Run `npx playwright test`. `e2e/demo-diagnostic.spec.ts` has two tests: the **diagnostic** journey (register → answer correctly → verify keyword states ≥ 0.70 + ratings in DB) and the **demo-practice** flow (seed `needs_lesson` → `/demo-practice` → lesson API 200 → stored in `learn_lessons`).
+Playwright e2e tests live in `e2e/` (`playwright.config.ts`, baseURL `:3002`). Run `npx playwright test`. `e2e/demo-diagnostic.spec.ts` has two tests: the **diagnostic** journey (register → answer correctly → verify keyword states ≥ 0.70 + ratings in DB) and the **demo-practice** flow (seed `needs_lesson` → `/demo-practice` → lesson API 200 → stored in `learn_lessons`). `e2e/mcat-flow.spec.ts` walks the whole MCAT feature (landing → drill-down → practice/quiz/flashcards → progress) and screenshots each surface.
 
 ---
 
