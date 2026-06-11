@@ -158,20 +158,25 @@ async function callGen(
 
 // ─── Validation helpers ───────────────────────────────────────────────────────
 
+/**
+ * Validates the shape of a model-returned question (before code assigns correct_index).
+ * The model no longer returns correct_index — that is assigned by the caller after validation.
+ * Returns true and mutates obj.difficulty (clamp) if valid.
+ */
 function isValidQuestion(
   q: unknown,
   allowedKeywordIds: Set<string>,
   targetDifficulty?: number
-): q is GeneratedQuestion {
+): q is Omit<GeneratedQuestion, "correct_index"> {
   if (!q || typeof q !== "object") return false;
   const obj = q as Record<string, unknown>;
 
   if (typeof obj.stem !== "string" || !obj.stem.trim()) return false;
   if (!Array.isArray(obj.choices) || obj.choices.length !== 4) return false;
   if (!(obj.choices as unknown[]).every((c) => typeof c === "string" && (c as string).trim())) return false;
-  if (typeof obj.correct_index !== "number") return false;
-  const ci = obj.correct_index as number;
-  if (ci < 0 || ci > 3 || !Number.isInteger(ci)) return false;
+  // Choices must be 4 distinct strings
+  const uniqueChoices = new Set(obj.choices as string[]);
+  if (uniqueChoices.size !== 4) return false;
   if (typeof obj.explanation !== "string" || !obj.explanation.trim()) return false;
   if (!obj.keyword_weights || typeof obj.keyword_weights !== "object") return false;
   // keyword ids must be a subset of allowed
@@ -225,14 +230,18 @@ KEYWORD WEIGHTS:
 - Weights must be positive and sum to approximately 1.0.
 - Assign higher weight to the primary concept tested.
 
-Return a JSON object:
+OUTPUT ORDER — YOU MUST FOLLOW THIS EXACTLY:
+FIRST write the stem. THEN write the explanation: fully work out the correct answer step by step. THEN write the four choices. Never decide the choices or the answer before completing the explanation. In the explanation, refer to the correct answer by its VALUE/content, never by a letter or position.
+
+The user prompt will specify an ANSWER PLACEMENT: which 0-based index in choices the correct answer must occupy. Place the correct answer at exactly that index and fill the other three positions with plausible distractors. Do NOT include a correct_index field in your output.
+
+Return a JSON object where each question has fields in this order:
 {
   "questions": [
     {
       "stem": "string",
-      "choices": ["string", "string", "string", "string"],
-      "correct_index": 0,
       "explanation": "string",
+      "choices": ["string", "string", "string", "string"],
       "keyword_weights": { "keyword_id": 0.8, "keyword_id_2": 0.2 },
       "difficulty": 0.5
     }
@@ -266,14 +275,18 @@ QUESTION RULES:
 
 KEYWORD WEIGHTS: Only use the keyword ids provided. Weights sum to ~1.0.
 
-Return a JSON object:
+OUTPUT ORDER — YOU MUST FOLLOW THIS EXACTLY:
+FIRST write the stem. THEN write the explanation: fully work out the correct answer step by step. THEN write the four choices. Never decide the choices or the answer before completing the explanation. In the explanation, refer to the correct answer by its VALUE/content, never by a letter or position.
+
+The user prompt will specify an ANSWER PLACEMENT: which 0-based index in choices the correct answer must occupy. Place the correct answer at exactly that index and fill the other three positions with plausible distractors. Do NOT include a correct_index field in your output.
+
+Return a JSON object where each question has fields in this order:
 {
   "questions": [
     {
       "stem": "string",
-      "choices": ["string", "string", "string", "string"],
-      "correct_index": 0,
       "explanation": "string",
+      "choices": ["string", "string", "string", "string"],
       "keyword_weights": { "keyword_id": 1.0 },
       "difficulty": 0.5
     }
@@ -354,18 +367,33 @@ export async function generateMcatQuestions(opts: {
       ? `${opts.outlineContext}\n\nUse the outline above to keep this question within the scope and depth the MCAT actually tests for this area: prefer the listed canonical topics, use MCAT-appropriate terminology, and do not drift into out-of-scope trivia.\n`
       : "";
 
+  // Pre-determine where the correct answer must land in each question's choices array.
+  // The model places the correct answer at the instructed index; we record it as correct_index.
+  const targetIndices = Array.from({ length: count }, () => Math.floor(Math.random() * 4));
+
+  const placementLines = targetIndices
+    .map((t, i) => `Question ${i + 1} → index ${t}`)
+    .join("; ");
+
+  const placementBlock = `\nANSWER PLACEMENT (the correct answer MUST be at this position in choices; fill the other three with plausible distractors): ${placementLines}`;
+
   const userPrompt = `Generate ${count} MCAT Biology multiple-choice questions.
 
 ${outlineBlock}${scopeEnforcement}${difficultyInstruction(effectiveTarget)}
 
 KEYWORDS TO TEST (use ONLY these keyword ids in keyword_weights):
 ${keywordBlock}
-${templateBlock}`;
+${templateBlock}${placementBlock}`;
 
   const runOnce = async (): Promise<GeneratedQuestion[]> => {
     const parsed = await callGen(QUESTION_SYSTEM, userPrompt);
     const items = Array.isArray(parsed.questions) ? parsed.questions : [];
-    return items.filter((q) => isValidQuestion(q, allowedIds, effectiveTarget)) as GeneratedQuestion[];
+    const validItems = items.filter((q) => isValidQuestion(q, allowedIds, effectiveTarget));
+    // Assign correct_index from the pre-determined target indices (by order)
+    return validItems.map((q, i) => ({
+      ...(q as Omit<GeneratedQuestion, "correct_index">),
+      correct_index: targetIndices[i] ?? 0,
+    })) as GeneratedQuestion[];
   };
 
   let valid = await runOnce();
@@ -375,8 +403,7 @@ ${templateBlock}`;
     valid = await runOnce();
   }
 
-  // Shuffle choices on every question before returning
-  return valid.map(shuffleChoices);
+  return valid;
 }
 
 /**
@@ -425,6 +452,9 @@ export async function generateSimilarQuestion(opts: {
       ? `${opts.outlineContext}\n\nUse the outline above to keep this question within the scope and depth the MCAT actually tests for this area: prefer the listed canonical topics, use MCAT-appropriate terminology, and do not drift into out-of-scope trivia.\n\n`
       : "";
 
+  // Pre-determine where the correct answer must land in the choices array.
+  const targetIndex = Math.floor(Math.random() * 4);
+
   const userPrompt = `Generate a NEW question testing the same concept from a different angle.
 
 ${outlineBlock}${scopeEnforcement}${difficultyInstruction(effectiveTarget)}
@@ -432,8 +462,9 @@ ${outlineBlock}${scopeEnforcement}${difficultyInstruction(effectiveTarget)}
 ORIGINAL QUESTION:
 Stem: ${question.stem}
 Choices: ${question.choices.map((c, i) => `[${i}] ${c}`).join("; ")}
-Correct index: ${question.correct_index}
 Explanation: ${question.explanation}
+
+ANSWER PLACEMENT (the correct answer MUST be at this position in choices; fill the other three with plausible distractors): Question 1 → index ${targetIndex}
 
 KEYWORDS (use ONLY these keyword ids in keyword_weights):
 ${keywordBlock}`;
@@ -441,7 +472,12 @@ ${keywordBlock}`;
   const runOnce = async (): Promise<GeneratedQuestion[]> => {
     const parsed = await callGen(SIMILAR_QUESTION_SYSTEM, userPrompt);
     const items = Array.isArray(parsed.questions) ? parsed.questions : [];
-    return items.filter((q) => isValidQuestion(q, allowedIds, effectiveTarget)) as GeneratedQuestion[];
+    const validItems = items.filter((q) => isValidQuestion(q, allowedIds, effectiveTarget));
+    // Assign correct_index from the pre-determined target index
+    return validItems.map((q) => ({
+      ...(q as Omit<GeneratedQuestion, "correct_index">),
+      correct_index: targetIndex,
+    })) as GeneratedQuestion[];
   };
 
   let valid = await runOnce();
@@ -455,8 +491,7 @@ ${keywordBlock}`;
     throw new McatGenError("Similar question generation produced no valid output after retry");
   }
 
-  // Shuffle choices before returning
-  return shuffleChoices(valid[0]);
+  return valid[0];
 }
 
 // ─── Lesson types ─────────────────────────────────────────────────────────────
