@@ -31,7 +31,7 @@ if (fs.existsSync(studentEnvPath)) {
   }
 }
 
-import { generateConceptBlueprint } from "../apps/student/lib/mcatBlueprint.js";
+import { generateConceptBlueprint, generateKeywordYield } from "../apps/student/lib/mcatBlueprint.js";
 import { outlineContextForCategory } from "../apps/student/lib/mcatContentOutline.js";
 
 // ─── CLI flags ────────────────────────────────────────────────────────────────
@@ -71,6 +71,7 @@ interface KeywordRow {
   parent_keyword_id: string | null;
   examples: string[] | null;
   concept_blueprint: Record<string, unknown> | null;
+  yield_level: string | null;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -101,7 +102,7 @@ async function main() {
   console.log("\nFetching all mcat_keywords...");
   const { data: allKeywordsRaw, error: fetchErr } = await supabase
     .from("mcat_keywords")
-    .select("id, category_id, label, description, tier, parent_keyword_id, examples, concept_blueprint")
+    .select("id, category_id, label, description, tier, parent_keyword_id, examples, concept_blueprint, yield_level")
     .order("order_index");
   if (fetchErr) {
     console.error("Fetch error:", fetchErr.message);
@@ -130,16 +131,16 @@ async function main() {
       console.error(`Keyword not found: "${keywordArg}"`);
       process.exit(1);
     }
-    // With --force, include even if a blueprint already exists; otherwise NULL-only
-    targets = (isForce || found.concept_blueprint === null) ? [found] : [];
+    // With --force, include regardless; otherwise include if blueprint OR yield is missing
+    targets = (isForce || found.concept_blueprint === null || found.yield_level === null) ? [found] : [];
     if (targets.length === 0) {
-      console.log(`Keyword "${keywordArg}" already has a blueprint. Use --force to regenerate.`);
+      console.log(`Keyword "${keywordArg}" already has a blueprint and yield. Use --force to regenerate.`);
       return;
     }
   } else {
-    // Default: in_depth tier only; NULL-only unless --force
+    // Default: in_depth tier only; include if blueprint OR yield is missing (unless --force: all)
     targets = allKeywords.filter(
-      (k) => k.tier === "in_depth" && (isForce || k.concept_blueprint === null)
+      (k) => k.tier === "in_depth" && (isForce || k.concept_blueprint === null || k.yield_level === null)
     );
 
     // Apply --category filter
@@ -161,7 +162,7 @@ async function main() {
     console.log(`  Limited to first ${limitArg} keyword(s).`);
   }
 
-  console.log(`  Target keywords (${isForce ? "force regenerate" : "need blueprint"}): ${targets.length}`);
+  console.log(`  Target keywords (${isForce ? "force regenerate" : "need blueprint or yield"}): ${targets.length}`);
 
   // ── Dry-run listing
   if (isDryRun) {
@@ -170,15 +171,16 @@ async function main() {
       const siblings = (siblingsByParent.get(kw.parent_keyword_id ?? "") ?? []).filter(
         (s) => s.id !== kw.id
       );
+      const mode = isForce || kw.concept_blueprint === null ? "full" : "yield-only";
       console.log(
-        `  [${kw.category_id}] ${kw.id} ("${kw.label}") — ${siblings.length} sibling(s)`
+        `  [${kw.category_id}] ${kw.id} ("${kw.label}") — ${siblings.length} sibling(s) → ${mode}`
       );
     }
     if (targets.length === 0) {
       console.log(
         isForce
           ? "  (none — no keywords found in this scope)"
-          : "  (none — all keywords in this scope already have blueprints; use --force to regenerate)"
+          : "  (none — all keywords in this scope already have blueprints and yield; use --force to regenerate)"
       );
     }
     console.log("\n[DRY RUN] Done. No writes performed.");
@@ -189,7 +191,7 @@ async function main() {
     console.log(
       isForce
         ? "\nNo keywords found in the targeted scope. Nothing to do."
-        : "\nAll targeted keywords already have blueprints. Use --force to regenerate. Nothing to do."
+        : "\nAll targeted keywords already have blueprints and yield ratings. Use --force to regenerate. Nothing to do."
     );
     return;
   }
@@ -205,53 +207,95 @@ async function main() {
     await Promise.all(
       batch.map(async (kw) => {
         try {
-          // Build siblings list (same parent, exclude self)
-          const siblings = (siblingsByParent.get(kw.parent_keyword_id ?? "") ?? [])
-            .filter((s) => s.id !== kw.id)
-            .map((s) => ({ label: s.label, description: s.description ?? "" }));
-
-          // Build outlineContext
+          // Build outlineContext (shared by both paths)
           const outlineContext = outlineContextForCategory(kw.category_id);
 
-          // Coerce examples jsonb array to string[]
-          const examples: string[] | undefined =
-            Array.isArray(kw.examples) && kw.examples.length > 0
-              ? (kw.examples as unknown[]).map((e) => String(e))
-              : undefined;
+          const needsFullBlueprint = isForce || kw.concept_blueprint === null;
 
-          // Generate blueprint + yield (single LLM call)
-          const { blueprint, yield_level, yield_rationale } = await generateConceptBlueprint({
-            keyword: {
-              id: kw.id,
-              label: kw.label,
-              description: kw.description ?? "",
-              ...(examples ? { examples } : {}),
-            },
-            siblings: siblings.length > 0 ? siblings : undefined,
-            outlineContext: outlineContext || undefined,
-          });
+          if (needsFullBlueprint) {
+            // ── Full path: generate blueprint + yield in a single LLM call ─────
 
-          // Store blueprint + yield fields in DB
-          const { error: updateErr } = await supabase
-            .from("mcat_keywords")
-            .update({ concept_blueprint: blueprint, yield_level, yield_rationale })
-            .eq("id", kw.id);
+            // Build siblings list (same parent, exclude self)
+            const siblings = (siblingsByParent.get(kw.parent_keyword_id ?? "") ?? [])
+              .filter((s) => s.id !== kw.id)
+              .map((s) => ({ label: s.label, description: s.description ?? "" }));
 
-          if (updateErr) {
-            console.error(
-              `  [ERROR] DB update failed for "${kw.id}": ${updateErr.message}`
+            // Coerce examples jsonb array to string[]
+            const examples: string[] | undefined =
+              Array.isArray(kw.examples) && kw.examples.length > 0
+                ? (kw.examples as unknown[]).map((e) => String(e))
+                : undefined;
+
+            const { blueprint, yield_level, yield_rationale } = await generateConceptBlueprint({
+              keyword: {
+                id: kw.id,
+                label: kw.label,
+                description: kw.description ?? "",
+                ...(examples ? { examples } : {}),
+              },
+              siblings: siblings.length > 0 ? siblings : undefined,
+              outlineContext: outlineContext || undefined,
+            });
+
+            const { error: updateErr } = await supabase
+              .from("mcat_keywords")
+              .update({ concept_blueprint: blueprint, yield_level, yield_rationale })
+              .eq("id", kw.id);
+
+            if (updateErr) {
+              console.error(
+                `  [ERROR] DB update failed for "${kw.id}": ${updateErr.message}`
+              );
+              failCount++;
+              return;
+            }
+
+            successCount++;
+            console.log(
+              `  [${kw.category_id}] ${kw.label} → full` +
+                ` (yield=${yield_level},` +
+                ` ${blueprint.in_scope_concepts.length} in-scope)`
             );
-            failCount++;
-            return;
-          }
+          } else {
+            // ── Yield-only path: blueprint exists, only yield is missing ────────
 
-          successCount++;
-          console.log(
-            `  [${kw.category_id}] ${kw.label} → stored` +
-              ` (yield=${yield_level},` +
-              ` ${blueprint.in_scope_concepts.length} in-scope,` +
-              ` ${blueprint.out_of_scope.length} out-of-scope)`
-          );
+            // Extract in_scope_concepts from the existing blueprint for context
+            const existingBlueprint = kw.concept_blueprint as Record<string, unknown> | null;
+            const rawConcepts = existingBlueprint?.in_scope_concepts;
+            const inScopeConcepts: string[] | undefined =
+              Array.isArray(rawConcepts) && rawConcepts.length > 0
+                ? (rawConcepts as unknown[]).map((c) => String(c))
+                : undefined;
+
+            const { yield_level, yield_rationale } = await generateKeywordYield({
+              keyword: {
+                id: kw.id,
+                label: kw.label,
+                description: kw.description ?? "",
+              },
+              inScopeConcepts,
+              outlineContext: outlineContext || undefined,
+            });
+
+            // UPDATE only yield fields — do NOT touch concept_blueprint
+            const { error: updateErr } = await supabase
+              .from("mcat_keywords")
+              .update({ yield_level, yield_rationale })
+              .eq("id", kw.id);
+
+            if (updateErr) {
+              console.error(
+                `  [ERROR] DB update failed for "${kw.id}": ${updateErr.message}`
+              );
+              failCount++;
+              return;
+            }
+
+            successCount++;
+            console.log(
+              `  [${kw.category_id}] ${kw.label} → yield-only (yield=${yield_level})`
+            );
+          }
         } catch (err) {
           failCount++;
           const msg = err instanceof Error ? err.message : String(err);

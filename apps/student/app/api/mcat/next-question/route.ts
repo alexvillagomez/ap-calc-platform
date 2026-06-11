@@ -334,11 +334,26 @@ export async function POST(request: Request) {
     genKeywords = keywords.filter((k) => scopedKeywordIds.has(k.id));
   }
 
+  // Yield-level nudge: among comparably-weak keywords, AAMC high-yield topics
+  // sort earlier (lower effective score) and low-yield topics sort later.
+  // NULL yield_level is treated as "medium" (zero adjustment).
+  // Guard: only apply when selection is automatic (category-wide or set-scoped).
+  // When keyword_id is present the user picked a single keyword explicitly —
+  // leave ordering unchanged so the intent is respected.
+  const YIELD_ADJ: Record<string, number> = { high: -0.12, medium: 0, low: 0.10 };
+  const applyYield = !keyword_id;
+
   const kwSorted = [...genKeywords].sort((a, b) => {
     const aState = kwStateMap.get(a.id);
     const bState = kwStateMap.get(b.id);
-    const aScore = (aState?.score as number) ?? 0.5;
-    const bScore = (bState?.score as number) ?? 0.5;
+    const rawA = (aState?.score as number) ?? 0.5;
+    const rawB = (bState?.score as number) ?? 0.5;
+    const aScore = applyYield
+      ? rawA + (YIELD_ADJ[a.yield_level ?? "medium"] ?? 0)
+      : rawA;
+    const bScore = applyYield
+      ? rawB + (YIELD_ADJ[b.yield_level ?? "medium"] ?? 0)
+      : rawB;
     if (Math.abs(aScore - bScore) > 0.01) return aScore - bScore;
     const aAttempts = (aState?.total_attempts as number) ?? 0;
     const bAttempts = (bState?.total_attempts as number) ?? 0;

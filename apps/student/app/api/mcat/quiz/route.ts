@@ -121,14 +121,29 @@ export async function POST(request: Request) {
     (attemptsRes.data ?? []).map((a) => a.question_id as string)
   );
 
-  // Rank keywords by weakness (lowest strength first) — within scoped set
+  // Rank keywords by weakness (lowest strength first) — within scoped set.
+  // Yield-level nudge: when the quiz is in automatic/category-wide mode (the
+  // user did NOT pick a specific keyword_ids set), AAMC high-yield keywords sort
+  // slightly earlier so they get covered preferentially among comparably-weak
+  // topics.  NULL yield_level behaves as "medium" (zero adjustment).
+  // Guard: skip the nudge when scopedKeywordIds is non-null — the user explicitly
+  // chose those keywords and we should not reorder their intent.
+  const YIELD_ADJ: Record<string, number> = { high: -0.12, medium: 0, low: 0.10 };
+  const applyYield = scopedKeywordIds === null;
+
   const kwStateMap = new Map(
     (statesRes.data ?? []).map((s) => [s.keyword_id as string, s])
   );
 
   const rankedKws = [...keywords].sort((a, b) => {
-    const aScore = (kwStateMap.get(a.id)?.score as number) ?? 0.5;
-    const bScore = (kwStateMap.get(b.id)?.score as number) ?? 0.5;
+    const rawA = (kwStateMap.get(a.id)?.score as number) ?? 0.5;
+    const rawB = (kwStateMap.get(b.id)?.score as number) ?? 0.5;
+    const aScore = applyYield
+      ? rawA + (YIELD_ADJ[a.yield_level ?? "medium"] ?? 0)
+      : rawA;
+    const bScore = applyYield
+      ? rawB + (YIELD_ADJ[b.yield_level ?? "medium"] ?? 0)
+      : rawB;
     return aScore - bScore;
   });
 

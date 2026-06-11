@@ -120,6 +120,25 @@ function createGenClient(): OpenAI {
   return new OpenAI({ apiKey: key });
 }
 
+/**
+ * Shared yield-level calibration guidance used by both BLUEPRINT_SYSTEM and the
+ * yield-only system prompt so they can never drift.
+ */
+const YIELD_GUIDANCE = `YIELD LEVEL GUIDANCE:
+yield_level estimates how heavily the REAL MCAT tests this specific keyword, grounded in the
+AAMC content outline provided above.
+  "high"   — the topic is explicitly elaborated in the AAMC outline AND/OR is foundational and
+             recurs across many passage types (e.g. core amino-acid properties, Michaelis-Menten
+             kinetics, cell membrane transport, major metabolic pathways).
+  "medium" — the topic is present in the outline and tested but not a dominant question driver;
+             tested in some passages, sometimes indirectly.
+  "low"    — a niche or rarely-tested detail; mentioned briefly in the outline or appears only
+             as contextual background in passages rather than the primary tested skill.
+yield_rationale must briefly cite WHY (e.g. "core, frequently-tested amino-acid property" or
+"narrow edge case rarely tested directly").
+Be calibrated — do NOT rate everything "high". Aim for a realistic spread that reflects actual
+MCAT frequency: roughly 25–35% high, 40–50% medium, 20–30% low across a typical keyword set.`;
+
 const BLUEPRINT_SYSTEM = `You are an MCAT Biology content architect. Your job is to define the precise, narrow testable boundary of a single MCAT keyword so that lesson and question generators stay strictly on topic and never drift into adjacent keywords' territory.
 
 For each keyword you receive, return a JSON object with the following shape:
@@ -135,20 +154,7 @@ For each keyword you receive, return a JSON object with the following shape:
   "yield_rationale": "<one sentence explaining WHY this yield level was assigned>"
 }
 
-YIELD LEVEL GUIDANCE:
-yield_level estimates how heavily the REAL MCAT tests this specific keyword, grounded in the
-AAMC content outline provided above.
-  "high"   — the topic is explicitly elaborated in the AAMC outline AND/OR is foundational and
-             recurs across many passage types (e.g. core amino-acid properties, Michaelis-Menten
-             kinetics, cell membrane transport, major metabolic pathways).
-  "medium" — the topic is present in the outline and tested but not a dominant question driver;
-             tested in some passages, sometimes indirectly.
-  "low"    — a niche or rarely-tested detail; mentioned briefly in the outline or appears only
-             as contextual background in passages rather than the primary tested skill.
-yield_rationale must briefly cite WHY (e.g. "core, frequently-tested amino-acid property" or
-"narrow edge case rarely tested directly").
-Be calibrated — do NOT rate everything "high". Aim for a realistic spread that reflects actual
-MCAT frequency: roughly 25–35% high, 40–50% medium, 20–30% low across a typical keyword set.
+${YIELD_GUIDANCE}
 
 RULES:
 - The keyword is deliberately narrow. Do not expand its scope.
@@ -333,4 +339,79 @@ export async function generateConceptBlueprint(opts: {
   }
 
   return { blueprint, ...capturedYield };
+}
+
+// ─── Yield-only generator ─────────────────────────────────────────────────────
+
+const YIELD_ONLY_SYSTEM = `You are an MCAT content expert rating how heavily the real MCAT tests a specific keyword, grounded in the AAMC content outline.
+
+Return a JSON object with exactly this shape:
+{
+  "yield_level": "high|medium|low",
+  "yield_rationale": "<one sentence explaining WHY this yield level was assigned>"
+}
+
+${YIELD_GUIDANCE}
+
+Return valid JSON only. No markdown.`;
+
+/**
+ * Lightweight yield-only generator for keywords that already have a blueprint
+ * but are missing `yield_level` / `yield_rationale`.
+ *
+ * Uses a single `gpt-5.4-mini` JSON-mode call. Never throws on a bad yield
+ * response — coerces to defaults instead. Only throws `McatGenError` if the
+ * API call itself fails.
+ */
+export async function generateKeywordYield(opts: {
+  keyword: { id: string; label: string; description: string };
+  inScopeConcepts?: string[];
+  outlineContext?: string;
+}): Promise<{ yield_level: YieldLevel; yield_rationale: string }> {
+  const { keyword, inScopeConcepts, outlineContext } = opts;
+
+  const parts: string[] = [];
+
+  if (outlineContext) {
+    parts.push(outlineContext);
+    parts.push("");
+  }
+
+  parts.push("KEYWORD TO RATE:");
+  parts.push(`  id: "${keyword.id}"`);
+  parts.push(`  label: "${keyword.label}"`);
+  parts.push(`  description: "${keyword.description}"`);
+
+  if (inScopeConcepts && inScopeConcepts.length > 0) {
+    parts.push("");
+    parts.push(`What this keyword tests: ${inScopeConcepts.join("; ")}`);
+  }
+
+  const userPrompt = parts.join("\n");
+
+  let text: string;
+  try {
+    const client = createGenClient();
+    const completion = await client.chat.completions.create({
+      model: GEN_MODEL,
+      messages: [
+        { role: "system", content: YIELD_ONLY_SYSTEM },
+        { role: "user", content: userPrompt },
+      ],
+      response_format: { type: "json_object" },
+    });
+    text = completion.choices[0]?.message?.content ?? "{}";
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    throw new McatGenError(`AI provider request failed: ${msg}`);
+  }
+
+  let parsed: Record<string, unknown>;
+  try {
+    parsed = JSON.parse(text) as Record<string, unknown>;
+  } catch {
+    return { yield_level: "medium", yield_rationale: "" };
+  }
+
+  return parseYield(parsed);
 }
