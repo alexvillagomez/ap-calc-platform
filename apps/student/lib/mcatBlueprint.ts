@@ -120,6 +120,33 @@ function createGenClient(): OpenAI {
   return new OpenAI({ apiKey: key });
 }
 
+// ─── Transient-retry helpers ──────────────────────────────────────────────────
+
+function isTransientError(err: unknown): boolean {
+  // OpenAI SDK errors expose `status`; also treat network/timeout (no status) as transient.
+  const status = (err as { status?: number } | null)?.status;
+  if (status === undefined) return true; // network/connection/timeout
+  return [408, 409, 425, 429, 431, 500, 502, 503, 504].includes(status);
+}
+
+async function withTransientRetry<T>(fn: () => Promise<T>, label: string, maxAttempts = 4): Promise<T> {
+  let lastErr: unknown;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastErr = err;
+      if (attempt === maxAttempts || !isTransientError(err)) break;
+      // exponential backoff with jitter: ~0.6s, 1.5s, 3.5s
+      const base = 600 * Math.pow(2.2, attempt - 1);
+      const delay = base + Math.floor(Math.random() * 400);
+      await new Promise((r) => setTimeout(r, delay));
+    }
+  }
+  const msg = lastErr instanceof Error ? lastErr.message : String(lastErr);
+  throw new McatGenError(`AI provider request failed after retries (${label}): ${msg}`);
+}
+
 /**
  * Shared yield-level calibration guidance used by both BLUEPRINT_SYSTEM and the
  * yield-only system prompt so they can never drift.
@@ -297,21 +324,19 @@ export async function generateConceptBlueprint(opts: {
 
   const runOnce = async (): Promise<ConceptBlueprint | null> => {
     let text: string;
-    try {
-      const client = createGenClient();
-      const completion = await client.chat.completions.create({
+    const client = createGenClient();
+    const completion = await withTransientRetry(
+      () => client.chat.completions.create({
         model: GEN_MODEL,
         messages: [
           { role: "system", content: BLUEPRINT_SYSTEM },
           { role: "user", content: userPrompt },
         ],
         response_format: { type: "json_object" },
-      });
-      text = completion.choices[0]?.message?.content ?? "{}";
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      throw new McatGenError(`AI provider request failed: ${msg}`);
-    }
+      }),
+      `blueprint:${opts.keyword.id}`
+    );
+    text = completion.choices[0]?.message?.content ?? "{}";
 
     let parsed: Record<string, unknown>;
     try {
@@ -389,22 +414,19 @@ export async function generateKeywordYield(opts: {
 
   const userPrompt = parts.join("\n");
 
-  let text: string;
-  try {
-    const client = createGenClient();
-    const completion = await client.chat.completions.create({
+  const client = createGenClient();
+  const completion = await withTransientRetry(
+    () => client.chat.completions.create({
       model: GEN_MODEL,
       messages: [
         { role: "system", content: YIELD_ONLY_SYSTEM },
         { role: "user", content: userPrompt },
       ],
       response_format: { type: "json_object" },
-    });
-    text = completion.choices[0]?.message?.content ?? "{}";
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    throw new McatGenError(`AI provider request failed: ${msg}`);
-  }
+    }),
+    `yield:${keyword.id}`
+  );
+  const text = completion.choices[0]?.message?.content ?? "{}";
 
   let parsed: Record<string, unknown>;
   try {
