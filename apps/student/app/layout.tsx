@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next";
 import "katex/dist/katex.min.css";
 import "./globals.css";
 
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="antialiased bg-gray-50 text-gray-900">
         {children}
         <Toaster position="bottom-right" />
+        <Analytics />
       </body>
     </html>
   );
