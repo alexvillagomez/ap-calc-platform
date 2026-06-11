@@ -14,6 +14,28 @@ const SHOT = (name: string) => ({ path: `test-results/mcat/${name}.png`, fullPag
 
 const CATEGORY = "mcat_biology_amino_acids_and_proteins";
 
+// MCAT is login-gated. Register a fresh account via the API and seed the auth
+// localStorage keys before each page load, and pre-dismiss the onboarding so the
+// overlay doesn't cover the UI under test.
+test.beforeEach(async ({ page, request }) => {
+  const username = `pw_mcat_${Date.now()}_${Math.floor(Math.random() * 1e6)}`;
+  const res = await request.post("/api/auth/register", {
+    data: { username, password: "testpass123" },
+  });
+  const data = (await res.json()) as { accountId?: string; sessionId?: string };
+  expect(data.accountId, "register should return an account").toBeTruthy();
+
+  await page.addInitScript(
+    ([acct, sess, user]) => {
+      localStorage.setItem("ap_calc_account_id", acct);
+      localStorage.setItem("ap_calc_username", user);
+      localStorage.setItem("ap_calc_student_session_id", sess);
+      localStorage.setItem("mcat_onboarding_seen", "1");
+    },
+    [data.accountId!, data.sessionId!, username]
+  );
+});
+
 test.describe("MCAT feature walkthrough", () => {
   test("landing + drill-down browse", async ({ page }) => {
     await page.goto("/mcat");
@@ -21,8 +43,8 @@ test.describe("MCAT feature walkthrough", () => {
     // General practice card + at least one category card
     await expect(page.getByText("General Practice")).toBeVisible();
     await expect(page.getByText("Explore topics", { exact: false }).first()).toBeVisible();
-    // Auth buttons present (logged out → "Log in")
-    await expect(page.getByRole("button", { name: "Log in" })).toBeVisible();
+    // MCAT is login-gated; the beforeEach signs us in, so the header shows "Log out"
+    await expect(page.getByRole("button", { name: "Log out" })).toBeVisible();
     await page.waitForTimeout(500);
     await page.screenshot(SHOT("01-landing"));
 
