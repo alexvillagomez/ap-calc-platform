@@ -286,7 +286,7 @@ function McatFlashcardsInner({
               )}
               {/* Tap to flip hint */}
               <p className="text-xs text-gray-300 mt-4 text-right select-none">
-                tap to flip
+                {cardPhase === "back" ? "tap to flip back" : "tap to flip"}
               </p>
             </button>
 
