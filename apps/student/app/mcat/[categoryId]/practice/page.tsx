@@ -448,7 +448,7 @@ function McatPracticeInner({
   const flipFcCard = useCallback(() => {
     setFcFlipping(true);
     setTimeout(() => {
-      setFcBackShown(true);
+      setFcBackShown((prev) => !prev);
       setFcFlipping(false);
     }, 150);
   }, []);
@@ -982,13 +982,13 @@ function McatPracticeInner({
             {/* Flip card */}
             <button
               type="button"
-              onClick={fcBackShown ? undefined : flipFcCard}
-              className={`w-full text-left bg-white rounded-2xl border-2 shadow-md p-6 min-h-[180px] flex flex-col justify-between transition-opacity duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 ${
+              onClick={flipFcCard}
+              className={`w-full text-left bg-white rounded-2xl border-2 shadow-md p-6 min-h-[180px] flex flex-col justify-between transition-opacity duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 ${
                 fcFlipping ? "opacity-0" : "opacity-100"
               } ${
                 fcBackShown
-                  ? "border-teal-300 cursor-default"
-                  : "border-gray-200 cursor-pointer hover:border-gray-300"
+                  ? "border-teal-300 hover:border-teal-400"
+                  : "border-gray-200 hover:border-gray-300"
               }`}
             >
               {!fcBackShown ? (
@@ -1010,11 +1010,9 @@ function McatPracticeInner({
                   </p>
                 </div>
               )}
-              {!fcBackShown && (
-                <p className="text-xs text-gray-300 mt-4 text-right select-none">
-                  tap to flip
-                </p>
-              )}
+              <p className="text-xs text-gray-300 mt-4 text-right select-none">
+                {fcBackShown ? "tap to flip back" : "tap to flip"}
+              </p>
             </button>
 
             {/* Show answer button */}
