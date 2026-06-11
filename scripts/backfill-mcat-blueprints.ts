@@ -9,6 +9,7 @@
  *   tsx scripts/backfill-mcat-blueprints.ts --category mcat_biology_amino_acids_and_proteins
  *   tsx scripts/backfill-mcat-blueprints.ts --limit 5
  *   tsx scripts/backfill-mcat-blueprints.ts --keyword <id>
+ *   tsx scripts/backfill-mcat-blueprints.ts --umbrella <umbrella_keyword_id>
  */
 
 import { createClient } from "@supabase/supabase-js";
@@ -45,6 +46,11 @@ const categoryArg = (() => {
 })();
 const keywordArg = (() => {
   const idx = process.argv.indexOf("--keyword");
+  if (idx !== -1 && process.argv[idx + 1]) return process.argv[idx + 1]!;
+  return null;
+})();
+const umbrellaArg = (() => {
+  const idx = process.argv.indexOf("--umbrella");
   if (idx !== -1 && process.argv[idx + 1]) return process.argv[idx + 1]!;
   return null;
 })();
@@ -133,6 +139,12 @@ async function main() {
     if (categoryArg) {
       targets = targets.filter((k) => k.category_id === categoryArg);
       console.log(`  Filtered to category "${categoryArg}": ${targets.length} in_depth keyword(s) pending.`);
+    }
+
+    // Apply --umbrella filter
+    if (umbrellaArg) {
+      targets = targets.filter((k) => k.parent_keyword_id === umbrellaArg);
+      console.log(`  Filtered to umbrella "${umbrellaArg}": ${targets.length} in_depth keyword(s) pending.`);
     }
   }
 

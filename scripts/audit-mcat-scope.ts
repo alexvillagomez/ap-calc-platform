@@ -9,6 +9,7 @@
  *   tsx scripts/audit-mcat-scope.ts
  *   tsx scripts/audit-mcat-scope.ts --category mcat_biology_amino_acids_and_proteins
  *   tsx scripts/audit-mcat-scope.ts --keyword <id>
+ *   tsx scripts/audit-mcat-scope.ts --umbrella <umbrella_keyword_id>
  *   tsx scripts/audit-mcat-scope.ts --apply
  */
 
@@ -39,6 +40,11 @@ const categoryArg = (() => {
 })();
 const keywordArg = (() => {
   const idx = process.argv.indexOf("--keyword");
+  if (idx !== -1 && process.argv[idx + 1]) return process.argv[idx + 1]!;
+  return null;
+})();
+const umbrellaArg = (() => {
+  const idx = process.argv.indexOf("--umbrella");
   if (idx !== -1 && process.argv[idx + 1]) return process.argv[idx + 1]!;
   return null;
 })();
@@ -230,6 +236,10 @@ async function main() {
 
   if (keywordArg) {
     kwQuery = kwQuery.eq("id", keywordArg);
+  } else if (umbrellaArg) {
+    // Restrict to in_depth children of the given umbrella keyword
+    kwQuery = kwQuery.eq("parent_keyword_id", umbrellaArg).eq("tier", "in_depth");
+    console.log(`  Scoping to in_depth children of umbrella "${umbrellaArg}".`);
   } else if (categoryArg) {
     kwQuery = kwQuery.eq("category_id", categoryArg);
   }
