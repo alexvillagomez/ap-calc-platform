@@ -10,6 +10,9 @@
  *   tsx scripts/backfill-mcat-blueprints.ts --limit 5
  *   tsx scripts/backfill-mcat-blueprints.ts --keyword <id>
  *   tsx scripts/backfill-mcat-blueprints.ts --umbrella <umbrella_keyword_id>
+ *   tsx scripts/backfill-mcat-blueprints.ts --force                             # regenerate ALL (including existing blueprints)
+ *   tsx scripts/backfill-mcat-blueprints.ts --force --umbrella <umbrella_id>    # regenerate all under an umbrella
+ *   tsx scripts/backfill-mcat-blueprints.ts --force --dry-run --umbrella <id>   # preview --force scope without writing
  */
 
 import { createClient } from "@supabase/supabase-js";
@@ -54,6 +57,8 @@ const umbrellaArg = (() => {
   if (idx !== -1 && process.argv[idx + 1]) return process.argv[idx + 1]!;
   return null;
 })();
+/** When true, regenerate keywords that ALREADY have a blueprint (drop the IS NULL restriction). */
+const isForce = process.argv.includes("--force");
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -81,6 +86,7 @@ function chunk<T>(arr: T[], size: number): T[][] {
 async function main() {
   console.log("=== backfill-mcat-blueprints ===");
   if (isDryRun) console.log("[DRY RUN] No OpenAI calls or DB writes will be made.");
+  if (isForce) console.log("[FORCE] Will regenerate keywords that already have a blueprint.");
 
   // ── Supabase client
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -124,27 +130,28 @@ async function main() {
       console.error(`Keyword not found: "${keywordArg}"`);
       process.exit(1);
     }
-    targets = found.concept_blueprint === null ? [found] : [];
+    // With --force, include even if a blueprint already exists; otherwise NULL-only
+    targets = (isForce || found.concept_blueprint === null) ? [found] : [];
     if (targets.length === 0) {
-      console.log(`Keyword "${keywordArg}" already has a blueprint. Nothing to do.`);
+      console.log(`Keyword "${keywordArg}" already has a blueprint. Use --force to regenerate.`);
       return;
     }
   } else {
-    // Default: in_depth tier only, concept_blueprint IS NULL
+    // Default: in_depth tier only; NULL-only unless --force
     targets = allKeywords.filter(
-      (k) => k.tier === "in_depth" && k.concept_blueprint === null
+      (k) => k.tier === "in_depth" && (isForce || k.concept_blueprint === null)
     );
 
     // Apply --category filter
     if (categoryArg) {
       targets = targets.filter((k) => k.category_id === categoryArg);
-      console.log(`  Filtered to category "${categoryArg}": ${targets.length} in_depth keyword(s) pending.`);
+      console.log(`  Filtered to category "${categoryArg}": ${targets.length} in_depth keyword(s) ${isForce ? "selected" : "pending"}.`);
     }
 
     // Apply --umbrella filter
     if (umbrellaArg) {
       targets = targets.filter((k) => k.parent_keyword_id === umbrellaArg);
-      console.log(`  Filtered to umbrella "${umbrellaArg}": ${targets.length} in_depth keyword(s) pending.`);
+      console.log(`  Filtered to umbrella "${umbrellaArg}": ${targets.length} in_depth keyword(s) ${isForce ? "selected" : "pending"}.`);
     }
   }
 
@@ -154,7 +161,7 @@ async function main() {
     console.log(`  Limited to first ${limitArg} keyword(s).`);
   }
 
-  console.log(`  Target keywords (need blueprint): ${targets.length}`);
+  console.log(`  Target keywords (${isForce ? "force regenerate" : "need blueprint"}): ${targets.length}`);
 
   // ── Dry-run listing
   if (isDryRun) {
@@ -168,14 +175,22 @@ async function main() {
       );
     }
     if (targets.length === 0) {
-      console.log("  (none — all keywords in this scope already have blueprints)");
+      console.log(
+        isForce
+          ? "  (none — no keywords found in this scope)"
+          : "  (none — all keywords in this scope already have blueprints; use --force to regenerate)"
+      );
     }
     console.log("\n[DRY RUN] Done. No writes performed.");
     return;
   }
 
   if (targets.length === 0) {
-    console.log("\nAll targeted keywords already have blueprints. Nothing to do.");
+    console.log(
+      isForce
+        ? "\nNo keywords found in the targeted scope. Nothing to do."
+        : "\nAll targeted keywords already have blueprints. Use --force to regenerate. Nothing to do."
+    );
     return;
   }
 

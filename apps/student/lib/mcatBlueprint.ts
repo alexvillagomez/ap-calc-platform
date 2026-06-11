@@ -93,10 +93,10 @@ export function buildBlueprintBlock(
     "SCOPE CONTRACT (you MUST obey this exactly):",
     `IN SCOPE — test only these concepts:\n${inScopeBullets}`,
     `FORMULAS ALLOWED: ${formulasLine}`,
-    `OUT OF SCOPE — these belong to other keywords; do NOT test, require, or build the question/lesson around them:\n${outOfScopeBullets}`,
+    `OUT OF SCOPE — do NOT make any item PRIMARILY about these or require the student to apply them as the tested skill (they may appear only as incidental context or as the stated conclusion):\n${outOfScopeBullets}`,
     `KEY TERMS: ${keyTermsLine}`,
     `BOUNDARY: ${blueprint.boundary_statement}`,
-    "Any question or lesson content that requires an out-of-scope concept or a formula not listed as allowed is INVALID. Stay strictly inside the in-scope concepts.",
+    "Any question or lesson content whose PRIMARY tested skill or required computation is out-of-scope is INVALID. Stay strictly inside the in-scope concepts.",
   ].join("\n");
 }
 
@@ -125,11 +125,30 @@ For each keyword you receive, return a JSON object with the following shape:
 
 RULES:
 - The keyword is deliberately narrow. Do not expand its scope.
-- in_scope_concepts: 2–6 short phrases describing ONLY what this keyword covers.
+- in_scope_concepts: 2–6 short phrases describing ONLY what this keyword covers. IMPORTANT: include the natural interpretation or conclusion that results from this keyword's core skill. For example, if the skill is to apply a formula that determines spontaneity, then "concluding whether a process is spontaneous or non-spontaneous" is IN scope — it is the outcome of the skill, not a separate skill.
 - in_scope_formulas: the formulas a student must USE for this keyword. If the keyword is conceptual (e.g. "interpret the sign of X", "recognize that Y means Z"), this array MUST be empty. The boundary_statement must then explicitly forbid calculations.
-- out_of_scope: 2–8 phrases describing concepts/formulas that are RELATED but belong to OTHER keywords. Be unambiguous. If sibling keywords are provided, their territory MUST appear here so the boundary between siblings is sharp.
+- out_of_scope: 2–8 phrases describing concepts/formulas that represent a DIFFERENT primary skill belonging to a sibling keyword — things a question here must NOT require the student to compute or apply as the tested skill. Do NOT put shared conclusion/outcome vocabulary in out_of_scope. "Spontaneous/non-spontaneous" is a shared outcome that multiple keywords may state as a conclusion — it is NOT the exclusive territory of any one keyword. Only list in out_of_scope what would require the student to demonstrate a distinct, separately-tested skill or formula.
 - key_terms: canonical terms and symbols in play.
-- boundary_statement: one imperative sentence stating the hard limit, e.g. "Tests ONLY the meaning of the sign of ΔG; must NOT require any calculation involving enthalpy, entropy, temperature, or equilibrium constants."
+- boundary_statement: one imperative sentence stating the hard limit.
+
+PRIMARY-SKILL vs. SHARED-OUTCOME DISTINCTION (critical):
+The PRIMARY TESTED SKILL is the cognitive operation the student must perform. Shared OUTCOME vocabulary is the conclusion that naturally follows from performing the skill — it belongs to whoever performs the skill, not exclusively to one keyword.
+
+WORKED CONTRAST using Gibbs free energy siblings:
+
+Keyword A: "gibbs_free_energy_sign_and_spontaneity" (skill: interpret the SIGN of ΔG)
+  • IN SCOPE: reading the sign of a given ΔG value; stating spontaneous (ΔG < 0) or non-spontaneous (ΔG > 0) as a conclusion; recognizing ΔG = 0 at equilibrium.
+  • in_scope_formulas: [] — EMPTY. No calculation. The student is given ΔG and interprets its sign.
+  • OUT OF SCOPE: applying the formula ΔG = ΔH − TΔS (that is the primary skill of a different sibling); calculating or comparing ΔH vs TΔS; finding the crossover temperature at which spontaneity changes; computing ΔG° from equilibrium constants; ATP coupling. Stating "spontaneous or not" is NOT out of scope — it is the natural conclusion of sign interpretation.
+  • boundary_statement: "Tests ONLY the meaning of the sign of ΔG; must NOT require any calculation involving enthalpy, entropy, temperature, or equilibrium constants."
+
+Keyword B: "delta_g_relationship_to_enthalpy_entropy_and_temperature" (skill: use ΔG = ΔH − TΔS)
+  • IN SCOPE: applying ΔG = ΔH − TΔS; comparing the TΔS term to ΔH across temperature regimes; finding the crossover temperature at which ΔG changes sign; CONCLUDING whether the process is spontaneous or non-spontaneous as the outcome of the calculation.
+  • in_scope_formulas: ["ΔG = ΔH − TΔS"]
+  • OUT OF SCOPE: computing ΔG° from equilibrium constants K (different skill/sibling); reaction quotient Q; ATP coupling; Nernst equation. Do NOT list "spontaneity interpretation" or "spontaneous/non-spontaneous" as out of scope — concluding spontaneity is the natural outcome of applying ΔG = ΔH − TΔS.
+  • boundary_statement: "Tests application of ΔG = ΔH − TΔS and temperature-dependence reasoning; must NOT require ΔG°/K relationships, reaction quotient Q, or ATP coupling."
+
+Apply this same logic to all keywords: out_of_scope is for DIFFERENT primary skills/formulas owned by siblings, not for shared conclusion vocabulary.
 
 Return valid JSON only. No markdown.`;
 
