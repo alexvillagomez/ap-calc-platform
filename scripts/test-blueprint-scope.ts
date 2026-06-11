@@ -99,8 +99,8 @@ async function main() {
   console.log(`=== Blueprint scope test: ${target.label} (${target.id}) ===`);
   console.log(`Siblings used to sharpen boundary: ${siblings.length}`);
 
-  // 1. Generate the blueprint
-  const blueprint = await generateConceptBlueprint({
+  // 1. Generate the blueprint + yield (single LLM call)
+  const { blueprint, yield_level, yield_rationale } = await generateConceptBlueprint({
     keyword: {
       id: target.id as string,
       label: target.label as string,
@@ -112,6 +112,9 @@ async function main() {
   });
   console.log("\n─── Generated ConceptBlueprint ───");
   console.log(JSON.stringify(blueprint, null, 2));
+  console.log(`\n─── Yield ───`);
+  console.log(`yield_level:     ${yield_level}`);
+  console.log(`yield_rationale: ${yield_rationale}`);
 
   const kwMeta = {
     id: target.id as string,

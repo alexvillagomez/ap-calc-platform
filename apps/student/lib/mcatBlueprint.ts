@@ -26,13 +26,21 @@
  * Output shape is validated strictly. If the first attempt produces an invalid
  * blueprint the call is retried once; a second failure throws McatGenError.
  *
+ * YIELD OUTPUT
+ * -----------
+ * `generateConceptBlueprint` also returns `yield_level` ("high"|"medium"|"low") and
+ * `yield_rationale` (one sentence), generated in the SAME LLM call as the blueprint.
+ * These are stored in `mcat_keywords.yield_level` / `mcat_keywords.yield_rationale`
+ * by the backfill script and are NOT injected into downstream generation prompts.
+ *
  * USAGE
  * -----
  * ```ts
  * import { generateConceptBlueprint, buildBlueprintBlock } from "@/lib/mcatBlueprint";
  *
- * const blueprint = await generateConceptBlueprint({ keyword, siblings, outlineContext });
- * // store blueprint in mcat_keywords.concept_blueprint ...
+ * const { blueprint, yield_level, yield_rationale } =
+ *   await generateConceptBlueprint({ keyword, siblings, outlineContext });
+ * // store blueprint, yield_level, yield_rationale in mcat_keywords ...
  *
  * // later, inside a generation prompt:
  * const scopeBlock = buildBlueprintBlock(blueprint);
@@ -46,6 +54,8 @@ import OpenAI from "openai";
 import { McatGenError } from "./mcatGenerator";
 
 // ─── Blueprint schema ─────────────────────────────────────────────────────────
+
+export type YieldLevel = "high" | "medium" | "low";
 
 export interface ConceptBlueprint {
   /** The specific concepts/skills a question or lesson for THIS keyword may test. Each a short phrase. 2–6 items. */
@@ -120,8 +130,25 @@ For each keyword you receive, return a JSON object with the following shape:
     "out_of_scope": ["<concept or formula that belongs elsewhere>", ...],
     "key_terms": ["<term or symbol>", ...],
     "boundary_statement": "<one imperative sentence>"
-  }
+  },
+  "yield_level": "high|medium|low",
+  "yield_rationale": "<one sentence explaining WHY this yield level was assigned>"
 }
+
+YIELD LEVEL GUIDANCE:
+yield_level estimates how heavily the REAL MCAT tests this specific keyword, grounded in the
+AAMC content outline provided above.
+  "high"   — the topic is explicitly elaborated in the AAMC outline AND/OR is foundational and
+             recurs across many passage types (e.g. core amino-acid properties, Michaelis-Menten
+             kinetics, cell membrane transport, major metabolic pathways).
+  "medium" — the topic is present in the outline and tested but not a dominant question driver;
+             tested in some passages, sometimes indirectly.
+  "low"    — a niche or rarely-tested detail; mentioned briefly in the outline or appears only
+             as contextual background in passages rather than the primary tested skill.
+yield_rationale must briefly cite WHY (e.g. "core, frequently-tested amino-acid property" or
+"narrow edge case rarely tested directly").
+Be calibrated — do NOT rate everything "high". Aim for a realistic spread that reflects actual
+MCAT frequency: roughly 25–35% high, 40–50% medium, 20–30% low across a typical keyword set.
 
 RULES:
 - The keyword is deliberately narrow. Do not expand its scope.
@@ -217,6 +244,21 @@ function parseBlueprint(parsed: Record<string, unknown>): ConceptBlueprint | nul
   };
 }
 
+const VALID_YIELD_LEVELS: YieldLevel[] = ["high", "medium", "low"];
+
+function parseYield(parsed: Record<string, unknown>): { yield_level: YieldLevel; yield_rationale: string } {
+  const rawLevel = parsed.yield_level;
+  const yield_level: YieldLevel =
+    typeof rawLevel === "string" && VALID_YIELD_LEVELS.includes(rawLevel as YieldLevel)
+      ? (rawLevel as YieldLevel)
+      : "medium"; // coerce-with-default; does NOT cause a retry
+
+  const rawRationale = parsed.yield_rationale;
+  const yield_rationale = typeof rawRationale === "string" ? rawRationale.trim() : "";
+
+  return { yield_level, yield_rationale };
+}
+
 // ─── Exported generator ───────────────────────────────────────────────────────
 
 /**
@@ -237,8 +279,15 @@ export async function generateConceptBlueprint(opts: {
   keyword: { id: string; label: string; description: string; examples?: string[] };
   siblings?: { label: string; description: string }[];
   outlineContext?: string;
-}): Promise<ConceptBlueprint> {
+}): Promise<{ blueprint: ConceptBlueprint; yield_level: YieldLevel; yield_rationale: string }> {
   const userPrompt = buildUserPrompt(opts);
+
+  // runOnce returns the blueprint if valid (null triggers a retry), but always
+  // captures yield fields via coerce-with-default so they never cause a retry.
+  let capturedYield: { yield_level: YieldLevel; yield_rationale: string } = {
+    yield_level: "medium",
+    yield_rationale: "",
+  };
 
   const runOnce = async (): Promise<ConceptBlueprint | null> => {
     let text: string;
@@ -265,6 +314,9 @@ export async function generateConceptBlueprint(opts: {
       return null;
     }
 
+    // Always capture yield (coerce-with-default; never blocks retry)
+    capturedYield = parseYield(parsed);
+
     return parseBlueprint(parsed);
   };
 
@@ -280,5 +332,5 @@ export async function generateConceptBlueprint(opts: {
     );
   }
 
-  return blueprint;
+  return { blueprint, ...capturedYield };
 }

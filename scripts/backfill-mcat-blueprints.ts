@@ -194,8 +194,9 @@ async function main() {
     return;
   }
 
-  // ── Process in batches of 3
-  const CONCURRENCY = 3;
+  // ── Process in batches of 8 — these are small JSON calls well within OpenAI
+  // rate limits; higher concurrency cuts the ~741-keyword run time proportionally.
+  const CONCURRENCY = 8;
   let successCount = 0;
   let failCount = 0;
 
@@ -218,8 +219,8 @@ async function main() {
               ? (kw.examples as unknown[]).map((e) => String(e))
               : undefined;
 
-          // Generate blueprint
-          const blueprint = await generateConceptBlueprint({
+          // Generate blueprint + yield (single LLM call)
+          const { blueprint, yield_level, yield_rationale } = await generateConceptBlueprint({
             keyword: {
               id: kw.id,
               label: kw.label,
@@ -230,10 +231,10 @@ async function main() {
             outlineContext: outlineContext || undefined,
           });
 
-          // Store in DB
+          // Store blueprint + yield fields in DB
           const { error: updateErr } = await supabase
             .from("mcat_keywords")
-            .update({ concept_blueprint: blueprint })
+            .update({ concept_blueprint: blueprint, yield_level, yield_rationale })
             .eq("id", kw.id);
 
           if (updateErr) {
@@ -246,8 +247,9 @@ async function main() {
 
           successCount++;
           console.log(
-            `  [${kw.category_id}] ${kw.label} → blueprint stored` +
-              ` (${blueprint.in_scope_concepts.length} in-scope,` +
+            `  [${kw.category_id}] ${kw.label} → stored` +
+              ` (yield=${yield_level},` +
+              ` ${blueprint.in_scope_concepts.length} in-scope,` +
               ` ${blueprint.out_of_scope.length} out-of-scope)`
           );
         } catch (err) {
