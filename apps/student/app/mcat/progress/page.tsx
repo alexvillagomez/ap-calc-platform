@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ScoreBar } from "@/components/mcat/ScoreBar";
+import { YieldBadge } from "@/components/mcat/YieldBadge";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -11,6 +12,7 @@ interface InDepthChild {
   id: string;
   label: string;
   description: string;
+  yield_level?: "high" | "medium" | "low" | null;
   score: number | null;
   total_attempts: number;
   correct_attempts: number;
@@ -23,6 +25,7 @@ interface Umbrella {
   id: string;
   label: string;
   description: string;
+  yield_level?: "high" | "medium" | "low" | null;
   score: number | null;
   total_attempts: number;
   correct_attempts: number;
@@ -214,6 +217,7 @@ function UmbrellaRow({
             <span className="text-sm font-medium text-gray-800 truncate">
               {umbrella.label}
             </span>
+            <YieldBadge level={umbrella.yield_level} />
             {umbrella.state === "mastered" && (
               <span title="Mastered" className="text-green-500 text-xs shrink-0">
                 ✓
@@ -263,6 +267,7 @@ function ChildRow({ child }: { child: InDepthChild }) {
       <div className="flex items-start justify-between gap-2 mb-1">
         <div className="flex items-center gap-1.5 min-w-0 flex-1">
           <span className="text-sm text-gray-700 truncate">{child.label}</span>
+          <YieldBadge level={child.yield_level} />
           {child.state === "mastered" && (
             <span title="Mastered" className="text-green-500 text-xs shrink-0">
               ✓

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { fetchTemplateCards } from "@/lib/mcatTemplateCards";
-import { generateMcatQuestions, McatGenError } from "@/lib/mcatGenerator";
+import { generateMcatQuestions, McatGenError, verifyQuestionsFast } from "@/lib/mcatGenerator";
 import { loadTargetKeywords, embedText, tagByEmbedding } from "@/lib/mcatTagging";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
 
@@ -334,11 +334,26 @@ export async function POST(request: Request) {
     genKeywords = keywords.filter((k) => scopedKeywordIds.has(k.id));
   }
 
+  // Yield-level nudge: among comparably-weak keywords, AAMC high-yield topics
+  // sort earlier (lower effective score) and low-yield topics sort later.
+  // NULL yield_level is treated as "medium" (zero adjustment).
+  // Guard: only apply when selection is automatic (category-wide or set-scoped).
+  // When keyword_id is present the user picked a single keyword explicitly —
+  // leave ordering unchanged so the intent is respected.
+  const YIELD_ADJ: Record<string, number> = { high: -0.12, medium: 0, low: 0.10 };
+  const applyYield = !keyword_id;
+
   const kwSorted = [...genKeywords].sort((a, b) => {
     const aState = kwStateMap.get(a.id);
     const bState = kwStateMap.get(b.id);
-    const aScore = (aState?.score as number) ?? 0.5;
-    const bScore = (bState?.score as number) ?? 0.5;
+    const rawA = (aState?.score as number) ?? 0.5;
+    const rawB = (bState?.score as number) ?? 0.5;
+    const aScore = applyYield
+      ? rawA + (YIELD_ADJ[a.yield_level ?? "medium"] ?? 0)
+      : rawA;
+    const bScore = applyYield
+      ? rawB + (YIELD_ADJ[b.yield_level ?? "medium"] ?? 0)
+      : rawB;
     if (Math.abs(aScore - bScore) > 0.01) return aScore - bScore;
     const aAttempts = (aState?.total_attempts as number) ?? 0;
     const bAttempts = (bState?.total_attempts as number) ?? 0;
@@ -349,6 +364,7 @@ export async function POST(request: Request) {
     id: kw.id,
     label: kw.label,
     description: kw.description ?? "",
+    blueprint: kw.concept_blueprint,
   }));
 
   const templateCards = await fetchTemplateCards(
@@ -369,6 +385,7 @@ export async function POST(request: Request) {
               id: k.id,
               label: k.label,
               description: k.description ?? "",
+              blueprint: k.concept_blueprint,
             })),
       templateCards,
       count: 3,
@@ -391,43 +408,66 @@ export async function POST(request: Request) {
     const sourceCardIds = templateCards.map((c) => c.id);
     const keywordsWithEmbed = keywords.filter((k) => k.embedding !== null);
 
-    const rows = await Promise.all(
-      genResults.map(async (q) => {
-        let embedding: number[] | null = null;
-        let finalWeights = q.keyword_weights;
+    // Run embedding AND fast verification concurrently so their latencies overlap
+    const [rows, verifyResults] = await Promise.all([
+      Promise.all(
+        genResults.map(async (q) => {
+          let embedding: number[] | null = null;
+          let finalWeights = q.keyword_weights;
 
-        try {
-          embedding = await embedText(
-            `${q.stem} | ${q.choices[q.correct_index]}`
-          );
-          const retagged = tagByEmbedding(embedding, keywordsWithEmbed);
-          if (Object.keys(retagged).length > 0) {
-            finalWeights = retagged;
+          try {
+            embedding = await embedText(
+              `${q.stem} | ${q.choices[q.correct_index]}`
+            );
+            const retagged = tagByEmbedding(embedding, keywordsWithEmbed);
+            if (Object.keys(retagged).length > 0) {
+              finalWeights = retagged;
+            }
+          } catch {
+            // Embedding failure is non-fatal — keep LLM weights
           }
-        } catch {
-          // Embedding failure is non-fatal — keep LLM weights
-        }
 
-        return {
-          section: "biology" as string,
-          category_id: primaryCategoryId,
+          return {
+            section: "biology" as string,
+            category_id: primaryCategoryId,
+            stem: q.stem,
+            choices: q.choices,
+            correct_index: q.correct_index,
+            explanation: q.explanation,
+            keyword_weights: finalWeights,
+            difficulty: q.difficulty,
+            source_card_ids: sourceCardIds,
+            generated_by: "gpt-5.4-mini",
+            status: "active",
+            embedding: embedding as unknown,
+          };
+        })
+      ),
+      verifyQuestionsFast(
+        genResults.map((q) => ({
           stem: q.stem,
           choices: q.choices,
           correct_index: q.correct_index,
-          explanation: q.explanation,
-          keyword_weights: finalWeights,
-          difficulty: q.difficulty,
-          source_card_ids: sourceCardIds,
-          generated_by: "gpt-5.4-mini",
-          status: "active",
-          embedding: embedding as unknown,
-        };
-      })
-    );
+        }))
+      ),
+    ]);
+
+    // Determine which questions passed verification (agrees === true)
+    // Fail-safe: if all fail, keep all and warn so the student still gets a question
+    let keptIndices = verifyResults
+      .map((r, i) => (r.agrees ? i : -1))
+      .filter((i) => i !== -1);
+    if (keptIndices.length === 0) {
+      console.warn(
+        "[next-question] all generated questions failed fast-verify; serving best-effort"
+      );
+      keptIndices = rows.map((_, i) => i);
+    }
+    const keptSet = new Set(keptIndices);
 
     const { data: inserted } = await supabase
       .from("mcat_questions")
-      .insert(rows)
+      .insert(rows.filter((_, i) => keptSet.has(i)))
       .select(
         "id, stem, choices, correct_index, explanation, keyword_weights, difficulty, parent_question_id, avg_rating"
       );

@@ -4,6 +4,7 @@
  * Throws McatGenError on failure — routes surface this as 502.
  */
 import OpenAI from "openai";
+import { buildBlueprintBlock, type ConceptBlueprint } from "./mcatBlueprint";
 
 const GEN_MODEL = "gpt-5.4-mini";
 
@@ -43,7 +44,7 @@ export interface GeneratedFlashcard {
   keyword_weights: Record<string, number>;
 }
 
-type KeywordMeta = { id: string; label: string; description: string };
+type KeywordMeta = { id: string; label: string; description: string; blueprint?: ConceptBlueprint | null };
 
 // ─── Shuffle helper ────────────────────────────────────────────────────────────
 
@@ -329,8 +330,19 @@ export async function generateMcatQuestions(opts: {
   const allowedIds = new Set(keywords.map((k) => k.id));
 
   const keywordBlock = keywords
-    .map((k) => `  - id: "${k.id}"\n    label: "${k.label}"\n    description: "${k.description}"`)
+    .map((k) => {
+      const base = `  - id: "${k.id}"\n    label: "${k.label}"\n    description: "${k.description}"`;
+      const blueprintText = buildBlueprintBlock(k.blueprint);
+      if (!blueprintText) return base;
+      const indented = blueprintText.split("\n").map((line) => `    ${line}`).join("\n");
+      return `${base}\n${indented}`;
+    })
     .join("\n");
+
+  const hasBlueprintKeyword = keywords.some((k) => !!k.blueprint);
+  const scopeEnforcement = hasBlueprintKeyword
+    ? `SCOPE ENFORCEMENT: Each item targets exactly ONE keyword. You MUST obey that keyword's SCOPE CONTRACT (shown under it): test only its in-scope concepts, never require a concept or formula listed OUT OF SCOPE for it. A question/flashcard that requires an out-of-scope concept is INVALID — regenerate it within scope.\n\n`
+    : "";
 
   const templateBlock =
     templateCards.length > 0
@@ -344,7 +356,7 @@ export async function generateMcatQuestions(opts: {
 
   const userPrompt = `Generate ${count} MCAT Biology multiple-choice questions.
 
-${outlineBlock}${difficultyInstruction(effectiveTarget)}
+${outlineBlock}${scopeEnforcement}${difficultyInstruction(effectiveTarget)}
 
 KEYWORDS TO TEST (use ONLY these keyword ids in keyword_weights):
 ${keywordBlock}
@@ -394,8 +406,19 @@ export async function generateSimilarQuestion(opts: {
   const allowedIds = new Set(keywords.map((k) => k.id));
 
   const keywordBlock = keywords
-    .map((k) => `  - id: "${k.id}"\n    label: "${k.label}"\n    description: "${k.description}"`)
+    .map((k) => {
+      const base = `  - id: "${k.id}"\n    label: "${k.label}"\n    description: "${k.description}"`;
+      const blueprintText = buildBlueprintBlock(k.blueprint);
+      if (!blueprintText) return base;
+      const indented = blueprintText.split("\n").map((line) => `    ${line}`).join("\n");
+      return `${base}\n${indented}`;
+    })
     .join("\n");
+
+  const hasBlueprintKeyword = keywords.some((k) => !!k.blueprint);
+  const scopeEnforcement = hasBlueprintKeyword
+    ? `SCOPE ENFORCEMENT: Each item targets exactly ONE keyword. You MUST obey that keyword's SCOPE CONTRACT (shown under it): test only its in-scope concepts, never require a concept or formula listed OUT OF SCOPE for it. A question/flashcard that requires an out-of-scope concept is INVALID — regenerate it within scope.\n\n`
+    : "";
 
   const outlineBlock =
     opts.outlineContext
@@ -404,7 +427,7 @@ export async function generateSimilarQuestion(opts: {
 
   const userPrompt = `Generate a NEW question testing the same concept from a different angle.
 
-${outlineBlock}${difficultyInstruction(effectiveTarget)}
+${outlineBlock}${scopeEnforcement}${difficultyInstruction(effectiveTarget)}
 
 ORIGINAL QUESTION:
 Stem: ${question.stem}
@@ -574,6 +597,7 @@ export async function generateMcatLesson(
     label: string;
     description: string;
     examples?: string;
+    blueprint?: ConceptBlueprint | null;
   },
   outlineContext?: string
 ): Promise<GeneratedMcatLesson> {
@@ -582,11 +606,13 @@ export async function generateMcatLesson(
       ? `${outlineContext}\n\nUse the outline above to keep the lesson content within the scope the MCAT tests for this area: prefer the listed canonical topics, use MCAT-appropriate terminology, and do not drift into out-of-scope trivia.\n\n`
       : "";
 
-  const userPrompt = `${outlineBlock}Keyword ID: ${keyword.id}
+  const scopeBlock = keyword.blueprint ? buildBlueprintBlock(keyword.blueprint) + "\n\n" : "";
+
+  const userPrompt = `${scopeBlock}${outlineBlock}Keyword ID: ${keyword.id}
 Label: ${keyword.label}
 Description: ${keyword.description}${keyword.examples ? `\nExamples: ${keyword.examples}` : ""}
 
-Think carefully about what a student who has NEVER seen this MCAT Biology concept before would find confusing. Build from the absolute simplest case. Every step must have a check question with distractors based on real MCAT misconceptions.`;
+Think carefully about what a student who has NEVER seen this MCAT Biology concept before would find confusing. Build from the absolute simplest case. Every step must have a check question with distractors based on real MCAT misconceptions. Teach EXACTLY the in-scope concepts listed in the scope contract above, and ensure every check question stays within that scope contract.`;
 
   let parsed = await callGen(MCAT_LESSON_SYSTEM, userPrompt);
   let lesson = validateLesson(parsed);
@@ -607,6 +633,109 @@ Think carefully about what a student who has NEVER seen this MCAT Biology concep
   };
 }
 
+// ─── Fast correctness verifier ────────────────────────────────────────────────
+
+export interface FastVerifyResult {
+  /** verifier's independent answer matches correct_index */
+  agrees: boolean;
+  predicted_index: number | null;
+  /** false if the verifier call errored/timed out — fail-open: treat as agrees */
+  ok: boolean;
+}
+
+const VERIFY_SYSTEM =
+  'You are a careful MCAT question solver. Solve the question independently. ' +
+  'Pick the single best answer. Return JSON {"answer_index": 0-3, "reason": "<=1 short sentence"}.';
+
+const VERIFY_TIMEOUT_MS = 4000;
+
+/**
+ * Runs a single fast, latency-conscious correctness check on a generated
+ * MCAT question. Makes one gpt-5.4-mini call in JSON mode without revealing
+ * the correct answer. Returns fail-open on any error or timeout.
+ */
+export async function verifyQuestionFast(
+  q: { stem: string; choices: string[]; correct_index: number },
+  opts?: { timeoutMs?: number }
+): Promise<FastVerifyResult> {
+  const timeoutMs = opts?.timeoutMs ?? VERIFY_TIMEOUT_MS;
+
+  const choiceLines = q.choices
+    .map((c, i) => `${i}: ${c}`)
+    .join("\n");
+
+  const userPrompt =
+    `Question:\n${q.stem}\n\nChoices:\n${choiceLines}\n\nWhich choice (0–3) is the single best answer?`;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const key = process.env.OPENAI_API_KEY;
+    if (!key) {
+      return { agrees: true, predicted_index: null, ok: false };
+    }
+    const client = new OpenAI({ apiKey: key });
+
+    const completion = await client.chat.completions.create(
+      {
+        model: GEN_MODEL,
+        messages: [
+          { role: "system", content: VERIFY_SYSTEM },
+          { role: "user", content: userPrompt },
+        ],
+        response_format: { type: "json_object" },
+        max_completion_tokens: 80,
+      },
+      { signal: controller.signal }
+    );
+
+    clearTimeout(timer);
+
+    const text = completion.choices[0]?.message?.content ?? "{}";
+    let parsed: Record<string, unknown>;
+    try {
+      parsed = JSON.parse(text) as Record<string, unknown>;
+    } catch {
+      return { agrees: true, predicted_index: null, ok: false };
+    }
+
+    const raw = parsed.answer_index;
+    if (typeof raw !== "number" || !Number.isInteger(raw) || raw < 0 || raw > 3) {
+      return { agrees: true, predicted_index: null, ok: false };
+    }
+
+    const predicted_index = raw as number;
+    return {
+      agrees: predicted_index === q.correct_index,
+      predicted_index,
+      ok: true,
+    };
+  } catch (err) {
+    clearTimeout(timer);
+    const isAbort =
+      err instanceof Error &&
+      (err.name === "AbortError" || err.message.toLowerCase().includes("abort"));
+    if (isAbort) {
+      console.warn("[verifyQuestionFast] timed out after", timeoutMs, "ms — failing open");
+    } else {
+      console.warn("[verifyQuestionFast] error — failing open:", err instanceof Error ? err.message : String(err));
+    }
+    return { agrees: true, predicted_index: null, ok: false };
+  }
+}
+
+/**
+ * Runs verifyQuestionFast concurrently on all items so total latency ≈ one
+ * call, not N. Each item fails open independently.
+ */
+export async function verifyQuestionsFast(
+  qs: { stem: string; choices: string[]; correct_index: number }[],
+  opts?: { timeoutMs?: number }
+): Promise<FastVerifyResult[]> {
+  return Promise.all(qs.map((q) => verifyQuestionFast(q, opts)));
+}
+
 // ─── Flashcard generator ──────────────────────────────────────────────────────
 
 /**
@@ -621,8 +750,19 @@ export async function generateMcatFlashcards(opts: {
   const { keywords, templateCards, count } = opts;
 
   const keywordBlock = keywords
-    .map((k) => `  - id: "${k.id}"\n    label: "${k.label}"\n    description: "${k.description}"`)
+    .map((k) => {
+      const base = `  - id: "${k.id}"\n    label: "${k.label}"\n    description: "${k.description}"`;
+      const blueprintText = buildBlueprintBlock(k.blueprint);
+      if (!blueprintText) return base;
+      const indented = blueprintText.split("\n").map((line) => `    ${line}`).join("\n");
+      return `${base}\n${indented}`;
+    })
     .join("\n");
+
+  const hasBlueprintKeyword = keywords.some((k) => !!k.blueprint);
+  const scopeEnforcement = hasBlueprintKeyword
+    ? `SCOPE ENFORCEMENT: Each item targets exactly ONE keyword. You MUST obey that keyword's SCOPE CONTRACT (shown under it): test only its in-scope concepts, never require a concept or formula listed OUT OF SCOPE for it. A question/flashcard that requires an out-of-scope concept is INVALID — regenerate it within scope.\n\n`
+    : "";
 
   const templateBlock =
     templateCards.length > 0
@@ -636,7 +776,7 @@ export async function generateMcatFlashcards(opts: {
 
   const userPrompt = `Generate ${count} MCAT Biology flashcards.
 
-${outlineBlock}KEYWORDS TO COVER (use ONLY these keyword ids in keyword_weights):
+${outlineBlock}${scopeEnforcement}KEYWORDS TO COVER (use ONLY these keyword ids in keyword_weights):
 ${keywordBlock}
 ${templateBlock}`;
 

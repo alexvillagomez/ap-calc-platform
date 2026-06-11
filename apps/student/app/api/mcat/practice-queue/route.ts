@@ -121,7 +121,7 @@ export async function GET(request: Request) {
         const { data: umbRow } = await supabase
           .from("mcat_keywords")
           .select(
-            "id, label, description, tier, parent_keyword_id, category_id, embedding"
+            "id, label, description, tier, parent_keyword_id, category_id, embedding, concept_blueprint, yield_level"
           )
           .eq("id", umbrellaId)
           .eq("status", "approved")
@@ -137,6 +137,8 @@ export async function GET(request: Request) {
                   (umbRow.parent_keyword_id as string | null) ?? null,
                 category_id: umbRow.category_id as string,
                 embedding: umbRow.embedding,
+                concept_blueprint: umbRow.concept_blueprint ?? null,
+                yield_level: (umbRow.yield_level as "high" | "medium" | "low" | null) ?? null,
               },
             ]
           : allKeywords; // last-resort: whole category
@@ -187,6 +189,7 @@ export async function GET(request: Request) {
     state: string | null;
     total_attempts: number;
     needs_lesson: boolean;
+    yield_level: "high" | "medium" | "low" | null;
   }[] = [];
 
   const reviewItems: {
@@ -245,14 +248,27 @@ export async function GET(request: Request) {
       state,
       total_attempts: totalAttempts,
       needs_lesson: needsLesson,
+      yield_level: kw.yield_level,
     });
   }
 
-  // Sort queue by score asc, tiebreak total_attempts asc; cap at 40
+  // Sort queue: weakness-first, nudged by AAMC yield level.
+  // YIELD_ADJ is added to the raw score before comparison so high-yield topics
+  // sort slightly earlier (lower effective score) and low-yield topics sort
+  // slightly later — but a clearly weak topic always beats a strong one.
+  // NULL yield_level is treated as "medium" (0 adjustment, preserving current
+  // behavior for any keyword that has no yield_level set).
+  //   high  → −0.12  (e.g. score 0.60 sorts as 0.48)
+  //   medium→   0.00
+  //   low   → +0.10  (e.g. score 0.48 sorts as 0.58)
+  const YIELD_ADJ: Record<string, number> = { high: -0.12, medium: 0, low: 0.10 };
+  const effectiveScore = (item: (typeof queueItems)[0]): number =>
+    (item.score ?? 0.5) + (YIELD_ADJ[item.yield_level ?? "medium"] ?? 0);
+
   queueItems.sort((a, b) => {
-    const aScore = a.score ?? 0.5;
-    const bScore = b.score ?? 0.5;
-    if (Math.abs(aScore - bScore) > 0.001) return aScore - bScore;
+    const aEff = effectiveScore(a);
+    const bEff = effectiveScore(b);
+    if (Math.abs(aEff - bEff) > 0.001) return aEff - bEff;
     return a.total_attempts - b.total_attempts;
   });
 

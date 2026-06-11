@@ -29,7 +29,7 @@ export async function GET(request: Request) {
     supabase
       .from("mcat_keywords")
       .select(
-        "id, category_id, label, description, tier, parent_keyword_id, order_index"
+        "id, category_id, label, description, tier, parent_keyword_id, order_index, yield_level"
       )
       .eq("status", "approved")
       .order("order_index"),
@@ -111,6 +111,7 @@ export async function GET(request: Request) {
         description: kw.description,
         tier: kw.tier,
         parent_keyword_id: kw.parent_keyword_id ?? null,
+        yield_level: (kw.yield_level as "high" | "medium" | "low" | null) ?? null,
         score,
         total_attempts: st?.total_attempts ?? 0,
         correct_attempts: st?.correct_attempts ?? 0,
@@ -151,6 +152,7 @@ export async function GET(request: Request) {
           id: kw.id,
           label: kw.label,
           description: kw.description,
+          yield_level: (kw.yield_level as "high" | "medium" | "low" | null) ?? null,
           score,
           total_attempts: st?.total_attempts ?? 0,
           correct_attempts: st?.correct_attempts ?? 0,
@@ -170,10 +172,21 @@ export async function GET(request: Request) {
             attempted.length
           : null;
 
+      // Aggregated yield_level from children: high > medium > low > null
+      let umbrellaYieldLevel: "high" | "medium" | "low" | null = null;
+      if (children.some((c) => c.yield_level === "high")) {
+        umbrellaYieldLevel = "high";
+      } else if (children.some((c) => c.yield_level === "medium")) {
+        umbrellaYieldLevel = "medium";
+      } else if (children.some((c) => c.yield_level === "low")) {
+        umbrellaYieldLevel = "low";
+      }
+
       return {
         id: umb.id,
         label: umb.label,
         description: umb.description,
+        yield_level: umbrellaYieldLevel,
         score: umbScore,
         total_attempts: umbSt?.total_attempts ?? 0,
         correct_attempts: umbSt?.correct_attempts ?? 0,
