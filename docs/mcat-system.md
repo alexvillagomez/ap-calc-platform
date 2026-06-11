@@ -21,11 +21,19 @@ Seeded from `mcat-keywords.txt` (two concatenated top-level JSON objects — a c
 
 ---
 
+## Auth gate & onboarding
+
+**MCAT requires login.** Every page funnels through `getOrCreateMcatSession()` (`lib/mcatSession.ts`), which now gates on auth: if there is no `ap_calc_account_id` in localStorage it redirects to `/login?next=<current path>` and returns a never-resolving promise (the page stays in its loading state until navigation). After login, the `?next=` param (honored by `/login`) returns the student to where they were. Logging out (`AuthButtons`) clears the keys and sends them back through the gate. Because all 8 pages call the helper on mount, the whole feature is gated with no per-page code.
+
+**Quick onboarding** — `components/mcat/McatOnboarding.tsx` is a 4-step first-visit overlay rendered on `/mcat`. It self-gates on `localStorage["mcat_onboarding_seen"]` and only shows to logged-in students (so there's no flash before the login redirect). "Skip" or finishing sets the flag.
+
 ## Pages (`apps/student/app/mcat/`)
+
+All pages are **login-gated** (see above). 
 
 | Route | Purpose |
 |---|---|
-| `/mcat` | Landing: section tabs (Biology active), General Practice card, 10 category cards (mastery bar + Practice/Flashcards/Quiz + "Explore topics →" into the browse page). Login/logout in header (`components/mcat/AuthButtons.tsx`). |
+| `/mcat` | Landing: section tabs (Biology active), General Practice card, 10 category cards (mastery bar + Practice/Flashcards/Quiz + "Explore topics →" into the browse page). Login/logout in header (`components/mcat/AuthButtons.tsx`); first-visit `McatOnboarding` overlay. |
 | `/mcat/[categoryId]` | **Browse / drill-down.** Whole-category actions, then each umbrella (expandable) with Practice/Flashcards/Quiz/Lesson, expanding to its in-depth keywords each with the same four actions. |
 | `/mcat/[categoryId]/practice` | **The Duolingo-style loop** (see below). Honors `?umbrella=<id>` / `?keyword=<id>` scope params. |
 | `/mcat/[categoryId]/quiz` | 8-question quiz (no mid-quiz reveal; review list at end with per-question FeedbackWidget). Scope params resolve to `keyword_ids`. |
