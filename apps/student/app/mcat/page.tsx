@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ScoreBar } from "@/components/mcat/ScoreBar";
 import AuthButtons from "@/components/mcat/AuthButtons";
+import McatOnboarding from "@/components/mcat/McatOnboarding";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
 interface Keyword {
@@ -74,6 +75,9 @@ export default function McatLandingPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* First-visit quick onboarding (self-gates on localStorage) */}
+      <McatOnboarding />
+
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
