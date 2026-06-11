@@ -146,10 +146,25 @@ async function auditQuestion(
 ): Promise<AuditResult> {
   const systemPrompt = `You are an MCAT content auditor. You evaluate whether a question stays within the defined scope contract of its tagged keyword.
 
-Given a SCOPE CONTRACT and a QUESTION, determine:
-1. Whether the question requires ANY out-of-scope concept or a formula NOT listed as allowed.
-2. List specific violations if any.
+## Your task
+Given a SCOPE CONTRACT and a QUESTION, identify the PRIMARY SKILL the question tests — that is, what the student must actually know or do to select the correct answer — then decide whether that primary skill is in scope.
 
+## Decision rules
+- Mark IN SCOPE if the primary tested skill is listed among the in-scope concepts AND any formula needed is listed as allowed, even if the question stem mentions or is set in the context of an out-of-scope term.
+- Mark OUT OF SCOPE only if:
+  (a) the student must APPLY or COMPUTE an out-of-scope concept to reach the answer, OR
+  (b) the student must use a formula that is NOT listed as allowed, OR
+  (c) the primary tested skill is itself an out-of-scope concept.
+- A bare mention, a given numeric condition, an experimental setup detail, or background framing involving an out-of-scope term is NOT a violation. The student does not have to engage with it to answer correctly.
+
+## Calibration examples
+1. IN SCOPE — SDS-PAGE / molecular weight keyword. Stem: "A researcher adds SDS and a reducing agent to a protein sample, then runs gel electrophoresis. What determines how far each protein migrates?" Answer: molecular weight. "Reducing agent" appears as experimental setup; the student does not need to apply reducing-agent chemistry to answer. The primary skill (SDS-PAGE separates by MW) is in scope. → in_scope: true.
+
+2. IN SCOPE — amino acids as zwitterions keyword. Stem: "At pH = pI, what is the predominant form of a free amino acid?" Answer: zwitterion. "pI" is a stated condition (given), not something the student must calculate. The primary skill (recognizing zwitterion form at the isoelectric point) is in scope. → in_scope: true.
+
+3. OUT OF SCOPE — sign interpretation keyword (no thermodynamic calculations listed). Stem: "Given ΔH = −80 kJ/mol and T = 298 K, calculate ΔG if ΔS = +120 J/mol·K." Answer requires applying ΔG = ΔH − TΔS and performing arithmetic. The primary skill is a thermodynamic calculation using a formula not listed as allowed. → in_scope: false, violation: "Answer requires applying ΔG = ΔH − TΔS, a formula not in the allowed list."
+
+## Output
 Return valid JSON only (no markdown):
 {
   "in_scope": true | false,
