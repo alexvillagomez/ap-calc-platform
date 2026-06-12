@@ -5,8 +5,13 @@ import "katex/dist/katex.min.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AP Calculus Practice",
-  description: "Student practice portal for AP Calculus AB",
+  title: "Lodera — Learn anything, addictively.",
+  description: "Adaptive learning for math and MCAT. Get better every question.",
+  applicationName: "Lodera",
+  openGraph: {
+    title: "Lodera — Learn anything, addictively.",
+    siteName: "Lodera",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { LoderaLogo } from "@/components/brand/LoderaLogo";
 
 const SEEN_KEY = "mcat_onboarding_seen";
 
@@ -18,7 +19,7 @@ const STEPS: { icon: string; title: string; body: string }[] = [
   {
     icon: "💡",
     title: "Lessons appear when you're stuck",
-    body: "No lectures up front. If you miss a few or tap “Learn this,” a short lesson shows up. Master a topic, then spaced review keeps it fresh.",
+    body: 'No lectures up front. If you miss a few or tap “Learn this,” a short lesson shows up. Master a topic, then spaced review keeps it fresh.',
   },
   {
     icon: "📈",
@@ -36,8 +37,6 @@ export default function McatOnboarding() {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    // Only for logged-in students who haven't seen it (MCAT is login-gated, and
-    // we don't want a flash before the login redirect for signed-out visitors).
     const loggedIn = !!localStorage.getItem("ap_calc_account_id");
     if (loggedIn && !localStorage.getItem(SEEN_KEY)) setShow(true);
   }, []);
@@ -54,26 +53,24 @@ export default function McatOnboarding() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-md rounded-2xl bg-white shadow-xl overflow-hidden">
+      <div className="w-full max-w-md rounded-2xl bg-white shadow-brand-lg overflow-hidden border border-neutral-200">
         <div className="p-6 sm:p-8">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">
-              Welcome to MCAT Practice
-            </span>
+          <div className="flex items-center justify-between mb-4">
+            <LoderaLogo size={22} withWordmark className="opacity-80" />
             <button
               onClick={dismiss}
-              className="text-xs text-gray-400 hover:text-gray-600"
+              className="text-xs text-neutral-400 hover:text-neutral-600 transition-colors"
             >
               Skip
             </button>
           </div>
 
-          <div className="text-4xl mt-4 mb-3">{s.icon}</div>
-          <h2 className="text-lg font-bold text-gray-900 leading-snug">
-            {s.title}
+          <div className="text-3xl mt-2 mb-3">{s?.icon}</div>
+          <h2 className="text-lg font-bold text-neutral-900 leading-snug">
+            {s?.title}
           </h2>
-          <p className="text-sm text-gray-600 leading-relaxed mt-2 min-h-[64px]">
-            {s.body}
+          <p className="text-sm text-neutral-600 leading-relaxed mt-2 min-h-[64px]">
+            {s?.body}
           </p>
 
           {/* Progress dots */}
@@ -81,8 +78,8 @@ export default function McatOnboarding() {
             {STEPS.map((_, i) => (
               <span
                 key={i}
-                className={`h-1.5 rounded-full transition-all ${
-                  i === step ? "w-5 bg-blue-600" : "w-1.5 bg-gray-200"
+                className={`h-1.5 rounded-full transition-all duration-200 ${
+                  i === step ? "w-5 bg-brand-500" : "w-1.5 bg-neutral-200"
                 }`}
               />
             ))}
@@ -92,14 +89,14 @@ export default function McatOnboarding() {
             {step > 0 && (
               <button
                 onClick={() => setStep((n) => n - 1)}
-                className="px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                className="px-4 py-2.5 rounded-xl border border-neutral-200 text-sm font-medium text-neutral-600 hover:bg-neutral-50 transition-colors"
               >
                 Back
               </button>
             )}
             <button
               onClick={() => (isLast ? dismiss() : setStep((n) => n + 1))}
-              className="flex-1 px-4 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors shadow-brand-sm"
             >
               {isLast ? "Start practicing →" : "Next"}
             </button>

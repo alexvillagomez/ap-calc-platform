@@ -2,6 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   Lodera.ai design tokens — CSS custom properties
+   ============================================================
+   Brand blues  (#38bdf8 sky → #6366f1 indigo gradient axis)
+     --brand-50  … --brand-900
+   Neutrals     (slate with blue undertone)
+     --neutral-50 … --neutral-900
+   Success / Error
+     --success-* / --error-*
+   Radii & shadows referenced by Tailwind config extensions.
+   ============================================================ */
+
+:root {
+  /* ── Brand blues ─────────────────────────────────────────── */
+  --brand-50:  #eff6ff;
+  --brand-100: #dbeafe;
+  --brand-200: #bfdbfe;
+  --brand-300: #93c5fd;
+  --brand-400: #60a5fa;
+  --brand-500: #3b82f6;   /* primary */
+  --brand-600: #4f46e5;   /* primary-dark / hover */
+  --brand-700: #4338ca;
+  --brand-800: #3730a3;
+  --brand-900: #312e81;
+
+  /* ── Neutrals (slight blue-cast slate) ──────────────────── */
+  --neutral-50:  #f8fafc;
+  --neutral-100: #f1f5f9;
+  --neutral-200: #e2e8f0;
+  --neutral-300: #cbd5e1;
+  --neutral-400: #94a3b8;
+  --neutral-500: #64748b;
+  --neutral-600: #475569;
+  --neutral-700: #334155;
+  --neutral-800: #1e293b;
+  --neutral-900: #0f172a;
+
+  /* ── Success (emerald) ──────────────────────────────────── */
+  --success-50:  #ecfdf5;
+  --success-100: #d1fae5;
+  --success-500: #10b981;
+  --success-600: #059669;
+
+  /* ── Error (soft rose) ──────────────────────────────────── */
+  --error-50:  #fff1f2;
+  --error-100: #ffe4e6;
+  --error-500: #f43f5e;
+  --error-600: #e11d48;
+
+  /* ── Correct-answer glow color ──────────────────────────── */
+  --correct-glow: rgb(16 185 129 / 0.22);
+}
+
 /* KaTeX: display math defaults to text-align:center — wide stems overflow the card */
 .ap-calc-preview .katex-display {
   text-align: left;
@@ -30,4 +83,71 @@
 /* Inside overflow-constrained containers (e.g. choice buttons), allow inline math to wrap */
 .ap-calc-preview .overflow-hidden .katex {
   white-space: normal;
+}
+
+/* ============================================================
+   Lodera.ai micro-animations
+   ============================================================ */
+
+/* Correct-answer: scale pop + green glow ring ───────────────── */
+@keyframes lodera-correct-pop {
+  0%   { transform: scale(1);    box-shadow: 0 0 0 0    var(--correct-glow); }
+  40%  { transform: scale(1.03); box-shadow: 0 0 0 6px  var(--correct-glow); }
+  70%  { transform: scale(0.99); box-shadow: 0 0 0 10px rgb(16 185 129 / 0.07); }
+  100% { transform: scale(1);    box-shadow: 0 0 0 14px rgb(16 185 129 / 0); }
+}
+
+.lodera-correct-pop {
+  animation: lodera-correct-pop 320ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Sparkle particle (used by CorrectPulse) ───────────────────── */
+@keyframes lodera-sparkle-fly {
+  0%   { transform: translate(0, 0) scale(1);  opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+}
+
+.lodera-sparkle {
+  position: absolute;
+  pointer-events: none;
+  width: 8px;
+  height: 8px;
+  animation: lodera-sparkle-fly 420ms ease-out forwards;
+}
+
+/* Progress bar fill ─────────────────────────────────────────── */
+@keyframes lodera-bar-fill {
+  from { width: 0%; }
+  to   { width: var(--progress-pct, 0%); }
+}
+
+.lodera-bar-fill {
+  animation: lodera-bar-fill 550ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Fade-in lift (general entrance) ───────────────────────────── */
+@keyframes lodera-fade-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.lodera-fade-in {
+  animation: lodera-fade-in 200ms ease-out both;
+}
+
+/* Pulse-ring (reusable outline ring that fades out) ─────────── */
+@keyframes lodera-ring-out {
+  0%   { box-shadow: 0 0 0 0   rgb(59 130 246 / 0.35); }
+  100% { box-shadow: 0 0 0 8px rgb(59 130 246 / 0); }
+}
+
+.lodera-ring-out {
+  animation: lodera-ring-out 500ms ease-out forwards;
+}
+
+/* Streak +1 float-up (StreakBadge celebrate) ────────────────── */
+@keyframes lodera-float-up {
+  0%   { opacity: 1; transform: translate(-50%, 0); }
+  80%  { opacity: 1; transform: translate(-50%, -14px); }
+  100% { opacity: 0; transform: translate(-50%, -18px); }
 }

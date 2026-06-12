@@ -31,24 +31,22 @@ export default function AuthButtons() {
     localStorage.removeItem(SESSION_KEY);
     localStorage.removeItem(DIAG_DONE_KEY);
     setUsername(null);
-    // Full reload so every page re-bootstraps a fresh guest session.
     window.location.href = "/mcat";
   };
 
   if (!ready) {
-    // Reserve space to avoid header layout shift.
     return <div className="w-16 h-7" aria-hidden />;
   }
 
   if (username) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-500 hidden sm:inline">
+        <span className="text-xs text-neutral-500 hidden sm:inline">
           {username}
         </span>
         <button
           onClick={handleLogout}
-          className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium hover:bg-gray-50 transition-colors"
+          className="px-3 py-1.5 rounded-xl border border-neutral-200 text-xs font-medium text-neutral-600 hover:bg-neutral-50 transition-colors"
         >
           Log out
         </button>
@@ -59,7 +57,7 @@ export default function AuthButtons() {
   return (
     <button
       onClick={() => router.push("/login?next=/mcat")}
-      className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-medium hover:bg-blue-700 transition-colors"
+      className="px-3 py-1.5 rounded-xl bg-brand-500 text-white text-xs font-medium hover:bg-brand-600 transition-colors shadow-brand-sm"
     >
       Log in
     </button>
