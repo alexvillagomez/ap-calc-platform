@@ -83,14 +83,14 @@ function computeOverallStats(categories: MathCategory[]): OverallStats {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function ChildRow({ child }: { child: MathInDepthChild }) {
+function ChildRow({ child, showYield }: { child: MathInDepthChild; showYield: boolean }) {
   const pct = child.score !== null ? Math.round(child.score * 100) : null;
   return (
     <div className="py-2.5 border-t border-neutral-50 first:border-0">
       <div className="flex items-start justify-between gap-2 mb-1">
         <div className="flex items-center gap-1.5 min-w-0 flex-1">
           <span className="text-sm text-neutral-700 truncate">{child.label}</span>
-          {child.yield_score !== null && (
+          {showYield && child.yield_score !== null && (
             <YieldBadge value={child.yield_score} />
           )}
           {child.state === "mastered" && (
@@ -116,9 +116,11 @@ function ChildRow({ child }: { child: MathInDepthChild }) {
 function UmbrellaRow({
   umbrella,
   defaultExpanded = false,
+  showYield,
 }: {
   umbrella: MathUmbrella;
   defaultExpanded?: boolean;
+  showYield: boolean;
 }) {
   const [expanded, setExpanded] = useState(defaultExpanded);
   const displayScore = umbrellaDisplayScore(umbrella);
@@ -153,7 +155,7 @@ function UmbrellaRow({
               </button>
             )}
             <span className="text-sm font-medium text-neutral-800 truncate">{umbrella.label}</span>
-            {umbrella.yield_score !== null && <YieldBadge value={umbrella.yield_score} />}
+            {showYield && umbrella.yield_score !== null && <YieldBadge value={umbrella.yield_score} />}
             {umbrella.state === "mastered" && (
               <span title="Mastered" className="text-success-500 text-xs shrink-0">✓</span>
             )}
@@ -190,7 +192,7 @@ function UmbrellaRow({
       {hasChildren && expanded && (
         <div className="pl-5 border-l-2 border-brand-100 ml-2 mb-2">
           {sorted.map((child) => (
-            <ChildRow key={child.id} child={child} />
+            <ChildRow key={child.id} child={child} showYield={showYield} />
           ))}
         </div>
       )}
@@ -201,9 +203,11 @@ function UmbrellaRow({
 function CategorySection({
   cat,
   course,
+  showYield,
 }: {
   cat: MathCategory;
   course: string;
+  showYield: boolean;
 }) {
   const [open, setOpen] = useState(true);
   const avg = categoryAvgPct(cat);
@@ -230,7 +234,7 @@ function CategorySection({
           <span className="text-sm font-semibold text-neutral-900 truncate text-left">
             {cat.label}
           </span>
-          {cat.yield_score !== null && <YieldBadge value={cat.yield_score} />}
+          {showYield && cat.yield_score !== null && <YieldBadge value={cat.yield_score} />}
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {avg !== null ? (
@@ -256,6 +260,7 @@ function CategorySection({
               key={u.id}
               umbrella={u}
               defaultExpanded={i === 0 && umbrellaAttempts(u) > 0}
+              showYield={showYield}
             />
           ))}
         </div>
@@ -322,7 +327,7 @@ function MathProgressInner({
   return (
     <div className="min-h-screen bg-neutral-50">
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+        <div className="w-full px-6 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <Link href={`/math/${course}`} className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0">
               ← {courseLabel}
@@ -443,7 +448,7 @@ function MathProgressInner({
             ) : (
               <div className="space-y-3">
                 {visibleCats.map((cat) => (
-                  <CategorySection key={cat.id} cat={cat} course={course} />
+                  <CategorySection key={cat.id} cat={cat} course={course} showYield={course !== "calc_ab"} />
                 ))}
               </div>
             )}

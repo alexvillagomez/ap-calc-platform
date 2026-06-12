@@ -242,7 +242,7 @@ function DiagnosticInner({
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
+        <div className="w-full px-6 py-3 flex items-center gap-3">
           <Link
             href={`/math/${course}`}
             className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0"
@@ -256,7 +256,7 @@ function DiagnosticInner({
 
         {/* Progress dots */}
         {(phase === "question" || phase === "revealed" || phase === "completing") && (
-          <div className="max-w-2xl mx-auto px-4 pb-2">
+          <div className="w-full px-6 pb-2">
             <div className="flex items-center gap-2">
               <div className="flex gap-1">
                 {Array.from({ length: Math.min(totalEstimated, 16) }).map(

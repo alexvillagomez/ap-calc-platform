@@ -486,7 +486,7 @@ function MathPracticeInner({
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+        <div className="w-full px-6 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <Link href={backHref} className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0">
               {isScoped ? "← Back" : `← ${courseLabel}`}
@@ -532,7 +532,7 @@ function MathPracticeInner({
 
         {/* Mastery meter */}
         {currentKeyword && !isReviewCard && (phase === "practicing" || phase === "revealed") && (
-          <div className="max-w-2xl mx-auto px-4 pb-1.5">
+          <div className="w-full px-6 pb-1.5">
             <p className="text-xs text-neutral-400">
               Mastering:{" "}
               <span className="font-mono tracking-wider text-brand-500">
@@ -547,7 +547,7 @@ function MathPracticeInner({
 
         {/* Difficulty control */}
         {(phase === "practicing" || phase === "revealed" || phase === "generating") && (
-          <div className="max-w-2xl mx-auto px-4 pb-2">
+          <div className="w-full px-6 pb-2">
             <div className="inline-flex rounded-lg border border-neutral-200 overflow-hidden text-xs">
               {difficultyOptions.map(({ value, label }) => (
                 <button
@@ -568,7 +568,7 @@ function MathPracticeInner({
 
         {/* Queue progress */}
         {queue.length > 0 && phase !== "loading" && phase !== "done" && (
-          <div className="max-w-2xl mx-auto px-4 pb-2">
+          <div className="w-full px-6 pb-2">
             <div className="flex items-center gap-2">
               <div className="flex-1 h-1 bg-neutral-200 rounded-full overflow-hidden">
                 <div

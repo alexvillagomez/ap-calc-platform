@@ -70,10 +70,12 @@ function ChildRow({
   child,
   categoryId,
   course,
+  showYield,
 }: {
   child: MathInDepthChild;
   categoryId: string;
   course: string;
+  showYield: boolean;
 }) {
   const pct = child.score !== null ? Math.round(child.score * 100) : null;
   const enc = encodeURIComponent(child.label);
@@ -85,7 +87,7 @@ function ChildRow({
           <span className="text-sm text-neutral-700 leading-snug">
             {child.label}
           </span>
-          {child.yield_score !== null && (
+          {showYield && child.yield_score !== null && (
             <YieldBadge value={child.yield_score} />
           )}
           {child.state === "mastered" && (
@@ -138,10 +140,12 @@ function UmbrellaRow({
   umbrella,
   categoryId,
   course,
+  showYield,
 }: {
   umbrella: MathUmbrella;
   categoryId: string;
   course: string;
+  showYield: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -182,7 +186,7 @@ function UmbrellaRow({
                 <p className="text-sm font-medium text-neutral-800 leading-snug">
                   {umbrella.label}
                 </p>
-                {umbrella.yield_score !== null && (
+                {showYield && umbrella.yield_score !== null && (
                   <YieldBadge value={umbrella.yield_score} />
                 )}
               </span>
@@ -231,6 +235,7 @@ function UmbrellaRow({
               child={child}
               categoryId={categoryId}
               course={course}
+              showYield={showYield}
             />
           ))}
         </div>
@@ -248,6 +253,7 @@ function CategoryBrowseInner({
 }) {
   const { course, categoryId } = use(params);
   const courseLabel = COURSE_LABELS[course] ?? course;
+  const showYield = course !== "calc_ab";
 
   const [category, setCategory] = useState<MathCategory | null>(null);
   const [loading, setLoading] = useState(true);
@@ -282,7 +288,7 @@ function CategoryBrowseInner({
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+        <div className="w-full px-6 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <Link
               href={`/math/${course}`}
@@ -342,7 +348,7 @@ function CategoryBrowseInner({
                   {category.description}
                 </p>
               )}
-              {category.yield_score !== null && (
+              {showYield && category.yield_score !== null && (
                 <div className="mb-3 flex items-center gap-2">
                   <span className="text-xs text-neutral-400">
                     Category yield:
@@ -381,6 +387,7 @@ function CategoryBrowseInner({
                       umbrella={u}
                       categoryId={categoryId}
                       course={course}
+                      showYield={showYield}
                     />
                   ))}
                 </div>

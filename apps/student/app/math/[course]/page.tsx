@@ -56,6 +56,8 @@ function CategoryCard({
     0
   );
 
+  const showYield = course !== "calc_ab";
+
   if (collapsed && !open) {
     return (
       <button
@@ -67,7 +69,7 @@ function CategoryCard({
           <span className="text-sm font-medium text-neutral-700 truncate">
             {cat.label}
           </span>
-          {cat.yield_score !== null && (
+          {showYield && cat.yield_score !== null && (
             <YieldBadge value={cat.yield_score} />
           )}
         </div>
@@ -103,7 +105,7 @@ function CategoryCard({
             >
               {cat.label}
             </Link>
-            {cat.yield_score !== null && (
+            {showYield && cat.yield_score !== null && (
               <YieldBadge value={cat.yield_score} />
             )}
             {cat.role === "foundation" && (
@@ -295,15 +297,15 @@ function MathCourseLandingInner({
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+        <div className="w-full px-6 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
+            <LoderaLogo size={22} />
             <Link
               href="/math"
               className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0"
             >
               ← Math
             </Link>
-            <LoderaLogo size={22} />
             <h1 className="font-semibold text-neutral-900 text-sm truncate">
               {courseLabel}
             </h1>
@@ -321,7 +323,7 @@ function MathCourseLandingInner({
         </div>
 
         {/* Top action row */}
-        <div className="max-w-4xl mx-auto px-4 pb-3 flex flex-wrap gap-2">
+        <div className="w-full px-6 pb-3 flex flex-wrap gap-2">
           <Link href={`/math/${course}/auto`}>
             <Button variant="primary" size="sm">
               Continue

@@ -325,7 +325,7 @@ export default function CategoryBrowsePage({
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
+        <div className="w-full px-6 py-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <Link href="/mcat" className="shrink-0">
               <LoderaLogo size={24} />

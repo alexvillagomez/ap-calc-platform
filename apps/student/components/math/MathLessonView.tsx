@@ -196,7 +196,7 @@ export function MathLessonView({
         </div>
         <button
           onClick={onComplete}
-          className="w-full py-3 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors"
+          className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
         >
           Continue
         </button>
@@ -264,7 +264,7 @@ export function MathLessonView({
               )}
               <button
                 onClick={() => setStepPhase("question")}
-                className="w-full py-3 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors"
+                className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
               >
                 Try a question
               </button>
@@ -315,7 +315,7 @@ export function MathLessonView({
                   <div className="flex justify-end pt-1">
                     <button
                       onClick={handleNext}
-                      className="px-5 py-2.5 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors"
+                      className="px-5 py-2.5 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
                     >
                       {stepIndex + 1 >= totalSteps ? "Finish lesson" : "Next step"}
                     </button>
