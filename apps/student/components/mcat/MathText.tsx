@@ -12,7 +12,30 @@ import katex from "katex";
 
 type Seg = { type: "text" | "inline" | "display"; value: string };
 
+/**
+ * Some generated math content (notably solution_latex) arrives as bare LaTeX —
+ * \text{...} prose with \dfrac etc. but no $ delimiters. Without this, it
+ * would fall through to the plain-text fast path and show raw commands.
+ */
+const BARE_LATEX_RE =
+  /\\(text|d?frac|sqrt|sin|cos|tan|ln|log|cdot|times|pi|theta|left|right|begin|int|sum|lim|infty|le|ge|ne|approx)\b/;
+
+function splitBareLatex(content: string): Seg[] {
+  // Render each paragraph as display math; KaTeX handles \text{} prose fine.
+  return content
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => ({
+      type: BARE_LATEX_RE.test(p) ? ("display" as const) : ("text" as const),
+      value: p,
+    }));
+}
+
 function split(content: string): Seg[] {
+  if (!content.includes("$") && BARE_LATEX_RE.test(content)) {
+    return splitBareLatex(content);
+  }
   const out: Seg[] = [];
   let i = 0;
   const len = content.length;

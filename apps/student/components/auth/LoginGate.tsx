@@ -135,6 +135,7 @@ function LoginScreen({ prompt, onLogin }: LoginScreenProps) {
               id="lg-email"
               type="email"
               autoComplete="email"
+              placeholder="you@example.com"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -143,7 +144,6 @@ function LoginScreen({ prompt, onLogin }: LoginScreenProps) {
                 "focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent",
                 "transition-colors placeholder:text-neutral-300"
               )}
-              placeholder="you@example.com"
             />
           </div>
 

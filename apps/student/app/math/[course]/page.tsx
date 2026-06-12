@@ -161,7 +161,7 @@ function CategoryCard({
       <div className="flex gap-2 pt-1">
         <Link
           href={`/math/${course}/${cat.id}/practice`}
-          className="flex-1 text-center py-2 rounded-xl bg-neutral-900 text-white text-xs font-semibold hover:bg-neutral-700 transition-colors"
+          className="flex-1 text-center py-2 rounded-xl bg-brand-500 text-white text-xs font-semibold hover:bg-brand-600 transition-colors"
         >
           Practice
         </Link>

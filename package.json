@@ -16,7 +16,13 @@
     "mcat:embed": "tsx scripts/embed-mcat.ts",
     "mcat:clean-unembedded": "tsx scripts/delete-unembedded-mcat.ts",
     "mcat:blueprints": "tsx scripts/backfill-mcat-blueprints.ts",
-    "mcat:audit-scope": "tsx scripts/audit-mcat-scope.ts"
+    "mcat:audit-scope": "tsx scripts/audit-mcat-scope.ts",
+    "math:validate": "tsx scripts/validate-math-taxonomy.ts",
+    "math:seed": "tsx scripts/seed-math-taxonomy.ts",
+    "math:embed": "tsx scripts/embed-math.ts",
+    "math:blueprints": "tsx scripts/backfill-math-blueprints.ts",
+    "math:import": "tsx scripts/import-math-problems.ts",
+    "math:yield-writeback": "tsx scripts/writeback-learn-yield.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",

@@ -333,7 +333,7 @@ function MathProgressInner({
           </div>
           <div className="shrink-0">
             <Link href={`/math/${course}/practice`}>
-              <span className="px-3 py-1.5 rounded-lg bg-neutral-900 text-white text-xs font-semibold hover:bg-neutral-700 transition-colors">
+              <span className="px-3 py-1.5 rounded-lg bg-brand-500 text-white text-xs font-semibold hover:bg-brand-600 transition-colors">
                 Practice now
               </span>
             </Link>
@@ -411,7 +411,7 @@ function MathProgressInner({
                   onClick={() => setSectionFilter(null)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
                     sectionFilter === null
-                      ? "bg-neutral-900 text-white border-neutral-900"
+                      ? "bg-brand-500 text-white border-brand-500"
                       : "bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50"
                   }`}
                 >
@@ -423,7 +423,7 @@ function MathProgressInner({
                     onClick={() => setSectionFilter(sec)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
                       sectionFilter === sec
-                        ? "bg-neutral-900 text-white border-neutral-900"
+                        ? "bg-brand-500 text-white border-brand-500"
                         : "bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50"
                     }`}
                   >

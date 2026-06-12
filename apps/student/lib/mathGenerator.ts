@@ -220,10 +220,13 @@ function isValidFlashcard(
 
 const LATEX_RULES = `LATEX RULES (MANDATORY — violations produce unusable output):
 - ALL math MUST be in KaTeX-compatible LaTeX: $...$ for inline, $$...$$ for display.
-- stem_latex: the problem statement. Use \\text{} for prose; math expressions bare (not inside \\text{}).
+- stem_latex: the problem statement as PLAIN PROSE with every math expression wrapped in $...$.
+  E.g. "What is the sign of $\\dfrac{-9}{-3}$?" — never \\text{} for prose, never bare commands.
 - solution_latex: full WORKED SOLUTION showing every step with \\n\\n between steps.
-  Format: \\text{ Prose explanation. } math_result.
-  E.g. "\\text{ Apply the power rule. } \\dfrac{d}{dx}[x^3] = 3x^2."
+  Format: PLAIN PROSE sentences with every math expression wrapped in $...$ (or $$...$$ for a
+  standalone step result). NEVER write bare LaTeX commands outside $ delimiters, and never put
+  prose inside \\text{}.
+  E.g. "Apply the power rule: $\\dfrac{d}{dx}[x^3] = 3x^2$.\\n\\nSo the slope at $x = 2$ is $3(2)^2 = 12$."
 - hint_latex: one sentence max 15 words guiding toward the approach without giving the answer.
 - choices: EXACTLY 4 strings. Each choice that contains math MUST wrap it in $...$. Prose-only choices need no delimiters.
 - NO unicode math symbols (×, ÷, ≤, ≥, √, π in plain text, etc.) — use \\times, \\div, \\leq, \\geq, \\sqrt{}, \\pi instead.

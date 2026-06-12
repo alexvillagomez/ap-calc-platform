@@ -14,6 +14,7 @@ import OpenAI from "openai";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { MathGenError } from "@/lib/mathGenerator";
 import type { ConceptBlueprint, MathCourse } from "@/lib/mathTypes";
+import { fetchAllPages } from "@/lib/mathPagedQuery";
 
 // ─── Cosine similarity ─────────────────────────────────────────────────────────
 
@@ -118,16 +119,24 @@ export async function loadTargetKeywords(
   void course; // suppress unused-var; future: filter via math_course_categories join
   if (categoryIds.length === 0) return [];
 
-  const { data, error } = await supabase
-    .from("math_keywords")
-    .select(
-      "id, label, description, tier, parent_keyword_id, category_id, embedding, concept_blueprint, yield_score"
-    )
-    .in("category_id", categoryIds)
-    .eq("status", "approved")
-    .order("order_index");
-
-  if (error || !data) return [];
+  // Paginated — a whole-course scope (1700+ keywords) exceeds PostgREST's 1000-row cap
+  let data: TargetMathKeyword[];
+  try {
+    data = await fetchAllPages<TargetMathKeyword>((from, to) =>
+      supabase
+        .from("math_keywords")
+        .select(
+          "id, label, description, tier, parent_keyword_id, category_id, embedding, concept_blueprint, yield_score"
+        )
+        .in("category_id", categoryIds)
+        .eq("status", "approved")
+        .order("order_index")
+        .range(from, to)
+    );
+  } catch {
+    return [];
+  }
+  if (!data) return [];
 
   // Group by category
   const byCat = new Map<string, TargetMathKeyword[]>();

@@ -66,8 +66,9 @@ export function StreakBadge({ className }: StreakBadgeProps) {
     return () => window.removeEventListener("lodera-streak-update", handler);
   }, []);
 
-  // Hidden when streak is unknown
-  if (!streak) return null;
+  // Hidden when streak is unknown. Also hidden at 0 — a dead "0" chip is noise
+  // for new users; the badge first appears with the day-1 celebration instead.
+  if (!streak || (streak.current_streak === 0 && !celebrating)) return null;
 
   return (
     <div className={cn("relative inline-flex items-center", className)}>

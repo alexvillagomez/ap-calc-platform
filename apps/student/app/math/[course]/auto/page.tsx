@@ -908,7 +908,7 @@ function MathAutoInner({
             <div className="flex flex-col gap-2">
               <Link
                 href={`/math/${course}/diagnostic?return=auto`}
-                className="w-full py-3 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors text-center"
+                className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors text-center"
               >
                 Take placement diagnostic
               </Link>
@@ -984,7 +984,7 @@ function MathAutoInner({
             <div className="flex flex-col gap-2">
               <button
                 onClick={handleTakeQuiz}
-                className="w-full py-3 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors"
+                className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
               >
                 Take checkpoint quiz
               </button>
@@ -1037,7 +1037,7 @@ function MathAutoInner({
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => advanceToNextCategory(sessionId)}
-                className="w-full py-3 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors"
+                className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
               >
                 Find spaced review
               </button>
@@ -1195,7 +1195,7 @@ function MathAutoInner({
                 />
                 <button
                   onClick={handleNext}
-                  className="w-full py-3 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors"
+                  className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
                 >
                   Continue
                 </button>
@@ -1271,7 +1271,7 @@ function MathAutoInner({
             {phase === "mini_quiz_revealed" && (
               <button
                 onClick={handleQuizNext}
-                className="w-full py-3 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors"
+                className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
               >
                 {quizIndex + 1 >= quizQuestions.length ? "Continue" : "Next"}
               </button>
@@ -1285,7 +1285,7 @@ function MathAutoInner({
             <p className="text-neutral-900 font-semibold">Session complete!</p>
             <button
               onClick={() => advanceToNextCategory(sessionId)}
-              className="w-full py-3 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors"
+              className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
             >
               Continue
             </button>

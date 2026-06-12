@@ -11,6 +11,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import type { MathCourse } from "@/lib/mathTypes";
+import { fetchAllPages } from "@/lib/mathPagedQuery";
 
 export const runtime = "nodejs";
 
@@ -61,21 +62,26 @@ export async function GET(request: Request) {
     ])
   );
 
-  // Load categories + keywords in parallel
-  const [categoriesRes, keywordsRes] = await Promise.all([
+  // Load categories + keywords in parallel (keywords paginated — a course's
+  // full keyword set exceeds PostgREST's 1000-row cap)
+  const [categoriesRes, keywordRows] = await Promise.all([
     supabase
       .from("math_categories")
       .select("id, label, description, section, ced_unit, yield_score, yield_rationale, order_index")
       .in("id", categoryIds),
-    supabase
-      .from("math_keywords")
-      .select(
-        "id, category_id, label, description, tier, parent_keyword_id, order_index, yield_score, yield_rationale"
-      )
-      .in("category_id", categoryIds)
-      .eq("status", "approved")
-      .order("order_index"),
+    fetchAllPages<Record<string, unknown>>((from, to) =>
+      supabase
+        .from("math_keywords")
+        .select(
+          "id, category_id, label, description, tier, parent_keyword_id, order_index, yield_score, yield_rationale"
+        )
+        .in("category_id", categoryIds)
+        .eq("status", "approved")
+        .order("order_index")
+        .range(from, to)
+    ),
   ]);
+  const keywordsRes = { data: keywordRows, error: null };
 
   if (categoriesRes.error) {
     return NextResponse.json(

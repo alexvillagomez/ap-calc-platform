@@ -36,6 +36,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import type { MathCourse } from "@/lib/mathTypes";
+import { fetchAllPages } from "@/lib/mathPagedQuery";
 
 export const runtime = "nodejs";
 
@@ -120,15 +121,19 @@ export async function GET(request: Request) {
     return aOrd - bOrd;
   });
 
-  // 3. Load all keywords for these categories (in_depth preferred, umbrella fallback)
-  const { data: allKeywords } = await supabase
-    .from("math_keywords")
-    .select(
-      "id, category_id, tier, parent_keyword_id, label, yield_score, order_index"
-    )
-    .in("category_id", categoryIds)
-    .eq("status", "approved")
-    .order("order_index");
+  // 3. Load all keywords for these categories (in_depth preferred, umbrella fallback).
+  // Paginated — a whole-course scope (1700+ keywords) exceeds PostgREST's 1000-row cap.
+  const allKeywords = await fetchAllPages<Record<string, unknown>>((from, to) =>
+    supabase
+      .from("math_keywords")
+      .select(
+        "id, category_id, tier, parent_keyword_id, label, yield_score, order_index"
+      )
+      .in("category_id", categoryIds)
+      .eq("status", "approved")
+      .order("order_index")
+      .range(from, to)
+  ).catch(() => null);
 
   const keywordRows = allKeywords ?? [];
 

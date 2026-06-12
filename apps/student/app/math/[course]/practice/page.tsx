@@ -517,7 +517,7 @@ function MathGeneralPracticeInner({
                 <button
                   onClick={handleStart}
                   disabled={totalSelected === 0}
-                  className="shrink-0 px-4 py-2.5 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="shrink-0 px-4 py-2.5 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 >
                   Start
                 </button>
@@ -730,7 +730,7 @@ function MathGeneralPracticeInner({
                   </button>
                   <button
                     onClick={handleNext}
-                    className="flex-1 py-3 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors"
+                    className="flex-1 py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
                   >
                     Next question
                   </button>

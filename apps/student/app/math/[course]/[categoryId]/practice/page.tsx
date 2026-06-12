@@ -555,7 +555,7 @@ function MathPracticeInner({
                   onClick={() => setDifficultyMode(value)}
                   className={`px-2.5 py-1 transition-colors font-medium ${
                     difficultyMode === value
-                      ? "bg-neutral-900 text-white"
+                      ? "bg-brand-500 text-white"
                       : "bg-white text-neutral-500 hover:bg-neutral-50"
                   }`}
                 >
@@ -788,7 +788,7 @@ function MathPracticeInner({
                   )}
                   <button
                     onClick={handleNext}
-                    className="flex-1 py-3 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors"
+                    className="flex-1 py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
                   >
                     {nextButtonLabel()}
                   </button>
@@ -847,7 +847,7 @@ function MathPracticeInner({
                   setStats({ answered: 0, correct: 0, lessons: 0, topicsMastered: 0 });
                   fetchQueue(sessionId);
                 }}
-                className="w-full py-3 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors"
+                className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
               >
                 Practice again
               </button>

@@ -329,7 +329,7 @@ function MathCategoryQuizInner({
               <div className="flex gap-2 justify-center flex-wrap">
                 <button
                   onClick={() => fetchQuiz(sessionId)}
-                  className="px-5 py-2.5 rounded-xl bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-700 transition-colors"
+                  className="px-5 py-2.5 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
                 >
                   New quiz
                 </button>
