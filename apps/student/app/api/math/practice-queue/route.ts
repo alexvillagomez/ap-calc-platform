@@ -51,6 +51,7 @@ export async function GET(request: Request) {
   const categoryId = searchParams.get("category_id");
   const umbrellaId = searchParams.get("umbrella_id");
   const keywordId = searchParams.get("keyword_id");
+  const keywordIds = searchParams.getAll("keyword_ids").filter(Boolean);
 
   if (!sessionId) {
     return NextResponse.json(
@@ -140,6 +141,14 @@ export async function GET(request: Request) {
       );
     }
     queueKeywords = [match];
+  } else if (keywordIds.length > 0) {
+    // Scoped set (auto mode sends its next_focus keywords as repeated keyword_ids params).
+    // Unknown ids are ignored rather than 404ing; empty match falls back to the full scope.
+    const idSet = new Set(keywordIds);
+    const matches = allKeywords.filter((k) => idSet.has(k.id));
+    if (matches.length > 0) {
+      queueKeywords = matches;
+    }
   } else if (umbrellaId) {
     if (!umbrellaMap.has(umbrellaId)) {
       return NextResponse.json(
