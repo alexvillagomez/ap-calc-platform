@@ -21,6 +21,11 @@ Guidance for Claude Code working in this repo. This file holds only the always-n
 | [docs/weights-research.md](docs/weights-research.md) | Design + simulation behind the diagnostic evidence-propagation layer. |
 | [docs/platform-overview.md](docs/platform-overview.md) | A full prose walkthrough of the whole platform (long-form onboarding read). |
 | [docs/research-index.md](docs/research-index.md) | Index of all research/notes files in the repo. |
+| [docs/math-research/design-spec.md](docs/math-research/design-spec.md) | The **`/math`** system (precalc + AP Calc AB) — authoritative spec: 19-category MECE taxonomy, course-as-view model, numeric 0–1 yield, generation pipeline, diagnostic + auto mode. **Read for anything `/math` or `math_*`.** |
+| [docs/math-research/db-inventory.md](docs/math-research/db-inventory.md) + [precalc-outline.md](docs/math-research/precalc-outline.md) + [calc-ab-outline.md](docs/math-research/calc-ab-outline.md) | CED research grounding the math taxonomy/yields; legacy-data import mapping. |
+| [docs/math-research/issues-log.md](docs/math-research/issues-log.md) + [persona-qa.md](docs/math-research/persona-qa.md) | Known issues, QA findings, deferred work (incl. the deferred DB cleanup plan in db-cleanup-plan.md). |
+| [apps/student/docs/brand.md](apps/student/docs/brand.md) | **Lodera** brand system — palette, logo usage, voice, animation/sound principles. |
+| [docs/gamification.md](docs/gamification.md) | Streaks/combo/sound wiring recipe for answer flows (math + MCAT). |
 
 ---
 
@@ -37,9 +42,19 @@ npm run mcat:expand  # Generate in-depth MCAT keywords per umbrella
 npm run mcat:embed   # Embed + retag MCAT keywords/questions/flashcards
 npm run mcat:blueprints  # Backfill per-keyword concept blueprints + AAMC yield (fill-missing; --force/--umbrella/--category/--keyword)
 npm run mcat:audit-scope # Audit stored questions vs their keyword blueprint; --apply to quarantine out-of-scope
+npm run math:validate    # Validate content/math-taxonomy/*.json against the design-spec format
+npm run math:seed        # Upsert math taxonomy (categories/courses/keywords/prereq edges) into math_* tables
+npm run math:embed       # Embed math_keywords (text-embedding-3-small); paginated + resume-safe
+npm run math:blueprints  # Backfill math concept blueprints (yields stay as authored; fill-missing only)
+npm run math:import      # Import rag_examples + learn practice/quiz problems into math_questions (idempotent)
+npm run math:yield-writeback # Write numeric yield back onto learn_keywords via source_learn_keyword_id
 ```
 
 The MCAT (`/mcat`) Biology feature is fully documented in [docs/mcat-system.md](docs/mcat-system.md) — it uses isolated `mcat_*` tables and never touches the precalc `learn_*`/`problems` pools. **Biology only; do not expand to other sections unless asked.**
+
+The math (`/math`) feature — **precalc + AP Calc AB**, modeled on the MCAT architecture — uses isolated `math_*` tables (courses are views over shared categories via `math_course_categories`; precalc lives standalone AND as the foundation layer inside calc). Taxonomy source of truth is `content/math-taxonomy/*.json` (seeded via `math:seed`; never hand-edit the DB). Yield is numeric 0–1 and drives queue prioritization; **the calc course hides yield badges in the UI by design** (precalc shows them). Generation = gpt-5.4-mini, reason-first, blind-solve verified; all content is prose with `$...$`-delimited KaTeX (`MathText` has a bare-LaTeX fallback for legacy rows). Whole-course keyword queries MUST paginate via `lib/mathPagedQuery.ts` — PostgREST caps at 1000 rows silently.
+
+**Lodera rebrand**: the product is **Lodera** (`components/brand/LoderaLogo.tsx`, tokens `brand-*` in tailwind config + globals.css, primitives in `components/ui/`). Onboarding at `/` (general intro → Math | MCAT choice → center); login is email+username+password with auto-signup, no verification (`app_users` + scrypt, httpOnly `lodera_uid` cookie; legacy `student_accounts` auth still exists for old demo flows). Gamification: `lib/gamification.ts` + `user_streaks` (+`/api/streak/touch`) — wiring recipe in docs/gamification.md.
 
 The admin app has pre-existing build errors (missing exports in `lib/ai/prompts.ts`); the student app builds cleanly. `next build` runs ESLint and **fails on errors** (e.g. `prefer-const`, unused vars) — keep code clean.
 
