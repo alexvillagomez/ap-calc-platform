@@ -1,0 +1,763 @@
+{
+  "category": {
+    "id": "exponential_and_logarithmic_functions",
+    "label": "Exponential and Logarithmic Functions",
+    "description": "Covers the behavior, manipulation, and modeling applications of exponential and logarithmic functions, including composition and inverse relationships, log-rule algebra, and solving exponential/logarithmic equations and inequalities. Spans AP Precalculus Unit 2 topics 2.1–2.15.",
+    "section": "ap_precalc",
+    "ced_unit": "AP Precalc Unit 2",
+    "courses": [
+      {"course": "precalc", "role": "core", "order_index": 9},
+      {"course": "calc_ab", "role": "foundation", "order_index": 9}
+    ],
+    "yield_score": 0.87,
+    "yield_rationale": "Unit 2 carries 27–40% of the AP Precalc exam; FRQs 2 and 4 both draw from this unit; log-rule manipulation and solving equations are among the most explicitly tested symbolic skills."
+  },
+  "umbrellas": [
+    {
+      "id": "exp_log_arithmetic_geometric_sequences",
+      "label": "Arithmetic and Geometric Sequences",
+      "description": "Distinguishes constant additive change (arithmetic sequences) from constant multiplicative change (geometric sequences); connects each sequence type to its corresponding continuous function family as a conceptual bridge.",
+      "ced_topics": ["2.1"],
+      "yield_score": 0.62,
+      "yield_rationale": "Moderate MC frequency; primarily a conceptual bridge into the exponential unit rather than a standalone heavily-tested cluster.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_arithmetic_sequence_common_difference",
+          "label": "Arithmetic Sequence Common Difference",
+          "description": "Identifies the constant additive difference between consecutive terms and uses it to write the explicit formula a_n = a_1 + (n-1)d; connects to the slope of a linear function.",
+          "yield_score": 0.55,
+          "yield_rationale": "Background fluency item; tested as a conceptual gateway, not as a standalone high-frequency MC target.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_geometric_sequence_common_ratio",
+          "label": "Geometric Sequence Common Ratio",
+          "description": "Identifies the constant multiplicative ratio r between consecutive terms and writes the explicit formula a_n = a_1 * r^(n-1); connects to the base of an exponential function.",
+          "yield_score": 0.65,
+          "yield_rationale": "Directly previews exponential function structure; tested in MC items that ask students to identify growth/decay from a table.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_sequence_type_classification_from_table",
+          "label": "Classifying Sequence Type from a Table",
+          "description": "Determines whether a table of equally-spaced values represents an arithmetic or geometric sequence by testing for constant differences vs. constant ratios.",
+          "yield_score": 0.72,
+          "yield_rationale": "A standard MC item type; classification from tabular data is explicitly listed in CED 2.1 and appears across prep-site practice sets. Yield raised to 0.72: direct MC type with clean one-question testability.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_sequence_to_function_connection",
+          "label": "Connecting Sequences to Function Families",
+          "description": "Articulates that arithmetic sequences model the same additive change as linear functions (constant rate) and geometric sequences model the same multiplicative change as exponential functions (constant percent change).",
+          "yield_score": 0.60,
+          "yield_rationale": "Conceptual justification item; appears in FRQ 2 justification parts and some MC reasoning prompts.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_linear_vs_exponential_change",
+      "label": "Linear vs. Exponential Change",
+      "description": "Compares and contrasts linear functions (constant additive rate of change) with exponential functions (constant proportional/multiplicative rate of change) across symbolic, graphical, and tabular representations.",
+      "ced_topics": ["2.2"],
+      "yield_score": 0.70,
+      "yield_rationale": "Central conceptual distinction explicitly tested in MC modeling questions and required in FRQ 2 justifications for model selection.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_constant_additive_change_linear",
+          "label": "Constant Additive Change in Linear Functions",
+          "description": "Recognizes that equal input increments produce equal output differences in a linear function; links this to the constant slope interpretation.",
+          "yield_score": 0.60,
+          "yield_rationale": "Prerequisite contrast item; tested alongside exponential comparison rather than in isolation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_constant_proportional_change_exponential",
+          "label": "Constant Proportional Change in Exponential Functions",
+          "description": "Recognizes that equal input increments produce outputs that change by a constant multiplicative factor in an exponential function; connects to the concept of percent change per unit.",
+          "yield_score": 0.75,
+          "yield_rationale": "Directly tested in MC questions presenting tables or graphs and asking which model applies; high conceptual centrality in the unit.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_linear_exponential_discrimination_from_table",
+          "label": "Discriminating Linear vs. Exponential from a Table",
+          "description": "Uses the pattern of first differences (constant → linear) vs. ratios (constant → exponential) in equally-spaced input tables to determine the correct function family.",
+          "yield_score": 0.78,
+          "yield_rationale": "A high-frequency MC item type; appears on nearly every practice exam and is a standard College Board item stem.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_eventual_dominance_of_exponential",
+          "label": "Long-Run Dominance of Exponential Growth over Linear",
+          "description": "Explains that exponential functions with base b > 1 eventually exceed any linear function; interprets this graphically as the exponential overtaking the line for large inputs.",
+          "yield_score": 0.55,
+          "yield_rationale": "Conceptual reasoning item; appears in MP3 (communication) FRQ parts asking students to justify comparisons.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_percent_change_interpretation",
+          "label": "Percent Change as the Unit Rate of Exponential Growth/Decay",
+          "description": "Interprets the base b of f(x) = ab^x as a per-unit percent change factor: b = 1 + r where r is the decimal growth/decay rate; identifies growth (b > 1) vs. decay (0 < b < 1).",
+          "yield_score": 0.80,
+          "yield_rationale": "Explicitly required for FRQ 2 context interpretation; one of the most common MC item targets in the exponential cluster.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_exponential_functions",
+      "label": "Exponential Functions",
+      "description": "Defines, evaluates, and analyzes exponential functions of the form f(x) = ab^x; identifies the initial value a, base b, domain (all reals), range (y > 0 or y < 0), horizontal asymptote, and end behavior.",
+      "ced_topics": ["2.3"],
+      "yield_score": 0.82,
+      "yield_rationale": "Core function type for the unit; appears in FRQ 2 and throughout MC; students must fluently read, build, and interpret exponential function structure.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_exponential_function_initial_value_and_base",
+          "label": "Initial Value and Base of an Exponential Function",
+          "description": "Identifies a as the y-intercept (output when x = 0) and b as the constant multiplicative factor per unit input in f(x) = ab^x; distinguishes between growth (b > 1) and decay (0 < b < 1) from b alone.",
+          "yield_score": 0.82,
+          "yield_rationale": "Directly tested in MC reading and context items; the two defining parameters appear in almost every exponential question.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_exponential_domain_and_range",
+          "label": "Domain and Range of Exponential Functions",
+          "description": "States that all exponential functions f(x) = ab^x have domain all real numbers and range (0, ∞) when a > 0 (or (-∞, 0) when a < 0); identifies how vertical translations shift the range and horizontal asymptote.",
+          "yield_score": 0.72,
+          "yield_rationale": "Domain and range questions appear consistently in MC; the asymptote relationship is tested both symbolically and graphically.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_horizontal_asymptote_exponential",
+          "label": "Horizontal Asymptote of an Exponential Function",
+          "description": "Identifies the horizontal asymptote of f(x) = ab^x + k as y = k; explains that the function approaches but never reaches the asymptote as x → -∞ (growth) or x → +∞ (decay).",
+          "yield_score": 0.75,
+          "yield_rationale": "A standard MC question target; the asymptote location and the direction of approach are frequently tested in both symbolic and graphical forms.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_exponential_end_behavior",
+          "label": "End Behavior of Exponential Functions",
+          "description": "Describes the end behavior of f(x) = ab^x using limit notation or words: for b > 1 the function grows without bound as x → +∞ and approaches 0 as x → -∞; reverses for 0 < b < 1.",
+          "yield_score": 0.70,
+          "yield_rationale": "End-behavior reasoning appears in FRQ 1 (function concepts) and MC; must be linked to growth/decay classification.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_exponential_function_evaluation",
+          "label": "Evaluating Exponential Functions at Given Inputs",
+          "description": "Substitutes numeric values (including fractions and negatives) into f(x) = ab^x or a contextual exponential model; computes the output using correct order of operations with exponents.",
+          "yield_score": 0.65,
+          "yield_rationale": "Procedural fluency item; tested frequently in calculator-active MC but also in function-notation reading tasks.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_natural_base_e_definition",
+          "label": "The Natural Base e and Recognizing f(x) = ae^(rx)",
+          "description": "Identifies e ≈ 2.718 as the natural (Euler) base; writes and evaluates f(x) = ae^(rx); recognizes this form as an exponential function and evaluates it at given inputs using correct order of operations.",
+          "yield_score": 0.68,
+          "yield_rationale": "The natural base appears in modeling contexts (continuous compounding, biological growth) in FRQ 2 and some MC items. Narrowed to identification and evaluation only; continuous-rate interpretation split to separate keyword.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_continuous_growth_rate_r",
+          "label": "Interpreting r as the Continuous Growth/Decay Rate",
+          "description": "Interprets the parameter r in f(x) = ae^(rx) as the continuous growth rate (r > 0) or continuous decay rate (r < 0); converts between ae^(rx) and the equivalent ab^x form using b = e^r, and back-converts using r = ln(b).",
+          "yield_score": 0.72,
+          "yield_rationale": "Converting between continuous and discrete exponential forms is tested in FRQ 2 context items and MC equivalent-form questions; distinct testable skill from mere identification of e.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_exponential_manipulation",
+      "label": "Exponential Function Manipulation",
+      "description": "Rewrites exponential expressions by applying exponent laws; converts between equivalent exponential forms including rational exponents, changes of base, and products/quotients of powers.",
+      "ced_topics": ["2.4"],
+      "yield_score": 0.78,
+      "yield_rationale": "Required for FRQ 4 (symbolic manipulations) and as a prerequisite for solving exponential equations; exponent-law fluency is among the most load-bearing algebraic skills in the unit.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_rewrite_with_exponent_laws",
+          "label": "Rewriting Exponential Expressions Using Exponent Laws",
+          "description": "Applies product, quotient, and power-of-power rules to simplify or rewrite exponential expressions such as b^m * b^n = b^(m+n) and (b^m)^n = b^(mn) in the context of function manipulation.",
+          "yield_score": 0.80,
+          "yield_rationale": "Directly tested in FRQ 4 and MC symbolic-manipulation items; the single most load-bearing algebraic tool in Unit 2.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_rational_exponent_to_radical_form",
+          "label": "Connecting Rational Exponents to Radical Form",
+          "description": "Converts between b^(m/n) and the nth-root radical form (n-th root of b^m); applies this equivalence to rewrite exponential functions in alternate forms.",
+          "yield_score": 0.75,
+          "yield_rationale": "Explicitly listed in CED 2.4; connects back to foundation category exponents_and_radicals; tested in both MC and FRQ 4.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_change_of_base_rewrite",
+          "label": "Change of Base for Equivalent Exponential Representations",
+          "description": "Rewrites an exponential function f(x) = a * b^x in an equivalent form with a different base using b = c^(log_c(b)); recognizes that the same function can be expressed with base e or base 10.",
+          "yield_score": 0.72,
+          "yield_rationale": "A higher-level manipulation skill tested in FRQ 4 and in MC items requiring equivalent-form recognition.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_single_base_product_quotient",
+          "label": "Combining Exponential Expressions with the Same Base",
+          "description": "Simplifies products b^m * b^n and quotients b^m / b^n by adding or subtracting exponents; applies this to expressions where m or n are variables or linear expressions.",
+          "yield_score": 0.78,
+          "yield_rationale": "Fundamental manipulation that appears in both solving and equivalent-form items; high cross-topic usage.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_negative_and_zero_exponent_in_exponential",
+          "label": "Negative and Zero Exponents in Exponential Expressions",
+          "description": "Applies b^0 = 1 and b^(-n) = 1/b^n to rewrite exponential function values; interprets negative exponents as decay or reciprocal factors in context.",
+          "yield_score": 0.58,
+          "yield_rationale": "Exponent-rule fluency item; tested in simplification and evaluation tasks across the unit. Yield lowered to 0.58 to reflect overlap with F6 (exponents_and_radicals) foundations coverage — students who mastered F6 can transfer directly.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_exponential_modeling",
+      "label": "Exponential Context and Data Modeling",
+      "description": "Constructs exponential models from real-world data or two given points; interprets the initial value and growth/decay rate in context; uses residual analysis or comparison criteria to validate or critique model choices.",
+      "ced_topics": ["2.5", "2.6"],
+      "yield_score": 0.83,
+      "yield_rationale": "FRQ 2 regularly features exponential context modeling; model validation (2.6) appears in FRQ 2 justification sub-parts; together these are among the most heavily FRQ-weighted clusters.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_model_from_two_points",
+          "label": "Building an Exponential Model from Two Data Points",
+          "description": "Writes the exponential function f(x) = ab^x by solving the 2-equation system formed from two given (x, f(x)) pairs; identifies a and b exactly.",
+          "yield_score": 0.85,
+          "yield_rationale": "A standard FRQ 2 task; two-point model construction is one of the most directly tested procedural skills in the unit.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_interpret_parameters_in_context",
+          "label": "Interpreting Exponential Parameters in Context",
+          "description": "Translates the values of a and b (or r in f(x) = ae^(rx)) into meaningful contextual statements (e.g., 'the population starts at 500 and grows by 8% each year').",
+          "yield_score": 0.88,
+          "yield_rationale": "Context-interpretation questions appear in nearly every FRQ 2 and in many MC items; among the highest-frequency tested skills in the unit.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_regression_model_technology",
+          "label": "Exponential Regression Using Technology",
+          "description": "Uses a graphing calculator or similar tool to fit an exponential regression model to a data set; reads the values of a and b from the regression output and interprets them.",
+          "yield_score": 0.70,
+          "yield_rationale": "Tested in the calculator-active MC and FRQ 2 sections; the regression step itself is technology-driven, but reading and interpreting the output is assessed.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_residual_and_model_validation",
+          "label": "Residuals and Model Validation",
+          "description": "Computes or interprets residuals (actual minus predicted values); uses a residual plot to judge whether an exponential (or linear) model is appropriate, identifying patterns that indicate poor fit.",
+          "yield_score": 0.55,
+          "yield_rationale": "Model-validation reasoning appears specifically in FRQ 2 justification sub-parts (2.6 content); less frequently a standalone MC target.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_model_assumptions_and_limitations",
+          "label": "Stating Assumptions and Limitations of an Exponential Model",
+          "description": "Articulates explicit assumptions (e.g., constant growth rate, no resource limits) and limitations (e.g., model breaks down for very large t) of an exponential model in a given context.",
+          "yield_score": 0.62,
+          "yield_rationale": "Appears in FRQ 2 as a justification/critique task (MP3); tested more for communication than computation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_model_application_prediction",
+          "label": "Applying an Exponential Model to Make Predictions",
+          "description": "Substitutes input values into a constructed or given exponential model to predict future or past output values; interprets the prediction in the units and context of the problem.",
+          "yield_score": 0.80,
+          "yield_rationale": "The final step of FRQ 2 modeling tasks and a frequent MC question type; tests both computation and contextual interpretation.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_composition_of_functions",
+      "label": "Composition of Functions",
+      "description": "Evaluates, constructs, and decomposes compositions of two or more functions using function notation (f∘g)(x) = f(g(x)); identifies the domain of a composition and interprets composed functions in context.",
+      "ced_topics": ["2.7"],
+      "yield_score": 0.75,
+      "yield_rationale": "FRQ 1 explicitly covers composition; it is also tested in MC and is the direct prerequisite for inverse functions (2.8); the spec places composition squarely in P2.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_composition_evaluate_at_value",
+          "label": "Evaluating a Composition at a Specific Input",
+          "description": "Computes (f∘g)(a) by first finding g(a) then substituting that value into f; handles both numeric and symbolic inputs and distinguishes (f∘g)(a) from (g∘f)(a).",
+          "yield_score": 0.78,
+          "yield_rationale": "Procedural composition evaluation is a direct FRQ 1 task and a frequent MC item.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_composition_symbolic_formula",
+          "label": "Finding the Symbolic Formula for a Composition",
+          "description": "Derives the formula for (f∘g)(x) by substituting the formula of g(x) into f; simplifies the resulting expression including cases with exponential or logarithmic components.",
+          "yield_score": 0.80,
+          "yield_rationale": "Symbolic composition construction is a core FRQ 1 and MC skill; appears in both no-calculator and calculator sections.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_composition_decomposition",
+          "label": "Decomposing a Function into a Composition",
+          "description": "Identifies inner and outer functions h and g such that f(x) = h(g(x)); recognizes standard decomposition patterns (e.g., a power applied to a log, or an exponential of a linear function).",
+          "yield_score": 0.65,
+          "yield_rationale": "Decomposition appears in FRQ 1 and is a prerequisite skill for chain-rule reasoning in later calculus; moderate standalone frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_composition_domain",
+          "label": "Domain of a Composed Function",
+          "description": "Determines the domain of (f∘g)(x) by requiring that x is in the domain of g and g(x) is in the domain of f; identifies restrictions introduced by square roots or logarithms in composed expressions.",
+          "yield_score": 0.60,
+          "yield_rationale": "Domain of compositions appears in MC items; requires careful reasoning about input restrictions from each component function.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_composition_from_table_or_graph",
+          "label": "Evaluating Compositions from Tables or Graphs",
+          "description": "Uses tabular or graphical representations of f and g to compute (f∘g)(a) by reading g(a) from one representation and then f of that value from another.",
+          "yield_score": 0.68,
+          "yield_rationale": "Multiple-representation composition tasks appear in FRQ 1 and in the representation-focused MC items (MP2).",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_inverse_functions",
+      "label": "Inverse Functions",
+      "description": "Determines input-output pairs of an inverse function; identifies domains on which a function is invertible; connects f and f⁻¹ graphically (reflection over y = x) and algebraically (swapping x and y to solve for the inverse formula).",
+      "ced_topics": ["2.8"],
+      "yield_score": 0.80,
+      "yield_rationale": "FRQ 1 frequently involves inverse functions; consistent MC topic; inverses of exponentials directly motivate logarithms (2.10); the spec places inverses squarely in P2.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_inverse_input_output_swap",
+          "label": "Inverse Function Input-Output Pair Reversal",
+          "description": "Identifies that if (a, b) is on f then (b, a) is on f⁻¹; uses this to evaluate f⁻¹ at specific values from a table or graph without finding the inverse formula.",
+          "yield_score": 0.75,
+          "yield_rationale": "A direct FRQ 1 task type and a standard MC item; tests conceptual understanding of inverse function definition. Yield lowered to 0.75: prerequisite concept — tests the definition rather than the full inverse-derivation procedure.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_inverse_formula_derivation",
+          "label": "Deriving the Inverse Function Formula Algebraically",
+          "description": "Finds f⁻¹(x) by swapping x and y in y = f(x), then solving for y; applies to exponential functions (yielding logarithms) and polynomial/rational functions.",
+          "yield_score": 0.82,
+          "yield_rationale": "Algebraic inverse derivation is tested in FRQ 1 and in no-calculator MC; the procedure connects directly to the definition of logarithm.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_domain_restriction_for_invertibility",
+          "label": "Restricting the Domain of an Exponential or Logarithmic Function to Create an Invertible Function",
+          "description": "Identifies a maximal sub-domain on which a non-one-to-one exponential or logarithmic function (e.g., f(x) = e^|x| or a piecewise exponential) becomes one-to-one and therefore invertible; justifies the restriction and states the resulting restricted domain.",
+          "yield_score": 0.62,
+          "yield_rationale": "Domain-restriction for invertibility in the exp/log context appears in FRQ 1 justification parts and higher-difficulty MC; narrower than the general HLT concept (which belongs in functions_and_graphs).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_inverse_graphical_reflection",
+          "label": "Graphical Relationship Between f and f⁻¹",
+          "description": "Describes and applies the fact that the graph of f⁻¹ is the reflection of the graph of f over the line y = x; uses this to sketch f⁻¹ or to identify key points from the graph of f.",
+          "yield_score": 0.72,
+          "yield_rationale": "Graphical inverse tasks appear in FRQ 1 and MC; the y = x reflection property is a standard College Board question type.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_inverse_composition_verification",
+          "label": "Verifying an Inverse Using Composition",
+          "description": "Confirms that g is the inverse of f by showing that (f∘g)(x) = x and (g∘f)(x) = x; applies this check symbolically or at specific values.",
+          "yield_score": 0.58,
+          "yield_rationale": "Verification appears in FRQ 1 justification parts; also a standard MC distractor target (students confuse inverse with reciprocal).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_inverse_domain_and_range_swap",
+          "label": "Domain and Range of an Inverse Function",
+          "description": "States that the domain of f⁻¹ equals the range of f and the range of f⁻¹ equals the domain of f; applies this principle to exponential-logarithmic inverse pairs.",
+          "yield_score": 0.68,
+          "yield_rationale": "Domain/range of inverses is tested in MC and FRQ 1; the asymmetric domain/range swap for exp/log pairs is a frequent item.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_logarithmic_expressions",
+      "label": "Logarithmic Expressions",
+      "description": "Evaluates and interprets logarithmic expressions by reading log_b(x) as 'the exponent to which b must be raised to get x'; computes logarithms at exact values including common (base 10) and natural (base e) logs.",
+      "ced_topics": ["2.9"],
+      "yield_score": 0.76,
+      "yield_rationale": "Logarithm evaluation is an MC staple and the prerequisite for all subsequent log topics (2.10–2.13); fluency here is load-bearing throughout the second half of the unit.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_log_as_exponent_question",
+          "label": "Reading log_b(x) as an Exponent Question",
+          "description": "Interprets log_b(x) = L as the statement b^L = x; converts between logarithmic and exponential form to evaluate exact logarithm values.",
+          "yield_score": 0.82,
+          "yield_rationale": "The definitional interpretation is the most tested single skill in the logarithm cluster; appears in MC and FRQ 4 no-calculator items.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_evaluate_common_log",
+          "label": "Evaluating Common Logarithms (Base 10)",
+          "description": "Computes log(x) (base 10) at exact values such as log(1), log(10), log(100), log(0.1); interprets the result as a power of 10.",
+          "yield_score": 0.70,
+          "yield_rationale": "Common log evaluation is a frequent no-calculator MC item and appears in semi-log plot interpretation (2.15).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_evaluate_natural_log",
+          "label": "Evaluating Natural Logarithms (ln)",
+          "description": "Computes ln(x) (base e) at exact values such as ln(1) = 0, ln(e) = 1, ln(e^k) = k; interprets ln as the inverse of the natural exponential.",
+          "yield_score": 0.75,
+          "yield_rationale": "Natural log evaluation appears in MC and FRQ 4; the ln/e inverse pair is the most used exact-value log relationship in the course.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_exact_log_values_special",
+          "label": "Exact Logarithm Values at Integer and Unit-Fraction Powers",
+          "description": "Evaluates log_b(b^n) = n, log_b(1) = 0, and log_b(b^(1/n)) = 1/n without a calculator by recognizing the exponent structure of the argument.",
+          "yield_score": 0.78,
+          "yield_rationale": "These special-value evaluations are required in the no-calculator MC section and FRQ 4; directly tests definitional fluency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_exponential_to_log_form_conversion",
+          "label": "Converting Between Exponential and Logarithmic Form",
+          "description": "Rewrites b^L = x as log_b(x) = L and vice versa; applies this conversion to set up equations or to evaluate unfamiliar logarithm expressions.",
+          "yield_score": 0.80,
+          "yield_rationale": "Form conversion is a gateway skill tested directly in MC and is the mechanism used in equation-solving (2.13).",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_inverses_of_exponential_functions",
+      "label": "Inverses of Exponential Functions",
+      "description": "Establishes the logarithm as the inverse function of the exponential; demonstrates that log_b undoes b^x; connects the graphs of b^x and log_b(x) as reflections over y = x.",
+      "ced_topics": ["2.10"],
+      "yield_score": 0.78,
+      "yield_rationale": "The exponential-logarithm inverse relationship is the conceptual hinge of the entire unit; directly enables equation-solving in 2.13 and is tested in both MC and FRQ parts.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_log_undoes_exponential",
+          "label": "Logarithm as the Undoing Operation for an Exponential",
+          "description": "Demonstrates that log_b(b^x) = x for all real x and b^(log_b(x)) = x for x > 0; uses these identities to simplify composed exponential-log expressions.",
+          "yield_score": 0.85,
+          "yield_rationale": "These cancellation identities are the algebraic mechanism for solving exponential equations; among the most tested symbolic skills in the unit.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_exp_log_graph_reflection",
+          "label": "Graphical Inverse Relationship of b^x and log_b(x)",
+          "description": "Identifies the graph of log_b(x) as the reflection of b^x over the line y = x; uses key points (such as (0,1) on b^x mapping to (1,0) on log_b(x)) to sketch or compare graphs.",
+          "yield_score": 0.72,
+          "yield_rationale": "Graphical inverse recognition is tested in MC and FRQ 1; the key-point symmetry is a standard item type.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_inverses_domain_range_connection",
+          "label": "Domain and Range Swap for exp/log Inverse Pair",
+          "description": "States that the domain of b^x (all reals) becomes the range of log_b(x) and vice versa; interprets the range restriction of log (positive reals only) as a consequence of the exponential's range.",
+          "yield_score": 0.60,
+          "yield_rationale": "Domain/range of log functions is a consistent MC question; the connection to the exponential inverse pair is the cleanest explanation. Yield lowered to 0.60: conceptual link — not a standalone MC target in isolation; students encounter this as part of broader domain/range items.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_applying_inverse_to_isolate_exponent",
+          "label": "Applying log_b to Both Sides to Isolate an Exponent",
+          "description": "Uses the inverse relationship to isolate the variable in an exponential equation by applying log_b to both sides, turning b^x = c into x = log_b(c); this is the bridge concept toward 2.13.",
+          "yield_score": 0.82,
+          "yield_rationale": "This move is the direct precursor to full equation-solving (2.13) and is tested as a standalone skill in MC items before full equation contexts.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_logarithmic_functions",
+      "label": "Logarithmic Functions",
+      "description": "Graphs and analyzes logarithmic functions f(x) = log_b(x) and f(x) = log_b(x) + k; identifies domain (x > 0), range (all reals), x-intercept, vertical asymptote at x = 0, increasing/decreasing behavior based on base, and end behavior.",
+      "ced_topics": ["2.11"],
+      "yield_score": 0.72,
+      "yield_rationale": "Function analysis of log functions appears in MC and FRQ 1; domain restriction (x > 0) and vertical asymptote are standard item targets.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_log_function_domain_restriction",
+          "label": "Domain Restriction of a Logarithmic Function",
+          "description": "Identifies that log_b(x) requires x > 0; determines the domain of f(x) = log_b(g(x)) by solving g(x) > 0 for the input variable.",
+          "yield_score": 0.82,
+          "yield_rationale": "Domain of log functions (and their compositions) is one of the most frequently tested log-function properties in MC.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_log_vertical_asymptote",
+          "label": "Vertical Asymptote of a Logarithmic Function",
+          "description": "Identifies the vertical asymptote of f(x) = log_b(x) as x = 0 and of f(x) = log_b(x - h) + k as x = h; explains that the function approaches -∞ (base > 1) as x approaches the asymptote from the right.",
+          "yield_score": 0.78,
+          "yield_rationale": "Vertical asymptote identification for log functions appears frequently in MC and is a standard FRQ 1 task.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_log_increasing_decreasing_from_base",
+          "label": "Increasing vs. Decreasing Behavior of log_b Based on Base",
+          "description": "States that log_b(x) is increasing when b > 1 and decreasing when 0 < b < 1; connects this to the reflection of the corresponding exponential function.",
+          "yield_score": 0.65,
+          "yield_rationale": "Base-dependent behavior is tested in MC and requires students to reason about the function family, not just compute.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_log_end_behavior",
+          "label": "End Behavior of Logarithmic Functions",
+          "description": "Describes that log_b(x) → +∞ as x → +∞ (for b > 1) and approaches -∞ as x → 0⁺; articulates that the function grows without bound but more slowly than any polynomial.",
+          "yield_score": 0.60,
+          "yield_rationale": "End-behavior reasoning for log functions appears in MC; the 'slower than polynomial growth' comparison is occasionally tested.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_log_key_points_and_intercept",
+          "label": "Key Points and x-Intercept of a Logarithmic Function",
+          "description": "Identifies that log_b(1) = 0 places the x-intercept at (1, 0); locates other key points such as (b, 1) and (1/b, -1) on the graph of f(x) = log_b(x).",
+          "yield_score": 0.68,
+          "yield_rationale": "Key-point identification is a staple MC item for logarithmic functions; tested in both graphical and symbolic form.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_log_horizontal_shift_asymptote",
+          "label": "How a Horizontal Shift Moves the Vertical Asymptote of log_b(x - h)",
+          "description": "Determines that replacing x with (x - h) in f(x) = log_b(x) shifts the vertical asymptote from x = 0 to x = h; identifies the new domain (x > h for h > 0, x > h for h < 0) and states why the asymptote location follows directly from the domain boundary of the logarithm.",
+          "yield_score": 0.70,
+          "yield_rationale": "Asymptote location after a horizontal shift is a targeted MC item in Unit 2; the tested skill is the asymptote consequence of the domain restriction, not the general transformation rule (which belongs in P1).",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_logarithmic_manipulation",
+      "label": "Logarithmic Function Manipulation",
+      "description": "Applies the product rule (log_b(MN) = log_b(M) + log_b(N)), quotient rule (log_b(M/N) = log_b(M) − log_b(N)), and power rule (log_b(M^p) = p·log_b(M)) to expand or condense logarithmic expressions into equivalent forms.",
+      "ced_topics": ["2.12"],
+      "yield_score": 0.87,
+      "yield_rationale": "FRQ 4 (symbolic manipulations, no-calculator) regularly requires log-rule application; this is consistently one of the most heavily tested symbolic skills in Unit 2.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_product_rule_logs",
+          "label": "Product Rule for Logarithms",
+          "description": "Applies log_b(MN) = log_b(M) + log_b(N) to expand a log of a product into a sum of logs, or to condense a sum of logs into a single log; handles numeric and variable arguments.",
+          "yield_score": 0.88,
+          "yield_rationale": "The product rule is the most directly tested individual log rule; appears in FRQ 4 every year across released practice materials.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_quotient_rule_logs",
+          "label": "Quotient Rule for Logarithms",
+          "description": "Applies log_b(M/N) = log_b(M) − log_b(N) to expand or condense logarithmic expressions; correctly handles the sign (difference, not sum) and distinguishes from the product rule.",
+          "yield_score": 0.85,
+          "yield_rationale": "The quotient rule is tested alongside the product rule in FRQ 4 and MC; the sign error is a common distractor.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_power_rule_logs",
+          "label": "Power Rule for Logarithms",
+          "description": "Applies log_b(M^p) = p·log_b(M) to move exponents inside a log to coefficients outside (expansion) or vice versa (condensation); handles fractional and negative exponents.",
+          "yield_score": 0.88,
+          "yield_rationale": "The power rule is the key tool for solving exponential equations (2.13); directly tested in FRQ 4 and as the mechanism for isolating variable exponents.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_condensing_log_expressions",
+          "label": "Condensing a Sum/Difference of Logs to a Single Log",
+          "description": "Combines multiple log terms with the same base into one log expression using the product and quotient rules in reverse; handles coefficient-to-exponent conversions via the power rule.",
+          "yield_score": 0.82,
+          "yield_rationale": "Condensation is the skill tested in FRQ 4 and MC when students must simplify or solve; it synthesizes all three log rules in one operation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_change_of_base_formula",
+          "label": "Change of Base Formula for Logarithms",
+          "description": "Rewrites log_b(x) = log(x)/log(b) = ln(x)/ln(b) using the change-of-base formula; applies this to evaluate non-standard base logarithms with a calculator or to rewrite expressions in a single base.",
+          "yield_score": 0.75,
+          "yield_rationale": "Change-of-base appears in MC (calculator and no-calculator) and is required when switching to natural or common log; moderate but consistent frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_expanding_log_expressions",
+          "label": "Expanding a Single Logarithm Using Log Rules",
+          "description": "Expands log_b(M^p / (N·Q)) and similar compound expressions into a sum/difference of simpler logarithms by applying the power, product, and quotient rules in order.",
+          "yield_score": 0.85,
+          "yield_rationale": "Full expansion of multi-rule expressions is a standard FRQ 4 and MC task; tests rule fluency and order of operations with logs. Yield raised to 0.85: FRQ 4 direct target — multi-rule expansion is the most commonly set standalone symbolic task in FRQ 4.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_exponential_and_log_equations",
+      "label": "Exponential and Logarithmic Equations and Inequalities",
+      "description": "Solves exponential equations by taking logarithms of both sides and logarithmic equations by rewriting in exponential form; checks for extraneous solutions introduced by the domain restriction of logarithms; solves related inequalities.",
+      "ced_topics": ["2.13"],
+      "yield_score": 0.90,
+      "yield_rationale": "FRQ 4 Part 2 explicitly asks for solving; also MC; this is the most directly and heavily tested symbolic skill in Unit 2 and among the top skills in the whole AP Precalc exam.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_solve_exponential_equation_by_log",
+          "label": "Solving an Exponential Equation by Applying a Logarithm",
+          "description": "Isolates an exponential expression and applies log (or ln) to both sides; uses the power rule to bring the variable exponent down as a coefficient, then solves the resulting linear equation.",
+          "yield_score": 0.92,
+          "yield_rationale": "The single most heavily tested equation-solving skill in Unit 2; appears in FRQ 4 as a required part and in multiple MC items.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_solve_exponential_same_base",
+          "label": "Solving Exponential Equations by Matching Bases",
+          "description": "Rewrites both sides of b^f(x) = b^g(x) with the same base so that f(x) = g(x) can be solved directly; applies to equations such as 2^(x+1) = 8^x.",
+          "yield_score": 0.78,
+          "yield_rationale": "Common-base solving is a standard no-calculator MC approach; tests base recognition and exponent algebra fluency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_solve_log_equation_exponential_form",
+          "label": "Solving a Logarithmic Equation by Converting to Exponential Form",
+          "description": "Rewrites log_b(x) = c as b^c = x to solve for the unknown; applies to equations with a single log term after condensation.",
+          "yield_score": 0.88,
+          "yield_rationale": "Form conversion to solve is the paired counterpart to taking logs of an exponential; tested directly in FRQ 4 and MC.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_extraneous_solutions_log_equations",
+          "label": "Identifying Extraneous Solutions in Logarithmic Equations",
+          "description": "Checks each solution of a logarithmic equation against the domain restriction (argument > 0); discards solutions that cause the log argument to be zero or negative.",
+          "yield_score": 0.82,
+          "yield_rationale": "Extraneous solutions are a consistent College Board distractor and FRQ 4 communication target; students must check and justify rejection of solutions.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_solve_log_equation_multiple_terms",
+          "label": "Solving a Logarithmic Equation with Multiple Log Terms",
+          "description": "Condenses multiple log terms using product/quotient/power rules before converting to exponential form; solves the resulting equation and checks for extraneous solutions.",
+          "yield_score": 0.85,
+          "yield_rationale": "Multi-term log equations synthesize all of 2.12 and appear in both FRQ 4 and MC; high-difficulty, high-yield items.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_solve_exponential_inequality",
+          "label": "Solving Exponential and Logarithmic Inequalities",
+          "description": "Solves inequalities such as b^x > c by applying log to both sides and adjusting the inequality direction if log base < 1; solves log inequalities by converting to exponential form and considering domain restrictions.",
+          "yield_score": 0.70,
+          "yield_rationale": "Inequalities appear in MC and FRQ 4 context parts; the base-dependent direction flip is a tested nuance.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_solve_quadratic_form_exponential",
+          "label": "Solving Quadratic-Form Exponential Equations",
+          "description": "Substitutes u = b^x to convert an equation like b^(2x) − 5b^x + 6 = 0 into a quadratic in u; solves the quadratic and back-substitutes to find x, checking that b^x > 0.",
+          "yield_score": 0.65,
+          "yield_rationale": "Quadratic-form exponentials appear in higher-difficulty MC items; requires fluency with both quadratic factoring and exponential solving.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_logarithmic_modeling",
+      "label": "Logarithmic Function Context and Data Modeling",
+      "description": "Constructs logarithmic models f(x) = a·log_b(x) + k from data or context; interprets the parameters a and k in the units of the problem; uses technology for logarithmic regression.",
+      "ced_topics": ["2.14"],
+      "yield_score": 0.68,
+      "yield_rationale": "Less frequent than exponential modeling but appears in FRQ 2 contexts (especially when diminishing-returns growth is described); moderate and targeted yield.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_log_model_from_data",
+          "label": "Building a Logarithmic Model from a Data Table",
+          "description": "Identifies that a concave-down, ever-increasing (but slowing) data pattern suggests a logarithmic model; uses two data points or regression to determine parameters a, b, and k in f(x) = a·log_b(x) + k.",
+          "yield_score": 0.65,
+          "yield_rationale": "Log regression appears in FRQ 2 when the context involves slowly growing phenomena; technology-assisted but interpretation is assessed.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_log_model_parameter_interpretation",
+          "label": "Interpreting Logarithmic Model Parameters in Context",
+          "description": "Translates parameter a (vertical stretch/compression, rate of growth in log-scale) and k (vertical shift, baseline value) into meaningful contextual statements with appropriate units.",
+          "yield_score": 0.70,
+          "yield_rationale": "Context interpretation for log models is tested in FRQ 2 justification sub-parts; highest-yield skill within this umbrella.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_log_model_prediction",
+          "label": "Using a Logarithmic Model for Prediction",
+          "description": "Substitutes input values into a constructed logarithmic model to predict outputs; interprets the prediction in context, including recognition that logarithmic growth is slow and bounded in practical settings.",
+          "yield_score": 0.72,
+          "yield_rationale": "Prediction from a log model is tested in FRQ 2 and MC; requires calculator fluency for non-exact log evaluation. Yield raised to 0.72: FRQ 2 staple — the prediction step is a consistently required sub-part.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_log_model_select_over_exponential",
+          "label": "Choosing Between an Exponential and Logarithmic Model",
+          "description": "Distinguishes contexts suited to exponential models (unbounded proportional growth) from those suited to logarithmic models (rapid early growth that slows); uses residuals or contextual cues to justify the choice.",
+          "yield_score": 0.62,
+          "yield_rationale": "Model-selection reasoning appears in FRQ 2 and MC items; the justification skill (MP3) distinguishes this from simple pattern recognition.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exp_log_semi_log_plots",
+      "label": "Semi-Log Plots",
+      "description": "Interprets and constructs semi-logarithmic plots in which one axis is on a logarithmic scale; explains why exponential data appears linear on a semi-log plot and reads the slope and intercept of the linearized data to extract exponential model parameters.",
+      "ced_topics": ["2.15"],
+      "yield_score": 0.42,
+      "yield_rationale": "Niche topic; appears occasionally in MC but not in FRQ task types; lower yield consistent with the precalc outline's 0.45 estimate.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "exp_log_semi_log_linearization",
+          "label": "Why Exponential Data Linearizes on a Semi-Log Plot",
+          "description": "Explains that taking log of both sides of y = ab^x gives log(y) = log(a) + x·log(b), which is linear in x; identifies this as the mathematical reason exponential data plots as a straight line on a log-y axis.",
+          "yield_score": 0.45,
+          "yield_rationale": "Conceptual explanation item; appears in MC reasoning questions; the algebraic derivation is the core tested skill here.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_semi_log_slope_intercept_extraction",
+          "label": "Reading Model Parameters from a Semi-Log Plot",
+          "description": "Reads the slope (= log(b)) and y-intercept (= log(a)) of the line on a semi-log plot; back-computes the exponential parameters b = 10^(slope) and a = 10^(intercept) to recover the exponential model.",
+          "yield_score": 0.40,
+          "yield_rationale": "Parameter extraction from a semi-log plot is the main procedural skill for 2.15; tested in MC at low-to-moderate frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_semi_log_identify_exponential_linearity",
+          "label": "Identifying Exponential Growth from a Semi-Log Plot",
+          "description": "Determines whether a data set is consistent with an exponential model by checking whether the data plots as approximately linear on a semi-log (log-y) axis.",
+          "yield_score": 0.42,
+          "yield_rationale": "A standard MC interpretation task for 2.15; tests the connection between the algebraic linearization and graphical linearity on a semi-log scale.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "exp_log_semi_log_scale_reading",
+          "label": "Reading Values on a Logarithmic Scale Axis",
+          "description": "Reads approximate y-values from a log-scaled axis by identifying the powers of 10 that bracket each tick mark; estimates values between labeled powers of 10 using the logarithmic spacing.",
+          "yield_score": 0.35,
+          "yield_rationale": "Scale-reading fluency is tested in MC items that display a semi-log graph; lowest-yield item in this umbrella.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

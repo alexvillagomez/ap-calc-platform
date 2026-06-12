@@ -1,0 +1,1091 @@
+{
+  "category": {
+    "id": "systems_of_equations",
+    "label": "Systems of Equations",
+    "description": "Solving and interpreting systems of linear and nonlinear equations and inequalities across two and three variables, using graphical, substitution, and elimination methods, including special-case and parameter analysis.",
+    "section": "foundations",
+    "ced_unit": null,
+    "courses": [
+      { "course": "precalc", "role": "core", "order_index": 4 },
+      { "course": "calc_ab", "role": "foundation", "order_index": 4 }
+    ],
+    "yield_score": 0.42,
+    "yield_rationale": "Systems reappear in AP Precalc for function-model construction (1.14, 2.5, 2.14, 3.7) and in sinusoidal parameter extraction, but the category itself is a supporting prerequisite rather than a direct exam question pool."
+  },
+  "umbrellas": [
+    {
+      "id": "system_solution_meaning",
+      "label": "System Solution Meaning and Notation",
+      "description": "Core structure of simultaneous systems: what a solution means, ordered-pair and ordered-triple notation, verification, and the geometric interpretation of solutions as intersection points.",
+      "ced_topics": [],
+      "yield_score": 0.38,
+      "yield_rationale": "Foundational vocabulary — solution meaning and notation feed all downstream system work — but the concepts themselves appear infrequently as isolated exam questions once methods are established.",
+      "source_learn_keyword_id": "systems_foundations_and_solution_sets",
+      "in_depth": [
+        {
+          "id": "system_of_equations_structure",
+          "label": "System of equations structure",
+          "description": "Recognizes a system as two or more equations that must hold simultaneously, distinguishing a multi-equation system from a single equation.",
+          "yield_score": 0.20,
+          "yield_rationale": "Purely definitional; tested only in early intro items. Downstream skills assume this knowledge.",
+          "source_learn_keyword_id": "system_of_equations_structure"
+        },
+        {
+          "id": "simultaneous_solution_meaning",
+          "label": "Simultaneous solution meaning",
+          "description": "A solution satisfies every equation in the system at the same time; values satisfying only one equation are not system solutions.",
+          "yield_score": 0.32,
+          "yield_rationale": "Conceptual anchor needed for verification and special-case reasoning, but rarely the primary tested skill.",
+          "source_learn_keyword_id": "simultaneous_solution_meaning"
+        },
+        {
+          "id": "ordered_pair_solutions_to_two_variable_systems",
+          "label": "Ordered-pair solutions to two-variable systems",
+          "description": "A two-variable system solution is written as an ordered pair (x, y) where coordinate order corresponds to variable assignment.",
+          "yield_score": 0.28,
+          "yield_rationale": "Notation skill; prerequisite for answer presentation in all system problems.",
+          "source_learn_keyword_id": "ordered_pair_solutions_to_two_variable_systems"
+        },
+        {
+          "id": "ordered_triple_solutions_to_three_variable_systems",
+          "label": "Ordered-triple solutions to three-variable systems",
+          "description": "A three-variable system solution is written as an ordered triple (x, y, z); coordinate position matches the correct variable.",
+          "yield_score": 0.25,
+          "yield_rationale": "Notation skill for three-variable work; lower frequency than two-variable notation.",
+          "source_learn_keyword_id": "ordered_triple_solutions_to_three_variable_systems"
+        },
+        {
+          "id": "solution_verification_two_variable_systems",
+          "label": "Solution verification for two-variable systems",
+          "description": "Checks a proposed ordered pair by substituting into every equation in the system, confirming it satisfies all simultaneously.",
+          "yield_score": 0.45,
+          "yield_rationale": "Verification is exercised regularly after solving and appears as an explicit exam step in both MC and FRQ contexts.",
+          "source_learn_keyword_id": "solution_verification_two_variable_systems"
+        },
+        {
+          "id": "solution_verification_three_variable_systems",
+          "label": "Solution verification for three-variable systems",
+          "description": "Checks a proposed ordered triple by substituting all three values into every equation in the system.",
+          "yield_score": 0.30,
+          "yield_rationale": "Same verification logic extended to three variables; less frequent than two-variable verification.",
+          "source_learn_keyword_id": "solution_verification_three_variable_systems"
+        },
+        {
+          "id": "system_solution_as_intersection",
+          "label": "System solution as intersection point",
+          "description": "Connects algebraic solutions to the geometric intersection of graphs; a system solution is the point (or set of points) where all equation graphs meet.",
+          "yield_score": 0.50,
+          "yield_rationale": "Algebraic-graphical connection is exercised throughout, especially in nonlinear-systems and graphical-methods work.",
+          "source_learn_keyword_id": "system_solution_as_intersection"
+        }
+      ]
+    },
+    {
+      "id": "system_solution_set_types",
+      "label": "System Solution-Set Types and Classification",
+      "description": "Classification of linear systems by solution-set type (consistent/independent, inconsistent, dependent), solution-set notation, and the role of variable and equation counts.",
+      "ced_topics": [],
+      "yield_score": 0.40,
+      "yield_rationale": "Classification vocabulary feeds special-case analysis and parameter problems; appears frequently in both method-based and structure-based question types.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "consistent_independent_system_classification",
+          "label": "Consistent and independent system classification",
+          "description": "A consistent system has at least one solution; an independent linear system has exactly one solution because the equations represent distinct intersecting lines. Recognizing a system as consistent and independent is the default classification for standard two-variable linear systems.",
+          "yield_score": 0.40,
+          "yield_rationale": "Merged from consistent_systems and independent_linear_systems. Most standard system problems produce an independent system; consistent/independent together form one natural classification concept.",
+          "source_learn_keyword_id": "consistent_systems",
+          "merged_from_source_learn_keyword_ids": ["consistent_systems", "independent_linear_systems"]
+        },
+        {
+          "id": "inconsistent_or_dependent_system_classification",
+          "label": "Inconsistent and dependent system classification",
+          "description": "An inconsistent system has no solution (parallel lines in two-variable linear form); a dependent system has infinitely many solutions because the equations represent the same line or equivalent relationship. Both are identified by proportionality analysis of coefficients or by a false/true identity produced during solving.",
+          "yield_score": 0.45,
+          "yield_rationale": "Merged from inconsistent_systems and dependent_linear_systems. Detecting inconsistency and dependence are closely paired classification tasks tested together in the same question type; unifying them reflects the proportionality-vs-identity distinction as a single decision point.",
+          "source_learn_keyword_id": "inconsistent_systems",
+          "merged_from_source_learn_keyword_ids": ["inconsistent_systems", "dependent_linear_systems"]
+        },
+        {
+          "id": "system_solution_set_notation",
+          "label": "System solution-set notation",
+          "description": "Represents system solutions as ordered pairs, ordered triples, the empty set, or an infinity statement, depending on solution type.",
+          "yield_score": 0.30,
+          "yield_rationale": "Answer-format skill; tested primarily in intro-level problems; assumed in downstream work.",
+          "source_learn_keyword_id": "system_solution_set_notation"
+        },
+        {
+          "id": "variables_and_equations_count_in_systems",
+          "label": "Number of variables and equations in systems",
+          "description": "Recognizes system size (number of variables and equations) before selecting a solution method, since size affects possible solution behavior.",
+          "yield_score": 0.22,
+          "yield_rationale": "Structural recognition skill; background knowledge rather than a direct exam question target.",
+          "source_learn_keyword_id": "variables_and_equations_count_in_systems"
+        },
+        {
+          "id": "equivalent_systems",
+          "label": "Equivalent systems",
+          "description": "Equivalent systems share the same solution set; valid transformations (multiplying an equation by a nonzero constant, combining equations) produce equivalent systems without changing solutions.",
+          "yield_score": 0.35,
+          "yield_rationale": "Underpins elimination and equation-scaling reasoning; important as a justification concept in FRQ explanations.",
+          "source_learn_keyword_id": "equivalent_systems"
+        }
+      ]
+    },
+    {
+      "id": "graphical_systems_plotting",
+      "label": "Graphical Systems — Plotting and Intersection",
+      "description": "Plotting two-variable linear systems by applying slope-intercept or standard form, handling special lines (horizontal, vertical), and reading the intersection as the system solution.",
+      "ced_topics": [],
+      "yield_score": 0.42,
+      "yield_rationale": "Graphical plotting and intersection reading are the core representation skills for linear systems; feed the graphical connection to function zeros and solutions in AP Precalc.",
+      "source_learn_keyword_id": "graphical_systems_of_linear_equations",
+      "in_depth": [
+        {
+          "id": "linear_system_graphical_intersection",
+          "label": "Graphical intersection of two lines",
+          "description": "Reads the graphical solution of a two-variable linear system as the ordered pair at the point where the two lines cross.",
+          "yield_score": 0.55,
+          "yield_rationale": "Core graphical skill exercised in every representation-based system question.",
+          "source_learn_keyword_id": "linear_system_graphical_intersection"
+        },
+        {
+          "id": "graphing_systems_from_slope_intercept_form",
+          "label": "Graphing systems from slope-intercept form",
+          "description": "Graphs a two-line system by applying each line's slope and y-intercept, then identifies the intersection as the solution.",
+          "yield_score": 0.48,
+          "yield_rationale": "Slope-intercept graphing is the most natural form for quick line sketching in system contexts.",
+          "source_learn_keyword_id": "graphing_systems_from_slope_intercept_form"
+        },
+        {
+          "id": "graphing_systems_from_standard_form",
+          "label": "Graphing systems from standard form",
+          "description": "Graphs a system whose equations are in ax + by = c form using intercepts or by converting to slope-intercept form before plotting.",
+          "yield_score": 0.38,
+          "yield_rationale": "Standard-form graphing is less intuitive; tested when students must convert form before graphing.",
+          "source_learn_keyword_id": "graphing_systems_from_standard_form"
+        },
+        {
+          "id": "graphing_systems_with_horizontal_lines",
+          "label": "Graphing systems with horizontal lines",
+          "description": "Handles systems containing y = c equations by graphing a horizontal line and reading the intersection with the other equation's graph.",
+          "yield_score": 0.32,
+          "yield_rationale": "Special structural case; tested as a recognition-and-intersection skill.",
+          "source_learn_keyword_id": "graphing_systems_with_horizontal_lines"
+        },
+        {
+          "id": "graphing_systems_with_vertical_lines",
+          "label": "Graphing systems with vertical lines",
+          "description": "Handles systems containing x = c equations by graphing a vertical line and reading the intersection with the other equation's graph.",
+          "yield_score": 0.30,
+          "yield_rationale": "Special structural case; less common than horizontal-line systems.",
+          "source_learn_keyword_id": "graphing_systems_with_vertical_lines"
+        }
+      ]
+    },
+    {
+      "id": "graphical_systems_interpretation",
+      "label": "Graphical Systems — Interpretation and Special Cases",
+      "description": "Interpreting graphical system results: parallel lines (no solution), coincident lines (infinitely many solutions), estimating non-grid intersections, and recognizing limits of graphical precision.",
+      "ced_topics": [],
+      "yield_score": 0.38,
+      "yield_rationale": "Graphical interpretation of special cases and precision limits reinforces algebraic classification and feeds AP Precalc representation questions.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "graphical_parallel_lines_no_solution",
+          "label": "Parallel lines and no solution",
+          "description": "Identifies that two distinct lines with equal slopes but different y-intercepts never intersect, producing an inconsistent system with no solution.",
+          "yield_score": 0.52,
+          "yield_rationale": "Slope-based inconsistency detection is a high-frequency classification task.",
+          "source_learn_keyword_id": "graphical_parallel_lines_no_solution"
+        },
+        {
+          "id": "graphical_coincident_lines_infinite_solutions",
+          "label": "Coincident lines and infinitely many solutions",
+          "description": "Identifies that two equations representing the same line (coincident lines) have every point in common, producing a dependent system with infinitely many solutions.",
+          "yield_score": 0.50,
+          "yield_rationale": "Coincident-line recognition complements parallel-line recognition; together they cover all special graphical cases.",
+          "source_learn_keyword_id": "graphical_coincident_lines_infinite_solutions"
+        },
+        {
+          "id": "estimating_system_solutions_from_graphs",
+          "label": "Estimating system solutions from graphs",
+          "description": "Approximates an intersection point when it does not fall exactly on grid lines, distinguishing graphical estimation from exact algebraic solving.",
+          "yield_score": 0.35,
+          "yield_rationale": "Estimation from graphs appears in representation-based problems; less frequent than exact-intersection reading.",
+          "source_learn_keyword_id": "estimating_system_solutions_from_graphs"
+        },
+        {
+          "id": "exact_vs_approximate_system_solutions",
+          "label": "Exact versus approximate system solutions",
+          "description": "Distinguishes between solutions that can be read exactly from a graph and those that require algebraic methods for precise values.",
+          "yield_score": 0.28,
+          "yield_rationale": "Conceptual distinction; most often appears as a justification or reasoning question.",
+          "source_learn_keyword_id": "exact_vs_approximate_system_solutions"
+        },
+        {
+          "id": "graph_scale_in_system_solution_reading",
+          "label": "Graph scale and axis reading in system solutions",
+          "description": "Applies the coordinate scale and tick-mark spacing correctly when reading intersection points from a graph; guards against misreading non-unit scales.",
+          "yield_score": 0.25,
+          "yield_rationale": "Scale-reading errors are common in MC distractors but the concept itself is a supporting skill.",
+          "source_learn_keyword_id": "graph_scale_in_system_solution_reading"
+        },
+        {
+          "id": "line_intersection_outside_viewing_window",
+          "label": "Intersection outside the viewing window",
+          "description": "Recognizes that two non-parallel lines may intersect outside the visible graph window, so absence of a visible crossing does not imply no solution.",
+          "yield_score": 0.20,
+          "yield_rationale": "Edge case in graphical interpretation; low but nonzero frequency in MC reasoning items.",
+          "source_learn_keyword_id": "line_intersection_outside_viewing_window"
+        }
+      ]
+    },
+    {
+      "id": "substitution_method_setup",
+      "label": "Substitution Method — Setup and Variants",
+      "description": "Setting up the substitution method: choosing which variable to isolate, substituting explicit or isolated expressions, and handling negative, fraction, and decimal coefficient variants.",
+      "ced_topics": [],
+      "yield_score": 0.55,
+      "yield_rationale": "Substitution setup is the entry skill for the method most directly reused in AP Precalc function-model construction (solving for parameters from two conditions).",
+      "source_learn_keyword_id": "substitution_method_linear_systems",
+      "in_depth": [
+        {
+          "id": "substitution_method_explicit_variable",
+          "label": "Substitution with an explicit variable expression",
+          "description": "Applies substitution when one equation already gives a variable explicitly (e.g., y = 2x + 1), replacing that variable directly in the other equation without prior isolation.",
+          "yield_score": 0.72,
+          "yield_rationale": "Most common substitution entry point; appears in the widest variety of system problems.",
+          "source_learn_keyword_id": "substitution_method_explicit_variable"
+        },
+        {
+          "id": "substitution_after_isolating_variable",
+          "label": "Substitution after isolating a variable",
+          "description": "Isolates one variable in an equation before substituting into the other equation; required when neither equation is already solved for a variable.",
+          "yield_score": 0.65,
+          "yield_rationale": "Two-step substitution setup is a frequent MC skill; isolating first is the prerequisite move.",
+          "source_learn_keyword_id": "substitution_after_isolating_variable"
+        },
+        {
+          "id": "substitution_into_standard_form_equation",
+          "label": "Substitution into a standard-form equation",
+          "description": "Substitutes a solved expression into an equation in ax + by = c form, correctly distributing within coefficients.",
+          "yield_score": 0.60,
+          "yield_rationale": "Standard-form target equations are the most error-prone substitution destination; tested regularly.",
+          "source_learn_keyword_id": "substitution_into_standard_form_equation"
+        },
+        {
+          "id": "substitution_with_negative_expressions",
+          "label": "Substitution with negative expressions",
+          "description": "Substitutes a negative expression (e.g., y = -2x + 5) or substitutes into a negative-coefficient term, requiring correct sign handling and parentheses.",
+          "yield_score": 0.68,
+          "yield_rationale": "Sign errors in substitution are among the most common student mistakes; high distractor frequency.",
+          "source_learn_keyword_id": "substitution_with_negative_expressions"
+        },
+        {
+          "id": "substitution_with_fraction_coefficients",
+          "label": "Substitution with fraction coefficients",
+          "description": "Applies substitution when equations involve fractional coefficients, requiring careful fraction arithmetic during and after replacement.",
+          "yield_score": 0.45,
+          "yield_rationale": "Fraction coefficient systems appear regularly; arithmetic complexity increases question difficulty.",
+          "source_learn_keyword_id": "substitution_with_fraction_coefficients"
+        },
+        {
+          "id": "substitution_with_decimal_coefficients",
+          "label": "Substitution with decimal coefficients",
+          "description": "Applies substitution when equations contain decimal coefficients, targeting decimal arithmetic inside the substitution step.",
+          "yield_score": 0.32,
+          "yield_rationale": "Decimal coefficient systems appear occasionally; less frequent than fraction variants.",
+          "source_learn_keyword_id": "substitution_with_decimal_coefficients"
+        }
+      ]
+    },
+    {
+      "id": "substitution_method_execution_and_special_cases",
+      "label": "Substitution Method — Execution and Special Cases",
+      "description": "Completing the substitution method: solving the resulting one-variable equation, back-substitution to find the remaining variable, and detecting no-solution and dependent special cases.",
+      "ced_topics": [],
+      "yield_score": 0.58,
+      "yield_rationale": "Back-substitution and special-case detection are the completion steps of every substitution solution; they also gate understanding of system classification.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "substitution_leading_to_one_variable_equation",
+          "label": "One-variable equation formed by substitution",
+          "description": "Recognizes and solves the single-variable linear equation that results after substitution reduces the system.",
+          "yield_score": 0.58,
+          "yield_rationale": "Identifying and solving the resulting one-variable equation is the central procedural step of the substitution method.",
+          "source_learn_keyword_id": "substitution_leading_to_one_variable_equation"
+        },
+        {
+          "id": "back_substitution_in_two_variable_systems",
+          "label": "Back-substitution in two-variable systems",
+          "description": "After finding one variable's value, substitutes it back into an original equation to determine the remaining variable and complete the ordered pair.",
+          "yield_score": 0.70,
+          "yield_rationale": "Back-substitution is required in every complete substitution-method solution; a common site of incomplete-answer errors.",
+          "source_learn_keyword_id": "back_substitution_in_two_variable_systems"
+        },
+        {
+          "id": "substitution_method_no_solution_case",
+          "label": "No-solution case detected by substitution",
+          "description": "Identifies an inconsistent system when substitution produces a false numeric statement (e.g., 0 = 5), signaling no solution.",
+          "yield_score": 0.55,
+          "yield_rationale": "Special-case detection via substitution is an explicit exam question type; requires recognizing the false statement as a system-level result.",
+          "source_learn_keyword_id": "substitution_method_no_solution_case"
+        },
+        {
+          "id": "substitution_method_dependent_case",
+          "label": "Dependent case detected by substitution",
+          "description": "Identifies a dependent system when substitution produces a true identity (e.g., 0 = 0), signaling infinitely many solutions.",
+          "yield_score": 0.52,
+          "yield_rationale": "Companion to no-solution detection; both special cases are tested together in classification problems.",
+          "source_learn_keyword_id": "substitution_method_dependent_case"
+        },
+        {
+          "id": "choosing_substitution_when_coefficient_is_one",
+          "label": "Choosing substitution when a coefficient is 1",
+          "description": "Recognizes that substitution is efficient when one variable has a coefficient of 1 or -1, because isolation avoids introducing fractions.",
+          "yield_score": 0.42,
+          "yield_rationale": "Method-selection reasoning appears in higher-difficulty MC items; practical strategy knowledge.",
+          "source_learn_keyword_id": "choosing_substitution_when_coefficient_is_one"
+        }
+      ]
+    },
+    {
+      "id": "elimination_method_setup",
+      "label": "Elimination Method — Setup and Scaling",
+      "description": "Setting up elimination: choosing a variable to eliminate, adding or subtracting equations with opposite or matching coefficients, and scaling one or both equations to create cancellation.",
+      "ced_topics": [],
+      "yield_score": 0.52,
+      "yield_rationale": "Elimination setup is the primary method for standard-form systems and is directly exercised in solving 2x2 parameter systems for AP Precalc model construction.",
+      "source_learn_keyword_id": "elimination_method_linear_systems",
+      "in_depth": [
+        {
+          "id": "elimination_with_opposite_coefficients",
+          "label": "Elimination with opposite coefficients",
+          "description": "Adds two equations directly when one variable has equal-and-opposite coefficients, immediately canceling that variable without scaling.",
+          "yield_score": 0.75,
+          "yield_rationale": "The most direct elimination structure; appears in the widest range of elimination problems.",
+          "source_learn_keyword_id": "elimination_with_opposite_coefficients"
+        },
+        {
+          "id": "elimination_with_matching_coefficients",
+          "label": "Elimination with matching coefficients",
+          "description": "Subtracts one equation from another when a variable has identical coefficients in both equations, removing that variable.",
+          "yield_score": 0.68,
+          "yield_rationale": "Subtraction-based elimination requires sign discipline; frequently tested alongside addition-based elimination.",
+          "source_learn_keyword_id": "elimination_with_matching_coefficients"
+        },
+        {
+          "id": "elimination_by_adding_equations",
+          "label": "Elimination by adding equations",
+          "description": "Adds the two equations to eliminate a variable whose coefficients are additive inverses, producing a one-variable equation.",
+          "yield_score": 0.72,
+          "yield_rationale": "Addition is the most natural elimination move; core procedural step tested in nearly every elimination problem.",
+          "source_learn_keyword_id": "elimination_by_adding_equations"
+        },
+        {
+          "id": "elimination_by_subtracting_equations",
+          "label": "Elimination by subtracting equations",
+          "description": "Subtracts one equation from another to eliminate a variable with matching coefficients; targets sign errors from subtracting an entire equation.",
+          "yield_score": 0.60,
+          "yield_rationale": "Subtraction-based elimination is a common source of sign-flip errors; tested as a distinct procedural variant.",
+          "source_learn_keyword_id": "elimination_by_subtracting_equations"
+        },
+        {
+          "id": "elimination_by_multiplying_one_equation",
+          "label": "Elimination by scaling one equation",
+          "description": "Multiplies one equation by a constant so that one variable's coefficients become opposite or matching, then adds or subtracts to eliminate it.",
+          "yield_score": 0.70,
+          "yield_rationale": "One-equation scaling is the most common preparation step in elimination; appears at medium and high difficulty.",
+          "source_learn_keyword_id": "elimination_by_multiplying_one_equation"
+        },
+        {
+          "id": "elimination_by_multiplying_both_equations",
+          "label": "Elimination by scaling both equations",
+          "description": "Multiplies both equations by different constants (typically using LCM) to create matching or opposite coefficients when single-equation scaling is insufficient.",
+          "yield_score": 0.65,
+          "yield_rationale": "Two-equation scaling is the highest-complexity elimination setup; tested at higher difficulty levels.",
+          "source_learn_keyword_id": "elimination_by_multiplying_both_equations"
+        },
+        {
+          "id": "choosing_variable_to_eliminate",
+          "label": "Choosing a variable to eliminate",
+          "description": "Selects the variable whose coefficients require the smallest multipliers to align, minimizing arithmetic complexity in the elimination step.",
+          "yield_score": 0.48,
+          "yield_rationale": "Efficiency reasoning appears in higher-difficulty strategy questions; also implicit in every elimination solution.",
+          "source_learn_keyword_id": "choosing_variable_to_eliminate"
+        }
+      ]
+    },
+    {
+      "id": "elimination_method_execution_and_special_cases",
+      "label": "Elimination Method — Execution and Special Cases",
+      "description": "Completing the elimination method: handling negative and non-integer coefficients, solving the resulting one-variable equation, back-substitution, and detecting no-solution and dependent special cases.",
+      "ced_topics": [],
+      "yield_score": 0.50,
+      "yield_rationale": "Execution skills (negative coefficients, fraction/decimal variants, back-substitution) and special-case detection are required for every complete elimination solution.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "elimination_with_negative_coefficients",
+          "label": "Elimination with negative coefficients",
+          "description": "Handles systems with negative coefficients during addition, subtraction, or scaling steps, requiring careful sign tracking throughout.",
+          "yield_score": 0.62,
+          "yield_rationale": "Negative coefficients generate the most common arithmetic errors in elimination; high distractor frequency.",
+          "source_learn_keyword_id": "elimination_with_negative_coefficients"
+        },
+        {
+          "id": "elimination_with_fraction_coefficients",
+          "label": "Elimination with fraction coefficients",
+          "description": "Applies elimination directly or after clearing fractions when equations have fraction coefficients.",
+          "yield_score": 0.42,
+          "yield_rationale": "Fraction coefficient systems are moderately frequent; often accompanied by a clearing step.",
+          "source_learn_keyword_id": "elimination_with_fraction_coefficients"
+        },
+        {
+          "id": "elimination_with_decimal_coefficients",
+          "label": "Elimination with decimal coefficients",
+          "description": "Applies elimination to systems with decimal coefficients, directly or after clearing decimals by multiplying by a power of 10.",
+          "yield_score": 0.30,
+          "yield_rationale": "Decimal coefficient systems appear occasionally; less frequent than fraction variants.",
+          "source_learn_keyword_id": "elimination_with_decimal_coefficients"
+        },
+        {
+          "id": "elimination_creating_one_variable_equation",
+          "label": "One-variable equation created by elimination",
+          "description": "Recognizes and solves the single-variable equation that results after one variable is cancelled by elimination.",
+          "yield_score": 0.55,
+          "yield_rationale": "Solving the resulting one-variable equation is the central procedural payoff of elimination; exercised in every elimination problem.",
+          "source_learn_keyword_id": "elimination_creating_one_variable_equation"
+        },
+        {
+          "id": "back_substitution_after_elimination",
+          "label": "Back-substitution after elimination",
+          "description": "After elimination yields one variable's value, substitutes it into an original equation to find the remaining variable and complete the solution.",
+          "yield_score": 0.68,
+          "yield_rationale": "Back-substitution is required in every complete elimination solution; common site of step-omission errors.",
+          "source_learn_keyword_id": "back_substitution_after_elimination"
+        },
+        {
+          "id": "elimination_method_no_solution_case",
+          "label": "No-solution case detected by elimination",
+          "description": "Identifies an inconsistent system when elimination produces a false numeric statement (e.g., 0 = 8), signaling no solution.",
+          "yield_score": 0.55,
+          "yield_rationale": "Parallel to substitution special case; both method-specific forms of inconsistency are tested.",
+          "source_learn_keyword_id": "elimination_method_no_solution_case"
+        },
+        {
+          "id": "elimination_method_dependent_case",
+          "label": "Dependent case detected by elimination",
+          "description": "Identifies a dependent system when elimination produces a true identity (e.g., 0 = 0), signaling infinitely many solutions.",
+          "yield_score": 0.52,
+          "yield_rationale": "Companion to no-solution detection via elimination; both special cases appear together in classification problems.",
+          "source_learn_keyword_id": "elimination_method_dependent_case"
+        }
+      ]
+    },
+    {
+      "id": "linear_system_preparation_and_structure",
+      "label": "Linear System Preparation and Structure",
+      "description": "Rewriting system equations into forms suitable for solving, including clearing denominators and decimals, distributing, collecting like terms, rearranging variables, scaling equations, and selecting between substitution and elimination.",
+      "ced_topics": [],
+      "yield_score": 0.48,
+      "yield_rationale": "Preparation skills feed every algebraic solving method; method-selection reasoning appears in moderate-difficulty exam items.",
+      "source_learn_keyword_id": "linear_system_preparation_and_structure",
+      "in_depth": [
+        {
+          "id": "standard_form_linear_systems",
+          "label": "Standard-form linear systems",
+          "description": "Identifies and rewrites system equations in ax + by = c form, recognizing this structure as particularly suited for elimination.",
+          "yield_score": 0.45,
+          "yield_rationale": "Standard form is the default algebraic presentation in elimination-focused problems.",
+          "source_learn_keyword_id": "standard_form_linear_systems"
+        },
+        {
+          "id": "slope_intercept_form_linear_systems",
+          "label": "Slope-intercept form linear systems",
+          "description": "Identifies and rewrites system equations in y = mx + b form, recognizing this structure as suited for graphing and direct substitution.",
+          "yield_score": 0.48,
+          "yield_rationale": "Slope-intercept form is the most common entry form for substitution-ready systems.",
+          "source_learn_keyword_id": "slope_intercept_form_linear_systems"
+        },
+        {
+          "id": "clearing_denominators_in_linear_systems",
+          "label": "Clearing denominators in linear systems",
+          "description": "Multiplies a system equation by the LCD of its fraction coefficients to produce an equivalent equation with integer coefficients before solving.",
+          "yield_score": 0.55,
+          "yield_rationale": "Clearing fractions before solving is a high-frequency preparation skill in fraction-coefficient systems.",
+          "source_learn_keyword_id": "clearing_denominators_in_linear_systems"
+        },
+        {
+          "id": "clearing_decimals_in_linear_systems",
+          "label": "Clearing decimals in linear systems",
+          "description": "Multiplies a system equation by a power of 10 to remove decimal coefficients before applying substitution or elimination.",
+          "yield_score": 0.38,
+          "yield_rationale": "Decimal clearing is a useful pre-processing step; less frequent than fraction clearing.",
+          "source_learn_keyword_id": "clearing_decimals_in_linear_systems"
+        },
+        {
+          "id": "distribution_before_solving_systems",
+          "label": "Distribution before solving systems",
+          "description": "Expands grouped expressions inside a system equation using the distributive property to align variables and constants before applying a solving method.",
+          "yield_score": 0.58,
+          "yield_rationale": "Distribution is required whenever system equations contain parentheses; common in moderate-difficulty problems.",
+          "source_learn_keyword_id": "distribution_before_solving_systems"
+        },
+        {
+          "id": "like_term_collection_before_solving_systems",
+          "label": "Like-term collection before solving systems",
+          "description": "Combines like terms within a system equation to simplify it before applying substitution or elimination.",
+          "yield_score": 0.50,
+          "yield_rationale": "Term collection before solving is a routine step in multi-term system equations.",
+          "source_learn_keyword_id": "like_term_collection_before_solving_systems"
+        },
+        {
+          "id": "variables_on_both_sides_in_system_equations",
+          "label": "Rearranging variables on both sides in system equations",
+          "description": "Moves all variable terms to one side of a system equation (e.g., 2x + y = x - 3y) before applying a solving method.",
+          "yield_score": 0.45,
+          "yield_rationale": "Variable-on-both-sides setup appears in moderately complex system problems.",
+          "source_learn_keyword_id": "variables_on_both_sides_in_system_equations"
+        },
+        {
+          "id": "equation_scaling_in_systems",
+          "label": "Equation scaling preserves solution sets",
+          "description": "Multiplying an entire system equation by a nonzero constant produces an equivalent equation without changing the system's solution set; applies the property to justify elimination scaling.",
+          "yield_score": 0.42,
+          "yield_rationale": "Conceptual justification for elimination; appears in reasoning and justification question parts.",
+          "source_learn_keyword_id": "equation_scaling_in_systems"
+        },
+        {
+          "id": "equivalent_equations_within_systems",
+          "label": "Equivalent equations within systems",
+          "description": "Replaces a system equation with an equivalent simpler form (e.g., 3x - 6y = 12 becomes x - 2y = 4) without changing the system's solution set.",
+          "yield_score": 0.38,
+          "yield_rationale": "Simplification before solving reduces arithmetic errors; tested as a pre-processing step.",
+          "source_learn_keyword_id": "equivalent_equations_within_systems"
+        },
+        {
+          "id": "method_selection_substitution_vs_elimination",
+          "label": "Method selection: substitution versus elimination",
+          "description": "Selects between substitution (when a variable is isolated or has coefficient 1/-1) and elimination (when coefficients align or can be aligned easily) based on system structure.",
+          "yield_score": 0.52,
+          "yield_rationale": "Strategy selection is explicitly tested in higher-difficulty MC items and FRQ justification parts.",
+          "source_learn_keyword_id": "method_selection_substitution_vs_elimination"
+        }
+      ]
+    },
+    {
+      "id": "special_case_and_parameter_linear_systems",
+      "label": "Special-Case and Parameter Linear Systems",
+      "description": "Systems whose solution type depends on coefficient relationships or unknown parameters, covering proportionality conditions for parallel and coincident lines, and finding parameter values that produce each solution type.",
+      "ced_topics": [],
+      "yield_score": 0.50,
+      "yield_rationale": "Parameter problems require combining system reasoning with equation analysis; moderate to high difficulty; appear in advanced MC and as parts of FRQ questions in AP Precalc modeling contexts.",
+      "source_learn_keyword_id": "special_case_and_parameter_linear_systems",
+      "in_depth": [
+        {
+          "id": "same_slope_different_intercepts_systems",
+          "label": "Same slope, different intercepts — no solution",
+          "description": "Classifies a two-line system as inconsistent when both equations have equal slopes but different y-intercepts, confirming the lines are parallel.",
+          "yield_score": 0.58,
+          "yield_rationale": "Slope-comparison route to inconsistency is among the most frequent special-case tests.",
+          "source_learn_keyword_id": "same_slope_different_intercepts_systems"
+        },
+        {
+          "id": "same_slope_same_intercept_systems",
+          "label": "Same slope, same intercept — infinitely many solutions",
+          "description": "Classifies a system as dependent when two slope-intercept equations have identical slopes and intercepts, confirming they represent the same line.",
+          "yield_score": 0.52,
+          "yield_rationale": "Companion classification to parallel-lines case; both appear in MC classification questions.",
+          "source_learn_keyword_id": "same_slope_same_intercept_systems"
+        },
+        {
+          "id": "proportional_coefficients_dependent_systems",
+          "label": "Proportional coefficients — dependent system",
+          "description": "Identifies a dependent system in standard form when all corresponding coefficients and constants are proportional, confirming the equations represent the same line.",
+          "yield_score": 0.55,
+          "yield_rationale": "Coefficient-ratio check is the algebraic form of coincident-line detection; frequently tested.",
+          "source_learn_keyword_id": "proportional_coefficients_dependent_systems"
+        },
+        {
+          "id": "proportional_coefficients_inconsistent_systems",
+          "label": "Proportional variable coefficients, nonproportional constants — no solution",
+          "description": "Identifies an inconsistent system when variable coefficients are proportional but constants are not, confirming parallel lines in standard form.",
+          "yield_score": 0.60,
+          "yield_rationale": "The coefficient-ratio inconsistency pattern is tested repeatedly because it looks similar to the dependent case.",
+          "source_learn_keyword_id": "proportional_coefficients_inconsistent_systems"
+        },
+        {
+          "id": "nonproportional_coefficients_one_solution_systems",
+          "label": "Nonproportional coefficients — one solution",
+          "description": "Identifies that nonproportional variable coefficients in a standard-form system confirm distinct non-parallel lines with exactly one intersection.",
+          "yield_score": 0.48,
+          "yield_rationale": "Default case for two-variable systems; recognizing it from coefficients is a prerequisite for classifying all three cases.",
+          "source_learn_keyword_id": "nonproportional_coefficients_one_solution_systems"
+        },
+        {
+          "id": "parameter_values_for_no_solution_systems",
+          "label": "Parameter value producing no solution",
+          "description": "Finds the value of an unknown parameter that makes the variable coefficients proportional but the constants nonproportional, forcing the system to be inconsistent.",
+          "yield_score": 0.65,
+          "yield_rationale": "Parameter problems for inconsistency are a high-difficulty MC type; require combining proportionality reasoning with algebraic solving.",
+          "source_learn_keyword_id": "parameter_values_for_no_solution_systems"
+        },
+        {
+          "id": "parameter_values_for_infinite_solution_systems",
+          "label": "Parameter value producing infinitely many solutions",
+          "description": "Finds the value of an unknown parameter that makes all corresponding coefficients and constants proportional, producing a dependent system.",
+          "yield_score": 0.62,
+          "yield_rationale": "The infinite-solutions parameter case is tested alongside the no-solution case; distinguishing them requires careful ratio comparison.",
+          "source_learn_keyword_id": "parameter_values_for_infinite_solution_systems"
+        },
+        {
+          "id": "parameter_values_for_one_solution_systems",
+          "label": "Parameter values producing one solution",
+          "description": "Identifies all parameter values for which the system has exactly one solution by excluding values that cause parallel or coincident lines.",
+          "yield_score": 0.55,
+          "yield_rationale": "Complement of the no-solution and infinite-solution parameter cases; tested as a set-exclusion reasoning problem.",
+          "source_learn_keyword_id": "parameter_values_for_one_solution_systems"
+        },
+        {
+          "id": "contradiction_from_system_simplification",
+          "label": "Contradiction after system simplification",
+          "description": "Interprets a false arithmetic statement (e.g., 0 = 9) resulting from valid system transformations as proof that the system is inconsistent with no solution.",
+          "yield_score": 0.58,
+          "yield_rationale": "False-statement interpretation is tested in both substitution and elimination special-case contexts.",
+          "source_learn_keyword_id": "contradiction_from_system_simplification"
+        },
+        {
+          "id": "identity_from_system_simplification",
+          "label": "Identity after system simplification",
+          "description": "Interprets a true arithmetic statement (e.g., 0 = 0) resulting from valid system transformations as proof that the system is dependent with infinitely many solutions.",
+          "yield_score": 0.55,
+          "yield_rationale": "True-statement interpretation is the dependent-case complement to the contradiction case.",
+          "source_learn_keyword_id": "identity_from_system_simplification"
+        }
+      ]
+    },
+    {
+      "id": "three_variable_linear_systems_non_matrix",
+      "label": "Three-Variable Linear Systems Without Matrices",
+      "description": "Solving and interpreting linear systems in three variables using substitution and elimination without matrix notation, row reduction, determinants, or inverse matrices.",
+      "ced_topics": [],
+      "yield_score": 0.28,
+      "yield_rationale": "Three-variable systems appear rarely in AP Precalc and not at all in AP Calc AB exam items; primarily a foundations extension of two-variable methods.",
+      "source_learn_keyword_id": "three_variable_linear_systems_non_matrix",
+      "in_depth": [
+        {
+          "id": "three_variable_system_structure",
+          "label": "Three-variable system structure",
+          "description": "Recognizes a three-variable system (involving x, y, z) and identifies the number of equations and variables before choosing a solution strategy.",
+          "yield_score": 0.20,
+          "yield_rationale": "Structural recognition is the entry step; rarely the primary tested skill.",
+          "source_learn_keyword_id": "three_variable_system_structure"
+        },
+        {
+          "id": "three_variable_substitution_method",
+          "label": "Substitution in three-variable systems",
+          "description": "Isolates one variable in an equation and substitutes into the remaining equations to reduce a three-variable system step by step.",
+          "yield_score": 0.25,
+          "yield_rationale": "Substitution in three-variable systems extends two-variable logic; tested in foundation assessments.",
+          "source_learn_keyword_id": "three_variable_substitution_method"
+        },
+        {
+          "id": "three_variable_elimination_to_two_variable_system",
+          "label": "Elimination reducing three variables to two",
+          "description": "Eliminates the same variable from two pairs of equations to produce a two-variable system, the key non-matrix reduction step.",
+          "yield_score": 0.32,
+          "yield_rationale": "The systematic reduction step is the most procedurally complex part of three-variable work.",
+          "source_learn_keyword_id": "three_variable_elimination_to_two_variable_system"
+        },
+        {
+          "id": "three_variable_elimination_pair_selection",
+          "label": "Equation-pair selection in three-variable elimination",
+          "description": "Selects which pairs of equations to combine to eliminate a target variable, producing a solvable two-variable system.",
+          "yield_score": 0.28,
+          "yield_rationale": "Strategic pair selection is needed for efficiency but is embedded in the broader reduction procedure.",
+          "source_learn_keyword_id": "three_variable_elimination_pair_selection"
+        },
+        {
+          "id": "three_variable_back_substitution",
+          "label": "Back-substitution in three-variable systems",
+          "description": "After solving for two variables, substitutes both values into an original equation to determine the third variable and complete the ordered triple.",
+          "yield_score": 0.30,
+          "yield_rationale": "Back-substitution is required for every complete three-variable solution; error-prone with three simultaneous values.",
+          "source_learn_keyword_id": "three_variable_back_substitution"
+        },
+        {
+          "id": "three_variable_ordered_triple_completion",
+          "label": "Ordered-triple completion",
+          "description": "Assembles the final ordered triple (x, y, z) in the correct variable order after all three values are found.",
+          "yield_score": 0.22,
+          "yield_rationale": "Notation step; important for answer correctness but not a conceptually complex target.",
+          "source_learn_keyword_id": "three_variable_ordered_triple_completion"
+        },
+        {
+          "id": "three_variable_system_one_solution",
+          "label": "One-solution three-variable systems",
+          "description": "Classifies a three-variable system as having a unique solution when the solving process produces a single ordered triple.",
+          "yield_score": 0.25,
+          "yield_rationale": "Most three-variable practice problems target the one-solution case.",
+          "source_learn_keyword_id": "three_variable_system_one_solution"
+        },
+        {
+          "id": "three_variable_system_no_solution",
+          "label": "No-solution three-variable systems",
+          "description": "Identifies a three-variable system as inconsistent when elimination or substitution produces a false numeric statement.",
+          "yield_score": 0.22,
+          "yield_rationale": "Special-case detection extends from two-variable systems; tested less frequently.",
+          "source_learn_keyword_id": "three_variable_system_no_solution"
+        },
+        {
+          "id": "three_variable_system_infinite_solutions",
+          "label": "Infinitely many solutions in three-variable systems",
+          "description": "Identifies a three-variable system as dependent when simplification produces a true identity and at least one variable is undetermined.",
+          "yield_score": 0.20,
+          "yield_rationale": "Dependent three-variable systems are conceptually complex and appear infrequently in foundations assessments.",
+          "source_learn_keyword_id": "three_variable_system_infinite_solutions"
+        },
+        {
+          "id": "free_variable_in_three_variable_systems",
+          "label": "Free variables in dependent three-variable systems",
+          "description": "Identifies and names a free variable when a three-variable system has infinitely many solutions, expressing remaining variables as functions of the free parameter.",
+          "yield_score": 0.18,
+          "yield_rationale": "Free-variable parametric description is a non-matrix concept that appears rarely in foundation-level work.",
+          "source_learn_keyword_id": "free_variable_in_three_variable_systems"
+        }
+      ]
+    },
+    {
+      "id": "linear_inequalities_graphing",
+      "label": "Systems of Linear Inequalities — Graphing",
+      "description": "Identifying and graphing systems of linear inequalities: boundary-line type (solid/dashed), half-plane shading direction, and the test-point method.",
+      "ced_topics": [],
+      "yield_score": 0.32,
+      "yield_rationale": "Graphing setup skills for inequality systems form the foundational layer before region analysis; boundary and shading conventions are the most directly tested concepts.",
+      "source_learn_keyword_id": "systems_of_linear_inequalities",
+      "in_depth": [
+        {
+          "id": "system_of_linear_inequalities_structure",
+          "label": "System of linear inequalities structure",
+          "description": "Recognizes a system of linear inequalities as two or more inequalities whose solution is the set of ordered pairs satisfying all conditions simultaneously.",
+          "yield_score": 0.22,
+          "yield_rationale": "Definitional entry point; rarely the primary tested skill after intro level.",
+          "source_learn_keyword_id": "system_of_linear_inequalities_structure"
+        },
+        {
+          "id": "solution_to_system_of_inequalities_meaning",
+          "label": "Solution meaning for systems of inequalities",
+          "description": "Identifies that a solution to a system of inequalities is an ordered pair satisfying every inequality, corresponding to the overlap region on the coordinate plane.",
+          "yield_score": 0.32,
+          "yield_rationale": "Region-vs-point distinction is conceptually important for coordinate-plane inequality interpretation.",
+          "source_learn_keyword_id": "solution_to_system_of_inequalities_meaning"
+        },
+        {
+          "id": "boundary_lines_for_linear_inequalities",
+          "label": "Boundary lines for linear inequalities",
+          "description": "Derives the boundary line for a linear inequality by replacing the inequality symbol with an equals sign, separating the plane into two half-planes.",
+          "yield_score": 0.40,
+          "yield_rationale": "Boundary line identification is the first step in every inequality-graphing problem.",
+          "source_learn_keyword_id": "boundary_lines_for_linear_inequalities"
+        },
+        {
+          "id": "solid_boundary_lines",
+          "label": "Solid boundary lines for inclusive inequalities",
+          "description": "Uses a solid boundary line for inequalities with <= or >=, because points on the boundary are included in the solution set.",
+          "yield_score": 0.42,
+          "yield_rationale": "Solid/dashed distinction is a frequently tested graphical convention.",
+          "source_learn_keyword_id": "solid_boundary_lines"
+        },
+        {
+          "id": "dashed_boundary_lines",
+          "label": "Dashed boundary lines for strict inequalities",
+          "description": "Uses a dashed boundary line for inequalities with < or >, because points on the boundary are excluded from the solution set.",
+          "yield_score": 0.42,
+          "yield_rationale": "Paired with solid-line recognition; both graphical conventions are tested together.",
+          "source_learn_keyword_id": "dashed_boundary_lines"
+        },
+        {
+          "id": "shading_above_or_below_boundary",
+          "label": "Shading above or below the boundary line",
+          "description": "Determines the correct half-plane to shade for an inequality solved for y: shade above for y > or y >=, below for y < or y <=.",
+          "yield_score": 0.50,
+          "yield_rationale": "Shading direction is the most commonly tested visual skill in inequality systems.",
+          "source_learn_keyword_id": "shading_above_or_below_boundary"
+        },
+        {
+          "id": "test_point_for_inequality_shading",
+          "label": "Test-point method for determining shading",
+          "description": "Substitutes a test point (usually (0, 0) when not on the boundary) into an inequality to determine which half-plane to shade.",
+          "yield_score": 0.48,
+          "yield_rationale": "Test-point method is the universal fallback for shading direction when the inequality is not solved for y.",
+          "source_learn_keyword_id": "test_point_for_inequality_shading"
+        }
+      ]
+    },
+    {
+      "id": "linear_inequalities_solution_regions",
+      "label": "Systems of Linear Inequalities — Solution Regions",
+      "description": "Identifying and analyzing the solution region of an inequality system: overlap regions, bounded and unbounded feasible regions, vertices, empty-overlap cases, and boundary-point inclusion.",
+      "ced_topics": [],
+      "yield_score": 0.28,
+      "yield_rationale": "Solution-region analysis is the application layer above graphing; vertex finding links to optimization and AP Precalc contextual modeling.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "overlap_region_for_systems_of_inequalities",
+          "label": "Overlap region for systems of inequalities",
+          "description": "Identifies the solution region of a system as the intersection of all individual half-planes, shading only the area where every inequality is satisfied.",
+          "yield_score": 0.55,
+          "yield_rationale": "Overlap identification is the defining skill in graphing systems of inequalities.",
+          "source_learn_keyword_id": "overlap_region_for_systems_of_inequalities"
+        },
+        {
+          "id": "bounded_feasible_regions",
+          "label": "Bounded feasible regions",
+          "description": "Identifies a feasible region as bounded when it is enclosed on all sides by boundary lines, having finite area.",
+          "yield_score": 0.35,
+          "yield_rationale": "Bounded-region recognition appears in contextual inequality problems; moderate frequency.",
+          "source_learn_keyword_id": "bounded_feasible_regions"
+        },
+        {
+          "id": "unbounded_feasible_regions",
+          "label": "Unbounded feasible regions",
+          "description": "Identifies a feasible region as unbounded when it extends infinitely in at least one direction because the inequalities do not fully enclose the solution set.",
+          "yield_score": 0.30,
+          "yield_rationale": "Unbounded-region recognition is the complement to bounded; tested less frequently.",
+          "source_learn_keyword_id": "unbounded_feasible_regions"
+        },
+        {
+          "id": "vertices_of_feasible_regions",
+          "label": "Vertices of feasible regions",
+          "description": "Finds the corner points of a feasible region by solving the systems formed by pairs of intersecting boundary lines.",
+          "yield_score": 0.38,
+          "yield_rationale": "Vertex finding links system-solving to inequality geometry; prerequisite for optimization contexts.",
+          "source_learn_keyword_id": "vertices_of_feasible_regions"
+        },
+        {
+          "id": "systems_of_inequalities_no_solution_region",
+          "label": "Systems of inequalities with no overlap",
+          "description": "Identifies when individual inequality regions have no overlap, producing a system of inequalities with no solution.",
+          "yield_score": 0.25,
+          "yield_rationale": "Empty-overlap case is a less common but important classification; tested alongside bounded/unbounded.",
+          "source_learn_keyword_id": "systems_of_inequalities_no_solution_region"
+        },
+        {
+          "id": "systems_of_inequalities_boundary_point_inclusion",
+          "label": "Boundary-point inclusion in inequality systems",
+          "description": "Determines whether a point on a boundary line belongs to the solution set by checking both the line-type (solid/dashed) and whether it satisfies every inequality in the system.",
+          "yield_score": 0.35,
+          "yield_rationale": "Endpoint and boundary-point questions require combining solid/dashed rules with verification; a distinct reasoning step.",
+          "source_learn_keyword_id": "systems_of_inequalities_boundary_point_inclusion"
+        }
+      ]
+    },
+    {
+      "id": "nonlinear_systems_types_and_setup",
+      "label": "Nonlinear Systems — Types and Setup",
+      "description": "Recognizing and setting up nonlinear system types: linear-quadratic, quadratic-quadratic, line-circle, and circle-circle systems, and applying substitution to reduce to a single-variable equation.",
+      "ced_topics": [],
+      "yield_score": 0.45,
+      "yield_rationale": "Nonlinear system types and substitution setup bridge foundations to AP Precalc function concepts; line-parabola intersections directly connect to polynomial zero analysis.",
+      "source_learn_keyword_id": "nonlinear_systems_of_equations",
+      "in_depth": [
+        {
+          "id": "nonlinear_system_structure",
+          "label": "Nonlinear system structure",
+          "description": "Recognizes a system as nonlinear when at least one equation is not linear (e.g., contains a squared term or a circle equation).",
+          "yield_score": 0.30,
+          "yield_rationale": "Structural classification is the entry step; primarily tested in intro-level nonlinear problems.",
+          "source_learn_keyword_id": "nonlinear_system_structure"
+        },
+        {
+          "id": "linear_quadratic_systems",
+          "label": "Linear-quadratic systems",
+          "description": "Solves a system containing one linear and one quadratic equation by finding their intersection points, typically producing zero, one, or two solutions.",
+          "yield_score": 0.65,
+          "yield_rationale": "Line-parabola intersection is the most tested nonlinear system type; connects to polynomial zero-finding and function modeling.",
+          "source_learn_keyword_id": "linear_quadratic_systems"
+        },
+        {
+          "id": "quadratic_quadratic_systems",
+          "label": "Quadratic-quadratic systems",
+          "description": "Solves a system of two quadratic equations by setting expressions equal or using elimination to find intersection points.",
+          "yield_score": 0.45,
+          "yield_rationale": "Parabola-parabola intersection extends linear-quadratic reasoning; moderate frequency.",
+          "source_learn_keyword_id": "quadratic_quadratic_systems"
+        },
+        {
+          "id": "line_circle_systems",
+          "label": "Line-circle systems",
+          "description": "Solves a system containing a linear equation and a circle equation (x^2 + y^2 = r^2) to find intersection points, yielding zero, one, or two solutions.",
+          "yield_score": 0.40,
+          "yield_rationale": "Line-circle systems appear in foundations and connect to coordinate geometry.",
+          "source_learn_keyword_id": "line_circle_systems"
+        },
+        {
+          "id": "circle_circle_systems",
+          "label": "Circle-circle systems",
+          "description": "Solves a system of two circle equations to find shared intersection points, if any exist.",
+          "yield_score": 0.22,
+          "yield_rationale": "Circle-circle intersection is the least common nonlinear system type in foundations assessments.",
+          "source_learn_keyword_id": "circle_circle_systems"
+        },
+        {
+          "id": "nonlinear_system_substitution",
+          "label": "Substitution in nonlinear systems",
+          "description": "Substitutes one expression from a nonlinear system into the other equation, producing a single-variable nonlinear equation to solve.",
+          "yield_score": 0.68,
+          "yield_rationale": "Substitution is the primary technique for nonlinear systems; widely tested across all nonlinear system types.",
+          "source_learn_keyword_id": "nonlinear_system_substitution"
+        }
+      ]
+    },
+    {
+      "id": "nonlinear_systems_solution_analysis",
+      "label": "Nonlinear Systems — Solution Analysis",
+      "description": "Analyzing nonlinear system solutions: reducing to a quadratic equation, counting real solutions, identifying tangency, verifying candidates, and rejecting extraneous roots.",
+      "ced_topics": [],
+      "yield_score": 0.42,
+      "yield_rationale": "Solution analysis skills for nonlinear systems connect to discriminant reasoning, graphical intersection counting, and extraneous-root handling in AP Precalc function-model contexts.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "nonlinear_systems_leading_to_quadratic_equations",
+          "label": "Nonlinear systems reducing to a quadratic equation",
+          "description": "Recognizes that most nonlinear system substitutions produce a quadratic equation as the final single-variable equation to solve.",
+          "yield_score": 0.70,
+          "yield_rationale": "Quadratic reduction is the most common intermediate step in nonlinear system solving; connects to factoring and quadratic formula.",
+          "source_learn_keyword_id": "nonlinear_systems_leading_to_quadratic_equations"
+        },
+        {
+          "id": "number_of_real_solutions_nonlinear_systems",
+          "label": "Number of real solutions in nonlinear systems",
+          "description": "Determines whether a nonlinear system has zero, one, two, or more real solutions from algebraic discriminant analysis or graphical intersection count.",
+          "yield_score": 0.62,
+          "yield_rationale": "Solution-count reasoning connects to discriminant analysis of quadratics and is tested in both algebraic and graphical forms.",
+          "source_learn_keyword_id": "number_of_real_solutions_nonlinear_systems"
+        },
+        {
+          "id": "tangent_intersection_systems",
+          "label": "Tangent intersection in nonlinear systems",
+          "description": "Identifies the special case where a line or curve is tangent to another curve, producing exactly one intersection point (a repeated root of the resulting quadratic).",
+          "yield_score": 0.50,
+          "yield_rationale": "Tangency as one-solution case links the discriminant equal to zero with the geometric concept of tangency.",
+          "source_learn_keyword_id": "tangent_intersection_systems"
+        },
+        {
+          "id": "nonlinear_system_solution_verification",
+          "label": "Solution verification in nonlinear systems",
+          "description": "Checks candidate solutions by substituting into every equation, which is especially important in nonlinear systems where multiple candidates may arise.",
+          "yield_score": 0.55,
+          "yield_rationale": "Verification after solving is a required step when the quadratic produces two candidates; both must be checked.",
+          "source_learn_keyword_id": "nonlinear_system_solution_verification"
+        },
+        {
+          "id": "extraneous_candidates_in_nonlinear_systems",
+          "label": "Extraneous candidates in nonlinear systems",
+          "description": "Identifies and rejects candidate solutions that fail to satisfy one or more of the original system equations after the algebraic solving process.",
+          "yield_score": 0.48,
+          "yield_rationale": "Extraneous solutions appear when squaring or other nonlinear operations introduce spurious roots; tested in higher-difficulty problems.",
+          "source_learn_keyword_id": "extraneous_candidates_in_nonlinear_systems"
+        },
+        {
+          "id": "graphical_intersections_nonlinear_systems",
+          "label": "Graphical intersections in nonlinear systems",
+          "description": "Reads or estimates intersection points between nonlinear curves from a graph, connecting geometric intersection to algebraic system solutions.",
+          "yield_score": 0.45,
+          "yield_rationale": "Graphical interpretation of nonlinear solutions reinforces the algebraic-graphical connection tested in AP Precalc representation questions.",
+          "source_learn_keyword_id": "graphical_intersections_nonlinear_systems"
+        }
+      ]
+    },
+    {
+      "id": "structured_linear_system_relationships",
+      "label": "Structured Linear System Relationships",
+      "description": "Common algebraic relationship patterns — sum-difference, total-part, value-quantity, rate-total, mixture, comparison, break-even, and two-constraint structures — that naturally and efficiently form two-variable linear systems.",
+      "ced_topics": [],
+      "yield_score": 0.50,
+      "yield_rationale": "Pattern-to-system translation is directly exercised in AP Precalc function-model construction (1.14, 2.5, 3.7) when two conditions define a system for parameter extraction.",
+      "source_learn_keyword_id": "structured_linear_system_relationships",
+      "in_depth": [
+        {
+          "id": "sum_and_difference_systems",
+          "label": "Sum-and-difference systems",
+          "description": "Translates 'sum is S and difference is D' into a 2x2 system (x + y = S, x - y = D) that solves efficiently by adding or subtracting equations.",
+          "yield_score": 0.55,
+          "yield_rationale": "Sum-difference is the most natural and frequently occurring structured system pattern.",
+          "source_learn_keyword_id": "sum_and_difference_systems"
+        },
+        {
+          "id": "total_and_part_systems",
+          "label": "Total-and-part systems",
+          "description": "Writes a system using one equation for total quantity (x + y = T) and one for a relationship between the parts (e.g., x = k*y), then solves for each part.",
+          "yield_score": 0.50,
+          "yield_rationale": "Part-total structure underlies many two-condition function-model problems.",
+          "source_learn_keyword_id": "total_and_part_systems"
+        },
+        {
+          "id": "value_and_quantity_systems",
+          "label": "Value-and-quantity systems",
+          "description": "Forms a system with one equation for total quantity (x + y = n) and one for total value (v1*x + v2*y = V) when two item types have different unit values.",
+          "yield_score": 0.60,
+          "yield_rationale": "Value-quantity systems appear in two-condition model construction; the structure is reused in exponential/linear parameter fitting.",
+          "source_learn_keyword_id": "value_and_quantity_systems"
+        },
+        {
+          "id": "rate_and_total_systems",
+          "label": "Rate-and-total systems",
+          "description": "Forms a system where two quantities are related by a total-quantity equation and a weighted-rate equation (r1*x + r2*y = total), solving for unknown amounts.",
+          "yield_score": 0.55,
+          "yield_rationale": "Rate-total structure generalizes value-quantity; both are common in AP Precalc modeling.",
+          "source_learn_keyword_id": "rate_and_total_systems"
+        },
+        {
+          "id": "mixture_systems_two_components",
+          "label": "Two-component mixture systems",
+          "description": "Writes a system using one equation for total amount and one for total weighted contribution (concentration, value, etc.) in a two-component mixture.",
+          "yield_score": 0.48,
+          "yield_rationale": "Mixture systems are a classic two-condition structure; moderate frequency in foundations assessments.",
+          "source_learn_keyword_id": "mixture_systems_two_components"
+        },
+        {
+          "id": "comparison_systems",
+          "label": "Comparison systems",
+          "description": "Identifies a system containing a direct comparison equation (x = y + k or x = k*y) as a substitution-ready structure and solves for both quantities.",
+          "yield_score": 0.52,
+          "yield_rationale": "Comparison structure is common in all contexts where one quantity is expressed relative to another.",
+          "source_learn_keyword_id": "comparison_systems"
+        },
+        {
+          "id": "break_even_systems",
+          "label": "Break-even systems",
+          "description": "Finds the input value where two linear expressions are equal (e.g., cost = revenue) by writing and solving a system or by setting expressions equal.",
+          "yield_score": 0.45,
+          "yield_rationale": "Break-even is a canonical two-linear-function comparison problem; appears in function-model contexts.",
+          "source_learn_keyword_id": "break_even_systems"
+        },
+        {
+          "id": "linear_systems_from_two_constraints",
+          "label": "Linear systems from two simultaneous constraints",
+          "description": "Translates two independent algebraic constraints on the same variables into a linear system and identifies which constraint forms each equation.",
+          "yield_score": 0.58,
+          "yield_rationale": "Two-constraint translation is the general form of all structured system patterns; directly mirrors AP Precalc parameter-extraction tasks.",
+          "source_learn_keyword_id": "linear_systems_from_two_constraints"
+        },
+        {
+          "id": "sys_writing_system_from_context",
+          "label": "Writing a linear system from contextual conditions",
+          "description": "Translates a multi-condition contextual description into a two-variable linear system by assigning variables and writing one equation per condition.",
+          "yield_score": 0.62,
+          "yield_rationale": "Model-construction from context is directly tested in AP Precalc FRQ 2 and in function-parameter extraction tasks (1.14, 2.5, 3.7).",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

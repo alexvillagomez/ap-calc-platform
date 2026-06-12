@@ -1,0 +1,1114 @@
+{
+  "category": {
+    "id": "number_systems",
+    "label": "Number Systems and Properties",
+    "description": "Properties of real numbers, number-set classification, arithmetic operations, and numeric structure. Builds the fluency with signed numbers, fractions, percents, and order-of-operations that every downstream algebra and precalculus topic assumes.",
+    "section": "foundations",
+    "ced_unit": null,
+    "courses": [
+      { "course": "precalc", "role": "core", "order_index": 1 },
+      { "course": "calc_ab", "role": "foundation", "order_index": 1 }
+    ],
+    "yield_score": 0.62,
+    "yield_rationale": "Ubiquitous prerequisite: signed-number and fraction fluency are load-bearing for every downstream category, but number-systems content is rarely the direct test object once functions are introduced."
+  },
+  "umbrellas": [
+    {
+      "id": "real_number_set_membership",
+      "label": "Real Number Set Membership",
+      "description": "The standard real-number subsets (ℕ, ℤ, ℚ, irrational, ℝ) and the containment chain among them — what each set contains and how they nest.",
+      "ced_topics": [],
+      "yield_score": 0.28,
+      "yield_rationale": "Set-definition and containment vocabulary is background literacy; only rarely the direct exam question once functions are in play.",
+      "source_learn_keyword_id": "real_number_classification",
+      "in_depth": [
+        {
+          "id": "natural_numbers",
+          "label": "Natural numbers",
+          "description": "Tests whether a student correctly identifies the counting numbers {1, 2, 3, …}, excluding 0, negatives, fractions, and irrationals.",
+          "yield_score": 0.18,
+          "yield_rationale": "Rarely tested independently; foundational vocabulary only.",
+          "source_learn_keyword_id": "natural_numbers"
+        },
+        {
+          "id": "whole_numbers",
+          "label": "Whole numbers",
+          "description": "Tests the distinction between whole numbers {0, 1, 2, …} and natural numbers, specifically the inclusion of 0.",
+          "yield_score": 0.15,
+          "yield_rationale": "Minimal standalone test value; distinguished from natural numbers by a single element.",
+          "source_learn_keyword_id": "whole_numbers"
+        },
+        {
+          "id": "integers",
+          "label": "Integers",
+          "description": "Tests identification of the set of positive whole numbers, negative whole numbers, and 0, excluding non-integer fractions and decimals.",
+          "yield_score": 0.20,
+          "yield_rationale": "Needed to classify signed numbers correctly; moderate background value.",
+          "source_learn_keyword_id": "integers"
+        },
+        {
+          "id": "rational_numbers",
+          "label": "Rational numbers",
+          "description": "Tests recognition that any number expressible as a ratio of two integers (nonzero denominator) is rational, including integers, terminating decimals, and repeating decimals.",
+          "yield_score": 0.32,
+          "yield_rationale": "Rational vs. irrational distinction is prerequisite for exact-value work in trig and logarithm contexts.",
+          "source_learn_keyword_id": "rational_numbers"
+        },
+        {
+          "id": "irrational_numbers",
+          "label": "Irrational numbers",
+          "description": "Tests identification of real numbers whose decimal expansion is nonterminating and nonrepeating, and that cannot be written as a ratio of integers.",
+          "yield_score": 0.35,
+          "yield_rationale": "Distinguishing rational from irrational is prerequisite for exact-form trig values and logarithm evaluation.",
+          "source_learn_keyword_id": "irrational_numbers"
+        },
+        {
+          "id": "real_numbers",
+          "label": "Real numbers",
+          "description": "Tests that any number placeable on the number line is real, contrasting with non-real complex numbers (which are out of scope here).",
+          "yield_score": 0.22,
+          "yield_rationale": "Serves as the overarching set; useful mainly for domain-and-range discussions in downstream categories.",
+          "source_learn_keyword_id": "real_numbers"
+        },
+        {
+          "id": "number_set_containment_chain",
+          "label": "Containment of real-number sets",
+          "description": "Tests the nested containment ℕ ⊂ ℤ_≥0 ⊂ ℤ ⊂ ℚ ⊂ ℝ with irrational ⊂ ℝ but irrational ∩ ℚ = ∅, requiring students to place sets in a correct containment diagram.",
+          "yield_score": 0.28,
+          "yield_rationale": "Containment reasoning is a one-time conceptual hurdle; not revisited heavily downstream.",
+          "source_learn_keyword_id": "number_set_containment_chain"
+        }
+      ]
+    },
+    {
+      "id": "real_number_classification_skills",
+      "label": "Real Number Classification Skills",
+      "description": "Applying set-membership knowledge to classify a given number — identifying all sets it belongs to, finding the most specific set, and using decimal-form cues to determine rationality or irrationality.",
+      "ced_topics": [],
+      "yield_score": 0.32,
+      "yield_rationale": "Classification skill (most-specific set, rational vs. irrational from decimal form) appears more often than raw set-definition questions at AP level.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "multiple_number_set_membership",
+          "label": "Multiple membership in number sets",
+          "description": "Tests listing all real-number subsets that contain a given number rather than only the smallest set.",
+          "yield_score": 0.20,
+          "yield_rationale": "Complement skill to 'most specific classification'; low direct exam weight.",
+          "source_learn_keyword_id": "multiple_number_set_membership"
+        },
+        {
+          "id": "least_restrictive_number_set_classification",
+          "label": "Most specific number-set classification",
+          "description": "Tests selecting the smallest standard subset (e.g., natural rather than rational) that describes a given number — the canonical classification move.",
+          "yield_score": 0.25,
+          "yield_rationale": "Most common form of number-classification MC question; still low overall weight.",
+          "source_learn_keyword_id": "least_restrictive_number_set_classification"
+        },
+        {
+          "id": "rational_decimal_forms",
+          "label": "Rational decimal forms",
+          "description": "Tests recognizing that every rational number's decimal expansion either terminates or eventually repeats, used to classify decimals without converting to fractions.",
+          "yield_score": 0.30,
+          "yield_rationale": "Supports exact-vs-approximate distinctions in log and trig exact-value contexts.",
+          "source_learn_keyword_id": "rational_decimal_forms"
+        },
+        {
+          "id": "irrational_decimal_forms",
+          "label": "Irrational decimal forms",
+          "description": "Tests recognizing irrationality from a decimal that continues without any repeating block, and distinguishing it from terminating or repeating decimals.",
+          "yield_score": 0.28,
+          "yield_rationale": "Paired with rational_decimal_forms; same limited standalone weight.",
+          "source_learn_keyword_id": "irrational_decimal_forms"
+        },
+        {
+          "id": "perfect_square_integer_roots",
+          "label": "Perfect-square integer roots",
+          "description": "Tests number-set classification of √n when n is a perfect square (result is an integer), NOT radical simplification.",
+          "yield_score": 0.33,
+          "yield_rationale": "Appears as classification in exact-value trig questions; boundary with exponents_and_radicals is purely classification here.",
+          "source_learn_keyword_id": "perfect_square_integer_roots"
+        },
+        {
+          "id": "nonperfect_square_irrational_roots",
+          "label": "Non-perfect-square irrational roots",
+          "description": "Tests classifying √n as irrational when n is a positive integer that is not a perfect square, focusing on classification only, not rewriting the radical.",
+          "yield_score": 0.33,
+          "yield_rationale": "Prerequisite recognition for exact-form answers; boundary skill before radical manipulation in F6.",
+          "source_learn_keyword_id": "nonperfect_square_irrational_roots"
+        }
+      ]
+    },
+    {
+      "id": "fraction_and_decimal_representations",
+      "label": "Fraction and Decimal Representations",
+      "description": "Place value, expanded form, equivalent fractions, reducing fractions, mixed numbers and improper fractions, and converting terminating decimals to fractions.",
+      "ced_topics": [],
+      "yield_score": 0.42,
+      "yield_rationale": "Fraction-equivalence and lowest-terms skills are directly load-bearing for rational expression work in F5/P1; decimal place value and expanded form have lower AP-level weight.",
+      "source_learn_keyword_id": "number_representations",
+      "in_depth": [
+        {
+          "id": "decimal_place_value",
+          "label": "Decimal place value",
+          "description": "Tests identifying the value of a digit based on its position (tenths, hundredths, thousandths, etc.) relative to the decimal point.",
+          "yield_score": 0.30,
+          "yield_rationale": "Background skill; needed for decimal arithmetic alignment but not independently tested downstream.",
+          "source_learn_keyword_id": "decimal_place_value"
+        },
+        {
+          "id": "expanded_notation_for_numbers",
+          "label": "Expanded notation for numbers",
+          "description": "Tests writing a number as the sum of its place-value parts (numeric decomposition without variables).",
+          "yield_score": 0.18,
+          "yield_rationale": "Low downstream relevance; primarily a primary/middle-school skill.",
+          "source_learn_keyword_id": "expanded_notation_for_numbers"
+        },
+        {
+          "id": "equivalent_fraction_forms",
+          "label": "Equivalent fraction forms",
+          "description": "Tests recognizing that scaling numerator and denominator by the same nonzero factor produces an equivalent fraction.",
+          "yield_score": 0.50,
+          "yield_rationale": "Equivalent fraction reasoning underlies LCD-finding and rational expression simplification in F5/P1.",
+          "source_learn_keyword_id": "equivalent_fraction_forms"
+        },
+        {
+          "id": "fractions_lowest_terms_by_gcf",
+          "label": "Fractions in lowest terms",
+          "description": "Tests reducing a fraction to lowest terms by dividing numerator and denominator by their GCF.",
+          "yield_score": 0.48,
+          "yield_rationale": "Required for rational function simplification and partial-fraction work in P1.",
+          "source_learn_keyword_id": "fractions_lowest_terms_by_gcf"
+        },
+        {
+          "id": "improper_fractions_and_mixed_numbers",
+          "label": "Improper fractions and mixed numbers",
+          "description": "Tests converting between improper fraction form and mixed number form for rational numbers ≥ 1.",
+          "yield_score": 0.35,
+          "yield_rationale": "Occasional in numeric computation; less critical once variable fractions dominate.",
+          "source_learn_keyword_id": "improper_fractions_and_mixed_numbers"
+        },
+        {
+          "id": "terminating_decimal_to_fraction",
+          "label": "Terminating decimal fraction forms",
+          "description": "Tests converting a terminating decimal to a fraction with a power-of-10 denominator, then reducing.",
+          "yield_score": 0.42,
+          "yield_rationale": "Supports rational number identification and exact-value reasoning.",
+          "source_learn_keyword_id": "terminating_decimal_to_fraction"
+        }
+      ]
+    },
+    {
+      "id": "decimal_percent_and_notation_forms",
+      "label": "Decimal, Percent, and Notation Forms",
+      "description": "Converting repeating decimals to fractions, fraction-to-decimal conversion, fraction-decimal-percent equivalence, scientific notation, and distinguishing exact from approximate representations.",
+      "ced_topics": [],
+      "yield_score": 0.48,
+      "yield_rationale": "Percent-decimal fluency and exact-vs-approximate reasoning are directly exercised in exponential modeling (P2) and no-calculator AP exam sections.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "repeating_decimal_to_fraction",
+          "label": "Repeating decimal fraction forms",
+          "description": "Tests converting a repeating decimal to a fraction using the repeating-block algebraic trick.",
+          "yield_score": 0.38,
+          "yield_rationale": "Confirms rationality of repeating decimals; less frequent than terminating conversion.",
+          "source_learn_keyword_id": "repeating_decimal_to_fraction"
+        },
+        {
+          "id": "fraction_to_decimal_forms",
+          "label": "Fraction-to-decimal forms",
+          "description": "Tests converting a fraction to its decimal equivalent (terminating or repeating) by long division.",
+          "yield_score": 0.40,
+          "yield_rationale": "Needed for mixed-form comparisons and percent/decimal interconversion.",
+          "source_learn_keyword_id": "fraction_to_decimal_forms"
+        },
+        {
+          "id": "fraction_decimal_percent_equivalence",
+          "label": "Fraction-decimal-percent equivalence",
+          "description": "Tests representing the same rational quantity in three forms — fraction, decimal, percent — without applied percent modeling.",
+          "yield_score": 0.52,
+          "yield_rationale": "Percent-decimal fluency is directly required for interpreting exponential growth/decay multipliers in P2.",
+          "source_learn_keyword_id": "fraction_decimal_percent_equivalence"
+        },
+        {
+          "id": "scientific_notation_form",
+          "label": "Scientific notation form",
+          "description": "Tests recognizing and writing a number in scientific notation a × 10^n where 1 ≤ |a| < 10; representation only, no exponent-law arithmetic.",
+          "yield_score": 0.32,
+          "yield_rationale": "Scientific notation appears in semi-log contexts (AP Precalc 2.15) and order-of-magnitude estimation.",
+          "source_learn_keyword_id": "scientific_notation_form"
+        },
+        {
+          "id": "standard_form_from_scientific_notation",
+          "label": "Standard form from scientific notation",
+          "description": "Tests converting a number written in scientific notation back to ordinary decimal notation by interpreting the sign and magnitude of the power of 10.",
+          "yield_score": 0.30,
+          "yield_rationale": "Inverse of scientific-notation form; similar downstream weight.",
+          "source_learn_keyword_id": "standard_form_from_scientific_notation"
+        },
+        {
+          "id": "exact_and_approximate_number_forms",
+          "label": "Exact and approximate number forms",
+          "description": "Tests distinguishing exact representations (fractions, radicals, π) from approximations (rounded decimals), and identifying which form is exact for a given quantity.",
+          "yield_score": 0.55,
+          "yield_rationale": "No-calculator sections of AP Precalc and Calc AB require exact-form answers; distinguishing exact from approximate is a recurring exam literacy skill.",
+          "source_learn_keyword_id": "exact_and_approximate_number_forms"
+        }
+      ]
+    },
+    {
+      "id": "divisibility_rules_and_parity",
+      "label": "Divisibility Rules and Parity",
+      "description": "Even and odd integers, parity of sums and products, digit-based divisibility rules (by 2, 3, 4, 5, 6, 8, 9, 10, 12), prime and composite numbers.",
+      "ced_topics": [],
+      "yield_score": 0.25,
+      "yield_rationale": "Divisibility rules and parity are low-weight background knowledge at AP level; they support prime factorization and GCF/LCM but are rarely directly tested.",
+      "source_learn_keyword_id": "integer_divisibility_and_factor_structure",
+      "in_depth": [
+        {
+          "id": "even_and_odd_integers",
+          "label": "Even and odd integers",
+          "description": "Tests classifying an integer as even (divisible by 2) or odd, and applying parity as a property of integers.",
+          "yield_score": 0.22,
+          "yield_rationale": "Background parity reasoning; not a direct AP Precalc or Calc AB test object.",
+          "source_learn_keyword_id": "even_and_odd_integers"
+        },
+        {
+          "id": "parity_of_sums_and_products",
+          "label": "Parity of sums and products",
+          "description": "Tests using even-odd rules to determine the parity of sums and products (e.g., odd + odd = even) without variables.",
+          "yield_score": 0.20,
+          "yield_rationale": "Low standalone weight; parity reasoning supports polynomial symmetry concepts at a background level.",
+          "source_learn_keyword_id": "parity_of_sums_and_products"
+        },
+        {
+          "id": "divisibility_by_2_5_10",
+          "label": "Divisibility by 2, 5, and 10",
+          "description": "Tests applying last-digit divisibility rules to determine if an integer is divisible by 2, 5, or 10.",
+          "yield_score": 0.18,
+          "yield_rationale": "Quick-recognition rules; minimal downstream AP relevance.",
+          "source_learn_keyword_id": "divisibility_by_2_5_10"
+        },
+        {
+          "id": "divisibility_by_3_and_9",
+          "label": "Divisibility by 3 and 9",
+          "description": "Tests the digit-sum rules for divisibility by 3 and 9, distinct from final-digit tests.",
+          "yield_score": 0.18,
+          "yield_rationale": "Digit-sum rule; low AP-level weight.",
+          "source_learn_keyword_id": "divisibility_by_3_and_9"
+        },
+        {
+          "id": "divisibility_by_4_and_8",
+          "label": "Divisibility by 4 and 8",
+          "description": "Tests applying last-two or last-three digit rules for divisibility by 4 and 8.",
+          "yield_score": 0.15,
+          "yield_rationale": "Rarely tested beyond arithmetic contexts.",
+          "source_learn_keyword_id": "divisibility_by_4_and_8"
+        },
+        {
+          "id": "divisibility_by_6_and_12",
+          "label": "Divisibility by 6 and 12",
+          "description": "Tests composite divisibility rules (satisfying multiple simpler conditions simultaneously, e.g., divisible by both 2 and 3 for divisibility by 6).",
+          "yield_score": 0.18,
+          "yield_rationale": "Combined-condition logic is useful for LCM reasoning; minimal direct exam weight.",
+          "source_learn_keyword_id": "divisibility_by_6_and_12"
+        },
+        {
+          "id": "prime_and_composite_numbers",
+          "label": "Prime and composite numbers",
+          "description": "Tests classifying positive integers greater than 1 as prime (exactly two factors) or composite (more than two), including the special status of 1.",
+          "yield_score": 0.30,
+          "yield_rationale": "Prerequisite for prime factorization; low direct test weight at AP level.",
+          "source_learn_keyword_id": "prime_and_composite_numbers"
+        }
+      ]
+    },
+    {
+      "id": "prime_factorization_gcf_lcm",
+      "label": "Prime Factorization, GCF, and LCM",
+      "description": "Factors and multiples, prime factorization, greatest common factor, least common multiple, relatively prime integers, and remainders after integer division.",
+      "ced_topics": [],
+      "yield_score": 0.42,
+      "yield_rationale": "GCF and LCM are the direct mechanisms for fraction reduction and LCD-finding (rational_number_arithmetic); prime factorization and remainders feed polynomial GCF factoring in F5.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "factors_and_multiples",
+          "label": "Factors and multiples",
+          "description": "Tests identifying the factors of an integer and listing its multiples, establishing the base idea behind divisibility.",
+          "yield_score": 0.38,
+          "yield_rationale": "Factor recognition is the entry move for prime factorization, GCF, and polynomial GCF factoring.",
+          "source_learn_keyword_id": "factors_and_multiples"
+        },
+        {
+          "id": "prime_factorization",
+          "label": "Prime factorization",
+          "description": "Tests writing a positive integer as a product of prime factors, which is the mechanism behind GCF and LCM computation.",
+          "yield_score": 0.42,
+          "yield_rationale": "Prime factorization is the computational tool for numeric GCF/LCM, which feed polynomial GCF factoring and rational simplification.",
+          "source_learn_keyword_id": "prime_factorization"
+        },
+        {
+          "id": "greatest_common_factor_integers",
+          "label": "Greatest common factor of integers",
+          "description": "Tests finding the largest integer that divides two or more given integers evenly (numeric GCF only, no variables).",
+          "yield_score": 0.45,
+          "yield_rationale": "Numeric GCF directly supports reducing fractions and is the conceptual basis for polynomial GCF factoring in F5.",
+          "source_learn_keyword_id": "greatest_common_factor_integers"
+        },
+        {
+          "id": "least_common_multiple_integers",
+          "label": "Least common multiple of integers",
+          "description": "Tests finding the smallest positive integer that is a multiple of two or more integers, supporting common-denominator arithmetic.",
+          "yield_score": 0.48,
+          "yield_rationale": "LCM is the mechanism for finding LCD in fraction arithmetic; moderate downstream load.",
+          "source_learn_keyword_id": "least_common_multiple_integers"
+        },
+        {
+          "id": "relatively_prime_integers",
+          "label": "Relatively prime integers",
+          "description": "Tests determining whether two integers share no common factor greater than 1 (GCF = 1), without requiring either number to be prime itself.",
+          "yield_score": 0.25,
+          "yield_rationale": "Supports lowest-terms reasoning and coprimality in modular contexts; low direct AP weight.",
+          "source_learn_keyword_id": "relatively_prime_integers"
+        },
+        {
+          "id": "remainders_after_integer_division",
+          "label": "Remainders after integer division",
+          "description": "Tests expressing integer division with a quotient and a nonnegative remainder smaller than the divisor, connecting to the Division Algorithm.",
+          "yield_score": 0.28,
+          "yield_rationale": "Remainder concept feeds polynomial long-division Remainder Theorem in F5; minimal direct AP weight here.",
+          "source_learn_keyword_id": "remainders_after_integer_division"
+        }
+      ]
+    },
+    {
+      "id": "signed_number_concepts",
+      "label": "Signed Number Concepts",
+      "description": "Classifying positive, negative, and zero; opposites; absolute value as magnitude; number-line distance; midpoint; and sign rules for products and quotients.",
+      "ced_topics": [],
+      "yield_score": 0.75,
+      "yield_rationale": "Sign fluency — including absolute value, distance, and product/quotient sign rules — is load-bearing in function evaluation, transformation parameters, and trig value interpretation throughout AP Precalc.",
+      "source_learn_keyword_id": "signed_number_structure",
+      "in_depth": [
+        {
+          "id": "positive_negative_and_zero",
+          "label": "Positive numbers, negative numbers, and zero",
+          "description": "Tests classifying a number as positive, negative, or zero, and that zero is neither positive nor negative.",
+          "yield_score": 0.55,
+          "yield_rationale": "Sign classification is the entry skill for all signed arithmetic; moderate standalone weight.",
+          "source_learn_keyword_id": "positive_negative_and_zero"
+        },
+        {
+          "id": "opposite_numbers",
+          "label": "Opposite numbers",
+          "description": "Tests identifying the additive opposite of a number (same distance from 0, opposite side of number line) and locating opposites on a number line.",
+          "yield_score": 0.65,
+          "yield_rationale": "Opposite-number fluency supports reflection transformations and additive inverse property throughout algebra.",
+          "source_learn_keyword_id": "opposite_numbers"
+        },
+        {
+          "id": "absolute_value_as_magnitude",
+          "label": "Absolute value as magnitude",
+          "description": "Tests evaluating the absolute value of a number as its nonnegative distance from 0; numeric only, not absolute value equations or functions.",
+          "yield_score": 0.70,
+          "yield_rationale": "Absolute value is a prerequisite for distance between numbers, and the concept reappears as a function in piecewise and transformation contexts.",
+          "source_learn_keyword_id": "absolute_value_as_magnitude"
+        },
+        {
+          "id": "distance_between_numbers_on_number_line",
+          "label": "Distance between numbers on the number line",
+          "description": "Tests computing the distance between two real numbers as |a − b|, applied to numeric values only (no coordinate-plane distance).",
+          "yield_score": 0.68,
+          "yield_rationale": "Distance reasoning is used in sinusoidal parameter extraction (midline = average of max/min) and interval-length calculations.",
+          "source_learn_keyword_id": "distance_between_numbers_on_number_line"
+        },
+        {
+          "id": "midpoint_between_two_real_numbers",
+          "label": "Midpoint between two real numbers",
+          "description": "Tests finding the midpoint of two numbers on a number line as their average — one-dimensional only, not coordinate geometry.",
+          "yield_score": 0.65,
+          "yield_rationale": "Midpoint of max and min values gives sinusoidal midline; moderate load in AP Precalc Unit 3.",
+          "source_learn_keyword_id": "midpoint_between_two_real_numbers"
+        },
+        {
+          "id": "sign_of_products",
+          "label": "Sign of products",
+          "description": "Tests determining the sign of a product from the count of negative factors: even count → positive, odd count → negative.",
+          "yield_score": 0.75,
+          "yield_rationale": "Sign-of-product rule is used constantly in polynomial evaluation, derivative computation, and trig expression simplification.",
+          "source_learn_keyword_id": "sign_of_products"
+        }
+      ]
+    },
+    {
+      "id": "signed_number_arithmetic_rules",
+      "label": "Signed Number Arithmetic Rules",
+      "description": "Sign rules for quotients; signed addition with same and opposite signs; subtraction as adding the opposite; and negative signs outside grouping symbols.",
+      "ced_topics": [],
+      "yield_score": 0.72,
+      "yield_rationale": "Signed arithmetic rules — especially subtract-as-add-opposite and negating a group — are direct error sources in algebraic manipulation and function evaluation throughout all downstream categories.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "sign_of_quotients",
+          "label": "Sign of quotients",
+          "description": "Tests determining that a quotient is positive when dividend and divisor share the same sign, negative when they differ; division by zero treated separately.",
+          "yield_score": 0.72,
+          "yield_rationale": "Sign of quotients underlies rational function sign analysis and limit sign reasoning.",
+          "source_learn_keyword_id": "sign_of_quotients"
+        },
+        {
+          "id": "signed_number_addition_same_signs",
+          "label": "Signed-number addition with same signs",
+          "description": "Tests adding two numbers with the same sign by summing magnitudes and keeping the common sign.",
+          "yield_score": 0.62,
+          "yield_rationale": "Basic signed arithmetic is the mechanism for combining polynomial/function terms with the same sign.",
+          "source_learn_keyword_id": "signed_number_addition_same_signs"
+        },
+        {
+          "id": "signed_number_addition_opposite_signs",
+          "label": "Signed-number addition with opposite signs",
+          "description": "Tests adding numbers with opposite signs by comparing magnitudes and retaining the sign of the larger.",
+          "yield_score": 0.65,
+          "yield_rationale": "Opposite-sign addition is the mechanism for like-term cancellation and subtraction in all algebraic manipulation.",
+          "source_learn_keyword_id": "signed_number_addition_opposite_signs"
+        },
+        {
+          "id": "signed_number_subtraction_as_adding_opposite",
+          "label": "Signed-number subtraction as adding the opposite",
+          "description": "Tests rewriting subtraction a − b as a + (−b), which prevents sign errors when combining signed terms in expressions.",
+          "yield_score": 0.72,
+          "yield_rationale": "The add-the-opposite rule is the conceptual bridge to distributing negative signs in algebraic contexts; high error-prevention value.",
+          "source_learn_keyword_id": "signed_number_subtraction_as_adding_opposite"
+        },
+        {
+          "id": "negative_signs_and_grouping",
+          "label": "Negative signs and grouping",
+          "description": "Tests applying a negative sign outside grouping symbols by negating every term inside — numeric grouping only, not algebraic distribution.",
+          "yield_score": 0.78,
+          "yield_rationale": "Negating a grouped quantity is the direct predecessor to distributing a negative factor in algebraic expressions; frequent source of sign errors.",
+          "source_learn_keyword_id": "negative_signs_and_grouping"
+        }
+      ]
+    },
+    {
+      "id": "fraction_arithmetic",
+      "label": "Fraction Arithmetic",
+      "description": "Adding and subtracting fractions with common and unlike denominators, finding the LCD, and multiplying fractions — the core operations with numeric fractions.",
+      "ced_topics": [],
+      "yield_score": 0.70,
+      "yield_rationale": "Fraction addition and multiplication with unlike denominators are the direct numeric analogs of rational expression operations in P1; high prerequisite load.",
+      "source_learn_keyword_id": "rational_number_arithmetic",
+      "in_depth": [
+        {
+          "id": "fraction_addition_common_denominators",
+          "label": "Fraction addition with common denominators",
+          "description": "Tests adding fractions with the same denominator by combining numerators while keeping the denominator unchanged.",
+          "yield_score": 0.55,
+          "yield_rationale": "Base case for fraction addition; prerequisite for unlike-denominator work.",
+          "source_learn_keyword_id": "fraction_addition_common_denominators"
+        },
+        {
+          "id": "fraction_subtraction_common_denominators",
+          "label": "Fraction subtraction with common denominators",
+          "description": "Tests subtracting fractions with the same denominator by subtracting numerators; separated from addition to target sign-error patterns.",
+          "yield_score": 0.55,
+          "yield_rationale": "Numerator subtraction with signed fractions is a frequent error source; moderate downstream load.",
+          "source_learn_keyword_id": "fraction_subtraction_common_denominators"
+        },
+        {
+          "id": "least_common_denominator",
+          "label": "Least common denominator",
+          "description": "Tests finding the LCD as the LCM of fraction denominators, which is the denominator-selection prerequisite for unlike-denominator fraction arithmetic.",
+          "yield_score": 0.68,
+          "yield_rationale": "LCD-finding underlies adding rational expressions and clearing denominators in equation solving (F3, P2).",
+          "source_learn_keyword_id": "least_common_denominator"
+        },
+        {
+          "id": "fraction_addition_unlike_denominators",
+          "label": "Fraction addition with unlike denominators",
+          "description": "Tests rewriting fractions with the LCD and then adding numerators — the full unlike-denominator addition algorithm.",
+          "yield_score": 0.72,
+          "yield_rationale": "Unlike-denominator addition is the direct numerical analog of adding rational expressions in P1.",
+          "source_learn_keyword_id": "fraction_addition_unlike_denominators"
+        },
+        {
+          "id": "fraction_subtraction_unlike_denominators",
+          "label": "Fraction subtraction with unlike denominators",
+          "description": "Tests subtracting fractions with different denominators after rewriting with the LCD; separated from addition because sign and order errors are distinct.",
+          "yield_score": 0.70,
+          "yield_rationale": "Unlike-denominator subtraction is numerically the most error-prone fraction operation; high prerequisite value.",
+          "source_learn_keyword_id": "fraction_subtraction_unlike_denominators"
+        },
+        {
+          "id": "fraction_multiplication",
+          "label": "Fraction multiplication",
+          "description": "Tests multiplying numeric fractions by multiplying numerators and denominators, including signed fractions and improper fractions.",
+          "yield_score": 0.68,
+          "yield_rationale": "Fraction multiplication is the operation behind percent multipliers, unit-rate scaling, and coefficient manipulation.",
+          "source_learn_keyword_id": "fraction_multiplication"
+        }
+      ]
+    },
+    {
+      "id": "fraction_division_and_decimal_arithmetic",
+      "label": "Fraction Division and Decimal Arithmetic",
+      "description": "Dividing fractions by reciprocal, simplifying complex fractions, and decimal addition, subtraction, multiplication, and division by place-value alignment.",
+      "ced_topics": [],
+      "yield_score": 0.52,
+      "yield_rationale": "Fraction division and complex fractions recur in rational expression and derivative quotient contexts; decimal arithmetic is background fluency with lower direct AP weight.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "fraction_division_by_reciprocal",
+          "label": "Fraction division by reciprocals",
+          "description": "Tests dividing by a nonzero fraction by multiplying by its reciprocal (invert-and-multiply); numeric fractions only.",
+          "yield_score": 0.65,
+          "yield_rationale": "Reciprocal division is the basis for dividing rational expressions and solving equations with fractional coefficients.",
+          "source_learn_keyword_id": "fraction_division_by_reciprocal"
+        },
+        {
+          "id": "numeric_complex_fractions",
+          "label": "Numeric complex fractions",
+          "description": "Tests simplifying a fraction whose numerator, denominator, or both contain fractions, using the invert-and-multiply rule or LCD multiplication; numeric values only.",
+          "yield_score": 0.60,
+          "yield_rationale": "Complex-fraction structure recurs in rational function simplification and derivative quotient work.",
+          "source_learn_keyword_id": "numeric_complex_fractions"
+        },
+        {
+          "id": "decimal_addition_and_subtraction_alignment",
+          "label": "Decimal addition and subtraction alignment",
+          "description": "Tests adding and subtracting decimals by correctly aligning place values at the decimal point.",
+          "yield_score": 0.42,
+          "yield_rationale": "Decimal arithmetic is background fluency; less prominent than fraction arithmetic in AP contexts.",
+          "source_learn_keyword_id": "decimal_addition_and_subtraction_alignment"
+        },
+        {
+          "id": "decimal_multiplication_place_value",
+          "label": "Decimal multiplication place value",
+          "description": "Tests multiplying decimals by performing whole-number multiplication and then counting decimal places to position the decimal point in the product.",
+          "yield_score": 0.40,
+          "yield_rationale": "Decimal multiplication is a computational fluency skill; moderate background load.",
+          "source_learn_keyword_id": "decimal_multiplication_place_value"
+        },
+        {
+          "id": "decimal_division_place_value",
+          "label": "Decimal division place value",
+          "description": "Tests dividing decimals by adjusting the divisor to a whole number via place-value shifts, then performing division.",
+          "yield_score": 0.38,
+          "yield_rationale": "Decimal division is less prominent than fraction division in precalculus; lower foundation yield.",
+          "source_learn_keyword_id": "decimal_division_place_value"
+        }
+      ]
+    },
+    {
+      "id": "percent_multipliers_and_change",
+      "label": "Percent Multipliers and Change",
+      "description": "Percent as a rate per hundred, percent of a number, growth multipliers (1+r), decay multipliers (1−r), percent change, successive percent changes, and the percentage-points distinction.",
+      "ced_topics": [],
+      "yield_score": 0.55,
+      "yield_rationale": "Growth/decay multiplier structure is the direct numeric prototype for exponential function base b in AP Precalc 2.3; percent change and compounding feed 2.5.",
+      "source_learn_keyword_id": "percent_and_proportional_number_structure",
+      "in_depth": [
+        {
+          "id": "percent_as_rate_per_hundred",
+          "label": "Percent as a rate per hundred",
+          "description": "Tests converting between percent notation and its fraction-out-of-100 or decimal form; representation only, not applied percent equations.",
+          "yield_score": 0.45,
+          "yield_rationale": "Percent-to-decimal conversion is the first step in computing exponential growth/decay multipliers.",
+          "source_learn_keyword_id": "percent_as_rate_per_hundred"
+        },
+        {
+          "id": "percent_of_a_number",
+          "label": "Percent of a number",
+          "description": "Tests finding a percent of a number by treating the percent as a decimal multiplier; numeric only, no unknown variables.",
+          "yield_score": 0.48,
+          "yield_rationale": "Percent-of-a-number is the arithmetic form of the exponential initial-application step.",
+          "source_learn_keyword_id": "percent_of_a_number"
+        },
+        {
+          "id": "percent_increase_factors",
+          "label": "Percent increase factors",
+          "description": "Tests identifying the growth multiplier (1 + r) for a percent increase and applying it to compute the increased value.",
+          "yield_score": 0.65,
+          "yield_rationale": "Growth factor structure is the numeric prototype of the base b > 1 in f(x) = ab^x; directly prerequisite for AP Precalc 2.3.",
+          "source_learn_keyword_id": "percent_increase_factors"
+        },
+        {
+          "id": "percent_decrease_factors",
+          "label": "Percent decrease factors",
+          "description": "Tests identifying the decay multiplier (1 − r) for a percent decrease and applying it to compute the decreased value.",
+          "yield_score": 0.65,
+          "yield_rationale": "Decay factor structure is the numeric prototype of 0 < b < 1 in exponential decay models; directly feeds AP Precalc 2.3.",
+          "source_learn_keyword_id": "percent_decrease_factors"
+        },
+        {
+          "id": "percent_change",
+          "label": "Percent change",
+          "description": "Tests computing percent change as (change ÷ original) × 100; numeric change structure, not exponential modeling.",
+          "yield_score": 0.55,
+          "yield_rationale": "Percent change is the discrete analog of continuous growth rate; used in model-construction context items.",
+          "source_learn_keyword_id": "percent_change"
+        },
+        {
+          "id": "successive_percent_changes",
+          "label": "Successive percent changes",
+          "description": "Tests that multiple percent changes compound multiplicatively, so two successive 10% increases give a factor of 1.1² not 1.2.",
+          "yield_score": 0.60,
+          "yield_rationale": "Multiplicative compounding is the numeric foundation of compound-growth problems in AP Precalc 2.5.",
+          "source_learn_keyword_id": "successive_percent_changes"
+        },
+        {
+          "id": "percentage_points_vs_percent_change",
+          "label": "Percentage points versus percent change",
+          "description": "Tests distinguishing between the arithmetic difference of two percents (percentage points) and the relative change from one percent to another (percent change).",
+          "yield_score": 0.30,
+          "yield_rationale": "Conceptual distinction; appears in model-interpretation items but rarely as a primary skill.",
+          "source_learn_keyword_id": "percentage_points_vs_percent_change"
+        }
+      ]
+    },
+    {
+      "id": "ratios_and_unit_rates",
+      "label": "Ratios and Unit Rates",
+      "description": "Part-to-part ratios, part-to-whole ratios, and unit rates — numeric proportional structure without algebraic equation solving.",
+      "ced_topics": [],
+      "yield_score": 0.38,
+      "yield_rationale": "Ratio and unit-rate structure is background for average-rate-of-change reasoning in AP Precalc 1.1–1.2; lower direct test weight than percent multipliers.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "ratio_part_to_part_structure",
+          "label": "Part-to-part ratios",
+          "description": "Tests writing a part-to-part ratio comparing two components of a whole; numeric ratio structure without solving proportion equations.",
+          "yield_score": 0.35,
+          "yield_rationale": "Ratio structure is background for rate-of-change and unit-rate reasoning.",
+          "source_learn_keyword_id": "ratio_part_to_part_structure"
+        },
+        {
+          "id": "ratio_part_to_whole_structure",
+          "label": "Part-to-whole ratios",
+          "description": "Tests writing a part-to-whole ratio (one component to the total), distinct from part-to-part comparisons.",
+          "yield_score": 0.35,
+          "yield_rationale": "Part-to-whole connects to probability-style reasoning and fraction representation.",
+          "source_learn_keyword_id": "ratio_part_to_whole_structure"
+        },
+        {
+          "id": "unit_rates",
+          "label": "Unit rates",
+          "description": "Tests computing a unit rate by expressing a quantity per one unit of another quantity; numeric rate structure, not linear function slope.",
+          "yield_score": 0.42,
+          "yield_rationale": "Unit rates are the pre-algebraic form of average rate of change; feeds AP Precalc 1.1–1.2.",
+          "source_learn_keyword_id": "unit_rates"
+        }
+      ]
+    },
+    {
+      "id": "real_number_ordering",
+      "label": "Real Number Ordering",
+      "description": "Placing real numbers on the number line and ordering integers, rationals, signed numbers, mixed forms, and irrational approximations.",
+      "ced_topics": [],
+      "yield_score": 0.40,
+      "yield_rationale": "Number-line order supports domain/range interval notation; ordering negative numbers and mixed forms has moderate error-prevention value downstream.",
+      "source_learn_keyword_id": "real_number_order_and_comparison",
+      "in_depth": [
+        {
+          "id": "number_line_location",
+          "label": "Number-line location",
+          "description": "Tests placing integers, fractions, decimals, and approximate irrational values at their correct positions on a number line.",
+          "yield_score": 0.38,
+          "yield_rationale": "Number-line fluency underpins interval and inequality notation for domains and ranges.",
+          "source_learn_keyword_id": "number_line_location"
+        },
+        {
+          "id": "ordering_positive_rational_numbers",
+          "label": "Ordering positive rational numbers",
+          "description": "Tests comparing and ordering positive fractions, decimals, and percents by converting to a common representation.",
+          "yield_score": 0.35,
+          "yield_rationale": "Ordering rational numbers in different forms supports numerical reasoning in rate-of-change contexts.",
+          "source_learn_keyword_id": "ordering_positive_rational_numbers"
+        },
+        {
+          "id": "ordering_negative_numbers",
+          "label": "Ordering negative numbers",
+          "description": "Tests the counterintuitive ordering of negative numbers where a more-negative value is smaller, correcting the common misconception that larger absolute value implies larger number.",
+          "yield_score": 0.45,
+          "yield_rationale": "Sign-order errors in negative values persist into function evaluation and transformation-parameter interpretation.",
+          "source_learn_keyword_id": "ordering_negative_numbers"
+        },
+        {
+          "id": "ordering_mixed_real_numbers",
+          "label": "Ordering mixed real-number forms",
+          "description": "Tests ordering a list containing integers, fractions, decimals, and irrational values (e.g., √2) using decimal approximations or benchmark comparisons.",
+          "yield_score": 0.42,
+          "yield_rationale": "Comparing exact and approximate forms is relevant to exact-value trig contexts.",
+          "source_learn_keyword_id": "ordering_mixed_real_numbers"
+        },
+        {
+          "id": "benchmark_fraction_comparisons",
+          "label": "Benchmark fraction comparisons",
+          "description": "Tests comparing fractions to benchmarks (0, 1/2, 1) to determine relative size without computing a common denominator.",
+          "yield_score": 0.30,
+          "yield_rationale": "Benchmark reasoning is an estimation heuristic; low direct AP test weight.",
+          "source_learn_keyword_id": "benchmark_fraction_comparisons"
+        },
+        {
+          "id": "integer_bounds_for_irrational_numbers",
+          "label": "Integer bounds for irrational numbers",
+          "description": "Tests bounding irrational square roots between consecutive integers using nearby perfect squares.",
+          "yield_score": 0.40,
+          "yield_rationale": "Bounding irrationals supports reasonableness checks and approximate placement of trig-related constants.",
+          "source_learn_keyword_id": "integer_bounds_for_irrational_numbers"
+        }
+      ]
+    },
+    {
+      "id": "inequality_and_order_properties",
+      "label": "Inequality and Order Properties",
+      "description": "Inequality symbols (<, >, ≤, ≥, =) in numeric comparisons, and the trichotomy and transitive order axioms.",
+      "ced_topics": [],
+      "yield_score": 0.38,
+      "yield_rationale": "Inequality symbol fluency is a notation prerequisite for interval-notation domain/range; order axioms are vocabulary-level background.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "inequality_symbols_numeric_comparisons",
+          "label": "Inequality symbols in numeric comparisons",
+          "description": "Tests selecting the correct symbol (<, >, ≤, ≥, =) to describe the relationship between two numeric values; comparison only, not solving inequalities.",
+          "yield_score": 0.48,
+          "yield_rationale": "Inequality symbol fluency is the notation prerequisite for interval-notation domain/range throughout AP Precalc.",
+          "source_learn_keyword_id": "inequality_symbols_numeric_comparisons"
+        },
+        {
+          "id": "trichotomy_property_real_numbers",
+          "label": "Trichotomy property of real numbers",
+          "description": "Tests that for any two real numbers, exactly one of <, =, > holds — the foundational order axiom that justifies inequality symbol usage.",
+          "yield_score": 0.25,
+          "yield_rationale": "Foundational axiom; rarely the direct test object above elementary level.",
+          "source_learn_keyword_id": "trichotomy_property_real_numbers"
+        },
+        {
+          "id": "transitive_property_of_order",
+          "label": "Transitive property of order",
+          "description": "Tests that if a < b and b < c then a < c, applied to chained numeric comparisons.",
+          "yield_score": 0.22,
+          "yield_rationale": "Property-identification skill; minimal direct test weight in AP contexts.",
+          "source_learn_keyword_id": "transitive_property_of_order"
+        }
+      ]
+    },
+    {
+      "id": "arithmetic_operation_properties",
+      "label": "Arithmetic Operation Properties",
+      "description": "Commutativity, associativity, and distributivity for real-number arithmetic — the reordering and regrouping rules that justify term and factor rearrangement.",
+      "ced_topics": [],
+      "yield_score": 0.52,
+      "yield_rationale": "Distributive property is an active algebraic tool; commutativity and associativity are applied constantly when collecting terms and rearranging factors.",
+      "source_learn_keyword_id": "real_number_operation_properties",
+      "in_depth": [
+        {
+          "id": "commutative_property_addition",
+          "label": "Commutative property of addition",
+          "description": "Tests recognizing and applying a + b = b + a with numeric values; distinguishing addition commutativity from the non-commutativity of subtraction.",
+          "yield_score": 0.45,
+          "yield_rationale": "Property-identification vocabulary; directly applied when reordering terms in polynomial arithmetic.",
+          "source_learn_keyword_id": "commutative_property_addition"
+        },
+        {
+          "id": "commutative_property_multiplication",
+          "label": "Commutative property of multiplication",
+          "description": "Tests recognizing and applying ab = ba with numeric values; distinguishing multiplication commutativity from the non-commutativity of division.",
+          "yield_score": 0.45,
+          "yield_rationale": "Used to reorder factors in polynomial and rational expression manipulation.",
+          "source_learn_keyword_id": "commutative_property_multiplication"
+        },
+        {
+          "id": "associative_property_addition",
+          "label": "Associative property of addition",
+          "description": "Tests recognizing that (a + b) + c = a + (b + c) with numeric values; distinguishing addition associativity from the non-associativity of subtraction.",
+          "yield_score": 0.42,
+          "yield_rationale": "Regrouping addends is used when collecting like terms efficiently in multi-term expressions.",
+          "source_learn_keyword_id": "associative_property_addition"
+        },
+        {
+          "id": "associative_property_multiplication",
+          "label": "Associative property of multiplication",
+          "description": "Tests recognizing that (ab)c = a(bc) with numeric values; used when rearranging coefficient-and-variable factor groups.",
+          "yield_score": 0.42,
+          "yield_rationale": "Regrouping factors is used in monomial multiplication and exponent-law application.",
+          "source_learn_keyword_id": "associative_property_multiplication"
+        },
+        {
+          "id": "distributive_property_numeric",
+          "label": "Distributive property with numbers",
+          "description": "Tests applying a(b + c) = ab + ac with numeric values; numeric only, not algebraic distribution with variables.",
+          "yield_score": 0.62,
+          "yield_rationale": "Numeric distributive property is the conceptual foundation for algebraic distribution (F2) and expanding polynomial products (F5).",
+          "source_learn_keyword_id": "distributive_property_numeric"
+        },
+        {
+          "id": "noncommutativity_subtraction_division",
+          "label": "Noncommutativity of subtraction and division",
+          "description": "Tests that a − b ≠ b − a and a ÷ b ≠ b ÷ a in general, preventing overgeneralization of commutativity.",
+          "yield_score": 0.38,
+          "yield_rationale": "Error-prevention knowledge; not often tested directly at AP level but underlying many student mistakes.",
+          "source_learn_keyword_id": "noncommutativity_subtraction_division"
+        },
+        {
+          "id": "nonassociativity_subtraction_division",
+          "label": "Nonassociativity of subtraction and division",
+          "description": "Tests that (a − b) − c ≠ a − (b − c) and (a ÷ b) ÷ c ≠ a ÷ (b ÷ c) in general.",
+          "yield_score": 0.35,
+          "yield_rationale": "Error-prevention for regrouping mistakes; not a direct AP exam target.",
+          "source_learn_keyword_id": "nonassociativity_subtraction_division"
+        }
+      ]
+    },
+    {
+      "id": "identity_inverse_and_zero_properties",
+      "label": "Identity, Inverse, and Zero Properties",
+      "description": "Additive and multiplicative identity elements, additive and multiplicative inverses, zero multiplication, division by zero, and zero-as-numerator — the special-element rules for the real-number field.",
+      "ced_topics": [],
+      "yield_score": 0.50,
+      "yield_rationale": "Division-by-zero undefined is high-yield (domain restrictions, asymptotes); additive/multiplicative inverses are the mechanism for cancellation and equation solving.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "additive_identity",
+          "label": "Additive identity",
+          "description": "Tests that a + 0 = a for any real number a, identifying 0 as the additive identity.",
+          "yield_score": 0.35,
+          "yield_rationale": "Identity property is vocabulary-level; applied implicitly in simplification but rarely the test object.",
+          "source_learn_keyword_id": "additive_identity"
+        },
+        {
+          "id": "multiplicative_identity",
+          "label": "Multiplicative identity",
+          "description": "Tests that a · 1 = a for any real number a, identifying 1 as the multiplicative identity.",
+          "yield_score": 0.35,
+          "yield_rationale": "Multiplicative identity underpins multiplying by 1 in equivalent-form rewriting, but is rarely the direct test object.",
+          "source_learn_keyword_id": "multiplicative_identity"
+        },
+        {
+          "id": "additive_inverse_property",
+          "label": "Additive inverse property",
+          "description": "Tests that a + (−a) = 0 for any real number a, identifying additive inverses as opposites.",
+          "yield_score": 0.55,
+          "yield_rationale": "Additive inverse is the mechanism for cancellation in like-term collection and equation solving.",
+          "source_learn_keyword_id": "additive_inverse_property"
+        },
+        {
+          "id": "multiplicative_inverse_property",
+          "label": "Multiplicative inverse property",
+          "description": "Tests that a · (1/a) = 1 for any nonzero real number a, identifying the reciprocal as the multiplicative inverse.",
+          "yield_score": 0.58,
+          "yield_rationale": "Reciprocal/multiplicative inverse is the mechanism for division and for isolating variables in one-step equations.",
+          "source_learn_keyword_id": "multiplicative_inverse_property"
+        },
+        {
+          "id": "zero_multiplication_property",
+          "label": "Zero multiplication property",
+          "description": "Tests that a · 0 = 0 for any real number a; numeric zero behavior, not the zero-product property for equations.",
+          "yield_score": 0.40,
+          "yield_rationale": "Zero multiplication is background; the zero-product property for equations lives in F5 (polynomials).",
+          "source_learn_keyword_id": "zero_multiplication_property"
+        },
+        {
+          "id": "division_by_zero_undefined",
+          "label": "Division by zero is undefined",
+          "description": "Tests recognizing that a ÷ 0 is undefined for any real a, because no real number times 0 can produce a nonzero result.",
+          "yield_score": 0.65,
+          "yield_rationale": "Division-by-zero is the foundation for vertical asymptotes in rational functions and domain restrictions throughout AP Precalc.",
+          "source_learn_keyword_id": "division_by_zero_undefined"
+        },
+        {
+          "id": "zero_divided_by_nonzero_number",
+          "label": "Zero divided by a nonzero number",
+          "description": "Tests that 0 ÷ a = 0 for any nonzero a, distinguishing this from the undefined case of dividing by zero.",
+          "yield_score": 0.42,
+          "yield_rationale": "Zero-numerator reasoning supports rational function zero identification (P1 topic 1.8).",
+          "source_learn_keyword_id": "zero_divided_by_nonzero_number"
+        }
+      ]
+    },
+    {
+      "id": "closure_properties_of_number_sets",
+      "label": "Closure Properties of Number Sets",
+      "description": "Closure of ℝ, ℤ, and ℚ under the four basic operations; nonclosure patterns of irrational numbers.",
+      "ced_topics": [],
+      "yield_score": 0.30,
+      "yield_rationale": "Closure is structural vocabulary at AP tier; irrational nonclosure supports exact-form reasoning. Low direct exam weight.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "closure_properties_real_numbers",
+          "label": "Closure properties of real numbers",
+          "description": "Tests that ℝ is closed under addition, subtraction, multiplication, and division by nonzero reals, meaning results stay within ℝ.",
+          "yield_score": 0.30,
+          "yield_rationale": "Closure is a structural property; vocabulary-level at AP tier.",
+          "source_learn_keyword_id": "closure_properties_real_numbers"
+        },
+        {
+          "id": "closure_properties_integers",
+          "label": "Closure properties of integers",
+          "description": "Tests that ℤ is closed under addition, subtraction, and multiplication but not division (3 ÷ 2 ∉ ℤ).",
+          "yield_score": 0.28,
+          "yield_rationale": "Integer closure contrasts with rational closure; background knowledge.",
+          "source_learn_keyword_id": "closure_properties_integers"
+        },
+        {
+          "id": "closure_properties_rational_numbers",
+          "label": "Closure properties of rational numbers",
+          "description": "Tests that ℚ is closed under the four basic operations (excluding division by zero), so any arithmetic result of rationals is rational.",
+          "yield_score": 0.32,
+          "yield_rationale": "Rational closure underpins the fact that polynomial and rational function outputs at rational inputs are rational.",
+          "source_learn_keyword_id": "closure_properties_rational_numbers"
+        },
+        {
+          "id": "irrational_number_nonclosure",
+          "label": "Nonclosure patterns of irrational numbers",
+          "description": "Tests that irrational numbers are not closed under any basic operation (e.g., √2 · √2 = 2 is rational), requiring case-by-case reasoning.",
+          "yield_score": 0.35,
+          "yield_rationale": "Irrational nonclosure supports reasoning about exact-form simplification in radical and trig contexts.",
+          "source_learn_keyword_id": "irrational_number_nonclosure"
+        }
+      ]
+    },
+    {
+      "id": "numeric_expression_structure",
+      "label": "Numeric Expression Structure",
+      "description": "Order of operations, grouping symbols (parentheses, brackets, fraction bars, absolute value bars), exponent precedence, and negative-base parentheses in purely numeric expressions.",
+      "ced_topics": [],
+      "yield_score": 0.68,
+      "yield_rationale": "Order-of-operations and negative-base precedence are active error sources in every category; fraction-bar and absolute-value grouping recur in rational function and piecewise function evaluation.",
+      "source_learn_keyword_id": "numeric_expression_structure",
+      "in_depth": [
+        {
+          "id": "operation_precedence_multiplication_division",
+          "label": "Precedence of multiplication and division",
+          "description": "Tests that multiplication and division are performed before addition and subtraction in numeric expressions without grouping symbols.",
+          "yield_score": 0.65,
+          "yield_rationale": "Multiplication-before-addition precedence is the most commonly violated order-of-operations rule in student work.",
+          "source_learn_keyword_id": "operation_precedence_multiplication_division"
+        },
+        {
+          "id": "left_to_right_same_precedence_operations",
+          "label": "Left-to-right order for same-precedence operations",
+          "description": "Tests that operations at the same precedence level (e.g., multiplication and division) are evaluated left to right.",
+          "yield_score": 0.60,
+          "yield_rationale": "Left-to-right rule prevents errors in multi-operation simplification; frequently tested in expression evaluation.",
+          "source_learn_keyword_id": "left_to_right_same_precedence_operations"
+        },
+        {
+          "id": "parentheses_and_grouping_symbols",
+          "label": "Parentheses and grouping symbols",
+          "description": "Tests treating grouped quantities as a single unit — evaluating the expression inside parentheses, brackets, or braces before combining with the rest.",
+          "yield_score": 0.72,
+          "yield_rationale": "Grouping-symbol fluency is directly required for evaluating functions at specific inputs and for fraction-bar interpretation.",
+          "source_learn_keyword_id": "parentheses_and_grouping_symbols"
+        },
+        {
+          "id": "nested_grouping_symbols",
+          "label": "Nested grouping symbols",
+          "description": "Tests working from the innermost group outward when multiple levels of grouping symbols are present in a numeric expression.",
+          "yield_score": 0.68,
+          "yield_rationale": "Nested-group evaluation recurs in composed functions and in rational expressions with grouped numerators/denominators.",
+          "source_learn_keyword_id": "nested_grouping_symbols"
+        },
+        {
+          "id": "fraction_bar_as_grouping",
+          "label": "Fraction bar as grouping",
+          "description": "Tests interpreting the fraction bar as grouping the entire numerator and the entire denominator separately before dividing.",
+          "yield_score": 0.75,
+          "yield_rationale": "Fraction-bar grouping is a prerequisite for reading and evaluating rational expressions and average-rate-of-change formulas.",
+          "source_learn_keyword_id": "fraction_bar_as_grouping"
+        },
+        {
+          "id": "absolute_value_bars_as_grouping",
+          "label": "Absolute value bars as grouping",
+          "description": "Tests evaluating the expression inside absolute value bars before applying the absolute value; numeric grouping only, not absolute value equations.",
+          "yield_score": 0.62,
+          "yield_rationale": "Absolute value bar grouping is prerequisite for piecewise function evaluation and distance computations.",
+          "source_learn_keyword_id": "absolute_value_bars_as_grouping"
+        },
+        {
+          "id": "numeric_exponent_precedence",
+          "label": "Numeric exponent precedence",
+          "description": "Tests that exponentiation is performed before multiplication, division, addition, and subtraction unless overridden by grouping; covers order of operations only, not exponent laws.",
+          "yield_score": 0.70,
+          "yield_rationale": "Exponent-before-multiply precedence is the second most common order-of-operations error and recurs in polynomial evaluation.",
+          "source_learn_keyword_id": "numeric_exponent_precedence"
+        },
+        {
+          "id": "negative_base_parentheses",
+          "label": "Negative bases and parentheses",
+          "description": "Tests distinguishing −3² = −9 (negation applied after squaring) from (−3)² = 9 (negative included in the base), based on parenthesis scope.",
+          "yield_score": 0.78,
+          "yield_rationale": "Negative-base ambiguity is one of the most frequent arithmetic errors in polynomial evaluation, function substitution, and transformation work.",
+          "source_learn_keyword_id": "negative_base_parentheses"
+        }
+      ]
+    },
+    {
+      "id": "approximation_estimation_and_bounds",
+      "label": "Approximation, Estimation, and Bounds",
+      "description": "Rounding to place value, truncation, compatible-number estimation, bounds from rounded values, order-of-magnitude reasoning, and reasonableness checks for numeric results.",
+      "ced_topics": [],
+      "yield_score": 0.40,
+      "yield_rationale": "Reasonableness checking and order-of-magnitude reasoning support model-validation tasks in AP Precalc 2.6; not a focal tested skill at AP level.",
+      "source_learn_keyword_id": "approximation_estimation_and_bounds",
+      "in_depth": [
+        {
+          "id": "rounding_to_place_value",
+          "label": "Rounding to place value",
+          "description": "Tests rounding a decimal or whole number to a specified place value using the standard look-at-the-next-digit rule.",
+          "yield_score": 0.40,
+          "yield_rationale": "Rounding is used when reporting decimal approximations of irrational values and regression outputs.",
+          "source_learn_keyword_id": "rounding_to_place_value"
+        },
+        {
+          "id": "truncation_vs_rounding",
+          "label": "Truncation versus rounding",
+          "description": "Tests distinguishing truncation (cutting off digits) from rounding (which may increase the last retained digit), showing that results can differ.",
+          "yield_score": 0.25,
+          "yield_rationale": "Truncation vs. rounding is a precision concept; low direct AP exam weight.",
+          "source_learn_keyword_id": "truncation_vs_rounding"
+        },
+        {
+          "id": "compatible_number_estimation",
+          "label": "Compatible-number estimation",
+          "description": "Tests replacing inconvenient numbers with nearby compatible values to facilitate quick mental estimation of sums, products, or quotients.",
+          "yield_score": 0.32,
+          "yield_rationale": "Estimation strategy; supports reasonableness checks but not a direct AP exam skill.",
+          "source_learn_keyword_id": "compatible_number_estimation"
+        },
+        {
+          "id": "bounds_from_rounded_numbers",
+          "label": "Bounds from rounded numbers",
+          "description": "Tests identifying the interval [lower, upper) of possible original values that would round to a given approximation.",
+          "yield_score": 0.35,
+          "yield_rationale": "Bounds reasoning is used in model-validation and error-analysis contexts (AP Precalc 2.6); moderate but targeted.",
+          "source_learn_keyword_id": "bounds_from_rounded_numbers"
+        },
+        {
+          "id": "order_of_magnitude_estimation",
+          "label": "Order-of-magnitude estimation",
+          "description": "Tests describing the approximate size of a number by identifying the nearest power of 10; estimation-scale reasoning, not exponent-law computation.",
+          "yield_score": 0.38,
+          "yield_rationale": "Order-of-magnitude thinking supports semi-log plot interpretation in AP Precalc 2.15.",
+          "source_learn_keyword_id": "order_of_magnitude_estimation"
+        },
+        {
+          "id": "reasonableness_checks_numeric_results",
+          "label": "Reasonableness checks for numeric results",
+          "description": "Tests verifying a computed answer against estimates of its expected size, sign, and magnitude to detect arithmetic errors.",
+          "yield_score": 0.45,
+          "yield_rationale": "Reasonableness checking is a mathematical practice skill assessed in FRQ justification parts; moderate foundation load.",
+          "source_learn_keyword_id": "reasonableness_checks_numeric_results"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,545 @@
+{
+  "category": {
+    "id": "calc_unit_6",
+    "label": "Integration and Accumulation of Change",
+    "description": "Develops the definite integral as accumulated change, connects differentiation to antidifferentiation via the Fundamental Theorem of Calculus, and builds procedural fluency with basic antiderivative rules, u-substitution, and algebraic rewriting techniques for integrands.",
+    "section": "calc_ab",
+    "ced_unit": "AP Calc AB Unit 6",
+    "courses": [
+      { "course": "calc_ab", "role": "core", "order_index": 6 }
+    ],
+    "yield_score": 0.92,
+    "yield_rationale": "Highest-weighted unit (17–20% of exam); FTC and u-sub appear as sub-parts in nearly every accumulation, area, and DE FRQ; foundational for Units 7 and 8."
+  },
+  "umbrellas": [
+    {
+      "id": "u6_accumulation_concept",
+      "label": "Accumulation of Change and Signed Area",
+      "description": "Interprets the definite integral as accumulated change; connects the area under a rate curve to net change; distinguishes positive and negative contributions to a signed area.",
+      "ced_topics": ["6.1"],
+      "yield_score": 0.70,
+      "yield_rationale": "Conceptual foundation tested in MC and accumulation FRQs; unit weighting 17–20% but this topic contributes via interpretation sub-parts rather than standalone questions.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u6_net_change_as_integral",
+          "label": "Net Change as a Definite Integral",
+          "description": "Recognizes that ∫ₐᵇ r(t) dt gives the net change in a quantity when r is a rate; identifies the integral as accumulated change rather than area in applied contexts.",
+          "yield_score": 0.72,
+          "yield_rationale": "Net-change interpretation appears in every accumulation FRQ and is required to write correct integral expressions in context.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_signed_area_interpretation",
+          "label": "Signed Area and Negative Contributions",
+          "description": "Determines when a definite integral is negative (integrand below x-axis) and interprets the signed value as net rather than total accumulation; distinguishes signed from unsigned area.",
+          "yield_score": 0.68,
+          "yield_rationale": "Signed-area reasoning appears in MC every year and is prerequisite for total-distance problems in Unit 8.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_definite_vs_indefinite_distinction",
+          "label": "Distinguishing a Definite Integral (Number) from an Indefinite Integral (Family of Functions)",
+          "description": "Explains that ∫ₐᵇ f(x) dx evaluates to a single real number (the net signed area), while ∫f(x) dx produces a family of antiderivatives differing by a constant; recognizes notation cues that distinguish the two forms.",
+          "yield_score": 0.72,
+          "yield_rationale": "Conceptual distinction between definite and indefinite integrals is tested in MC identification questions and underpins correct FRQ communication; belongs in Unit 6's mathematical scope rather than the applied-context scope owned by Unit 8.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_accumulation_from_area_below_axis",
+          "label": "Distinguishing Area from Accumulation When f Is Negative",
+          "description": "Computes or interprets ∫ₐᵇ f(x) dx when f dips below the x-axis; correctly identifies that the integral subtracts the below-axis region rather than adding it.",
+          "yield_score": 0.65,
+          "yield_rationale": "Conceptual MC question type; supports the graphical analysis of accumulation functions in topic 6.5.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u6_riemann_sums",
+      "label": "Riemann Sum Approximations",
+      "description": "Approximates definite integrals using left, right, midpoint, and trapezoidal sums from tables or graphs; assesses whether each approximation is an over- or under-estimate based on function behavior.",
+      "ced_topics": ["6.2"],
+      "yield_score": 0.85,
+      "yield_rationale": "Riemann sum from a table of values is a near-annual FRQ sub-part (2023 Q1, 2021 Q1); over/under-estimate analysis is explicitly tested in both MC and FRQ.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u6_left_right_riemann_sum",
+          "label": "Left and Right Riemann Sum from a Table",
+          "description": "Computes a left or right Riemann sum with specified subintervals from a table of function values; correctly multiplies each function value by the corresponding subinterval width.",
+          "yield_score": 0.88,
+          "yield_rationale": "The most common Riemann sum FRQ sub-task; appears explicitly in Rate/Data archetype FRQs most years.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_midpoint_riemann_sum",
+          "label": "Midpoint Riemann Sum",
+          "description": "Evaluates a midpoint Riemann sum by using function values at the midpoint of each subinterval; distinguishes midpoint from left/right endpoint selection.",
+          "yield_score": 0.70,
+          "yield_rationale": "Midpoint sum appears in MC; less common than left/right in FRQ but tested in MC Part A.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_trapezoidal_sum",
+          "label": "Trapezoidal Approximation",
+          "description": "Computes a trapezoidal sum T = Σ[(f(xᵢ) + f(xᵢ₊₁))/2 · Δx] from a table; interprets trapezoidal sum as the average of left and right Riemann sums on uniform partitions.",
+          "yield_score": 0.80,
+          "yield_rationale": "Trapezoidal approximation from a table is an explicit FRQ sub-part in the Rate/Data archetype and appears in MC most years.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_riemann_over_under_estimate",
+          "label": "Over- and Under-Estimate Analysis for Riemann Sums",
+          "description": "Determines whether a left, right, or trapezoidal sum over- or under-estimates the true integral by examining whether f is increasing, decreasing, concave up, or concave down on the interval.",
+          "yield_score": 0.82,
+          "yield_rationale": "Over/under-estimate justification is a required written justification in FRQ and a frequent MC distractor; tests both Riemann sums and function behavior together.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_nonuniform_subintervals",
+          "label": "Riemann Sums with Unequal Subintervals",
+          "description": "Handles Riemann sum calculations when subinterval widths are not equal; multiplies each function value by its specific Δxᵢ from the given partition.",
+          "yield_score": 0.72,
+          "yield_rationale": "Exam tables routinely use unequal subintervals; failure to use correct widths is the primary distractor error on these problems.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u6_integral_notation",
+      "label": "Riemann Sums, Summation Notation, and Integral Notation",
+      "description": "Connects the limit of a Riemann sum to the definite integral symbol; interprets ∫ₐᵇ f(x) dx as a limit of sums, reads integral notation fluently, and writes correct integral expressions for described quantities.",
+      "ced_topics": ["6.3"],
+      "yield_score": 0.75,
+      "yield_rationale": "Integral notation fluency is required to write correct integral expressions in FRQ; MC tests recognition of integrals as limits of Riemann sums.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u6_riemann_sum_to_integral_connection",
+          "label": "Connecting Riemann Sum Notation to Integral Notation",
+          "description": "Recognizes that lim_{n→∞} Σf(xᵢ)Δx = ∫ₐᵇ f(x) dx; identifies the integrand, limits of integration, and differential dx from a given Riemann sum expression.",
+          "yield_score": 0.70,
+          "yield_rationale": "Limit-of-sums to integral connection appears in MC as a matching or identification question; conceptually essential for the FTC derivation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_integral_notation_fluency",
+          "label": "Reading and Writing Integral Notation",
+          "description": "Correctly interprets and writes ∫ₐᵇ f(x) dx notation including the integrand, differential, and limits; identifies the variable of integration and distinguishes it from parameters.",
+          "yield_score": 0.73,
+          "yield_rationale": "Notation fluency is tested implicitly on every FRQ requiring an integral expression; MC tests correct notation in 'which expression represents...' questions.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_write_integral_expression_in_context",
+          "label": "Writing a Definite Integral Expression for a Described Quantity",
+          "description": "Translates a verbal description (e.g., 'total amount of water added from t = 1 to t = 5') into the correct integral expression, identifying the integrand function and limits from context.",
+          "yield_score": 0.78,
+          "yield_rationale": "Writing an integral expression is a standard FRQ sub-task in the Rate/Data and Accumulation archetypes; earns explicit points.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_summation_sigma_notation",
+          "label": "Summation (Σ) Notation for Riemann Sums",
+          "description": "Reads and evaluates Σ notation for finite sums; writes a Riemann sum in Σ form specifying the index, function value, and width; connects the finite sum to the integral in the limit.",
+          "yield_score": 0.55,
+          "yield_rationale": "Σ notation appears in MC as a Riemann sum representation; less frequently tested than the integral notation itself.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u6_ftc_part1",
+      "label": "FTC Part 1: Accumulation Functions and Their Derivatives",
+      "description": "Differentiates F(x) = ∫ₐˣ f(t) dt using the Fundamental Theorem Part 1 in its basic form (constant lower limit, upper limit = x); handles the variable-lower-limit orientation flip; analyzes sign and behavior of F using the sign of f. Chain-rule extension (variable upper limit g(x)) is scoped to Unit 8.",
+      "ced_topics": ["6.4"],
+      "yield_score": 0.90,
+      "yield_rationale": "FTC Part 1 is one of the highest-frequency skills on the exam; appears in FRQ every year (2021 Q4, 2025 Q4) and constantly in MC. Yield reflects the basic and orientation-flip cases owned here; the chain-rule extension is consolidated in Unit 8 to avoid double-counting.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u6_ftc1_basic_derivative",
+          "label": "FTC Part 1: d/dx of ∫ₐˣ f(t) dt",
+          "description": "Applies d/dx[∫ₐˣ f(t) dt] = f(x) directly; recognizes that the derivative of an accumulation function with variable upper limit equals the integrand evaluated at the upper limit.",
+          "yield_score": 0.92,
+          "yield_rationale": "The most directly tested FTC statement; appears in MC every year and is Step 1 of the FTC FRQ archetype.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_ftc1_basic_with_initial_condition",
+          "label": "FTC Part 1: Basic Case (Constant Lower Limit, Upper Limit = x) with and without an Initial Condition",
+          "description": "Applies d/dx[∫ₐˣ f(t) dt] = f(x) in the standard case where the lower limit is a constant and the upper limit is exactly x; distinguishes this from the chain-rule extension; uses an initial condition F(a) = k when given to identify a specific antiderivative.",
+          "yield_score": 0.90,
+          "yield_rationale": "The basic FTC1 case (no chain rule) is the entry-level skill for accumulation function derivatives; initial-condition sub-parts appear in FRQ annually and must be clearly separated from the chain-rule variant owned by Unit 8.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_ftc1_variable_lower_limit",
+          "label": "FTC Part 1 with Variable Lower Limit",
+          "description": "Handles d/dx[∫ₓᵇ f(t) dt] = −f(x) by reversing the bounds first; applies the negative sign from interval reversal before differentiating.",
+          "yield_score": 0.78,
+          "yield_rationale": "Variable-lower-limit variant tests bounds reversal plus FTC1; appears in MC as a trap for students who ignore the orientation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_ftc1_second_derivative_of_accumulation",
+          "label": "Second Derivative of an Accumulation Function",
+          "description": "Computes F''(x) by differentiating f(x) = F'(x); uses F'' = f' to locate inflection points of F and determine concavity of F from the graph of f.",
+          "yield_score": 0.82,
+          "yield_rationale": "Accumulation FRQ archetype asks for F''(x) to determine concavity/inflection of F; tested annually.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u6_accumulation_function_behavior",
+      "label": "Behavior of Accumulation Functions from a Graph of f",
+      "description": "Analyzes F(x) = ∫ₐˣ f(t) dt graphically: determines where F is increasing or decreasing, identifies horizontal tangents, sketches a rough graph of F, and reasons about the sign and relative comparisons of F from the graph of f. Extrema identification and numeric evaluation of F are scoped to Unit 8.",
+      "ced_topics": ["6.5"],
+      "yield_score": 0.85,
+      "yield_rationale": "Accumulation function graphical analysis is near-annual in FRQ and MC; yield reflects qualitative and sign-based reasoning owned here. Numeric extrema and F-value computation are consolidated in Unit 8 (CED 8.2/8.3) to avoid double-counting.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u6_accum_increasing_decreasing",
+          "label": "Determining Where F Is Increasing or Decreasing from the Graph of f",
+          "description": "Uses F'(x) = f(x) to conclude F is increasing where f > 0 and decreasing where f < 0; identifies intervals from a graph of f.",
+          "yield_score": 0.87,
+          "yield_rationale": "Increasing/decreasing analysis of F is the most common sub-task in the accumulation FRQ archetype; tested every year.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_accum_horizontal_tangent_at_zero",
+          "label": "Identifying Horizontal Tangents of F Where f(c) = 0",
+          "description": "Applies F'(c) = f(c) = 0 to conclude F has a horizontal tangent line at x = c; locates all x-values where the graph of f crosses or touches zero to identify horizontal tangents of F.",
+          "yield_score": 0.82,
+          "yield_rationale": "Recognizing that F'(c) = 0 iff f(c) = 0 is the conceptual link between zeros of f and horizontal tangents of F; tested in MC and required before extrema analysis in the accumulation FRQ archetype.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_accum_sketch_F_from_f",
+          "label": "Sketching a Rough Graph of F Given the Graph of f (Without Computing Exact Areas)",
+          "description": "Constructs a qualitative sketch of F(x) = ∫ₐˣ f(t) dt from the graph of f by tracking where F rises/falls (sign of f), where it bends (sign of f'), and where it levels off (f = 0); does not require computing numeric area values.",
+          "yield_score": 0.80,
+          "yield_rationale": "Qualitative sketching of an accumulation function from a graph of f is a graphical synthesis skill tested in MC and occasionally in FRQ; distinct from numeric evaluation owned by Unit 8.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_accum_compare_F_values_sign_of_integral",
+          "label": "Comparing F(b) to F(a) Using the Sign of ∫f Without Numeric Evaluation",
+          "description": "Determines whether F(b) > F(a), F(b) < F(a), or F(b) = F(a) by examining whether ∫ₐᵇ f is positive, negative, or zero from the graph of f; avoids computing exact area values.",
+          "yield_score": 0.76,
+          "yield_rationale": "Sign-based comparison of accumulated values is a conceptual MC question type; complements numeric evaluation owned by Unit 8 by focusing on qualitative reasoning.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_accum_sign_of_F_on_interval",
+          "label": "Identifying Where F Is Positive, Negative, or Zero from the Graph of f",
+          "description": "Determines the sign of F(x) = ∫ₐˣ f(t) dt on an interval by tracking whether net accumulated area from a to x is positive, negative, or zero; reads geometric areas from the graph of f to reason about F's sign.",
+          "yield_score": 0.78,
+          "yield_rationale": "Sign-of-F reasoning from a graph of f is a conceptual accumulation skill tested in MC; requires integrating knowledge of signed area and FTC1 without numeric computation.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u6_integral_properties",
+      "label": "Properties of Definite Integrals",
+      "description": "Applies linearity of integration (constant multiple, sum/difference), interval additivity (splitting/combining intervals), and interval reversal to evaluate or simplify definite integrals algebraically or from a graph/table.",
+      "ced_topics": ["6.6"],
+      "yield_score": 0.75,
+      "yield_rationale": "Integral properties appear in MC every year; used to evaluate integrals from graphs or tables when direct computation is unavailable.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u6_integral_linearity",
+          "label": "Linearity of the Definite Integral (Constant Multiple and Sum)",
+          "description": "Applies ∫[cf(x) + g(x)]dx = c∫f(x)dx + ∫g(x)dx to split or combine integral expressions; uses known integral values to evaluate a new integral without direct computation.",
+          "yield_score": 0.76,
+          "yield_rationale": "Constant-multiple and sum/difference properties appear in MC questions asking to evaluate an integral given others; high practical frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_interval_additivity",
+          "label": "Splitting and Combining Intervals (Interval Additivity)",
+          "description": "Uses ∫ₐᶜ f = ∫ₐᵇ f + ∫ᵦᶜ f to split an integral at an interior point or to find a missing piece given two of the three integrals.",
+          "yield_score": 0.78,
+          "yield_rationale": "Interval-splitting is a frequent MC problem type and appears in FRQ when integrating piecewise or when a known partial integral is given.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_reversing_bounds",
+          "label": "Reversing the Limits of Integration",
+          "description": "Applies ∫ₐᵇ f = −∫ᵦₐ f to flip bounds; correctly handles the sign change when reversing integration direction.",
+          "yield_score": 0.72,
+          "yield_rationale": "Bound reversal is tested directly in MC and is a prerequisite for FTC1 with a variable lower limit.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_zero_width_integral",
+          "label": "Integral Over a Zero-Width Interval",
+          "description": "Recognizes that ∫ₐᵃ f(x) dx = 0 regardless of f(a); uses this property to simplify expressions or evaluate degenerate cases.",
+          "yield_score": 0.45,
+          "yield_rationale": "Zero-width integral appears occasionally in MC as a trap; lower exam frequency but important for completeness of properties.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_integral_properties_from_graph",
+          "label": "Evaluating Integrals Using Properties and a Graph",
+          "description": "Combines linearity, additivity, and reversal properties with area values read directly from a graph of f to evaluate a composite integral expression.",
+          "yield_score": 0.74,
+          "yield_rationale": "Graph-based integral evaluation using properties is a standard MC question format; tests both property fluency and graph reading.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u6_ftc_part2",
+      "label": "FTC Part 2: Evaluating Definite Integrals with Antiderivatives",
+      "description": "Evaluates ∫ₐᵇ f(x) dx = F(b) − F(a) using the Fundamental Theorem Part 2; finds the appropriate antiderivative F, applies the evaluation at both bounds, and computes the net result.",
+      "ced_topics": ["6.7"],
+      "yield_score": 0.90,
+      "yield_rationale": "FTC Part 2 is the computational workhorse for every definite integral; used in virtually every integration FRQ and MC question.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u6_ftc2_apply_evaluation_rule",
+          "label": "Applying the FTC Evaluation Rule F(b) − F(a)",
+          "description": "Finds an antiderivative F of f, evaluates F at both limits of integration, and computes F(b) − F(a); uses correct bracket notation [F(x)]ₐᵇ.",
+          "yield_score": 0.92,
+          "yield_rationale": "Core FTC2 application appears on every exam; used directly in FRQ and MC to complete definite integral evaluations.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_ftc2_with_trig_exponential",
+          "label": "FTC Part 2 Applied to Trig and Exponential Integrands",
+          "description": "Evaluates definite integrals of sin, cos, e^x, and 1/x using their standard antiderivatives; applies boundary evaluation after each antiderivative is found.",
+          "yield_score": 0.85,
+          "yield_rationale": "Trig and exponential definite integrals appear regularly in MC and FRQ; requires both antiderivative recall and correct FTC2 execution.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_ftc2_with_usub_before_evaluation",
+          "label": "FTC Part 2 When U-Substitution Is Required Before Evaluating with Bounds",
+          "description": "Applies FTC Part 2 to a definite integral whose integrand is a product of a polynomial and a transcendental function (e.g., x·e^{x²}, x·cos(x²)); performs u-substitution first, converts the bounds to u-values, then evaluates F(b) − F(a) entirely in terms of u.",
+          "yield_score": 0.83,
+          "yield_rationale": "Definite integrals requiring u-sub before FTC2 evaluation are a high-frequency MC and FRQ sub-step; combining FTC2 with u-sub is the procedural capstone of Unit 6's integration technique scope.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_ftc2_polynomial_definite",
+          "label": "FTC Part 2 Applied to Polynomial Integrands",
+          "description": "Evaluates definite integrals of polynomial functions using the reverse power rule antiderivative; applies bounds and simplifies the resulting arithmetic.",
+          "yield_score": 0.88,
+          "yield_rationale": "Polynomial definite integrals are the most common computational integration task in no-calculator MC and FRQ.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u6_basic_antiderivatives",
+      "label": "Finding Antiderivatives and Basic Indefinite Integral Rules",
+      "description": "Applies the reverse power rule and standard antiderivative formulas for trigonometric, exponential, and reciprocal functions to find indefinite integrals; includes the constant of integration +C.",
+      "ced_topics": ["6.8"],
+      "yield_score": 0.90,
+      "yield_rationale": "Antiderivative computation appears in every integration FRQ and MC; foundational for all of Units 7 and 8.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u6_reverse_power_rule",
+          "label": "Reverse Power Rule for Antiderivatives",
+          "description": "Applies ∫xⁿ dx = xⁿ⁺¹/(n+1) + C for n ≠ −1; correctly increments the exponent and divides by the new exponent, including fractional and negative exponents.",
+          "yield_score": 0.93,
+          "yield_rationale": "Reverse power rule is the single most-used antiderivative rule on the exam; appears in nearly every integration question.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_antiderivative_of_trig",
+          "label": "Antiderivatives of sin(x) and cos(x)",
+          "description": "Applies ∫sin(x) dx = −cos(x) + C and ∫cos(x) dx = sin(x) + C; recalls the sign conventions and uses them in both indefinite and definite integrals.",
+          "yield_score": 0.85,
+          "yield_rationale": "Trig antiderivatives appear in MC and FRQ every year; sign errors between sin and cos antiderivatives are the most common distractor.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_antiderivative_of_exponential",
+          "label": "Antiderivative of e^x and Exponential Functions",
+          "description": "Applies ∫e^x dx = e^x + C and ∫e^{kx} dx = (1/k)e^{kx} + C; distinguishes e^x (derivative = itself) from other exponential bases.",
+          "yield_score": 0.82,
+          "yield_rationale": "Exponential antiderivatives appear in integration and DE sub-parts; forgetting the 1/k factor is a classic distractor.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_antiderivative_of_reciprocal",
+          "label": "Antiderivative of 1/x",
+          "description": "Applies ∫(1/x) dx = ln|x| + C; recognizes when the integrand has the form 1/x (or f'(x)/f(x)) and selects the logarithmic antiderivative; includes the absolute value in the argument.",
+          "yield_score": 0.78,
+          "yield_rationale": "Reciprocal antiderivative (ln|x|) is tested in MC and appears in integrate_log_form problems; the absolute value requirement is a common error.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_antiderivative_linearity",
+          "label": "Constant Multiple and Sum/Difference Rules for Antiderivatives",
+          "description": "Applies ∫[cf(x) ± g(x)] dx = c∫f(x) dx ± ∫g(x) dx to integrate term-by-term; distributes the constant multiple before integrating each term.",
+          "yield_score": 0.87,
+          "yield_rationale": "Term-by-term integration of polynomials and mixed functions is required in every antiderivative computation on the exam.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_constant_of_integration",
+          "label": "Including and Interpreting the Constant of Integration +C",
+          "description": "Recognizes that every indefinite integral requires +C; understands that omitting C loses points on FRQ; distinguishes indefinite integrals (family of functions) from definite integrals (a number).",
+          "yield_score": 0.70,
+          "yield_rationale": "Missing +C is an explicit FRQ point deduction; tested in MC via 'which expression is an antiderivative of...' format.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u6_u_substitution",
+      "label": "Integration by U-Substitution",
+      "description": "Transforms indefinite and definite integrals by substituting u = g(x) and du = g'(x) dx; recognizes when the integrand contains a function and its derivative; adjusts limits of integration for definite u-sub.",
+      "ced_topics": ["6.9"],
+      "yield_score": 0.90,
+      "yield_rationale": "U-substitution is the primary integration technique on the AB exam; appears in MC and as a FRQ sub-step every year.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u6_usub_recognize_pattern",
+          "label": "Recognizing When U-Substitution Applies",
+          "description": "Identifies that u-substitution is needed when the integrand contains a composite function whose inner derivative (or a constant multiple thereof) is also present; chooses the correct u = g(x).",
+          "yield_score": 0.88,
+          "yield_rationale": "Pattern recognition is the first step that separates students who can do u-sub from those who cannot; tested via MC 'which substitution works here?' questions.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_usub_compute_du",
+          "label": "Computing du and Rewriting the Integral in Terms of u",
+          "description": "Differentiates u = g(x) to get du = g'(x) dx; algebraically isolates dx or adjusts a constant coefficient so the integral is fully expressed in terms of u and du.",
+          "yield_score": 0.90,
+          "yield_rationale": "Correct du computation and substitution is the execution step of every u-sub problem; errors here are the most common source of wrong answers.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_usub_indefinite_evaluate",
+          "label": "Completing an Indefinite U-Substitution and Back-Substituting",
+          "description": "Integrates ∫f(u) du using basic rules after substitution; back-substitutes u = g(x) to express the antiderivative in terms of the original variable; adds +C.",
+          "yield_score": 0.88,
+          "yield_rationale": "Full indefinite u-sub is tested in MC and required in FRQ; forgetting to back-substitute is an explicit error.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_usub_definite_change_bounds",
+          "label": "U-Substitution in a Definite Integral — Changing Limits",
+          "description": "Converts the limits of integration from x-values to u-values when applying u-sub to a definite integral; evaluates the integral entirely in terms of u without back-substituting.",
+          "yield_score": 0.85,
+          "yield_rationale": "Definite u-sub with updated bounds appears in MC and no-calc FRQ; failing to update bounds while leaving a definite integral is the primary error.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_usub_with_trig",
+          "label": "U-Substitution with Trigonometric Integrands",
+          "description": "Applies u-substitution to integrands of the form sin(g(x))·g'(x) or cos(g(x))·g'(x); uses the standard trig antiderivatives after substituting.",
+          "yield_score": 0.80,
+          "yield_rationale": "Trig composite integrals via u-sub appear in MC; arctan integral (1/(1+u²)) also arises in this context.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_usub_adjust_constant",
+          "label": "Adjusting a Constant Factor to Complete U-Substitution",
+          "description": "Handles the case where g'(x) is off by a constant factor (e.g., integrand has 2x but u = x², so du = 2x dx matches); multiplies or divides by the appropriate constant to complete the substitution.",
+          "yield_score": 0.82,
+          "yield_rationale": "Constant-factor adjustment in u-sub is tested in MC; students who only recognize 'exact' matches miss these problems.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u6_algebraic_rewriting_for_integration",
+      "label": "Algebraic Rewriting for Integration: Long Division and Completing the Square",
+      "description": "Rewrites improper rational integrands via polynomial long division or completes the square in a denominator to transform integrands into integrable forms; selects the appropriate algebraic technique before integrating.",
+      "ced_topics": ["6.10"],
+      "yield_score": 0.45,
+      "yield_rationale": "Less frequently tested directly; appears in MC roughly every 2–3 years; important as a technique selection skill but not a core FRQ archetype.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u6_long_division_before_integration",
+          "label": "Polynomial Long Division to Prepare an Integral",
+          "description": "Performs polynomial long division on an improper rational integrand (degree of numerator ≥ degree of denominator) to rewrite it as a polynomial plus a proper rational remainder; then integrates each piece using basic rules.",
+          "yield_score": 0.45,
+          "yield_rationale": "Long division for integration is tested in MC every 2–3 years; the algebraic step itself is the point of difficulty.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_completing_square_integration",
+          "label": "Completing the Square in a Denominator to Enable Integration",
+          "description": "Rewrites a quadratic expression in the denominator by completing the square to obtain the form (x − h)² + k²; enables a u-substitution that yields an arctan antiderivative.",
+          "yield_score": 0.40,
+          "yield_rationale": "Completing-the-square integration appears occasionally in MC; lower frequency but tests combined algebraic and integration fluency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_recognize_integrand_requires_rewriting",
+          "label": "Identifying When an Integrand Requires Algebraic Rewriting",
+          "description": "Determines that a given rational or quadratic integrand cannot be integrated directly; selects long division (improper rational) or completing the square (sum-of-squares denominator) as the appropriate first step.",
+          "yield_score": 0.48,
+          "yield_rationale": "Technique-selection for rewriting is tested as the 6.14 strategy topic; students who skip the rewriting step produce incorrect integrals.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_integrate_rational_log_form",
+          "label": "Integrating Rational Expressions That Yield ln|x|",
+          "description": "Recognizes integrands of the form k/x or f'(x)/f(x) and applies the logarithmic antiderivative; distinguishes this case from the power rule (n = −1 exception).",
+          "yield_score": 0.55,
+          "yield_rationale": "Rational integrals yielding ln appear in u-sub and direct integration MC questions; the n = −1 exception to the power rule is a targeted misconception.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u6_antidifferentiation_strategy",
+      "label": "Selecting Techniques for Antidifferentiation",
+      "description": "Surveys a given integrand and selects the appropriate technique — direct antiderivative, u-substitution, or algebraic manipulation — before executing; includes recognizing when an integrand in a non-standard form must be rewritten first.",
+      "ced_topics": ["6.14"],
+      "yield_score": 0.65,
+      "yield_rationale": "Strategy-selection MC questions test this explicitly; unit 17–20% weighting but topic contributes via guiding all integration computations.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u6_strategy_direct_vs_usub",
+          "label": "Choosing Between Direct Antiderivative and U-Substitution",
+          "description": "Distinguishes integrands that match a basic formula directly (e.g., ∫x² dx) from those requiring u-substitution (e.g., ∫x·cos(x²) dx); selects the correct first move.",
+          "yield_score": 0.68,
+          "yield_rationale": "Strategy questions appear in MC; the direct vs. u-sub decision is where students make the most technique errors.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_strategy_identify_composite_integrand",
+          "label": "Identifying a Composite Structure That Triggers U-Substitution",
+          "description": "Spots the f(g(x))·g'(x) pattern in an integrand and names the inner function u = g(x); distinguishes it from a product that requires a different approach.",
+          "yield_score": 0.72,
+          "yield_rationale": "Composite pattern recognition is the key skill for u-sub; tested implicitly on every u-sub question and explicitly in technique-selection MC.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_strategy_algebraic_manipulation_first",
+          "label": "Recognizing When Algebraic Manipulation Must Precede Integration",
+          "description": "Identifies integrands that must be expanded, simplified, or rewritten (e.g., (x + 1)² expanded before power rule; (x² + 1)/x split into x + 1/x) before any integration rule can be applied.",
+          "yield_score": 0.62,
+          "yield_rationale": "Algebraic preprocessing before integrating appears in MC; students who jump to u-sub on an expandable expression waste effort and introduce errors.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u6_strategy_multi_step_integration",
+          "label": "Executing a Multi-Step Integration Plan",
+          "description": "Chains two or more steps (e.g., long division then power rule; completing the square then u-sub) to evaluate an integrand that does not yield to a single technique; demonstrates technique fluency in sequence.",
+          "yield_score": 0.58,
+          "yield_rationale": "Multi-step integration appears in harder MC and FRQ bonus sub-parts; tests both strategy and execution fluency.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

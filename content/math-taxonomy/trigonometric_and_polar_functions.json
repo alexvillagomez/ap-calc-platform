@@ -1,0 +1,703 @@
+{
+  "category": {
+    "id": "trigonometric_and_polar_functions",
+    "label": "Trigonometric and Polar Functions",
+    "description": "Defines, graphs, and models trigonometric and polar functions. Covers the unit circle, sinusoidal modeling (the dominant FRQ task), inverse trig, solving trig equations, reciprocal functions, identities, and polar coordinates and graphs.",
+    "section": "ap_precalc",
+    "ced_unit": "AP Precalc Unit 3",
+    "courses": [
+      {"course": "precalc", "role": "core", "order_index": 10},
+      {"course": "calc_ab", "role": "foundation", "order_index": 10}
+    ],
+    "yield_score": 0.87,
+    "yield_rationale": "30-35% of AP Precalc exam; FRQ 3 is exclusively sinusoidal modeling; FRQ 4 Part 1 regularly involves solving trig equations; unit is consistently heavy with a narrow weighting band"
+  },
+  "umbrellas": [
+    {
+      "id": "trig_periodic_phenomena",
+      "label": "Periodic Phenomena",
+      "description": "Identifies and characterizes periodic behavior in real-world and mathematical contexts. Tests recognition of period, amplitude, and midline from graphs, tables, and verbal descriptions, and distinguishes periodic from non-periodic functions.",
+      "ced_topics": ["3.1"],
+      "yield_score": 0.72,
+      "yield_rationale": "Conceptual setup for all of Unit 3; appears in FRQ 3 context-interpretation parts and MC framing questions",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_period_from_graph",
+          "label": "Period from graph",
+          "description": "Reads the period of a periodic function directly from its graph by identifying the horizontal length of one complete cycle. Tests use of two successive maxima, minima, or zero-crossings to measure the period.",
+          "yield_score": 0.78,
+          "yield_rationale": "Appears in nearly every sinusoidal problem setup; direct FRQ 3 skill"
+        },
+        {
+          "id": "trig_amplitude_from_graph",
+          "label": "Amplitude from graph",
+          "description": "Extracts amplitude as half the vertical distance between maximum and minimum output values of a periodic function. Tests reading max/min from a graph or table and computing (max - min) / 2.",
+          "yield_score": 0.80,
+          "yield_rationale": "Core parameter in sinusoidal modeling; tested both in context interpretation and parameter-identification MC"
+        },
+        {
+          "id": "trig_midline_from_graph",
+          "label": "Midline from graph",
+          "description": "Determines the midline of a periodic function as the horizontal line y = (max + min) / 2. Tests computing the vertical shift D from a graph or data table.",
+          "yield_score": 0.78,
+          "yield_rationale": "Direct prerequisite for constructing sinusoidal models in FRQ 3; frequently paired with amplitude in MC"
+        },
+        {
+          "id": "trig_periodic_vs_nonperiodic",
+          "label": "Periodic vs. non-periodic classification",
+          "description": "Distinguishes periodic functions from non-periodic ones using the definition: f(x + p) = f(x) for all x. Tests identification from graphs, tables, and function descriptions.",
+          "yield_score": 0.55,
+          "yield_rationale": "Conceptual MC item; lower frequency than parameter-reading but required for unit understanding"
+        },
+        {
+          "id": "trig_period_from_table",
+          "label": "Period from table of values",
+          "description": "Identifies the period of a periodic function from equally-spaced input-output tables by locating repeating output patterns. Tests finding the smallest interval after which values recur.",
+          "yield_score": 0.62,
+          "yield_rationale": "Tabular representation tested in MC Part A (no calculator); bridges data literacy to sinusoidal parameter extraction"
+        },
+        {
+          "id": "trig_periodic_context_interpretation",
+          "label": "Periodic context interpretation",
+          "description": "Interprets period, amplitude, and midline in terms of a real-world context (e.g., tide height, temperature cycle, rotating wheel). Tests translation from parameter values to contextual meaning with units.",
+          "yield_score": 0.70,
+          "yield_rationale": "FRQ 3 always asks for parameter interpretation in context; high communication/reasoning practice weight"
+        }
+      ]
+    },
+    {
+      "id": "trig_sine_cosine_tangent_definitions",
+      "label": "Sine, Cosine, and Tangent — Definitions",
+      "description": "Defines sine, cosine, and tangent using both right-triangle ratios (SOH-CAH-TOA) and unit-circle coordinates. Tests conversion between degree and radian measure and locating angles on the unit circle.",
+      "ced_topics": ["3.2"],
+      "yield_score": 0.78,
+      "yield_rationale": "Core definitions prerequisite for all subsequent trig topics; degree/radian conversion and unit-circle coordinates appear throughout MC and no-calculator FRQ sections",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_right_triangle_ratios",
+          "label": "Right-triangle trig ratios (SOH-CAH-TOA)",
+          "description": "Computes sine, cosine, and tangent as ratios of opposite, adjacent, and hypotenuse sides in a right triangle. Tests setting up and evaluating ratios from labeled triangles.",
+          "yield_score": 0.72,
+          "yield_rationale": "Entry-level trig definition; tested in MC and is prerequisite for unit-circle reasoning"
+        },
+        {
+          "id": "trig_unit_circle_coordinates",
+          "label": "Unit-circle coordinates for sine and cosine",
+          "description": "Identifies the unit-circle point (cos θ, sin θ) for a given angle θ. Tests reading x- and y-coordinates from the unit circle as cosine and sine values at key quadrant and special angles.",
+          "yield_score": 0.83,
+          "yield_rationale": "Unit-circle coordinate reading is tested in both MC and no-calculator FRQ; underpins exact-value evaluation"
+        },
+        {
+          "id": "trig_degree_radian_conversion",
+          "label": "Degree–radian conversion",
+          "description": "Converts angle measures between degrees and radians using the relation π rad = 180°. Tests both directions and fraction simplification for common angles.",
+          "yield_score": 0.76,
+          "yield_rationale": "Required for every unit-circle and graphing problem; appears in no-calculator MC and FRQ setup"
+        },
+        {
+          "id": "trig_tangent_ratio_unit_circle",
+          "label": "Tangent as sine-over-cosine",
+          "description": "Defines tangent as the ratio sin θ / cos θ and computes tangent from unit-circle coordinates or right-triangle ratios. Tests evaluating tan at angles where cosine is zero (undefined).",
+          "yield_score": 0.65,
+          "yield_rationale": "Connects tangent to sine/cosine before the dedicated tangent function topic (3.8); tested in definitional MC"
+        },
+        {
+          "id": "trig_quadrant_sign_identification",
+          "label": "Sign of trig functions by quadrant",
+          "description": "Determines the sign of sine, cosine, and tangent in each quadrant using the unit circle (ASTC mnemonic or coordinate analysis). Tests identifying which functions are positive or negative for a given angle location.",
+          "yield_score": 0.68,
+          "yield_rationale": "Essential for evaluating trig at non-first-quadrant angles; moderate MC frequency and prerequisite for solving equations"
+        }
+      ]
+    },
+    {
+      "id": "trig_special_angle_values",
+      "label": "Sine and Cosine Values at Special Angles",
+      "description": "Evaluates sine and cosine exactly at the standard special angles (0, π/6, π/4, π/3, π/2 and their reflections through all four quadrants). Tests recall and derivation from the unit circle without a calculator.",
+      "ced_topics": ["3.3"],
+      "yield_score": 0.80,
+      "yield_rationale": "Required for FRQ 4 (no-calculator) and MC Part A; exact-value fluency underpins trig equation solving and identity verification",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_special_values_first_quadrant",
+          "label": "Exact values at 0, π/6, π/4, π/3, π/2",
+          "description": "Recalls or derives exact sine and cosine values at the five first-quadrant special angles. Tests producing values such as sin(π/3) = √3/2 or cos(π/4) = √2/2 without a calculator.",
+          "yield_score": 0.88,
+          "yield_rationale": "Highest-frequency exact-value skill; tested in every no-calculator section and needed to solve trig equations"
+        },
+        {
+          "id": "trig_reference_angle_computation",
+          "label": "Reference angle computation",
+          "description": "Finds the reference angle for any angle in standard position by measuring the acute angle to the nearest x-axis. Tests computing reference angles for angles in QII, QIII, and QIV in both degrees and radians.",
+          "yield_score": 0.80,
+          "yield_rationale": "Mechanism for extending special-angle values to all quadrants; used in every exact-value evaluation outside QI"
+        },
+        {
+          "id": "trig_special_values_all_quadrants",
+          "label": "Exact trig values in all four quadrants",
+          "description": "Evaluates sine and cosine at reflections of special angles (e.g., 5π/6, 5π/4, 7π/4) by combining reference-angle values with quadrant signs. Tests both standard-position angle inputs and their co-terminal equivalents.",
+          "yield_score": 0.82,
+          "yield_rationale": "Central to FRQ 4 no-calculator work and MC Part A; requires combining two separate skills cleanly"
+        },
+        {
+          "id": "trig_coterminal_angles",
+          "label": "Coterminal angles",
+          "description": "Identifies angles coterminal with a given angle by adding or subtracting integer multiples of 2π (or 360°). Tests finding positive/negative coterminal angles and confirming that trig values are identical.",
+          "yield_score": 0.60,
+          "yield_rationale": "Supports general-solution writing in trig equations; moderate standalone MC frequency"
+        },
+        {
+          "id": "trig_tangent_special_values",
+          "label": "Tangent values at special angles",
+          "description": "Evaluates tangent exactly at special angles using sin/cos ratios (e.g., tan(π/3) = √3, tan(π/4) = 1, tan(π/6) = 1/√3). Tests including cases where tangent is undefined (π/2, 3π/2).",
+          "yield_score": 0.65,
+          "yield_rationale": "Required for trig equation solving and tangent-function analysis; tested in MC and FRQ 4"
+        }
+      ]
+    },
+    {
+      "id": "trig_sine_cosine_graphs",
+      "label": "Sine and Cosine Function Graphs",
+      "description": "Identifies and interprets key features of y = sin x and y = cos x: amplitude 1, period 2π, x-intercepts, maxima, minima, and symmetry. Tests graph reading, sketching from features, and connecting graph features to function behavior.",
+      "ced_topics": ["3.4"],
+      "yield_score": 0.82,
+      "yield_rationale": "Graph reading and parent-function identification appear throughout MC and FRQ 3; prerequisite for sinusoidal transformations",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_parent_sine_cosine_features",
+          "label": "Key features of parent sine and cosine graphs",
+          "description": "States the amplitude, period, domain, range, intercepts, and maximum/minimum locations for y = sin x and y = cos x. Tests matching graph features to the correct parent function and vice versa.",
+          "yield_score": 0.80,
+          "yield_rationale": "Foundational graph literacy for the sinusoidal unit; tested in MC and provides the baseline for transformations"
+        },
+        {
+          "id": "trig_max_min_from_graph",
+          "label": "Reading maxima and minima from sine/cosine graphs",
+          "description": "Locates the x-coordinates of maxima and minima on a sine or cosine graph and states their corresponding y-values. Tests identifying maximum at x = π/2 for sine, at x = 0 for cosine, and their periodic extensions.",
+          "yield_score": 0.75,
+          "yield_rationale": "Precision graph-reading skill tested in both MC and FRQ 3 where max/min values define amplitude and midline"
+        },
+        {
+          "id": "trig_zeros_from_graph",
+          "label": "Zeros of sine and cosine from graphs",
+          "description": "Identifies the x-intercepts of y = sin x (at multiples of π) and y = cos x (at π/2 + nπ). Tests reading zeros from a graph and using them to confirm the period or locate the function.",
+          "yield_score": 0.68,
+          "yield_rationale": "Necessary for sketching and interpreting sinusoidal functions; moderate direct-test frequency"
+        },
+        {
+          "id": "trig_sketch_from_features",
+          "label": "Sketching sine and cosine from stated features",
+          "description": "Constructs a rough sketch of y = sin x or y = cos x given amplitude, period, and starting phase. Tests plotting the five key points (start, quarter-period, half-period, three-quarter-period, full-period) accurately.",
+          "yield_score": 0.72,
+          "yield_rationale": "Foundational graphing technique directly extended to transformed sinusoidals; tested in FRQ 3 graph-sketching parts"
+        },
+        {
+          "id": "trig_symmetry_and_periodicity",
+          "label": "Symmetry and periodicity of sine and cosine",
+          "description": "Uses the odd symmetry of sine (sin(−x) = −sin x) and even symmetry of cosine (cos(−x) = cos x) to evaluate function values and verify identities. Tests applying symmetry to simplify expressions.",
+          "yield_score": 0.60,
+          "yield_rationale": "Supports identity work in topic 3.12; moderate MC frequency as a standalone skill"
+        }
+      ]
+    },
+    {
+      "id": "trig_sinusoidal_functions",
+      "label": "Sinusoidal Functions — Parameter Model",
+      "description": "Defines the general sinusoidal form y = A sin(B(x − C)) + D and identifies each parameter: |A| = amplitude, 2π/B = period, C = phase shift, D = midline/vertical shift. Tests extracting all four parameters from an equation and connecting them to graph features.",
+      "ced_topics": ["3.5"],
+      "yield_score": 0.90,
+      "yield_rationale": "Highest-yield Unit 3 topic; FRQ 3 is centered on this model; sinusoidal parameter identification appears across MC and both FRQ sections involving periodic context",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_amplitude_parameter",
+          "label": "Amplitude parameter |A|",
+          "description": "Identifies |A| as the amplitude of y = A sin(B(x−C)) + D, recognizing that negative A reflects the graph vertically. Tests extracting amplitude from equations and connecting it to max/min values.",
+          "yield_score": 0.88,
+          "yield_rationale": "Most directly tested parameter in FRQ 3 and sinusoidal MC; paired with midline to define range"
+        },
+        {
+          "id": "trig_period_from_b_parameter",
+          "label": "Period from B parameter (2π/B)",
+          "description": "Computes the period of y = A sin(Bx + ...) as 2π / |B| (or 360° / |B| in degrees). Tests both solving for period from B and solving for B from a known period.",
+          "yield_score": 0.90,
+          "yield_rationale": "Critical two-way conversion; appears in virtually every sinusoidal equation problem on the exam"
+        },
+        {
+          "id": "trig_phase_shift_parameter",
+          "label": "Phase shift parameter C",
+          "description": "Determines the horizontal (phase) shift of a sinusoidal function as the value C in y = A sin(B(x − C)) + D, distinguishing it from the argument rewrite form Bx + φ. Tests identifying left/right shift direction and magnitude.",
+          "yield_score": 0.82,
+          "yield_rationale": "Common source of student error (sign confusion); tested both as isolated skill and within full model construction"
+        },
+        {
+          "id": "trig_vertical_shift_midline",
+          "label": "Vertical shift and midline D",
+          "description": "Identifies D as the vertical shift (midline) of a sinusoidal function, giving y = D as the equation of the midline. Tests computing D as (max + min) / 2 and interpreting its contextual meaning.",
+          "yield_score": 0.85,
+          "yield_rationale": "Required for building sinusoidal models from contextual data; midline interpretation is a standard FRQ 3 part"
+        },
+        {
+          "id": "trig_all_parameters_from_equation",
+          "label": "Extracting all four parameters from an equation",
+          "description": "Reads amplitude, period, phase shift, and midline simultaneously from a single sinusoidal equation in standard form. Tests rewriting from non-standard form (e.g., A sin(Bx + φ) + D → A sin(B(x − C)) + D) before extraction.",
+          "yield_score": 0.88,
+          "yield_rationale": "Integrated skill tested in MC and forms the analytic half of FRQ 3; requires all four parameter operations"
+        },
+        {
+          "id": "trig_range_from_parameters",
+          "label": "Range from amplitude and midline",
+          "description": "Computes the range of a sinusoidal function as [D − |A|, D + |A|] from its amplitude and midline values. Tests stating range in interval notation and interpreting it contextually (e.g., minimum temperature = midline − amplitude).",
+          "yield_score": 0.72,
+          "yield_rationale": "Tested in interpretation questions; connects parameter values to function output behavior"
+        }
+      ]
+    },
+    {
+      "id": "trig_sinusoidal_transformations",
+      "label": "Sinusoidal Function Transformations",
+      "description": "Constructs transformed sinusoidal functions from parent functions using additive and multiplicative changes, connecting each transformation to its effect on amplitude, period, phase shift, and vertical shift. Tests graphing transformed sinusoidals and identifying the equation from a transformed graph.",
+      "ced_topics": ["3.6"],
+      "yield_score": 0.88,
+      "yield_rationale": "FRQ 3 requires building and interpreting transformations of sinusoidal functions; very high-yield alongside the parameter model (3.5)",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_vertical_stretch_compression",
+          "label": "Vertical stretch and compression (amplitude change)",
+          "description": "Describes how multiplying f(x) by a constant |A| > 1 (stretch) or 0 < |A| < 1 (compression) changes the amplitude of a sinusoidal function while preserving the period. Tests comparing graphs before and after amplitude change.",
+          "yield_score": 0.82,
+          "yield_rationale": "Amplitude transformation is the most-tested individual transformation for sinusoidal functions"
+        },
+        {
+          "id": "trig_horizontal_stretch_compression",
+          "label": "Horizontal stretch and compression (period change)",
+          "description": "Describes how multiplying the argument by B changes the period to 2π/|B|: |B| > 1 compresses (shorter period), 0 < |B| < 1 stretches (longer period). Tests identifying the period after a horizontal scaling and solving for B from a target period.",
+          "yield_score": 0.85,
+          "yield_rationale": "Period manipulation via B is one of the two most tested sinusoidal transformations; required for model construction"
+        },
+        {
+          "id": "trig_horizontal_translation_phase_shift",
+          "label": "Horizontal translation (phase shift) in transformed graphs",
+          "description": "Identifies and applies horizontal shifts to sinusoidal graphs, recognizing that f(x − C) shifts the graph right by C units. Tests distinguishing phase shift direction (sign) and magnitude from both equations and graphs.",
+          "yield_score": 0.80,
+          "yield_rationale": "Phase shift direction errors are one of the most common student mistakes; tested heavily in MC and FRQ 3"
+        },
+        {
+          "id": "trig_vertical_translation",
+          "label": "Vertical translation (midline shift)",
+          "description": "Applies f(x) + D to shift a sinusoidal graph vertically, changing the midline from y = 0 to y = D. Tests reading the new midline, max, and min after adding D to a base sinusoidal function.",
+          "yield_score": 0.80,
+          "yield_rationale": "Midline shift is required for all contextual sinusoidal models; tested in FRQ 3 and MC"
+        },
+        {
+          "id": "trig_reflection_sinusoidal",
+          "label": "Reflection of sinusoidal functions",
+          "description": "Describes the effect of a negative leading coefficient A < 0 (vertical reflection) or B < 0 (horizontal reflection) on the graph of a sinusoidal function. Tests rewriting −sin(...) as sin(...+ π) and identifying whether the graph opens 'down' from its midline first.",
+          "yield_score": 0.68,
+          "yield_rationale": "Reflection tested in MC; students must distinguish cosine from negated sine; moderate direct-test frequency"
+        },
+        {
+          "id": "trig_equation_from_graph",
+          "label": "Writing sinusoidal equation from a graph",
+          "description": "Constructs the equation y = A sin(B(x−C)) + D or y = A cos(B(x−C)) + D from a complete graph by reading amplitude, period, phase shift, and midline. Tests the reverse direction of parameter identification: graph → equation.",
+          "yield_score": 0.87,
+          "yield_rationale": "Reverse-engineering sinusoidal equations from graphs is a standard FRQ 3 and MC skill; very high frequency"
+        }
+      ]
+    },
+    {
+      "id": "trig_sinusoidal_modeling",
+      "label": "Sinusoidal Context and Data Modeling",
+      "description": "Constructs sinusoidal models from real-world periodic data or verbal descriptions; determines parameters from contextual information such as known maximum, minimum, or period; interprets model parameters in context and validates the model against data.",
+      "ced_topics": ["3.7"],
+      "yield_score": 0.90,
+      "yield_rationale": "FRQ 3 task type is always sinusoidal context modeling; single highest-yield FRQ topic in Unit 3; consistently tested every exam year",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_model_from_max_min_period",
+          "label": "Building a model from maximum, minimum, and period",
+          "description": "Derives A, B, C, and D for a sinusoidal model given contextual maximum value, minimum value, and period. Tests using (max − min)/2 for A, (max + min)/2 for D, and 2π/period for B, then choosing C to align the function with a known maximum or minimum.",
+          "yield_score": 0.92,
+          "yield_rationale": "The core FRQ 3 construction task; almost certainly tested every year; highest individual skill yield in this category"
+        },
+        {
+          "id": "trig_model_from_two_data_points",
+          "label": "Model construction from two data points",
+          "description": "Constructs a sinusoidal model when two input-output pairs are given (e.g., a maximum and a value a quarter-period later), setting up and solving for the unknown parameters algebraically. Tests using known function behavior (max at peak, zero at midline crossing) to anchor parameter values.",
+          "yield_score": 0.80,
+          "yield_rationale": "More algebraically demanding variant of model construction; tested in MC calculator section and FRQ 3"
+        },
+        {
+          "id": "trig_context_parameter_interpretation",
+          "label": "Interpreting parameters in context",
+          "description": "Translates each parameter of a fitted sinusoidal model into its real-world meaning with correct units (e.g., 'the amplitude of 3°C means the temperature fluctuates 3°C above and below the midline'). Tests explaining what A, B, C, and D represent in a specific application.",
+          "yield_score": 0.85,
+          "yield_rationale": "FRQ 3 consistently has a parameter-interpretation part; Communication and Reasoning practice (MP3)"
+        },
+        {
+          "id": "trig_model_prediction",
+          "label": "Using a sinusoidal model to predict output values",
+          "description": "Evaluates a constructed sinusoidal model at a specific input to predict a future or unobserved output value. Tests calculator-based evaluation and interpretation of the result in context.",
+          "yield_score": 0.78,
+          "yield_rationale": "Prediction is the 'apply the model' step in FRQ 3; medium-high weight in contextual modeling"
+        },
+        {
+          "id": "trig_model_validation",
+          "label": "Validating a sinusoidal model against data",
+          "description": "Assesses how well a sinusoidal model fits a data set by comparing model predictions to observed values or by inspecting residuals. Tests recognizing whether a sinusoidal model is appropriate (vs. a different function family) and stating limitations.",
+          "yield_score": 0.62,
+          "yield_rationale": "Less frequently tested than model construction but appears in FRQ justification parts (MP3)"
+        },
+        {
+          "id": "trig_sinusoidal_cosine_form",
+          "label": "Choosing sine vs. cosine form for a model",
+          "description": "Selects whether to use the sine or cosine form of a sinusoidal model based on the starting behavior: cosine begins at a maximum, sine begins at the midline going up. Tests writing equivalent models in both forms and converting between them.",
+          "yield_score": 0.72,
+          "yield_rationale": "Choosing the appropriate form avoids a non-zero phase shift and simplifies the model; tested in MC and FRQ model-construction"
+        }
+      ]
+    },
+    {
+      "id": "trig_tangent_function",
+      "label": "The Tangent Function",
+      "description": "Analyzes the behavior of y = tan x: period π, vertical asymptotes at x = π/2 + nπ, zeros at multiples of π, and unbounded range. Tests identifying graph features, comparing tangent to sine and cosine, and evaluating tangent at special angles.",
+      "ced_topics": ["3.8"],
+      "yield_score": 0.55,
+      "yield_rationale": "Tangent appears in MC but not in the fixed FRQ task types; moderate weight below the sinusoidal cluster",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_tangent_period",
+          "label": "Period of tangent (π, not 2π)",
+          "description": "States that the period of y = tan x is π, not 2π, and explains this using the ratio sin x / cos x or by reading from the graph. Tests identifying the correct period and distinguishing it from sine/cosine.",
+          "yield_score": 0.58,
+          "yield_rationale": "Common error point where students confuse tangent period with 2π; moderate MC frequency"
+        },
+        {
+          "id": "trig_tangent_vertical_asymptotes",
+          "label": "Vertical asymptotes of tangent",
+          "description": "Identifies vertical asymptotes of y = tan x at x = π/2 + nπ (where cosine = 0) and explains why they occur. Tests locating asymptotes on the graph and for transformed tangent functions y = tan(Bx).",
+          "yield_score": 0.62,
+          "yield_rationale": "Asymptote identification is a consistent MC question type; connects back to rational-function asymptote reasoning"
+        },
+        {
+          "id": "trig_tangent_zeros",
+          "label": "Zeros of tangent",
+          "description": "Locates the zeros of y = tan x at x = nπ (integer multiples of π) by applying the definition tan x = sin x / cos x and noting when the numerator is zero. Tests giving exact zeros within a specified interval.",
+          "yield_score": 0.52,
+          "yield_rationale": "Tested alongside asymptote identification in graph-analysis MC; lower individual frequency"
+        },
+        {
+          "id": "trig_tangent_graph_features",
+          "label": "Tangent graph overall behavior",
+          "description": "Describes the overall behavior of y = tan x: increasing on each branch, no amplitude (unbounded range), domain excluding asymptotes, and odd symmetry. Tests matching graph descriptions to the tangent function.",
+          "yield_score": 0.55,
+          "yield_rationale": "Conceptual MC items asking students to distinguish tangent graph from sine/cosine graphs"
+        },
+        {
+          "id": "trig_transformed_tangent",
+          "label": "Transformed tangent functions y = A tan(Bx)",
+          "description": "Analyzes how scaling coefficients A and B affect the tangent function: B changes the period to π/|B|, A changes the steepness of the branches. Tests identifying period and asymptotes of transformed tangent from equations.",
+          "yield_score": 0.48,
+          "yield_rationale": "Less frequently tested as a standalone; appears in MC when asked to identify which equation matches a graph"
+        }
+      ]
+    },
+    {
+      "id": "trig_inverse_trig_functions",
+      "label": "Inverse Trigonometric Functions",
+      "description": "Defines arcsin, arccos, and arctan with their restricted domains and ranges; evaluates inverse trig functions at special values; interprets inverse trig outputs as angles; uses inverse trig to solve for angles in context.",
+      "ced_topics": ["3.9"],
+      "yield_score": 0.65,
+      "yield_rationale": "Appears in FRQ 4 (symbolic) and MC; prerequisite for solving trig equations (3.10); tested at moderate frequency",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "arcsin_domain_range",
+          "label": "Domain and range of arcsin",
+          "description": "States that arcsin has domain [−1, 1] and range [−π/2, π/2]. Tests identifying the principal value branch of arcsin, explaining why the domain must be restricted to make sine invertible, and recognizing that outputs are confined to the interval [−π/2, π/2].",
+          "yield_score": 0.68,
+          "yield_rationale": "arcsin domain/range is the most-tested of the three; underpins exact-value evaluation in FRQ 4 (no-calculator) and general-solution writing for sine equations"
+        },
+        {
+          "id": "arccos_domain_range",
+          "label": "Domain and range of arccos",
+          "description": "States that arccos has domain [−1, 1] and range [0, π]. Tests identifying the principal value branch of arccos, explaining why the restricted range is [0, π] rather than [−π/2, π/2], and distinguishing arccos outputs from arcsin outputs at the same input value.",
+          "yield_score": 0.65,
+          "yield_rationale": "arccos domain/range tested in MC; students frequently confuse its range [0, π] with arcsin's [−π/2, π/2]; needed for solving cosine equations and polar coordinate angle selection"
+        },
+        {
+          "id": "arctan_domain_range",
+          "label": "Domain and range of arctan",
+          "description": "States that arctan has domain ℝ (all real numbers) and range (−π/2, π/2) (open interval). Tests recognizing that arctan accepts any real input (unlike arcsin/arccos), that its range endpoints are excluded because tan is undefined there, and evaluating arctan at special values within the principal branch.",
+          "yield_score": 0.63,
+          "yield_rationale": "arctan domain/range tested in MC and polar-to-rectangular conversion (3.13); the open-vs-closed interval distinction and unrestricted domain are common error sources"
+        },
+        {
+          "id": "trig_inverse_trig_special_values",
+          "label": "Evaluating inverse trig at special values",
+          "description": "Computes exact values such as arcsin(1/2) = π/6, arccos(√3/2) = π/6, arctan(1) = π/4 by reading the principal value from the unit circle. Tests no-calculator evaluation restricted to the principal branch.",
+          "yield_score": 0.75,
+          "yield_rationale": "Exact-value inverse trig is tested in FRQ 4 (no-calculator) and MC Part A; high direct-test frequency"
+        },
+        {
+          "id": "trig_inverse_trig_angle_interpretation",
+          "label": "Interpreting arcsin/arccos/arctan outputs as angles",
+          "description": "Interprets the output of an inverse trig function as the measure of an angle (in radians or degrees). Tests contextual interpretation: 'arcsin(0.6) is the angle whose sine is 0.6' and converting the result to degrees or context units.",
+          "yield_score": 0.62,
+          "yield_rationale": "Conceptual interpretation tested in MC and FRQ context problems involving angle measurement"
+        },
+        {
+          "id": "trig_inverse_trig_composition",
+          "label": "Composing trig and inverse trig functions",
+          "description": "Evaluates expressions of the form sin(arccos(x)) or arctan(sin(θ)) by drawing a reference triangle or using Pythagorean identity to simplify. Tests knowing when composition simplifies to the identity and when it does not (outside the principal branch).",
+          "yield_score": 0.58,
+          "yield_rationale": "Composition of inverse trig appears in FRQ 4 symbolic work; less frequent but high-difficulty when it appears"
+        },
+        {
+          "id": "trig_inverse_trig_context",
+          "label": "Inverse trig in contextual angle-finding",
+          "description": "Uses arcsin, arccos, or arctan to find an unknown angle in a right-triangle or periodic-function context. Tests setting up the inverse trig expression and interpreting the result with appropriate units.",
+          "yield_score": 0.60,
+          "yield_rationale": "Application context for inverse trig; appears in calculator-active MC and ties into 3.7 model evaluation"
+        }
+      ]
+    },
+    {
+      "id": "trig_equations_and_inequalities",
+      "label": "Trigonometric Equations and Inequalities",
+      "description": "Solves trigonometric equations algebraically using inverse trig functions and unit-circle reasoning to find both principal solutions and general solutions. Tests solving linear and quadratic-in-trig equations and interpreting solutions in context.",
+      "ced_topics": ["3.10"],
+      "yield_score": 0.82,
+      "yield_rationale": "FRQ 4 Part 1 regularly involves solving trig equations; also tested in MC; one of the most directly tested symbolic skills in Unit 3",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_basic_trig_equation",
+          "label": "Solving basic trig equations (sin x = c, cos x = c)",
+          "description": "Solves equations of the form sin x = c or cos x = c for x in [0, 2π) using inverse trig and the unit circle to find both solutions in the appropriate quadrants. Tests identifying which quadrants yield the given value.",
+          "yield_score": 0.85,
+          "yield_rationale": "Most fundamental trig equation type; appears in virtually every trig-equation MC item and FRQ 4"
+        },
+        {
+          "id": "trig_general_solution",
+          "label": "General solution with + 2πn or + πn",
+          "description": "Writes the complete general solution to a trig equation by appending the periodic term (+ 2πn for sine/cosine, + πn for tangent) to each principal-branch solution. Tests distinguishing the correct period increment by function type.",
+          "yield_score": 0.78,
+          "yield_rationale": "General solution writing is tested in FRQ 4 and MC; students must know the period of each trig function to generalize"
+        },
+        {
+          "id": "trig_linear_trig_equation",
+          "label": "Solving linear trig equations (A sin(Bx) = c)",
+          "description": "Solves equations where the trig function is applied to a linear argument, such as 2 sin(3x) = 1, by isolating the trig expression and solving for x over a specified interval. Tests adjusting the solution set for the compressed period.",
+          "yield_score": 0.82,
+          "yield_rationale": "Standard FRQ 4 equation form; requires chaining isolation steps with period adjustment"
+        },
+        {
+          "id": "trig_quadratic_trig_equation",
+          "label": "Solving quadratic-in-trig equations",
+          "description": "Solves equations quadratic in a trig function (e.g., 2 sin²x − sin x − 1 = 0) by factoring or substituting u = sin x, then solving for the trig expression and applying inverse trig. Tests recognizing the quadratic structure.",
+          "yield_score": 0.70,
+          "yield_rationale": "Higher-difficulty MC and FRQ 4 variant; requires factoring fluency combined with trig solving"
+        },
+        {
+          "id": "trig_trig_equation_using_identities",
+          "label": "Trig equations requiring identity substitution",
+          "description": "Solves equations that require first applying a Pythagorean identity (sin²x + cos²x = 1) to rewrite in terms of a single trig function before solving. Tests recognizing when substitution is needed to reduce to one trig function.",
+          "yield_score": 0.72,
+          "yield_rationale": "FRQ 4 Part 1 sometimes combines identity use with equation solving; moderate-to-high difficulty"
+        },
+        {
+          "id": "trig_equation_on_interval",
+          "label": "Trig equation solutions restricted to an interval",
+          "description": "Finds all solutions of a trig equation within a specified interval such as [0, 2π) or [0°, 360°), listing all values without the general +2πn term. Tests careful enumeration of solutions in the stated domain.",
+          "yield_score": 0.80,
+          "yield_rationale": "Most exam problems specify a domain; correctly listing all solutions in the interval without omission is a high-frequency skill"
+        }
+      ]
+    },
+    {
+      "id": "trig_reciprocal_functions",
+      "label": "Secant, Cosecant, and Cotangent Functions",
+      "description": "Defines the reciprocal trigonometric functions sec x = 1/cos x, csc x = 1/sin x, and cot x = 1/tan x; identifies their domains, asymptotes, and key graph features; distinguishes them from the primary trig functions.",
+      "ced_topics": ["3.11"],
+      "yield_score": 0.42,
+      "yield_rationale": "Less tested than primary trig functions; appears occasionally in MC; no fixed FRQ task type uses these functions prominently",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_reciprocal_definitions",
+          "label": "Definitions of sec, csc, cot",
+          "description": "States that sec x = 1/cos x, csc x = 1/sin x, and cot x = cos x / sin x = 1/tan x. Tests evaluating these at special angles and recognizing which primary trig function each is the reciprocal of.",
+          "yield_score": 0.48,
+          "yield_rationale": "Definitional recall tested in MC; required for reciprocal-function asymptote and value problems"
+        },
+        {
+          "id": "trig_reciprocal_asymptotes_domain",
+          "label": "Asymptotes and domain of reciprocal functions",
+          "description": "Identifies the vertical asymptotes of csc x (at x = nπ, where sin x = 0) and sec x (at x = π/2 + nπ, where cos x = 0) and states their domains. Tests locating asymptotes from first principles.",
+          "yield_score": 0.45,
+          "yield_rationale": "Asymptote identification is the most tested aspect of reciprocal functions in MC"
+        },
+        {
+          "id": "trig_reciprocal_graph_features",
+          "label": "Key graph features of sec, csc, and cot",
+          "description": "Describes the shape of y = sec x (U-shaped arches between asymptotes), y = csc x (similar but shifted), and y = cot x (decreasing branches like −tan). Tests matching a graph description to the correct reciprocal function.",
+          "yield_score": 0.38,
+          "yield_rationale": "Graph identification questions appear sporadically in MC; lowest yield among reciprocal-function skills"
+        },
+        {
+          "id": "trig_evaluating_reciprocal_values",
+          "label": "Evaluating sec, csc, cot at special angles",
+          "description": "Computes exact values of sec, csc, and cot at standard special angles by taking the reciprocal of the corresponding primary trig value. Tests recognizing when a reciprocal value is undefined.",
+          "yield_score": 0.42,
+          "yield_rationale": "Exact-value evaluation for reciprocal functions appears in no-calculator MC; moderate frequency"
+        }
+      ]
+    },
+    {
+      "id": "trig_identities",
+      "label": "Equivalent Representations — Trig Identities",
+      "description": "Applies Pythagorean identities (sin²x + cos²x = 1 and derived forms) and co-function identities to rewrite trigonometric expressions in equivalent forms. Tests simplifying expressions and verifying or using identities in symbolic manipulation tasks.",
+      "ced_topics": ["3.12"],
+      "yield_score": 0.68,
+      "yield_rationale": "FRQ 4 (symbolic manipulations) regularly requires identity application; moderate MC frequency; no-calculator section tested",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_pythagorean_identity_primary",
+          "label": "Pythagorean identity sin²x + cos²x = 1",
+          "description": "Applies the identity sin²x + cos²x = 1 to find the value of one trig function given the other. Tests both numeric evaluation (given sin x, find cos x) and symbolic substitution to simplify expressions.",
+          "yield_score": 0.78,
+          "yield_rationale": "Most frequently applied identity in FRQ 4 and trig equation solving; high direct-test frequency"
+        },
+        {
+          "id": "trig_pythagorean_identity_derived",
+          "label": "Derived Pythagorean identities (1 + tan² = sec², 1 + cot² = csc²)",
+          "description": "Derives and applies the identities 1 + tan²x = sec²x and 1 + cot²x = csc²x by dividing the primary Pythagorean identity through by cos²x or sin²x. Tests recognizing which derived form is useful in a given simplification.",
+          "yield_score": 0.55,
+          "yield_rationale": "Less frequent than primary identity but tested in harder MC and FRQ 4 symbolic work"
+        },
+        {
+          "id": "trig_cofunction_identities",
+          "label": "Co-function identities",
+          "description": "Applies co-function identities such as sin(π/2 − x) = cos x and cos(π/2 − x) = sin x (and analogues for tan/cot, sec/csc) to rewrite expressions. Tests rewriting one trig function in terms of its co-function.",
+          "yield_score": 0.55,
+          "yield_rationale": "Co-function identities appear in FRQ 4 and MC; less frequent than Pythagorean identity"
+        },
+        {
+          "id": "trig_simplify_trig_expression",
+          "label": "Simplifying trig expressions using identities",
+          "description": "Reduces a complex trigonometric expression to a simpler form by strategically applying Pythagorean and co-function identities. Tests selecting the appropriate identity and completing multi-step simplifications.",
+          "yield_score": 0.72,
+          "yield_rationale": "Multi-step identity simplification is the dominant FRQ 4 symbolic task for Unit 3; tested with no calculator"
+        },
+        {
+          "id": "trig_identity_given_value",
+          "label": "Finding trig values using Pythagorean identity",
+          "description": "Given the value of one trig function and a quadrant constraint, uses sin²x + cos²x = 1 to find the exact value of another trig function. Tests applying the correct sign based on quadrant after solving the identity equation.",
+          "yield_score": 0.70,
+          "yield_rationale": "Standard MC problem type and FRQ 4 component; requires combining identity use with quadrant sign reasoning"
+        }
+      ]
+    },
+    {
+      "id": "trig_polar_coordinates_and_graphs",
+      "label": "Polar Coordinates and Polar Function Graphs",
+      "description": "Converts between rectangular (x, y) and polar (r, θ) coordinate systems; graphs polar functions r = f(θ) including circles, limaçons, roses, and lemniscates; identifies key features such as maximum r-value, symmetry, and special angle crossings.",
+      "ced_topics": ["3.13", "3.14"],
+      "yield_score": 0.57,
+      "yield_rationale": "Both polar coordinate conversion (3.13) and polar graph identification (3.14) appear in MC with moderate frequency; merged since coordinate conversion is the immediate prerequisite for graphing",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_polar_to_rectangular",
+          "label": "Converting from polar to rectangular coordinates",
+          "description": "Applies x = r cos θ and y = r sin θ to convert a polar point (r, θ) to rectangular form (x, y). Tests conversion at special angles and for negative r-values.",
+          "yield_score": 0.62,
+          "yield_rationale": "Coordinate conversion appears consistently in MC; prerequisite for understanding polar graphs"
+        },
+        {
+          "id": "trig_rectangular_to_polar",
+          "label": "Converting from rectangular to polar coordinates",
+          "description": "Converts a rectangular point (x, y) to polar form using r = √(x² + y²) and θ = arctan(y/x) with quadrant adjustment. Tests selecting the correct branch of arctan and expressing r as positive or negative.",
+          "yield_score": 0.58,
+          "yield_rationale": "Tested in MC; requires combining Pythagorean distance with inverse trig angle finding"
+        },
+        {
+          "id": "trig_polar_graph_circles_limacons",
+          "label": "Graphs of polar circles and limaçons",
+          "description": "Identifies and sketches polar graphs of the form r = a (circle), r = a + b sin θ, and r = a + b cos θ (limaçons with or without inner loop). Tests classifying a limaçon by |a/b| ratio and identifying the direction of the large lobe.",
+          "yield_score": 0.58,
+          "yield_rationale": "Limaçon and circle identification is the most frequently tested polar graph type in MC"
+        },
+        {
+          "id": "trig_polar_graph_roses_lemniscates",
+          "label": "Graphs of rose curves and lemniscates",
+          "description": "Identifies polar rose curves r = a sin(nθ) or r = a cos(nθ) (n petals if n is odd, 2n if even) and lemniscates r² = a² cos(2θ). Tests counting petals, identifying the orientation, and recognizing the graph family.",
+          "yield_score": 0.52,
+          "yield_rationale": "Rose and lemniscate identification tested in MC; less common than limaçon problems"
+        },
+        {
+          "id": "trig_polar_key_features",
+          "label": "Key features of polar graphs (max r, symmetry, zeros)",
+          "description": "Reads the maximum value of r, angles where r = 0, and axes of symmetry from a polar equation or its graph. Tests evaluating r at special angles (θ = 0, π/2, π, 3π/2) and using symmetry to infer missing portions of the graph.",
+          "yield_score": 0.55,
+          "yield_rationale": "Feature-reading tested alongside graph-identification in MC; requires trig evaluation at special angles"
+        },
+        {
+          "id": "trig_polar_equation_identification",
+          "label": "Matching a polar graph to its equation",
+          "description": "Selects the polar equation that matches a given graph by analyzing the shape family, number of petals, maximum radius, and orientation. Tests elimination using key distinguishing features rather than point-by-point plotting.",
+          "yield_score": 0.58,
+          "yield_rationale": "Graph-to-equation matching is a common MC polar question format; tests recognition rather than full graphing"
+        }
+      ]
+    },
+    {
+      "id": "trig_polar_rates_of_change",
+      "label": "Rates of Change in Polar Functions",
+      "description": "Describes how the radial distance r changes as θ increases in a polar function; interprets increasing, decreasing, and concave behavior of r with respect to θ; connects these behaviors to the shape of the polar graph.",
+      "ced_topics": ["3.15"],
+      "yield_score": 0.48,
+      "yield_rationale": "Least-tested Unit 3 topic; niche rate-of-change interpretation in polar context; appears occasionally in MC but no FRQ task type covers it",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "trig_polar_r_increasing_decreasing",
+          "label": "Identifying where r is increasing or decreasing",
+          "description": "Determines intervals of θ over which r increases or decreases in a polar function by analyzing the sign of dr/dθ or by examining the output table of r = f(θ). Tests connecting increasing r to a spiral outward and decreasing r to a curve moving toward the pole.",
+          "yield_score": 0.50,
+          "yield_rationale": "Tested in MC; requires interpreting rate-of-change in the polar context rather than the Cartesian context"
+        },
+        {
+          "id": "trig_polar_r_concavity",
+          "label": "Concavity of r as a function of θ",
+          "description": "Interprets whether r is concave up or concave down as a function of θ by examining the second derivative sign or the curvature of the graph. Tests applying rate-of-change language to a polar function's radial output.",
+          "yield_score": 0.40,
+          "yield_rationale": "Rarely tested standalone; appears in harder MC rate-of-change items in Unit 3"
+        },
+        {
+          "id": "trig_polar_average_rate_of_change",
+          "label": "Average rate of change of r with respect to θ",
+          "description": "Computes the average rate of change of r over an interval [θ₁, θ₂] as (r(θ₂) − r(θ₁)) / (θ₂ − θ₁). Tests setting up the difference quotient in polar notation and interpreting the result as the average radial change per radian.",
+          "yield_score": 0.45,
+          "yield_rationale": "Parallel to the average-rate-of-change concept from Unit 1; applied here to polar functions in MC"
+        },
+        {
+          "id": "trig_polar_rate_change_graph_connection",
+          "label": "Connecting rate of change to polar graph features",
+          "description": "Links the behavior of dr/dθ (positive, negative, zero) to specific visual features of the polar graph: outward spiral segments, inward segments, and direction reversals at r-extrema. Tests describing graph features using rate-of-change language.",
+          "yield_score": 0.48,
+          "yield_rationale": "Communication-and-reasoning (MP3) skill; MC items may ask to justify graph behavior using rate-of-change interpretation"
+        }
+      ]
+    }
+  ]
+}

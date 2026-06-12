@@ -1,0 +1,1006 @@
+{
+  "category": {
+    "id": "algebraic_expressions",
+    "label": "Algebraic Expressions",
+    "description": "Structure, evaluation, simplification, and translation of algebraic expressions — covering notation, substitution, like-term collection, distribution, equivalent forms, verbal translation, operation order, absolute value expressions, and rational expression structure. These skills are the symbolic manipulation engine used in every downstream unit.",
+    "section": "foundations",
+    "ced_unit": null,
+    "courses": [
+      { "course": "precalc", "role": "core", "order_index": 2 },
+      { "course": "calc_ab", "role": "foundation", "order_index": 2 }
+    ],
+    "yield_score": 0.72,
+    "yield_rationale": "F2 feeds distribution (Unit 1 polynomial work), equivalent expressions (1.11, 2.12, 3.12), substitution (2.7 composition, function evaluation), and verbal translation (FRQ modeling); medium-high load across all three AP Precalc units."
+  },
+  "umbrellas": [
+    {
+      "id": "algebraic_expression_structure",
+      "label": "Expression Components",
+      "description": "Recognizing the fundamental building blocks of algebraic expressions — variables, constants, coefficients (including implied), terms, factors, and monomials — without solving equations or analyzing functions.",
+      "ced_topics": [],
+      "yield_score": 0.50,
+      "yield_rationale": "Background structural literacy; rarely the direct test object once functions are introduced, but prerequisite for all other umbrellas.",
+      "source_learn_keyword_id": "algebraic_expression_structure",
+      "in_depth": [
+        {
+          "id": "variables_as_quantities",
+          "label": "Variables as quantities",
+          "description": "A variable represents an unknown, changing, or unspecified quantity inside an expression. Tests interpreting the role of a symbol before any manipulation.",
+          "yield_score": 0.40,
+          "yield_rationale": "Pure vocabulary — seldom tested directly at the AP level but anchors all symbolic fluency.",
+          "source_learn_keyword_id": "variables_as_quantities"
+        },
+        {
+          "id": "constants_in_expressions",
+          "label": "Constants in expressions",
+          "description": "A constant is a fixed numerical value in an expression. Tests distinguishing standalone numbers from variable terms.",
+          "yield_score": 0.38,
+          "yield_rationale": "Foundational identification skill; low direct yield but used whenever students parse expression structure.",
+          "source_learn_keyword_id": "constants_in_expressions"
+        },
+        {
+          "id": "coefficients_of_variable_terms",
+          "label": "Coefficients of variable terms",
+          "description": "A coefficient is the numerical factor multiplying a variable term, including positive, negative, fractional, decimal, and implied values. Tests correct coefficient identification in varied forms.",
+          "yield_score": 0.55,
+          "yield_rationale": "Coefficient reading is load-bearing in polynomial structure (Unit 1) and exponential parameter identification.",
+          "source_learn_keyword_id": "coefficients_of_variable_terms"
+        },
+        {
+          "id": "implied_coefficient_one",
+          "label": "Implied coefficient of 1",
+          "description": "A variable written without a visible coefficient has coefficient 1. Tests expressions like x, y, and ab where the 1 is invisible.",
+          "yield_score": 0.42,
+          "yield_rationale": "Prevents silent errors in term collection and distribution; moderate downstream usage.",
+          "source_learn_keyword_id": "implied_coefficient_one"
+        },
+        {
+          "id": "implied_coefficient_negative_one",
+          "label": "Implied coefficient of -1",
+          "description": "A variable term with only a leading negative sign has coefficient -1. Tests expressions like -x and -ab.",
+          "yield_score": 0.48,
+          "yield_rationale": "Sign-handling errors with implied -1 propagate into distribution and trig identity rewriting.",
+          "source_learn_keyword_id": "implied_coefficient_negative_one"
+        },
+        {
+          "id": "terms_in_algebraic_expressions",
+          "label": "Terms in algebraic expressions",
+          "description": "Terms are the additive parts of an expression separated by + or − at the top level (outside any grouping). Tests correct parsing of expression structure into its constituent terms.",
+          "yield_score": 0.52,
+          "yield_rationale": "Term-parsing is prerequisite for like-term collection and polynomial classification.",
+          "source_learn_keyword_id": "terms_in_algebraic_expressions"
+        },
+        {
+          "id": "term_signs_in_expressions",
+          "label": "Term signs in expressions",
+          "description": "Each term carries the sign directly preceding it, so 4x − 7y has terms +4x and −7y. Tests distinguishing signed terms to prevent collection errors.",
+          "yield_score": 0.58,
+          "yield_rationale": "Sign errors on terms are among the most common algebraic mistakes; directly exercised in polynomial addition and trig expression simplification.",
+          "source_learn_keyword_id": "term_signs_in_expressions"
+        },
+        {
+          "id": "factors_in_algebraic_terms",
+          "label": "Factors in algebraic terms",
+          "description": "Factors are quantities multiplied together inside a single term. Tests recognizing the multiplicative structure within one term, such as 3, m, and n inside 3mn.",
+          "yield_score": 0.45,
+          "yield_rationale": "Factor recognition supports GCF extraction (polynomial factoring) and rational expression simplification.",
+          "source_learn_keyword_id": "factors_in_algebraic_terms"
+        }
+      ]
+    },
+    {
+      "id": "expression_notation_and_grouping",
+      "label": "Expression Notation and Grouping",
+      "description": "Recognizing operation symbols, grouping symbols, implied multiplication, fraction bars, and boundary concepts (expression vs. equation, expression vs. term) — the notation layer of algebraic literacy.",
+      "ced_topics": [],
+      "yield_score": 0.48,
+      "yield_rationale": "Notation literacy is prerequisite for distribution, nested expressions, and rational function notation; split from expression_components to keep each umbrella under 8 in_depth.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "single_variable_terms",
+          "label": "Single-variable terms",
+          "description": "A single-variable term contains exactly one variable type, possibly with a coefficient or power. Tests distinguishing 5x from multi-variable terms like 5xy.",
+          "yield_score": 0.36,
+          "yield_rationale": "Definitional; low direct yield but supports like-term classification.",
+          "source_learn_keyword_id": "single_variable_terms"
+        },
+        {
+          "id": "multi_variable_terms",
+          "label": "Multi-variable terms",
+          "description": "A multi-variable term contains more than one variable factor, such as xy, 3ab, or -5mn. Tests identifying and classifying these compound terms.",
+          "yield_score": 0.36,
+          "yield_rationale": "Structural classification; moderate relevance to multi-variable polynomial and rational expressions.",
+          "source_learn_keyword_id": "multi_variable_terms"
+        },
+        {
+          "id": "monomial_term_structure",
+          "label": "Monomial term structure",
+          "description": "A monomial is a single algebraic term made from a coefficient and variable factors. Tests structural recognition — distinguishing one term from multi-term expressions.",
+          "yield_score": 0.42,
+          "yield_rationale": "Monomial identification is the entry point for polynomial degree and classification (Unit 1).",
+          "source_learn_keyword_id": "monomial_term_structure"
+        },
+        {
+          "id": "expression_vs_equation_boundary",
+          "label": "Expression versus equation",
+          "description": "An expression has no equals sign; an equation asserts two expressions are equal. Tests the structural distinction that separates simplification tasks from solving tasks.",
+          "yield_score": 0.45,
+          "yield_rationale": "Conceptual boundary prevents task-confusion errors throughout; appears in communication and reasoning (MP3).",
+          "source_learn_keyword_id": "expression_vs_equation_boundary"
+        },
+        {
+          "id": "expression_vs_term_boundary",
+          "label": "Expression versus term",
+          "description": "A term is one additive part of an expression; an expression may contain one or many terms. Tests local vs. whole-expression distinctions.",
+          "yield_score": 0.32,
+          "yield_rationale": "Mostly definitional; low direct AP yield.",
+          "source_learn_keyword_id": "expression_vs_term_boundary"
+        },
+        {
+          "id": "algebraic_operation_symbols",
+          "label": "Operation symbols in expressions",
+          "description": "Algebraic expressions use symbols for addition, subtraction, multiplication, division, powers, and grouping. Tests reading which operation connects the parts of an expression.",
+          "yield_score": 0.40,
+          "yield_rationale": "Operation reading is background fluency needed for notation-heavy AP content.",
+          "source_learn_keyword_id": "algebraic_operation_symbols"
+        },
+        {
+          "id": "implied_multiplication_notation",
+          "label": "Implied multiplication notation",
+          "description": "Multiplication can appear without a symbol: 5x, 3(a + b), and ab all mean multiplication. Tests reading compact algebraic notation correctly.",
+          "yield_score": 0.50,
+          "yield_rationale": "Misreading implied multiplication causes systematic errors in distribution and function composition.",
+          "source_learn_keyword_id": "implied_multiplication_notation"
+        },
+        {
+          "id": "algebraic_grouping_symbols",
+          "label": "Grouping symbols in algebraic expressions",
+          "description": "Parentheses, brackets, and braces group parts of an expression so they act as a single unit. Tests structural identification of grouped quantities before any operation is applied.",
+          "yield_score": 0.55,
+          "yield_rationale": "Grouping symbol literacy is prerequisite for distribution, nested expressions, and rational function notation.",
+          "source_learn_keyword_id": "algebraic_grouping_symbols"
+        },
+        {
+          "id": "fraction_bar_grouping_with_variables",
+          "label": "Fraction bar grouping with variables",
+          "description": "A fraction bar acts as a grouping symbol for the entire numerator and entire denominator. Tests parsing — distinguishing (x + 3)/5 from x + 3/5.",
+          "yield_score": 0.58,
+          "yield_rationale": "Fraction-bar parsing errors are a direct source of mistakes in rational expressions and logarithm arguments.",
+          "source_learn_keyword_id": "fraction_bar_grouping_with_variables"
+        }
+      ]
+    },
+    {
+      "id": "substitution_into_expressions",
+      "label": "Substitution into Expressions",
+      "description": "Replacing variables with given numeric values and evaluating the resulting algebraic structure — without solving for unknowns. Covers single-variable, multi-variable, negative, zero, fraction, decimal, and parenthesis-aware substitution.",
+      "ced_topics": [],
+      "yield_score": 0.75,
+      "yield_rationale": "Function evaluation, composition (AP Precalc 2.7), and every FRQ model-application task use substitution; high load across the course.",
+      "source_learn_keyword_id": "substitution_into_expressions",
+      "in_depth": [
+        {
+          "id": "single_variable_numeric_substitution",
+          "label": "Single-variable numeric substitution",
+          "description": "A single numeric value replaces one variable throughout an expression. Tests the basic mechanics of expression evaluation at a given value.",
+          "yield_score": 0.68,
+          "yield_rationale": "Base-level function evaluation; exercised in virtually every AP Precalc topic.",
+          "source_learn_keyword_id": "single_variable_numeric_substitution"
+        },
+        {
+          "id": "multiple_occurrences_same_variable_substitution",
+          "label": "Multiple occurrences of the same variable",
+          "description": "When a variable appears more than once, the same replacement value must be substituted at every occurrence. Tests consistency across repeated variables.",
+          "yield_score": 0.65,
+          "yield_rationale": "Consistency errors compound in polynomial evaluation and multi-step function problems.",
+          "source_learn_keyword_id": "multiple_occurrences_same_variable_substitution"
+        },
+        {
+          "id": "multi_variable_numeric_substitution",
+          "label": "Multi-variable numeric substitution",
+          "description": "Different variables in the same expression are each replaced by their corresponding given values. Tests matching each value to the correct variable.",
+          "yield_score": 0.62,
+          "yield_rationale": "Needed for multi-parameter function evaluation and model application (sinusoidal, exponential).",
+          "source_learn_keyword_id": "multi_variable_numeric_substitution"
+        },
+        {
+          "id": "substitution_of_negative_values",
+          "label": "Substitution of negative values",
+          "description": "Negative replacement values require careful parenthesization to preserve signs when multiplied or raised to powers. Tests sign accuracy during substitution.",
+          "yield_score": 0.78,
+          "yield_rationale": "Negative input errors are among the most frequent mistakes in function evaluation; persists throughout Units 1–3.",
+          "source_learn_keyword_id": "substitution_of_negative_values"
+        },
+        {
+          "id": "substitution_of_zero",
+          "label": "Substitution of zero",
+          "description": "Substituting zero eliminates variable terms via multiplication but leaves constants unchanged. Tests awareness of which parts of an expression survive a zero substitution.",
+          "yield_score": 0.58,
+          "yield_rationale": "Zero substitution checks y-intercepts and zeros throughout polynomial and exponential function work.",
+          "source_learn_keyword_id": "substitution_of_zero"
+        },
+        {
+          "id": "substitution_of_fraction_values",
+          "label": "Substitution of fraction values",
+          "description": "Fractional values replace variables, requiring fraction multiplication and careful operation order. Tests substitution skill independent of standalone fraction arithmetic.",
+          "yield_score": 0.60,
+          "yield_rationale": "Fraction inputs appear in rational parameter problems and inverse function evaluation.",
+          "source_learn_keyword_id": "substitution_of_fraction_values"
+        },
+        {
+          "id": "substitution_of_decimal_values",
+          "label": "Substitution of decimal values",
+          "description": "Decimal values replace variables, requiring place-value arithmetic within an algebraic expression. Tests decimal substitution as distinct from decimal arithmetic alone.",
+          "yield_score": 0.50,
+          "yield_rationale": "Decimal inputs appear in calculator-active sections and regression-model evaluation tasks.",
+          "source_learn_keyword_id": "substitution_of_decimal_values"
+        },
+        {
+          "id": "parentheses_for_substitution",
+          "label": "Parentheses during substitution",
+          "description": "Replacement values must be inserted with parentheses when signs, products, or powers could otherwise be misread. Tests correct grouping at the substitution step.",
+          "yield_score": 0.70,
+          "yield_rationale": "Parenthesis omission is the root cause of the most common evaluation sign errors in function problems.",
+          "source_learn_keyword_id": "parentheses_for_substitution"
+        }
+      ]
+    },
+    {
+      "id": "substitution_advanced_forms",
+      "label": "Substitution: Order of Operations and Expression Forms",
+      "description": "Applying substitution in structurally complex cases — operation order after replacement, power terms, grouped expressions, expression-for-variable, and formula evaluation. Follows on from basic numeric substitution.",
+      "ced_topics": [],
+      "yield_score": 0.73,
+      "yield_rationale": "Advanced substitution forms are the direct bridge to function composition and formula evaluation; high load in AP Precalc Units 1–3. Split from substitution_into_expressions to keep each umbrella under 8 in_depth.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "order_of_operations_after_substitution",
+          "label": "Order of operations after substitution",
+          "description": "After replacing variables, the resulting numeric expression must be evaluated in correct PEMDAS order. Tests the connection between substitution and expression evaluation.",
+          "yield_score": 0.65,
+          "yield_rationale": "Operation-order errors after substitution affect every numeric answer in function evaluation contexts.",
+          "source_learn_keyword_id": "order_of_operations_after_substitution"
+        },
+        {
+          "id": "substitution_into_power_terms",
+          "label": "Substitution into power terms",
+          "description": "When substituting into a term with an exponent, the replacement value becomes the base if grouped correctly. Tests the distinction between -x² and (-x)² at the substitution stage.",
+          "yield_score": 0.72,
+          "yield_rationale": "Power-term substitution errors are extremely common and persist into polynomial and exponential function evaluation.",
+          "source_learn_keyword_id": "substitution_into_power_terms"
+        },
+        {
+          "id": "substitution_into_grouped_expressions",
+          "label": "Substitution into grouped expressions",
+          "description": "Substituting inside parenthesized expressions requires preserving the grouped quantity before applying outside operations. Tests substitution into forms like 3(x + 4).",
+          "yield_score": 0.62,
+          "yield_rationale": "Grouped substitution is the mechanism behind composition evaluation and function-model application.",
+          "source_learn_keyword_id": "substitution_into_grouped_expressions"
+        },
+        {
+          "id": "substitution_of_expression_for_variable",
+          "label": "Substituting an expression for a variable",
+          "description": "An entire algebraic expression replaces a variable rather than a single number. Tests expression replacement without conflating it with full function composition.",
+          "yield_score": 0.74,
+          "yield_rationale": "Direct precursor to function composition (AP Precalc 2.7, FRQ 1); high load in the course.",
+          "source_learn_keyword_id": "substitution_of_expression_for_variable"
+        },
+        {
+          "id": "formula_substitution",
+          "label": "Formula substitution",
+          "description": "Given values are inserted into a formula containing several variables. Tests using a formula as an algebraic expression to compute an output, not rearranging it.",
+          "yield_score": 0.68,
+          "yield_rationale": "Formula evaluation appears in modeling contexts (sinusoidal, exponential) and FRQ application parts.",
+          "source_learn_keyword_id": "formula_substitution"
+        }
+      ]
+    },
+    {
+      "id": "like_terms_and_term_collection",
+      "label": "Like Terms: Identification and Classification",
+      "description": "Recognizing which terms are like and which are unlike — matching variable parts, powers, and variable combinations — as the prerequisite step before any combination.",
+      "ced_topics": [],
+      "yield_score": 0.65,
+      "yield_rationale": "Needed for polynomial arithmetic (Unit 1) and simplifying log/trig expressions; medium load across the course.",
+      "source_learn_keyword_id": "like_terms_and_term_collection",
+      "in_depth": [
+        {
+          "id": "like_terms_same_variable_part",
+          "label": "Like terms with the same variable part",
+          "description": "Like terms have exactly the same variable factors and powers; only their coefficients differ. Tests identifying like vs. unlike terms before any combination.",
+          "yield_score": 0.62,
+          "yield_rationale": "Correct like-term identification is prerequisite for every simplification task in the course.",
+          "source_learn_keyword_id": "like_terms_same_variable_part"
+        },
+        {
+          "id": "unlike_terms_different_variables",
+          "label": "Unlike terms with different variables",
+          "description": "Terms with different variables cannot be combined. Tests that 4x and 4y remain separate and never merge into 8xy.",
+          "yield_score": 0.55,
+          "yield_rationale": "A persistent error that surfaces in multi-variable polynomial simplification.",
+          "source_learn_keyword_id": "unlike_terms_different_variables"
+        },
+        {
+          "id": "unlike_terms_different_powers",
+          "label": "Unlike terms with different powers",
+          "description": "Terms sharing the same variable but different exponents are unlike and cannot be combined. Tests that x and x² remain separate.",
+          "yield_score": 0.60,
+          "yield_rationale": "Degree-confusion errors in polynomial simplification directly map to this skill.",
+          "source_learn_keyword_id": "unlike_terms_different_powers"
+        },
+        {
+          "id": "unlike_terms_different_variable_combinations",
+          "label": "Unlike terms with different variable combinations",
+          "description": "Terms with partially overlapping variable sets (e.g., xy vs. x, or ab vs. ac) are unlike even when they share some variables. Tests finer-grained like-term classification.",
+          "yield_score": 0.52,
+          "yield_rationale": "Relevant to multi-variable polynomial and rational expression simplification.",
+          "source_learn_keyword_id": "unlike_terms_different_variable_combinations"
+        },
+        {
+          "id": "coefficient_combination_integer_coefficients",
+          "label": "Integer coefficient combination",
+          "description": "Like terms with integer coefficients are combined by adding their coefficients while keeping the variable part unchanged. Tests the basic collect-like-terms algorithm.",
+          "yield_score": 0.68,
+          "yield_rationale": "Core simplification operation exercised throughout polynomial and trig expression work.",
+          "source_learn_keyword_id": "coefficient_combination_integer_coefficients"
+        },
+        {
+          "id": "coefficient_combination_negative_coefficients",
+          "label": "Negative coefficient combination",
+          "description": "Like terms with negative coefficients require signed-number addition when combining. Tests sign accuracy in the collect-like-terms step.",
+          "yield_score": 0.70,
+          "yield_rationale": "Sign errors in collection are among the most common algebraic mistakes across all AP units.",
+          "source_learn_keyword_id": "coefficient_combination_negative_coefficients"
+        },
+        {
+          "id": "coefficient_combination_fraction_coefficients",
+          "label": "Fraction coefficient combination",
+          "description": "Like terms with fraction coefficients are combined by adding the fractional coefficients. Tests that the variable part is preserved while the fraction arithmetic is performed.",
+          "yield_score": 0.58,
+          "yield_rationale": "Fraction-coefficient collection appears in rational-parameter function simplification.",
+          "source_learn_keyword_id": "coefficient_combination_fraction_coefficients"
+        },
+        {
+          "id": "coefficient_combination_decimal_coefficients",
+          "label": "Decimal coefficient combination",
+          "description": "Like terms with decimal coefficients are combined by decimal addition of the coefficients. Tests expression-level decimal arithmetic.",
+          "yield_score": 0.45,
+          "yield_rationale": "Decimal coefficients appear in regression-model simplification and data contexts.",
+          "source_learn_keyword_id": "coefficient_combination_decimal_coefficients"
+        }
+      ]
+    },
+    {
+      "id": "term_collection_strategies",
+      "label": "Term Collection Strategies",
+      "description": "Applying collection techniques — constant collection, multi-variable collection, reordering, additive-inverse cancellation, and post-grouping collection. Follows on from like-term identification.",
+      "ced_topics": [],
+      "yield_score": 0.63,
+      "yield_rationale": "Collection techniques are exercised in every polynomial and trig simplification chain; split from like_terms_and_term_collection to keep each umbrella under 8 in_depth.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "constant_term_collection",
+          "label": "Constant term collection",
+          "description": "Constant terms (no variable part) are like terms and can be combined with each other but not with variable terms. Tests combining pure-number terms in a mixed expression.",
+          "yield_score": 0.62,
+          "yield_rationale": "Constant collection completes every polynomial simplification and is used in sinusoidal parameter extraction.",
+          "source_learn_keyword_id": "constant_term_collection"
+        },
+        {
+          "id": "multi_variable_like_term_collection",
+          "label": "Multi-variable like term collection",
+          "description": "Terms with identical multi-variable parts (e.g., xy, ab) can be combined by their coefficients. Tests collection beyond single-variable contexts.",
+          "yield_score": 0.50,
+          "yield_rationale": "Multi-variable collection appears in polynomial products and trig identity simplification.",
+          "source_learn_keyword_id": "multi_variable_like_term_collection"
+        },
+        {
+          "id": "preserving_unlike_terms",
+          "label": "Preserving unlike terms",
+          "description": "Unlike terms must remain separate in a simplified expression; combining them is an error. Tests recognizing which terms cannot be merged.",
+          "yield_score": 0.55,
+          "yield_rationale": "Prevents the persistent 'combine everything' error that corrupts rational and trig expression simplification.",
+          "source_learn_keyword_id": "preserving_unlike_terms"
+        },
+        {
+          "id": "term_reordering_for_collection",
+          "label": "Term reordering for collection",
+          "description": "Terms can be rearranged using commutativity so like terms are adjacent and easier to collect. Tests that each term's sign travels with it when reordered.",
+          "yield_score": 0.58,
+          "yield_rationale": "Reordering strategy reduces errors in multi-term polynomial and logarithm simplification.",
+          "source_learn_keyword_id": "term_reordering_for_collection"
+        },
+        {
+          "id": "additive_inverse_like_terms",
+          "label": "Additive inverse like terms",
+          "description": "Like terms with equal but opposite coefficients (e.g., 5x and −5x) cancel completely to zero. Tests recognition of total cancellation.",
+          "yield_score": 0.65,
+          "yield_rationale": "Cancellation of opposite terms is the mechanism behind hole creation in rational functions and log identity simplification.",
+          "source_learn_keyword_id": "additive_inverse_like_terms"
+        },
+        {
+          "id": "like_terms_across_parentheses_after_group_removal",
+          "label": "Like terms across removed grouping",
+          "description": "After grouping symbols are correctly removed, like terms from inside and outside the former group may be collected. Tests combined structural rewriting and term collection.",
+          "yield_score": 0.68,
+          "yield_rationale": "This two-step skill (remove grouping, then collect) is exercised in every polynomial and trig simplification chain.",
+          "source_learn_keyword_id": "like_terms_across_parentheses_after_group_removal"
+        }
+      ]
+    },
+    {
+      "id": "distribution_and_expansion",
+      "label": "Distribution: Factor Types and Basic Forms",
+      "description": "Using the distributive property with integer, negative, fraction, decimal, and variable factors — covering the basic monomial-over-binomial/trinomial, subtraction-of-group, and -1 distribution forms.",
+      "ced_topics": [],
+      "yield_score": 0.85,
+      "yield_rationale": "Distribution is used in every AP Precalc unit to expand and simplify; it is a prerequisite for trig identity work (FRQ 4) and polynomial manipulation (Unit 1).",
+      "source_learn_keyword_id": "distribution_and_expansion",
+      "in_depth": [
+        {
+          "id": "positive_integer_distribution",
+          "label": "Distribution by a positive integer",
+          "description": "A positive integer outside parentheses multiplies each term inside. Tests the basic distributive structure with the simplest factor type.",
+          "yield_score": 0.72,
+          "yield_rationale": "Foundation case of distribution; exercised in every polynomial expansion.",
+          "source_learn_keyword_id": "positive_integer_distribution"
+        },
+        {
+          "id": "negative_integer_distribution",
+          "label": "Distribution by a negative integer",
+          "description": "A negative integer outside parentheses multiplies each inside term, flipping the sign of every term. Tests sign-change accuracy under negative distribution.",
+          "yield_score": 0.82,
+          "yield_rationale": "Negative distribution errors are among the most frequent algebraic mistakes; propagate directly into polynomial and trig expression work.",
+          "source_learn_keyword_id": "negative_integer_distribution"
+        },
+        {
+          "id": "fraction_coefficient_distribution",
+          "label": "Distribution by a fraction coefficient",
+          "description": "A fractional coefficient outside parentheses multiplies every term inside. Tests distribution when the factor is not a whole number.",
+          "yield_score": 0.70,
+          "yield_rationale": "Fraction distribution appears in rational-parameter equation solving and clearing fractions from expressions.",
+          "source_learn_keyword_id": "fraction_coefficient_distribution"
+        },
+        {
+          "id": "decimal_coefficient_distribution",
+          "label": "Distribution by a decimal coefficient",
+          "description": "A decimal coefficient outside parentheses multiplies each term inside. Tests distribution combined with decimal arithmetic.",
+          "yield_score": 0.52,
+          "yield_rationale": "Decimal distribution appears in data-based modeling contexts and regression work.",
+          "source_learn_keyword_id": "decimal_coefficient_distribution"
+        },
+        {
+          "id": "variable_factor_distribution",
+          "label": "Distribution by a variable factor",
+          "description": "A variable factor outside parentheses multiplies each inside term — basic monomial distribution not involving polynomial-degree operations.",
+          "yield_score": 0.74,
+          "yield_rationale": "Variable-factor distribution is the first step in polynomial multiplication and rational expression expansion.",
+          "source_learn_keyword_id": "variable_factor_distribution"
+        },
+        {
+          "id": "monomial_distribution_over_binomial",
+          "label": "Monomial distribution over a binomial",
+          "description": "A single term (numeric or variable) outside parentheses multiplies both terms of a two-term group. Tests the standard monomial × binomial expansion.",
+          "yield_score": 0.80,
+          "yield_rationale": "Monomial-binomial distribution is the core operation in polynomial arithmetic (Unit 1) and log manipulation (2.12).",
+          "source_learn_keyword_id": "monomial_distribution_over_binomial"
+        },
+        {
+          "id": "monomial_distribution_over_trinomial",
+          "label": "Monomial distribution over a trinomial",
+          "description": "A single term outside parentheses multiplies each of three terms inside. Tests complete distribution without polynomial factoring.",
+          "yield_score": 0.72,
+          "yield_rationale": "Three-term distribution is needed in polynomial GCF factoring and trig expression rewriting.",
+          "source_learn_keyword_id": "monomial_distribution_over_trinomial"
+        },
+        {
+          "id": "distribution_over_subtraction",
+          "label": "Distribution over subtraction",
+          "description": "Distribution over a subtracted group requires multiplying the subtracted term with its sign included. Tests sign preservation inside minus-signed groups.",
+          "yield_score": 0.78,
+          "yield_rationale": "Subtraction-group sign errors are a root cause of mistakes in factored polynomial expansion and identity verification.",
+          "source_learn_keyword_id": "distribution_over_subtraction"
+        }
+      ]
+    },
+    {
+      "id": "distribution_advanced_and_error_recognition",
+      "label": "Distribution: Negation, Multi-Group, Nested, and Error Recognition",
+      "description": "Advanced distribution patterns — negating grouped expressions, distributing across multiple groups, nested layers, chaining distribution with collection, and identifying partial/sign-error mistakes.",
+      "ced_topics": [],
+      "yield_score": 0.80,
+      "yield_rationale": "Advanced distribution forms underlie polynomial subtraction, trig identity verification, and the AP MC error-recognition item type; split from distribution_and_expansion to keep each umbrella under 8 in_depth.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "negative_one_distribution",
+          "label": "Distribution by -1",
+          "description": "A lone negative sign outside parentheses acts as multiplication by -1, flipping every term's sign. Tests the negation-of-group rule.",
+          "yield_score": 0.83,
+          "yield_rationale": "Negating a grouped expression is one of the most error-prone moves in trig identity proofs and polynomial subtraction.",
+          "source_learn_keyword_id": "negative_one_distribution"
+        },
+        {
+          "id": "subtraction_of_parenthesized_expression",
+          "label": "Subtraction of a parenthesized expression",
+          "description": "Subtracting a parenthesized expression changes the sign of every term inside the group. Tests the two-step parse-then-negate rewrite.",
+          "yield_score": 0.80,
+          "yield_rationale": "Polynomial subtraction and completing the square both require this skill; high frequency in Units 1–2.",
+          "source_learn_keyword_id": "subtraction_of_parenthesized_expression"
+        },
+        {
+          "id": "multiple_distribution_terms",
+          "label": "Multiple separate distribution terms",
+          "description": "An expression containing more than one grouped part requires separate distributions before collecting terms. Tests multi-step expansion.",
+          "yield_score": 0.76,
+          "yield_rationale": "Multi-group distribution is the standard form of binomial products and transformed function expansions.",
+          "source_learn_keyword_id": "multiple_distribution_terms"
+        },
+        {
+          "id": "nested_distribution",
+          "label": "Nested distribution",
+          "description": "Nested grouping symbols require distributing through one layer at a time, innermost first. Tests layered expansion without solving.",
+          "yield_score": 0.68,
+          "yield_rationale": "Nested distribution appears in complex rational expression expansion and multi-step identity verification.",
+          "source_learn_keyword_id": "nested_distribution"
+        },
+        {
+          "id": "distribution_followed_by_term_collection",
+          "label": "Distribution followed by term collection",
+          "description": "After distributing, like terms may need to be collected to produce the simplified equivalent form. Tests chaining expansion with simplification.",
+          "yield_score": 0.82,
+          "yield_rationale": "The expand-and-collect two-step is the workhorse of polynomial simplification throughout Unit 1 and FRQ 4.",
+          "source_learn_keyword_id": "distribution_followed_by_term_collection"
+        },
+        {
+          "id": "partial_distribution_error_recognition",
+          "label": "Partial distribution error recognition",
+          "description": "Distribution must reach every term inside the group; applying it only to the first term is an error. Tests recognition and correction of incomplete expansion.",
+          "yield_score": 0.65,
+          "yield_rationale": "Partial-distribution errors corrupt polynomial and trig expansions; error-recognition problems appear in AP MC.",
+          "source_learn_keyword_id": "partial_distribution_error_recognition"
+        },
+        {
+          "id": "distribution_sign_error_recognition",
+          "label": "Distribution sign error recognition",
+          "description": "Negative distribution and group subtraction require sign changes on every affected term; missing sign changes are a specific error class. Tests identifying incorrect signs after expansion.",
+          "yield_score": 0.75,
+          "yield_rationale": "Sign errors after negative distribution are one of the most tested 'identify the mistake' scenarios in AP MC.",
+          "source_learn_keyword_id": "distribution_sign_error_recognition"
+        }
+      ]
+    },
+    {
+      "id": "equivalent_expression_properties",
+      "label": "Equivalent Expressions: Definition, Verification, and Matching",
+      "description": "Recognizing when two algebraic expressions have the same value for all allowed inputs — covering the equivalence concept, collection and distribution as rewrites, verification by substitution, counterexamples, and coefficient matching.",
+      "ced_topics": [],
+      "yield_score": 0.80,
+      "yield_rationale": "Underpins AP Precalc 1.11, 2.12, and 3.12 — all 'equivalent representation' topics; high load throughout the course.",
+      "source_learn_keyword_id": "equivalent_expression_properties",
+      "in_depth": [
+        {
+          "id": "equivalent_expressions_definition",
+          "label": "Equivalent expressions",
+          "description": "Two expressions are equivalent when they produce the same value for every allowed input. Tests expression comparison as distinct from equation solving.",
+          "yield_score": 0.72,
+          "yield_rationale": "The conceptual anchor for all of 1.11, 2.12, and 3.12 (equivalent representations topics).",
+          "source_learn_keyword_id": "equivalent_expressions_definition"
+        },
+        {
+          "id": "equivalence_by_like_term_collection",
+          "label": "Equivalence through like-term collection",
+          "description": "One expression is equivalent to another when it is produced by collecting like terms. Tests recognizing collection as a valid structural rewrite.",
+          "yield_score": 0.68,
+          "yield_rationale": "Collection-based equivalence is exercised in polynomial and log expression simplification.",
+          "source_learn_keyword_id": "equivalence_by_like_term_collection"
+        },
+        {
+          "id": "equivalence_by_distribution",
+          "label": "Equivalence through distribution",
+          "description": "A distributed (or factored) form of an expression is equivalent to its grouped form. Tests recognizing distribution and factoring as inverse structural rewrites.",
+          "yield_score": 0.75,
+          "yield_rationale": "Distribution equivalence is the mechanism behind 1.11 (polynomial/rational equivalent forms) and FRQ 4 symbolic manipulations.",
+          "source_learn_keyword_id": "equivalence_by_distribution"
+        },
+        {
+          "id": "testing_equivalence_by_substitution",
+          "label": "Testing equivalence by substitution",
+          "description": "Substituting the same value into two expressions checks whether they agree at that input — a necessary but not sufficient test of full equivalence. Tests the substitution-as-verification strategy.",
+          "yield_score": 0.62,
+          "yield_rationale": "Substitution-check reasoning appears in AP MC equivalence questions and MP3 justification tasks.",
+          "source_learn_keyword_id": "testing_equivalence_by_substitution"
+        },
+        {
+          "id": "non_equivalence_from_counterexample",
+          "label": "Non-equivalence from a counterexample",
+          "description": "A single input value producing different outputs in two expressions proves non-equivalence. Tests the counterexample approach to disproving equivalence.",
+          "yield_score": 0.60,
+          "yield_rationale": "Counterexample reasoning is explicitly tested in AP Precalc communication and reasoning items (MP3).",
+          "source_learn_keyword_id": "non_equivalence_from_counterexample"
+        },
+        {
+          "id": "coefficient_matching_in_equivalent_linear_expressions",
+          "label": "Coefficient matching in equivalent linear expressions",
+          "description": "Two equivalent linear expressions must have identical variable coefficients and identical constant terms. Tests structural comparison without solving an equation.",
+          "yield_score": 0.65,
+          "yield_rationale": "Coefficient matching is used in parameter identification for function models across Units 1–3.",
+          "source_learn_keyword_id": "coefficient_matching_in_equivalent_linear_expressions"
+        }
+      ]
+    },
+    {
+      "id": "algebraic_arithmetic_properties",
+      "label": "Algebraic Arithmetic Properties",
+      "description": "Commutative, associative, identity, and zero-factor properties applied to algebraic expressions — the structural rules that justify rearranging and regrouping without changing value.",
+      "ced_topics": [],
+      "yield_score": 0.45,
+      "yield_rationale": "Arithmetic properties underlie strategic simplification moves throughout the course; split from equivalent_expression_properties to keep each umbrella under 8 in_depth.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "commutative_property_algebraic_addition",
+          "label": "Commutative property of algebraic addition",
+          "description": "Additive terms can be reordered without changing the expression's value, provided each term keeps its sign. Tests applying commutativity to algebraic sums.",
+          "yield_score": 0.52,
+          "yield_rationale": "Commutativity enables term reordering for easier collection; background skill in simplification.",
+          "source_learn_keyword_id": "commutative_property_algebraic_addition"
+        },
+        {
+          "id": "commutative_property_algebraic_multiplication",
+          "label": "Commutative property of algebraic multiplication",
+          "description": "Factors in a product can be reordered without changing the product's value, supporting rewrites like 3x = x·3 and ab = ba. Tests commutative rewriting of algebraic products.",
+          "yield_score": 0.48,
+          "yield_rationale": "Supports factor reordering in GCF extraction and monomial simplification.",
+          "source_learn_keyword_id": "commutative_property_algebraic_multiplication"
+        },
+        {
+          "id": "associative_property_algebraic_addition",
+          "label": "Associative property of algebraic addition",
+          "description": "Additive grouping can change without changing the sum: (x + 3) + 5 = x + (3 + 5). Tests associative regrouping in algebraic sums.",
+          "yield_score": 0.45,
+          "yield_rationale": "Enables strategic regrouping for efficient simplification; background skill.",
+          "source_learn_keyword_id": "associative_property_algebraic_addition"
+        },
+        {
+          "id": "associative_property_algebraic_multiplication",
+          "label": "Associative property of algebraic multiplication",
+          "description": "Multiplicative grouping can change without changing the product: (3x)y = 3(xy). Tests associative regrouping of algebraic factors.",
+          "yield_score": 0.45,
+          "yield_rationale": "Supports coefficient extraction and factor regrouping in polynomial and rational expressions.",
+          "source_learn_keyword_id": "associative_property_algebraic_multiplication"
+        },
+        {
+          "id": "identity_properties_in_algebraic_expressions",
+          "label": "Identity properties in algebraic expressions",
+          "description": "Adding 0 or multiplying by 1 leaves any algebraic expression unchanged. Tests recognizing these identity-based equivalences.",
+          "yield_score": 0.40,
+          "yield_rationale": "Identity properties are used in completing the square and adding/subtracting zero strategically in proofs.",
+          "source_learn_keyword_id": "identity_properties_in_algebraic_expressions"
+        },
+        {
+          "id": "zero_factor_in_algebraic_expressions",
+          "label": "Zero factor in algebraic expressions",
+          "description": "Any algebraic expression multiplied by 0 equals 0. Tests expression-structure recognition — not the zero-product property for equations.",
+          "yield_score": 0.38,
+          "yield_rationale": "Background property; supports understanding cancellation and coefficient interpretation.",
+          "source_learn_keyword_id": "zero_factor_in_algebraic_expressions"
+        }
+      ]
+    },
+    {
+      "id": "verbal_to_symbolic_expression_structure",
+      "label": "Verbal-to-Symbolic: Basic Operations and Order",
+      "description": "Translating addition, subtraction, multiplication, division, and power phrases into algebraic expressions — with particular attention to order errors in subtraction and division phrases.",
+      "ced_topics": [],
+      "yield_score": 0.60,
+      "yield_rationale": "FRQ modeling tasks (1.14, 2.5, 2.14, 3.7) require translating contextual language into function notation; moderate-high load for the modeling FRQs.",
+      "source_learn_keyword_id": "verbal_to_symbolic_expression_structure",
+      "in_depth": [
+        {
+          "id": "addition_phrase_expressions",
+          "label": "Addition phrase expressions",
+          "description": "Phrases describing sums, totals, increases, or quantities added together translate to algebraic addition. Tests symbolic expression construction from additive language.",
+          "yield_score": 0.55,
+          "yield_rationale": "Additive translation is background for function model construction in FRQ 2 and 3.",
+          "source_learn_keyword_id": "addition_phrase_expressions"
+        },
+        {
+          "id": "subtraction_phrase_expressions",
+          "label": "Subtraction phrase expressions",
+          "description": "Phrases describing differences, decreases, or quantities less than another translate to algebraic subtraction. Tests correct operand order in subtraction expressions.",
+          "yield_score": 0.55,
+          "yield_rationale": "Subtraction order errors are a frequent source of reversed expressions in modeling problems.",
+          "source_learn_keyword_id": "subtraction_phrase_expressions"
+        },
+        {
+          "id": "less_than_phrase_order",
+          "label": "Less-than phrase order",
+          "description": "Phrases like '5 less than x' reverse the spoken order, producing x − 5 not 5 − x. Tests a specific high-frequency translation misconception.",
+          "yield_score": 0.65,
+          "yield_rationale": "Less-than order reversal is the single most common verbal-to-symbolic translation error in precalc and AP contexts.",
+          "source_learn_keyword_id": "less_than_phrase_order"
+        },
+        {
+          "id": "more_than_phrase_order",
+          "label": "More-than phrase order",
+          "description": "Phrases like '6 more than x' produce x + 6; because addition is commutative, order is less critical but the relationship must be interpreted correctly.",
+          "yield_score": 0.52,
+          "yield_rationale": "Complementary to less-than phrase order; tests correct additive relationship parsing.",
+          "source_learn_keyword_id": "more_than_phrase_order"
+        },
+        {
+          "id": "multiplication_phrase_expressions",
+          "label": "Multiplication phrase expressions",
+          "description": "Phrases describing products, multiples, or scaled quantities translate to algebraic multiplication. Includes forms like 3x, ab, and 5(n + 1).",
+          "yield_score": 0.58,
+          "yield_rationale": "Multiplicative translation feeds coefficient-of-a-function-rule and scaled-model construction.",
+          "source_learn_keyword_id": "multiplication_phrase_expressions"
+        },
+        {
+          "id": "division_phrase_expressions",
+          "label": "Division phrase expressions",
+          "description": "Phrases describing quotients or ratios translate to algebraic division. Tests correct placement of dividend and divisor in the expression.",
+          "yield_score": 0.55,
+          "yield_rationale": "Division translation is needed for rational expression construction and per-unit rate modeling.",
+          "source_learn_keyword_id": "division_phrase_expressions"
+        },
+        {
+          "id": "quotient_order_in_phrases",
+          "label": "Quotient phrase order",
+          "description": "Quotient phrases preserve which quantity is divided by which; order errors invert the expression. Tests the non-commutative nature of division in verbal descriptions.",
+          "yield_score": 0.60,
+          "yield_rationale": "Inverted quotients produce wrong rational expressions; this error appears in FRQ modeling and MC interpretation.",
+          "source_learn_keyword_id": "quotient_order_in_phrases"
+        },
+        {
+          "id": "power_phrase_expressions",
+          "label": "Power phrase expressions",
+          "description": "Words like 'square', 'cube', or 'raised to a power' translate to exponent notation. Tests translation to exponential form without applying exponent laws.",
+          "yield_score": 0.60,
+          "yield_rationale": "Power translation is used in contextual polynomial and exponential model construction.",
+          "source_learn_keyword_id": "power_phrase_expressions"
+        }
+      ]
+    },
+    {
+      "id": "verbal_to_symbolic_grouped_and_contextual",
+      "label": "Verbal-to-Symbolic: Grouping, Sequences, and Contextual Expressions",
+      "description": "Translating phrases that require grouping (sums and differences treated as single units), consecutive-integer patterns, percent language, and unit-rate contexts into algebraic expressions.",
+      "ced_topics": [],
+      "yield_score": 0.58,
+      "yield_rationale": "Grouped translation maps directly to transformation parameters in function models; percent and rate language appears in exponential and linear FRQs. Split from verbal_to_symbolic_expression_structure to keep each umbrella under 8 in_depth.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "grouped_sum_phrase_expressions",
+          "label": "Grouped sum phrase expressions",
+          "description": "Phrases treating a sum as a single quantity (e.g., 'three times the sum of x and 4') require parentheses in the algebraic form. Tests grouping-aware translation.",
+          "yield_score": 0.68,
+          "yield_rationale": "Grouping in translation directly maps to transformation parameters (A, B, C, D) in function model construction.",
+          "source_learn_keyword_id": "grouped_sum_phrase_expressions"
+        },
+        {
+          "id": "grouped_difference_phrase_expressions",
+          "label": "Grouped difference phrase expressions",
+          "description": "Phrases treating a difference as one quantity require parentheses when the difference is multiplied or divided. Tests sign-preserving grouped translation.",
+          "yield_score": 0.65,
+          "yield_rationale": "Grouped-difference translation errors cause sign mistakes in model parameter extraction.",
+          "source_learn_keyword_id": "grouped_difference_phrase_expressions"
+        },
+        {
+          "id": "consecutive_integer_expressions",
+          "label": "Consecutive integer expressions",
+          "description": "Consecutive integers are represented using a starting variable with increments of 1 (e.g., n, n+1, n+2). Tests constructing multi-term expressions for sequences.",
+          "yield_score": 0.42,
+          "yield_rationale": "Appears in sequence-to-expression bridges; moderate precalc load, lower direct AP yield.",
+          "source_learn_keyword_id": "consecutive_integer_expressions"
+        },
+        {
+          "id": "consecutive_even_integer_expressions",
+          "label": "Consecutive even integer expressions",
+          "description": "Consecutive even integers differ by 2 and are expressed as n, n+2, n+4 when n is even. Tests constructing even-step increment expressions.",
+          "yield_score": 0.35,
+          "yield_rationale": "Useful for arithmetic sequence bridges but low direct AP Precalc exam yield.",
+          "source_learn_keyword_id": "consecutive_even_integer_expressions"
+        },
+        {
+          "id": "consecutive_odd_integer_expressions",
+          "label": "Consecutive odd integer expressions",
+          "description": "Consecutive odd integers differ by 2 and are expressed as n, n+2, n+4 when n is odd. Tests constructing odd-step increment expressions.",
+          "yield_score": 0.35,
+          "yield_rationale": "Parallel to even-integer structure; low direct AP yield.",
+          "source_learn_keyword_id": "consecutive_odd_integer_expressions"
+        },
+        {
+          "id": "percent_of_variable_expression",
+          "label": "Percent of a variable quantity",
+          "description": "A percent of an unknown is written by converting the percent to a decimal or fraction multiplier. Tests expression construction for percentage relationships.",
+          "yield_score": 0.50,
+          "yield_rationale": "Growth/decay percent language in exponential models (2.3, 2.5) uses this translation pattern.",
+          "source_learn_keyword_id": "percent_of_variable_expression"
+        },
+        {
+          "id": "variable_expression_from_unit_rate",
+          "label": "Variable expression from a unit rate",
+          "description": "A unit rate multiplied by a variable quantity produces an algebraic expression for a total. Tests expression construction in linear rate contexts.",
+          "yield_score": 0.55,
+          "yield_rationale": "Unit-rate expressions are the building blocks of linear function models and appear in FRQ 2 setup.",
+          "source_learn_keyword_id": "variable_expression_from_unit_rate"
+        }
+      ]
+    },
+    {
+      "id": "algebraic_expression_order_and_grouping",
+      "label": "Algebraic Expression Order and Grouping",
+      "description": "Interpreting operation order, grouping symbols, negative signs, and power scopes in algebraic expressions. Tests which part of an expression is acted on first — prerequisite for correct parsing of rational functions and logarithm arguments.",
+      "ced_topics": [],
+      "yield_score": 0.62,
+      "yield_rationale": "Order-and-grouping literacy underlies rational function work (1.7–1.10) and logarithm manipulation (2.12); referenced in F2 rationale for 1.11 and 3.12.",
+      "source_learn_keyword_id": "algebraic_expression_order_and_grouping",
+      "in_depth": [
+        {
+          "id": "operation_precedence_with_variables",
+          "label": "Operation precedence with variables",
+          "description": "Algebraic expressions follow the same PEMDAS order as numeric expressions. Tests identifying which operation applies first when variables are present.",
+          "yield_score": 0.62,
+          "yield_rationale": "Precedence with variables is load-bearing for correct evaluation in every AP unit.",
+          "source_learn_keyword_id": "operation_precedence_with_variables"
+        },
+        {
+          "id": "grouping_precedence_with_variables",
+          "label": "Grouping precedence with variables",
+          "description": "A grouped algebraic quantity is treated as a unit before any outside operation is applied. Tests parsing the interior of a parenthesized group before acting on it.",
+          "yield_score": 0.68,
+          "yield_rationale": "Grouping precedence errors produce systematic distribution and substitution mistakes throughout the course.",
+          "source_learn_keyword_id": "grouping_precedence_with_variables"
+        },
+        {
+          "id": "nested_grouping_with_variables",
+          "label": "Nested grouping with variables",
+          "description": "Expressions with grouping symbols inside other grouping symbols require interpreting the innermost group first. Tests layered precedence in algebraic notation.",
+          "yield_score": 0.60,
+          "yield_rationale": "Nested grouping appears in complex rational expressions and trig expression simplification.",
+          "source_learn_keyword_id": "nested_grouping_with_variables"
+        },
+        {
+          "id": "coefficient_attached_to_group",
+          "label": "Coefficient attached to a group",
+          "description": "A coefficient directly adjacent to parentheses multiplies the entire grouped expression. Tests correct parsing before distribution is applied.",
+          "yield_score": 0.70,
+          "yield_rationale": "Misidentifying the scope of a coefficient causes distribution errors; directly relevant to polynomial and trig expansion.",
+          "source_learn_keyword_id": "coefficient_attached_to_group"
+        },
+        {
+          "id": "power_applied_to_variable_vs_coefficient",
+          "label": "Power applied to variable versus coefficient",
+          "description": "In 3x², the exponent applies only to x unless parentheses show otherwise; (3x)² applies to the whole term. Tests the scope of an exponent in a monomial.",
+          "yield_score": 0.72,
+          "yield_rationale": "Exponent-scope misreading is a top-three source of errors in polynomial evaluation and power rule application.",
+          "source_learn_keyword_id": "power_applied_to_variable_vs_coefficient"
+        },
+        {
+          "id": "negative_variable_power_grouping",
+          "label": "Negative variable power grouping",
+          "description": "Parentheses determine whether a negative sign is inside or outside a power: -x² vs. (-x)². Tests the structural distinction at the base level of a power.",
+          "yield_score": 0.75,
+          "yield_rationale": "This distinction causes one of the most common evaluation errors in polynomial and exponential problems on the AP exam.",
+          "source_learn_keyword_id": "negative_variable_power_grouping"
+        },
+        {
+          "id": "fraction_coefficient_vs_division_structure",
+          "label": "Fraction coefficient versus division structure",
+          "description": "A fraction adjacent to a variable may be a coefficient (½x) or the expression may divide an entire group ((x+2)/5). Tests distinguishing these two fraction-in-expression structures.",
+          "yield_score": 0.65,
+          "yield_rationale": "Fraction-structure misreading produces wrong rational expressions; directly relevant to 1.7–1.10 and logarithm arguments.",
+          "source_learn_keyword_id": "fraction_coefficient_vs_division_structure"
+        },
+        {
+          "id": "ambiguous_linear_expression_grouping",
+          "label": "Ambiguous linear expression grouping",
+          "description": "Written forms like x + 3/2 and (x + 3)/2 have different structures; the grouping must be explicit to resolve the ambiguity. Tests precision in reading and writing algebraic notation.",
+          "yield_score": 0.58,
+          "yield_rationale": "Notation precision is tested in AP Precalc communication tasks and is prerequisite for unambiguous function formula writing.",
+          "source_learn_keyword_id": "ambiguous_linear_expression_grouping"
+        }
+      ]
+    },
+    {
+      "id": "absolute_value_expressions",
+      "label": "Absolute Value Expressions",
+      "description": "Interpreting, evaluating, and writing algebraic absolute value expressions — applying the absolute value rule to variable expressions, composing absolute value with linear forms, and recognizing key structural properties. This is expression-level work, not absolute value equation/inequality solving.",
+      "ced_topics": [],
+      "yield_score": 0.45,
+      "yield_rationale": "Absolute value expressions appear in piecewise function definitions (F7), distance-related modeling, and as notation within AP Precalc arguments; moderate foundation load.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "abs_value_expression_definition",
+          "label": "Absolute value expression definition",
+          "description": "The absolute value |a| of a real number returns the non-negative distance from zero. Tests applying the definition to numeric and simple variable expressions.",
+          "yield_score": 0.48,
+          "yield_rationale": "Definitional; used whenever absolute value appears in function notation or expressions.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "abs_value_of_variable_expression",
+          "label": "Absolute value of a variable expression",
+          "description": "An absolute value sign applied to an algebraic expression such as |3x − 2| produces a non-negative output for every input. Tests evaluating |f(x)| at given values without solving equations.",
+          "yield_score": 0.52,
+          "yield_rationale": "Evaluating absolute value expressions is prerequisite for piecewise definitions and distance modeling contexts.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "abs_value_negative_base",
+          "label": "Absolute value of a negative expression",
+          "description": "When the expression inside absolute value bars is negative, the output equals its opposite. Tests applying the two-case output rule to expressions with negative values.",
+          "yield_score": 0.55,
+          "yield_rationale": "Negative-input absolute value behavior is tested whenever students evaluate piecewise or transformed absolute value forms.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "abs_value_notation_as_grouping",
+          "label": "Absolute value bars as grouping",
+          "description": "Absolute value bars group their entire contents as a unit before the absolute value is applied, similar to parentheses. Tests correct parsing when the argument is a multi-term expression.",
+          "yield_score": 0.50,
+          "yield_rationale": "Grouping errors inside absolute value bars cause evaluation mistakes; relevant to piecewise and inequality notation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "abs_value_symmetry_property",
+          "label": "Absolute value symmetry property",
+          "description": "|−x| = |x| for all real x; absolute value of an expression and its negation are equal. Tests the structural sign-independence property.",
+          "yield_score": 0.42,
+          "yield_rationale": "Symmetry property is used in simplifying absolute value expressions and in trig-context distance reasoning.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "rational_expression_structure",
+      "label": "Rational Expression Structure",
+      "description": "Recognizing, reading, and writing rational expressions — algebraic fractions with polynomial numerators and denominators. Covers identifying the domain restriction (denominator ≠ 0), simplifying by canceling common factors, and distinguishing rational from non-rational forms. This is expression structure, not full rational-function analysis.",
+      "ced_topics": [],
+      "yield_score": 0.68,
+      "yield_rationale": "Rational expression fluency is direct prerequisite for 1.7–1.11 (rational functions unit) and for simplifying log and trig expressions with fraction forms; high load in Unit 1.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "rational_expression_definition",
+          "label": "Rational expression definition",
+          "description": "A rational expression is a ratio of two polynomial expressions. Tests identifying which algebraic fractions qualify as rational and which do not (e.g., those with radicals or variables in exponents).",
+          "yield_score": 0.65,
+          "yield_rationale": "Definitional gating for Unit 1 rational function work; students must distinguish rational from non-rational forms.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_expression_domain_restriction",
+          "label": "Domain restriction from denominator",
+          "description": "A rational expression is undefined when its denominator equals zero. Tests identifying the excluded values from the domain of a rational expression.",
+          "yield_score": 0.72,
+          "yield_rationale": "Domain restriction from denominator = 0 is the direct precursor to vertical asymptote identification (AP Precalc 1.9).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_expression_numerator_denominator_structure",
+          "label": "Numerator and denominator as polynomial expressions",
+          "description": "The numerator and denominator of a rational expression are each polynomial expressions that must be treated as grouped units. Tests structural parsing of the two-part fraction form.",
+          "yield_score": 0.62,
+          "yield_rationale": "Structural parsing is prerequisite for degree comparison (end behavior, 1.7) and for partial fraction setup (1.11).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_expression_equivalent_forms",
+          "label": "Equivalent forms of a rational expression",
+          "description": "A rational expression can be rewritten by multiplying numerator and denominator by the same nonzero factor, producing an equivalent form. Tests the algebraic-fraction equivalence rule.",
+          "yield_score": 0.65,
+          "yield_rationale": "Equivalent forms are used in partial fraction decomposition and in combining rational expressions with different denominators.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

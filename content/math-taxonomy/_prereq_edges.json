@@ -1,0 +1,371 @@
+{
+  "_comment": "Category-level prerequisite edges for the math system adaptive diagnostic. from_category_id failing implies likely deficit in to_category_id. strength 0-1. Category ids match design-spec §Categories (19).",
+  "edges": [
+    {
+      "from_category_id": "number_systems",
+      "to_category_id": "algebraic_expressions",
+      "strength": 0.85,
+      "note": "Signed-number arithmetic and rational-number fluency are the numeric substrate for all algebraic manipulation"
+    },
+    {
+      "from_category_id": "number_systems",
+      "to_category_id": "linear_equations_and_inequalities",
+      "strength": 0.75,
+      "note": "Multi-step equation solving requires signed-number and fraction arithmetic at each step"
+    },
+    {
+      "from_category_id": "number_systems",
+      "to_category_id": "exponents_and_radicals",
+      "strength": 0.80,
+      "note": "Exponent laws require fluent rational-number and negative-number arithmetic"
+    },
+    {
+      "from_category_id": "number_systems",
+      "to_category_id": "polynomial_and_rational_functions",
+      "strength": 0.65,
+      "note": "Rate-of-change arithmetic in 1.1–1.3 requires clean real-number operations"
+    },
+    {
+      "from_category_id": "number_systems",
+      "to_category_id": "exponential_and_logarithmic_functions",
+      "strength": 0.60,
+      "note": "Arithmetic/geometric sequence recognition (2.1–2.2) requires percent, ratio, and proportional reasoning"
+    },
+    {
+      "from_category_id": "number_systems",
+      "to_category_id": "trigonometric_and_polar_functions",
+      "strength": 0.70,
+      "note": "Exact trig values at special angles require rational-number and radical arithmetic"
+    },
+    {
+      "from_category_id": "algebraic_expressions",
+      "to_category_id": "linear_equations_and_inequalities",
+      "strength": 0.90,
+      "note": "Distribution and equivalent-expression recognition are the manipulation engine for multi-step linear solving"
+    },
+    {
+      "from_category_id": "algebraic_expressions",
+      "to_category_id": "systems_of_equations",
+      "strength": 0.80,
+      "note": "Equivalent expression manipulation underpins substitution and elimination setup"
+    },
+    {
+      "from_category_id": "algebraic_expressions",
+      "to_category_id": "polynomials",
+      "strength": 0.88,
+      "note": "Polynomial arithmetic (addition, distribution) is a direct extension of algebraic-expression manipulation"
+    },
+    {
+      "from_category_id": "algebraic_expressions",
+      "to_category_id": "polynomial_and_rational_functions",
+      "strength": 0.85,
+      "note": "Equivalent-form rewriting (1.11) and transformation construction (1.12) require fluent distribution and substitution"
+    },
+    {
+      "from_category_id": "algebraic_expressions",
+      "to_category_id": "exponential_and_logarithmic_functions",
+      "strength": 0.80,
+      "note": "Log manipulation (2.12) and exponential manipulation (2.4) require distribution and equivalent-expression skills"
+    },
+    {
+      "from_category_id": "algebraic_expressions",
+      "to_category_id": "trigonometric_and_polar_functions",
+      "strength": 0.70,
+      "note": "Trig identity work (3.12) and symbolic FRQ 4 require distribution and equivalent expression fluency"
+    },
+    {
+      "from_category_id": "linear_equations_and_inequalities",
+      "to_category_id": "systems_of_equations",
+      "strength": 0.90,
+      "note": "Systems require solving individual linear equations as a sub-step; literal-equation fluency enables parameter extraction"
+    },
+    {
+      "from_category_id": "linear_equations_and_inequalities",
+      "to_category_id": "functions_and_graphs",
+      "strength": 0.75,
+      "note": "Interval notation and inequality solutions are the language of domain and range"
+    },
+    {
+      "from_category_id": "linear_equations_and_inequalities",
+      "to_category_id": "polynomial_and_rational_functions",
+      "strength": 0.75,
+      "note": "Solving exponential/log equations (2.13) and trig equations (3.10) mirrors multi-step linear algebra; literal-equation fluency enables parameter extraction in function models"
+    },
+    {
+      "from_category_id": "linear_equations_and_inequalities",
+      "to_category_id": "exponential_and_logarithmic_functions",
+      "strength": 0.80,
+      "note": "Solving exponential and logarithmic equations (2.13) is multi-step linear solving extended to non-linear forms"
+    },
+    {
+      "from_category_id": "linear_equations_and_inequalities",
+      "to_category_id": "trigonometric_and_polar_functions",
+      "strength": 0.75,
+      "note": "Solving trig equations (3.10) requires the same inverse-operation reasoning as linear equation solving"
+    },
+    {
+      "from_category_id": "systems_of_equations",
+      "to_category_id": "polynomial_and_rational_functions",
+      "strength": 0.60,
+      "note": "Constructing polynomial/exponential models from two conditions (1.14, 2.14) sometimes requires solving a 2×2 system"
+    },
+    {
+      "from_category_id": "systems_of_equations",
+      "to_category_id": "exponential_and_logarithmic_functions",
+      "strength": 0.60,
+      "note": "Two-point exponential and logarithmic modeling (2.5, 2.14) may require solving a 2×2 system for parameters"
+    },
+    {
+      "from_category_id": "systems_of_equations",
+      "to_category_id": "trigonometric_and_polar_functions",
+      "strength": 0.55,
+      "note": "Sinusoidal model construction from two known points (3.7) sometimes reduces to a system of equations"
+    },
+    {
+      "from_category_id": "polynomials",
+      "to_category_id": "polynomial_and_rational_functions",
+      "strength": 0.95,
+      "note": "AP Precalc Unit 1 is applied polynomial algebra; factoring, zeros, end behavior, and rational simplification all require polynomial fluency"
+    },
+    {
+      "from_category_id": "polynomials",
+      "to_category_id": "exponential_and_logarithmic_functions",
+      "strength": 0.65,
+      "note": "Composition of functions (2.7) uses polynomial-style reasoning; algebraic manipulation for 2.4 requires polynomial fluency"
+    },
+    {
+      "from_category_id": "polynomials",
+      "to_category_id": "calc_unit_1",
+      "strength": 0.80,
+      "note": "Algebraic limit manipulation (factoring, cancellation) requires polynomial factoring fluency"
+    },
+    {
+      "from_category_id": "polynomials",
+      "to_category_id": "calc_unit_2",
+      "strength": 0.85,
+      "note": "Differentiating and simplifying polynomial expressions is the base case for all derivative rules"
+    },
+    {
+      "from_category_id": "exponents_and_radicals",
+      "to_category_id": "polynomial_and_rational_functions",
+      "strength": 0.70,
+      "note": "Rational exponents appear in polynomial zero work (1.5) and equivalent-representation questions"
+    },
+    {
+      "from_category_id": "exponents_and_radicals",
+      "to_category_id": "exponential_and_logarithmic_functions",
+      "strength": 0.92,
+      "note": "Exponent laws are the operational core of Unit 2; rational exponents connect to 2.3–2.4; radical structure underpins exact trig values"
+    },
+    {
+      "from_category_id": "exponents_and_radicals",
+      "to_category_id": "trigonometric_and_polar_functions",
+      "strength": 0.72,
+      "note": "Exact trig values (3.3) require radical simplification; trig identity proofs use algebraic manipulation involving radicals"
+    },
+    {
+      "from_category_id": "exponents_and_radicals",
+      "to_category_id": "calc_unit_2",
+      "strength": 0.88,
+      "note": "Power rule with negative and fractional exponents requires rational-exponent fluency from F6"
+    },
+    {
+      "from_category_id": "exponents_and_radicals",
+      "to_category_id": "calc_unit_6",
+      "strength": 0.80,
+      "note": "Antiderivative of x^n with rational exponents requires exponent-law fluency; reverse power rule is an exponent operation"
+    },
+    {
+      "from_category_id": "functions_and_graphs",
+      "to_category_id": "polynomial_and_rational_functions",
+      "strength": 0.90,
+      "note": "Function notation, domain/range, piecewise evaluation, and graph reading are assumed throughout Unit 1"
+    },
+    {
+      "from_category_id": "functions_and_graphs",
+      "to_category_id": "exponential_and_logarithmic_functions",
+      "strength": 0.88,
+      "note": "Composition (2.7) and inverse functions (2.8) require function-notation fluency and graph interpretation"
+    },
+    {
+      "from_category_id": "functions_and_graphs",
+      "to_category_id": "trigonometric_and_polar_functions",
+      "strength": 0.85,
+      "note": "Reading sinusoidal graphs, identifying amplitude/period/midline, and evaluating trig at inputs all require function-notation and graph fluency"
+    },
+    {
+      "from_category_id": "functions_and_graphs",
+      "to_category_id": "parameters_vectors_and_matrices",
+      "strength": 0.80,
+      "note": "Parametric functions (4.1–4.4) are an extension of function notation with two component functions"
+    },
+    {
+      "from_category_id": "functions_and_graphs",
+      "to_category_id": "calc_unit_1",
+      "strength": 0.90,
+      "note": "Limits of piecewise and rational functions require evaluating functions at boundary points and reading graph behavior"
+    },
+    {
+      "from_category_id": "functions_and_graphs",
+      "to_category_id": "calc_unit_2",
+      "strength": 0.85,
+      "note": "Derivative definition as a limit requires function-notation fluency; secant line construction requires evaluating f at two inputs"
+    },
+    {
+      "from_category_id": "polynomial_and_rational_functions",
+      "to_category_id": "calc_unit_1",
+      "strength": 0.88,
+      "note": "Limits of rational functions (factoring, holes, vertical asymptotes) require P1 rational-function algebra"
+    },
+    {
+      "from_category_id": "polynomial_and_rational_functions",
+      "to_category_id": "calc_unit_2",
+      "strength": 0.85,
+      "note": "Polynomial derivative computation and rational function differentiation (quotient rule) require P1 fluency"
+    },
+    {
+      "from_category_id": "polynomial_and_rational_functions",
+      "to_category_id": "calc_unit_5",
+      "strength": 0.80,
+      "note": "Sign-chart analysis for polynomial expressions (zeros, multiplicity) is the engine for increase/decrease and concavity analysis"
+    },
+    {
+      "from_category_id": "exponential_and_logarithmic_functions",
+      "to_category_id": "calc_unit_2",
+      "strength": 0.82,
+      "note": "Derivatives of e^x and ln(x) build directly on exponential/log function structure from P2"
+    },
+    {
+      "from_category_id": "exponential_and_logarithmic_functions",
+      "to_category_id": "calc_unit_6",
+      "strength": 0.80,
+      "note": "Antiderivative of e^x and 1/x require recognizing exponential and logarithmic structures from P2"
+    },
+    {
+      "from_category_id": "exponential_and_logarithmic_functions",
+      "to_category_id": "calc_unit_7",
+      "strength": 0.85,
+      "note": "Exponential growth/decay DE solution (dy/dt = ky → y = Ce^(kt)) requires P2 exponential-function fluency"
+    },
+    {
+      "from_category_id": "trigonometric_and_polar_functions",
+      "to_category_id": "calc_unit_1",
+      "strength": 0.78,
+      "note": "Limits involving trig functions (especially sin x/x squeeze) require trig-value fluency from P3"
+    },
+    {
+      "from_category_id": "trigonometric_and_polar_functions",
+      "to_category_id": "calc_unit_2",
+      "strength": 0.85,
+      "note": "Derivatives of sin, cos, tan require knowing the trig function definitions and identities from P3"
+    },
+    {
+      "from_category_id": "trigonometric_and_polar_functions",
+      "to_category_id": "calc_unit_3",
+      "strength": 0.80,
+      "note": "Derivatives of inverse trig functions (arcsin, arctan) and trig chain-rule applications require P3 inverse-trig and trig identity fluency"
+    },
+    {
+      "from_category_id": "trigonometric_and_polar_functions",
+      "to_category_id": "calc_unit_6",
+      "strength": 0.75,
+      "note": "Antiderivatives of trig functions (cos → sin, sec² → tan) require P3 trig derivative knowledge in reverse"
+    },
+    {
+      "from_category_id": "calc_unit_1",
+      "to_category_id": "calc_unit_2",
+      "strength": 0.92,
+      "note": "Derivative definition is a limit; differentiability requires continuity; all of Unit 2 presupposes Unit 1 limit fluency"
+    },
+    {
+      "from_category_id": "calc_unit_2",
+      "to_category_id": "calc_unit_3",
+      "strength": 0.95,
+      "note": "Chain rule (3.1) extends basic derivative rules; implicit differentiation requires fluent application of all Unit 2 rules"
+    },
+    {
+      "from_category_id": "calc_unit_2",
+      "to_category_id": "calc_unit_4",
+      "strength": 0.90,
+      "note": "All contextual applications require derivative computation including chain, product, and quotient rules from Unit 2"
+    },
+    {
+      "from_category_id": "calc_unit_3",
+      "to_category_id": "calc_unit_4",
+      "strength": 0.88,
+      "note": "Related rates (4.4–4.5) use implicit differentiation; L'Hopital (4.7) uses derivatives of composite forms"
+    },
+    {
+      "from_category_id": "calc_unit_2",
+      "to_category_id": "calc_unit_5",
+      "strength": 0.90,
+      "note": "First and second derivative tests require fluent derivative computation from Unit 2"
+    },
+    {
+      "from_category_id": "calc_unit_3",
+      "to_category_id": "calc_unit_5",
+      "strength": 0.85,
+      "note": "Implicit curve analysis (5.12) requires implicit differentiation; higher-order derivatives require chain rule"
+    },
+    {
+      "from_category_id": "calc_unit_4",
+      "to_category_id": "calc_unit_5",
+      "strength": 0.80,
+      "note": "MVT and EVT (5.1–5.2) build on rate-of-change interpretation established in Unit 4"
+    },
+    {
+      "from_category_id": "calc_unit_1",
+      "to_category_id": "calc_unit_6",
+      "strength": 0.80,
+      "note": "FTC connects limits (Riemann sum limit) to the integral; antiderivative definition uses limit notation from Unit 1"
+    },
+    {
+      "from_category_id": "calc_unit_2",
+      "to_category_id": "calc_unit_6",
+      "strength": 0.88,
+      "note": "Antiderivatives are inverse derivative operations; fluent differentiation from Unit 2 is required to find them"
+    },
+    {
+      "from_category_id": "calc_unit_3",
+      "to_category_id": "calc_unit_6",
+      "strength": 0.82,
+      "note": "U-substitution (6.9) is the chain rule reversed; FTC Part 1 with composite upper limits requires chain rule"
+    },
+    {
+      "from_category_id": "calc_unit_2",
+      "to_category_id": "calc_unit_7",
+      "strength": 0.85,
+      "note": "Setting up differential equations requires interpreting dy/dx as a derivative from Unit 2"
+    },
+    {
+      "from_category_id": "calc_unit_3",
+      "to_category_id": "calc_unit_7",
+      "strength": 0.80,
+      "note": "Separation of variables uses chain rule in reverse; exponential DEs involve d/dx(e^(kt)) = ke^(kt)"
+    },
+    {
+      "from_category_id": "calc_unit_6",
+      "to_category_id": "calc_unit_7",
+      "strength": 0.92,
+      "note": "Separation of variables requires integrating both sides; particular solution requires applying FTC Part 2"
+    },
+    {
+      "from_category_id": "calc_unit_4",
+      "to_category_id": "calc_unit_8",
+      "strength": 0.82,
+      "note": "Particle motion (8.2) is the integration counterpart to Unit 4 velocity/acceleration analysis"
+    },
+    {
+      "from_category_id": "calc_unit_5",
+      "to_category_id": "calc_unit_8",
+      "strength": 0.80,
+      "note": "Area-between-curves requires sign-chart reasoning to identify where f > g; optimization setup mirrors Unit 5 candidates test"
+    },
+    {
+      "from_category_id": "calc_unit_6",
+      "to_category_id": "calc_unit_8",
+      "strength": 0.92,
+      "note": "Every Unit 8 topic (area, volume, average value, particle motion) uses definite integral evaluation from Unit 6"
+    }
+  ]
+}

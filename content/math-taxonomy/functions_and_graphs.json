@@ -1,0 +1,559 @@
+{
+  "category": {
+    "id": "functions_and_graphs",
+    "label": "Functions and Graphs",
+    "description": "Core function concept and notation, evaluating functions from rules/graphs/tables, domain and range, piecewise-defined functions, average rate of change, basic graph symmetry, and interval notation. Fills the empty 'functions' and 'piecewise_functions' learn_category gap and supplies the prerequisite function-literacy layer for all AP Precalculus and Calc AB work.",
+    "section": "foundations",
+    "ced_unit": null,
+    "courses": [
+      { "course": "precalc", "role": "core", "order_index": 7 },
+      { "course": "calc_ab", "role": "foundation", "order_index": 7 }
+    ],
+    "yield_score": 0.82,
+    "yield_rationale": "Function notation and evaluation underlie every AP Precalc topic (1.1–1.14, 2.3–2.14, 3.1–3.10) and every Calc AB unit; domain/range and piecewise functions recur heavily in FRQ 1 (function concepts) and limit/continuity work; average rate of change seeds AP Precalc 1.1–1.4 and Calc AB Unit 2."
+  },
+  "umbrellas": [
+    {
+      "id": "fg_function_concept",
+      "label": "The Function Concept",
+      "description": "What makes a relation a function: the vertical-line test, input-output mapping, and the distinction between relations that are and are not functions across representations (mappings, tables, graphs, equations).",
+      "ced_topics": [],
+      "yield_score": 0.78,
+      "yield_rationale": "Function vs. non-function identification appears in AP Precalc MC and grounds all function-analysis tasks in Units 1–3 and Calc AB; FRQ 1 (function concepts) assumes this fluency.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "fg_relation_vs_function_definition",
+          "label": "Relation vs. function definition",
+          "description": "A function assigns exactly one output to each input; tests identifying whether a given rule, set of ordered pairs, or mapping diagram satisfies the uniqueness-of-output criterion.",
+          "yield_score": 0.72,
+          "yield_rationale": "Definitional anchor — tested directly in introductory MC items and prerequisite for all downstream function work.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_vertical_line_test",
+          "label": "Vertical-line test on a graph",
+          "description": "Applying the vertical-line test to a coordinate-plane graph to determine whether the graph represents a function; tests the visual equivalent of the uniqueness-of-output criterion.",
+          "yield_score": 0.68,
+          "yield_rationale": "Graphical identification of functions appears in MC; slightly lower than definition item because it is a single graphical move.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_function_from_table",
+          "label": "Identifying a function from a table",
+          "description": "Determining whether an input-output table represents a function by checking for repeated x-values paired with different y-values.",
+          "yield_score": 0.38,
+          "yield_rationale": "Table representation of functions recurs throughout AP Precalc FRQ 2 data contexts and rate-of-change questions; rescored to reflect genuinely lower utility relative to high-yield anchors.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_function_from_equation",
+          "label": "Deciding if an equation defines a function",
+          "description": "Using algebraic reasoning (e.g., solving for y) to determine whether an equation defines y as a function of x; distinguishes cases like y = x² (yes) from x = y² (no).",
+          "yield_score": 0.38,
+          "yield_rationale": "Algebraic function-identification; less frequent than graphical/tabular checks but essential for implicit-form awareness; rescored to reflect low AP exam frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_one_to_one_function",
+          "label": "One-to-one functions and the horizontal-line test",
+          "description": "A function is one-to-one if every output is produced by at most one input; tests applying the horizontal-line test to a graph and recognising which function families are inherently one-to-one.",
+          "yield_score": 0.74,
+          "yield_rationale": "One-to-one is the prerequisite gate for invertibility (P2 2.8) and is referenced in FRQ 1; higher yield than basic function identification because it feeds a heavily tested AP concept.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "fg_function_notation",
+      "label": "Function Notation and Language",
+      "description": "Reading and using f(x) notation correctly: interpreting f(a) as the output of f at input a, naming functions with multiple letters, and translating between verbal descriptions and symbolic function notation.",
+      "ced_topics": [],
+      "yield_score": 0.88,
+      "yield_rationale": "f(x) notation is the symbolic language of every AP Precalc and Calc AB topic; every FRQ and the vast majority of MC items assume fluent notation reading; extremely high downstream load.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "fg_reading_function_notation",
+          "label": "Reading f(x) notation",
+          "description": "Interpreting the expression f(x) as 'the output of function f at input x'; distinguishing f, x, and f(x) as three distinct objects, and reading statements like f(3) = 7 correctly.",
+          "yield_score": 0.85,
+          "yield_rationale": "Notation fluency is the entry fee for every AP math question; extremely high foundational load.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_evaluating_at_a_number",
+          "label": "Evaluating f(a) at a specific numeric input",
+          "description": "Substituting a given number for the input variable in a function rule and simplifying to find the output value; covers integer, fraction, and negative inputs.",
+          "yield_score": 0.90,
+          "yield_rationale": "Highest-frequency foundational move — used in function evaluation, composition setup, and rate-of-change calculation across all units and both courses.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_evaluating_at_an_expression",
+          "label": "Evaluating f(expression) — input as an algebraic expression",
+          "description": "Substituting an algebraic expression (e.g., f(x+h) or f(2x)) into a function rule and simplifying; tests correct distribution and term tracking when the input itself contains variables.",
+          "yield_score": 0.82,
+          "yield_rationale": "Direct prerequisite for difference-quotient work in Calc AB Unit 2 and composition setup in AP Precalc 2.7; very high downstream demand.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_function_output_from_graph",
+          "label": "Reading function output values from a graph",
+          "description": "Given the graph of f, identifying f(a) as the y-coordinate of the point where x = a; tests reading specific output values from a coordinate-plane curve.",
+          "yield_score": 0.80,
+          "yield_rationale": "Graph-reading of function values is required in AP Precalc FRQ 1 and throughout Calc AB limit/derivative graphical questions.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_function_output_from_table",
+          "label": "Reading function output values from a table",
+          "description": "Finding f(a) by locating the input a in the input column of a table and reading the corresponding output; distinguishing this from interpolating values not in the table.",
+          "yield_score": 0.76,
+          "yield_rationale": "Tabular function reading recurs in AP Precalc FRQ 2 data tasks and Calc AB rate-of-change and accumulation table problems.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_solving_f_of_x_equals_c",
+          "label": "Solving f(x) = c — finding inputs from outputs",
+          "description": "Given a function value (output), finding all inputs x such that f(x) = c by reading a graph, scanning a table, or solving an equation; tests the reversal direction of function evaluation.",
+          "yield_score": 0.78,
+          "yield_rationale": "Solving f(x) = c is the reverse of evaluation and directly underlies inverse function concepts (P2 2.8) and zero-finding (P1 1.8); high cross-unit demand.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "fg_domain_and_range",
+      "label": "Domain and Range",
+      "description": "Identifying the set of valid inputs (domain) and possible outputs (range) of a function from its rule, graph, or table; applying algebraic restrictions such as division by zero and square roots of negatives.",
+      "ced_topics": [],
+      "yield_score": 0.85,
+      "yield_rationale": "Domain and range are explicitly tested in AP Precalc 2.3, 2.11, 3.4, FRQ 1, and throughout Calc AB continuity and integration limit analysis; a top-three foundational concept by frequency.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "fg_domain_from_graph",
+          "label": "Reading domain from a graph",
+          "description": "Identifying all x-values for which a graph has defined output by scanning the graph horizontally; recognising open/closed endpoints and gaps from graphical features.",
+          "yield_score": 0.82,
+          "yield_rationale": "Graphical domain reading is required in AP Precalc FRQ 1 and MC graph-analysis items; also foundational for Calc AB continuity and limit analysis.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_range_from_graph",
+          "label": "Reading range from a graph",
+          "description": "Identifying all y-values attained by a function by scanning the graph vertically; distinguishing bounded ranges (e.g., sinusoidal) from unbounded ones.",
+          "yield_score": 0.78,
+          "yield_rationale": "Range identification is consistently tested in AP Precalc MC and FRQ 1; slightly less frequent than domain due to the asymmetry in how functions are defined.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_domain_algebraic_restrictions",
+          "label": "Domain restrictions from algebraic rules",
+          "description": "Finding the natural domain of a function rule by excluding inputs that cause division by zero (denominator = 0) or even-root of a negative (radicand < 0); covers square-root and rational function cases.",
+          "yield_score": 0.88,
+          "yield_rationale": "Algebraic domain restrictions appear in every unit involving rational or radical functions (P1 1.8–1.10, P2 2.3) and are tested in both MC and FRQ contexts; one of the highest-frequency domain skills.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_range_from_rule",
+          "label": "Determining range from a function rule",
+          "description": "Using algebraic reasoning (completing the square, vertex analysis, asymptote identification) to determine the range of a function from its symbolic form, without a graph.",
+          "yield_score": 0.72,
+          "yield_rationale": "Algebraic range determination is moderately tested in AP Precalc MC; lower frequency than domain because it often requires deeper analysis.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_domain_from_context",
+          "label": "Domain restricted by real-world context",
+          "description": "Restricting the mathematical domain to values that make physical or contextual sense (e.g., only non-negative time, positive lengths); tests reading implicit constraints from a word problem.",
+          "yield_score": 0.76,
+          "yield_rationale": "Context-restricted domain appears in AP Precalc 1.13 (model assumption articulation) and FRQ 2 modeling tasks; also in Calc AB applied optimization.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_domain_range_from_table",
+          "label": "Domain and range from a table of values",
+          "description": "Listing the domain as the set of input values and the range as the set of output values in a finite input-output table; recognising that repeated outputs do not affect range cardinality.",
+          "yield_score": 0.40,
+          "yield_rationale": "Table-based domain/range is lower-stakes than graphical or algebraic but tests careful reading; used in AP Precalc data-table MC items; rescored to reflect genuinely low exam frequency.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "fg_interval_notation",
+      "label": "Interval Notation",
+      "description": "Writing and interpreting domain, range, and solution sets using interval notation with parentheses, brackets, and infinity symbols; converting between inequality notation, set-builder notation, and interval notation.",
+      "ced_topics": [],
+      "yield_score": 0.80,
+      "yield_rationale": "Interval notation is the universal language for domain/range answers throughout AP Precalc and Calc AB; F3 groundwork (inequality notation) feeds directly into this; every domain/range item implicitly requires it.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "fg_interval_open_closed_endpoints",
+          "label": "Open vs. closed interval endpoints",
+          "description": "Distinguishing parentheses (exclusive endpoint) from brackets (inclusive endpoint) in interval notation; connecting to strict vs. non-strict inequalities and open vs. closed dots on graphs.",
+          "yield_score": 0.80,
+          "yield_rationale": "Endpoint notation precision is tested every time domain/range or continuity intervals appear; fundamental to correct communication in AP math.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_interval_notation_from_inequality",
+          "label": "Converting inequalities to interval notation",
+          "description": "Rewriting a linear inequality or compound inequality as an interval (e.g., 2 ≤ x < 5 → [2, 5)) or as a union of intervals; covers all four basic inequality forms and their interval equivalents.",
+          "yield_score": 0.78,
+          "yield_rationale": "Direct conversion skill used whenever domain/range or solution sets must be expressed; AP Precalc FRQ scoring expects correct interval notation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_interval_union_notation",
+          "label": "Union and intersection in interval notation",
+          "description": "Writing domains or solution sets that consist of multiple disjoint intervals using the union symbol (∪); interpreting a union as 'either interval'; distinguishes from intersections.",
+          "yield_score": 0.72,
+          "yield_rationale": "Union notation arises whenever a function has a gap in its domain (e.g., rational function with one excluded value) and is required for AP Precalc domain MC answers.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_interval_infinity_notation",
+          "label": "Intervals extending to infinity",
+          "description": "Writing unbounded domains or ranges using (−∞, a) or (b, ∞) notation, always with parentheses at ±∞; testing awareness that infinity is not a number and never gets a bracket.",
+          "yield_score": 0.82,
+          "yield_rationale": "Unbounded intervals appear in polynomial/rational domain expressions (P1) and throughout Calc AB; infinity-endpoint convention is a common precision error on AP exams.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_interval_notation_from_graph",
+          "label": "Writing interval notation from a graph",
+          "description": "Reading the domain or range of a graphed function and expressing it in interval notation; requires combining graph-reading skill with correct bracket/parenthesis convention for open/closed endpoints.",
+          "yield_score": 0.75,
+          "yield_rationale": "Composite graphical + notation skill; appears in AP Precalc FRQ 1 (function concepts) where students must state domain/range from a given graph.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "fg_graph_reading",
+      "label": "Reading and Interpreting Graphs",
+      "description": "Extracting and interpreting mathematical information from coordinate-plane graphs: increasing/decreasing intervals, local maxima and minima, intercepts, end behavior reading, and describing graph features in precise language.",
+      "ced_topics": [],
+      "yield_score": 0.87,
+      "yield_rationale": "Graph reading underlies AP Precalc topics 1.1–1.4 (covariation, rates of change from graphs), 2.3, 2.11, 3.4, and virtually every FRQ; also the primary mode of Calc AB limit and derivative questions.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "fg_increasing_decreasing_intervals",
+          "label": "Identifying increasing and decreasing intervals",
+          "description": "Locating intervals where a function's graph rises (increasing) or falls (decreasing) as x increases from left to right; expressing these intervals using interval notation.",
+          "yield_score": 0.85,
+          "yield_rationale": "Increasing/decreasing identification is tested in AP Precalc 1.1 (covariation) and 1.2 (rates of change) and recurs in Calc AB derivative sign analysis.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_local_max_min_from_graph",
+          "label": "Identifying local maxima and minima from a graph",
+          "description": "Locating the x- and y-coordinates of local maximum and minimum points by finding peaks and valleys on a graph; distinguishing local from global (absolute) extrema.",
+          "yield_score": 0.80,
+          "yield_rationale": "Local extrema identification recurs in AP Precalc 1.2–1.4 and is a pillar of Calc AB Unit 5 (analytical applications); graphical identification is the foundation before algebraic methods.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_x_and_y_intercepts_from_graph",
+          "label": "Reading x-intercepts and y-intercepts from a graph",
+          "description": "Identifying where a graph crosses the x-axis (zeros of f) and the y-axis (value of f at x = 0) by reading the coordinate-plane graph; naming intercepts as ordered pairs or single values.",
+          "yield_score": 0.82,
+          "yield_rationale": "Intercept reading is among the most tested graphical skills across AP Precalc (1.6–1.10, 2.11, 3.4) and Calc AB; direct prerequisite for zero-finding and y-intercept interpretation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_end_behavior_from_graph",
+          "label": "Describing end behavior from a graph",
+          "description": "Reading and describing what a function's graph approaches as x → ∞ and x → −∞ using limit-style language or arrow notation; distinguishes functions that grow without bound from those that approach horizontal asymptotes.",
+          "yield_score": 0.78,
+          "yield_rationale": "End-behavior description from a graph is prerequisite for AP Precalc 1.6–1.7 (polynomial/rational end behavior) and Calc AB limit analysis at infinity.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_reading_graph_over_interval",
+          "label": "Interpreting a function's values over an interval from a graph",
+          "description": "Describing how output values behave over a specified x-interval: whether the function is positive, negative, increasing, decreasing, or constant, and by approximately how much it changes.",
+          "yield_score": 0.76,
+          "yield_rationale": "Interval-level graph interpretation supports AP Precalc covariation (1.1) and rate-of-change (1.2) questions and Calc AB mean-value/accumulation reasoning.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_function_value_reading_precision",
+          "label": "Precise coordinate reading from a graph",
+          "description": "Reading the exact or approximate coordinates of labeled points on a graph, including non-integer values; tests attention to axis scale and whether specific coordinates are explicitly marked vs. estimated.",
+          "yield_score": 0.65,
+          "yield_rationale": "Precision in coordinate reading matters for rate-of-change calculations from graphs and for correctly stating function values; moderate direct yield but affects accuracy across many questions.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "fg_tables_and_numerical_input_output",
+      "label": "Tables and Numerical Input-Output Relationships",
+      "description": "Working with functions presented as input-output tables: reading values, identifying patterns, computing differences and ratios between consecutive outputs, and recognising the representation's limitations compared to continuous graphs.",
+      "ced_topics": [],
+      "yield_score": 0.74,
+      "yield_rationale": "Table representation of functions is tested in AP Precalc FRQ 2 (modeling from data) and MC tabular questions; Calc AB uses tables heavily in rate-of-change, accumulation, and FRQ data contexts.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "fg_table_input_output_reading",
+          "label": "Reading input-output pairs from a table",
+          "description": "Locating a specific input in a table and reading its paired output; also finding all inputs that produce a given output; tests basic table navigation for a function presented in tabular form.",
+          "yield_score": 0.70,
+          "yield_rationale": "Baseline table-reading skill; required before any rate-of-change or difference calculation from a table.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_table_consecutive_change",
+          "label": "Computing consecutive changes (differences) from a table",
+          "description": "Calculating the difference between successive output values for equally or unequally spaced inputs; recognising whether outputs change by a constant amount (linear pattern) or a constant ratio (exponential pattern).",
+          "yield_score": 0.78,
+          "yield_rationale": "Consecutive differences underlie AP Precalc 1.3 (linear vs. quadratic rates) and 2.1 (arithmetic vs. geometric); a direct prerequisite for average rate of change from tables.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_table_output_difference_pattern",
+          "label": "Computing consecutive output differences (Δy) and classifying linearity",
+          "description": "For a table with equally spaced inputs, computing the first differences (Δy = y_{i+1} − y_i) between successive output values and identifying whether they are constant (implying a linear relationship) or non-constant (implying non-linearity); a pure table-reading skill that does not require computing a rate per unit of input.",
+          "yield_score": 0.72,
+          "yield_rationale": "First-difference pattern recognition is a distinct table-reading skill from AROC computation: it reads the raw output change without dividing by Δx; directly tested in AP Precalc 1.3 linearity identification and FRQ 2 model-selection items.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_table_domain_range_identification",
+          "label": "Domain and range from a table",
+          "description": "Listing the domain as all input values in the table and the range as all distinct output values; recognising that a finite table represents only a restricted sample of the full function.",
+          "yield_score": 0.38,
+          "yield_rationale": "Low-complexity but frequently tested as part of domain/range questions when a table is given; lower yield because it reduces to simple list-making; rescored to reflect genuinely low utility relative to high-yield anchors.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_table_multiple_representations_link",
+          "label": "Connecting table values to a corresponding graph",
+          "description": "Plotting or identifying graphical features consistent with given table values — for example, locating which graph passes through all the tabulated points or determining where the function is increasing based on the table.",
+          "yield_score": 0.72,
+          "yield_rationale": "Cross-representation translation between table and graph is a Mathematical Practice (MP2) skill tested in AP Precalc MC and is prerequisite for model validation (2.6).",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "fg_piecewise_functions",
+      "label": "Piecewise-Defined Functions",
+      "description": "Writing, reading, evaluating, and graphing piecewise-defined functions; determining which piece applies for a given input; constructing piecewise definitions from graphs.",
+      "ced_topics": [],
+      "yield_score": 0.83,
+      "yield_rationale": "Piecewise functions are a named gap in the DB (empty 'piecewise_functions' category) and appear in Calc AB Unit 1 limit/continuity questions and AP Precalc 2.6 (model validation); also tested in AP Precalc MC involving domain-restricted behavior.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "fg_piecewise_evaluating_at_a_point",
+          "label": "Evaluating a piecewise function at a specific input",
+          "description": "Selecting the correct branch of a piecewise definition for a given input value by checking the domain condition for each piece, then evaluating that branch's rule at the input.",
+          "yield_score": 0.85,
+          "yield_rationale": "Direct evaluation is the most-tested piecewise skill; appears in Calc AB limit problems and AP Precalc function-concept MC items.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_piecewise_breakpoint_boundary",
+          "label": "Handling the boundary value in a piecewise function",
+          "description": "Correctly applying strict vs. non-strict inequality conditions at breakpoints (e.g., which piece owns x = 2 when one piece covers x < 2 and the other x ≥ 2); tests reading inequality direction and inclusion. Note: checking whether both pieces yield the same output at a breakpoint (the continuity condition) is a Calc AB Unit 1 skill owned by limit_1_continuity_of_piecewise_functions_at_boundary.",
+          "yield_score": 0.80,
+          "yield_rationale": "Boundary precision is a common error point and is tested whenever piecewise functions appear with a mixture of strict and non-strict domain conditions.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_piecewise_graphing",
+          "label": "Graphing a piecewise-defined function",
+          "description": "Sketching the graph of a piecewise function by graphing each piece only over its specified domain interval; correctly representing open and closed endpoints at each breakpoint.",
+          "yield_score": 0.78,
+          "yield_rationale": "Graphing piecewise functions is tested in AP Precalc MC and is prerequisite for visually interpreting limits from piecewise graphs in Calc AB.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_piecewise_definition_from_graph",
+          "label": "Writing a piecewise definition from a graph",
+          "description": "Reading a piecewise graph and writing the algebraic rule and domain interval for each piece; requires identifying slopes, intercepts, or other features of each segment.",
+          "yield_score": 0.72,
+          "yield_rationale": "Writing piecewise definitions from graphs appears in AP Precalc and Calc AB FRQ contexts; tests both graph-reading and notation fluency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_piecewise_domain_and_range",
+          "label": "Domain and range of a piecewise function",
+          "description": "Determining the full domain and range of a piecewise function by taking the union of all piece domains and by identifying all output values across all branches; expressing results in interval notation.",
+          "yield_score": 0.70,
+          "yield_rationale": "Domain/range of piecewise functions combines piecewise evaluation with interval notation; moderate direct yield but integrates two important skills.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "fg_average_rate_of_change",
+      "label": "Average Rate of Change",
+      "description": "Conceptual foundations of average rate of change: the geometric meaning as secant-line slope, interpreting sign and magnitude, and comparing rates across intervals. The mechanical computation of (f(b) − f(a))/(b − a) from a formula, graph, or table is owned by AP Precalc P1 (poly_average_rate_of_change); this F7 umbrella covers the abstract concept layer that applies across all function families.",
+      "ced_topics": [],
+      "yield_score": 0.90,
+      "yield_rationale": "Average rate of change is the explicit focus of AP Precalc 1.2 and 1.3 and the conceptual entry point to derivatives in Calc AB Unit 2; among the most-tested foundational skills across both courses; FRQ 2 regularly requires rate-of-change computation and interpretation.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "fg_aroc_secant_slope_connection",
+          "label": "AROC as slope of the secant line",
+          "description": "Interpreting average rate of change geometrically as the slope of the line connecting (a, f(a)) to (b, f(b)) on the graph; tests the equivalence between the algebraic formula and the graphical secant — purely as a precalc conceptual statement about any function, independent of limit or derivative machinery.",
+          "yield_score": 0.85,
+          "yield_rationale": "Secant-slope interpretation is the geometric bridge to derivative definition in Calc AB Unit 2; AP Precalc 1.2 explicitly connects AROC to covariation and graph behavior.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_aroc_comparing_across_intervals",
+          "label": "Comparing AROC over different intervals",
+          "description": "Computing average rates of change over multiple intervals and comparing the values to describe whether a function is speeding up, slowing down, or changing direction; connects to concavity and increasing/decreasing behavior.",
+          "yield_score": 0.78,
+          "yield_rationale": "Interval comparison of AROC appears in AP Precalc 1.3–1.4 (linear vs. non-linear rate patterns) and is foundational for Calc AB MVT and increasing/decreasing analysis.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_aroc_secant_line_generic_notation",
+          "label": "Writing the secant-line slope expression in generic (a, b) notation",
+          "description": "Writing the symbolic expression for the slope of the secant line through two labeled points (a, f(a)) and (b, f(b)) as [f(b) − f(a)] / (b − a) using generic parameter names, without substituting a specific function rule or simplifying/expanding; tests correct symbolic setup of the ratio before any function-specific algebra.",
+          "yield_score": 0.75,
+          "yield_rationale": "Setting up the generic secant-slope expression is a distinct F7 skill that precedes the function-specific computation owned by P1; ensures students can write the ratio correctly for any function family before learning to compute it for polynomials.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_aroc_from_verbal_description",
+          "label": "Identifying AROC from a verbally described function relationship",
+          "description": "Recognizing and computing the average rate of change when a function relationship is described only in words (e.g., 'a balloon rises 30 feet in 5 seconds, then 12 feet in 3 more seconds') without a formula, graph, or table — tests isolating the relevant output change and input change from a verbal context.",
+          "yield_score": 0.70,
+          "yield_rationale": "Verbal-context AROC problems appear in AP Precalc FRQ 2 contextual sub-parts and test whether students can extract the Δy and Δx from a description before applying the formula; a distinct skill from formula or table computation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_aroc_sign_meaning",
+          "label": "Interpreting the sign of AROC (positive, negative, or zero)",
+          "description": "Determining what a positive, negative, or zero average rate of change implies about the function's behavior over the interval: increasing output, decreasing output, or no net change respectively; does not require units or a real-world context.",
+          "yield_score": 0.72,
+          "yield_rationale": "Sign interpretation of AROC is a foundational conceptual skill that bridges the algebraic formula to function behavior language (increasing/decreasing); tested in AP Precalc covariation items (1.1–1.2) and is a prerequisite for all contextual interpretation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_aroc_zero_and_constant_behavior",
+          "label": "AROC of zero and constant function behavior",
+          "description": "Recognizing that an average rate of change equal to zero over an interval implies the function's net output change is zero — which may reflect constant behavior, or equal rises and falls that cancel; distinguishes zero AROC from the function being identically constant.",
+          "yield_score": 0.62,
+          "yield_rationale": "Zero-AROC as a special case is a common MC trap (students confuse zero net change with a constant function) and connects to the MVT in Calc AB; moderate yield as a conceptual precision skill.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "fg_symmetry",
+      "label": "Even and Odd Function Symmetry",
+      "description": "Determining whether a function is even (symmetric about the y-axis), odd (symmetric about the origin), or neither, using the algebraic test f(−x) = f(x) or f(−x) = −f(x) and by visual inspection of a graph.",
+      "ced_topics": [],
+      "yield_score": 0.62,
+      "yield_rationale": "Even/odd symmetry is directly tested in AP Precalc MC and FRQ 4 (symbolic) and simplifies trig identity work in P3; moderate-high yield given its cross-cutting utility.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "fg_even_function_algebraic_test",
+          "label": "Algebraic even-function test: f(−x) = f(x)",
+          "description": "Substituting −x for x in a function rule, simplifying, and verifying whether the result equals the original f(x); identifies functions symmetric about the y-axis.",
+          "yield_score": 0.65,
+          "yield_rationale": "Algebraic symmetry test for even functions is a standard AP Precalc MC item and a prerequisite for recognizing cosine as even in trig unit P3.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_odd_function_algebraic_test",
+          "label": "Algebraic odd-function test: f(−x) = −f(x)",
+          "description": "Substituting −x for x in a function rule and verifying whether the result equals the negation of f(x); identifies functions with 180° rotational symmetry about the origin.",
+          "yield_score": 0.65,
+          "yield_rationale": "Odd-function test parallels even-function test; particularly important for recognising sine as odd in P3.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_symmetry_from_graph",
+          "label": "Identifying even/odd symmetry visually from a graph",
+          "description": "Recognising y-axis symmetry (even) or 180°-rotational symmetry about the origin (odd) by inspecting the shape of a graph; tests the graphical interpretation of the algebraic symmetry conditions.",
+          "yield_score": 0.32,
+          "yield_rationale": "Graphical symmetry identification is tested in AP Precalc MC graph-analysis items; rescored to reflect that visual symmetry inspection is simpler and less discriminating than the algebraic test, placing it below the set-builder notation anchor (0.20) only slightly.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_neither_even_nor_odd",
+          "label": "Classifying a function as neither even nor odd",
+          "description": "Demonstrating that a function is neither even nor odd by showing that f(−x) ≠ f(x) AND f(−x) ≠ −f(x) for some or all x; requires checking both conditions and providing a counterexample.",
+          "yield_score": 0.28,
+          "yield_rationale": "The 'neither' classification is a common wrong-direction trap in symmetry MC items but is the default outcome for most functions; low direct yield because it reduces to a simple negative check; rescored accordingly.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_symmetry_predict_output_values",
+          "label": "Using even/odd symmetry to predict output values without computing",
+          "description": "Applying the even or odd property directly to a known function value to predict the output at a reflected input without evaluating the function rule — for example, if f is odd and f(3) = 7 then f(−3) = −7; if f is even and f(−5) = 2 then f(5) = 2.",
+          "yield_score": 0.60,
+          "yield_rationale": "Using symmetry to infer output values is a pure foundational skill distinct from integral simplification; tested in AP Precalc MC when only one function value and a symmetry property are given; replaces the deleted fg_symmetry_and_definite_integrals which required downstream definite integral knowledge.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "fg_covariation_and_behavior",
+      "label": "Describing Function Behavior and Covariation",
+      "description": "Using precise language and mathematical notation to describe how input and output values change together — whether the function is increasing, decreasing, or constant over an interval — and connecting this to sign of rate of change and concavity direction.",
+      "ced_topics": [],
+      "yield_score": 0.83,
+      "yield_rationale": "Covariation language is the explicit focus of AP Precalc 1.1 and 1.3–1.4 and feeds directly into rate-of-change reasoning in Calc AB Units 4–5; FRQ communication tasks (MP3) require precise covariation descriptions.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "fg_covariation_increasing_decreasing_language",
+          "label": "Using precise language for increasing/decreasing behavior",
+          "description": "Describing a function's behavior using phrases like 'f is increasing on [a, b]' with correct interval notation and justification referencing how output changes as input increases; contrasts with merely saying 'the graph goes up'.",
+          "yield_score": 0.82,
+          "yield_rationale": "Precise covariation language is explicitly tested in AP Precalc 1.1 and in FRQ communication tasks (MP3); also prerequisite for Calc AB first-derivative sign analysis phrasing.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_constant_function_behavior",
+          "label": "Identifying constant behavior over an interval",
+          "description": "Recognising when a function's output does not change over an interval (slope = 0 or horizontal segment on graph) and expressing this as 'f is constant on [a, b]'.",
+          "yield_score": 0.30,
+          "yield_rationale": "Constant intervals complete the increasing/decreasing/constant trichotomy; lower yield because they are less prominent than non-constant behavior in AP questions and represent a simple graphical read; rescored to reflect position well below midrange anchors.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_concavity_direction_from_graph",
+          "label": "Identifying concavity direction (concave up vs. down) from a graph",
+          "description": "Describing whether the graph curves upward (concave up) or downward (concave down) over an interval by visual inspection of the curve's shape alone — specifically whether the curve bends like a bowl (opening up) or an arch (opening down); this is a visual identification skill and does not involve reasoning about whether the rate of change is increasing or decreasing.",
+          "yield_score": 0.78,
+          "yield_rationale": "Concavity identification from a graph is prerequisite for AP Precalc 1.3 (quadratic rate behavior) and Calc AB Unit 5 (second derivative analysis); tightened to visual identification only to avoid overlap with poly_covariation_concavity_direction which owns the rate-of-change reasoning connection.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_sign_of_function_output",
+          "label": "Identifying where a function is positive, negative, or zero",
+          "description": "Locating intervals where f(x) > 0, f(x) < 0, or f(x) = 0 from a graph or table; tests reading the relationship between the graph and the x-axis and connects to zero-finding and inequality solving.",
+          "yield_score": 0.75,
+          "yield_rationale": "Sign analysis of a function output is used in AP Precalc rational-function inequality work (P1) and Calc AB accumulation/integral sign problems; moderately high yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "fg_absolute_maximum_minimum",
+          "label": "Identifying absolute maximum and minimum over a closed interval",
+          "description": "Finding the highest and lowest output values of a function on a closed bounded interval from a graph or table; distinguishing absolute (global) extrema from local extrema.",
+          "yield_score": 0.72,
+          "yield_rationale": "Absolute extrema on a closed interval are tested in AP Precalc and Calc AB Unit 5 (Extreme Value Theorem context); foundational before calculus-based optimization methods.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

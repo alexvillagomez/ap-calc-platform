@@ -1,0 +1,549 @@
+{
+  "category": {
+    "id": "calc_unit_8",
+    "label": "Applications of Integration",
+    "description": "Uses the definite integral to compute average values, analyze particle motion (net displacement vs total distance), model accumulation in applied contexts, find areas between curves (with respect to x and y), and compute volumes of solids via cross-sections, the disc method, and the washer method. Arc length is also introduced. Third-highest FRQ unit (~30 appearances 2012-2025).",
+    "section": "calc_ab",
+    "ced_unit": "AP Calc AB Unit 8",
+    "courses": [
+      {
+        "course": "calc_ab",
+        "role": "core",
+        "order_index": 8
+      }
+    ],
+    "yield_score": 0.87,
+    "yield_rationale": "Unit weight 10-15%; ~30 FRQ appearances (third highest); Area & Volume and Particle Motion are two of the seven core FRQ archetypes, each appearing most exam years; every FRQ involving rates also touches accumulation (8.3). High standalone yield and high FRQ centrality."
+  },
+  "umbrellas": [
+    {
+      "id": "u8_average_value",
+      "label": "Average Value of a Function",
+      "description": "Applies the average-value formula f_avg = (1/(b-a)) * integral from a to b of f(x) dx to compute mean output over an interval, and interprets the result in context (e.g., average temperature, average velocity).",
+      "ced_topics": ["8.1"],
+      "yield_score": 0.75,
+      "yield_rationale": "Average value appears in MC every year and as FRQ sub-parts (2025 Q1, 2024 Q1 coffee temperature); formula recognition plus integral evaluation; moderate-high frequency.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u8_avg_value_formula_setup",
+          "label": "Setting Up the Average-Value Integral",
+          "description": "Write the expression (1/(b-a)) * integral_a^b f(x) dx for a given function and interval, identifying the correct limits and integrand from a verbal or graphical prompt.",
+          "yield_score": 0.72,
+          "yield_rationale": "Formula setup is the entry step for every average-value question; tested in MC and as the first sub-part of applied FRQs.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_avg_value_formula_evaluate",
+          "label": "Evaluating the Average-Value Integral",
+          "description": "Compute (1/(b-a)) * integral_a^b f(x) dx by finding an antiderivative (or applying FTC Part 2) and simplifying to a numeric result.",
+          "yield_score": 0.75,
+          "yield_rationale": "Evaluation of the definite integral is tested directly; combines antiderivative fluency with the average-value scale factor; high MC and FRQ sub-part frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_avg_value_contextual_interpretation",
+          "label": "Interpreting Average Value in Context",
+          "description": "State what the average value represents in applied terms with correct units (e.g., 'the average temperature in degrees Celsius over the interval [0, 3]'); distinguish average value of f from average rate of change.",
+          "yield_score": 0.70,
+          "yield_rationale": "Contextual interpretation sub-parts are required in nearly every applied FRQ; units and verbal interpretation are graded separately from computation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_avg_value_from_table_or_graph",
+          "label": "Estimating Average Value from a Table or Graph",
+          "description": "Approximate (1/(b-a)) * integral_a^b f(x) dx when f is given numerically or graphically, using a Riemann sum or geometric area estimate as a substitute for the exact integral.",
+          "yield_score": 0.65,
+          "yield_rationale": "Table-based and graph-based average-value estimation appears in FRQ Part A (calculator) and occasionally in data-table FRQs; moderate frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_avg_value_vs_mean_value_theorem",
+          "label": "Connecting Average Value to the Mean Value Theorem for Integrals",
+          "description": "Apply the Mean Value Theorem for Integrals to guarantee the existence of a point c in (a, b) where f(c) equals the average value; state the required hypotheses (continuity on [a, b]).",
+          "yield_score": 0.45,
+          "yield_rationale": "MVT-for-integrals appears less frequently than the average-value computation itself; tested as a justification MC item or FRQ sub-part roughly every 2-3 years.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u8_particle_motion_integrals",
+      "label": "Particle Motion via Integration",
+      "description": "Recovers position from velocity (and velocity from acceleration) by integration; distinguishes net displacement (signed integral of velocity) from total distance traveled (integral of |v(t)|, split at sign changes); applies FTC Part 2 to evaluate definite integrals of v(t).",
+      "ced_topics": ["8.2"],
+      "yield_score": 0.92,
+      "yield_rationale": "Particle motion is the single most common FRQ archetype (appears ~80% of exam years, including 2021 Q2, 2022 Q6, 2023 Q2, 2024 Q2, 2025 Q5); total-distance vs displacement distinction is tested every year; unit weight 10-15% plus FRQ centrality gives highest yield in unit.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u8_pm_displacement_from_velocity_integral",
+          "label": "Net Displacement as a Definite Integral of Velocity",
+          "description": "Compute net (signed) displacement s(b) - s(a) = integral_a^b v(t) dt; interpret the sign of the result as net leftward or rightward movement.",
+          "yield_score": 0.90,
+          "yield_rationale": "Net displacement via integral is a core FRQ sub-part in every particle motion question; among the most frequently tested skills in Unit 8.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_pm_total_distance_split_at_zeros",
+          "label": "Total Distance Traveled by Splitting at Sign Changes of v(t)",
+          "description": "Find all t in (a, b) where v(t) = 0 (changes sign), split the interval, and compute total distance = integral_a^b |v(t)| dt = sum of absolute values of sub-integrals.",
+          "yield_score": 0.92,
+          "yield_rationale": "Total distance is the defining distinction from displacement; tested as a required FRQ sub-part in virtually every particle motion problem; highest-frequency Unit 8 skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_pm_position_from_initial_condition",
+          "label": "Finding Position at Time t Given s(t_0)",
+          "description": "Use s(t) = s(t_0) + integral_{t_0}^{t} v(u) du to find position at a specific time, combining the initial position with the accumulated displacement.",
+          "yield_score": 0.88,
+          "yield_rationale": "Position recovery from an initial condition and v(t) is a standard FRQ sub-part; appears in nearly every particle motion FRQ.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_pm_velocity_from_acceleration_integral",
+          "label": "Recovering Velocity from Acceleration by Integration",
+          "description": "Compute v(t) = v(t_0) + integral_{t_0}^{t} a(u) du; apply an initial velocity condition to determine the constant of integration.",
+          "yield_score": 0.78,
+          "yield_rationale": "Velocity-from-acceleration via integration appears as a sub-part in some particle motion FRQs and in MC; slightly less frequent than the velocity-to-position direction.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_pm_net_displacement_signed_integral_sign_change",
+          "label": "Net Displacement via ∫v(t)dt When v(t) Changes Sign",
+          "description": "Determine net displacement on [a, b] by evaluating the signed integral ∫_a^b v(t) dt even when v(t) changes sign on the interval; contrast the signed result (net displacement) with the sum of absolute sub-integrals (total distance); recognize that cancellation of positive and negative areas yields the correct net displacement.",
+          "yield_score": 0.82,
+          "yield_rationale": "The conceptual distinction between signed integral (net displacement) and geometric area (total distance) when v(t) crosses zero is the core C8 integration skill; tested every year in particle motion FRQ and MC; distinct from the direction/speed skills (C4) because it requires evaluating the definite integral and interpreting cancellation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_pm_motion_from_graphical_v",
+          "label": "Reading Total Distance and Displacement from a Graph of v(t)",
+          "description": "Given a graph of v(t), identify where v changes sign, use areas above/below the axis to compute displacement (signed sum of areas) and total distance (unsigned sum of areas).",
+          "yield_score": 0.85,
+          "yield_rationale": "Graph-of-v(t) problems appear in MC (Part B, calculator) and FRQ; reading signed vs unsigned area from a velocity graph is a perennial skill.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u8_accumulation_in_context",
+      "label": "Accumulation Functions and Definite Integrals in Applied Contexts",
+      "description": "Uses integral_a^b rate(t) dt to compute net change in a quantity given a rate function; interprets the result in context (e.g., total gallons added, net change in fish population); applies to flow-in/flow-out scenarios where net accumulation equals the difference of two rate integrals.",
+      "ced_topics": ["8.3"],
+      "yield_score": 0.88,
+      "yield_rationale": "Rate-accumulation FRQs appear every year (2019 Q1 fish, 2021 Q1 bacteria, 2023 Q1 gasoline, 2025 Q3 reading rates); second-most-frequent FRQ archetype in Unit 8; tested in both calculator and no-calculator sections.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u8_accum_net_change_from_rate_integral",
+          "label": "Net Change as integral_a^b rate(t) dt",
+          "description": "Set up and evaluate a definite integral of a rate function to find the total net change in a quantity over an interval; identify the integrand as a rate (units per time) and the result as an accumulated quantity (units).",
+          "yield_score": 0.88,
+          "yield_rationale": "Net-change-from-rate is the foundational accumulation skill; appears as the first sub-part of every rate/data FRQ; among the most tested concepts in Unit 8.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_accum_units_and_context_interpretation",
+          "label": "Interpreting the Integral in Applied Context with Units",
+          "description": "State what integral_a^b R(t) dt represents in context, including appropriate units derived from units of R times units of t; explain the meaning of the value to the reader (e.g., 'the total gallons of water pumped from t = 0 to t = 5 hours').",
+          "yield_score": 0.85,
+          "yield_rationale": "Units and contextual interpretation earn dedicated FRQ points every year; partial credit explicitly awarded for correct interpretation even with wrong arithmetic.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_accum_flow_in_flow_out",
+          "label": "Net Accumulation with Competing Rate Functions (Flow-In / Flow-Out)",
+          "description": "Compute net change as integral_a^b [R_in(t) - R_out(t)] dt when two rate functions act simultaneously; determine whether the total quantity increases or decreases over a given interval.",
+          "yield_score": 0.80,
+          "yield_rationale": "Two-rate (in/out) scenarios appear in FRQs roughly every 2 years (2019 Q1, 2021 Q1 type); students must correctly combine the two rate integrals with appropriate signs.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_accum_total_quantity_at_time_t",
+          "label": "Finding Total Quantity at Time t from an Initial Value",
+          "description": "Compute Q(t) = Q(a) + integral_a^t R(u) du using an initial condition Q(a) and a rate function R; evaluate or estimate using a Riemann sum when an antiderivative is unavailable.",
+          "yield_score": 0.82,
+          "yield_rationale": "Total-quantity-at-time-t using an initial condition appears in most rate/data FRQs; pairs initial condition interpretation with FTC Part 2 or numerical evaluation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_accum_piecewise_linear_graph_trapezoids",
+          "label": "Net Accumulation from a Piecewise-Linear Rate Graph Using Trapezoids",
+          "description": "Compute net accumulation over [a, b] when the rate function is given as a piecewise linear graph: read trapezoid (and triangle) areas directly from the graph segments without a formula, accumulate signed areas to find the net change in the underlying quantity.",
+          "yield_score": 0.80,
+          "yield_rationale": "Piecewise-linear graph accumulation is a distinct C8 context tested in FRQ and MC; students must identify the geometric shapes formed by each linear piece and sum signed areas; appears in rate/data and particle motion FRQs where v(t) or R(t) is a polygonal graph.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u8_area_between_curves_x",
+      "label": "Area Between Curves as Functions of x",
+      "description": "Sets up and evaluates integral_a^b [f(x) - g(x)] dx for regions bounded above by f and below by g; finds intersection points algebraically to determine limits of integration; handles cases where the top/bottom curve switches within the interval.",
+      "ced_topics": ["8.4", "8.6"],
+      "yield_score": 0.92,
+      "yield_rationale": "Area between curves (x-integration) is one of the highest-frequency FRQ topics; standalone or sub-part in ~70% of exam years (2025 Q2, 2024 Q6, 2022 Q2); CED topic 8.4 combined with 8.6 (multi-intersection) captures the full x-area skill set.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u8_area_x_intersection_points",
+          "label": "Finding Intersection Points to Determine Limits of Integration",
+          "description": "Solve f(x) = g(x) algebraically (or numerically with a calculator) to find the x-values that bound the enclosed region; verify which function is on top in each sub-interval.",
+          "yield_score": 0.88,
+          "yield_rationale": "Finding intersection points is the mandatory setup step for every area-between-curves problem; tested independently in MC and as the first FRQ sub-part.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_area_x_top_minus_bottom_setup",
+          "label": "Setting Up the 'Top Minus Bottom' Area Integral",
+          "description": "Write integral_a^b [f(x) - g(x)] dx with correct orientation (f above g on [a,b]); identify the integrand as the vertical height of the cross-section at x.",
+          "yield_score": 0.90,
+          "yield_rationale": "Correct integral setup is required for both MC and FRQ credit; orientation errors are a common distractor; among the most-tested setup skills on the exam.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_area_x_evaluation_and_simplification",
+          "label": "Evaluating the Area Integral and Simplifying",
+          "description": "Compute the antiderivative of [f(x) - g(x)], apply the Fundamental Theorem of Calculus (FTC Part 2), and simplify to a positive numeric area value; include correct sign handling.",
+          "yield_score": 0.88,
+          "yield_rationale": "Evaluation step earns explicit FRQ points; requires antiderivative fluency and correct FTC application; high exam frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_area_x_split_at_multiple_intersections",
+          "label": "Splitting the Area Integral at Additional Intersection Points",
+          "description": "When two curves intersect at more than two points, split the region into sub-intervals at each intersection and sum absolute areas: total = integral |f(x) - g(x)| dx, computed as a sum of signed sub-integrals with correct orientation in each piece.",
+          "yield_score": 0.62,
+          "yield_rationale": "Multi-intersection area appears in MC regularly and occasionally in FRQ; students must identify all crossing points; slightly lower frequency than the simple two-boundary case.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_area_x_calculator_numeric_eval",
+          "label": "Computing Area Numerically with a Calculator",
+          "description": "Use a graphing calculator to evaluate a definite integral numerically when the integrand has no elementary antiderivative or intersection points require numeric solving; apply in the calculator-active FRQ section.",
+          "yield_score": 0.75,
+          "yield_rationale": "Calculator-active area problems require numerical integration; appears in FRQ Part A; students must know when to invoke calculator and how to write the setup expression.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u8_area_between_curves_y",
+      "label": "Area Between Curves as Functions of y",
+      "description": "Sets up and evaluates integral_c^d [right(y) - left(y)] dy for horizontally-oriented regions where curves are expressed (or re-expressed) as functions of y; determines which curve lies to the right for a given y-value.",
+      "ced_topics": ["8.5"],
+      "yield_score": 0.60,
+      "yield_rationale": "y-integration for area appears in MC most years and occasionally in FRQ; less frequent than x-integration (8.4) but a required skill tested roughly every 2 years; students must re-express x = g(y) forms.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u8_area_y_express_as_function_of_y",
+          "label": "Re-expressing Boundary Curves as Functions of y",
+          "description": "Rewrite x = f(y) by solving the original y = f(x) equation for x, or directly use the given x = g(y) form; identify the horizontal limits of integration in terms of y.",
+          "yield_score": 0.55,
+          "yield_rationale": "Rewriting equations as x = g(y) is the prerequisite algebraic step for all y-integration problems; tested in MC as a conversion task.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_area_y_right_minus_left_setup",
+          "label": "Setting Up the 'Right Minus Left' Integral in y",
+          "description": "Write integral_c^d [x_right(y) - x_left(y)] dy with the rightmost function first; identify the horizontal cross-section width at height y as the integrand.",
+          "yield_score": 0.60,
+          "yield_rationale": "Correct right-minus-left orientation is the key setup error students make; appears in MC and FRQ; moderate exam frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_area_y_find_y_bounds",
+          "label": "Finding y-Limits of Integration from Intersection Points",
+          "description": "Solve x_right(y) = x_left(y) for y (or identify y-coordinates of intersection points from a graph) to determine the y-values at which the region begins and ends.",
+          "yield_score": 0.55,
+          "yield_rationale": "Identifying y-bounds is the setup prerequisite; tested alongside right-minus-left setup in MC; moderate frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_area_y_evaluate_y_integral",
+          "label": "Evaluating the Area Integral with Respect to y",
+          "description": "Find an antiderivative of [x_right(y) - x_left(y)] with respect to y, apply FTC Part 2, and simplify to a numeric area; use a calculator when necessary in the calculator section.",
+          "yield_score": 0.58,
+          "yield_rationale": "Evaluation of the y-integral requires antiderivative fluency in y; tested in MC and occasionally FRQ; slightly lower frequency than x-direction evaluation.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u8_cross_section_volumes",
+      "label": "Volumes with Known Cross Sections",
+      "description": "Computes volumes by integrating cross-sectional areas perpendicular to an axis: V = integral A(x) dx, where A(x) is determined by the shape (square, rectangle, equilateral triangle, or semicircle) and the edge length (or diameter) derived from the bounding curves.",
+      "ced_topics": ["8.7", "8.8"],
+      "yield_score": 0.72,
+      "yield_rationale": "Cross-section volume (squares and rectangles) appears in FRQ regularly (2024 Q6); triangular and semicircular cross sections appear in MC; combined topics cover a coherent skill set tested most years.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u8_cs_square_cross_section_setup",
+          "label": "Setting Up Volume Integral with Square Cross Sections",
+          "description": "Identify the side length of each square cross section as f(x) - g(x) (or g(y) - f(y)), write A(x) = [f(x) - g(x)]^2, and set up V = integral_a^b [f(x) - g(x)]^2 dx.",
+          "yield_score": 0.75,
+          "yield_rationale": "Square cross sections are the most common cross-section type in FRQ (2024 Q6); setup is the critical skill; appears in FRQ and MC.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_cs_rectangle_cross_section_with_given_ratio",
+          "label": "Rectangular Cross Sections with a Prescribed Height-to-Base Ratio",
+          "description": "Given that height = k * base (where base = f(x) - g(x)), write A(x) = k * [f(x) - g(x)]^2 and set up the corresponding volume integral; read the ratio k from the problem statement.",
+          "yield_score": 0.68,
+          "yield_rationale": "Rectangular cross sections with a given ratio (e.g., h = b/2) appear in FRQ (2024 Q6 type) and MC; slightly less common than pure-square cross sections.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_cs_equilateral_triangle_cross_section",
+          "label": "Volume with Equilateral-Triangle Cross Sections",
+          "description": "Use A(x) = (sqrt(3)/4) * s^2 where s = f(x) - g(x) is the side length; set up V = integral (sqrt(3)/4)[f(x)-g(x)]^2 dx.",
+          "yield_score": 0.55,
+          "yield_rationale": "Equilateral-triangle cross sections appear in MC most years; formula recall is the primary test; moderate frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_cs_semicircle_cross_section",
+          "label": "Volume with Semicircular Cross Sections",
+          "description": "Use A(x) = (pi/2) * (diameter/2)^2 = pi/8 * [f(x)-g(x)]^2 when the diameter equals the base width; set up the corresponding integral.",
+          "yield_score": 0.55,
+          "yield_rationale": "Semicircular cross sections appear in MC; requires identifying that the diameter (not radius) is given by the curve spacing; moderate frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_cs_volume_integral_evaluation",
+          "label": "Evaluating the Cross-Section Volume Integral",
+          "description": "Compute the definite integral of A(x) over [a, b] using antiderivative rules or a calculator; simplify algebraic expressions for A(x) before integrating to avoid errors.",
+          "yield_score": 0.65,
+          "yield_rationale": "Evaluation earns FRQ points and is tested in MC; requires combining antiderivative fluency with the correct area formula; moderate-high frequency.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u8_disc_method",
+      "label": "Volume by Disc Method",
+      "description": "Computes the volume of a solid of revolution by integrating circular disc cross sections: V = pi * integral [R(x)]^2 dx around the x-axis (or analogous around the y-axis); extends to revolution around horizontal or vertical axes y = k or x = k by adjusting the radius expression.",
+      "ced_topics": ["8.9", "8.10"],
+      "yield_score": 0.82,
+      "yield_rationale": "Disc method is high-frequency in FRQ and MC most years, often combined with the area problem (Archetype 3); appears in both standard-axis and offset-axis forms; unit weight plus FRQ centrality gives high yield.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u8_disc_setup_x_axis",
+          "label": "Disc Method Integral Setup Around the x-Axis",
+          "description": "Write V = pi * integral_a^b [f(x)]^2 dx for a region between y = f(x) and y = 0 revolved around the x-axis; identify f(x) as the radius R(x) of each disc.",
+          "yield_score": 0.85,
+          "yield_rationale": "Standard disc setup around the x-axis is the most frequently tested volume configuration; appears in FRQ and MC every year or nearly so.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_disc_setup_y_axis",
+          "label": "Disc Method Integral Setup Around the y-Axis",
+          "description": "Write V = pi * integral_c^d [g(y)]^2 dy for a region revolved around the y-axis; re-express x = g(y) and identify integration bounds in y.",
+          "yield_score": 0.65,
+          "yield_rationale": "y-axis disc revolution appears in MC regularly; less common in FRQ than x-axis version; requires re-expression in terms of y.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_disc_offset_horizontal_axis",
+          "label": "Disc Method Around a Horizontal Axis y = k (Non-Standard)",
+          "description": "Adjust the disc radius when revolving around y = k (k != 0): radius R(x) = f(x) - k (if k is below the curve) or R(x) = k - f(x) (if k is above); substitute into V = pi * integral R(x)^2 dx.",
+          "yield_score": 0.62,
+          "yield_rationale": "Non-standard horizontal axis (e.g., y = 2 or y = -1) appears in MC and occasionally FRQ; radius adjustment is the key error point; moderate frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_disc_evaluate_and_simplify",
+          "label": "Evaluating the Disc Volume Integral",
+          "description": "Expand [R(x)]^2 (if needed), find the antiderivative, apply FTC Part 2, and multiply by pi; use a calculator for numerical evaluation in the calculator-active section.",
+          "yield_score": 0.80,
+          "yield_rationale": "Evaluation earns FRQ points; pi factor must be carried correctly; arithmetic errors on squaring the radius expression are the most common distractor; high frequency.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u8_washer_method",
+      "label": "Volume by Washer Method",
+      "description": "Computes the volume of a solid of revolution with a hole by subtracting the inner disc from the outer disc: V = pi * integral ([R(x)]^2 - [r(x)]^2) dx; identifies outer radius R and inner radius r from the geometry; extends to non-standard axes of revolution.",
+      "ced_topics": ["8.11", "8.12"],
+      "yield_score": 0.87,
+      "yield_rationale": "Washer method is among the most-tested volume techniques; appears in FRQ most years (2022 Q2, 2025 Q2); R-squared minus r-squared setup with correct radii is a perennial FRQ sub-part; combined topics 8.11-8.12 give high yield.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u8_washer_identify_outer_inner_radii",
+          "label": "Identifying Outer Radius R and Inner Radius r from the Region Geometry",
+          "description": "Given two bounding curves revolved around an axis, determine which curve produces the outer radius R(x) (farther from the axis) and which produces the inner radius r(x) (closer to the axis).",
+          "yield_score": 0.88,
+          "yield_rationale": "Correct identification of R vs r is the most commonly tested conceptual step in washer problems; confusion between the two is the primary distractor in MC; high frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_washer_setup_standard_axis",
+          "label": "Washer Method Integral Setup Around x- or y-Axis",
+          "description": "Write V = pi * integral_a^b ([R(x)]^2 - [r(x)]^2) dx for revolution around the x-axis, or V = pi * integral_c^d ([R(y)]^2 - [r(y)]^2) dy for the y-axis; state the correct orientation.",
+          "yield_score": 0.87,
+          "yield_rationale": "Standard-axis washer setup is tested in FRQ every year or nearly so; the formula structure is expected to be recalled and correctly applied.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_washer_offset_axis_radius_adjustment",
+          "label": "Adjusting Radii for Revolution Around a Non-Standard Axis",
+          "description": "When the axis is y = k or x = k (k != 0), compute outer and inner radii as |f(x) - k| and |g(x) - k| respectively; handle cases where k lies between the two curves vs outside them.",
+          "yield_score": 0.68,
+          "yield_rationale": "Non-standard axis washers (e.g., y = -1 or y = 3) appear in MC and occasionally FRQ; radius adjustment expressions require careful sign analysis; moderate-high frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_washer_setup_vs_disc_distinguish",
+          "label": "Recognizing When to Use Washer vs Disc Method",
+          "description": "Determine whether a solid has a hole (washer needed) or is solid (disc only); identify when the inner radius is zero (collapsing to disc formula) versus non-zero; articulate the difference in setup.",
+          "yield_score": 0.72,
+          "yield_rationale": "Washer-vs-disc discrimination is a standard MC question type; common distractor is applying the disc formula to a two-curve region that requires a washer; tested most years.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_washer_evaluate_volume_integral",
+          "label": "Evaluating the Washer Volume Integral",
+          "description": "Compute pi * integral ([R(x)]^2 - [r(x)]^2) dx by expanding squares, integrating term by term, applying FTC Part 2, and multiplying by pi; use a calculator when expressions are complex.",
+          "yield_score": 0.82,
+          "yield_rationale": "Evaluation is the final step of every washer FRQ sub-part; correct arithmetic on subtracted squared terms is required; high frequency in FRQ and MC.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u8_arc_length",
+      "label": "Arc Length of a Smooth Curve",
+      "description": "Computes the arc length (total path length) of a smooth curve y = f(x) on [a, b] using L = integral_a^b sqrt(1 + [f'(x)]^2) dx; interprets arc length as total distance traveled along a path when position is given as a differentiable function.",
+      "ced_topics": ["8.13"],
+      "yield_score": 0.35,
+      "yield_rationale": "Arc length is the lowest-yield Unit 8 topic per the spec's anchor (arc length 0.35); tested as an occasional MC item or FRQ concept but not a high-frequency standalone question; formula recognition is the primary skill tested.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u8_arc_length_formula_setup",
+          "label": "Setting Up the Arc Length Integral",
+          "description": "Write L = integral_a^b sqrt(1 + [f'(x)]^2) dx for a given differentiable function y = f(x); identify f'(x) and substitute correctly into the radicand.",
+          "yield_score": 0.35,
+          "yield_rationale": "Formula setup is the primary tested skill for arc length; appears in MC roughly every 2-3 years; rarely an FRQ standalone question.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_arc_length_derivative_computation",
+          "label": "Computing f'(x) for the Arc Length Integrand",
+          "description": "Differentiate f(x) to find f'(x) and substitute into 1 + [f'(x)]^2; simplify the expression inside the square root before attempting integration or numeric evaluation.",
+          "yield_score": 0.30,
+          "yield_rationale": "Derivative computation for arc length is a prerequisite sub-step; rarely isolated in its own question; tested as part of the full setup in MC.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_arc_length_numeric_evaluation",
+          "label": "Evaluating the Arc Length Integral Numerically",
+          "description": "Use a calculator to evaluate integral_a^b sqrt(1 + [f'(x)]^2) dx numerically, since the integrand rarely has a clean antiderivative; state the numerical result with appropriate units.",
+          "yield_score": 0.30,
+          "yield_rationale": "Numeric evaluation of arc length is the computation step when the integral is calculator-active; appears as a calculator-section MC item; low standalone frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_arc_length_distance_interpretation",
+          "label": "Interpreting Arc Length as Total Distance Traveled",
+          "description": "Connect the arc length formula to the concept of total distance traveled when a position curve y = f(x) represents a path; distinguish arc length (spatial path length) from displacement (straight-line distance between endpoints).",
+          "yield_score": 0.25,
+          "yield_rationale": "Conceptual interpretation of arc length as total path distance appears as a verbal MC or FRQ interpretation question; low frequency, primarily conceptual.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u8_ftc_and_accumulation_functions",
+      "label": "FTC Applied to Accumulation in Unit 8 Contexts",
+      "description": "Applies FTC Part 2 in genuinely Unit 8 contexts: compares accumulated values across multiple points using signed area reasoning; relates the integral of a rate to a net quantity change in an applied scenario; interprets an accumulation integral when the rate function is defined by a formula in one sub-interval and a graph in another (hybrid piecewise context). The pure FTC Part 1 analysis of F(x) = integral_a^x f(t) dt (derivatives, extrema, concavity, single-point evaluation) lives in calc_unit_6.",
+      "ced_topics": ["8.3", "8.2"],
+      "yield_score": 0.80,
+      "yield_rationale": "C8-specific FTC application contexts — comparative area reasoning, hybrid rate definitions, and accumulation with unit/context interpretation — appear in FRQ and MC; narrowed from original umbrella after removing four C6 duplicates; yield reflects the remaining genuinely C8 skills.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u8_ftc_compare_F_values_using_areas",
+          "label": "Comparing F Values at Different Points Using Area",
+          "description": "Determine which of F(a), F(b), F(c) is largest or smallest by comparing the accumulated signed areas from a common starting point; reason about net area without computing exact values.",
+          "yield_score": 0.75,
+          "yield_rationale": "Comparative F-value reasoning appears in MC and FRQ; requires understanding that F(b) - F(a) = integral_a^b f is positive or negative based on f's sign on the interval. Retained as the one skill here that is genuinely distinct from any single C6 evaluation keyword.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_ftc_rate_formula_plus_graph_hybrid",
+          "label": "Accumulation When the Rate Is a Formula on One Sub-interval and a Graph on Another",
+          "description": "Compute total accumulation over [a, b] when the rate function R(t) is given by an algebraic formula on [a, c] and by a piecewise-linear or curve graph on [c, b]; split the integral at c, evaluate the formula piece analytically and the graph piece by area, then add results.",
+          "yield_score": 0.80,
+          "yield_rationale": "Hybrid rate definitions (part formula, part graph) appear in FRQ Part A/B and are a C8-specific presentation distinct from the pure-graph analysis of C6; students must integrate across the boundary between representations.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_ftc_accumulation_with_initial_value_and_units",
+          "label": "Applying FTC Part 2 to Find Total Quantity with Initial Value and Units in Context",
+          "description": "Compute Q(b) = Q(a) + integral_a^b R(t) dt in an applied word-problem setting; state the result with correct units derived from R's units times t's units; interpret the meaning of Q(b) in the problem's context (e.g., total gallons, net fish population change).",
+          "yield_score": 0.82,
+          "yield_rationale": "Applied FTC Part 2 with initial value and units is tested every year in rate/data FRQ; this is the core C8 application of FTC as opposed to the pure mathematical analysis of an accumulation function (C6); units and contextual meaning earn separate partial-credit points.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_ftc_net_vs_total_via_signed_integral",
+          "label": "Using FTC to Distinguish Net Change from Total Change in Context",
+          "description": "Identify when a problem requires net change (use the signed definite integral as-is) versus total change (split the interval at sign changes of R and sum absolute values); apply FTC Part 2 correctly in both cases and interpret the distinction in the applied context.",
+          "yield_score": 0.78,
+          "yield_rationale": "The net-vs-total distinction in an applied context (not just particle motion) is a recurring FRQ concept; students must decide whether to use the signed or unsigned integral and justify their choice; appears in rate FRQs and MC.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u8_integral_setup_and_expression_writing",
+      "label": "Writing and Interpreting Integral Expressions in Context",
+      "description": "Tests the ability to correctly write a definite integral expression that models a given quantity (area, volume, accumulated change, average value) from a verbal or graphical description, and to interpret what a given integral expression represents; includes selecting correct bounds, integrands, and constants.",
+      "ced_topics": ["8.1", "8.2", "8.3", "8.4"],
+      "yield_score": 0.80,
+      "yield_rationale": "Expression-writing and interpretation appear across all FRQ archetypes; partial credit is awarded for correctly writing the integral even if evaluation is wrong; high cross-topic frequency.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u8_expr_write_area_integral",
+          "label": "Writing an Integral Expression for Area from a Description",
+          "description": "Given a verbal or graphical description of a bounded region, write the definite integral expression (with correct bounds and top-minus-bottom or right-minus-left integrand) that represents its area, without evaluating.",
+          "yield_score": 0.70,
+          "yield_rationale": "Setting up (but not evaluating) an integral expression earns partial credit in FRQ; tested in both calculator and no-calculator sections; writing the expression is graded separately. Rescored below dedicated computation keywords (0.88–0.92) because setup-only is a sub-skill of the full area computation skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_expr_write_volume_integral",
+          "label": "Writing an Integral Expression for Volume from a Description",
+          "description": "Write V = pi * integral [R^2 - r^2] dx (or the cross-section form) from a geometric or graphical description; include the correct pi factor, radius expressions, and limits without evaluating.",
+          "yield_score": 0.70,
+          "yield_rationale": "Volume-expression setup earns independent FRQ credit; examiners may ask to 'write, but do not evaluate' the integral; tested every year the volume archetype appears. Rescored below dedicated volume computation keywords (0.80–0.87) because setting up the expression alone is a sub-skill of the full computation skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_expr_interpret_given_integral",
+          "label": "Interpreting What a Given Integral Expression Represents",
+          "description": "Read an integral expression in context and state in words what it represents, including units; distinguish between integrals representing area, net change, total distance, average value, or accumulated quantity.",
+          "yield_score": 0.78,
+          "yield_rationale": "Interpretation questions appear in MC (matching integral to description) and FRQ (explain in context); verbal interpretation earns partial credit and is tested independently of computation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u8_expr_select_correct_integral_from_choices",
+          "label": "Selecting the Correct Integral Expression from Multiple Choices",
+          "description": "Identify the integral expression that correctly computes a described quantity (area, volume, average value) from four options; distinguish errors such as wrong bounds, reversed orientation, or missing scale factor.",
+          "yield_score": 0.76,
+          "yield_rationale": "MC items frequently present four candidate integral expressions; identifying the correct one requires careful reading of bounds and integrand; tests the full setup skill without evaluation.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,483 @@
+{
+  "category": {
+    "id": "calc_unit_3",
+    "label": "Differentiation: Composite, Implicit, and Inverse Functions",
+    "description": "Extends basic differentiation to composite functions via the chain rule, equations defined implicitly in x and y, and inverse and inverse-trigonometric functions. These techniques underpin virtually every complex derivative computation in the course.",
+    "section": "calc_ab",
+    "ced_unit": "AP Calc AB Unit 3",
+    "courses": [
+      { "course": "calc_ab", "role": "core", "order_index": 3 }
+    ],
+    "yield_score": 0.88,
+    "yield_rationale": "9-13% exam weight; chain rule embedded in almost every FRQ; implicit differentiation owns its own dedicated FRQ archetype (archetype 7) appearing most years; ~15 cumulative FRQ appearances 2012-2025."
+  },
+  "umbrellas": [
+    {
+      "id": "chain_rule_fundamentals",
+      "label": "Chain Rule — Fundamentals",
+      "description": "Identifies the inner and outer function in a composite and applies d/dx[f(g(x))] = f'(g(x)) · g'(x) in a single differentiation step.",
+      "ced_topics": ["3.1"],
+      "yield_score": 0.95,
+      "yield_rationale": "Topic 3.1 is the single highest-yield topic in the course per the CED outline; chain rule is embedded in nearly 100% of FRQs and is the anchor skill for units 3-7.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "chain_rule_outer_power_inner_linear",
+          "label": "Chain Rule: Outer Power, Linear Inner Function",
+          "description": "Differentiates a composite of the form (ax + b)^n by identifying the power as outer and the linear expression as inner; tests the most basic application of the chain rule before non-linear inners.",
+          "yield_score": 0.80,
+          "yield_rationale": "Entry-level chain rule application; appears in MC Part A every year as a warm-up composite; prerequisite for all harder chain rule variants.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "chain_rule_outer_power_inner_polynomial",
+          "label": "Chain Rule: Outer Power, Polynomial Inner Function",
+          "description": "Differentiates (p(x))^n where p(x) is a polynomial of degree ≥ 2; requires correctly bringing down the exponent, reducing it, and multiplying by p'(x).",
+          "yield_score": 0.88,
+          "yield_rationale": "High-frequency MC form; appears as a sub-step in almost every complex FRQ derivative; failure to multiply by p'(x) is the single most common distractor.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "chain_rule_with_nested_trig",
+          "label": "Chain Rule: Composite Trigonometric Function",
+          "description": "Differentiates sin(g(x)), cos(g(x)), tan(g(x)), etc., where g(x) is a non-identity expression; tests the student's ability to pair the correct trig derivative formula with the chain factor g'(x).",
+          "yield_score": 0.92,
+          "yield_rationale": "Trig-composite derivatives appear in MC and FRQ every year; connects unit 3 to the trig derivatives from unit 2 and frequently appears in implicit differentiation setups.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "chain_rule_with_exponential_composite",
+          "label": "Chain Rule: Composite Exponential e^(g(x))",
+          "description": "Differentiates e^(g(x)) using the rule d/dx[e^(g(x))] = e^(g(x)) · g'(x); tests that the student does not drop the chain factor and recognizes that e^u is its own derivative.",
+          "yield_score": 0.90,
+          "yield_rationale": "e^(g(x)) appears throughout units 4-7 (related rates, DEs, accumulation); failure to apply the chain factor is the canonical distractor.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "chain_rule_with_log_composite",
+          "label": "Chain Rule: Composite Natural Log ln(g(x))",
+          "description": "Differentiates ln(g(x)) using d/dx[ln(g(x))] = g'(x)/g(x); tests that the student applies the chain factor in the numerator and uses the correct base formula.",
+          "yield_score": 0.82,
+          "yield_rationale": "ln(g(x)) derivatives appear in MC and as sub-steps in implicit differentiation and DE problems; connects units 3, 6, and 7.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "chain_rule_identify_inner_outer",
+          "label": "Chain Rule: Identifying Inner and Outer Functions",
+          "description": "Given a composite expression, correctly labels the outer function f and inner function g before differentiating; tests conceptual decomposition as a distinct skill from execution.",
+          "yield_score": 0.70,
+          "yield_rationale": "Appears as a MC concept-check item and is the foundational sub-skill that, when missing, causes systematic chain rule errors on all subsequent composite problems.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "chain_rule_multiple_layers",
+      "label": "Chain Rule — Multiple Nested Layers",
+      "description": "Applies the chain rule repeatedly when a composite has three or more nested functions, such as sin²(3x) or e^(tan(x²)); requires tracking each layer and multiplying all chain factors.",
+      "ced_topics": ["3.1"],
+      "yield_score": 0.82,
+      "yield_rationale": "Multi-layer composites appear regularly in MC Part A and as embedded steps in FRQ derivative computations; a student who can handle two-layer composites but not three fails a measurable share of exam items.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "chain_rule_triple_nested_power_trig",
+          "label": "Chain Rule: Triple Nesting with Power and Trig",
+          "description": "Differentiates an expression such as sin^n(g(x)) by applying the power-chain rule to the outer power, then the trig derivative, then the inner function; tests complete bookkeeping of three chain factors.",
+          "yield_score": 0.78,
+          "yield_rationale": "This structure (e.g., sin²(3x)) is a perennial MC item; students frequently drop the innermost chain factor, making it an ideal distractor-rich problem.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "chain_rule_product_times_composite",
+          "label": "Chain Rule Combined with Product Rule",
+          "description": "Differentiates a product where one or both factors are composites; requires deciding the outer differentiation structure (product rule) and then applying chain rule within each factor.",
+          "yield_score": 0.88,
+          "yield_rationale": "Product-times-composite is the standard FRQ derivative setup (archetype 7 and particle motion); virtually every exam year includes at least one such problem.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "chain_rule_quotient_with_composite_numerator",
+          "label": "Chain Rule Combined with Quotient Rule",
+          "description": "Differentiates a quotient where numerator and/or denominator are composites; requires applying the quotient rule skeleton and then chain rule within each part.",
+          "yield_score": 0.80,
+          "yield_rationale": "Quotient-with-composite appears in MC Part A most years; common error is forgetting the chain factor inside the numerator derivative, making it a reliable distractor source.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "chain_rule_nested_exponential_polynomial",
+          "label": "Chain Rule: e^(polynomial) Nested Inside Another Function",
+          "description": "Differentiates a composite such as ln(e^(x²) + 1) or (e^(2x) + 3)^4 where the exponential is itself the inner function of a larger composite; tests multiple chain applications.",
+          "yield_score": 0.72,
+          "yield_rationale": "This structure links exponential and polynomial layers and appears in MC; it also surfaces in related-rates and DE setup sub-steps.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "chain_rule_verify_composite_decomposition",
+          "label": "Verify a Proposed Derivative of a Composite Is Correct",
+          "description": "Given a claimed derivative expression for a composite function, identifies whether it is correct or contains a missing/incorrect chain factor; tests chain rule understanding from an error-analysis angle.",
+          "yield_score": 0.62,
+          "yield_rationale": "Error-analysis and justification MC items appear in both Part A and Part B; checking a derivative for a missing chain factor is a standard wrong-answer explanation task.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "implicit_differentiation_setup",
+      "label": "Implicit Differentiation — Setup and dy/dx",
+      "description": "Differentiates an equation in x and y implicitly by applying the chain rule to every y term (treating y as a function of x), then isolates dy/dx algebraically.",
+      "ced_topics": ["3.2"],
+      "yield_score": 0.85,
+      "yield_rationale": "Topic 3.2 yield 0.85 per CED outline; implicit differentiation drives FRQ archetype 7 (2021 Q5, 2023 Q6, 2024 Q5, 2025 Q6); also appears in related rates (unit 4) and curve analysis (unit 5).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "implicit_diff_polynomial_relation",
+          "label": "Implicit Differentiation: Polynomial Relation in x and y",
+          "description": "Differentiates an implicit equation such as x³ + y³ = 6xy by differentiating each term with respect to x, applying chain rule on y terms to produce dy/dx factors, and collecting and solving for dy/dx.",
+          "yield_score": 0.85,
+          "yield_rationale": "Polynomial implicit relations are the most common FRQ form for implicit differentiation; correct factor placement and algebraic isolation are both tested.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "implicit_diff_with_product_term",
+          "label": "Implicit Differentiation: Equation Contains an xy Product Term",
+          "description": "Differentiates an implicit equation that includes a product of x and y (e.g., xy² + x²y = 5) by applying the product rule to the mixed term; tests that dy/dx factors appear correctly in both product rule slots.",
+          "yield_score": 0.88,
+          "yield_rationale": "The xy-product structure is the most common FRQ implicit differentiation setup; failing to apply product rule to the mixed term is the canonical student error and appears in nearly every archetype-7 FRQ.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "implicit_diff_with_trig_terms",
+          "label": "Implicit Differentiation: Equation Contains Trigonometric Terms in y",
+          "description": "Differentiates an implicit equation containing sin(y), cos(y), or tan(y) by combining the trig derivative formula with the chain rule chain factor dy/dx on each trig-of-y term.",
+          "yield_score": 0.78,
+          "yield_rationale": "Trig implicit equations appear in MC and FRQ; requires combining unit 2 trig derivatives with chain rule on y — a two-skill synthesis.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "implicit_diff_solve_for_dy_dx",
+          "label": "Implicit Differentiation: Algebraic Isolation of dy/dx",
+          "description": "After differentiating implicitly and obtaining an equation containing multiple dy/dx terms, collects all dy/dx terms on one side, factors them out, and divides to isolate dy/dx as a function of x and y.",
+          "yield_score": 0.82,
+          "yield_rationale": "The algebraic isolation step is tested both as a standalone MC skill and as a sub-step in FRQ; students who can differentiate but fail the algebra lose partial credit.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "implicit_diff_evaluate_at_point",
+          "label": "Implicit Differentiation: Evaluate dy/dx at a Given Point",
+          "description": "Substitutes a specific (x, y) coordinate pair into the dy/dx expression obtained by implicit differentiation to compute the slope of the tangent line at that point; tests numerical evaluation of a two-variable derivative expression.",
+          "yield_score": 0.90,
+          "yield_rationale": "Evaluating dy/dx at a point and interpreting it as a tangent slope is the most common FRQ sub-part for implicit differentiation; appears in nearly every archetype-7 question.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "implicit_diff_find_tangent_line",
+          "label": "Implicit Differentiation: Equation of the Tangent Line",
+          "description": "Uses the implicit derivative evaluated at a point to write the tangent line equation y − y₀ = m(x − x₀); tests the full workflow from curve equation to tangent line expression.",
+          "yield_score": 0.86,
+          "yield_rationale": "Tangent line to an implicit curve is a near-annual FRQ sub-part; combines implicit differentiation with point-slope form and is a standard exam deliverable.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "implicit_differentiation_advanced",
+      "label": "Implicit Differentiation — Advanced and Second Derivative",
+      "description": "Extends implicit differentiation to find the second derivative d²y/dx² implicitly (differentiating dy/dx itself implicitly and substituting the expression for dy/dx), and analyzes horizontal and vertical tangents on implicit curves.",
+      "ced_topics": ["3.2", "3.6"],
+      "yield_score": 0.78,
+      "yield_rationale": "Second implicit derivative appears in FRQ for concavity of implicit curves (archetype 7: 2023 Q6, 2024 Q5); horizontal/vertical tangents are a standard sub-part in the same archetype.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "implicit_diff_exp_log_in_y",
+          "label": "Implicit Differentiation: Equation with Exponential or Logarithmic Terms in y",
+          "description": "Differentiates an implicit equation that contains e^y, e^(f(y)), ln(y), or log expressions involving y by combining the standard exponential/log derivative formulas with the chain rule chain factor dy/dx on each such term; tests correct identification and treatment of the chain factor when the base or argument is y rather than x.",
+          "yield_score": 0.80,
+          "yield_rationale": "Exp/log terms in y are a distinct, higher-difficulty variant of implicit differentiation that appears in MC and FRQ; requires students to merge unit 2 (log/exp) derivative formulas with the implicit chain-rule dy/dx factor — a two-skill synthesis unique to unit 3.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "implicit_diff_verify_dy_dx_at_point",
+          "label": "Implicit Differentiation: Verify a dy/dx Expression by Checking a Sample Point",
+          "description": "Given a proposed closed-form expression for dy/dx obtained by implicit differentiation, substitutes a specific (x, y) point that lies on the curve into both sides of the original equation and into the derivative expression to confirm consistency; tests error-checking and conceptual ownership of the differentiation process rather than mechanical execution alone.",
+          "yield_score": 0.65,
+          "yield_rationale": "Error-analysis and justification items appear in MC Part A and Part B; verifying a derivative by substituting a known point on the curve is a distinct check-your-work skill that reinforces understanding without repeating the tangent-analysis content owned by unit 5.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "implicit_diff_second_deriv_trig_y_product",
+          "label": "Implicit Second Derivative: Equation with a Trig Function of y and a Product Term",
+          "description": "Differentiates dy/dx a second time implicitly when the original implicit equation contains a trig function of y (e.g., sin(y) or cos(y)) combined with a product term in x and y; requires applying the product rule, chain rule on the trig-of-y factor, and carrying the dy/dx chain factor correctly through both differentiation passes.",
+          "yield_score": 0.74,
+          "yield_rationale": "This structure synthesizes product-rule implicit differentiation with trig-of-y derivatives and the second-derivative implicit process in a form that is distinct from the pure polynomial implicit curve (x²+y²=r²) analyzed in unit 5; it isolates the mechanical challenge of the second differentiation pass without the behavioral-analysis context that CED 5.12 owns.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "implicit_diff_second_deriv_two_variable_unsimplified",
+          "label": "Implicit Second Derivative: d²y/dx² Left Unsimplified with Two Variable Terms",
+          "description": "Differentiates dy/dx implicitly to obtain d²y/dx² when the first derivative expression contains two variable terms (for example a sum of an x-term and a y-term in both numerator and denominator); keeps the result in an unsimplified form containing dy/dx and requires no substitution or numerical evaluation, testing the student's ability to execute the differentiation bookkeeping correctly before any simplification step.",
+          "yield_score": 0.70,
+          "yield_rationale": "Isolating the bookkeeping mechanics of the second implicit differentiation step from the substitution-and-concavity interpretation is a distinct in-unit skill; the 'keep unsimplified' framing tests step 1 of the full second-derivative workflow while leaving the interpretation and substitution steps to unit 5's concavity umbrella.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "inverse_function_derivative",
+      "label": "Differentiating Inverse Functions",
+      "description": "Applies the inverse function derivative formula (f⁻¹)'(a) = 1 / f'(f⁻¹(a)) to find the derivative of an inverse at a given value without explicitly finding the inverse function formula.",
+      "ced_topics": ["3.3"],
+      "yield_score": 0.65,
+      "yield_rationale": "Topic 3.3 yield 0.65 per CED outline; appears in MC most years; occasionally an FRQ sub-part; requires knowing a point on f and its derivative value simultaneously.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "inverse_deriv_formula_from_table",
+          "label": "Inverse Function Derivative from a Table of Values",
+          "description": "Uses a table giving values of f(x) and f'(x) to compute (f⁻¹)'(a) by identifying the x-value where f(x) = a, then computing 1 / f'(x) at that x; the most common exam representation of this skill.",
+          "yield_score": 0.72,
+          "yield_rationale": "Table-based inverse derivative questions appear in MC most years and are a standard Rate/Data-from-Tables FRQ sub-task; the table format makes the formula directly executable.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "inverse_deriv_formula_from_graph",
+          "label": "Inverse Function Derivative from a Graph of f",
+          "description": "Reads slope information from a graph of f to determine f'(f⁻¹(a)) and computes (f⁻¹)'(a); tests the student's ability to connect the geometric slope of f at the relevant point to the inverse derivative formula.",
+          "yield_score": 0.60,
+          "yield_rationale": "Graph-based inverse derivative appears in MC Part A; less common than the table form but tests the same formula from a different representation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "inverse_deriv_formula_analytic",
+          "label": "Inverse Function Derivative: Analytic Application of the Formula",
+          "description": "Given f(x) analytically and a value a, uses the formula (f⁻¹)'(a) = 1 / f'(f⁻¹(a)) by first finding f⁻¹(a) algebraically, then computing f' at that value; tests the full formula without a table.",
+          "yield_score": 0.55,
+          "yield_rationale": "Analytic inverse derivative appears in MC; harder than the table form and less frequent, but directly assesses formula mastery in isolation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "inverse_deriv_condition_one_to_one",
+          "label": "Inverse Differentiability: Checking the One-to-One Condition",
+          "description": "Identifies whether (f⁻¹)'(a) exists by verifying that f'(f⁻¹(a)) ≠ 0; tests understanding that the inverse derivative formula breaks down when f has a horizontal tangent at the relevant point.",
+          "yield_score": 0.42,
+          "yield_rationale": "The edge case f'(f⁻¹(a)) = 0 makes the inverse non-differentiable at that point; this appears as an MC justification item and tests conceptual understanding of the formula's domain.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "inverse_trig_derivatives",
+      "label": "Derivatives of Inverse Trigonometric Functions",
+      "description": "Applies the standard derivative formulas for arcsin, arccos, and arctan (and less commonly arcsec, arccsc, arccot), and combines them with the chain rule when the argument is a composite expression.",
+      "ced_topics": ["3.4"],
+      "yield_score": 0.70,
+      "yield_rationale": "Topic 3.4 yield 0.70 per CED outline; arctan and arcsin derivatives appear in MC regularly; inverse trig antiderivatives in unit 6 make this a gateway skill.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "arcsin_derivative_formula",
+          "label": "Derivative of arcsin(x): Basic Formula Application",
+          "description": "Applies d/dx[arcsin(x)] = 1/√(1−x²) to compute the derivative; tests recognition of the formula and correct square-root structure in the denominator.",
+          "yield_score": 0.65,
+          "yield_rationale": "arcsin derivative appears in MC and is a foundational formula for inverse trig antiderivatives in unit 6; the radical denominator is the most common error source.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "arctan_derivative_formula",
+          "label": "Derivative of arctan(x): Basic Formula Application",
+          "description": "Applies d/dx[arctan(x)] = 1/(1+x²) to compute the derivative; tests recognition of the 1+x² denominator and distinguishes arctan from arcsin.",
+          "yield_score": 0.72,
+          "yield_rationale": "arctan derivative is the most commonly tested inverse trig derivative on the AB exam; appears in MC every year and in u-sub setups in unit 6.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "arccos_derivative_formula",
+          "label": "Derivative of arccos(x): Formula and Sign",
+          "description": "Applies d/dx[arccos(x)] = −1/√(1−x²) and identifies the key difference from arcsin (the negative sign); tests whether the student can correctly distinguish and apply both formulas.",
+          "yield_score": 0.55,
+          "yield_rationale": "arccos derivative appears in MC and relies on knowing the negative-sign relationship to arcsin; less frequent than arctan but tested as a discrimination item.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "inverse_trig_chain_rule",
+          "label": "Inverse Trig Derivative Combined with Chain Rule",
+          "description": "Differentiates arcsin(g(x)), arctan(g(x)), or arccos(g(x)) by applying the inverse trig formula with g(x) substituted for x and then multiplying by the chain factor g'(x); tests the two-step composition.",
+          "yield_score": 0.78,
+          "yield_rationale": "Inverse trig composites appear in MC Part A and are embedded in implicit differentiation problems; the chain factor on top of the formula formula is the most error-prone step.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "inverse_trig_derivative_from_definition",
+          "label": "Derive the Inverse Trig Derivative Using Implicit Differentiation",
+          "description": "Derives d/dx[arctan(x)] or d/dx[arcsin(x)] from scratch by setting y = arctan(x) → tan(y) = x, differentiating implicitly, and using a Pythagorean trig identity to simplify; tests conceptual grounding of the formulas.",
+          "yield_score": 0.38,
+          "yield_rationale": "Derivation from implicit differentiation appears occasionally in MC as a conceptual item; less directly tested than application but reinforces the formula origin.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "selecting_differentiation_procedures",
+      "label": "Selecting Procedures for Calculating Derivatives",
+      "description": "Given a function requiring multiple differentiation rules (chain, product, quotient, implicit, inverse), identifies the correct rule order and combination strategy before executing; tests metacognitive strategy selection rather than a single rule.",
+      "ced_topics": ["3.5"],
+      "yield_score": 0.75,
+      "yield_rationale": "Topic 3.5 yield 0.75; strategy-selection MC questions appear every year; any FRQ 'find dy/dx' task implicitly requires this skill and it is a scoring bottleneck for multi-rule problems.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "strategy_chain_vs_product_recognition",
+          "label": "Differentiation Strategy: Distinguishing Chain Rule from Product Rule",
+          "description": "Given a function that could be misread as either a product or a composition (e.g., x·sin(x) vs sin(x²)), correctly identifies the structure and selects the appropriate rule; tests structural parsing of derivative expressions.",
+          "yield_score": 0.78,
+          "yield_rationale": "Misidentifying structure is the most common systematic error on derivative MC questions; this recognition skill is implicitly tested on every multi-term FRQ derivative.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "strategy_chain_inside_product",
+          "label": "Differentiation Strategy: Chain Rule Inside a Product Rule",
+          "description": "Correctly differentiates a product where one or both factors require the chain rule first; applies product rule as the outer operation and chain rule within each factor term.",
+          "yield_score": 0.85,
+          "yield_rationale": "This structure is the most common multi-rule derivative on the AP exam; virtually every archetype-7 FRQ and many MC items require product-then-chain application.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "strategy_chain_inside_quotient",
+          "label": "Differentiation Strategy: Chain Rule Inside a Quotient Rule",
+          "description": "Applies quotient rule as the outer operation to a rational expression where numerator and/or denominator are composite; correctly computes each composite derivative before substituting into the quotient formula.",
+          "yield_score": 0.76,
+          "yield_rationale": "Quotient-with-composites appear in MC Part A and as sub-steps in FRQ; failure to chain within the quotient rule components is a reliable exam distractor.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "strategy_implicit_multi_rule",
+          "label": "Differentiation Strategy: Implicit Differentiation Requiring Product and Chain Rules Simultaneously",
+          "description": "Differentiates an implicit equation containing both a product of x and y terms and composite trig or exponential terms, using product rule, chain rule, and implicit dy/dx factors in a single computation.",
+          "yield_score": 0.88,
+          "yield_rationale": "The hardest sub-task in archetype-7 FRQs; multi-rule implicit differentiation (product + chain inside implicit) appears in recent FRQs (2023 Q6, 2024 Q5, 2025 Q6) and demands complete rule orchestration.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "strategy_simplify_before_differentiating",
+          "label": "Differentiation Strategy: Simplify the Expression Before Applying Rules",
+          "description": "Recognizes when algebraic simplification (factoring, cancellation, rewriting a radical as a power) before differentiation avoids an unnecessarily complex multi-rule application.",
+          "yield_score": 0.58,
+          "yield_rationale": "Simplification-first strategy appears as an MC efficiency question and in FRQ as a check that students did not overcomplicate a derivative; moderate frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "strategy_logarithmic_differentiation",
+          "label": "Logarithmic Differentiation for Variable Exponent Functions",
+          "description": "Applies ln to both sides of y = [f(x)]^(g(x)) (where both base and exponent depend on x), differentiates implicitly using the log product rule, and solves for dy/dx; handles cases like x^x or (sin x)^x.",
+          "yield_score": 0.45,
+          "yield_rationale": "Logarithmic differentiation appears occasionally in MC and rarely in FRQ; it is the only clean technique for variable-exponent functions and is CED-adjacent to topic 3.5.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "higher_order_derivatives",
+      "label": "Higher-Order Derivatives",
+      "description": "Computes the second derivative f''(x) and occasionally f'''(x) by differentiating f'(x) using all applicable rules; interprets f'' in terms of concavity, acceleration, or the rate of change of a rate.",
+      "ced_topics": ["3.6"],
+      "yield_score": 0.80,
+      "yield_rationale": "Topic 3.6 yield 0.80; f'' is required for every concavity and inflection question in unit 5 and every acceleration sub-part in particle motion (unit 4); second derivative is tested on nearly every exam.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "second_derivative_polynomial",
+          "label": "Second Derivative of a Polynomial Function",
+          "description": "Computes f''(x) for a polynomial by applying the power rule twice; tests that each differentiation step is performed correctly and that constants differentiate to zero.",
+          "yield_score": 0.72,
+          "yield_rationale": "Polynomial second derivatives are the foundational form; appear in unit 5 concavity analysis and as the starting point for understanding f'' as acceleration.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "second_derivative_requires_chain_rule",
+          "label": "Second Derivative of a Composite Function",
+          "description": "Differentiates f'(x) — which itself contains a composite — a second time, correctly reapplying the chain rule; tests that chain rule is applied anew at the second differentiation step.",
+          "yield_score": 0.82,
+          "yield_rationale": "Second derivative of a composite is tested in MC and in FRQ when analyzing acceleration or concavity of functions defined by composites; dropping the chain factor on the second pass is a classic error.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "second_derivative_requires_product_rule",
+          "label": "Second Derivative of a Product Function",
+          "description": "Differentiates a product f'(x) a second time; because f'(x) may itself be a product, requires applying the product rule at the second step and simplifying correctly.",
+          "yield_score": 0.75,
+          "yield_rationale": "Second derivative of a product appears in MC and in FRQ concavity questions; students frequently apply product rule only once and miss the second-pass product structure.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "second_derivative_implicit",
+          "label": "Second Derivative via Implicit Differentiation",
+          "description": "Differentiates dy/dx implicitly to find d²y/dx², substituting the dy/dx expression back to write the result in terms of x and y only; used to determine concavity of implicitly defined curves.",
+          "yield_score": 0.70,
+          "yield_rationale": "Second implicit derivative appears in FRQ archetype 7 (2023 Q6, 2024 Q5); requires combining implicit and higher-order skills in a single problem.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "higher_order_interpret_acceleration",
+          "label": "Interpreting f'' as Acceleration in Particle Motion",
+          "description": "Computes a(t) = s''(t) = v'(t) and interprets its sign and magnitude in the context of a particle's motion; determines whether the particle is speeding up or slowing down at a given time.",
+          "yield_score": 0.88,
+          "yield_rationale": "Acceleration interpretation from f'' is a required sub-task in almost every particle motion FRQ (archetype 2: 2021 Q2, 2022 Q6, 2023 Q2, 2024 Q2, 2025 Q5); extremely high exam frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "higher_order_nth_derivative_pattern",
+          "label": "Finding a Pattern for the nth Derivative",
+          "description": "Identifies a repeating pattern in successive derivatives (e.g., sin/cos cycling, e^x invariance) to determine the nth derivative without computing all intermediate derivatives; tests pattern recognition in differentiation.",
+          "yield_score": 0.30,
+          "yield_rationale": "nth derivative pattern questions appear occasionally in MC Part A; low frequency but distinctly tested; useful for verifying solutions to differential equations in unit 7.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "chain_rule_from_tables_and_graphs",
+      "label": "Chain Rule from Tables and Graphs",
+      "description": "Evaluates derivatives of composite functions when the component functions are given by a table of values or a graph rather than an explicit formula; requires reading f'(g(a)) and g'(a) from the data and multiplying.",
+      "ced_topics": ["3.1", "3.5"],
+      "yield_score": 0.78,
+      "yield_rationale": "Table/graph-based chain rule evaluation is a standard MC representation and appears in Rate/Data-from-Tables FRQ sub-parts; connects the chain rule formula to the exam's multi-representation practice.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "chain_rule_evaluate_from_table",
+          "label": "Chain Rule: Evaluate a Composite Derivative from a Table of Values",
+          "description": "Given a table of values for f, f', g, and g' at selected x-values, computes h'(a) for h(x) = f(g(x)) by locating g(a) in the table, reading f'(g(a)), and multiplying by g'(a); a pure table-reading application of the chain rule.",
+          "yield_score": 0.82,
+          "yield_rationale": "Table-of-values chain rule evaluation appears in MC Part A and Part B most years; it is also a standard sub-task in Rate/Data-from-Tables FRQs where students must compute a composite derivative numerically.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "chain_rule_evaluate_from_graph",
+          "label": "Chain Rule: Evaluate a Composite Derivative from a Graph",
+          "description": "Reads tangent slopes from a graph of f and g to estimate f'(g(a)) · g'(a) for a composite h(x) = f(g(x)); tests graphical slope-reading in combination with the chain rule formula.",
+          "yield_score": 0.68,
+          "yield_rationale": "Graph-based composite derivative evaluation appears in MC and connects graphical reading (unit 2) to chain rule application; slope estimation from a graph is an exam-assessed skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "chain_rule_composite_with_implicit_at_point",
+          "label": "Chain Rule: Evaluate Derivative of a Composite at a Specific Point",
+          "description": "Given that h(x) = f(g(x)) and specific values for g(a), f'(g(a)), and g'(a) (stated directly or extracted from a function rule), computes h'(a) numerically; tests formula execution without ambiguity about which values to use.",
+          "yield_score": 0.75,
+          "yield_rationale": "Point-evaluation of a composite derivative is the most direct chain rule MC item; provides clean distractor opportunities for students who confuse f'(g(a)) with f'(a) or forget to multiply by g'(a).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "chain_rule_table_product_composite",
+          "label": "Chain Rule: Derivative of f(x)·g(h(x)) from a Table",
+          "description": "Computes the derivative of a product where one factor is a composite, using values from a table for each component function and its derivative; tests simultaneous application of the product rule and chain rule with numerical data.",
+          "yield_score": 0.70,
+          "yield_rationale": "Combined product-plus-chain evaluation from tables appears in MC Part B (calculator section) and in Rate/Data FRQ sub-parts; the product-times-composite structure is the most common exam form for this skill.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

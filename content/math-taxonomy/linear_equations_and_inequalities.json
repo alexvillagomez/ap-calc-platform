@@ -1,0 +1,1392 @@
+{
+  "category": {
+    "id": "linear_equations_and_inequalities",
+    "label": "Linear Equations and Inequalities",
+    "description": "Solving, rearranging, and interpreting one-variable linear equations and inequalities, including multi-step forms, literal equations, compound inequalities, and solution-set notation. Literal-equation fluency is prerequisite for parameter extraction in all downstream function-modeling topics.",
+    "section": "foundations",
+    "ced_unit": null,
+    "courses": [
+      { "course": "precalc", "role": "core", "order_index": 3 },
+      { "course": "calc_ab", "role": "foundation", "order_index": 3 }
+    ],
+    "yield_score": 0.62,
+    "yield_rationale": "Medium yield: solving linear equations feeds exponential/log/trig equation solving (2.13, 3.10), and literal-equation fluency is critical for extracting sinusoidal and exponential model parameters in all three AP Precalc units; interval notation is the language of domain/range throughout."
+  },
+  "umbrellas": [
+    {
+      "id": "linear_equation_foundations_core",
+      "label": "Linear Equation Foundations: Core Concepts",
+      "description": "Fundamental structural concepts behind one-variable linear equations: equality meaning, solution definition and verification, equivalent equations, balance principle, and inverse operations.",
+      "ced_topics": [],
+      "yield_score": 0.45,
+      "yield_rationale": "Foundational literacy; equality properties and isolation concept are background assumed by all downstream algebra but rarely the direct test object once functions are introduced.",
+      "source_learn_keyword_id": "linear_equation_foundations",
+      "in_depth": [
+        {
+          "id": "equation_statement_structure",
+          "label": "Equation statement structure",
+          "description": "Recognizes an equation as a statement that two expressions have equal value; identifies the left side, right side, and equals sign before any solving begins.",
+          "yield_score": 0.20,
+          "yield_rationale": "Pure structural literacy; prerequisite knowledge assumed in all later solving but not directly tested.",
+          "source_learn_keyword_id": "equation_statement_structure"
+        },
+        {
+          "id": "linear_equation_solution_meaning",
+          "label": "Meaning of a linear equation solution",
+          "description": "Distinguishes solving from rewriting; identifies that a solution is a value making the equation true and that most one-variable linear equations have exactly one solution.",
+          "yield_score": 0.30,
+          "yield_rationale": "Conceptual prerequisite; tested early but not revisited as a direct question type once solving is fluent.",
+          "source_learn_keyword_id": "linear_equation_solution_meaning"
+        },
+        {
+          "id": "linear_equation_solution_verification",
+          "label": "Solution verification for linear equations",
+          "description": "Checks a proposed solution by substituting it into both sides and comparing; targets errors where a value is produced but not validated against the original equation.",
+          "yield_score": 0.35,
+          "yield_rationale": "Verification strategy is exercised inside exponential and trig equation solving downstream but as a sub-step, not the focal skill.",
+          "source_learn_keyword_id": "linear_equation_solution_verification"
+        },
+        {
+          "id": "equivalent_linear_equations",
+          "label": "Equivalent linear equations",
+          "description": "Identifies whether two equations have the same solution set; recognizes that valid transformations preserve solutions while changing the equation's form.",
+          "yield_score": 0.28,
+          "yield_rationale": "Equivalence reasoning is implicit in all solving but rarely the isolated question target.",
+          "source_learn_keyword_id": "equivalent_linear_equations"
+        },
+        {
+          "id": "balance_principle_for_equations",
+          "label": "Balance principle for equations",
+          "description": "States that applying the same valid operation to both sides of an equation preserves equality; this is the structural rationale behind every algebraic solving step.",
+          "yield_score": 0.32,
+          "yield_rationale": "Conceptual anchor for all solving; not independently tested at AP level but is the diagnostic skill that catches one-sided operation errors.",
+          "source_learn_keyword_id": "balance_principle_for_equations"
+        },
+        {
+          "id": "inverse_operations_in_linear_equations",
+          "label": "Inverse operations in linear equations",
+          "description": "Identifies and applies inverse operations (addition-subtraction pair, multiplication-division pair) to undo operations on the variable and achieve isolation.",
+          "yield_score": 0.48,
+          "yield_rationale": "Inverse-operation reasoning generalizes directly to undoing exponential, logarithmic, and trigonometric operations in downstream units.",
+          "source_learn_keyword_id": "inverse_operations_in_linear_equations"
+        }
+      ]
+    },
+    {
+      "id": "linear_equation_foundations_properties",
+      "label": "Linear Equation Foundations: Properties and Solution Sets",
+      "description": "Properties of equality (addition, subtraction, multiplication, division), variable isolation as a goal, and solution-set representation for one-variable linear equations.",
+      "ced_topics": [],
+      "yield_score": 0.40,
+      "yield_rationale": "Properties of equality are the step-by-step justification behind solving; solution-set representation feeds downstream notation work.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "addition_property_of_equality",
+          "label": "Addition property of equality",
+          "description": "Adding the same quantity to both sides of an equation creates an equivalent equation; used to undo subtraction when isolating the variable.",
+          "yield_score": 0.38,
+          "yield_rationale": "Routine step in all multi-step solving; not independently high-yield but failures here propagate to every solving task.",
+          "source_learn_keyword_id": "addition_property_of_equality"
+        },
+        {
+          "id": "subtraction_property_of_equality",
+          "label": "Subtraction property of equality",
+          "description": "Subtracting the same quantity from both sides of an equation creates an equivalent equation; used to undo addition when isolating the variable.",
+          "yield_score": 0.38,
+          "yield_rationale": "Same load-bearing role as addition property; an arithmetic sub-step rather than an independent exam target.",
+          "source_learn_keyword_id": "subtraction_property_of_equality"
+        },
+        {
+          "id": "multiplication_property_of_equality",
+          "label": "Multiplication property of equality",
+          "description": "Multiplying both sides by the same nonzero quantity creates an equivalent equation; used to clear fractional coefficients or undo division.",
+          "yield_score": 0.42,
+          "yield_rationale": "Slightly higher than addition/subtraction because it involves the nonzero restriction and fractional-coefficient handling that reappear in literal equations.",
+          "source_learn_keyword_id": "multiplication_property_of_equality"
+        },
+        {
+          "id": "division_property_of_equality",
+          "label": "Division property of equality",
+          "description": "Dividing both sides by the same nonzero quantity creates an equivalent equation; used to undo multiplication by a coefficient in the final isolation step.",
+          "yield_score": 0.42,
+          "yield_rationale": "The most-used final step in linear equation solving; appears ubiquitously in literal equations and formula rearrangement.",
+          "source_learn_keyword_id": "division_property_of_equality"
+        },
+        {
+          "id": "variable_isolation_concept",
+          "label": "Variable isolation",
+          "description": "Identifies isolation as the goal of solving a one-variable linear equation; recognizes when a variable is or is not alone on one side of the equals sign.",
+          "yield_score": 0.45,
+          "yield_rationale": "The goal-state concept behind all solving; prerequisite for literal-equation rearrangement which is highly load-bearing.",
+          "source_learn_keyword_id": "variable_isolation_concept"
+        },
+        {
+          "id": "solution_set_single_value",
+          "label": "Single-value solution sets",
+          "description": "Represents the solution of a typical one-variable linear equation as a singleton set or a single statement; distinguishes one solution from no solution or all real numbers.",
+          "yield_score": 0.25,
+          "yield_rationale": "Notation literacy; not a frequently isolated exam question but necessary for solution-set communication.",
+          "source_learn_keyword_id": "solution_set_single_value"
+        },
+        {
+          "id": "equation_sides_with_variable_terms",
+          "label": "Variable terms on equation sides",
+          "description": "Recognizes whether variable terms appear on the left side only, the right side only, or both sides of an equation, guiding which moves are needed before isolating.",
+          "yield_score": 0.33,
+          "yield_rationale": "Structural scanning skill that precedes variable-collection steps; moderate diagnostic value.",
+          "source_learn_keyword_id": "equation_sides_with_variable_terms"
+        },
+        {
+          "id": "linear_equations_zero_coefficient_after_simplification",
+          "label": "Zero variable coefficient after simplification",
+          "description": "Recognizes that when variable terms cancel during simplification to produce 0·x, the equation has no variable and is either always true (identity) or always false (contradiction); identifies this structural fork before any isolation step is attempted.",
+          "yield_score": 0.52,
+          "yield_rationale": "The structural fork that explains both special cases; diagnostic value for recognizing when the variable disappears.",
+          "source_learn_keyword_id": "linear_equations_zero_coefficient_after_simplification"
+        }
+      ]
+    },
+    {
+      "id": "one_step_linear_equations_basic",
+      "label": "One-Step Linear Equations: Basic Operations",
+      "description": "One-variable linear equations solvable with a single inverse operation using integer, negative, and zero-solution structures; covers addition, subtraction, multiplication, division, and negative coefficients.",
+      "ced_topics": [],
+      "yield_score": 0.40,
+      "yield_rationale": "The one-step case is the terminal step in every more complex solving chain; basic operation fluency rarely the stand-alone AP target but errors propagate widely.",
+      "source_learn_keyword_id": "one_step_linear_equations",
+      "in_depth": [
+        {
+          "id": "one_step_addition_equations",
+          "label": "One-step equations with addition",
+          "description": "Solves x + a = b by subtracting the same constant from both sides; targets the form where addition is attached directly to the variable.",
+          "yield_score": 0.28,
+          "yield_rationale": "Elementary case; mastered early and rarely the sole question target in AP-level work.",
+          "source_learn_keyword_id": "one_step_addition_equations"
+        },
+        {
+          "id": "one_step_subtraction_equations",
+          "label": "One-step equations with subtraction",
+          "description": "Solves x − a = b by adding the same constant to both sides; targets the form where subtraction follows the variable.",
+          "yield_score": 0.28,
+          "yield_rationale": "Parallel to addition case; elementary and foundational.",
+          "source_learn_keyword_id": "one_step_subtraction_equations"
+        },
+        {
+          "id": "one_step_variable_subtracted_from_constant_equations",
+          "label": "One-step equations with variable subtracted from a constant",
+          "description": "Solves a − x = b, requiring recognition that the variable carries an implicit coefficient of −1 and handling distinct from x − a = b.",
+          "yield_score": 0.38,
+          "yield_rationale": "Slightly higher than basic addition/subtraction because the implied negative coefficient is a persistent error source across many equation types.",
+          "source_learn_keyword_id": "one_step_variable_subtracted_from_constant_equations"
+        },
+        {
+          "id": "one_step_multiplication_equations",
+          "label": "One-step equations with multiplication",
+          "description": "Solves ax = b by dividing both sides by the nonzero coefficient; targets integer coefficient structures.",
+          "yield_score": 0.35,
+          "yield_rationale": "The division-to-isolate step appears in virtually every solving chain; foundational.",
+          "source_learn_keyword_id": "one_step_multiplication_equations"
+        },
+        {
+          "id": "one_step_division_equations",
+          "label": "One-step equations with division",
+          "description": "Solves x/a = b by multiplying both sides by the nonzero divisor; targets variables in numerator over a constant.",
+          "yield_score": 0.35,
+          "yield_rationale": "Reciprocal-multiplication step is the foundation for clearing fractional coefficients in literal equations.",
+          "source_learn_keyword_id": "one_step_division_equations"
+        },
+        {
+          "id": "one_step_negative_coefficient_equations",
+          "label": "One-step equations with negative coefficients",
+          "description": "Solves −ax = b by dividing by a negative number; isolates sign errors that arise when the coefficient is negative.",
+          "yield_score": 0.45,
+          "yield_rationale": "Sign errors in negative-coefficient equations are among the most common arithmetic mistakes; reappear throughout all subsequent solving contexts.",
+          "source_learn_keyword_id": "one_step_negative_coefficient_equations"
+        }
+      ]
+    },
+    {
+      "id": "one_step_linear_equations_extended",
+      "label": "One-Step Linear Equations: Fractions, Decimals, and Special Cases",
+      "description": "One-step equations with fractional or decimal coefficients, non-integer solutions, zero solutions, and non-standard variable positions.",
+      "ced_topics": [],
+      "yield_score": 0.38,
+      "yield_rationale": "Fraction and decimal coefficient cases have higher downstream relevance in literal equations and applied modeling; special-case recognition prevents specific persistent misconceptions.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "one_step_fraction_coefficient_equations",
+          "label": "One-step equations with fraction coefficients",
+          "description": "Solves (a/b)x = c by multiplying by the reciprocal b/a; focuses on fractional coefficient structure as distinct from variable-in-denominator rational equations.",
+          "yield_score": 0.48,
+          "yield_rationale": "Reciprocal-multiplication fluency directly enables literal-equation rearrangement for function parameters.",
+          "source_learn_keyword_id": "one_step_fraction_coefficient_equations"
+        },
+        {
+          "id": "one_step_decimal_coefficient_equations",
+          "label": "One-step equations with decimal coefficients",
+          "description": "Solves 0.px = q by dividing by the decimal coefficient or converting to a fraction; targets coefficient interpretation in decimal form.",
+          "yield_score": 0.32,
+          "yield_rationale": "Decimal arithmetic sub-skill; moderate frequency in applied function contexts.",
+          "source_learn_keyword_id": "one_step_decimal_coefficient_equations"
+        },
+        {
+          "id": "one_step_equations_with_fraction_solutions",
+          "label": "One-step equations with fraction solutions",
+          "description": "Solves integer-coefficient equations like 4x = 7 whose solutions are non-integer fractions; targets the misconception that simple equations always produce integer answers.",
+          "yield_score": 0.36,
+          "yield_rationale": "Fraction solutions appear routinely when solving for exponential or trigonometric model parameters.",
+          "source_learn_keyword_id": "one_step_equations_with_fraction_solutions"
+        },
+        {
+          "id": "one_step_equations_with_zero_solution",
+          "label": "One-step equations with zero solution",
+          "description": "Recognizes and accepts x = 0 as a valid unique solution; distinguishes zero as a solution from a no-solution case.",
+          "yield_score": 0.22,
+          "yield_rationale": "Conceptual clarification; low independent frequency but eliminates a specific misconception.",
+          "source_learn_keyword_id": "one_step_equations_with_zero_solution"
+        },
+        {
+          "id": "one_step_equations_with_variable_on_right",
+          "label": "One-step equations with variable on the right",
+          "description": "Solves equations such as 15 = x + 6 where the variable is on the right side; tests that isolation logic is not position-dependent.",
+          "yield_score": 0.25,
+          "yield_rationale": "Structural flexibility; reappears in formula rearrangement when the target variable is on the non-standard side.",
+          "source_learn_keyword_id": "one_step_equations_with_variable_on_right"
+        },
+        {
+          "id": "one_step_equations_with_signed_constants",
+          "label": "One-step equations with signed constants",
+          "description": "Solves one-step equations containing negative constants or subtracting a negative, such as x + (−6) = 11 or a − (−4) = 9; targets signed-number errors in constant handling.",
+          "yield_score": 0.40,
+          "yield_rationale": "Signed-constant errors propagate into all higher-difficulty equation solving; persistent error source.",
+          "source_learn_keyword_id": "one_step_equations_with_signed_constants"
+        }
+      ]
+    },
+    {
+      "id": "two_step_linear_equations_core",
+      "label": "Two-Step Linear Equations: Core Forms",
+      "description": "One-variable linear equations requiring exactly two inverse operations; covers standard forms, non-standard term order, negative variable terms, and variable-divided-by-constant structures.",
+      "ced_topics": [],
+      "yield_score": 0.50,
+      "yield_rationale": "The two-step structure is the most frequently encountered equation form in applied algebra; mastery directly reduces error rates in multi-step and literal equation solving.",
+      "source_learn_keyword_id": "two_step_linear_equations",
+      "in_depth": [
+        {
+          "id": "two_step_equations_ax_plus_b_equals_c",
+          "label": "Two-step equations: ax + b = c",
+          "description": "Solves the standard two-step form ax + b = c by first subtracting b from both sides and then dividing by a; requires correct reversal of operation order.",
+          "yield_score": 0.55,
+          "yield_rationale": "The canonical two-step equation form; appears as a sub-task in virtually every linear formula rearrangement.",
+          "source_learn_keyword_id": "two_step_equations_ax_plus_b_equals_c"
+        },
+        {
+          "id": "two_step_equations_ax_minus_b_equals_c",
+          "label": "Two-step equations: ax − b = c",
+          "description": "Solves ax − b = c by adding b to both sides before dividing by a; distinguishes the sign of the constant addend.",
+          "yield_score": 0.52,
+          "yield_rationale": "Subtracted-constant form is slightly more error-prone than added-constant; equal frequency in practice.",
+          "source_learn_keyword_id": "two_step_equations_ax_minus_b_equals_c"
+        },
+        {
+          "id": "two_step_equations_b_plus_ax_equals_c",
+          "label": "Two-step equations with constant before variable term",
+          "description": "Solves equations such as 4 + 2x = 18 where the constant is written before the variable term; tests order-invariant application of inverse operations.",
+          "yield_score": 0.45,
+          "yield_rationale": "Parsing equations with non-standard term order is a recurring structural skill.",
+          "source_learn_keyword_id": "two_step_equations_b_plus_ax_equals_c"
+        },
+        {
+          "id": "two_step_equations_variable_term_negative",
+          "label": "Two-step equations with negative variable term",
+          "description": "Solves equations such as −3x + 8 = 20 where the variable coefficient is negative; requires sign tracking after the constant term is moved.",
+          "yield_score": 0.58,
+          "yield_rationale": "Negative variable terms are a top error source; this structure appears in sinusoidal and linear model inversion tasks.",
+          "source_learn_keyword_id": "two_step_equations_variable_term_negative"
+        },
+        {
+          "id": "two_step_equations_variable_divided_by_constant",
+          "label": "Two-step equations: x/a + b = c",
+          "description": "Solves x/a + b = c by first removing the constant and then multiplying by the divisor; the undoing of division requires multiplication as the inverse.",
+          "yield_score": 0.48,
+          "yield_rationale": "Quotient-variable structure appears in rate and proportion applications and in literal equations.",
+          "source_learn_keyword_id": "two_step_equations_variable_divided_by_constant"
+        },
+        {
+          "id": "two_step_equations_operation_order_reversal",
+          "label": "Reverse order of operations in two-step equations",
+          "description": "Applies inverse operations in the correct reverse order: undo the constant first (addition/subtraction), then undo the coefficient (multiplication/division).",
+          "yield_score": 0.62,
+          "yield_rationale": "Correct reversal of operation order generalizes to exponential-to-log and log-to-exponential equation solving sequences in Units 2 and 3.",
+          "source_learn_keyword_id": "two_step_equations_operation_order_reversal"
+        }
+      ]
+    },
+    {
+      "id": "two_step_linear_equations_extended",
+      "label": "Two-Step Linear Equations: Fractions, Decimals, and Special Cases",
+      "description": "Two-step equations with fractional or decimal coefficients, negative and zero solutions, right-side variable expressions, and parenthesized constants.",
+      "ced_topics": [],
+      "yield_score": 0.48,
+      "yield_rationale": "Fractional and decimal coefficient handling extends directly to literal-equation rearrangement for function formulas; special-case solutions build solution-set literacy.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "two_step_equations_fraction_coefficient",
+          "label": "Two-step equations with fraction coefficients",
+          "description": "Solves (a/b)x + c = d by isolating the variable term and then multiplying by the reciprocal; tests reciprocal use within a two-step structure.",
+          "yield_score": 0.60,
+          "yield_rationale": "Fractional coefficient handling is directly required in literal equation rearrangement for function formulas (yield 0.80 downstream).",
+          "source_learn_keyword_id": "two_step_equations_fraction_coefficient"
+        },
+        {
+          "id": "two_step_equations_decimal_coefficient",
+          "label": "Two-step equations with decimal coefficients",
+          "description": "Solves two-step equations with decimal variable coefficients such as 0.5x + 4 = 10; may solve directly with decimal arithmetic or convert the coefficient first.",
+          "yield_score": 0.40,
+          "yield_rationale": "Decimal coefficients appear in applied exponential modeling contexts; moderate direct frequency.",
+          "source_learn_keyword_id": "two_step_equations_decimal_coefficient"
+        },
+        {
+          "id": "two_step_equations_with_negative_solution",
+          "label": "Two-step equations with negative solutions",
+          "description": "Recognizes and correctly interprets negative solutions in two-step equations; targets sign errors in final answers from signed constants or negative coefficients.",
+          "yield_score": 0.50,
+          "yield_rationale": "Negative solutions are common in function-model parameter extraction; errors here directly cause parameter sign mistakes.",
+          "source_learn_keyword_id": "two_step_equations_with_negative_solution"
+        },
+        {
+          "id": "two_step_equations_with_zero_solution",
+          "label": "Two-step equations with zero solution",
+          "description": "Identifies that x = 0 is a valid unique solution when a two-step equation is solved; avoids confusing zero-as-answer with no-solution.",
+          "yield_score": 0.25,
+          "yield_rationale": "Conceptual clarification; occurs in specific equation structures but low overall frequency.",
+          "source_learn_keyword_id": "two_step_equations_with_zero_solution"
+        },
+        {
+          "id": "two_step_equations_right_side_variable_expression",
+          "label": "Two-step equations with variable expression on the right",
+          "description": "Solves equations such as 19 = 4x + 3 where the two-step variable expression is on the right side; tests position-independent isolation logic.",
+          "yield_score": 0.38,
+          "yield_rationale": "Right-side variable form tests structural flexibility; moderate frequency in formula rearrangement.",
+          "source_learn_keyword_id": "two_step_equations_right_side_variable_expression"
+        },
+        {
+          "id": "two_step_equations_with_parenthesized_constants",
+          "label": "Two-step equations with signed constant grouping",
+          "description": "Interprets signed constants in parentheses such as x + (−5) or a − (−4) before applying two-step solving; targets grouping-notation errors.",
+          "yield_score": 0.42,
+          "yield_rationale": "Parenthesized sign notation appears in function expressions and transformation descriptions throughout the course.",
+          "source_learn_keyword_id": "two_step_equations_with_parenthesized_constants"
+        }
+      ]
+    },
+    {
+      "id": "multi_step_linear_equations_simplification",
+      "label": "Multi-Step Linear Equations: Distribution and Collection",
+      "description": "Linear equations requiring distribution, like-term collection, and variables on both sides before isolation. Covers one-side and both-sides distribution, negative and subtracted groups, and variable collection.",
+      "ced_topics": [],
+      "yield_score": 0.75,
+      "yield_rationale": "Multi-step equation fluency is the core downstream skill referenced in the precalc-outline: it directly mirrors exponential and logarithmic equation solving and literal-equation rearrangement for model parameters.",
+      "source_learn_keyword_id": "multi_step_linear_equations",
+      "in_depth": [
+        {
+          "id": "linear_equations_combining_like_terms_one_side",
+          "label": "Linear equations requiring like-term collection on one side",
+          "description": "Collects like terms on one side before applying inverse operations; targets equations such as 3x + 4x − 5 = 16 where simplification precedes isolation.",
+          "yield_score": 0.68,
+          "yield_rationale": "Term collection is an obligatory sub-step in simplifying exponential and logarithmic equations after log rules are applied.",
+          "source_learn_keyword_id": "linear_equations_combining_like_terms_one_side"
+        },
+        {
+          "id": "linear_equations_with_distribution_one_side",
+          "label": "Linear equations requiring distribution on one side",
+          "description": "Expands a grouped expression on one side using the distributive property before solving; targets structures such as 3(x + 4) = 21.",
+          "yield_score": 0.72,
+          "yield_rationale": "Distribution before solving mirrors the expansion required when applying logarithm or exponent rules in function equations.",
+          "source_learn_keyword_id": "linear_equations_with_distribution_one_side"
+        },
+        {
+          "id": "linear_equations_with_negative_distribution",
+          "label": "Linear equations requiring negative distribution",
+          "description": "Distributes a negative factor outside parentheses correctly before solving; targets sign errors in structures such as −2(x + 5) = 14.",
+          "yield_score": 0.70,
+          "yield_rationale": "Negative distribution errors are among the most persistent algebra mistakes; relevant to trig identity manipulation and log property application.",
+          "source_learn_keyword_id": "linear_equations_with_negative_distribution"
+        },
+        {
+          "id": "linear_equations_with_subtracted_parentheses",
+          "label": "Linear equations with subtracted parentheses",
+          "description": "Changes the sign of every term inside a subtracted group before collecting terms; targets equations such as x − (2x + 5) = 11.",
+          "yield_score": 0.66,
+          "yield_rationale": "Subtracted-group sign distribution is a precursor to the same skill needed when rewriting trig or log expressions.",
+          "source_learn_keyword_id": "linear_equations_with_subtracted_parentheses"
+        },
+        {
+          "id": "linear_equations_with_multiple_parentheses",
+          "label": "Linear equations with multiple grouped expressions",
+          "description": "Distributes across two or more grouped expressions on one or both sides before combining like terms; each group must be expanded before term collection.",
+          "yield_score": 0.64,
+          "yield_rationale": "Multiple-group expansion is the algebraic engine behind simplifying product-form trig and exponential equations.",
+          "source_learn_keyword_id": "linear_equations_with_multiple_parentheses"
+        },
+        {
+          "id": "linear_equations_variables_on_both_sides",
+          "label": "Linear equations with variables on both sides",
+          "description": "Moves variable terms to one side and constants to the other before isolating; targets equations such as 5x + 2 = 2x + 14.",
+          "yield_score": 0.78,
+          "yield_rationale": "Variables-on-both-sides structure appears directly in exponential/log equations after applying inverse operations and in sinusoidal parameter equations.",
+          "source_learn_keyword_id": "linear_equations_variables_on_both_sides"
+        },
+        {
+          "id": "linear_equations_constants_on_both_sides",
+          "label": "Linear equations with constants on both sides",
+          "description": "Gathers constants on the side opposite the variable terms using addition or subtraction; targets equations such as 4x + 9 = 2x − 5.",
+          "yield_score": 0.72,
+          "yield_rationale": "Constant-gathering step is routinely required in function model construction involving two-point parameter extraction.",
+          "source_learn_keyword_id": "linear_equations_constants_on_both_sides"
+        },
+        {
+          "id": "linear_equations_distribution_both_sides",
+          "label": "Linear equations requiring distribution on both sides",
+          "description": "Expands grouped expressions on both sides before collecting terms; targets equations such as 3(x + 2) = 2(x + 9).",
+          "yield_score": 0.65,
+          "yield_rationale": "Full distribution on both sides is the most complex single-equation algebraic manipulation; prerequisite for symbolic FRQ manipulation tasks.",
+          "source_learn_keyword_id": "linear_equations_distribution_both_sides"
+        }
+      ]
+    },
+    {
+      "id": "multi_step_linear_equations_clearing_and_special_cases",
+      "label": "Multi-Step Linear Equations: Clearing and Special Cases",
+      "description": "Linear equations requiring both-sides like-term collection, clearing of fraction or decimal coefficients using LCD or powers of 10, proportion and cross-product equations, and identification of no-solution and identity special cases.",
+      "ced_topics": [],
+      "yield_score": 0.68,
+      "yield_rationale": "Fraction-clearing and special-case recognition are high-load sub-skills in literal equations and model-parameter extraction; proportion equations appear in applied function problems.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "linear_equations_combining_like_terms_both_sides",
+          "label": "Linear equations requiring like-term collection on both sides",
+          "description": "Simplifies each side independently before moving terms across the equation; targets equations with multiple like terms on both sides before clearing or isolating.",
+          "yield_score": 0.68,
+          "yield_rationale": "Both-sides simplification is required in solving after applying log or exponent rules that produce multiple like terms.",
+          "source_learn_keyword_id": "linear_equations_combining_like_terms_both_sides"
+        },
+        {
+          "id": "linear_equations_with_fraction_coefficients",
+          "label": "Multi-step linear equations with fraction coefficients",
+          "description": "Solves equations with fractional coefficients on both sides using fraction arithmetic or algebraic rearrangement; limited to constant denominators only.",
+          "yield_score": 0.73,
+          "yield_rationale": "Fraction-coefficient equations model the algebraic structure of rearranging formulas involving rational parameters in function modeling.",
+          "source_learn_keyword_id": "linear_equations_with_fraction_coefficients"
+        },
+        {
+          "id": "linear_equations_clearing_fraction_coefficients",
+          "label": "Clearing fraction coefficients in linear equations",
+          "description": "Multiplies every term by the least common denominator to remove constant fraction denominators, then solves the resulting integer-coefficient equation.",
+          "yield_score": 0.70,
+          "yield_rationale": "LCD-clearing strategy mirrors the algebraic manipulation used to isolate a variable in formulas with constant denominator parameters.",
+          "source_learn_keyword_id": "linear_equations_clearing_fraction_coefficients"
+        },
+        {
+          "id": "linear_equations_with_decimal_coefficients",
+          "label": "Multi-step linear equations with decimal coefficients",
+          "description": "Solves equations with decimal variable and constant terms directly or by clearing decimals with a power of 10; targets equations such as 0.4x + 1.2 = 3.6.",
+          "yield_score": 0.55,
+          "yield_rationale": "Decimal-coefficient equations appear in applied exponential model fitting where calculated parameters are decimal values.",
+          "source_learn_keyword_id": "linear_equations_with_decimal_coefficients"
+        },
+        {
+          "id": "linear_equations_clearing_decimal_coefficients",
+          "label": "Clearing decimal coefficients in linear equations",
+          "description": "Multiplies every term by a power of 10 to convert decimal coefficients to integers before solving; identifies the correct power of 10 to use.",
+          "yield_score": 0.45,
+          "yield_rationale": "Useful technique but less frequently required than fraction-clearing at AP level.",
+          "source_learn_keyword_id": "linear_equations_clearing_decimal_coefficients"
+        },
+        {
+          "id": "linear_equations_from_cross_products_constant_denominators",
+          "label": "Cross-product linear equations with constant denominators",
+          "description": "Applies cross multiplication when a proportion has constant denominators and a linear numerator to produce a solvable linear equation; excludes rational equations with variable denominators.",
+          "yield_score": 0.52,
+          "yield_rationale": "Cross-product setting up a linear equation reappears in rate-of-change and similar-figure proportion applications.",
+          "source_learn_keyword_id": "linear_equations_from_cross_products_constant_denominators"
+        },
+        {
+          "id": "linear_equations_special_case_no_solution",
+          "label": "Linear equations with no solution",
+          "description": "Identifies that an equation has no solution when variable terms cancel and a false constant statement results, such as 0 = 5.",
+          "yield_score": 0.60,
+          "yield_rationale": "No-solution recognition is directly applied when solving exponential equations or checking whether a model can be parameterized for given data.",
+          "source_learn_keyword_id": "linear_equations_special_case_no_solution"
+        },
+        {
+          "id": "linear_equations_special_case_identity",
+          "label": "Linear equations with infinitely many solutions",
+          "description": "Identifies that an equation has infinitely many solutions when it reduces to a true identity such as 0 = 0; every real number satisfies the equation.",
+          "yield_score": 0.55,
+          "yield_rationale": "Identity recognition distinguishes dependent from consistent equations; relevant to model-parameter uniqueness analysis.",
+          "source_learn_keyword_id": "linear_equations_special_case_identity"
+        }
+      ]
+    },
+    {
+      "id": "literal_equations_core",
+      "label": "Literal Equations and Formula Rearrangement: Core Isolation",
+      "description": "Isolating a specified variable in multi-variable equations using linear equation principles; covers single-operation isolation, two-step forms, and variable-on-both-sides collection.",
+      "ced_topics": [],
+      "yield_score": 0.80,
+      "yield_rationale": "Highest-yield umbrella in this category: extracting parameters A, B, C, D from sinusoidal models and a, b from exponential models is exactly literal-equation work; referenced explicitly in the precalc-outline as a 0.80 foundation yield.",
+      "source_learn_keyword_id": "literal_equations_and_formula_rearrangement",
+      "in_depth": [
+        {
+          "id": "literal_equations_isolating_added_variable",
+          "label": "Literal equations isolating a variable with addition",
+          "description": "Isolates a specified variable by undoing addition or subtraction involving other variables or constants; targets symbolic isolation without numeric values.",
+          "yield_score": 0.72,
+          "yield_rationale": "Addition-based rearrangement is the basic step in isolating midline D from sinusoidal model form or base b from exponential form.",
+          "source_learn_keyword_id": "literal_equations_isolating_added_variable"
+        },
+        {
+          "id": "literal_equations_isolating_multiplied_variable",
+          "label": "Literal equations isolating a multiplied variable",
+          "description": "Isolates a variable multiplied by a nonzero quantity by dividing both sides; targets forms ax = b and ab = c solved symbolically for one factor.",
+          "yield_score": 0.78,
+          "yield_rationale": "Division to isolate a multiplied parameter is the core of extracting amplitude A or growth rate b from function formulas.",
+          "source_learn_keyword_id": "literal_equations_isolating_multiplied_variable"
+        },
+        {
+          "id": "literal_equations_isolating_divided_variable",
+          "label": "Literal equations isolating a divided variable",
+          "description": "Isolates a variable in a numerator over a constant or parameter by multiplying both sides by the denominator; excludes solving for variables in denominators.",
+          "yield_score": 0.74,
+          "yield_rationale": "Clearing a constant denominator to isolate a numerator variable is directly required in rearranging period formulas B = 2π/P.",
+          "source_learn_keyword_id": "literal_equations_isolating_divided_variable"
+        },
+        {
+          "id": "literal_equations_two_step_linear_forms",
+          "label": "Literal equations with two-step linear forms",
+          "description": "Isolates a specified variable in ax + b = c form with parameters; undoes addition/subtraction before undoing multiplication, mirroring two-step numeric solving.",
+          "yield_score": 0.80,
+          "yield_rationale": "Two-step literal form is the most common structure for extracting function parameters from a model equation such as y = A·b^x + c solved for x.",
+          "source_learn_keyword_id": "literal_equations_two_step_linear_forms"
+        },
+        {
+          "id": "literal_equations_variable_on_both_sides",
+          "label": "Literal equations with the target variable on both sides",
+          "description": "Gathers all terms containing the target variable to one side before isolating; the equation is linear in the target variable even when other variables appear.",
+          "yield_score": 0.76,
+          "yield_rationale": "This structure appears when the same parameter appears on both sides of a model equation, requiring collection before isolation.",
+          "source_learn_keyword_id": "literal_equations_variable_on_both_sides"
+        },
+        {
+          "id": "literal_equations_factoring_target_variable",
+          "label": "Factoring out the target variable in literal equations",
+          "description": "After collecting terms with the target variable, factors the variable out of a sum before dividing; targets forms ax + bx = c solved for x via x(a + b) = c.",
+          "yield_score": 0.82,
+          "yield_rationale": "Factoring the target variable is the key step in solving systems of function equations and is flagged explicitly in the precalc-outline as a high-load literal-equation skill.",
+          "source_learn_keyword_id": "literal_equations_factoring_target_variable"
+        }
+      ]
+    },
+    {
+      "id": "literal_equations_formula_forms",
+      "label": "Literal Equations and Formula Rearrangement: Standard Formula Forms",
+      "description": "Rearranging standard formulas and relations for a specified variable, including slope-intercept forms, fraction coefficient formulas, parenthesized formulas, subtracted-variable forms, and restriction identification.",
+      "ced_topics": [],
+      "yield_score": 0.76,
+      "yield_rationale": "Standard formula rearrangement is directly applied to sinusoidal, exponential, and linear function formulas throughout AP Precalc; restriction identification is required for domain analysis.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "linear_formula_rearrangement_for_y",
+          "label": "Linear formula rearrangement for y",
+          "description": "Isolates y in a linear relation such as Ax + By = C; purely algebraic rearrangement without graphing or function interpretation.",
+          "yield_score": 0.75,
+          "yield_rationale": "Slope-intercept conversion is prerequisite for reading domain/range and interpreting graph behavior; medium-high direct use.",
+          "source_learn_keyword_id": "linear_formula_rearrangement_for_y"
+        },
+        {
+          "id": "linear_formula_rearrangement_for_x",
+          "label": "Linear formula rearrangement for x",
+          "description": "Isolates x in a linear relation such as y = 2x + 7 or Ax + By = C; moves terms and divides by the coefficient symbolically.",
+          "yield_score": 0.72,
+          "yield_rationale": "Solving for x in a linear relation mirrors inverting a linear function; direct prerequisite for inverse-function reasoning in AP Precalc.",
+          "source_learn_keyword_id": "linear_formula_rearrangement_for_x"
+        },
+        {
+          "id": "formula_rearrangement_with_fraction_coefficients",
+          "label": "Formula rearrangement with fraction coefficients",
+          "description": "Rearranges formulas whose target variable has a fractional coefficient by clearing denominators or multiplying by the reciprocal; targets slope-intercept and area formulas.",
+          "yield_score": 0.78,
+          "yield_rationale": "Fractional parameter rearrangement appears in A = (1/2)bh and similar geometry/physics formulas that arise in applied modeling.",
+          "source_learn_keyword_id": "formula_rearrangement_with_fraction_coefficients"
+        },
+        {
+          "id": "formula_rearrangement_with_parentheses",
+          "label": "Formula rearrangement with parentheses",
+          "description": "Distributes or divides by a common factor in a formula containing grouped expressions to isolate the requested variable; targets forms such as P = 2(l + w).",
+          "yield_score": 0.76,
+          "yield_rationale": "Parenthesized formulas appear in standard geometric and sinusoidal model forms that students must rearrange during FRQ construction tasks.",
+          "source_learn_keyword_id": "formula_rearrangement_with_parentheses"
+        },
+        {
+          "id": "formula_rearrangement_with_subtracted_target_variable",
+          "label": "Formula rearrangement with subtracted target variable",
+          "description": "Handles the implied negative coefficient correctly when the target variable is subtracted, solving forms such as a − x = b for x.",
+          "yield_score": 0.68,
+          "yield_rationale": "Subtracted-variable forms arise in difference-based sinusoidal model rearrangements and are a reliable error source.",
+          "source_learn_keyword_id": "formula_rearrangement_with_subtracted_target_variable"
+        },
+        {
+          "id": "formula_rearrangement_solution_restrictions",
+          "label": "Restrictions in formula rearrangement",
+          "description": "States the nonzero restriction on any parameter that becomes a divisor during isolation; identifies when a rearrangement is undefined.",
+          "yield_score": 0.60,
+          "yield_rationale": "Noting divisor restrictions is explicitly required in rational-function and domain analysis; moderate direct yield.",
+          "source_learn_keyword_id": "formula_rearrangement_solution_restrictions"
+        },
+        {
+          "id": "linear_proportion_equations_variable_numerator",
+          "label": "Linear proportion equations with variable numerator",
+          "description": "Solves a proportion x/a = b/c where the variable is in the numerator using equivalent ratios or cross products; excludes variable-in-denominator rational equations.",
+          "yield_score": 0.50,
+          "yield_rationale": "Proportion solving with variable numerator is a common model-construction sub-task in applied function problems; placed here because proportions are a form of formula rearrangement.",
+          "source_learn_keyword_id": "linear_proportion_equations_variable_numerator"
+        }
+      ]
+    },
+    {
+      "id": "linear_inequality_foundations_concepts",
+      "label": "Linear Inequality Foundations: Symbols, Properties, and Solution Meaning",
+      "description": "Core structural concepts for one-variable linear inequalities: symbol meanings (strict and inclusive), solution set meaning and verification, equivalent inequalities, and all six properties of inequality.",
+      "ced_topics": [],
+      "yield_score": 0.55,
+      "yield_rationale": "Interval notation is the language of domain and range throughout AP Precalc Units 2 and 3; sign-reversal rules reappear implicitly whenever a negative coefficient is encountered in any solving context.",
+      "source_learn_keyword_id": "linear_inequality_foundations",
+      "in_depth": [
+        {
+          "id": "inequality_statement_structure",
+          "label": "Inequality statement structure",
+          "description": "Reads an inequality as a comparison of two expressions; identifies the inequality symbol, left side, and right side before any solving.",
+          "yield_score": 0.22,
+          "yield_rationale": "Structural literacy; prerequisite background not independently tested at AP level.",
+          "source_learn_keyword_id": "inequality_statement_structure"
+        },
+        {
+          "id": "strict_inequality_symbols",
+          "label": "Strict inequality symbols",
+          "description": "Recognizes that < and > exclude the boundary value, producing open endpoints and solution sets that do not include the boundary.",
+          "yield_score": 0.45,
+          "yield_rationale": "Strict vs. inclusive distinction drives domain boundary notation in rational and radical functions throughout AP Precalc.",
+          "source_learn_keyword_id": "strict_inequality_symbols"
+        },
+        {
+          "id": "inclusive_inequality_symbols",
+          "label": "Inclusive inequality symbols",
+          "description": "Recognizes that ≤ and ≥ include the boundary value, producing closed endpoints and solution sets that include the boundary.",
+          "yield_score": 0.45,
+          "yield_rationale": "Same domain-notation importance as strict symbols; paired concept.",
+          "source_learn_keyword_id": "inclusive_inequality_symbols"
+        },
+        {
+          "id": "linear_inequality_solution_meaning",
+          "label": "Meaning of a linear inequality solution",
+          "description": "Identifies that a linear inequality solution is any value satisfying the comparison and that infinitely many values typically satisfy a one-variable linear inequality.",
+          "yield_score": 0.40,
+          "yield_rationale": "Conceptual pivot from equation (one solution) to inequality (ray of solutions); directly relevant to domain/range interpretation.",
+          "source_learn_keyword_id": "linear_inequality_solution_meaning"
+        },
+        {
+          "id": "linear_inequality_solution_verification",
+          "label": "Solution verification for linear inequalities",
+          "description": "Substitutes a candidate value into an inequality to check whether the comparison is true; includes boundary-value tests to determine inclusion.",
+          "yield_score": 0.35,
+          "yield_rationale": "Verification by substitution is a useful error-check strategy across all solving contexts.",
+          "source_learn_keyword_id": "linear_inequality_solution_verification"
+        },
+        {
+          "id": "equivalent_linear_inequalities",
+          "label": "Equivalent linear inequalities",
+          "description": "Identifies when two inequalities have the same solution set; applies valid transformations with special care that multiplying or dividing by a negative reverses direction.",
+          "yield_score": 0.50,
+          "yield_rationale": "Equivalence reasoning under transformation is directly required when rewriting domain or range constraints.",
+          "source_learn_keyword_id": "equivalent_linear_inequalities"
+        },
+        {
+          "id": "addition_property_of_inequality",
+          "label": "Addition property of inequality",
+          "description": "Adds the same quantity to both sides of an inequality without changing direction; used to undo a subtracted constant.",
+          "yield_score": 0.40,
+          "yield_rationale": "Routine solving step; parallel to equation property with no direction change involved.",
+          "source_learn_keyword_id": "addition_property_of_inequality"
+        },
+        {
+          "id": "subtraction_property_of_inequality",
+          "label": "Subtraction property of inequality",
+          "description": "Subtracts the same quantity from both sides of an inequality without changing direction; used to undo an added constant.",
+          "yield_score": 0.40,
+          "yield_rationale": "Routine solving step; parallel to addition property.",
+          "source_learn_keyword_id": "subtraction_property_of_inequality"
+        }
+      ]
+    },
+    {
+      "id": "linear_inequality_foundations_multiplication",
+      "label": "Linear Inequality Foundations: Multiplication/Division and Representation",
+      "description": "Multiplication and division properties of inequality (positive and negative), boundary values, number-line representation, and interval notation. NOTE: interval notation converting an inequality to bracket/parenthesis form is canonical in functions_and_graphs (F7); the keyword below is retained for DB row continuity only and should not generate problems that duplicate fg_interval_notation.",
+      "ced_topics": [],
+      "yield_score": 0.58,
+      "yield_rationale": "Sign-reversal properties and boundary/number-line representation are the highest-yield pieces of inequality foundations; interval notation is high indirect yield but owned by F7.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "positive_multiplication_property_of_inequality",
+          "label": "Positive multiplication property of inequality",
+          "description": "Multiplying both sides by the same positive number preserves the inequality direction; used to undo division by a positive number.",
+          "yield_score": 0.42,
+          "yield_rationale": "Preservation rule is the contrast case that makes the negative reversal rule meaningful.",
+          "source_learn_keyword_id": "positive_multiplication_property_of_inequality"
+        },
+        {
+          "id": "positive_division_property_of_inequality",
+          "label": "Positive division property of inequality",
+          "description": "Dividing both sides by the same positive number preserves the inequality direction; used to isolate the variable when the coefficient is positive.",
+          "yield_score": 0.45,
+          "yield_rationale": "Most-common final step in inequality solving when the coefficient is positive; no reversal needed.",
+          "source_learn_keyword_id": "positive_division_property_of_inequality"
+        },
+        {
+          "id": "negative_multiplication_property_of_inequality",
+          "label": "Negative multiplication property of inequality",
+          "description": "Multiplying both sides by a negative number reverses the inequality direction; one of the most important distinctions between equation and inequality solving.",
+          "yield_score": 0.72,
+          "yield_rationale": "Sign-reversal rule is the most tested inequality-specific concept; errors here propagate into compound-inequality and absolute-value work.",
+          "source_learn_keyword_id": "negative_multiplication_property_of_inequality"
+        },
+        {
+          "id": "negative_division_property_of_inequality",
+          "label": "Negative division property of inequality",
+          "description": "Dividing both sides by a negative number reverses the inequality direction; used to isolate the variable when the coefficient is negative.",
+          "yield_score": 0.72,
+          "yield_rationale": "Most frequently triggered reversal scenario; persistent error source across all multi-step inequality solving.",
+          "source_learn_keyword_id": "negative_division_property_of_inequality"
+        },
+        {
+          "id": "inequality_boundary_values",
+          "label": "Inequality boundary values",
+          "description": "Identifies the boundary value of an inequality as the point where the related equation is true; determines whether that boundary is included based on the symbol.",
+          "yield_score": 0.55,
+          "yield_rationale": "Boundary-value identification is prerequisite for reading domain endpoints in rational and radical function graphs.",
+          "source_learn_keyword_id": "inequality_boundary_values"
+        },
+        {
+          "id": "number_line_representation_inequalities",
+          "label": "Number-line representations of inequalities",
+          "description": "Graphs one-variable inequality solutions on a number line using open or closed endpoints and correct shading direction; limited to one-variable, not coordinate-plane.",
+          "yield_score": 0.48,
+          "yield_rationale": "Number-line graphing is a standard solution-representation skill tested in early algebra contexts.",
+          "source_learn_keyword_id": "number_line_representation_inequalities"
+        },
+        {
+          "id": "interval_notation_for_inequalities",
+          "label": "Interval notation for inequalities (DB row — scope redirected to F7)",
+          "description": "MECE NOTE: The canonical home for converting inequalities to bracket/parenthesis interval notation is functions_and_graphs (F7) under fg_interval_notation_from_inequality. This keyword is retained here solely to preserve its source_learn_keyword_id DB mapping. Problem generation for converting a single inequality such as 2 ≤ x < 5 to interval notation belongs to F7; this row should map to that concept in the student-facing system. F3's interval-notation instruction is covered by open_vs_closed_endpoint_meaning, infinity_endpoint_notation, and number_line_representation_inequalities in the interpretation umbrella.",
+          "yield_score": 0.10,
+          "yield_rationale": "Retained for DB row continuity only; active yield is assigned to the F7 canonical keyword. Set near zero to suppress generation.",
+          "source_learn_keyword_id": "interval_notation_for_inequalities"
+        }
+      ]
+    },
+    {
+      "id": "one_step_linear_inequalities",
+      "label": "One-Step Linear Inequalities",
+      "description": "Linear inequalities solvable with a single inverse operation, covering addition, subtraction, positive and negative multiplication/division, fractions, and decimals. Correct sign-reversal decisions are the central skill.",
+      "ced_topics": [],
+      "yield_score": 0.52,
+      "yield_rationale": "One-step inequality solving establishes the sign-reversal rule in its simplest form; the negative-coefficient cases are the highest-diagnostic-value items.",
+      "source_learn_keyword_id": "one_and_two_step_linear_inequalities",
+      "in_depth": [
+        {
+          "id": "one_step_inequalities_addition",
+          "label": "One-step inequalities with addition",
+          "description": "Solves x + a < b or x + a > b by subtracting the constant from both sides with no reversal; tests addition case in inequality context.",
+          "yield_score": 0.30,
+          "yield_rationale": "Elementary case; no reversal involved and not independently assessed at AP level.",
+          "source_learn_keyword_id": "one_step_inequalities_addition"
+        },
+        {
+          "id": "one_step_inequalities_subtraction",
+          "label": "One-step inequalities with subtraction",
+          "description": "Solves x − a < b or x − a > b by adding the constant with no reversal; tests subtraction case in inequality context.",
+          "yield_score": 0.30,
+          "yield_rationale": "Elementary case; parallel to addition.",
+          "source_learn_keyword_id": "one_step_inequalities_subtraction"
+        },
+        {
+          "id": "one_step_inequalities_positive_multiplication",
+          "label": "One-step inequalities with positive multiplication",
+          "description": "Solves ax < b with a > 0 by dividing by a positive coefficient without reversing; contrasts with the negative-coefficient case.",
+          "yield_score": 0.38,
+          "yield_rationale": "Establishes the no-reversal baseline for contrasting with the reversal rule.",
+          "source_learn_keyword_id": "one_step_inequalities_positive_multiplication"
+        },
+        {
+          "id": "one_step_inequalities_negative_multiplication",
+          "label": "One-step inequalities with negative multiplication",
+          "description": "Solves −ax < b by dividing by a negative coefficient and reversing the symbol; isolates the one-step reversal scenario.",
+          "yield_score": 0.68,
+          "yield_rationale": "The minimal case where sign reversal is required; high diagnostic value for catching the most common inequality error.",
+          "source_learn_keyword_id": "one_step_inequalities_negative_multiplication"
+        },
+        {
+          "id": "one_step_inequalities_positive_division",
+          "label": "One-step inequalities with positive division",
+          "description": "Solves x/a < b with a > 0 by multiplying by a positive divisor without reversing; tests the positive-divisor no-reversal case.",
+          "yield_score": 0.35,
+          "yield_rationale": "Standard clearing-a-fraction-divisor step; no reversal involved.",
+          "source_learn_keyword_id": "one_step_inequalities_positive_division"
+        },
+        {
+          "id": "one_step_inequalities_negative_division",
+          "label": "One-step inequalities with negative division",
+          "description": "Solves x/(−a) < b by multiplying by a negative divisor and reversing the symbol; isolates the negative-divisor reversal scenario.",
+          "yield_score": 0.65,
+          "yield_rationale": "Negative-divisor case is slightly less common but equally important as negative-coefficient multiplication for reversal recognition.",
+          "source_learn_keyword_id": "one_step_inequalities_negative_division"
+        },
+        {
+          "id": "one_step_inequalities_fraction_coefficients",
+          "label": "One-step inequalities with fraction coefficients",
+          "description": "Solves inequalities with fractional coefficients by undoing the fraction multiplier; reversal required only if the multiplier or resulting divisor is negative.",
+          "yield_score": 0.55,
+          "yield_rationale": "Fraction-coefficient inequalities appear in domain/range analysis involving fractional function parameters.",
+          "source_learn_keyword_id": "one_step_inequalities_fraction_coefficients"
+        },
+        {
+          "id": "one_step_inequalities_decimal_coefficients",
+          "label": "One-step inequalities with decimal coefficients",
+          "description": "Solves inequalities with decimal coefficients by dividing, with reversal only for negative coefficients; tests decimal arithmetic in inequality context.",
+          "yield_score": 0.38,
+          "yield_rationale": "Decimal inequality solving appears in applied model constraints; moderate direct frequency.",
+          "source_learn_keyword_id": "one_step_inequalities_decimal_coefficients"
+        }
+      ]
+    },
+    {
+      "id": "two_step_linear_inequalities",
+      "label": "Two-Step Linear Inequalities",
+      "description": "Linear inequalities requiring two inverse operations, with sign-reversal decisions based on whether the final operation involves a negative divisor or coefficient. Covers all coefficient types and boundary inclusion.",
+      "ced_topics": [],
+      "yield_score": 0.58,
+      "yield_rationale": "Two-step negative-coefficient case is the canonical inequality problem; fraction and decimal coefficient cases extend to domain-restriction analysis; boundary inclusion links directly to interval notation.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "two_step_inequalities_positive_coefficient",
+          "label": "Two-step inequalities with positive coefficients",
+          "description": "Solves ax + b < c with a > 0 by removing the constant term and then dividing by a positive coefficient without reversing the symbol.",
+          "yield_score": 0.50,
+          "yield_rationale": "Standard two-step inequality; no reversal needed but must sequence operations correctly.",
+          "source_learn_keyword_id": "two_step_inequalities_positive_coefficient"
+        },
+        {
+          "id": "two_step_inequalities_negative_coefficient",
+          "label": "Two-step inequalities with negative coefficients",
+          "description": "Solves ax + b < c with a < 0 by removing the constant and then dividing by a negative coefficient with reversal; tests the most common reversal scenario.",
+          "yield_score": 0.72,
+          "yield_rationale": "The two-step negative-coefficient case is the canonical inequality problem testing reversal; highest-yield in this umbrella.",
+          "source_learn_keyword_id": "two_step_inequalities_negative_coefficient"
+        },
+        {
+          "id": "two_step_inequalities_variable_divided_by_positive",
+          "label": "Two-step inequalities with variable divided by a positive constant",
+          "description": "Solves x/a + b < c with a > 0 by isolating the quotient term and multiplying by a positive divisor; no reversal needed.",
+          "yield_score": 0.45,
+          "yield_rationale": "Quotient-variable inequality structure; positive divisor preserves direction.",
+          "source_learn_keyword_id": "two_step_inequalities_variable_divided_by_positive"
+        },
+        {
+          "id": "two_step_inequalities_variable_divided_by_negative",
+          "label": "Two-step inequalities with variable divided by a negative constant",
+          "description": "Solves x/(−a) + b < c by isolating the quotient term and multiplying by a negative divisor with reversal; tests reversal in the quotient-variable setting.",
+          "yield_score": 0.65,
+          "yield_rationale": "Negative-divisor reversal in a two-step context is a targeted error type.",
+          "source_learn_keyword_id": "two_step_inequalities_variable_divided_by_negative"
+        },
+        {
+          "id": "two_step_inequalities_with_fraction_coefficients",
+          "label": "Two-step inequalities with fraction coefficients",
+          "description": "Solves two-step inequalities with fractional variable coefficients; symbol reversal depends only on the sign of the fractional coefficient, not on the denominator magnitude.",
+          "yield_score": 0.58,
+          "yield_rationale": "Fractional-coefficient inequality solving extends to domain-restriction problems in function modeling.",
+          "source_learn_keyword_id": "two_step_inequalities_with_fraction_coefficients"
+        },
+        {
+          "id": "two_step_inequalities_with_decimal_coefficients",
+          "label": "Two-step inequalities with decimal coefficients",
+          "description": "Solves two-step inequalities with decimal coefficients using decimal arithmetic or clearing; reversal depends only on the sign of the final divisor.",
+          "yield_score": 0.45,
+          "yield_rationale": "Decimal two-step inequalities appear in applied constraint modeling.",
+          "source_learn_keyword_id": "two_step_inequalities_with_decimal_coefficients"
+        },
+        {
+          "id": "two_step_inequalities_boundary_inclusion",
+          "label": "Boundary inclusion in two-step inequalities",
+          "description": "Determines whether the solved boundary value is included in the solution based on the original inequality symbol; maps to open vs. closed endpoints in graphical and interval representations.",
+          "yield_score": 0.60,
+          "yield_rationale": "Endpoint-inclusion identification is prerequisite for writing domain and range in interval notation throughout AP Precalc.",
+          "source_learn_keyword_id": "two_step_inequalities_boundary_inclusion"
+        },
+        {
+          "id": "inequality_symbol_reversal_error_recognition",
+          "label": "Inequality symbol reversal errors",
+          "description": "Recognizes and corrects reversal mistakes: the symbol reverses only when multiplying or dividing by a negative, and never for addition or subtraction operations.",
+          "yield_score": 0.70,
+          "yield_rationale": "Error-recognition items are high diagnostic value for detecting the most common inequality misconception.",
+          "source_learn_keyword_id": "inequality_symbol_reversal_error_recognition"
+        }
+      ]
+    },
+    {
+      "id": "multi_step_linear_inequalities_distribution",
+      "label": "Multi-Step Linear Inequalities: Distribution and Collection",
+      "description": "Linear inequalities requiring distribution, like-term collection on one or both sides, and variables on both sides, combined with correct sign-reversal handling.",
+      "ced_topics": [],
+      "yield_score": 0.60,
+      "yield_rationale": "Multi-step inequality fluency supports domain/range reasoning for rational and radical functions; variables-on-both-sides is the standard form for comparing two function values over a domain interval.",
+      "source_learn_keyword_id": "multi_step_linear_inequalities",
+      "in_depth": [
+        {
+          "id": "linear_inequalities_combining_like_terms_one_side",
+          "label": "Linear inequalities requiring like-term collection on one side",
+          "description": "Combines like terms on one side before isolating the variable; mirrors multi-step equation structure while preserving inequality direction unless negative division follows.",
+          "yield_score": 0.55,
+          "yield_rationale": "Like-term collection before inequality isolation is a moderate-frequency skill in constraint analysis.",
+          "source_learn_keyword_id": "linear_inequalities_combining_like_terms_one_side"
+        },
+        {
+          "id": "linear_inequalities_with_distribution_one_side",
+          "label": "Linear inequalities requiring distribution on one side",
+          "description": "Expands a grouped expression on one side before solving; targets inequalities such as 3(x + 2) < 15 where distribution precedes isolation.",
+          "yield_score": 0.58,
+          "yield_rationale": "Distribution in inequality context; moderate frequency in applied constraint problems.",
+          "source_learn_keyword_id": "linear_inequalities_with_distribution_one_side"
+        },
+        {
+          "id": "linear_inequalities_with_subtracted_parentheses",
+          "label": "Linear inequalities with subtracted parentheses",
+          "description": "Changes the sign of every term inside a subtracted group before solving; combines grouping errors with inequality direction logic.",
+          "yield_score": 0.55,
+          "yield_rationale": "Sign-change in subtracted groups is the same algebraic move required in trig identity rewriting.",
+          "source_learn_keyword_id": "linear_inequalities_with_subtracted_parentheses"
+        },
+        {
+          "id": "linear_inequalities_with_multiple_parentheses",
+          "label": "Linear inequalities with multiple grouped expressions",
+          "description": "Distributes across two or more grouped expressions before collecting terms and isolating; the most complex single-step inequality expansion.",
+          "yield_score": 0.52,
+          "yield_rationale": "Multiple-group expansion in inequalities is less common than in equations but appears in advanced applied constraint problems.",
+          "source_learn_keyword_id": "linear_inequalities_with_multiple_parentheses"
+        },
+        {
+          "id": "linear_inequalities_variables_on_both_sides",
+          "label": "Linear inequalities with variables on both sides",
+          "description": "Moves variable terms to one side and constants to the other before isolating; direction reversal depends only on any final negative-coefficient division step.",
+          "yield_score": 0.65,
+          "yield_rationale": "Variables-on-both-sides inequality is the standard form for comparing two function values over a domain interval.",
+          "source_learn_keyword_id": "linear_inequalities_variables_on_both_sides"
+        },
+        {
+          "id": "linear_inequalities_distribution_both_sides",
+          "label": "Linear inequalities requiring distribution on both sides",
+          "description": "Distributes grouped expressions on both sides before collecting and isolating; most complex distribution scenario in linear inequalities.",
+          "yield_score": 0.55,
+          "yield_rationale": "Both-sides distribution is tested less frequently than one-side but appears in comparison-of-function-expressions problems.",
+          "source_learn_keyword_id": "linear_inequalities_distribution_both_sides"
+        }
+      ]
+    },
+    {
+      "id": "multi_step_linear_inequalities_clearing_and_special_cases",
+      "label": "Multi-Step Linear Inequalities: Clearing and Special Cases",
+      "description": "Linear inequalities requiring LCD-clearing of fraction coefficients, power-of-10 clearing of decimals, and identification of no-solution or all-real-number special cases.",
+      "ced_topics": [],
+      "yield_score": 0.55,
+      "yield_rationale": "Fraction-clearing in inequalities arises in domain constraints; no-solution and all-real special cases model impossible or unconstrained domains in function analysis.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "linear_inequalities_with_fraction_coefficients",
+          "label": "Multi-step linear inequalities with fraction coefficients",
+          "description": "Solves inequalities with fractional coefficients using fraction arithmetic or LCD clearing; symbol reversal occurs only for negative fractional-coefficient division.",
+          "yield_score": 0.60,
+          "yield_rationale": "Fraction coefficients in inequalities arise in domain restrictions on fractional function parameters.",
+          "source_learn_keyword_id": "linear_inequalities_with_fraction_coefficients"
+        },
+        {
+          "id": "linear_inequalities_clearing_positive_denominators",
+          "label": "Clearing positive denominators in linear inequalities",
+          "description": "Multiplies every term by a positive LCD to clear constant fraction denominators without reversing; applies only when all denominators are positive constants.",
+          "yield_score": 0.55,
+          "yield_rationale": "Positive-LCD clearing is the standard strategy for simplifying fractional inequalities into integer form.",
+          "source_learn_keyword_id": "linear_inequalities_clearing_positive_denominators"
+        },
+        {
+          "id": "linear_inequalities_with_decimal_coefficients",
+          "label": "Multi-step linear inequalities with decimal coefficients",
+          "description": "Solves multi-step inequalities with decimal coefficients directly or by clearing with a power of 10; reversal depends on the sign of the final divisor.",
+          "yield_score": 0.48,
+          "yield_rationale": "Decimal inequality solving appears in applied constraints; lower frequency than fraction forms.",
+          "source_learn_keyword_id": "linear_inequalities_with_decimal_coefficients"
+        },
+        {
+          "id": "linear_inequalities_clearing_decimal_coefficients",
+          "label": "Clearing decimal coefficients in linear inequalities",
+          "description": "Multiplies by a positive power of 10 to eliminate decimal coefficients before solving; preserves inequality direction because the multiplier is positive.",
+          "yield_score": 0.42,
+          "yield_rationale": "Useful technique; less frequent than fraction-clearing in AP-level inequality problems.",
+          "source_learn_keyword_id": "linear_inequalities_clearing_decimal_coefficients"
+        },
+        {
+          "id": "linear_inequalities_special_case_no_solution",
+          "label": "Linear inequalities with no solution",
+          "description": "Identifies that an inequality has no solution when variable terms cancel and a false constant comparison such as 0 > 5 results.",
+          "yield_score": 0.62,
+          "yield_rationale": "No-solution inequality recognition appears in domain analysis — for instance, identifying when a constraint on x is never satisfied.",
+          "source_learn_keyword_id": "linear_inequalities_special_case_no_solution"
+        },
+        {
+          "id": "linear_inequalities_special_case_all_real_numbers",
+          "label": "Linear inequalities true for all real numbers",
+          "description": "Identifies that an inequality is satisfied by all real numbers when simplification produces an always-true comparison such as 0 < 5.",
+          "yield_score": 0.58,
+          "yield_rationale": "All-real solution inequalities model unconstrained domains; recognizing them is relevant to domain analysis of polynomial and exponential functions.",
+          "source_learn_keyword_id": "linear_inequalities_special_case_all_real_numbers"
+        }
+      ]
+    },
+    {
+      "id": "compound_linear_inequalities_core",
+      "label": "Compound Linear Inequalities: Structure and Solving",
+      "description": "Solution sets formed by combining two linear inequalities with AND or OR logic; covers AND/OR structure, bounded intervals, three-part solving, and compound inequalities from separate solutions.",
+      "ced_topics": [],
+      "yield_score": 0.58,
+      "yield_rationale": "Compound inequalities model domain restrictions and range constraints throughout AP Precalc; three-part inequalities appear when isolating a variable in a bounded domain.",
+      "source_learn_keyword_id": "compound_linear_inequalities",
+      "in_depth": [
+        {
+          "id": "compound_inequalities_and_structure",
+          "label": "AND compound inequality structure",
+          "description": "Identifies an AND compound inequality as requiring simultaneous satisfaction of both parts; its solution set is the intersection of the two individual solution sets.",
+          "yield_score": 0.55,
+          "yield_rationale": "Intersection logic directly models bounded domain constraints such as −1 ≤ x ≤ 4.",
+          "source_learn_keyword_id": "compound_inequalities_and_structure"
+        },
+        {
+          "id": "compound_inequalities_or_structure",
+          "label": "OR compound inequality structure",
+          "description": "Identifies an OR compound inequality as satisfied by values meeting at least one condition; its solution set is the union of the two individual solution sets.",
+          "yield_score": 0.50,
+          "yield_rationale": "Union logic models domain exclusion constraints such as x < −1 or x > 5 for rational functions.",
+          "source_learn_keyword_id": "compound_inequalities_or_structure"
+        },
+        {
+          "id": "bounded_compound_inequalities",
+          "label": "Bounded compound inequalities",
+          "description": "Represents a double-bounded solution set such as a < x < b with two endpoints; reads and writes three-part inequality notation.",
+          "yield_score": 0.62,
+          "yield_rationale": "Bounded interval form is the standard representation for restricted domains of sinusoidal and logarithmic models.",
+          "source_learn_keyword_id": "bounded_compound_inequalities"
+        },
+        {
+          "id": "three_part_inequality_solving",
+          "label": "Three-part linear inequality solving",
+          "description": "Solves a < Bx + C < d by applying the same operation to all three parts simultaneously to isolate the variable in the middle; targets forms where a middle expression must be isolated.",
+          "yield_score": 0.68,
+          "yield_rationale": "Three-part solving is the direct method for isolating a variable inside a bounded constraint; used in finding inverse domains and restricted sinusoidal inputs.",
+          "source_learn_keyword_id": "three_part_inequality_solving"
+        },
+        {
+          "id": "compound_inequalities_from_separate_solutions",
+          "label": "Compound inequalities from separate solved inequalities",
+          "description": "Solves two separate linear inequalities and then combines their solution sets using AND or OR logic; targets the case where each sub-inequality needs independent solution steps.",
+          "yield_score": 0.60,
+          "yield_rationale": "Solving and combining two inequalities is the standard approach for finding feasible parameter ranges in function modeling.",
+          "source_learn_keyword_id": "compound_inequalities_from_separate_solutions"
+        },
+        {
+          "id": "compound_inequality_endpoint_inclusion",
+          "label": "Endpoint inclusion in compound inequalities",
+          "description": "Determines whether each endpoint of a compound inequality solution is included or excluded based on the corresponding inequality symbol; maps to brackets vs. parentheses in interval notation.",
+          "yield_score": 0.65,
+          "yield_rationale": "Endpoint-inclusion accuracy in compound inequalities is directly required for writing domain intervals with mixed strict/inclusive bounds.",
+          "source_learn_keyword_id": "compound_inequality_endpoint_inclusion"
+        }
+      ]
+    },
+    {
+      "id": "compound_linear_inequalities_sets_and_notation",
+      "label": "Compound Linear Inequalities: Set Operations and Notation",
+      "description": "Interval intersection and union for compound inequalities, no-overlap and all-real special cases, interval notation, and number-line graph representations.",
+      "ced_topics": [],
+      "yield_score": 0.55,
+      "yield_rationale": "Interval intersection/union are the set operations behind expressing domain as the overlap of two restrictions; notation forms are used throughout AP Precalc domain/range analysis.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "compound_inequality_interval_intersections",
+          "label": "Interval intersections for compound inequalities",
+          "description": "Finds the overlap region of two solution sets for an AND compound inequality; works with inequality notation, number lines, or interval notation.",
+          "yield_score": 0.60,
+          "yield_rationale": "Interval intersection is the set-operation behind expressing domain as the intersection of two restrictions.",
+          "source_learn_keyword_id": "compound_inequality_interval_intersections"
+        },
+        {
+          "id": "compound_inequality_interval_unions",
+          "label": "Interval unions for compound inequalities",
+          "description": "Combines two disjoint solution sets for an OR compound inequality; writes the union in interval notation using the union symbol or as two separate intervals.",
+          "yield_score": 0.55,
+          "yield_rationale": "Interval unions express domains of functions with excluded points such as vertical asymptote neighborhoods.",
+          "source_learn_keyword_id": "compound_inequality_interval_unions"
+        },
+        {
+          "id": "compound_inequalities_no_overlap",
+          "label": "Compound inequalities with no overlap",
+          "description": "Identifies that an AND compound inequality has no solution when the required intervals are disjoint (e.g., x < 2 and x > 5); represents this as the empty set.",
+          "yield_score": 0.52,
+          "yield_rationale": "No-overlap recognition connects to impossible domain constraints; moderate diagnostic value.",
+          "source_learn_keyword_id": "compound_inequalities_no_overlap"
+        },
+        {
+          "id": "compound_inequalities_all_real_union",
+          "label": "Compound inequalities with all-real-number union",
+          "description": "Recognizes that an OR compound inequality whose combined intervals cover the entire real line has all real numbers as its solution set.",
+          "yield_score": 0.45,
+          "yield_rationale": "All-real union represents unconstrained domains; less frequent as a direct test question.",
+          "source_learn_keyword_id": "compound_inequalities_all_real_union"
+        },
+        {
+          "id": "interval_notation_for_compound_inequalities",
+          "label": "Interval notation for compound inequalities",
+          "description": "Writes compound inequality solution sets using interval notation including intersections, unions, and bounded intervals; translates between inequality, number-line, and interval forms.",
+          "yield_score": 0.70,
+          "yield_rationale": "Interval notation for compound sets is the primary tool for expressing domain and range in AP Precalc; high indirect yield.",
+          "source_learn_keyword_id": "interval_notation_for_compound_inequalities"
+        },
+        {
+          "id": "number_line_graphs_for_compound_inequalities",
+          "label": "Number-line graphs for compound inequalities",
+          "description": "Graphs compound inequality solutions using multiple shaded regions or bounded segments on a number line; reads and writes both AND (intersection) and OR (union) configurations.",
+          "yield_score": 0.48,
+          "yield_rationale": "Number-line graphing of compound sets is a representation skill tested in early algebra; less direct use at AP level.",
+          "source_learn_keyword_id": "number_line_graphs_for_compound_inequalities"
+        }
+      ]
+    },
+    {
+      "id": "linear_equation_and_inequality_interpretation",
+      "label": "Linear Equation and Inequality Interpretation",
+      "description": "Interpreting solution types for linear equations and inequalities: distinguishing single-value, interval, empty, and all-real solutions; correctly using interval notation, endpoint types, and infinity conventions.",
+      "ced_topics": [],
+      "yield_score": 0.52,
+      "yield_rationale": "Solution-interpretation literacy directly feeds domain/range communication throughout AP Precalc; interval notation and empty-set/all-real conventions appear in every unit.",
+      "source_learn_keyword_id": "linear_equation_and_inequality_interpretation",
+      "in_depth": [
+        {
+          "id": "equation_vs_inequality_solution_type",
+          "label": "Equation versus inequality solution type",
+          "description": "Distinguishes that a typical linear equation has a single-point solution while a linear inequality produces a ray or interval; applies to reading and interpreting solved problems.",
+          "yield_score": 0.48,
+          "yield_rationale": "This conceptual distinction is the bridge between equation-solving and domain/range reasoning.",
+          "source_learn_keyword_id": "equation_vs_inequality_solution_type"
+        },
+        {
+          "id": "boundary_value_vs_solution_region",
+          "label": "Boundary value versus solution region",
+          "description": "Distinguishes the boundary (cutoff point) from the complete solution region of an inequality; recognizes that the full solution includes all values on the correct side with possible boundary inclusion.",
+          "yield_score": 0.55,
+          "yield_rationale": "Boundary-vs-region clarity is required for identifying domain endpoints of rational and radical functions.",
+          "source_learn_keyword_id": "boundary_value_vs_solution_region"
+        },
+        {
+          "id": "open_vs_closed_endpoint_meaning",
+          "label": "Open versus closed endpoint meaning",
+          "description": "Connects strict inequalities to open endpoints (parentheses, hollow dot) and inclusive inequalities to closed endpoints (brackets, filled dot); applies consistently across notation systems.",
+          "yield_score": 0.65,
+          "yield_rationale": "Open/closed endpoint notation appears in every domain and range expression throughout AP Precalc; high indirect yield.",
+          "source_learn_keyword_id": "open_vs_closed_endpoint_meaning"
+        },
+        {
+          "id": "infinity_endpoint_notation",
+          "label": "Infinity endpoint notation",
+          "description": "Applies the rule that ∞ and −∞ always use parentheses in interval notation because they are directions rather than reachable values; targets the common bracket-with-infinity error.",
+          "yield_score": 0.62,
+          "yield_rationale": "Infinity parenthesis rule is one of the most commonly violated notation conventions in domain/range writing.",
+          "source_learn_keyword_id": "infinity_endpoint_notation"
+        },
+        {
+          "id": "solution_set_empty_set_notation",
+          "label": "Empty solution set notation",
+          "description": "Represents a contradiction (no-solution case) using the empty set symbol ∅ or the empty set notation; applies to both equations and compound inequalities.",
+          "yield_score": 0.48,
+          "yield_rationale": "Empty-set notation is needed whenever a model constraint or equation system has no valid solution.",
+          "source_learn_keyword_id": "solution_set_empty_set_notation"
+        },
+        {
+          "id": "all_real_numbers_solution_notation",
+          "label": "All real numbers solution notation",
+          "description": "Represents an identity equation or always-true inequality using all-real-number notation (ℝ or (−∞, ∞)); distinguishes from a single specific solution.",
+          "yield_score": 0.52,
+          "yield_rationale": "All-real-number domain notation is needed for polynomial and exponential functions whose domain is unrestricted.",
+          "source_learn_keyword_id": "all_real_numbers_solution_notation"
+        },
+        {
+          "id": "extraneous_results_from_invalid_linear_steps",
+          "label": "Invalid steps causing wrong linear solutions",
+          "description": "Diagnoses structural errors — applying an operation to only one side, incorrect distribution, or unnecessary symbol reversal — that produce invalid equation or inequality solutions.",
+          "yield_score": 0.58,
+          "yield_rationale": "Error diagnosis is a high-value skill for catching mistakes in function-equation solving steps in FRQ work.",
+          "source_learn_keyword_id": "extraneous_results_from_invalid_linear_steps"
+        },
+        {
+          "id": "linear_solution_reasonableness",
+          "label": "Reasonableness of linear solutions",
+          "description": "Evaluates whether a solved value or inequality is reasonable by substitution, sign checking, boundary testing, or structural comparison to the original problem.",
+          "yield_score": 0.50,
+          "yield_rationale": "Reasonableness checking is a communication and reasoning skill (MP3) assessed in FRQ justification parts.",
+          "source_learn_keyword_id": "linear_solution_reasonableness"
+        }
+      ]
+    },
+    {
+      "id": "absolute_value_equations_and_inequalities",
+      "label": "Absolute Value Equations and Inequalities",
+      "description": "Solving equations and inequalities involving absolute value expressions by splitting into two linear cases; interpreting solution sets as single points, intervals, or unions based on the comparison.",
+      "ced_topics": [],
+      "yield_score": 0.48,
+      "yield_rationale": "Absolute value equations and inequalities appear in domain restriction and distance-based model contexts; they are the natural extension of compound-inequality notation and feed into piecewise function analysis.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "absolute_value_equation_two_cases",
+          "label": "Absolute value equations via two-case split",
+          "description": "Solves |ax + b| = c by splitting into ax + b = c and ax + b = −c, then solving each linear equation; applies only when c ≥ 0.",
+          "yield_score": 0.55,
+          "yield_rationale": "Two-case split is the standard technique for absolute-value equations; reappears when solving equations derived from piecewise-defined functions.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "absolute_value_equation_no_solution",
+          "label": "Absolute value equations with no solution",
+          "description": "Identifies that |expression| = c has no solution when c < 0, since absolute value is always nonneg; avoids erroneously splitting into two cases.",
+          "yield_score": 0.42,
+          "yield_rationale": "No-solution recognition for absolute value equations prevents a specific category of error in equation solving.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "absolute_value_equation_single_solution",
+          "label": "Absolute value equations with single solution",
+          "description": "Recognizes that |expression| = 0 produces exactly one solution because both cases reduce to the same equation; distinguishes from the general two-solution case.",
+          "yield_score": 0.38,
+          "yield_rationale": "Zero-right-side boundary case; moderate diagnostic value.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "absolute_value_inequality_less_than",
+          "label": "Absolute value inequalities with < or ≤",
+          "description": "Rewrites |ax + b| < c as the AND compound inequality −c < ax + b < c and solves for a bounded interval solution; applies when c > 0.",
+          "yield_score": 0.65,
+          "yield_rationale": "The AND-compound rewrite of absolute-value less-than directly exercises the three-part inequality solving already established in this category.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "absolute_value_inequality_greater_than",
+          "label": "Absolute value inequalities with > or ≥",
+          "description": "Rewrites |ax + b| > c as the OR compound inequality ax + b < −c or ax + b > c and solves for a union-of-rays solution; applies when c > 0.",
+          "yield_score": 0.65,
+          "yield_rationale": "The OR-compound rewrite of absolute-value greater-than reinforces union notation and is a direct application of compound-inequality logic to a new structure.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "absolute_value_inequality_all_real_or_no_solution",
+          "label": "Absolute value inequalities: trivially true or false",
+          "description": "Identifies that |expression| > c is true for all real numbers when c < 0, and |expression| < c has no solution when c ≤ 0; applies structural reasoning before splitting.",
+          "yield_score": 0.40,
+          "yield_rationale": "Special-case recognition prevents wasted steps; connects to no-solution and all-real cases already established in compound inequalities.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "linear_function_graphs_and_slope",
+      "label": "Linear Function Graphs and Slope",
+      "description": "Graphing linear functions in slope-intercept and point-slope forms, computing slope from two points, interpreting slope as a rate of change, identifying slope and y-intercept from a graph, and classifying horizontal, vertical, parallel, and perpendicular lines. Direct prerequisite for CED topics 1.2 (AROC as slope) and 1.3 (constant rate of change identifies a linear function).",
+      "ced_topics": [],
+      "yield_score": 0.70,
+      "yield_rationale": "Slope is the foundational rate-of-change concept: AP Precalc 1.2 defines AROC as slope of a secant line and 1.3 characterizes linear functions by constant rate of change. Fluency with slope-intercept and point-slope forms is also required for tangent-line approximation in Calc AB (C4).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "slope_from_two_points",
+          "label": "Slope from two points",
+          "description": "Computes slope as rise over run using m = (y₂ − y₁)/(x₂ − x₁); handles positive, negative, zero, and undefined slope cases.",
+          "yield_score": 0.72,
+          "yield_rationale": "Slope computation from coordinates is directly exercised in AROC calculations and secant-line analysis throughout AP Precalc and Calc AB.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "slope_as_rate_of_change",
+          "label": "Slope as a rate of change",
+          "description": "Interprets the slope of a linear function as the constant rate at which the output changes per unit of input; connects numerical slope to verbal descriptions of change.",
+          "yield_score": 0.75,
+          "yield_rationale": "Rate-of-change interpretation of slope is the conceptual bridge to AROC (AP Precalc 1.2) and to the derivative as instantaneous rate of change (Calc AB).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "slope_intercept_form_graphing",
+          "label": "Graphing in slope-intercept form",
+          "description": "Identifies m and b in y = mx + b and uses them to graph the line: plots the y-intercept and applies slope as rise/run to find additional points.",
+          "yield_score": 0.68,
+          "yield_rationale": "Slope-intercept graphing is prerequisite for interpreting linear function behavior, y-intercept meaning, and transformations in AP Precalc Unit 1.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "point_slope_form",
+          "label": "Point-slope form of a linear equation",
+          "description": "Writes and uses the equation y − y₁ = m(x − x₁) given a point and slope; converts between point-slope and slope-intercept forms.",
+          "yield_score": 0.65,
+          "yield_rationale": "Point-slope form is the natural output of the AROC/secant-slope computation and is the standard form for tangent-line equations in Calc AB.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "slope_and_intercept_from_graph",
+          "label": "Reading slope and y-intercept from a graph",
+          "description": "Identifies the slope (steepness and direction) and y-intercept of a linear function directly from its graph; selects two lattice-point coordinates to compute slope accurately.",
+          "yield_score": 0.60,
+          "yield_rationale": "Graph-reading for slope and intercept is tested in AP Precalc graphical representation tasks and in Calc AB graph-based AROC problems.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "horizontal_and_vertical_lines",
+          "label": "Horizontal and vertical lines",
+          "description": "Distinguishes equations of horizontal lines (y = k, slope 0) from vertical lines (x = h, undefined slope); connects to zero and undefined rate of change.",
+          "yield_score": 0.50,
+          "yield_rationale": "Horizontal and vertical line cases arise in domain/range analysis and in identifying constant functions vs. non-functions.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "parallel_and_perpendicular_slopes",
+          "label": "Parallel and perpendicular slope relationships",
+          "description": "Identifies that parallel lines have equal slopes and perpendicular lines have slopes that are negative reciprocals; applies these relationships to write equations of related lines.",
+          "yield_score": 0.55,
+          "yield_rationale": "Parallel/perpendicular slope relationships appear in geometric applications and in normal-line construction in Calc AB.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

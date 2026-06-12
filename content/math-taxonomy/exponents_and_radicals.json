@@ -1,0 +1,1306 @@
+{
+  "category": {
+    "id": "exponents_and_radicals",
+    "label": "Exponents and Radicals",
+    "description": "Exponent laws, radical notation, rational exponents, and equations involving powers and roots. These skills are the operational core of Unit 2 (exponential and logarithmic functions) and prerequisite for rational-exponent manipulation, complex zeros, and exact trig values.",
+    "section": "foundations",
+    "ced_unit": null,
+    "courses": [
+      { "course": "precalc", "role": "core", "order_index": 6 },
+      { "course": "calc_ab", "role": "foundation", "order_index": 6 }
+    ],
+    "yield_score": 0.88,
+    "yield_rationale": "Exponent laws are the algebraic engine of AP Precalc Unit 2 (2.3, 2.4, 2.9–2.13); rational exponents and radical skills appear in FRQ 4 (symbolic manipulations) and throughout MC; spec anchors integer exponent laws at 0.92."
+  },
+  "umbrellas": [
+    {
+      "id": "exponent_notation_and_structure",
+      "label": "Exponent Notation and Structure",
+      "description": "Meaning and structure of powers: base/exponent identification, repeated multiplication, how parentheses determine base scope, and coefficient scope errors.",
+      "ced_topics": [],
+      "yield_score": 0.50,
+      "yield_rationale": "Structural-vocabulary umbrella feeding all downstream use; rarely the direct exam target itself. Rescored from 0.65 to 0.50 to spread the yield signal and better reflect that this umbrella is a prerequisite scaffold, not a direct exam target. Split from original 13-item umbrella; first half covers notation meaning and base-scope errors.",
+      "source_learn_keyword_id": "exponent_notation_and_structure",
+      "in_depth": [
+        {
+          "id": "base_and_exponent_identification",
+          "label": "Base and exponent identification",
+          "description": "A power has a base (the factor being repeated) and an exponent (the count of repetitions); this skill tests reading exponent notation before applying any law.",
+          "yield_score": 0.55,
+          "yield_rationale": "Entry-level reading skill; foundational but rarely the direct test object; embedded in every exponent problem.",
+          "source_learn_keyword_id": "base_and_exponent_identification"
+        },
+        {
+          "id": "positive_integer_exponents_as_repeated_multiplication",
+          "label": "Positive integer exponents as repeated multiplication",
+          "description": "A positive integer exponent represents repeated multiplication of the same base; excludes zero, negative, and rational exponents.",
+          "yield_score": 0.50,
+          "yield_rationale": "Conceptual anchor for exponent meaning; tested at foundation level before laws are applied.",
+          "source_learn_keyword_id": "positive_integer_exponents_as_repeated_multiplication"
+        },
+        {
+          "id": "power_notation_for_variable_bases",
+          "label": "Power notation with variable bases",
+          "description": "Variable bases written with exponents represent repeated multiplication of the same variable; tests forms like x^n.",
+          "yield_score": 0.55,
+          "yield_rationale": "Prerequisite notation for all algebraic exponent work; foundational.",
+          "source_learn_keyword_id": "power_notation_for_variable_bases"
+        },
+        {
+          "id": "power_notation_for_multi_variable_bases",
+          "label": "Power notation with multi-variable bases",
+          "description": "A grouped multi-variable product raised to a power has the entire product as base; distinguishes (xy)^n from xy^n.",
+          "yield_score": 0.62,
+          "yield_rationale": "Scope-of-base errors are common in power-of-product problems; moderately tested via application.",
+          "source_learn_keyword_id": "power_notation_for_multi_variable_bases"
+        },
+        {
+          "id": "parenthesized_base_vs_unparenthesized_base",
+          "label": "Parenthesized versus unparenthesized bases",
+          "description": "Parentheses determine whether an exponent applies to an entire quantity or only the immediately preceding factor; targets (-x)^2 versus -x^2.",
+          "yield_score": 0.72,
+          "yield_rationale": "Sign errors from missing parentheses are among the most common algebra mistakes; high distractor value in MC.",
+          "source_learn_keyword_id": "parenthesized_base_vs_unparenthesized_base"
+        },
+        {
+          "id": "coefficient_not_in_base_without_parentheses",
+          "label": "Coefficient not in base without parentheses",
+          "description": "In a term like 4x^2, the exponent applies to x only, not the coefficient 4; distinguishes 4x^2 from (4x)^2.",
+          "yield_score": 0.70,
+          "yield_rationale": "Classic coefficient-scope error targeted in both procedural and error-analysis MC items.",
+          "source_learn_keyword_id": "coefficient_not_in_base_without_parentheses"
+        },
+        {
+          "id": "exponent_applied_to_grouped_sum_or_difference",
+          "label": "Powers of grouped sums and differences",
+          "description": "An exponent outside parentheses applies to the entire grouped sum or difference; structural recognition, not binomial expansion.",
+          "yield_score": 0.60,
+          "yield_rationale": "Prerequisite for recognizing when expansion is needed versus when base scope applies; moderate frequency.",
+          "source_learn_keyword_id": "exponent_applied_to_grouped_sum_or_difference"
+        },
+        {
+          "id": "powers_do_not_distribute_over_addition",
+          "label": "Powers do not distribute over addition",
+          "description": "A power of a sum is not equal to the sum of powers; targets the misconception (a+b)^n = a^n + b^n.",
+          "yield_score": 0.75,
+          "yield_rationale": "One of the highest-frequency algebra errors; appears as a distractor in polynomial and exponential MC problems.",
+          "source_learn_keyword_id": "powers_do_not_distribute_over_addition"
+        }
+      ]
+    },
+    {
+      "id": "exponent_notation_precedence_and_edge_cases",
+      "label": "Exponent Notation — Precedence and Edge Cases",
+      "description": "Exponent precedence over multiplication and addition, subtraction non-distribution, and trivial-base edge cases (power of 1, base of 1).",
+      "ced_topics": [],
+      "yield_score": 0.48,
+      "yield_rationale": "Precedence and edge-case knowledge is foundational but even lower direct-test frequency than base-scope errors; slightly lower yield than the first notation half. Split from original exponent_notation_and_structure (second half, precedence/edge-case items).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "powers_do_not_distribute_over_subtraction",
+          "label": "Powers do not distribute over subtraction",
+          "description": "A power of a difference is not equal to the difference of powers; targets errors such as (a-b)^2 = a^2 - b^2.",
+          "yield_score": 0.74,
+          "yield_rationale": "Close parallel to the addition case; similarly high distractor frequency in difference-of-squares contexts.",
+          "source_learn_keyword_id": "powers_do_not_distribute_over_subtraction"
+        },
+        {
+          "id": "exponent_precedence_over_multiplication",
+          "label": "Exponent precedence over multiplication",
+          "description": "Exponents are applied before multiplication unless grouping symbols change structure; focuses on scope of exponent inside a product term.",
+          "yield_score": 0.65,
+          "yield_rationale": "Order-of-operations precision required for correct evaluation of function expressions; moderately tested.",
+          "source_learn_keyword_id": "exponent_precedence_over_multiplication"
+        },
+        {
+          "id": "exponent_precedence_over_addition",
+          "label": "Exponent precedence over addition",
+          "description": "Exponents are applied before addition or subtraction unless grouping symbols change structure; targets x^2 + 5 style expressions.",
+          "yield_score": 0.60,
+          "yield_rationale": "Foundational order-of-operations skill; embedded in function evaluation tasks.",
+          "source_learn_keyword_id": "exponent_precedence_over_addition"
+        },
+        {
+          "id": "power_of_one",
+          "label": "Power of one",
+          "description": "Any base raised to the exponent 1 equals the base itself; tests recognition of a^1 = a.",
+          "yield_score": 0.42,
+          "yield_rationale": "Trivial rule used incidentally; rarely the primary test object.",
+          "source_learn_keyword_id": "power_of_one"
+        },
+        {
+          "id": "one_as_base",
+          "label": "One as a base",
+          "description": "The base 1 raised to any exponent remains 1; contrasts with exponent-of-1 rule.",
+          "yield_score": 0.35,
+          "yield_rationale": "Edge case; occasionally used to craft plausible distractors; low direct-test frequency.",
+          "source_learn_keyword_id": "one_as_base"
+        }
+      ]
+    },
+    {
+      "id": "integer_exponent_basic_rules",
+      "label": "Integer Exponent Basic Rules",
+      "description": "Core rules for rewriting powers with integer exponents: product rule (add exponents for same-base products), quotient rule (subtract exponents for same-base quotients), and power of a power (multiply exponents).",
+      "ced_topics": [],
+      "yield_score": 0.92,
+      "yield_rationale": "Spec anchor: 0.92 — product, quotient, and power-of-power rules are the most load-bearing exponent laws; ubiquitous in Units 1 and 2 and FRQ 4 symbolic manipulations. Split from integer_exponent_laws to satisfy 8-keyword limit.",
+      "source_learn_keyword_id": "integer_exponent_laws",
+      "in_depth": [
+        {
+          "id": "product_rule_same_base_single_variable",
+          "label": "Product rule with same single-variable base",
+          "description": "Multiplying powers with the same variable base adds exponents while keeping the base; applies only when bases match exactly.",
+          "yield_score": 0.88,
+          "yield_rationale": "Core exponent law; appears in virtually every algebraic simplification involving powers.",
+          "source_learn_keyword_id": "product_rule_same_base_single_variable"
+        },
+        {
+          "id": "product_rule_same_numeric_base",
+          "label": "Product rule with same numeric base",
+          "description": "Multiplying powers with the same numeric base adds exponents; targets numeric powers such as 2^a · 2^b.",
+          "yield_score": 0.82,
+          "yield_rationale": "Numeric-base product rule is tested in exponential function manipulation (2.4) and FRQ 4.",
+          "source_learn_keyword_id": "product_rule_same_numeric_base"
+        },
+        {
+          "id": "product_rule_multiple_factors_same_base",
+          "label": "Product rule with more than two same-base factors",
+          "description": "The product rule extends to three or more same-base powers by adding all exponents.",
+          "yield_score": 0.72,
+          "yield_rationale": "Extended product chains appear in simplification problems; moderate frequency.",
+          "source_learn_keyword_id": "product_rule_multiple_factors_same_base"
+        },
+        {
+          "id": "product_rule_requires_matching_bases",
+          "label": "Product rule requires matching bases",
+          "description": "Exponents are added only when multiplied powers share the same base; prevents combining unlike bases such as x^2·y^3.",
+          "yield_score": 0.80,
+          "yield_rationale": "Common error: students add exponents across unlike bases; this boundary is tested directly in MC.",
+          "source_learn_keyword_id": "product_rule_requires_matching_bases"
+        },
+        {
+          "id": "quotient_rule_same_base_single_variable",
+          "label": "Quotient rule with same single-variable base",
+          "description": "Dividing powers with the same variable base subtracts the denominator exponent from the numerator exponent.",
+          "yield_score": 0.87,
+          "yield_rationale": "Core exponent law used in rational-function simplification and exponential manipulation.",
+          "source_learn_keyword_id": "quotient_rule_same_base_single_variable"
+        },
+        {
+          "id": "quotient_rule_same_numeric_base",
+          "label": "Quotient rule with same numeric base",
+          "description": "Dividing powers with the same numeric base subtracts exponents; targets powers of numbers such as 5^a/5^b.",
+          "yield_score": 0.80,
+          "yield_rationale": "Numeric quotient rule appears in exponential function rewriting and semi-log contexts.",
+          "source_learn_keyword_id": "quotient_rule_same_numeric_base"
+        },
+        {
+          "id": "quotient_rule_negative_exponent_result",
+          "label": "Quotient rule producing a negative exponent",
+          "description": "When the denominator exponent exceeds the numerator, the quotient rule yields a negative exponent; connects quotient structure to reciprocal form.",
+          "yield_score": 0.85,
+          "yield_rationale": "Negative-exponent results from quotient rule are high-frequency in simplification problems; connects to zero/negative exponent umbrella.",
+          "source_learn_keyword_id": "quotient_rule_negative_exponent_result"
+        },
+        {
+          "id": "quotient_rule_zero_exponent_result",
+          "label": "Quotient rule producing a zero exponent",
+          "description": "Equal-exponent same-base quotients yield exponent zero; connects quotient structure to the zero-exponent rule.",
+          "yield_score": 0.78,
+          "yield_rationale": "Zero-exponent production via quotient rule is tested explicitly as a conceptual link.",
+          "source_learn_keyword_id": "quotient_rule_zero_exponent_result"
+        },
+        {
+          "id": "power_of_power_rule",
+          "label": "Power of a power rule",
+          "description": "A power raised to another power multiplies the exponents; targets (x^a)^b = x^(ab).",
+          "yield_score": 0.92,
+          "yield_rationale": "Power-of-power rule is one of the most-tested exponent laws; appears in exponential manipulation (2.4) and FRQ 4.",
+          "source_learn_keyword_id": "power_of_power_rule"
+        }
+      ]
+    },
+    {
+      "id": "integer_exponent_power_product_quotient_rules",
+      "label": "Integer Exponent Power-of-Product, Power-of-Quotient, and Same-Exponent Rules",
+      "description": "Rules covering how exponents distribute over products and quotients: power of a product, power of a quotient, negative power on a quotient, and reverse direction (same-exponent regrouping).",
+      "ced_topics": [],
+      "yield_score": 0.85,
+      "yield_rationale": "Power-of-product and power-of-quotient rules are required for exponential function rewriting and polynomial manipulation; slightly lower than the product/quotient/power-of-power anchor but still high-load. Split from integer_exponent_laws to satisfy 8-keyword limit.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "power_of_power_with_negative_exponents",
+          "label": "Power of a power with negative exponents",
+          "description": "The power-of-power rule applies when one or both exponents are negative; resulting exponent is the product of the two exponents.",
+          "yield_score": 0.82,
+          "yield_rationale": "Negative exponent interaction with power-of-power is a common source of sign errors in MC.",
+          "source_learn_keyword_id": "power_of_power_with_negative_exponents"
+        },
+        {
+          "id": "power_of_power_vs_product_rule",
+          "label": "Power of a power versus product rule",
+          "description": "Powers of powers multiply exponents; same-base products add exponents; this skill distinguishes these two commonly confused laws.",
+          "yield_score": 0.88,
+          "yield_rationale": "Confusion between these two rules is among the highest-frequency exponent errors; targeted heavily in both MC and FRQ 4.",
+          "source_learn_keyword_id": "power_of_power_vs_product_rule"
+        },
+        {
+          "id": "power_of_product_rule",
+          "label": "Power of a product rule",
+          "description": "A power applied to a product applies to each factor; (ab)^n = a^n · b^n.",
+          "yield_score": 0.85,
+          "yield_rationale": "Power-of-product rule is required for exponential function rewriting and polynomial manipulation.",
+          "source_learn_keyword_id": "power_of_product_rule"
+        },
+        {
+          "id": "power_of_product_with_coefficients",
+          "label": "Power of a product with coefficients",
+          "description": "When a product with a numerical coefficient is raised to a power, both the coefficient and each variable factor are raised to that power; targets (3x)^2.",
+          "yield_score": 0.83,
+          "yield_rationale": "Coefficient-in-base errors are high-frequency; directly tested in exponential manipulation problems.",
+          "source_learn_keyword_id": "power_of_product_with_coefficients"
+        },
+        {
+          "id": "power_of_product_multiple_variables",
+          "label": "Power of a product with multiple variables",
+          "description": "When a product of several variable factors is raised to a power, the exponent applies to each factor; targets (xyz)^n style expressions.",
+          "yield_score": 0.75,
+          "yield_rationale": "Multi-variable power distribution appears in exponential expression manipulation.",
+          "source_learn_keyword_id": "power_of_product_multiple_variables"
+        },
+        {
+          "id": "power_of_quotient_rule",
+          "label": "Power of a quotient rule",
+          "description": "A power applied to a quotient applies to both numerator and denominator; (a/b)^n = a^n/b^n.",
+          "yield_score": 0.82,
+          "yield_rationale": "Power-of-quotient structure appears in rational function and exponential expression work.",
+          "source_learn_keyword_id": "power_of_quotient_rule"
+        },
+        {
+          "id": "power_of_quotient_with_negative_exponents",
+          "label": "Power of a quotient with negative exponents",
+          "description": "A quotient raised to a negative power is rewritten using reciprocal structure and positive exponents; targets (a/b)^(-n).",
+          "yield_score": 0.78,
+          "yield_rationale": "Negative power on quotient combines two laws; moderate complexity tested in simplification MC.",
+          "source_learn_keyword_id": "power_of_quotient_with_negative_exponents"
+        },
+        {
+          "id": "same_exponent_different_bases_product",
+          "label": "Same exponent with different bases in a product",
+          "description": "A product of powers with the same exponent can be rewritten as one grouped product raised to that exponent; a^n · b^n = (ab)^n.",
+          "yield_score": 0.72,
+          "yield_rationale": "Reverse direction of power-of-product rule; used in exponential expression equivalence questions.",
+          "source_learn_keyword_id": "same_exponent_different_bases_product"
+        },
+        {
+          "id": "same_exponent_different_bases_quotient",
+          "label": "Same exponent with different bases in a quotient",
+          "description": "A quotient of powers with the same exponent can be rewritten as one quotient raised to that exponent; a^n/b^n = (a/b)^n.",
+          "yield_score": 0.70,
+          "yield_rationale": "Reverse direction of power-of-quotient rule; used in equivalent-form questions.",
+          "source_learn_keyword_id": "same_exponent_different_bases_quotient"
+        }
+      ]
+    },
+    {
+      "id": "zero_and_negative_exponent_basics",
+      "label": "Zero and Negative Exponent Basics",
+      "description": "Meaning and rewriting of zero exponents (any nonzero base gives 1) and the core rules for negative exponents as reciprocals, including numerator/denominator factor movement and sign distinction.",
+      "ced_topics": [],
+      "yield_score": 0.85,
+      "yield_rationale": "Spec anchor: 0.85 — negative exponents appear constantly in rational function and exponential work; required for FRQ 4 symbolic manipulations. Split from zero_and_negative_exponent_structure (first half).",
+      "source_learn_keyword_id": "zero_and_negative_exponent_structure",
+      "in_depth": [
+        {
+          "id": "zero_exponent_nonzero_base",
+          "label": "Zero exponent with nonzero base",
+          "description": "Any nonzero base raised to the zero power equals 1; the nonzero-base restriction is essential.",
+          "yield_score": 0.82,
+          "yield_rationale": "Zero-exponent rule is among the most tested exponent facts; frequently embedded in complex expressions.",
+          "source_learn_keyword_id": "zero_exponent_nonzero_base"
+        },
+        {
+          "id": "zero_exponent_variable_base_restriction",
+          "label": "Variable-base restriction for zero exponents",
+          "description": "A variable base raised to zero equals 1 only when the base is nonzero; tests hidden restrictions in forms like x^0.",
+          "yield_score": 0.72,
+          "yield_rationale": "Domain restriction from zero exponent is tested in AP Precalc function-domain contexts.",
+          "source_learn_keyword_id": "zero_exponent_variable_base_restriction"
+        },
+        {
+          "id": "zero_to_zero_power_indeterminate",
+          "label": "Zero to the zero power",
+          "description": "The expression 0^0 is indeterminate or undefined in standard precalculus; distinguishes it from ordinary zero-exponent cases.",
+          "yield_score": 0.40,
+          "yield_rationale": "Niche edge case; appears occasionally as a distractor option; low direct-test frequency.",
+          "source_learn_keyword_id": "zero_to_zero_power_indeterminate"
+        },
+        {
+          "id": "negative_exponent_as_reciprocal",
+          "label": "Negative exponent as reciprocal",
+          "description": "A negative exponent indicates the reciprocal of the corresponding positive-exponent power; a^(-n) = 1/a^n.",
+          "yield_score": 0.90,
+          "yield_rationale": "Foundational negative-exponent rule; prerequisite for all rational function and exponential manipulation tasks.",
+          "source_learn_keyword_id": "negative_exponent_as_reciprocal"
+        },
+        {
+          "id": "negative_exponent_on_denominator_factor",
+          "label": "Negative exponent on denominator factor",
+          "description": "A factor with a negative exponent in the denominator moves to the numerator with a positive exponent.",
+          "yield_score": 0.85,
+          "yield_rationale": "Denominator-to-numerator movement is heavily tested in simplification and equivalent-form questions.",
+          "source_learn_keyword_id": "negative_exponent_on_denominator_factor"
+        },
+        {
+          "id": "negative_exponent_on_numerator_factor",
+          "label": "Negative exponent on numerator factor",
+          "description": "A factor with a negative exponent in the numerator moves to the denominator with a positive exponent.",
+          "yield_score": 0.85,
+          "yield_rationale": "Numerator-to-denominator movement is the mirror of denominator movement; equally tested.",
+          "source_learn_keyword_id": "negative_exponent_on_numerator_factor"
+        },
+        {
+          "id": "negative_exponent_vs_negative_number",
+          "label": "Negative exponent versus negative number",
+          "description": "A negative exponent creates a reciprocal, not a negative value; 2^(-3) = 1/8, not -8.",
+          "yield_score": 0.88,
+          "yield_rationale": "Sign-vs-reciprocal confusion is one of the highest-frequency exponent errors; consistently appears as a wrong-answer distractor.",
+          "source_learn_keyword_id": "negative_exponent_vs_negative_number"
+        }
+      ]
+    },
+    {
+      "id": "zero_and_negative_exponent_advanced",
+      "label": "Zero and Negative Exponent Advanced Forms",
+      "description": "Advanced negative-exponent patterns: grouped-quantity bases, fractions raised to negative powers, positive-exponent convention, domain restrictions from negative exponents, and mixed-exponent simplification.",
+      "ced_topics": [],
+      "yield_score": 0.82,
+      "yield_rationale": "Advanced negative-exponent forms appear in FRQ 4 multi-step simplification; slightly lower yield than basic forms but still high-load. Split from zero_and_negative_exponent_structure (second half).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "negative_exponent_on_grouped_quantity",
+          "label": "Negative exponent on a grouped quantity",
+          "description": "A negative exponent on a grouped expression makes the entire grouped base reciprocal; differs from moving only one term inside the group.",
+          "yield_score": 0.78,
+          "yield_rationale": "Grouped-base scope errors with negative exponents produce common distractors.",
+          "source_learn_keyword_id": "negative_exponent_on_grouped_quantity"
+        },
+        {
+          "id": "negative_exponent_on_fraction",
+          "label": "Negative exponent on a fraction",
+          "description": "A fraction raised to a negative exponent is rewritten by taking the reciprocal and applying the positive exponent; (a/b)^(-n) = (b/a)^n.",
+          "yield_score": 0.80,
+          "yield_rationale": "Fraction raised to negative power combines reciprocal and exponent rules; tested in FRQ 4 equivalent-form tasks.",
+          "source_learn_keyword_id": "negative_exponent_on_fraction"
+        },
+        {
+          "id": "positive_exponent_convention",
+          "label": "Positive-exponent convention",
+          "description": "Algebraic answers are conventionally written without negative exponents by moving factors across a fraction bar; form convention only, not a change in value.",
+          "yield_score": 0.80,
+          "yield_rationale": "Positive-exponent form is expected in final answers on AP Precalc; tested as a completion step in simplification chains.",
+          "source_learn_keyword_id": "positive_exponent_convention"
+        },
+        {
+          "id": "zero_base_negative_exponent_undefined",
+          "label": "Zero base with negative exponent",
+          "description": "A zero base raised to a negative exponent is undefined because it requires division by zero.",
+          "yield_score": 0.68,
+          "yield_rationale": "Domain restriction from negative exponent on potentially-zero base appears in function domain questions.",
+          "source_learn_keyword_id": "zero_base_negative_exponent_undefined"
+        },
+        {
+          "id": "variable_restrictions_from_negative_exponents",
+          "label": "Variable restrictions from negative exponents",
+          "description": "Negative exponents create denominator factors in reciprocal form; any base moved to the denominator cannot be zero.",
+          "yield_score": 0.72,
+          "yield_rationale": "Domain-restriction identification from negative exponents is tested in AP Precalc function-domain contexts.",
+          "source_learn_keyword_id": "variable_restrictions_from_negative_exponents"
+        },
+        {
+          "id": "mixed_positive_zero_negative_exponents",
+          "label": "Mixed positive, zero, and negative exponents",
+          "description": "Expressions may contain positive, zero, and negative exponents simultaneously; each type must be interpreted correctly in the same expression.",
+          "yield_score": 0.82,
+          "yield_rationale": "Mixed-exponent simplification problems are a staple of AP Precalc MC symbolic fluency questions.",
+          "source_learn_keyword_id": "mixed_positive_zero_negative_exponents"
+        },
+        {
+          "id": "negative_exponents_after_quotient_rule",
+          "label": "Negative exponents produced by quotient rule",
+          "description": "Applying the quotient rule may produce negative exponents; these can then be rewritten as reciprocal factors.",
+          "yield_score": 0.84,
+          "yield_rationale": "Two-step chain (quotient rule then reciprocal rewrite) is a canonical simplification task in exponent manipulation.",
+          "source_learn_keyword_id": "negative_exponents_after_quotient_rule"
+        }
+      ]
+    },
+    {
+      "id": "scientific_notation_with_powers_of_ten",
+      "label": "Scientific Notation with Powers of Ten",
+      "description": "Operations and comparisons involving scientific notation using exponent laws and powers of ten, including multiplication, division, addition, subtraction, coefficient normalization, and magnitude comparison.",
+      "ced_topics": [],
+      "yield_score": 0.30,
+      "yield_rationale": "Spec anchor: 0.30 — minimal direct AP Precalc overlap; powers of 10 appear in semi-log contexts (2.15) but scientific notation itself is not a central exam skill.",
+      "source_learn_keyword_id": "scientific_notation_with_powers_of_ten",
+      "in_depth": [
+        {
+          "id": "multiplication_scientific_notation",
+          "label": "Multiplication in scientific notation",
+          "description": "Numbers in scientific notation are multiplied by multiplying coefficients and adding powers of 10; coefficient may need normalization.",
+          "yield_score": 0.35,
+          "yield_rationale": "Most directly connected to exponent-law practice; occasionally appears in exponential-context problems.",
+          "source_learn_keyword_id": "multiplication_scientific_notation"
+        },
+        {
+          "id": "division_scientific_notation",
+          "label": "Division in scientific notation",
+          "description": "Numbers in scientific notation are divided by dividing coefficients and subtracting powers of 10; result may need coefficient adjustment.",
+          "yield_score": 0.33,
+          "yield_rationale": "Quotient-rule application in scientific-notation context; low AP exam overlap.",
+          "source_learn_keyword_id": "division_scientific_notation"
+        },
+        {
+          "id": "addition_scientific_notation_same_power",
+          "label": "Addition in scientific notation with same power",
+          "description": "Scientific-notation values with the same power of 10 are added by combining coefficients while keeping the common power.",
+          "yield_score": 0.22,
+          "yield_rationale": "Procedural skill; minimal AP Precalc exam appearance.",
+          "source_learn_keyword_id": "addition_scientific_notation_same_power"
+        },
+        {
+          "id": "addition_scientific_notation_different_powers",
+          "label": "Addition in scientific notation with different powers",
+          "description": "Scientific-notation values with different powers of 10 must be rewritten with a common power before coefficients can be combined.",
+          "yield_score": 0.20,
+          "yield_rationale": "Rarely tested at AP Precalc level; prerequisite alignment skill.",
+          "source_learn_keyword_id": "addition_scientific_notation_different_powers"
+        },
+        {
+          "id": "subtraction_scientific_notation",
+          "label": "Subtraction in scientific notation",
+          "description": "Scientific-notation subtraction requires matching powers of 10 before subtracting coefficients; targets sign and place-value issues.",
+          "yield_score": 0.20,
+          "yield_rationale": "Parallel to addition with different powers; same low AP exam frequency.",
+          "source_learn_keyword_id": "subtraction_scientific_notation"
+        },
+        {
+          "id": "scientific_notation_coefficient_adjustment",
+          "label": "Scientific-notation coefficient adjustment",
+          "description": "After an operation, the coefficient must satisfy 1 ≤ |a| < 10, with the power of 10 adjusted accordingly.",
+          "yield_score": 0.28,
+          "yield_rationale": "Normalization step needed after any operation; supports fluency but not a direct exam target.",
+          "source_learn_keyword_id": "scientific_notation_coefficient_adjustment"
+        },
+        {
+          "id": "scientific_notation_comparison",
+          "label": "Scientific-notation comparison",
+          "description": "Scientific-notation values are compared using powers of 10 first and coefficients when powers match.",
+          "yield_score": 0.25,
+          "yield_rationale": "Magnitude comparison skill; occasionally tested in data-interpretation contexts.",
+          "source_learn_keyword_id": "scientific_notation_comparison"
+        },
+        {
+          "id": "scientific_notation_with_negative_powers",
+          "label": "Scientific notation with negative powers of ten",
+          "description": "Negative powers of 10 represent small decimal quantities; tests operations and interpretation for values less than 1.",
+          "yield_score": 0.30,
+          "yield_rationale": "Negative-power-of-ten context overlaps with semi-log reasoning (2.15); slightly higher yield than non-negative cases.",
+          "source_learn_keyword_id": "scientific_notation_with_negative_powers"
+        }
+      ]
+    },
+    {
+      "id": "rational_exponent_meaning_and_conversion",
+      "label": "Rational Exponent Meaning and Conversion",
+      "description": "Meaning of fractional exponents: unit fractions as roots, m/n form (denominator = root index, numerator = power), equivalence with radical notation, and order of root vs power operations.",
+      "ced_topics": [],
+      "yield_score": 0.88,
+      "yield_rationale": "Spec anchor: 0.88 — rational exponents are explicitly part of AP Precalc 2.3 and 2.4 and appear in FRQ 4 equivalent-form manipulations. Split from rational_exponent_structure (first half, meaning/conversion skills).",
+      "source_learn_keyword_id": "rational_exponent_structure",
+      "in_depth": [
+        {
+          "id": "unit_fraction_exponents_as_roots",
+          "label": "Unit fraction exponents as roots",
+          "description": "An exponent of 1/n represents an nth root; connects x^(1/2) to square roots and x^(1/3) to cube roots.",
+          "yield_score": 0.88,
+          "yield_rationale": "Core rational-exponent concept directly tested in 2.3 and 2.4; high FRQ 4 relevance.",
+          "source_learn_keyword_id": "unit_fraction_exponents_as_roots"
+        },
+        {
+          "id": "rational_exponent_denominator_as_root_index",
+          "label": "Denominator of rational exponent as root index",
+          "description": "In a rational exponent m/n, the denominator n gives the root index; focuses on interpreting the root component.",
+          "yield_score": 0.85,
+          "yield_rationale": "Denominator-as-root-index is foundational for converting between radical and rational-exponent forms.",
+          "source_learn_keyword_id": "rational_exponent_denominator_as_root_index"
+        },
+        {
+          "id": "rational_exponent_numerator_as_power",
+          "label": "Numerator of rational exponent as power",
+          "description": "In a rational exponent m/n, the numerator m gives the power applied to the base or its root.",
+          "yield_score": 0.85,
+          "yield_rationale": "Numerator-as-power is the complementary half of rational-exponent meaning; equally tested.",
+          "source_learn_keyword_id": "rational_exponent_numerator_as_power"
+        },
+        {
+          "id": "root_then_power_vs_power_then_root",
+          "label": "Root-then-power versus power-then-root",
+          "description": "For real-valued expressions, x^(m/n) can be interpreted as nth root then mth power, or mth power then nth root; focuses on equivalent rational-exponent structures.",
+          "yield_score": 0.80,
+          "yield_rationale": "Order flexibility is tested when one interpretation produces simpler computation; AP Precalc MC regular.",
+          "source_learn_keyword_id": "root_then_power_vs_power_then_root"
+        },
+        {
+          "id": "negative_rational_exponents",
+          "label": "Negative rational exponents",
+          "description": "A negative rational exponent combines reciprocal structure with root and power; x^(-m/n) = 1 / (nth root of x^m).",
+          "yield_score": 0.85,
+          "yield_rationale": "Negative rational exponents appear in exponential function manipulation and FRQ 4; combine multiple rules.",
+          "source_learn_keyword_id": "negative_rational_exponents"
+        },
+        {
+          "id": "rational_exponents_on_perfect_powers",
+          "label": "Rational exponents on perfect powers",
+          "description": "Rational exponents often yield integer results when the base is a perfect power matching the root index; e.g., 27^(2/3) = 9.",
+          "yield_score": 0.88,
+          "yield_rationale": "Evaluating rational exponents on perfect powers is a staple no-calculator MC question.",
+          "source_learn_keyword_id": "rational_exponents_on_perfect_powers"
+        },
+        {
+          "id": "even_denominator_rational_exponents_real_domain",
+          "label": "Even-denominator rational exponents and real domain",
+          "description": "Rational exponents with even denominators involve even roots; the base must be nonnegative for real-valued results.",
+          "yield_score": 0.72,
+          "yield_rationale": "Domain restriction from even-root rational exponents appears in function domain analysis.",
+          "source_learn_keyword_id": "even_denominator_rational_exponents_real_domain"
+        }
+      ]
+    },
+    {
+      "id": "rational_exponent_laws_and_domain",
+      "label": "Rational Exponent Laws and Domain",
+      "description": "Exponent laws extended to rational exponents (product, quotient, power-of-power), domain restrictions from even/odd denominators, lowest-terms form, and variable restrictions.",
+      "ced_topics": [],
+      "yield_score": 0.82,
+      "yield_rationale": "Rational-exponent law application and domain analysis feed FRQ 4 multi-step manipulation tasks; slightly lower yield than meaning/conversion. Split from rational_exponent_structure (second half, law/domain skills).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "rational_exponent_product_rule",
+          "label": "Product rule with rational exponents",
+          "description": "Same-base powers with rational exponents are multiplied by adding the rational exponents; extends integer product rule.",
+          "yield_score": 0.82,
+          "yield_rationale": "Rational-exponent product rule is required in exponential expression simplification tasks.",
+          "source_learn_keyword_id": "rational_exponent_product_rule"
+        },
+        {
+          "id": "rational_exponent_quotient_rule",
+          "label": "Quotient rule with rational exponents",
+          "description": "Same-base powers with rational exponents are divided by subtracting the denominator rational exponent from the numerator.",
+          "yield_score": 0.80,
+          "yield_rationale": "Rational-exponent quotient rule parallels integer form; used in exponential function rewriting.",
+          "source_learn_keyword_id": "rational_exponent_quotient_rule"
+        },
+        {
+          "id": "rational_exponent_power_rule",
+          "label": "Power of a power with rational exponents",
+          "description": "When a power with a rational exponent is raised to another power, the exponents are multiplied; (x^(m/n))^p = x^(mp/n).",
+          "yield_score": 0.82,
+          "yield_rationale": "Power-of-power with rational exponents is a canonical FRQ 4 manipulation step.",
+          "source_learn_keyword_id": "rational_exponent_power_rule"
+        },
+        {
+          "id": "odd_denominator_rational_exponents_negative_bases",
+          "label": "Odd-denominator rational exponents with negative bases",
+          "description": "Rational exponents with odd denominators can represent real odd roots of negative bases when written in reduced form.",
+          "yield_score": 0.65,
+          "yield_rationale": "Odd-root negative-base behavior distinguishes cube roots from square roots; moderately tested.",
+          "source_learn_keyword_id": "odd_denominator_rational_exponents_negative_bases"
+        },
+        {
+          "id": "rational_exponents_in_lowest_terms",
+          "label": "Rational exponents in lowest terms",
+          "description": "Real interpretation of rational exponents can depend on the exponent being in lowest terms, especially for negative bases; e.g., (-1)^(2/4) vs (-1)^(1/2).",
+          "yield_score": 0.58,
+          "yield_rationale": "Lowest-terms requirement is a subtle precision issue; tested occasionally in error-analysis MC.",
+          "source_learn_keyword_id": "rational_exponents_in_lowest_terms"
+        },
+        {
+          "id": "rational_exponent_expression_restrictions",
+          "label": "Variable restrictions from rational exponents",
+          "description": "Variable expressions with rational exponents may require nonnegative or nonzero bases depending on even roots and negative exponents.",
+          "yield_score": 0.70,
+          "yield_rationale": "Domain-restriction identification from rational exponents appears in AP Precalc function-domain problems.",
+          "source_learn_keyword_id": "rational_exponent_expression_restrictions"
+        }
+      ]
+    },
+    {
+      "id": "radical_notation_and_root_basics",
+      "label": "Radical Notation and Root Basics",
+      "description": "Foundational radical reading: radicand and index identification, square/cube/nth-root structure, principal square root, and the behavior of even roots (nonnegativity requirement, nonreal negatives).",
+      "ced_topics": [],
+      "yield_score": 0.72,
+      "yield_rationale": "Radical structure is prerequisite for simplifying exact trig values (3.3), complex zeros (1.5), and all radical operation and equation work; moderately tested directly. Split from radical_notation_and_root_structure (first half, structure/even-root items).",
+      "source_learn_keyword_id": "radical_notation_and_root_structure",
+      "in_depth": [
+        {
+          "id": "radicand_identification",
+          "label": "Radicand identification",
+          "description": "The radicand is the expression inside a radical symbol; distinguishes radicand from index or outside coefficient.",
+          "yield_score": 0.52,
+          "yield_rationale": "Structural reading skill; foundational but not a direct test target.",
+          "source_learn_keyword_id": "radicand_identification"
+        },
+        {
+          "id": "root_index_identification",
+          "label": "Root index identification",
+          "description": "The index of a radical indicates which root is taken; a square root has implied index 2.",
+          "yield_score": 0.55,
+          "yield_rationale": "Index identification is prerequisite for all root-type distinctions; foundational.",
+          "source_learn_keyword_id": "root_index_identification"
+        },
+        {
+          "id": "square_root_structure",
+          "label": "Square root structure",
+          "description": "A square root asks for the principal value whose square equals the radicand; foundational meaning before simplification.",
+          "yield_score": 0.60,
+          "yield_rationale": "Square-root meaning is the entry point for radical work; tested implicitly throughout.",
+          "source_learn_keyword_id": "square_root_structure"
+        },
+        {
+          "id": "cube_root_structure",
+          "label": "Cube root structure",
+          "description": "A cube root asks for the value whose cube equals the radicand; cube roots can produce real values for negative radicands.",
+          "yield_score": 0.65,
+          "yield_rationale": "Cube root behavior with negatives distinguishes it from square roots; tested in exact-value and domain questions.",
+          "source_learn_keyword_id": "cube_root_structure"
+        },
+        {
+          "id": "nth_root_structure",
+          "label": "Nth-root structure",
+          "description": "An nth root asks for a value that raised to the nth power gives the radicand; generalizes square and cube root structure.",
+          "yield_score": 0.62,
+          "yield_rationale": "General nth-root understanding supports rational exponent interpretation.",
+          "source_learn_keyword_id": "nth_root_structure"
+        },
+        {
+          "id": "principal_square_root",
+          "label": "Principal square root",
+          "description": "The radical symbol √x represents the nonnegative principal square root; distinguishes √9 = 3 from the two solutions of x^2 = 9.",
+          "yield_score": 0.78,
+          "yield_rationale": "Principal-root vs ±root confusion is a high-frequency error in both equation solving and function domain work.",
+          "source_learn_keyword_id": "principal_square_root"
+        },
+        {
+          "id": "even_roots_of_negative_numbers_nonreal",
+          "label": "Even roots of negative numbers are nonreal",
+          "description": "Even roots of negative numbers are not real in standard precalculus; drives domain restrictions for square roots and other even roots.",
+          "yield_score": 0.80,
+          "yield_rationale": "Even-root domain restriction is tested directly in AP Precalc function-domain problems and implicit in 1.5 (complex zeros).",
+          "source_learn_keyword_id": "even_roots_of_negative_numbers_nonreal"
+        }
+      ]
+    },
+    {
+      "id": "radical_notation_and_root_domain",
+      "label": "Radical Notation and Root Domain",
+      "description": "Domain and sign behavior of radicals: even-root nonnegativity conditions, odd-root sign behavior, coefficient outside a radical, and nested radical structure.",
+      "ced_topics": [],
+      "yield_score": 0.68,
+      "yield_rationale": "Domain and sign distinctions for radicals are tested in function-domain and error-analysis problems; slightly lower direct yield than structural identification. Split from radical_notation_and_root_structure (second half, domain/behavior items).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "even_roots_of_positive_numbers",
+          "label": "Even roots of positive numbers",
+          "description": "Even roots of positive numbers have positive principal values in radical notation.",
+          "yield_score": 0.55,
+          "yield_rationale": "Baseline behavior for even roots; foundational for domain reasoning.",
+          "source_learn_keyword_id": "even_roots_of_positive_numbers"
+        },
+        {
+          "id": "even_roots_of_zero",
+          "label": "Even roots of zero",
+          "description": "Any even root of zero equals zero; a defined boundary case for even-root expressions.",
+          "yield_score": 0.38,
+          "yield_rationale": "Boundary edge case; seldom the primary question target.",
+          "source_learn_keyword_id": "even_roots_of_zero"
+        },
+        {
+          "id": "odd_roots_of_negative_numbers",
+          "label": "Odd roots of negative numbers",
+          "description": "Odd roots of negative numbers are real and negative; distinguishes cube roots and fifth roots from square roots.",
+          "yield_score": 0.70,
+          "yield_rationale": "Odd-root negative behavior is tested in exact-value computation and domain analysis.",
+          "source_learn_keyword_id": "odd_roots_of_negative_numbers"
+        },
+        {
+          "id": "even_root_domain_condition",
+          "label": "Even-root radicand condition",
+          "description": "For real-valued even-root expressions the radicand must be ≥ 0; applies to square roots, fourth roots, and all even-index radicals.",
+          "yield_score": 0.82,
+          "yield_rationale": "Domain condition from even roots is one of the most tested foundation skills in AP Precalc function analysis.",
+          "source_learn_keyword_id": "even_root_domain_condition"
+        },
+        {
+          "id": "odd_root_no_nonnegative_restriction",
+          "label": "Odd-root radicands allow all real values",
+          "description": "Odd-root expressions are real for positive, zero, and negative radicands; no nonnegativity restriction.",
+          "yield_score": 0.68,
+          "yield_rationale": "Contrasting with even-root restriction; tested when students must identify unrestricted domains.",
+          "source_learn_keyword_id": "odd_root_no_nonnegative_restriction"
+        },
+        {
+          "id": "radical_coefficient_structure",
+          "label": "Coefficient outside a radical",
+          "description": "A number or expression outside a radical multiplies the radical expression; distinguishes 3√x from √(3x).",
+          "yield_score": 0.60,
+          "yield_rationale": "Scope of coefficient vs radicand is tested in simplification and combining-like-radicals problems.",
+          "source_learn_keyword_id": "radical_coefficient_structure"
+        },
+        {
+          "id": "nested_radical_structure",
+          "label": "Nested radical structure",
+          "description": "A nested radical contains one radical expression inside another; tests recognition of layered root structure.",
+          "yield_score": 0.42,
+          "yield_rationale": "Nested radicals appear in advanced simplification; less frequent at AP Precalc level.",
+          "source_learn_keyword_id": "nested_radical_structure"
+        }
+      ]
+    },
+    {
+      "id": "radical_simplification_numeric",
+      "label": "Radical Simplification — Numeric Factors",
+      "description": "Using perfect powers, prime factorization, and radical product/quotient properties to simplify radical expressions with numeric radicands; includes combining into a single radical and index-matching rules.",
+      "ced_topics": [],
+      "yield_score": 0.78,
+      "yield_rationale": "Spec anchor: 0.78 — simplifying radicals required for exact trig values (3.3), complex zero work (1.5), and FRQ 4 symbolic tasks. Split from radical_factor_structure_and_rewriting (first half, numeric items).",
+      "source_learn_keyword_id": "radical_factor_structure_and_rewriting",
+      "in_depth": [
+        {
+          "id": "perfect_square_factors_in_square_roots",
+          "label": "Perfect-square factors in square roots",
+          "description": "Square-root radicands are analyzed for perfect-square factors; those factors are pulled outside the radical.",
+          "yield_score": 0.85,
+          "yield_rationale": "Extracting perfect-square factors is the most common radical-simplification step; foundational for exact trig values.",
+          "source_learn_keyword_id": "perfect_square_factors_in_square_roots"
+        },
+        {
+          "id": "perfect_cube_factors_in_cube_roots",
+          "label": "Perfect-cube factors in cube roots",
+          "description": "Cube-root radicands are analyzed for perfect-cube factors, which are pulled outside the radical.",
+          "yield_score": 0.72,
+          "yield_rationale": "Cube-root simplification appears in exact-value and equivalent-form tasks.",
+          "source_learn_keyword_id": "perfect_cube_factors_in_cube_roots"
+        },
+        {
+          "id": "perfect_nth_power_factors",
+          "label": "Perfect nth-power factors",
+          "description": "An nth-root radicand is analyzed for factors that are perfect nth powers; generalizes square-root and cube-root factor extraction.",
+          "yield_score": 0.65,
+          "yield_rationale": "Generalized nth-power extraction supports rational-exponent equivalence; moderate AP frequency.",
+          "source_learn_keyword_id": "perfect_nth_power_factors"
+        },
+        {
+          "id": "prime_factorization_in_radicals",
+          "label": "Prime factorization in radicals",
+          "description": "Prime factorization reveals groups of factors matching the radical index when perfect-power factors are not obvious.",
+          "yield_score": 0.70,
+          "yield_rationale": "Prime factorization method is a reliable fallback strategy tested when perfect powers are not immediately visible.",
+          "source_learn_keyword_id": "prime_factorization_in_radicals"
+        },
+        {
+          "id": "radical_product_property",
+          "label": "Radical product property",
+          "description": "For real-valued radicals with appropriate conditions, a root of a product equals the product of roots; supports splitting radicands.",
+          "yield_score": 0.82,
+          "yield_rationale": "Radical product property is the mechanism for all factor-extraction simplification; very high usage.",
+          "source_learn_keyword_id": "radical_product_property"
+        },
+        {
+          "id": "radical_quotient_property",
+          "label": "Radical quotient property",
+          "description": "A root of a quotient equals the quotient of roots for real-valued radicals with appropriate conditions; separates numerator and denominator radicands.",
+          "yield_score": 0.75,
+          "yield_rationale": "Radical quotient property used in rationalizing and equivalent-form tasks.",
+          "source_learn_keyword_id": "radical_quotient_property"
+        },
+        {
+          "id": "combining_radicals_into_single_radical",
+          "label": "Combining factors into a single radical",
+          "description": "Products or quotients of same-index radicals can be combined into one radical; reverse of product and quotient properties.",
+          "yield_score": 0.68,
+          "yield_rationale": "Reverse-direction combination appears in rationalization setup and simplification verification.",
+          "source_learn_keyword_id": "combining_radicals_into_single_radical"
+        },
+        {
+          "id": "radical_index_must_match_for_combining",
+          "label": "Matching radical indices for combining",
+          "description": "Radicals can be combined by product or quotient properties only when root indices match; prevents combining square roots with cube roots.",
+          "yield_score": 0.65,
+          "yield_rationale": "Index-matching requirement is a boundary tested in error-analysis problems.",
+          "source_learn_keyword_id": "radical_index_must_match_for_combining"
+        }
+      ]
+    },
+    {
+      "id": "radical_simplification_variable",
+      "label": "Radical Simplification — Variable Factors",
+      "description": "Simplifying radical expressions involving variable powers: extracting even and odd power factors, absolute value requirements, general nth-root exponent division, lowest-terms form, and combined numeric-variable cases.",
+      "ced_topics": [],
+      "yield_score": 0.80,
+      "yield_rationale": "Variable-power radical simplification (including absolute value) is a high-frequency AP Precalc MC task; slightly higher yield than purely numeric simplification due to domain interaction. Split from radical_factor_structure_and_rewriting (second half, variable items).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "square_root_of_variable_even_power",
+          "label": "Square root of a variable even power",
+          "description": "The square root of a variable raised to an even power is rewritten using half the exponent; absolute value is needed when variables are unrestricted.",
+          "yield_score": 0.78,
+          "yield_rationale": "Variable even-power extraction is a canonical AP Precalc radical rewriting task; absolute value requirement is frequently tested.",
+          "source_learn_keyword_id": "square_root_of_variable_even_power"
+        },
+        {
+          "id": "square_root_of_variable_odd_power",
+          "label": "Square root of a variable odd power",
+          "description": "A square root of an odd variable power separates into an outside variable power and one remaining variable factor inside; e.g., √(x^5) = x^2·√x.",
+          "yield_score": 0.75,
+          "yield_rationale": "Odd-power extraction is a standard radical simplification step in AP Precalc symbolic manipulation.",
+          "source_learn_keyword_id": "square_root_of_variable_odd_power"
+        },
+        {
+          "id": "nth_root_of_variable_power_by_exponent_division",
+          "label": "Nth root of variable powers by exponent division",
+          "description": "For an nth root of a variable power, the exponent is divided by the root index using quotient and remainder to determine outside and leftover factors.",
+          "yield_score": 0.72,
+          "yield_rationale": "Exponent-division reasoning is required for general radical simplification with variable radicands.",
+          "source_learn_keyword_id": "nth_root_of_variable_power_by_exponent_division"
+        },
+        {
+          "id": "absolute_value_from_even_roots",
+          "label": "Absolute value from even roots",
+          "description": "Even roots of even powers require absolute value to ensure the principal root is nonnegative; √(x^2) = |x|.",
+          "yield_score": 0.80,
+          "yield_rationale": "Absolute-value requirement from even roots is a high-frequency AP Precalc question; commonly missed.",
+          "source_learn_keyword_id": "absolute_value_from_even_roots"
+        },
+        {
+          "id": "odd_roots_of_variable_powers",
+          "label": "Odd roots of variable powers",
+          "description": "Odd roots of variable powers do not require absolute value because odd roots preserve sign; ∛(x^3) = x.",
+          "yield_score": 0.70,
+          "yield_rationale": "Contrasting with even-root absolute value; tested in simplification and domain problems.",
+          "source_learn_keyword_id": "odd_roots_of_variable_powers"
+        },
+        {
+          "id": "radical_in_lowest_terms",
+          "label": "Radical in lowest terms",
+          "description": "A radical is fully simplified when no perfect-power factor matching the index remains inside, no avoidable fraction remains inside, and no radical remains in the denominator.",
+          "yield_score": 0.80,
+          "yield_rationale": "Simplified radical form is the expected answer convention on AP Precalc; tested as a final-answer requirement.",
+          "source_learn_keyword_id": "radical_in_lowest_terms"
+        },
+        {
+          "id": "radical_rewriting_with_numeric_and_variable_factors",
+          "label": "Radical rewriting with numeric and variable factors",
+          "description": "Radical expressions with both numerical perfect-power factors and variable-power factors require extracting both types simultaneously; e.g., √(72x^5).",
+          "yield_score": 0.82,
+          "yield_rationale": "Combined numeric-and-variable simplification is a standard AP Precalc MC task.",
+          "source_learn_keyword_id": "radical_rewriting_with_numeric_and_variable_factors"
+        },
+        {
+          "id": "radicals_with_coefficients_and_factor_extraction",
+          "label": "Radicals with existing outside coefficients",
+          "description": "When a radical already has an outside coefficient, extracted factors multiply that coefficient; targets forms such as 3√50.",
+          "yield_score": 0.75,
+          "yield_rationale": "Coefficient multiplication after extraction is tested as a multi-step simplification.",
+          "source_learn_keyword_id": "radicals_with_coefficients_and_factor_extraction"
+        }
+      ]
+    },
+    {
+      "id": "radical_addition_and_subtraction",
+      "label": "Radical Addition and Subtraction",
+      "description": "Identifying like radicals (same index and radicand), adding and subtracting like radical terms by combining outside coefficients, and common misconceptions about combining radicands directly.",
+      "ced_topics": [],
+      "yield_score": 0.72,
+      "yield_rationale": "Spec anchor: 0.72 — combining and subtracting radicals appear in trig identity/equation solving (FRQ 4) and exact trig value computation (3.3). Split from radical_operations_and_like_radicals (first half, addition/subtraction items).",
+      "source_learn_keyword_id": "radical_operations_and_like_radicals",
+      "in_depth": [
+        {
+          "id": "like_radicals_same_index_and_radicand",
+          "label": "Like radicals with same index and radicand",
+          "description": "Like radicals share the same root index and the same radicand after full simplification; only their outside coefficients differ.",
+          "yield_score": 0.72,
+          "yield_rationale": "Identifying like radicals is the prerequisite step for all radical addition and subtraction.",
+          "source_learn_keyword_id": "like_radicals_same_index_and_radicand"
+        },
+        {
+          "id": "unlike_radicals_different_radicands",
+          "label": "Unlike radicals with different radicands",
+          "description": "Radicals with different radicands are unlike and cannot be combined unless they simplify to the same radicand.",
+          "yield_score": 0.65,
+          "yield_rationale": "Unlike-radicand boundary is tested in error-analysis items; moderate frequency.",
+          "source_learn_keyword_id": "unlike_radicals_different_radicands"
+        },
+        {
+          "id": "unlike_radicals_different_indices",
+          "label": "Unlike radicals with different indices",
+          "description": "Radicals with different root indices are unlike even when their radicands match; prevents combining √5 and ∛5.",
+          "yield_score": 0.62,
+          "yield_rationale": "Index-mismatch error is tested in error-analysis and classification questions.",
+          "source_learn_keyword_id": "unlike_radicals_different_indices"
+        },
+        {
+          "id": "adding_like_square_roots",
+          "label": "Adding like square roots",
+          "description": "Like square-root terms are added by combining outside coefficients while keeping the radical unchanged.",
+          "yield_score": 0.75,
+          "yield_rationale": "Direct like-radical addition is the most common radical operation in AP Precalc simplification tasks.",
+          "source_learn_keyword_id": "adding_like_square_roots"
+        },
+        {
+          "id": "subtracting_like_square_roots",
+          "label": "Subtracting like square roots",
+          "description": "Like square-root terms are subtracted by subtracting outside coefficients while keeping the radical unchanged.",
+          "yield_score": 0.72,
+          "yield_rationale": "Parallel to addition; equally tested in simplification problems.",
+          "source_learn_keyword_id": "subtracting_like_square_roots"
+        },
+        {
+          "id": "adding_and_subtracting_like_nth_roots",
+          "label": "Adding and subtracting like nth roots",
+          "description": "Like radicals of any matching index can be combined by adding or subtracting outside coefficients; index and radicand stay unchanged.",
+          "yield_score": 0.65,
+          "yield_rationale": "Generalization beyond square roots; moderately tested at AP Precalc level.",
+          "source_learn_keyword_id": "adding_and_subtracting_like_nth_roots"
+        },
+        {
+          "id": "combining_radicals_after_rewriting",
+          "label": "Combining radicals after rewriting",
+          "description": "Radicals that look unlike may become like after perfect-power factors are extracted; targets forms such as √8 + √18.",
+          "yield_score": 0.80,
+          "yield_rationale": "Simplify-then-combine is a canonical two-step AP Precalc MC task; high frequency.",
+          "source_learn_keyword_id": "combining_radicals_after_rewriting"
+        },
+        {
+          "id": "radical_addition_does_not_combine_radicands",
+          "label": "Radical addition does not combine radicands",
+          "description": "A sum of radicals is not found by adding radicands; targets the misconception √a + √b = √(a+b).",
+          "yield_score": 0.82,
+          "yield_rationale": "Radicand-addition error mirrors the power-distribution error; one of the highest-frequency radical misconceptions in MC distractors.",
+          "source_learn_keyword_id": "radical_addition_does_not_combine_radicands"
+        },
+        {
+          "id": "radical_subtraction_does_not_combine_radicands",
+          "label": "Radical subtraction does not combine radicands",
+          "description": "A difference of radicals is not found by subtracting radicands; targets the misconception √a - √b = √(a-b).",
+          "yield_score": 0.78,
+          "yield_rationale": "Parallel misconception to addition case; similarly tested as a distractor.",
+          "source_learn_keyword_id": "radical_subtraction_does_not_combine_radicands"
+        }
+      ]
+    },
+    {
+      "id": "radical_multiplication_and_binomial_products",
+      "label": "Radical Multiplication and Binomial Products",
+      "description": "Multiplying and dividing radicals, FOIL-style distribution with radical binomials, squaring binomial radicals, and conjugate products that eliminate radical terms.",
+      "ced_topics": [],
+      "yield_score": 0.75,
+      "yield_rationale": "Radical multiplication and conjugate products are directly needed for rationalizing denominators and trig identity work; slightly higher practical yield than like-radical addition. Split from radical_operations_and_like_radicals (second half, multiplication/binomial items).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "multiplying_square_roots",
+          "label": "Multiplying square roots",
+          "description": "Square roots are multiplied by multiplying radicands, with outside coefficients multiplied separately.",
+          "yield_score": 0.78,
+          "yield_rationale": "Radical multiplication used in rationalization and exact trig value computation.",
+          "source_learn_keyword_id": "multiplying_square_roots"
+        },
+        {
+          "id": "multiplying_nth_roots_same_index",
+          "label": "Multiplying nth roots with the same index",
+          "description": "Radicals with the same index can be multiplied by multiplying their radicands; generalizes beyond square roots.",
+          "yield_score": 0.68,
+          "yield_rationale": "Generalized radical multiplication supports rational-exponent equivalence work.",
+          "source_learn_keyword_id": "multiplying_nth_roots_same_index"
+        },
+        {
+          "id": "dividing_radicals_same_index",
+          "label": "Dividing radicals with the same index",
+          "description": "Radicals with the same index can be divided by forming a radical quotient; uses the radical quotient property.",
+          "yield_score": 0.68,
+          "yield_rationale": "Radical division is the setup step for simplification and rationalizing tasks.",
+          "source_learn_keyword_id": "dividing_radicals_same_index"
+        },
+        {
+          "id": "multiplying_binomial_radical_expressions",
+          "label": "Multiplying binomial radical expressions",
+          "description": "Products of binomials containing radicals require distribution, with resulting radical products simplified; (a + √b)(c + √d).",
+          "yield_score": 0.75,
+          "yield_rationale": "Binomial radical multiplication is required in rationalizing conjugate denominators and trig identity proofs.",
+          "source_learn_keyword_id": "multiplying_binomial_radical_expressions"
+        },
+        {
+          "id": "squaring_binomial_radical_expressions",
+          "label": "Squaring binomial radical expressions",
+          "description": "A binomial containing a radical must be squared using full binomial multiplication; (a + √b)^2 ≠ a^2 + b.",
+          "yield_score": 0.72,
+          "yield_rationale": "Squaring with radicals appears in equation-solving and rationalization; missing middle term is a common error.",
+          "source_learn_keyword_id": "squaring_binomial_radical_expressions"
+        },
+        {
+          "id": "conjugate_product_radical_difference_of_squares",
+          "label": "Conjugate products with radicals",
+          "description": "A product of radical conjugates creates a difference of squares that eliminates the radical cross-terms; (a + √b)(a - √b) = a^2 - b.",
+          "yield_score": 0.82,
+          "yield_rationale": "Conjugate product is the mechanism for rationalizing binomial denominators; directly tested in FRQ 4 equivalent-form tasks.",
+          "source_learn_keyword_id": "conjugate_product_radical_difference_of_squares"
+        }
+      ]
+    },
+    {
+      "id": "rationalizing_monomial_denominators",
+      "label": "Rationalizing Monomial Radical Denominators",
+      "description": "Removing radicals from monomial denominators: single square-root, coefficient-bearing, nth-root, and variable radical denominators.",
+      "ced_topics": [],
+      "yield_score": 0.68,
+      "yield_rationale": "Rationalizing appears in FRQ 4 equivalent-form manipulation and exact trig value computation; moderately tested directly but frequently an intermediate step. Split from rationalizing_and_radical_denominators (first half, monomial cases).",
+      "source_learn_keyword_id": "rationalizing_and_radical_denominators",
+      "in_depth": [
+        {
+          "id": "radical_denominator_convention",
+          "label": "Radical denominator convention",
+          "description": "Many algebraic forms are conventionally rewritten so radicals do not remain in denominators; establishes the goal before techniques are applied.",
+          "yield_score": 0.55,
+          "yield_rationale": "Contextual motivation for rationalizing; foundational awareness skill.",
+          "source_learn_keyword_id": "radical_denominator_convention"
+        },
+        {
+          "id": "rationalizing_single_square_root_denominator",
+          "label": "Single square-root denominator",
+          "description": "A denominator containing one square root is rationalized by multiplying numerator and denominator by the same square root.",
+          "yield_score": 0.78,
+          "yield_rationale": "Monomial radical-denominator rationalization is the most common rationalizing task; tested frequently.",
+          "source_learn_keyword_id": "rationalizing_single_square_root_denominator"
+        },
+        {
+          "id": "rationalizing_square_root_with_coefficient_denominator",
+          "label": "Square-root denominator with coefficient",
+          "description": "A denominator of the form a√b is rationalized by multiplying by √b while tracking the numerical coefficient.",
+          "yield_score": 0.72,
+          "yield_rationale": "Coefficient tracking in rationalization is tested as a procedural precision item.",
+          "source_learn_keyword_id": "rationalizing_square_root_with_coefficient_denominator"
+        },
+        {
+          "id": "rationalizing_nth_root_denominator",
+          "label": "Nth-root denominator",
+          "description": "An nth-root denominator is rationalized by multiplying by a radical factor that completes a perfect nth power; generalizes square-root rationalization.",
+          "yield_score": 0.62,
+          "yield_rationale": "Nth-root rationalization connects to rational-exponent equivalence; moderately tested.",
+          "source_learn_keyword_id": "rationalizing_nth_root_denominator"
+        },
+        {
+          "id": "rationalizing_variable_radical_denominator",
+          "label": "Variable radical denominator",
+          "description": "Radical denominators containing variables require multiplying by factors that remove the radical while respecting variable restrictions.",
+          "yield_score": 0.65,
+          "yield_rationale": "Variable radical denominators appear in algebraic manipulation tasks and function expression rewriting.",
+          "source_learn_keyword_id": "rationalizing_variable_radical_denominator"
+        }
+      ]
+    },
+    {
+      "id": "rationalizing_binomial_denominators_and_numerators",
+      "label": "Rationalizing Binomial Denominators and Numerators",
+      "description": "Removing radicals from binomial denominators using conjugates, rationalizing numerators, and preserving domain restrictions through the rewriting process.",
+      "ced_topics": [],
+      "yield_score": 0.70,
+      "yield_rationale": "Conjugate rationalization of binomial denominators is directly tested in FRQ 4; slightly higher yield than monomial rationalization due to more complex algebraic manipulation required. Split from rationalizing_and_radical_denominators (second half, binomial/conjugate cases).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "rationalizing_binomial_square_root_denominator",
+          "label": "Binomial square-root denominator",
+          "description": "A denominator containing a binomial with a square root is rationalized by multiplying by its conjugate, removing the radical via difference of squares.",
+          "yield_score": 0.78,
+          "yield_rationale": "Conjugate rationalization of binomial denominators is a standard FRQ 4 symbolic manipulation.",
+          "source_learn_keyword_id": "rationalizing_binomial_square_root_denominator"
+        },
+        {
+          "id": "conjugate_selection_for_rationalizing",
+          "label": "Conjugate selection for rationalizing",
+          "description": "The conjugate of a binomial changes the sign between terms while keeping the terms unchanged; it is the key multiplier for binomial radical denominators.",
+          "yield_score": 0.72,
+          "yield_rationale": "Correct conjugate selection is a procedural skill tested in rationalization problems.",
+          "source_learn_keyword_id": "conjugate_selection_for_rationalizing"
+        },
+        {
+          "id": "rationalizing_denominator_with_two_radicals",
+          "label": "Denominator with two radical terms",
+          "description": "A denominator containing two square-root terms is rationalized by multiplying by the conjugate; targets 1/(√a + √b).",
+          "yield_score": 0.70,
+          "yield_rationale": "Two-radical denominator rationalization is tested in equivalent-form MC and FRQ 4 tasks.",
+          "source_learn_keyword_id": "rationalizing_denominator_with_two_radicals"
+        },
+        {
+          "id": "rationalizing_numerator",
+          "label": "Rationalizing a numerator",
+          "description": "A radical numerator can be rationalized using conjugate or radical-factor logic; particularly relevant for limit-style equivalent-form work.",
+          "yield_score": 0.58,
+          "yield_rationale": "Numerator rationalization appears in calculus preparation contexts and occasional AP Precalc equivalent-form tasks.",
+          "source_learn_keyword_id": "rationalizing_numerator"
+        },
+        {
+          "id": "extraneous_domain_restrictions_from_rationalizing",
+          "label": "Restrictions when rationalizing",
+          "description": "Rationalizing preserves value only when multiplied factors are defined and nonzero; restrictions must not be lost during rewriting.",
+          "yield_score": 0.65,
+          "yield_rationale": "Domain-restriction preservation during rationalization is tested in AP Precalc function analysis.",
+          "source_learn_keyword_id": "extraneous_domain_restrictions_from_rationalizing"
+        }
+      ]
+    },
+    {
+      "id": "radical_equations_isolating_and_solving",
+      "label": "Radical Equations — Isolating and Solving",
+      "description": "Isolating radicals and solving radical equations by raising both sides to an appropriate power: square-root equations with linear or quadratic results, equations requiring two squaring steps, and cube/nth-root equations.",
+      "ced_topics": [],
+      "yield_score": 0.65,
+      "yield_rationale": "Radical equation solving has direct F6 chapter-test and AP Precalc exam presence; rescored from 0.60 to 0.65 per audit finding that its direct link to chapter test items was underweighted. Split from radical_equations_and_rational_exponent_equations (first half, isolation/solving items).",
+      "source_learn_keyword_id": "radical_equations_and_rational_exponent_equations",
+      "in_depth": [
+        {
+          "id": "radical_equation_structure",
+          "label": "Radical equation structure",
+          "description": "A radical equation contains a variable inside a radical expression; distinguishes radical equations from equations with radical constants only.",
+          "yield_score": 0.45,
+          "yield_rationale": "Classification skill; foundational for solving strategy selection.",
+          "source_learn_keyword_id": "radical_equation_structure"
+        },
+        {
+          "id": "isolated_square_root_equations",
+          "label": "Isolated square-root equations",
+          "description": "A square-root equation with one isolated radical is solved by squaring both sides; √(ax + b) = c structure.",
+          "yield_score": 0.65,
+          "yield_rationale": "Basic isolated radical equation is the entry-level radical-solving problem; moderate AP frequency.",
+          "source_learn_keyword_id": "isolated_square_root_equations"
+        },
+        {
+          "id": "nonisolated_square_root_equations",
+          "label": "Non-isolated square-root equations",
+          "description": "When a radical is not isolated, it must be isolated before both sides are squared; targets equations like √(x+1) + 3 = 8.",
+          "yield_score": 0.62,
+          "yield_rationale": "Isolation-before-squaring is a key procedural step; tested for correct order-of-operations in equation solving.",
+          "source_learn_keyword_id": "nonisolated_square_root_equations"
+        },
+        {
+          "id": "square_root_equations_with_linear_radicands",
+          "label": "Square-root equations with linear radicands",
+          "description": "A square-root equation with a linear expression inside the radicand produces a linear equation after squaring; √(ax + b) = c.",
+          "yield_score": 0.65,
+          "yield_rationale": "Linear-radicand equations are the most common radical equation form in AP Precalc MC.",
+          "source_learn_keyword_id": "square_root_equations_with_linear_radicands"
+        },
+        {
+          "id": "square_root_equations_leading_to_quadratics",
+          "label": "Square-root equations leading to quadratics",
+          "description": "Some square-root equations produce quadratic equations after squaring when a variable expression appears outside the radical; requires checking for extraneous solutions.",
+          "yield_score": 0.70,
+          "yield_rationale": "Radical-to-quadratic equations test both radical and quadratic solving skills together; moderate AP frequency with extraneous-solution check required.",
+          "source_learn_keyword_id": "square_root_equations_leading_to_quadratics"
+        },
+        {
+          "id": "radical_equations_with_radicals_on_both_sides",
+          "label": "Radical equations with radicals on both sides",
+          "description": "When radicals appear on both sides of an equation, squaring may remove both radicals or require a second squaring step.",
+          "yield_score": 0.58,
+          "yield_rationale": "Two-sided radical equations are more complex; appear occasionally in AP Precalc MC.",
+          "source_learn_keyword_id": "radical_equations_with_radicals_on_both_sides"
+        },
+        {
+          "id": "radical_equations_requiring_two_squaring_steps",
+          "label": "Radical equations requiring two squaring steps",
+          "description": "Equations with multiple radicals require isolating one radical, squaring, then isolating and squaring again.",
+          "yield_score": 0.50,
+          "yield_rationale": "Two-squaring equations are procedurally complex; less common on AP Precalc but tests multi-step fluency.",
+          "source_learn_keyword_id": "radical_equations_requiring_two_squaring_steps"
+        }
+      ]
+    },
+    {
+      "id": "radical_equations_extraneous_and_rational_exponent",
+      "label": "Radical Equations — Extraneous Solutions and Rational-Exponent Equations",
+      "description": "Cube and nth-root equations, rational-exponent equations solved via reciprocal powers, extraneous-solution checking, domain restrictions in equation contexts, and no-solution recognition.",
+      "ced_topics": [],
+      "yield_score": 0.65,
+      "yield_rationale": "Extraneous-solution checking and rational-exponent equations are high-discrimination exam items; yield matches the umbrella-level rescore to 0.65. Split from radical_equations_and_rational_exponent_equations (second half).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "cube_root_equations",
+          "label": "Cube-root equations",
+          "description": "A cube-root equation is solved by cubing both sides after isolating the cube-root expression; allows negative radicands.",
+          "yield_score": 0.58,
+          "yield_rationale": "Cube-root equations appear in AP Precalc alongside other radical equation types.",
+          "source_learn_keyword_id": "cube_root_equations"
+        },
+        {
+          "id": "nth_root_equations",
+          "label": "Nth-root equations",
+          "description": "An nth-root equation is solved by raising both sides to the nth power after isolating the radical; even-index roots require attention to real-valued restrictions.",
+          "yield_score": 0.55,
+          "yield_rationale": "General nth-root equation solving appears occasionally; supports rational-exponent equation mastery.",
+          "source_learn_keyword_id": "nth_root_equations"
+        },
+        {
+          "id": "rational_exponent_equations",
+          "label": "Rational-exponent equations",
+          "description": "Equations involving rational exponents are solved by raising both sides to the reciprocal power or rewriting in radical form; x^(m/n) = c structure.",
+          "yield_score": 0.65,
+          "yield_rationale": "Rational-exponent equations appear in AP Precalc as applications of 2.4 and directly in FRQ 4.",
+          "source_learn_keyword_id": "rational_exponent_equations"
+        },
+        {
+          "id": "reciprocal_power_in_rational_exponent_equations",
+          "label": "Reciprocal powers in rational-exponent equations",
+          "description": "To undo a rational exponent m/n, both sides are raised to the reciprocal power n/m, with domain and extraneous-solution checks.",
+          "yield_score": 0.68,
+          "yield_rationale": "Reciprocal-power technique is directly tested in FRQ 4 and connects rational exponent manipulation to equation solving.",
+          "source_learn_keyword_id": "reciprocal_power_in_rational_exponent_equations"
+        },
+        {
+          "id": "extraneous_solutions_from_squaring",
+          "label": "Extraneous solutions from squaring",
+          "description": "Squaring both sides of a radical equation can introduce solutions that fail the original equation; every candidate solution must be checked.",
+          "yield_score": 0.80,
+          "yield_rationale": "Extraneous solution checking is a high-yield exam skill; one of the most tested concepts in radical equations.",
+          "source_learn_keyword_id": "extraneous_solutions_from_squaring"
+        },
+        {
+          "id": "radical_equation_domain_restrictions",
+          "label": "Domain restrictions in radical equations",
+          "description": "Radical equations with even-index roots require nonnegative radicands and matching principal-root behavior; these restrictions guide valid solutions.",
+          "yield_score": 0.72,
+          "yield_rationale": "Domain restriction reasoning in equation contexts is tested in AP Precalc and directly connects to function domain analysis.",
+          "source_learn_keyword_id": "radical_equation_domain_restrictions"
+        },
+        {
+          "id": "no_solution_radical_equations",
+          "label": "Radical equations with no real solution",
+          "description": "A radical equation may have no real solution because of domain restrictions, principal-root restrictions, or all candidates being extraneous after solving.",
+          "yield_score": 0.68,
+          "yield_rationale": "No-solution recognition is a key exam discriminator tested in AP Precalc equation-solving problems.",
+          "source_learn_keyword_id": "no_solution_radical_equations"
+        }
+      ]
+    }
+  ]
+}

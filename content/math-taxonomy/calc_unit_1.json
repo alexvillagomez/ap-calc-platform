@@ -1,0 +1,612 @@
+{
+  "category": {
+    "id": "calc_unit_1",
+    "label": "Limits and Continuity",
+    "description": "Introduces the limit concept, develops algebraic and graphical techniques for evaluating limits, classifies discontinuities, defines continuity rigorously, and applies the Intermediate Value Theorem. Forms the language and foundation for all of differential and integral calculus.",
+    "section": "calc_ab",
+    "ced_unit": "AP Calc AB Unit 1",
+    "courses": [
+      { "course": "calc_ab", "role": "core", "order_index": 1 }
+    ],
+    "yield_score": 0.68,
+    "yield_rationale": "Unit weight 10-12%; ~7 direct FRQ appearances (lowest unit) but limits appear as sub-parts in ~40% of all FRQs and underpin every downstream unit; moderate standalone yield, high foundational yield."
+  },
+  "umbrellas": [
+    {
+      "id": "limit_1_introducing_limits_and_notation",
+      "label": "Introducing Limits and Limit Notation",
+      "description": "Motivates the limit concept by contrasting average and instantaneous rates of change, then formalizes one-sided and two-sided limit notation and the conditions under which a two-sided limit exists.",
+      "ced_topics": ["1.1", "1.2"],
+      "yield_score": 0.50,
+      "yield_rationale": "Topic 1.1 is conceptual framing with no direct exam points; 1.2 notation fluency is prerequisite to every downstream unit but rarely the isolated test target; combined umbrella earns mid-tier yield.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "limit_1_average_vs_instantaneous_rate_preview",
+          "label": "Average vs Instantaneous Rate of Change (Preview)",
+          "description": "Distinguish between the average rate of change over an interval and the instantaneous rate at a point as a motivating question; no formal limit computation required, only conceptual interpretation.",
+          "yield_score": 0.15,
+          "yield_rationale": "Topic 1.1 is motivational framing; directly tested only in conceptual MC items; very low standalone exam frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_limit_notation_reading",
+          "label": "Reading and Writing Limit Notation",
+          "description": "Interpret and write the notation lim_{x→c} f(x) = L, including one-sided forms lim_{x→c⁻} and lim_{x→c⁺}; translate between symbolic and verbal descriptions of a limit statement.",
+          "yield_score": 0.55,
+          "yield_rationale": "Notation fluency is tested in MC most years as interpretation questions; underpins every subsequent limit problem but is rarely isolated on its own at high frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_two_sided_limit_existence_condition",
+          "label": "Two-Sided Limit Existence Condition",
+          "description": "State and apply the condition that lim_{x→c} f(x) = L if and only if both one-sided limits equal L; identify when a two-sided limit fails to exist due to unequal one-sided limits.",
+          "yield_score": 0.60,
+          "yield_rationale": "Limit-existence reasoning appears in MC and as FRQ sub-parts testing whether a limit exists at a jump or removable discontinuity; moderate exam frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_one_sided_limit_interpretation",
+          "label": "One-Sided Limit Interpretation",
+          "description": "Evaluate or interpret left-hand and right-hand limits separately; connect the sign or value of a one-sided limit to approach direction on a number line or graph.",
+          "yield_score": 0.58,
+          "yield_rationale": "One-sided limit questions appear regularly in MC; essential sub-skill for piecewise and discontinuity problems across the unit.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "limit_1_estimating_from_graphs",
+      "label": "Estimating Limit Values from Graphs",
+      "description": "Read approximate or exact limit values from a function graph, distinguish limit from function value at a point, and handle one-sided cases including open circles and jumps.",
+      "ced_topics": ["1.3"],
+      "yield_score": 0.65,
+      "yield_rationale": "Graph-reading limit problems appear frequently in MC Part A; tests the representation-translation skill (MP2) that appears across all FRQ archetypes.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "limit_1_read_two_sided_limit_from_graph",
+          "label": "Reading a Two-Sided Limit from a Graph",
+          "description": "Identify the value L that f(x) approaches from both sides as x → c by reading a Cartesian graph; correctly handle open-circle points where f(c) ≠ L or f(c) is undefined.",
+          "yield_score": 0.65,
+          "yield_rationale": "Standard MC format in Part A; distinguishing the limit from the function value at the point is a frequently tested conceptual distinction.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_read_one_sided_limit_from_graph",
+          "label": "Reading One-Sided Limits from a Graph",
+          "description": "Read lim_{x→c⁻} f(x) and lim_{x→c⁺} f(x) separately from a graph; determine whether the two-sided limit exists by comparing the one-sided values.",
+          "yield_score": 0.62,
+          "yield_rationale": "Jump discontinuity and piecewise graph problems in MC require one-sided graph reading; appears most years in Part A.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_limit_vs_function_value_at_point",
+          "label": "Distinguishing Limit from Function Value at a Point",
+          "description": "Recognize that lim_{x→c} f(x) and f(c) are independent: the limit describes approach behavior while f(c) is the actual output; identify cases where they differ (removable discontinuity) or where one is undefined.",
+          "yield_score": 0.60,
+          "yield_rationale": "A classic MC distractor trap; appears in continuity questions and limit-exists questions; tested most years.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_infinite_behavior_from_graph",
+          "label": "Reading Infinite Limit Behavior from a Graph",
+          "description": "Use a graph to determine when lim_{x→c} f(x) = +∞ or −∞ (vertical asymptote behavior) or when f(x) → L as x → ±∞ (horizontal end behavior).",
+          "yield_score": 0.55,
+          "yield_rationale": "Infinite behavior is part of graph-reading in MC; connects to asymptote topics 1.14 and 1.15 at the umbrella level.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "limit_1_estimating_from_tables",
+      "label": "Estimating Limit Values from Tables",
+      "description": "Approximate one-sided and two-sided limits by inspecting a table of function values, recognizing convergence or divergence as x approaches a target value.",
+      "ced_topics": ["1.4"],
+      "yield_score": 0.58,
+      "yield_rationale": "Table-based limit reading is a standard MC format and connects to the Rate/Data from Tables FRQ archetype; moderate frequency as a standalone skill.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "limit_1_approximate_limit_from_table",
+          "label": "Approximating a Limit from a Numerical Table",
+          "description": "Read rows of a table where x approaches c from both sides and identify the value L that f(x) appears to approach; report the limit as an approximation or state that the limit does not exist if the one-sided values diverge.",
+          "yield_score": 0.60,
+          "yield_rationale": "Table-based limit estimation appears as a standard MC sub-task; also scaffolds the Rate/Data FRQ archetype where tables of values substitute for formulas.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_one_sided_limit_from_table",
+          "label": "Reading One-Sided Limits from a Table",
+          "description": "Use only the rows where x approaches c from one direction (left or right) in a table to evaluate a one-sided limit; determine whether both one-sided values agree and the two-sided limit exists.",
+          "yield_score": 0.55,
+          "yield_rationale": "One-sided table reading appears in MC and supports rate-of-change estimation problems that use table data.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_recognize_divergence_from_table",
+          "label": "Recognizing Divergence or Non-Existence from a Table",
+          "description": "Identify from a table that a limit does not exist because f(x) grows without bound (infinite limit) or because the one-sided values approach different finite numbers (jump).",
+          "yield_score": 0.42,
+          "yield_rationale": "DNE recognition from a table is less frequently isolated; appears as an MC option-elimination skill rather than a primary task.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_estimate_limit_with_two_sided_table",
+          "label": "Using a Two-Sided Table to Confirm a Limit Value",
+          "description": "Interpret a symmetric table (values of x both less than and greater than c) to confirm that f(x) → L from both directions, and state the limit with appropriate notation.",
+          "yield_score": 0.50,
+          "yield_rationale": "Confirming convergence from a complete two-sided table is a standard presentation in MC; moderate yield as a notation-and-interpretation task.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "limit_1_algebraic_properties_of_limits",
+      "label": "Algebraic Properties of Limits",
+      "description": "Apply the limit laws (sum, difference, product, quotient, constant multiple, power, and composition) to evaluate limits of combined functions by breaking them into simpler parts.",
+      "ced_topics": ["1.5"],
+      "yield_score": 0.70,
+      "yield_rationale": "Algebraic limit manipulation is tested directly in MC every year; these laws are the computational backbone for all analytical limit evaluation.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "limit_1_sum_difference_limit_laws",
+          "label": "Sum and Difference Limit Laws",
+          "description": "Apply lim[f(x) ± g(x)] = lim f(x) ± lim g(x) to split a compound limit into separately evaluated parts; recognize that both component limits must exist for the law to apply.",
+          "yield_score": 0.65,
+          "yield_rationale": "Sum/difference laws are the entry step for all algebraic limit evaluation; heavily implicit in every limit computation question.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_product_quotient_limit_laws",
+          "label": "Product and Quotient Limit Laws",
+          "description": "Apply lim[f(x)·g(x)] = lim f(x)·lim g(x) and lim[f(x)/g(x)] = lim f(x)/lim g(x) (when denominator limit ≠ 0) to evaluate products and quotients of limits.",
+          "yield_score": 0.68,
+          "yield_rationale": "Product and quotient laws appear in MC when a limit can be broken into a product of simpler limits; prerequisite for recognizing when direct substitution applies.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_constant_multiple_power_limit_laws",
+          "label": "Constant Multiple and Power Limit Laws",
+          "description": "Apply lim[c·f(x)] = c·lim f(x) and lim[f(x)]^n = [lim f(x)]^n to pull constants through limits and raise a limit to a power.",
+          "yield_score": 0.55,
+          "yield_rationale": "Constant multiple and power laws are implicitly used in polynomial/trig limit evaluations; less often isolated as a standalone test question.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_direct_substitution",
+          "label": "Direct Substitution for Continuous Functions",
+          "description": "Evaluate lim_{x→c} f(x) = f(c) by direct substitution when f is continuous at c (polynomial, rational with nonzero denominator, trig, exponential, logarithmic at a domain point); identify when substitution fails by producing 0/0 or ∞/∞.",
+          "yield_score": 0.72,
+          "yield_rationale": "Direct substitution is the first step in every limit evaluation strategy; appears as both the complete solution and the failure-recognition step in MC problems most years.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_composition_limit_law",
+          "label": "Limit Law for Compositions",
+          "description": "Apply lim_{x→c} f(g(x)) = f(lim_{x→c} g(x)) when f is continuous at the inner limit value; evaluate limits of composed functions by substituting the inner limit into the outer function.",
+          "yield_score": 0.58,
+          "yield_rationale": "Composition limits appear in MC when trig, log, or exponential functions are composed with polynomial expressions; moderately frequent.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "limit_1_algebraic_manipulation",
+      "label": "Algebraic Manipulation and Strategy Selection for Limits",
+      "description": "Resolve indeterminate 0/0 forms by factoring, rationalizing the numerator, or using common denominators; choose the appropriate technique for a given limit expression.",
+      "ced_topics": ["1.6", "1.7"],
+      "yield_score": 0.75,
+      "yield_rationale": "Factoring and rationalizing limits appear every exam year in MC; strategy selection (choose technique for a given form) is a direct MC skill; these are the core computational topics in Unit 1.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "limit_1_factor_cancel_for_limit",
+          "label": "Factoring and Canceling to Evaluate a 0/0 Limit",
+          "description": "Factor the numerator and denominator of a rational expression to cancel the common factor producing the 0/0 form, then evaluate the simplified expression by direct substitution.",
+          "yield_score": 0.78,
+          "yield_rationale": "Factoring limits is among the most-tested algebraic skills in Unit 1 MC; also appears as the first step in the derivative definition limit.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_rationalize_conjugate_for_limit",
+          "label": "Rationalizing with the Conjugate to Evaluate a Limit",
+          "description": "Multiply the numerator and denominator by the conjugate expression to eliminate a radical in the numerator or denominator, resolve the 0/0 form, and evaluate by direct substitution.",
+          "yield_score": 0.65,
+          "yield_rationale": "Rationalization limits appear in MC regularly (e.g., lim (√(x+a) − √a)/x); a classic technique tested every few years.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_common_denominator_for_complex_limit",
+          "label": "Common Denominator Technique for Complex Fraction Limits",
+          "description": "Combine two fractions in a limit expression using a common denominator to simplify a compound fraction (e.g., 1/(x+h) − 1/x all over h), cancel the indeterminate factor, and evaluate.",
+          "yield_score": 0.55,
+          "yield_rationale": "Complex fraction limits appear in difference quotient setups and in MC occasionally; less frequent than factoring but a distinct algebraic move.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_recognize_indeterminate_form_00",
+          "label": "Recognizing an Indeterminate 0/0 Form",
+          "description": "Identify that direct substitution produces 0/0, classify the expression as an indeterminate form requiring algebraic manipulation, and distinguish it from the definite case where the denominator limit is nonzero.",
+          "yield_score": 0.68,
+          "yield_rationale": "Form recognition is the decision step before technique selection; directly tested in strategy-selection MC questions about which technique applies.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_strategy_selection_for_limit",
+          "label": "Selecting the Appropriate Limit Evaluation Strategy",
+          "description": "Given a limit expression, choose among direct substitution, factoring, rationalizing, common denominator, squeeze theorem, or L'Hôpital (when eligible) by analyzing the form of the expression.",
+          "yield_score": 0.62,
+          "yield_rationale": "Strategy-selection questions appear in MC Part A; connects to L'Hôpital in Unit 4 and the overall limit toolbox tested on the exam.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_difference_quotient_limit",
+          "label": "Evaluating the Difference Quotient Limit",
+          "description": "Evaluate lim_{h→0} [f(x+h) − f(x)]/h or lim_{x→a} [f(x) − f(a)]/(x−a) by expanding, canceling the h or (x−a) factor, and substituting; connect to the derivative definition (context only, not derivative rules).",
+          "yield_score": 0.70,
+          "yield_rationale": "Difference quotient limits appear in MC and are the direct bridge to the Unit 2 derivative definition; high relevance as a cross-unit skill.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "limit_1_squeeze_theorem_and_trig_limits",
+      "label": "Squeeze Theorem and Special Trigonometric Limits",
+      "description": "Apply the Squeeze Theorem to evaluate limits of functions bounded between two functions with the same limit; use the standard special trig limits sin(x)/x → 1 and (1−cos x)/x → 0 as x → 0.",
+      "ced_topics": ["1.8"],
+      "yield_score": 0.45,
+      "yield_rationale": "Squeeze theorem is a classic but infrequently tested topic; sin(x)/x appears roughly every 2 years in MC; directly tested in 2019 FRQ Q6; trig identity knowledge lives in P3, not here.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "limit_1_squeeze_theorem_statement_and_conditions",
+          "label": "Squeeze Theorem: Statement and Conditions",
+          "description": "State the Squeeze Theorem (if g(x) ≤ f(x) ≤ h(x) near c and lim g = lim h = L, then lim f = L) and verify that the bounding and squeezed functions satisfy the required inequalities.",
+          "yield_score": 0.40,
+          "yield_rationale": "Knowing the conditions of the Squeeze Theorem is tested in MC justification questions; low frequency but must-know for the unit.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_squeeze_theorem_application_trig_bounded",
+          "label": "Applying the Squeeze Theorem to a Trigonometric Bounded Function",
+          "description": "Use −1 ≤ sin(u) ≤ 1 or −1 ≤ cos(u) ≤ 1 to construct bounding functions, then apply the Squeeze Theorem to evaluate limits such as lim_{x→0} x·sin(1/x) = 0.",
+          "yield_score": 0.42,
+          "yield_rationale": "The x·sin(1/x) archetype is the canonical MC Squeeze Theorem problem; appears every few years; concrete skill that can be isolated.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_special_trig_limit_sin_x_over_x",
+          "label": "Special Trig Limit: sin(x)/x → 1 as x → 0",
+          "description": "Apply the standard result lim_{x→0} sin(x)/x = 1 and its corollaries (e.g., lim_{x→0} sin(kx)/(kx) = 1, lim_{x→0} tan(x)/x = 1) to evaluate limits of trig quotients without L'Hôpital.",
+          "yield_score": 0.50,
+          "yield_rationale": "sin(x)/x is a standard AP Calc limit that appears in MC and connects to the derivative of sin(x) derivation; more frequently tested than the general Squeeze Theorem.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_special_trig_limit_one_minus_cos",
+          "label": "Special Trig Limit: (1 − cos x)/x → 0 as x → 0",
+          "description": "Apply the standard result lim_{x→0} (1 − cos x)/x = 0 to evaluate related trig limits; recognize this form as distinct from sin(x)/x and apply appropriately.",
+          "yield_score": 0.35,
+          "yield_rationale": "This limit appears less frequently in MC than sin(x)/x but is an expected result in the unit; occasionally appears as a distractor comparison or derivation step.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "limit_1_multiple_representations",
+      "label": "Connecting Multiple Representations of Limits",
+      "description": "Reconcile graphical, tabular, and analytical information about the same function to verify or determine a limit; translate between representations to justify a limit value or identify inconsistency.",
+      "ced_topics": ["1.9"],
+      "yield_score": 0.55,
+      "yield_rationale": "Multi-representation problems are a core exam skill (MP2); appear in MC and FRQ as translation tasks; medium MC frequency for Unit 1.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "limit_1_verify_limit_across_representations",
+          "label": "Verifying a Limit Using Multiple Representations",
+          "description": "Given a function defined analytically, confirm the limit value by checking agreement between direct algebraic evaluation, a table of values, and graph behavior; identify any representation that appears inconsistent.",
+          "yield_score": 0.52,
+          "yield_rationale": "Verification across representations is an MP2 skill tested in MC and as a sub-task in FRQs that provide a graph and ask the student to also compute algebraically.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_translate_graph_to_analytic_limit",
+          "label": "Translating from Graph to Analytic Limit Statement",
+          "description": "Read a limit value from a graph and express it in correct limit notation; determine whether the limit at c equals f(c) or differs from it, writing a complete symbolic statement.",
+          "yield_score": 0.55,
+          "yield_rationale": "Notation-writing from a graph appears in MC and short FRQ sub-parts; directly tests MP4 (communication and notation) alongside MP2.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_translate_table_to_limit_statement",
+          "label": "Translating from a Table to a Limit Statement",
+          "description": "Use tabular data to construct a complete limit statement in symbolic notation, including identifying whether the limit is one-sided, two-sided, or at infinity, and noting any evidence of divergence.",
+          "yield_score": 0.48,
+          "yield_rationale": "Table-to-notation translation is tested less often in isolation but appears in multi-part FRQ where students must write an integral or limit expression matching given data.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_match_graph_to_limit_statement",
+          "label": "Matching a Graph to a Set of Limit Statements",
+          "description": "Given several limit statements (e.g., lim_{x→2⁻} f = 3, lim_{x→2⁺} f = 1, f(2) = 3), select the graph that correctly displays all stated limit and function values simultaneously.",
+          "yield_score": 0.50,
+          "yield_rationale": "Matching problems appear in MC Part A; tests ability to synthesize multiple limit-notation conditions into a single visual representation.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "limit_1_types_of_discontinuities",
+      "label": "Types of Discontinuities",
+      "description": "Identify and classify removable (hole), jump, and infinite (vertical asymptote) discontinuities by examining one-sided limits and function values; determine oscillating behavior as a separate non-classifiable case.",
+      "ced_topics": ["1.10"],
+      "yield_score": 0.65,
+      "yield_rationale": "Discontinuity classification appears in MC most years; connects directly to the definition of continuity and piecewise function analysis; moderate-high unit frequency.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "limit_1_removable_discontinuity_identification",
+          "label": "Identifying a Removable Discontinuity (Hole)",
+          "description": "Classify a discontinuity at c as removable when the two-sided limit exists (lim_{x→c} f(x) = L) but f(c) ≠ L or is undefined; connect to a hole in the graph of a rational function after factoring.",
+          "yield_score": 0.68,
+          "yield_rationale": "Removable discontinuity (hole) identification is a high-frequency MC skill; appears in rational function limit problems and in 'find c to make continuous' problems.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_jump_discontinuity_identification",
+          "label": "Identifying a Jump Discontinuity",
+          "description": "Classify a discontinuity at c as a jump when both one-sided limits exist but are unequal; recognize jump discontinuities in piecewise-defined functions by checking left- and right-hand limits at boundary points.",
+          "yield_score": 0.62,
+          "yield_rationale": "Jump discontinuity is a standard piecewise function question in MC; closely linked to the continuity-at-a-point definition tested in 1.11.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_infinite_discontinuity_identification",
+          "label": "Identifying an Infinite Discontinuity (Vertical Asymptote)",
+          "description": "Classify a discontinuity at c as infinite when at least one one-sided limit diverges to ±∞; connect to a vertical asymptote in the graph and to factored rational expressions where the common factor does not cancel.",
+          "yield_score": 0.65,
+          "yield_rationale": "Infinite discontinuity and vertical asymptote identification appears in MC every year; prerequisite for the full asymptote analysis in 1.14.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_oscillating_discontinuity_recognition",
+          "label": "Recognizing Oscillating (Non-Classifiable) Discontinuity",
+          "description": "Recognize that lim_{x→0} sin(1/x) does not exist because the function oscillates without settling to any value; distinguish oscillating behavior from jump, removable, and infinite discontinuities.",
+          "yield_score": 0.30,
+          "yield_rationale": "Oscillating discontinuity is a low-frequency MC topic; appears occasionally as a distractor or a conceptual question; rarely the main tested skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_classify_discontinuity_from_graph",
+          "label": "Classifying a Discontinuity from a Graph",
+          "description": "Look at a graph and assign each point of discontinuity to a type (removable, jump, or infinite) by reading the one-sided limits and function value directly from the graph.",
+          "yield_score": 0.62,
+          "yield_rationale": "Graph-based classification appears in MC most years; combines graph-reading skill with discontinuity taxonomy knowledge.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "limit_1_continuity_definition_and_intervals",
+      "label": "Continuity at a Point, Over an Interval, and Removing Discontinuities",
+      "description": "Apply the three-part definition of continuity (limit exists, function defined, they are equal) to test continuity at a specific point; determine intervals of continuity for function families; find parameter values that remove a discontinuity.",
+      "ced_topics": ["1.11", "1.12", "1.13"],
+      "yield_score": 0.70,
+      "yield_rationale": "Continuity at a point is tested directly in FRQ sub-parts (justify continuity or find k); 'find c to make continuous' is a near-annual MC type; interval continuity supports IVT and EVT.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "limit_1_three_part_continuity_definition",
+          "label": "Applying the Three-Part Definition of Continuity at a Point",
+          "description": "Verify or disprove continuity at c by checking all three conditions: (1) f(c) is defined, (2) lim_{x→c} f(x) exists, (3) lim_{x→c} f(x) = f(c); identify which condition(s) fail when a function is discontinuous.",
+          "yield_score": 0.72,
+          "yield_rationale": "Three-part continuity check appears as an FRQ sub-part almost every year ('justify that f is continuous at x = 2'); also directly tested in MC.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_continuity_of_function_families",
+          "label": "Continuity of Standard Function Families on Their Domains",
+          "description": "State that polynomials are continuous everywhere, rational functions are continuous on their domains (x values that don't zero the denominator), and trig/exp/log functions are continuous on their natural domains; identify intervals of continuity from these facts.",
+          "yield_score": 0.52,
+          "yield_rationale": "Interval continuity from function family properties appears in MC and supports IVT application; less directly tested than continuity at a single point.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_continuity_of_piecewise_functions_at_boundary",
+          "label": "Testing Continuity of a Piecewise Function at a Boundary Point",
+          "description": "Evaluate the left-hand limit, right-hand limit, and function value at a piecewise boundary point; state whether the piecewise function is continuous or has a jump discontinuity at that point.",
+          "yield_score": 0.70,
+          "yield_rationale": "Piecewise continuity at the boundary is a very common MC and FRQ sub-part; appears most years in both parts of the exam.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_find_parameter_for_continuity",
+          "label": "Finding a Parameter Value to Make a Function Continuous",
+          "description": "Set up and solve the equation lim_{x→c⁻} f(x) = lim_{x→c⁺} f(x) = f(c) to determine a constant (k, a, or b) in a piecewise or rational expression that eliminates a jump or removable discontinuity.",
+          "yield_score": 0.68,
+          "yield_rationale": "'Find the value of k so that f is continuous' appears as a near-annual MC question; also appears as FRQ sub-parts requiring algebraic setup.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_define_removable_discontinuity_value",
+          "label": "Extending a Function to Remove a Removable Discontinuity",
+          "description": "Given a function with a removable discontinuity (hole) at x = c, find the limit value L and define or redefine f(c) = L to produce a continuous extension; verify the extension satisfies all three continuity conditions.",
+          "yield_score": 0.60,
+          "yield_rationale": "Removing a removable discontinuity by defining a function value appears in MC and connects to domain extension problems; moderately frequent.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "limit_1_infinite_limits_vertical_asymptotes",
+      "label": "Infinite Limits and Vertical Asymptotes",
+      "description": "Evaluate one-sided limits that diverge to +∞ or −∞ as x approaches a finite value; connect the sign of each one-sided infinite limit to the direction of the vertical asymptote on the graph.",
+      "ced_topics": ["1.14"],
+      "yield_score": 0.60,
+      "yield_rationale": "Infinite-limit MC problems appear regularly; vertical asymptote identification is a standard rational function skill that connects to end-behavior analysis and asymptotic behavior in later units.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "limit_1_evaluate_one_sided_infinite_limit",
+          "label": "Evaluating a One-Sided Infinite Limit",
+          "description": "Determine whether lim_{x→c⁺} f(x) or lim_{x→c⁻} f(x) equals +∞ or −∞ by analyzing the sign of the numerator and denominator near c for a rational or combined function.",
+          "yield_score": 0.62,
+          "yield_rationale": "Sign-analysis of infinite limits is a standard MC skill; appear in rational function problems and in asymptote identification questions.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_vertical_asymptote_from_infinite_limit",
+          "label": "Connecting Infinite Limits to Vertical Asymptotes",
+          "description": "Identify a vertical asymptote at x = c when at least one one-sided limit diverges to ±∞; distinguish a vertical asymptote (non-canceling factor in denominator) from a hole (canceling factor).",
+          "yield_score": 0.65,
+          "yield_rationale": "Vertical asymptote identification via limits appears in MC most years; the asymptote-vs-hole distinction is a classic MC distractor.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_sign_analysis_near_vertical_asymptote",
+          "label": "Sign Analysis of One-Sided Infinite Limits Near an Asymptote",
+          "description": "Use a sign chart for the numerator and denominator of a rational function near x = c to determine whether each one-sided limit goes to +∞ or −∞, and sketch the corresponding graph behavior.",
+          "yield_score": 0.55,
+          "yield_rationale": "Sign analysis for +∞ vs −∞ one-sided behavior appears in MC when the exam asks about the graph near a vertical asymptote; moderately frequent.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_infinite_limit_of_rational_function",
+          "label": "Evaluating Infinite Limits of Rational Functions",
+          "description": "Apply factoring or inspection to determine whether lim_{x→c} p(x)/q(x) is +∞, −∞, or DNE for a rational function where q(c) = 0 and p(c) ≠ 0, checking both one-sided limits.",
+          "yield_score": 0.60,
+          "yield_rationale": "Rational function infinite limits appear frequently in MC; the factored-form analysis connects to discontinuity classification and asymptote problems.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "limit_1_limits_at_infinity_horizontal_asymptotes",
+      "label": "Limits at Infinity and Horizontal Asymptotes",
+      "description": "Determine the end behavior of rational, exponential, and composite functions by comparing dominant terms or using standard limits; connect the result to horizontal asymptotes on the graph.",
+      "ced_topics": ["1.15"],
+      "yield_score": 0.65,
+      "yield_rationale": "Horizontal asymptote via limits appears in MC every year; end-behavior analysis also connects to rational function graph sketching, DE long-run behavior, and asymptote identification across Units 4–7.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "limit_1_rational_infinity_numerator_lower_degree",
+          "label": "Rational Limit at Infinity: Numerator Degree Lower (Limit = 0)",
+          "description": "Evaluate lim_{x→±∞} p(x)/q(x) when deg(p) < deg(q): the denominator grows faster, so the limit equals 0 and the x-axis (y = 0) is a horizontal asymptote. Apply by identifying the dominant terms or dividing through by the highest power of x.",
+          "yield_score": 0.68,
+          "yield_rationale": "One of three degree-comparison cases for rational end behavior; appears in near-annual MC problems on horizontal asymptotes; this case produces the cleanest answer (zero) and is frequently paired with the equal-degree case as a distractor.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_rational_infinity_equal_degrees",
+          "label": "Rational Limit at Infinity: Equal Degrees (Limit = Ratio of Leading Coefficients)",
+          "description": "Evaluate lim_{x→±∞} p(x)/q(x) when deg(p) = deg(q): all lower-order terms vanish, leaving the ratio of the leading coefficients as the limit; this value is a horizontal asymptote y = a_n/b_n.",
+          "yield_score": 0.72,
+          "yield_rationale": "The equal-degree case is the most frequently tested of the three degree-comparison cases in MC; 'find the horizontal asymptote of a rational function' problems almost always use this case or force a comparison with the lower-degree case.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_rational_infinity_numerator_higher_degree",
+          "label": "Rational Limit at Infinity: Numerator Degree Higher (Limit Unbounded)",
+          "description": "Evaluate lim_{x→±∞} p(x)/q(x) when deg(p) > deg(q): the numerator dominates, so the limit diverges to +∞ or −∞ (or does not exist if the signs differ for x→+∞ vs x→−∞); there is no horizontal asymptote, though an oblique asymptote may exist.",
+          "yield_score": 0.58,
+          "yield_rationale": "The unbounded case is tested in MC when students must recognize the absence of a horizontal asymptote; also connects to oblique/slant asymptote analysis and reinforces that not every rational function has a finite limit at infinity.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_horizontal_asymptote_from_limit",
+          "label": "Connecting a Finite Limit at Infinity to a Horizontal Asymptote",
+          "description": "State that y = L is a horizontal asymptote of f if lim_{x→∞} f(x) = L or lim_{x→−∞} f(x) = L; identify the horizontal asymptote of a rational or exponential function from the limit value.",
+          "yield_score": 0.65,
+          "yield_rationale": "Horizontal asymptote identification via limits appears in MC every year; often also tested via direct graph reading.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_limit_at_infinity_exponential",
+          "label": "Limit at Infinity for Exponential Functions",
+          "description": "Evaluate lim_{x→∞} e^x = ∞, lim_{x→−∞} e^x = 0, lim_{x→∞} e^{−x} = 0 and generalizations; recognize that exponential growth dominates polynomial growth as x → ∞.",
+          "yield_score": 0.55,
+          "yield_rationale": "Exponential limits at infinity appear in MC in functions like e^x/(x^2+1) and in DE long-run behavior questions; moderately tested.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_divide_by_highest_power_technique",
+          "label": "Dividing by the Highest Power to Evaluate a Limit at Infinity",
+          "description": "Evaluate lim_{x→∞} p(x)/q(x) by dividing every term by the highest power of x present, then applying lim_{x→∞} 1/x^n = 0 to reduce the expression to a ratio of leading coefficients.",
+          "yield_score": 0.62,
+          "yield_rationale": "The divide-by-highest-power technique is the canonical algebraic method for limits at infinity in MC; appears when degree-comparison alone needs to be shown analytically.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_limit_at_infinity_composite_or_abs",
+          "label": "Limits at Infinity for Composite or Absolute Value Expressions",
+          "description": "Evaluate limits at infinity for expressions like lim_{x→∞} √(x^2 + 1)/x using dominant-term analysis under the radical, or lim_{x→−∞} |x|/x = −1 using the definition of absolute value for negative x.",
+          "yield_score": 0.45,
+          "yield_rationale": "Absolute value and square-root limit at infinity appear as occasional MC distractors; less frequent but conceptually important for completeness.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "limit_1_intermediate_value_theorem",
+      "label": "Intermediate Value Theorem (IVT)",
+      "description": "State the IVT conditions (f continuous on [a,b] and N strictly between f(a) and f(b)) and apply it to guarantee the existence of a value c in (a,b) where f(c) = N; use IVT to justify existence of roots or specific output values.",
+      "ced_topics": ["1.16"],
+      "yield_score": 0.72,
+      "yield_rationale": "IVT justification appears as an FRQ sub-part most years (2019 Q4, 2022 Q4, 2023 Q1, 2025 Q5); also appears in MC as a conditions-check question; high practical exam yield for its low-effort setup.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "limit_1_ivt_statement_and_conditions",
+          "label": "Stating IVT and Verifying Its Conditions",
+          "description": "State the Intermediate Value Theorem precisely: if f is continuous on [a, b] and N is any value strictly between f(a) and f(b), then there exists at least one c in (a, b) with f(c) = N; check continuity and that N is between the endpoint values.",
+          "yield_score": 0.72,
+          "yield_rationale": "Stating IVT with conditions is the standard FRQ format; students lose points for omitting the continuity hypothesis or the interval; appears most years as a 1–2 point justification sub-part.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_ivt_guarantee_root_existence",
+          "label": "Using IVT to Guarantee a Root (Zero) of a Function",
+          "description": "Apply IVT with N = 0 to prove that a continuous function f has at least one zero on (a, b) when f(a) and f(b) have opposite signs; write a complete justification citing continuity and sign change.",
+          "yield_score": 0.75,
+          "yield_rationale": "Root existence via IVT is the most common FRQ application; 'show there exists c such that f(c) = 0' appears as an FRQ sub-part nearly every year.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_ivt_guarantee_specific_output",
+          "label": "Using IVT to Guarantee a Specific Output Value",
+          "description": "Apply IVT with a specific nonzero target value N to guarantee f(c) = N for some c in (a, b); verify f(a) < N < f(b) or f(b) < N < f(a) and that f is continuous on the interval.",
+          "yield_score": 0.68,
+          "yield_rationale": "Non-root IVT applications (e.g., 'show f(c) = 5 for some c') appear in FRQ sub-parts alongside root existence questions; slightly less common than the zero version.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_ivt_conclusion_language_and_notation",
+          "label": "Writing a Complete IVT Justification in Correct Notation",
+          "description": "Write a full IVT argument using proper notation: cite continuity, state f(a) and f(b), identify N between them, and conclude 'by the IVT there exists c in (a, b) such that f(c) = N'; avoid overstating (saying c is unique).",
+          "yield_score": 0.65,
+          "yield_rationale": "FRQ graders require specific language; notation/conclusion errors are a common source of point deductions; this is a distinct skill from knowing the theorem content.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_ivt_mc_condition_checking",
+          "label": "Identifying When IVT Conditions Are or Are Not Satisfied (MC)",
+          "description": "Given a function and an interval, determine whether the hypotheses of IVT hold (check continuity on the closed interval) and whether the theorem guarantees a conclusion; identify false claims about IVT applicability.",
+          "yield_score": 0.62,
+          "yield_rationale": "MC questions test IVT conditions directly by providing discontinuous functions or intervals where N is not strictly between endpoint values; appears most years in Part A.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "limit_1_ivt_from_table_data",
+          "label": "Applying IVT from a Table of Function Values",
+          "description": "Use tabular data to verify IVT conditions (continuity assumed, check whether a target value N lies between two given table values) and conclude existence of c on the corresponding subinterval.",
+          "yield_score": 0.60,
+          "yield_rationale": "Table-based IVT applications appear in the Rate/Data FRQ archetype; students must reason from discrete data points to a continuity-based existence claim.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

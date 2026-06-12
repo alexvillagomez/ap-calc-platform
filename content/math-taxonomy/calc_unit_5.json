@@ -1,0 +1,518 @@
+{
+  "category": {
+    "id": "calc_unit_5",
+    "label": "Analytical Applications of Differentiation",
+    "description": "Uses derivative theory to analyze function behavior analytically: locating extrema, classifying concavity, connecting graphs of f, f', and f'', and solving optimization problems. The highest-FRQ-frequency unit on the AP Calc AB exam, appearing in roughly 38 sub-parts from 2012–2025.",
+    "section": "calc_ab",
+    "ced_unit": "AP Calc AB Unit 5",
+    "courses": [
+      { "course": "calc_ab", "role": "core", "order_index": 5 }
+    ],
+    "yield_score": 0.90,
+    "yield_rationale": "Unit 5 is 15–18% of the AP exam and has the highest cumulative FRQ appearance count (~38) of all eight units; every graph-analysis FRQ archetype lives here."
+  },
+  "umbrellas": [
+    {
+      "id": "u5_mean_value_theorem",
+      "label": "Mean Value Theorem",
+      "description": "Applies the MVT to guarantee the existence of an instantaneous rate equal to the average rate on a closed interval, and states the required hypotheses (continuity on [a,b], differentiability on (a,b)).",
+      "ced_topics": ["5.1"],
+      "yield_score": 0.80,
+      "yield_rationale": "MVT justification appears in FRQs every 1–2 years (2023 Q1, 2019 Q2) and in MC as a condition-checking question; high FRQ partial-credit value.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u5_mvt_hypothesis_check",
+          "label": "MVT Hypothesis Verification",
+          "description": "Checks that a function is continuous on [a, b] and differentiable on (a, b) before invoking the MVT; identifies when a hypothesis is violated.",
+          "yield_score": 0.75,
+          "yield_rationale": "FRQ sub-parts routinely ask students to 'justify why MVT applies'; hypothesis errors are a common distractor target in MC.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_mvt_guarantee_c_value",
+          "label": "MVT Existence Guarantee",
+          "description": "Applies the MVT conclusion — there exists c in (a, b) where f'(c) = [f(b)−f(a)]/(b−a) — and identifies what that c represents geometrically (slope of tangent equals slope of secant).",
+          "yield_score": 0.80,
+          "yield_rationale": "Core exam task: 'use MVT to justify there exists a time when instantaneous rate equals average rate'; appears in both table-based and analytical FRQs.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_mvt_average_rate_calculation",
+          "label": "Average Rate of Change for MVT Setup",
+          "description": "Computes the average rate of change [f(b)−f(a)]/(b−a) as the target slope, then invokes MVT to assert that f' achieves that value; connects to difference-quotient interpretation.",
+          "yield_score": 0.70,
+          "yield_rationale": "Requires combining aroc computation with MVT reasoning; appears as a sub-part in data-table FRQs where aroc is computed first.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_rolle_theorem_special_case",
+          "label": "Rolle's Theorem as Special Case of MVT",
+          "description": "Recognizes that when f(a) = f(b) the MVT guarantees f'(c) = 0, so horizontal tangent must exist; applies to justify an extreme value or zero of f'.",
+          "yield_score": 0.40,
+          "yield_rationale": "Rolle's theorem is rarely tested as a standalone topic but appears as an MC distractor and in conceptual justification sub-parts; lower direct yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_mvt_contextual_interpretation",
+          "label": "MVT Interpretation in Context",
+          "description": "Translates the MVT conclusion into context-appropriate language — e.g., 'at some moment the car's speedometer read exactly 60 mph' — including correct units.",
+          "yield_score": 0.72,
+          "yield_rationale": "Interpretation/communication sub-parts are awarded partial-credit points on FRQs; contextual MVT statements appear in applied table questions.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u5_extreme_value_theorem_and_critical_points",
+      "label": "Extreme Value Theorem, Global vs. Local Extrema, and Critical Points",
+      "description": "Applies the EVT to guarantee absolute extrema on a closed interval, identifies critical points where f'(c) = 0 or f'(c) is undefined, and distinguishes local from global extrema.",
+      "ced_topics": ["5.2"],
+      "yield_score": 0.82,
+      "yield_rationale": "Critical-point identification is the entry step for every optimization and extrema FRQ; EVT conditions are tested in MC; unit weight 15–18%.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u5_evt_hypothesis_and_guarantee",
+          "label": "EVT Hypothesis and Guarantee",
+          "description": "States that a continuous function on a closed interval [a, b] must attain both an absolute maximum and an absolute minimum; identifies that an open interval or discontinuity violates EVT conditions.",
+          "yield_score": 0.72,
+          "yield_rationale": "EVT justification appears in MC condition-checking problems; prerequisite for the candidates test.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_critical_point_from_derivative_zero",
+          "label": "Critical Points Where f' = 0",
+          "description": "Finds critical points by setting f'(x) = 0 and solving algebraically; includes power, trig, exponential, and product/quotient rule expressions.",
+          "yield_score": 0.88,
+          "yield_rationale": "Setting f' = 0 is the first algebraic step in virtually every extrema/optimization FRQ and MC problem; extremely high frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_critical_point_where_derivative_undefined",
+          "label": "Critical Points Where f' Is Undefined",
+          "description": "Identifies critical points at corners, cusps, or vertical tangents where f' does not exist; distinguishes these from removable or jump discontinuities of f' vs. points where f itself is not defined.",
+          "yield_score": 0.65,
+          "yield_rationale": "Undefined-derivative critical points appear in piecewise or radical function MC problems; less frequent than f' = 0 but tested annually.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_local_vs_global_extrema_distinction",
+          "label": "Local vs. Global Extrema Distinction",
+          "description": "Explains that a relative maximum is a locally highest value but may not be the absolute maximum; uses the graph of f or sign chart of f' to compare candidate values.",
+          "yield_score": 0.60,
+          "yield_rationale": "Terminology distinction tested in MC conceptual questions; foundational for understanding candidates test and closed-interval analysis.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u5_increasing_decreasing_intervals",
+      "label": "Increasing and Decreasing Intervals via f'",
+      "description": "Constructs a sign chart for f'(x) on a partition of the domain at critical points to determine intervals where f is increasing (f' > 0) or decreasing (f' < 0).",
+      "ced_topics": ["5.3"],
+      "yield_score": 0.85,
+      "yield_rationale": "Sign-chart analysis of f' appears on almost every graph-analysis FRQ (2022 Q3, 2023 Q4) and in MC every year; forms the scaffolding for the first-derivative test (CED 5.4). Rescored to 0.85 (from 0.87) to sit below FDT (5.4 umbrella 0.87): interval-reading is scaffolding, not the primary tested skill.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u5_sign_chart_of_f_prime",
+          "label": "Sign Chart Construction for f'",
+          "description": "Partitions the domain at all critical points and discontinuities of f', tests a sample point in each sub-interval to determine the sign of f', and records the sign pattern.",
+          "yield_score": 0.80,
+          "yield_rationale": "Sign-chart construction is a procedural sub-skill (drawing tick marks and +/− symbols); what is directly tested is the inference drawn from the chart (intervals, FDT classification). Rescored to 0.80 to sit below the inference-level in_depth keywords and prevent inflated practice-queue frequency for a mechanical setup step.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_interval_of_increase_from_sign_chart",
+          "label": "Reading Increasing Intervals from f' Sign Chart",
+          "description": "Translates f' > 0 sub-intervals into interval notation for the set of x-values where f is increasing; uses open/closed endpoints correctly based on domain restrictions.",
+          "yield_score": 0.83,
+          "yield_rationale": "Reading interval notation from sign chart is a required FRQ justification skill; endpoint handling (open vs. closed) is a common error source. Rescored to 0.83 to preserve ordering below FDT in_depth keywords (0.88–0.92) and above the procedural chart-construction step (0.80).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_interval_of_decrease_from_sign_chart",
+          "label": "Reading Decreasing Intervals from f' Sign Chart",
+          "description": "Translates f' < 0 sub-intervals into interval notation for the set of x-values where f is decreasing; applies the same sign-chart partition logic as for increasing intervals.",
+          "yield_score": 0.83,
+          "yield_rationale": "Decreasing-interval identification is symmetrically tested with increasing intervals; both appear in every graph-analysis FRQ.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_increasing_decreasing_from_f_prime_graph",
+          "label": "Increasing/Decreasing from a Graph of f'",
+          "description": "Reads intervals where f is increasing or decreasing directly from a given graph of f' by identifying where the f' graph is above or below the x-axis.",
+          "yield_score": 0.88,
+          "yield_rationale": "Graph-of-f'-given archetype (FRQ 5 archetype) requires reading f's behavior from f's graph; appears in FRQ no-calculator section most years.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u5_first_derivative_test",
+      "label": "First Derivative Test for Relative Extrema",
+      "description": "Classifies each critical point as a relative maximum, relative minimum, or neither by observing whether f' changes sign from positive to negative, negative to positive, or does not change sign.",
+      "ced_topics": ["5.4"],
+      "yield_score": 0.87,
+      "yield_rationale": "First derivative test is among the most-tested AP Calc AB skills; appears in MC and is the primary justification method required in FRQ extrema sub-parts.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u5_fdt_pos_to_neg_relative_max",
+          "label": "f' Changes + to − Implies Relative Maximum",
+          "description": "Applies the FDT conclusion that a sign change of f' from positive to negative at c identifies c as a relative maximum of f; writes the justification sentence referencing the sign change.",
+          "yield_score": 0.90,
+          "yield_rationale": "Relative-max justification is a required FRQ writing skill; sign-change language is expected verbatim by AP graders.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_fdt_neg_to_pos_relative_min",
+          "label": "f' Changes − to + Implies Relative Minimum",
+          "description": "Applies the FDT conclusion that a sign change of f' from negative to positive at c identifies c as a relative minimum of f; mirrors the max case with opposite sign pattern.",
+          "yield_score": 0.88,
+          "yield_rationale": "Relative-min justification is equally tested as relative-max in FRQ; graded as a paired skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_fdt_no_sign_change_neither",
+          "label": "No Sign Change of f' — Neither Extremum",
+          "description": "Recognizes that a critical point where f' does not change sign (e.g., f'(x) = x³ at x = 0) is neither a relative max nor min; avoids the common error of assuming every critical point is an extremum.",
+          "yield_score": 0.55,
+          "yield_rationale": "The 'no sign change' case appears in MC conceptual questions; less frequent but tests deeper understanding of FDT.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_fdt_applied_to_f_prime_graph",
+          "label": "First Derivative Test Applied to a Graph of f'",
+          "description": "Identifies relative extrema of f by locating x-intercepts of a given f' graph where f' changes sign, without computing derivatives algebraically.",
+          "yield_score": 0.92,
+          "yield_rationale": "Graph-of-f' archetype FRQs (2022 Q3, 2023 Q4) require applying FDT visually; this is among the most-tested single skills in Unit 5.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_fdt_justify_written_statement",
+          "label": "FDT Justification in Written Form",
+          "description": "Writes a complete FRQ-style justification sentence for a relative extremum: names the critical point, states the sign change of f', and concludes the type of extremum using precise vocabulary.",
+          "yield_score": 0.85,
+          "yield_rationale": "AP graders award justification points only for correct written reasoning; FDT sentence structure is explicitly taught and tested.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u5_candidates_test_absolute_extrema",
+      "label": "Candidates Test for Absolute Extrema on a Closed Interval",
+      "description": "Finds the absolute maximum and minimum of a continuous function on [a, b] by evaluating f at all interior critical points and both endpoints, then comparing the function values.",
+      "ced_topics": ["5.5"],
+      "yield_score": 0.82,
+      "yield_rationale": "Candidates test is required whenever a closed interval is given; optimization FRQs and closed-interval sub-parts rely on it; appears in MC and FRQ every exam year.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u5_candidates_test_procedure",
+          "label": "Full Candidates Test Procedure",
+          "description": "Executes the candidates test: finds all critical points in (a, b), evaluates f at each critical point and at both endpoints a and b, lists the values, and identifies the largest (abs max) and smallest (abs min).",
+          "yield_score": 0.85,
+          "yield_rationale": "Full closed-interval analysis appears as an FRQ sub-part or MC computation every year; procedural fluency is essential.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_endpoint_evaluation_closed_interval",
+          "label": "Endpoint Evaluation in Closed-Interval Analysis",
+          "description": "Evaluates f(a) and f(b) explicitly and includes them in the candidates list; recognizes that the absolute extremum may occur at an endpoint rather than an interior critical point.",
+          "yield_score": 0.78,
+          "yield_rationale": "Omitting endpoint evaluation is a common student error; tested in MC as a trap (interior critical point is a local min but endpoint is the global min).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_absolute_vs_relative_extrema_comparison",
+          "label": "Distinguishing Absolute from Relative Extrema",
+          "description": "Compares all candidate values to determine which is the global maximum and which is the global minimum; states that an absolute extremum may or may not coincide with a relative extremum.",
+          "yield_score": 0.70,
+          "yield_rationale": "Conceptual MC questions directly test whether students confuse local and global extrema; common FRQ partial-credit trap.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_closed_interval_analysis_piecewise",
+          "label": "Closed-Interval Analysis on a Piecewise-Defined Function",
+          "description": "Applies the candidates test when f is defined piecewise on [a, b]; finds critical points within each piece's domain and evaluates at interior boundary points as additional candidates.",
+          "yield_score": 0.58,
+          "yield_rationale": "Piecewise functions appear periodically in MC and FRQ; boundary-point evaluation is an additional candidate source beyond standard critical-point analysis.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u5_concavity_and_inflection_points",
+      "label": "Concavity and Inflection Points via f''",
+      "description": "Uses the sign of f''(x) to classify intervals of concave-up (f'' > 0) and concave-down (f'' < 0) behavior, and identifies inflection points where f'' changes sign.",
+      "ced_topics": ["5.6"],
+      "yield_score": 0.87,
+      "yield_rationale": "Concavity and inflection point analysis appear in every graph-analysis FRQ and in MC every year; f'' sign chart is as fundamental as f' sign chart.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u5_sign_chart_of_f_double_prime",
+          "label": "Sign Chart of f'' for Concavity",
+          "description": "Constructs a sign chart for f''(x) by finding where f'' = 0 or is undefined, testing sub-intervals, and recording the concavity in each interval.",
+          "yield_score": 0.80,
+          "yield_rationale": "f'' sign chart construction is a procedural sub-skill analogous to the f' sign chart; the directly tested skills are the concavity and inflection-point inferences drawn from the chart. Rescored to 0.80 (from 0.88) to sit below inference-level in_depth keywords in this umbrella and prevent inflated practice frequency for the mechanical setup step.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_concave_up_interval_identification",
+          "label": "Identifying Concave-Up Intervals",
+          "description": "States that f is concave up on intervals where f''(x) > 0, which corresponds to f' increasing and the graph curving upward like a cup.",
+          "yield_score": 0.85,
+          "yield_rationale": "Concave-up identification is a standard FRQ sub-part; also tested as over/under-estimate justification in linearization problems.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_concave_down_interval_identification",
+          "label": "Identifying Concave-Down Intervals",
+          "description": "States that f is concave down on intervals where f''(x) < 0, which corresponds to f' decreasing and the graph curving downward like a cap.",
+          "yield_score": 0.84,
+          "yield_rationale": "Concave-down identification is symmetrically tested with concave-up; both are standard FRQ and MC items.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_inflection_point_sign_change_condition",
+          "label": "Inflection Point Requires f'' Sign Change",
+          "description": "Identifies an inflection point as an x-value where f'' changes sign (not merely f'' = 0); rejects candidate inflection points where f'' = 0 but does not change sign.",
+          "yield_score": 0.82,
+          "yield_rationale": "The sign-change condition for inflection points is a high-value MC and FRQ question; f'' = 0 is necessary but not sufficient.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_inflection_point_from_f_prime_graph",
+          "label": "Inflection Points from a Graph of f'",
+          "description": "Locates inflection points of f from a graph of f' by identifying where f' has a local maximum or minimum (i.e., where f' changes from increasing to decreasing or vice versa).",
+          "yield_score": 0.90,
+          "yield_rationale": "Reading inflection points from a graph of f' is a core skill in the FRQ archetype 5 (graph-of-f' analysis); among the most frequently tested Unit 5 sub-tasks.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_concavity_and_over_under_estimate",
+          "label": "Concavity Determines Over/Under-Estimate of Linearization",
+          "description": "Uses concavity to determine whether a tangent-line approximation overestimates (concave down) or underestimates (concave up) the true function value near the point of tangency.",
+          "yield_score": 0.60,
+          "yield_rationale": "Over/under-estimate justification appears as a sub-part in linearization FRQ and MC questions; bridges Unit 4 linearization with Unit 5 concavity.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u5_second_derivative_test",
+      "label": "Second Derivative Test for Relative Extrema",
+      "description": "Classifies a critical point c as a relative maximum if f''(c) < 0 or a relative minimum if f''(c) > 0; recognizes when f''(c) = 0 makes the test inconclusive.",
+      "ced_topics": ["5.7"],
+      "yield_score": 0.70,
+      "yield_rationale": "Second derivative test appears in MC problems testing understanding of f''; less commonly required than the first derivative test in FRQ justification, but tested as an alternative method.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u5_sdt_negative_second_derivative_max",
+          "label": "f''(c) < 0 at Critical Point Implies Relative Maximum",
+          "description": "Applies the SDT conclusion: if f'(c) = 0 and f''(c) < 0, then f has a relative maximum at c because the function is concave down there.",
+          "yield_score": 0.72,
+          "yield_rationale": "SDT max case tested in MC; conceptual pairing of f' = 0 and f'' < 0 is a common distractor setup.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_sdt_positive_second_derivative_min",
+          "label": "f''(c) > 0 at Critical Point Implies Relative Minimum",
+          "description": "Applies the SDT conclusion: if f'(c) = 0 and f''(c) > 0, then f has a relative minimum at c because the function is concave up there.",
+          "yield_score": 0.70,
+          "yield_rationale": "SDT min case is the mirror of the max case; both tested together in MC and occasionally as an alternative to FDT in FRQ.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_sdt_inconclusive_when_zero",
+          "label": "SDT Is Inconclusive When f''(c) = 0",
+          "description": "Recognizes that when f''(c) = 0, the second derivative test yields no conclusion; student must revert to the first derivative test (sign chart of f') to classify the critical point.",
+          "yield_score": 0.55,
+          "yield_rationale": "Inconclusive SDT case is tested in MC as a conceptual question; understanding the limitation of SDT is an exam-level skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_sdt_vs_fdt_selection",
+          "label": "Choosing Between SDT and FDT",
+          "description": "Selects the appropriate test for a given critical point — SDT when f'' is easy to evaluate at c, FDT when f'' = 0 or the sign chart of f' is more revealing.",
+          "yield_score": 0.50,
+          "yield_rationale": "Strategy-selection MC questions test awareness of when each test is applicable; lower direct FRQ frequency but reinforces conceptual understanding.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u5_graphical_analysis_f_fprime_fdoubleprime",
+      "label": "Connecting Graphs of f, f', and f''",
+      "description": "Synthesizes information across all three functions — increasing/decreasing, concavity, extrema, inflection points — by reading a graph of f, f', or f'' and inferring properties of the other two.",
+      "ced_topics": ["5.8", "5.9"],
+      "yield_score": 0.88,
+      "yield_rationale": "Graph-of-f' analysis is a standard FRQ archetype (2022 Q3, 2023 Q4) and a perennial MC theme; cross-graph synthesis is among the highest-yield Unit 5 skills.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u5_infer_f_properties_from_f_prime_graph",
+          "label": "Infer f Properties from a Graph of f'",
+          "description": "Given a graph of f', reads sign, zeros, and local extrema of f' to determine where f is increasing/decreasing, has relative extrema, or is concave up/down.",
+          "yield_score": 0.95,
+          "yield_rationale": "This is the core skill of FRQ archetype 5 (graph-of-f' given); appears in FRQ no-calculator section most years and dominates MC graph questions in Unit 5.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_infer_f_prime_properties_from_f_graph",
+          "label": "Infer f' Properties from a Graph of f",
+          "description": "Given a graph of f, identifies where f' = 0 (horizontal tangents), where f' > 0 (rising), where f' < 0 (falling), and sketches a qualitative graph of f'.",
+          "yield_score": 0.82,
+          "yield_rationale": "Reverse direction (f → f') is tested in MC multiple times per year; sketch-the-derivative problems appear in FRQ and MC.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_sketch_f_from_f_prime_info",
+          "label": "Sketch f from Derivative Information",
+          "description": "Constructs a rough sketch of f consistent with given information about f' (sign chart or graph), incorporating a starting value of f, increasing/decreasing behavior, and extrema.",
+          "yield_score": 0.78,
+          "yield_rationale": "Sketch-from-derivative questions appear in FRQ (sometimes as a no-calc sub-part) and in MC as matching problems; requires synthesis of all derivative information.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_match_graph_of_f_to_graph_of_f_prime",
+          "label": "Match a Graph of f to Its Derivative Graph",
+          "description": "Identifies which of several given graphs is f' (or f) by checking that extrema of f correspond to zeros of f', that increasing parts of f correspond to positive values of f', and slope transitions match.",
+          "yield_score": 0.80,
+          "yield_rationale": "Graph-matching MC questions are a staple of the AP exam; require simultaneous reasoning about all three-tier relationships.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_concavity_and_inflection_from_f_prime_graph",
+          "label": "Concavity and Inflection Points from a Graph of f'",
+          "description": "Identifies intervals where f is concave up or down by reading whether f' is increasing or decreasing on those intervals; locates inflection points of f at local extrema of f'.",
+          "yield_score": 0.88,
+          "yield_rationale": "FRQ archetype 5 sub-parts explicitly ask for inflection points and concavity from a graph of f'; tied directly to 2022 Q3 and 2023 Q4 style questions.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_simultaneous_f_fprime_fdoubleprime_synthesis",
+          "label": "Simultaneous Synthesis of f, f', and f''",
+          "description": "Analyzes all three functions at once — applying sign charts for both f' and f'' — to produce a complete qualitative description of f's behavior including extrema, concavity, and inflection points.",
+          "yield_score": 0.85,
+          "yield_rationale": "Complete graph-analysis FRQ questions require simultaneous use of f', f'', and f; synthesis tasks earn full FRQ credit and are the capstone of Unit 5.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u5_optimization",
+      "label": "Optimization Problems",
+      "description": "Translates a word problem into a function to optimize, applies calculus to find and verify the absolute extremum using the candidates test or first/second derivative test on the relevant domain.",
+      "ced_topics": ["5.10", "5.11"],
+      "yield_score": 0.78,
+      "yield_rationale": "Optimization appears in MC and as FRQ sub-parts (2021 Q3, 2025 Q1 partial); full optimization FRQs appear roughly every 2 years; unit weight 15–18%.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u5_optimization_objective_function_setup",
+          "label": "Setting Up the Objective Function",
+          "description": "Identifies the quantity to be optimized (area, cost, distance, volume, revenue) and writes an algebraic expression for it in terms of a single variable, using a constraint to eliminate extra variables.",
+          "yield_score": 0.80,
+          "yield_rationale": "Setup is the highest-value partial-credit step in optimization FRQs; students who set up correctly but differentiate incorrectly still earn points.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_optimization_constraint_substitution",
+          "label": "Constraint Substitution to Reduce Variables",
+          "description": "Uses a given constraint equation (perimeter = constant, volume = constant, sum = constant) to express the objective function in terms of a single variable before differentiating.",
+          "yield_score": 0.75,
+          "yield_rationale": "Constraint substitution is an algebraic prerequisite for optimization; errors here propagate through the entire solution; tested as a setup step in MC.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_optimization_domain_identification",
+          "label": "Identifying the Feasible Domain",
+          "description": "States the domain for the optimization (e.g., 0 < x < 10) based on physical constraints, and determines whether the interval is open or closed to choose the appropriate extremum-finding method.",
+          "yield_score": 0.65,
+          "yield_rationale": "Domain identification is required for choosing between candidates test (closed) and first derivative test (open); omitting domain is a frequent AP exam error.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_optimization_critical_point_and_verify",
+          "label": "Finding and Verifying the Optimal Critical Point",
+          "description": "Differentiates the objective function, sets f' = 0 to find critical points, and verifies the optimal value using the candidates test (if domain is closed) or first/second derivative test (if domain is open).",
+          "yield_score": 0.82,
+          "yield_rationale": "Differentiate-and-verify is the core computational step; f' = 0 + verification earns the majority of optimization FRQ points.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_optimization_geometric_setup",
+          "label": "Geometric Optimization Setup",
+          "description": "Sets up an optimization problem with a geometric objective: maximize area of a rectangle inscribed in a curve, minimize perimeter for a given area, or optimize dimensions of a box or fence.",
+          "yield_score": 0.72,
+          "yield_rationale": "Geometric optimization (box, fence, inscribed rectangle) is the most common optimization context on the AP exam; requires combining geometry formulas with calculus.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_optimization_answer_in_context",
+          "label": "Stating the Optimization Answer in Context",
+          "description": "Interprets the optimal critical point value in the problem's context — reports the optimized quantity with correct units and confirms it satisfies the original constraints.",
+          "yield_score": 0.60,
+          "yield_rationale": "Contextual communication and units are awarded FRQ points; students who reach the right x but fail to state the answer in context lose partial credit.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u5_implicit_curve_analysis",
+      "label": "Behaviors of Implicit Relations",
+      "description": "Analyzes the local behavior of implicitly defined curves using implicit differentiation: finds horizontal and vertical tangent lines, determines concavity, and connects curve shape to derivative values.",
+      "ced_topics": ["5.12"],
+      "yield_score": 0.67,
+      "yield_rationale": "Implicit curve analysis appears in FRQs as part of the implicit differentiation / related-rates archetype (2023 Q6, 2024 Q5, 2025 Q6); unit weight 15–18% and FRQ sub-parts earn meaningful points.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u5_implicit_horizontal_tangent_condition",
+          "label": "Horizontal Tangent on an Implicit Curve",
+          "description": "Finds points on an implicit curve where dy/dx = 0 by setting the numerator of dy/dx equal to zero (from implicit differentiation), subject to the constraint that the denominator is nonzero.",
+          "yield_score": 0.70,
+          "yield_rationale": "Horizontal tangent sub-parts appear in FRQ archetype 7 (implicit/related-rates) and in MC; numerator = 0 condition is directly tested.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_implicit_vertical_tangent_condition",
+          "label": "Vertical Tangent on an Implicit Curve",
+          "description": "Finds points where dy/dx is undefined by setting the denominator of dy/dx equal to zero and verifying that the numerator is nonzero (so dy/dx → ∞), indicating a vertical tangent.",
+          "yield_score": 0.65,
+          "yield_rationale": "Vertical tangent conditions are tested alongside horizontal tangents in implicit-curve FRQs; denominator = 0 condition is commonly mishandled.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_implicit_second_derivative_concavity",
+          "label": "Concavity of an Implicit Curve via d²y/dx²",
+          "description": "Computes the second derivative of an implicit relation by differentiating dy/dx implicitly again, substitutes y back using the curve equation, and determines the sign of d²y/dx² to classify concavity.",
+          "yield_score": 0.62,
+          "yield_rationale": "Second derivative of implicit curves appears as a harder FRQ sub-part (2023 Q6 d²y/dx² concavity question); requires chain rule within implicit differentiation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_implicit_curve_sketch_from_tangent_info",
+          "label": "Sketching Local Behavior of an Implicit Curve",
+          "description": "Uses dy/dx and d²y/dx² values at specific points to sketch the local shape of an implicit curve near a given point, showing direction and concavity.",
+          "yield_score": 0.45,
+          "yield_rationale": "Local sketch from derivative information appears as a conceptual sub-part in harder FRQs; less frequently a standalone question but tests synthesis of implicit analysis.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u5_implicit_curve_point_substitution_check",
+          "label": "Verifying a Point Lies on an Implicit Curve",
+          "description": "Substitutes given (x, y) coordinates into the implicit equation to confirm the point satisfies the relation before computing derivatives or tangent information there.",
+          "yield_score": 0.38,
+          "yield_rationale": "Verification of a point is a setup step in implicit FRQs; rarely earns its own exam question but is a prerequisite for all subsequent sub-parts; lower direct yield.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

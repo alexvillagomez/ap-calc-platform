@@ -1,0 +1,1277 @@
+{
+  "category": {
+    "id": "polynomials",
+    "label": "Polynomials",
+    "description": "Structure, operations, factoring, division, equations, zeros, graphs, and finite differences for polynomial expressions and functions. Foundational prerequisite for AP Precalculus Unit 1 and rational-function work.",
+    "section": "foundations",
+    "ced_unit": null,
+    "courses": [
+      {"course": "precalc", "role": "core", "order_index": 5},
+      {"course": "calc_ab", "role": "foundation", "order_index": 5}
+    ],
+    "yield_score": 0.85,
+    "yield_rationale": "AP Precalc Unit 1 is almost entirely applied polynomial algebra; factoring, zeros, end behavior, and division are direct prerequisites for 9 of 14 Unit 1 topics and appear in FRQs 1 and 2."
+  },
+  "umbrellas": [
+    {
+      "id": "polynomial_structure_and_classification",
+      "label": "Polynomial Structure and Classification",
+      "description": "Recognizing polynomial expressions and identifying their fundamental parts: terms, coefficients, constant term, leading term, leading coefficient, and standard-form ordering. Core vocabulary for all polynomial operations.",
+      "ced_topics": [],
+      "yield_score": 0.55,
+      "yield_rationale": "Vocabulary and standard form are background fluency for Unit 1; not a direct exam question target but tested implicitly through every polynomial operation.",
+      "source_learn_keyword_id": "polynomial_structure_and_classification",
+      "in_depth": [
+        {
+          "id": "polynomial_expression_definition",
+          "label": "Polynomial expression definition",
+          "description": "A polynomial expression is a finite sum of terms with variables raised only to nonnegative integer powers and real (or specified) coefficients; excludes variable denominators, negative variable exponents, and fractional variable exponents.",
+          "yield_score": 0.52,
+          "yield_rationale": "Definitional fluency; tested in MC classification questions and as background for all polynomial work.",
+          "source_learn_keyword_id": "polynomial_expression_definition"
+        },
+        {
+          "id": "polynomial_term_structure",
+          "label": "Polynomial term structure",
+          "description": "Parsing a polynomial into its additive terms, each consisting of a coefficient multiplied by a variable power; identifying how many terms exist before combining.",
+          "yield_score": 0.58,
+          "yield_rationale": "Term identification is the entry skill for like-term collection, addition, and standard-form work; moderate exam presence.",
+          "source_learn_keyword_id": "polynomial_term_structure"
+        },
+        {
+          "id": "polynomial_coefficients",
+          "label": "Polynomial coefficients",
+          "description": "Identifying the numerical factor of each term in a polynomial, including positive, negative, fractional, decimal, and implied-1 coefficients.",
+          "yield_score": 0.62,
+          "yield_rationale": "Coefficient identification is exercised in every manipulation and evaluation task; moderate-high frequency across rag_examples.",
+          "source_learn_keyword_id": "polynomial_coefficients"
+        },
+        {
+          "id": "polynomial_constant_term",
+          "label": "Polynomial constant term",
+          "description": "The degree-0 term of a polynomial has no variable factor; it equals the polynomial's value at 0 and becomes the y-intercept of the polynomial function.",
+          "yield_score": 0.55,
+          "yield_rationale": "y-intercept connection is practiced in graphing problems; constant-term identification appears in evaluation and standard-form questions.",
+          "source_learn_keyword_id": "polynomial_constant_term"
+        },
+        {
+          "id": "leading_term_polynomial",
+          "label": "Leading term of a polynomial",
+          "description": "The nonzero term of greatest degree in standard form; it controls end behavior and is distinct from the constant term.",
+          "yield_score": 0.72,
+          "yield_rationale": "Leading term is the anchor for end-behavior reasoning (1.6) and is among the most-practiced skills in rag_examples.",
+          "source_learn_keyword_id": "leading_term_polynomial"
+        },
+        {
+          "id": "leading_coefficient_polynomial",
+          "label": "Leading coefficient of a polynomial",
+          "description": "The coefficient of the leading term; determines the direction of end behavior together with the degree (positive vs. negative, even vs. odd).",
+          "yield_score": 0.70,
+          "yield_rationale": "Leading coefficient sign directly drives the four end-behavior cases central to AP Precalc 1.6.",
+          "source_learn_keyword_id": "leading_coefficient_polynomial"
+        },
+        {
+          "id": "polynomial_standard_form",
+          "label": "Polynomial standard form",
+          "description": "Writing a univariate polynomial with terms in descending powers; prerequisite for identifying the leading term, degree, and performing long division.",
+          "yield_score": 0.60,
+          "yield_rationale": "Standard form is a procedural requirement before division, factoring checks, and leading-term analysis; moderate direct exam frequency.",
+          "source_learn_keyword_id": "polynomial_standard_form"
+        },
+        {
+          "id": "descending_power_order",
+          "label": "Descending power order",
+          "description": "Arranging polynomial terms from greatest exponent to least for a chosen variable; the ordering convention behind standard form.",
+          "yield_score": 0.45,
+          "yield_rationale": "Prerequisite ordering step; not independently tested but required before division and degree identification.",
+          "source_learn_keyword_id": "descending_power_order"
+        }
+      ]
+    },
+    {
+      "id": "polynomial_classification_and_degree",
+      "label": "Polynomial Classification and Degree",
+      "description": "Determining polynomial degree (univariate and zero-polynomial edge cases), classifying by number of terms (monomial, binomial, trinomial) and by degree (linear, quadratic, cubic, quartic), and handling missing-term zero coefficients.",
+      "ced_topics": [],
+      "yield_score": 0.48,
+      "yield_rationale": "Degree and term-count classification are prerequisite vocabulary for zero/graph analysis (1.4–1.6) and factoring identification; moderate foundation yield reflecting background rather than direct exam targets.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "missing_terms_zero_coefficients",
+          "label": "Missing terms and zero coefficients",
+          "description": "Inserting zero-coefficient placeholder terms for skipped degree powers; essential for vertical alignment in addition and for synthetic and long division.",
+          "yield_score": 0.65,
+          "yield_rationale": "Among top-20 rag_example keywords; zero-placeholder errors cause systematic mistakes in polynomial division.",
+          "source_learn_keyword_id": "missing_terms_zero_coefficients"
+        },
+        {
+          "id": "polynomial_degree_univariate",
+          "label": "Degree of a univariate polynomial",
+          "description": "The greatest exponent of the variable after like terms are combined; determines end behavior, turning-point count, and zero count.",
+          "yield_score": 0.68,
+          "yield_rationale": "Degree is the primary structural fact used in end-behavior (1.6) and turning-point analysis; frequently tested.",
+          "source_learn_keyword_id": "polynomial_degree_univariate"
+        },
+        {
+          "id": "zero_polynomial_degree_undefined",
+          "label": "Zero polynomial degree",
+          "description": "The zero polynomial has all coefficients equal to 0 and is conventionally assigned no finite degree, preventing misclassification as degree 0.",
+          "yield_score": 0.18,
+          "yield_rationale": "Edge-case concept; low direct exam frequency; used for definitional precision only.",
+          "source_learn_keyword_id": "zero_polynomial_degree_undefined"
+        },
+        {
+          "id": "polynomial_classification_by_number_of_terms",
+          "label": "Polynomial classification by number of terms",
+          "description": "Classifying polynomials as monomials, binomials, trinomials, or general polynomials based on count of nonzero terms after collecting like terms.",
+          "yield_score": 0.35,
+          "yield_rationale": "Vocabulary classification; rarely the direct test object but supports communication in factoring and expansion descriptions.",
+          "source_learn_keyword_id": "polynomial_classification_by_number_of_terms"
+        },
+        {
+          "id": "polynomial_classification_by_degree",
+          "label": "Polynomial classification by degree",
+          "description": "Naming polynomials as constant, linear, quadratic, cubic, quartic, etc., based on degree; structural classification distinct from graph analysis.",
+          "yield_score": 0.38,
+          "yield_rationale": "Terminology is used in problem stems and solution communication; low independent test frequency.",
+          "source_learn_keyword_id": "polynomial_classification_by_degree"
+        },
+        {
+          "id": "monomial_polynomial_structure",
+          "label": "Monomial polynomial structure",
+          "description": "A monomial is a single-term polynomial: a constant, a variable power, or their product; excludes sums.",
+          "yield_score": 0.42,
+          "yield_rationale": "Monomial recognition underlies GCF extraction and monomial-times-polynomial distribution.",
+          "source_learn_keyword_id": "monomial_polynomial_structure"
+        },
+        {
+          "id": "binomial_polynomial_structure",
+          "label": "Binomial polynomial structure",
+          "description": "A binomial has exactly two nonzero terms after combining like terms; the form targeted by FOIL, conjugate products, and many factoring patterns.",
+          "yield_score": 0.50,
+          "yield_rationale": "Binomial form is the factor structure for difference-of-squares and perfect-square patterns that appear in 1.11 and FRQ 4.",
+          "source_learn_keyword_id": "binomial_polynomial_structure"
+        },
+        {
+          "id": "trinomial_polynomial_structure",
+          "label": "Trinomial polynomial structure",
+          "description": "A trinomial has exactly three nonzero terms after combining; the target structure for quadratic factoring and perfect-square recognition.",
+          "yield_score": 0.50,
+          "yield_rationale": "Trinomial recognition is the entry condition for quadratic factoring, which is among the highest-yield foundation skills.",
+          "source_learn_keyword_id": "trinomial_polynomial_structure"
+        }
+      ]
+    },
+    {
+      "id": "polynomial_univariate_multivariable_and_boundaries",
+      "label": "Univariate, Multivariable, and Non-Polynomial Boundaries",
+      "description": "Distinguishing univariate from multivariable polynomials and their degree conventions; recognizing non-polynomial forms with negative, fractional, or variable-denominator exponents; understanding coefficient domain independence.",
+      "ced_topics": [],
+      "yield_score": 0.38,
+      "yield_rationale": "Boundary-recognition and multivariable degree are low-frequency exam topics but essential for preventing classification errors in AP Precalc rational-function and radical contexts.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "univariate_polynomials",
+          "label": "Univariate polynomials",
+          "description": "A polynomial in a single variable; supports standard form, unique-degree ordering, and single-variable zero/graph analysis.",
+          "yield_score": 0.48,
+          "yield_rationale": "Univariate structure is the assumed form for most AP Precalc polynomial work; recognition prevents multivariable confusion.",
+          "source_learn_keyword_id": "univariate_polynomials"
+        },
+        {
+          "id": "multivariable_polynomials",
+          "label": "Multivariable polynomials",
+          "description": "A polynomial in two or more variables, each raised to nonnegative integer powers; degree is the greatest total-exponent sum over all terms.",
+          "yield_score": 0.22,
+          "yield_rationale": "Low direct AP Precalc exam frequency; appears in foundation context and in algebraic identity work.",
+          "source_learn_keyword_id": "multivariable_polynomials"
+        },
+        {
+          "id": "multivariable_monomial_degree",
+          "label": "Degree of a multivariable monomial",
+          "description": "Sum of all variable exponents in a single multivariable term; differs from univariate degree where there is only one exponent.",
+          "yield_score": 0.20,
+          "yield_rationale": "Edge case; not directly tested on AP Precalc exam but needed for complete polynomial-structure literacy.",
+          "source_learn_keyword_id": "multivariable_monomial_degree"
+        },
+        {
+          "id": "multivariable_polynomial_degree",
+          "label": "Degree of a multivariable polynomial",
+          "description": "The greatest total degree among all terms; focuses on total degree rather than degree in any single variable.",
+          "yield_score": 0.20,
+          "yield_rationale": "Same as multivariable monomial degree; edge-case foundational concept with very low AP exam frequency.",
+          "source_learn_keyword_id": "multivariable_polynomial_degree"
+        },
+        {
+          "id": "polynomial_vs_nonpolynomial_negative_exponents",
+          "label": "Non-polynomial forms: negative variable exponents",
+          "description": "Expressions with variables raised to negative exponents (e.g., x^{-1}) are not polynomials; targets the common confusion between negative integer exponents and polynomial structure.",
+          "yield_score": 0.48,
+          "yield_rationale": "Boundary-recognition questions appear in MC classification items; prevents category errors in rational-function vs. polynomial identification.",
+          "source_learn_keyword_id": "polynomial_vs_nonpolynomial_negative_exponents"
+        },
+        {
+          "id": "polynomial_vs_nonpolynomial_variable_denominators",
+          "label": "Non-polynomial forms: variable denominators",
+          "description": "Expressions with variables in a denominator are not polynomials because they are equivalent to negative variable exponents; distinguishes polynomials from rational expressions.",
+          "yield_score": 0.52,
+          "yield_rationale": "Classification of rational vs. polynomial forms is a direct prerequisite for AP Precalc Unit 1 rational-function topics.",
+          "source_learn_keyword_id": "polynomial_vs_nonpolynomial_variable_denominators"
+        },
+        {
+          "id": "polynomial_vs_nonpolynomial_fractional_exponents",
+          "label": "Non-polynomial forms: fractional variable exponents",
+          "description": "Expressions with fractional variable exponents (including radical forms like x^{1/2}) are not polynomials in standard precalculus; tests boundary between polynomial and radical/exponential expressions.",
+          "yield_score": 0.48,
+          "yield_rationale": "Boundary-recognition for rational exponents connects to F6 and prevents misclassification in polynomial-equation solving.",
+          "source_learn_keyword_id": "polynomial_vs_nonpolynomial_fractional_exponents"
+        },
+        {
+          "id": "polynomial_coefficient_domain",
+          "label": "Polynomial coefficient domain",
+          "description": "Polynomial coefficients may come from ℤ, ℚ, ℝ, or ℂ; the variable-power requirement is independent of whether coefficients are integers, fractions, decimals, or irrational numbers.",
+          "yield_score": 0.30,
+          "yield_rationale": "Clarifies that fractional or irrational coefficients do not prevent an expression from being a polynomial; low but non-zero exam frequency.",
+          "source_learn_keyword_id": "polynomial_coefficient_domain"
+        }
+      ]
+    },
+    {
+      "id": "polynomial_values_and_identities",
+      "label": "Polynomial Values and Identities",
+      "description": "Evaluating polynomials at numeric (including negative and fractional) inputs, using function notation, recognizing equivalent expressions, interpreting polynomial identities, and determining unknown coefficients by matching corresponding powers.",
+      "ced_topics": [],
+      "yield_score": 0.62,
+      "yield_rationale": "Polynomial evaluation and coefficient matching underlie composition (2.7), identity work in 1.11 and FRQ 4, and function-notation fluency throughout Unit 1.",
+      "source_learn_keyword_id": "polynomial_values_and_identities",
+      "in_depth": [
+        {
+          "id": "polynomial_value_at_numeric_input",
+          "label": "Polynomial evaluation at a numeric input",
+          "description": "Substituting a number for the variable and applying order of operations to compute the polynomial's value; focuses on correct power and sign handling.",
+          "yield_score": 0.65,
+          "yield_rationale": "Direct prerequisite for the Remainder Theorem and function evaluation; appears in FRQ context as function-value computation.",
+          "source_learn_keyword_id": "polynomial_value_at_numeric_input"
+        },
+        {
+          "id": "negative_input_polynomial_evaluation",
+          "label": "Polynomial evaluation at negative inputs",
+          "description": "Substituting negative values requires careful sign treatment: even powers yield positive results, odd powers yield negative; targets the common error of omitting parentheses around a negative base.",
+          "yield_score": 0.68,
+          "yield_rationale": "Sign errors at negative inputs are among the most common distractors in polynomial evaluation; high-frequency error target.",
+          "source_learn_keyword_id": "negative_input_polynomial_evaluation"
+        },
+        {
+          "id": "fractional_decimal_input_polynomial_evaluation",
+          "label": "Polynomial evaluation at fractional or decimal inputs",
+          "description": "Evaluating polynomials at non-integer inputs requires careful arithmetic with powers of fractions and decimals; extends evaluation beyond integer domains.",
+          "yield_score": 0.55,
+          "yield_rationale": "Fraction/decimal substitution appears in rate-of-change and model-application contexts; moderate AP frequency.",
+          "source_learn_keyword_id": "fractional_decimal_input_polynomial_evaluation"
+        },
+        {
+          "id": "multivariable_polynomial_evaluation",
+          "label": "Multivariable polynomial evaluation",
+          "description": "Substituting a value for each variable in a multivariable polynomial and computing the result; requires matching each input to the correct variable.",
+          "yield_score": 0.28,
+          "yield_rationale": "Low AP Precalc frequency; occasionally required in parametric or systems-context problems.",
+          "source_learn_keyword_id": "multivariable_polynomial_evaluation"
+        },
+        {
+          "id": "polynomial_function_notation_evaluation",
+          "label": "Polynomial function notation evaluation",
+          "description": "Interpreting and evaluating f(a), f(a+h), or f(–x) by replacing every occurrence of the variable with the given expression; focuses on notation mechanics rather than general function theory.",
+          "yield_score": 0.72,
+          "yield_rationale": "Function notation fluency is required throughout AP Precalc (composition 2.7, inverse functions 2.8, transformation notation 1.12).",
+          "source_learn_keyword_id": "polynomial_function_notation_evaluation"
+        },
+        {
+          "id": "equivalent_polynomial_expressions",
+          "label": "Equivalent polynomial expressions",
+          "description": "Recognizing that two polynomial expressions are equal for all inputs in their domain, which may result from expanding, factoring, collecting terms, or rearranging; tested by both algebraic and substitution verification.",
+          "yield_score": 0.70,
+          "yield_rationale": "Equivalent-form recognition is the core skill for AP Precalc 1.11 (equivalent polynomial/rational representations) and FRQ 4 (symbolic manipulations).",
+          "source_learn_keyword_id": "equivalent_polynomial_expressions"
+        },
+        {
+          "id": "polynomial_identity_meaning",
+          "label": "Polynomial identity meaning",
+          "description": "A polynomial identity is true for every input value, not just selected solutions; distinguishes identities (e.g., (x+1)^2 = x^2+2x+1) from conditional equations.",
+          "yield_score": 0.58,
+          "yield_rationale": "Identity vs. equation distinction is required for FRQ 4 symbolic-manipulation tasks and log/trig identity work upstream.",
+          "source_learn_keyword_id": "polynomial_identity_meaning"
+        },
+        {
+          "id": "coefficient_comparison_in_polynomial_identities",
+          "label": "Coefficient comparison in polynomial identities",
+          "description": "When two polynomials are identical, coefficients of matching degree terms must be equal; used to set up equations that determine unknown parameters without testing multiple inputs.",
+          "yield_score": 0.65,
+          "yield_rationale": "Coefficient-matching is a key technique in partial-fraction decomposition and polynomial identity questions in AP Precalc 1.11.",
+          "source_learn_keyword_id": "coefficient_comparison_in_polynomial_identities"
+        },
+        {
+          "id": "solving_unknown_coefficients_in_polynomial_identities",
+          "label": "Solving for unknown coefficients in polynomial identities",
+          "description": "Expanding both sides of a polynomial identity and matching coefficients of corresponding powers to determine unknown constants A, B, etc.; identity work, not root solving.",
+          "yield_score": 0.65,
+          "yield_rationale": "Directly required for partial fractions and equivalent-form work in 1.11; also feeds FRQ 4 symbolic tasks.",
+          "source_learn_keyword_id": "solving_unknown_coefficients_in_polynomial_identities"
+        },
+        {
+          "id": "polynomial_expression_domain_all_real",
+          "label": "Polynomial expression domain over the reals",
+          "description": "A polynomial with real coefficients is defined for every real input because it uses only addition, subtraction, multiplication, and nonnegative integer powers; contrasts with rational and radical expression domain restrictions.",
+          "yield_score": 0.45,
+          "yield_rationale": "Domain reasoning is needed for rational function vs. polynomial comparison in Unit 1; moderate frequency.",
+          "source_learn_keyword_id": "polynomial_expression_domain_all_real"
+        }
+      ]
+    },
+    {
+      "id": "polynomial_addition_and_subtraction",
+      "label": "Polynomial Addition and Subtraction",
+      "description": "Adding and subtracting polynomial expressions by identifying and combining like terms, distributing subtraction signs, handling cancellation, and understanding closure and degree behavior under these operations.",
+      "ced_topics": [],
+      "yield_score": 0.60,
+      "yield_rationale": "Polynomial addition and subtraction fluency is required for expanding and simplifying expressions in Units 1 and 2, and for combining terms after distribution or substitution.",
+      "source_learn_keyword_id": "polynomial_addition_and_subtraction",
+      "in_depth": [
+        {
+          "id": "adding_polynomials_like_terms",
+          "label": "Adding polynomials by combining like terms",
+          "description": "Polynomial addition combines coefficients of terms with matching variable-and-exponent parts while leaving unlike terms unchanged; directly extends like-term collection to full polynomial expressions.",
+          "yield_score": 0.70,
+          "yield_rationale": "Among top-10 rag_example keywords; adding polynomials is a constant background skill in simplification across all AP Precalc units.",
+          "source_learn_keyword_id": "adding_polynomials_like_terms"
+        },
+        {
+          "id": "adding_polynomials_vertical_alignment",
+          "label": "Vertical alignment for polynomial addition",
+          "description": "Lining up same-degree terms in columns before adding; especially useful when polynomials have missing or out-of-order terms.",
+          "yield_score": 0.42,
+          "yield_rationale": "Organizational technique; reduces systematic errors in multi-term addition; moderate procedural utility.",
+          "source_learn_keyword_id": "adding_polynomials_vertical_alignment"
+        },
+        {
+          "id": "subtracting_polynomials_group_negation",
+          "label": "Subtracting polynomials by distributing negation",
+          "description": "Polynomial subtraction requires changing the sign of every term in the polynomial being subtracted before combining like terms; targets sign-distribution errors when subtracting grouped expressions.",
+          "yield_score": 0.68,
+          "yield_rationale": "Sign-distribution error on subtracted polynomials is a persistent distractor; appears in MC and FRQ simplification steps.",
+          "source_learn_keyword_id": "subtracting_polynomials_group_negation"
+        },
+        {
+          "id": "subtracting_polynomials_vertical_alignment",
+          "label": "Vertical alignment for polynomial subtraction",
+          "description": "Organizing polynomial subtraction in columns by matching degree, using zero placeholders for missing powers, and subtracting corresponding coefficients.",
+          "yield_score": 0.38,
+          "yield_rationale": "Procedural tool; most useful for multi-term sparse polynomials; lower direct test frequency than horizontal subtraction.",
+          "source_learn_keyword_id": "subtracting_polynomials_vertical_alignment"
+        },
+        {
+          "id": "polynomial_like_terms_with_matching_exponents",
+          "label": "Identifying like terms in polynomials",
+          "description": "Polynomial terms are like terms only when their variable factors and exponents match exactly; coefficients may differ but the variable-power part must be identical.",
+          "yield_score": 0.62,
+          "yield_rationale": "Like-term recognition is foundational to all simplification; errors here cascade into wrong polynomial sums.",
+          "source_learn_keyword_id": "polynomial_like_terms_with_matching_exponents"
+        },
+        {
+          "id": "polynomial_unlike_terms_different_exponents",
+          "label": "Polynomial unlike terms: different exponents cannot combine",
+          "description": "Terms with the same variable but different exponents are unlike and cannot be combined; targets the error of adding x^2 and x, or combining 3a^4 + 2a^3 into 5a^7.",
+          "yield_score": 0.60,
+          "yield_rationale": "Unlike-term errors are among the most common polynomial mistakes; targeted in multiple rag_examples.",
+          "source_learn_keyword_id": "polynomial_unlike_terms_different_exponents"
+        },
+        {
+          "id": "cancellation_creating_missing_terms",
+          "label": "Cancellation creating missing polynomial terms",
+          "description": "When like terms cancel to zero, the corresponding degree disappears from the written polynomial, potentially changing the leading term or creating a sparse result.",
+          "yield_score": 0.72,
+          "yield_rationale": "Among top-10 rag_example keywords; cancellation-after-addition is a frequent surprise result tested in computation questions.",
+          "source_learn_keyword_id": "cancellation_creating_missing_terms"
+        },
+        {
+          "id": "polynomial_additive_inverse",
+          "label": "Additive inverse of a polynomial",
+          "description": "The additive inverse is formed by negating every term; adding a polynomial and its additive inverse yields the zero polynomial.",
+          "yield_score": 0.40,
+          "yield_rationale": "Structural property; used in simplification and proof-of-closure arguments; low direct test frequency.",
+          "source_learn_keyword_id": "polynomial_additive_inverse"
+        },
+        {
+          "id": "closure_under_polynomial_addition_subtraction",
+          "label": "Closure of polynomials under addition and subtraction",
+          "description": "The sum or difference of two polynomials is always a polynomial because like-degree terms have nonnegative integer powers that remain nonnegative after addition or subtraction.",
+          "yield_score": 0.28,
+          "yield_rationale": "Structural fact; low direct exam frequency but supports conceptual reasoning tasks.",
+          "source_learn_keyword_id": "closure_under_polynomial_addition_subtraction"
+        },
+        {
+          "id": "polynomial_degree_after_addition_subtraction",
+          "label": "Degree after polynomial addition or subtraction",
+          "description": "The degree of a sum or difference is at most the greater of the two degrees; it can drop below this maximum when leading terms cancel, changing the apparent degree of the result.",
+          "yield_score": 0.55,
+          "yield_rationale": "Degree-after-cancellation questions test conceptual understanding of leading-term behavior in AP Precalc end-behavior problems.",
+          "source_learn_keyword_id": "polynomial_degree_after_addition_subtraction"
+        }
+      ]
+    },
+    {
+      "id": "polynomial_multiplication_and_special_products",
+      "label": "Polynomial Multiplication and Special Products",
+      "description": "Multiplying monomials and polynomials of all sizes using distribution and exponent rules, including special product patterns such as squares of binomials, conjugate products, and cube expansions.",
+      "ced_topics": [],
+      "yield_score": 0.82,
+      "yield_rationale": "Difference-of-squares and square-of-binomial patterns are used directly in AP Precalc 1.11 (equivalent representations) and FRQ 4 (symbolic manipulations); degree-of-product reasoning appears in 1.4.",
+      "source_learn_keyword_id": "polynomial_multiplication_and_special_products",
+      "in_depth": [
+        {
+          "id": "monomial_times_monomial",
+          "label": "Monomial times monomial",
+          "description": "Multiplying two monomials by multiplying coefficients and adding exponents of matching variable bases; the simplest polynomial product structure.",
+          "yield_score": 0.65,
+          "yield_rationale": "Foundational exponent-rule application; required for every polynomial product and for simplifying exponential expressions in Unit 2.",
+          "source_learn_keyword_id": "monomial_times_monomial"
+        },
+        {
+          "id": "monomial_times_polynomial",
+          "label": "Monomial times polynomial",
+          "description": "Distributing a monomial to every term of a polynomial by multiplying coefficients and adding exponents; includes sign handling for negative monomials.",
+          "yield_score": 0.72,
+          "yield_rationale": "GCF factoring verification, simplification of rational expressions, and trig identity expansion all require monomial distribution.",
+          "source_learn_keyword_id": "monomial_times_polynomial"
+        },
+        {
+          "id": "binomial_times_binomial",
+          "label": "Binomial times binomial (FOIL)",
+          "description": "Multiplying two binomials by distributing each term of the first across each term of the second, producing four products before combining like terms; the basis of FOIL.",
+          "yield_score": 0.78,
+          "yield_rationale": "Among the most-practiced keywords in rag_examples and learn_practice_problems; directly required for factoring reversal in AP Precalc.",
+          "source_learn_keyword_id": "binomial_times_binomial"
+        },
+        {
+          "id": "binomial_times_trinomial",
+          "label": "Binomial times trinomial",
+          "description": "Expanding a binomial-trinomial product by distributing each term of the binomial over all three terms of the trinomial, then combining six products; extends FOIL to larger products.",
+          "yield_score": 0.70,
+          "yield_rationale": "Required for verifying factored forms and for expanding composed polynomial expressions; moderate-high AP frequency.",
+          "source_learn_keyword_id": "binomial_times_trinomial"
+        },
+        {
+          "id": "polynomial_times_polynomial_general",
+          "label": "General polynomial multiplication",
+          "description": "Multiplying polynomials of any size by pairing every term in one polynomial with every term in the other, then combining all like-term products.",
+          "yield_score": 0.65,
+          "yield_rationale": "General product expansion required for verifying polynomial identities and for expanding composed or cubed expressions.",
+          "source_learn_keyword_id": "polynomial_times_polynomial_general"
+        },
+        {
+          "id": "multiplying_polynomials_with_missing_terms",
+          "label": "Multiplying polynomials with missing powers",
+          "description": "Multiplying sparse polynomials (those with missing intermediate powers) requires careful like-term alignment after expansion to avoid missing or miscombining terms.",
+          "yield_score": 0.55,
+          "yield_rationale": "Missing-term product errors are a common distractor; moderate direct AP frequency.",
+          "source_learn_keyword_id": "multiplying_polynomials_with_missing_terms"
+        },
+        {
+          "id": "polynomial_product_degree",
+          "label": "Degree of a polynomial product",
+          "description": "For nonzero polynomials, the degree of a product equals the sum of the factors' degrees; allows degree reasoning without full expansion.",
+          "yield_score": 0.58,
+          "yield_rationale": "Degree-of-product reasoning appears in AP Precalc 1.4 (polynomial rate-of-change) and in identifying the degree of composed expressions.",
+          "source_learn_keyword_id": "polynomial_product_degree"
+        },
+        {
+          "id": "square_of_binomial_sum",
+          "label": "Square of a binomial sum: (a+b)² pattern",
+          "description": "Applying the pattern (a+b)^2 = a^2 + 2ab + b^2; the middle term 2ab is what prevents the common error of squaring each term separately.",
+          "yield_score": 0.78,
+          "yield_rationale": "Perfect-square trinomial pattern is used in completing the square, trig identity manipulation, and 1.11 equivalent-form rewriting.",
+          "source_learn_keyword_id": "square_of_binomial_sum"
+        },
+        {
+          "id": "square_of_binomial_difference",
+          "label": "Square of a binomial difference: (a−b)² pattern",
+          "description": "Applying the pattern (a−b)^2 = a^2 − 2ab + b^2; the final term is positive because the squared negative term becomes positive.",
+          "yield_score": 0.78,
+          "yield_rationale": "Same reasoning as sum-of-binomial square; combined pattern fluency is required for FRQ 4 symbolic work.",
+          "source_learn_keyword_id": "square_of_binomial_difference"
+        },
+        {
+          "id": "conjugate_binomial_product",
+          "label": "Conjugate binomial product: (a+b)(a−b) = a²−b²",
+          "description": "The product of conjugate binomials follows (a+b)(a−b) = a^2 − b^2; middle terms cancel, producing a two-term result.",
+          "yield_score": 0.82,
+          "yield_rationale": "Difference-of-squares pattern is directly required for factoring in AP Precalc rational function simplification (1.10) and FRQ 4; one of the highest-yield special products.",
+          "source_learn_keyword_id": "conjugate_binomial_product"
+        },
+        {
+          "id": "cube_of_binomial_sum",
+          "label": "Cube of a binomial sum: (a+b)³ expansion",
+          "description": "Expanding (a+b)^3 = a^3 + 3a^2b + 3ab^2 + b^3 using the binomial cube pattern; distinct from squaring.",
+          "yield_score": 0.52,
+          "yield_rationale": "Cubic expansion appears in AP Precalc 1.11 equivalent-form work and in FRQ 4; moderate frequency.",
+          "source_learn_keyword_id": "cube_of_binomial_sum"
+        },
+        {
+          "id": "cube_of_binomial_difference",
+          "label": "Cube of a binomial difference: (a−b)³ expansion",
+          "description": "Expanding (a−b)^3 = a^3 − 3a^2b + 3ab^2 − b^3; targets the alternating sign pattern in cubic expansions.",
+          "yield_score": 0.52,
+          "yield_rationale": "Companion to sum-cube expansion; alternating sign errors are a common trap in symbolic-manipulation tasks.",
+          "source_learn_keyword_id": "cube_of_binomial_difference"
+        },
+        {
+          "id": "product_of_sum_and_difference_of_polynomial_terms",
+          "label": "Generalized conjugate product: (A+B)(A−B) = A²−B² with polynomial terms",
+          "description": "Applying the difference-of-squares product pattern when A or B is itself a polynomial expression (e.g., x^2+3)(x^2−3)), generalizing conjugate products beyond linear binomials.",
+          "yield_score": 0.72,
+          "yield_rationale": "Generalized conjugate patterns appear in AP Precalc factoring and simplification of higher-degree rational expressions.",
+          "source_learn_keyword_id": "product_of_sum_and_difference_of_polynomial_terms"
+        },
+        {
+          "id": "polynomial_multiplication_sign_management",
+          "label": "Sign management in polynomial multiplication",
+          "description": "Correctly handling signs when negative coefficients, subtracted terms, or negative binomial factors appear in polynomial products; targets incorrect signs after distribution.",
+          "yield_score": 0.68,
+          "yield_rationale": "Sign errors in multiplication are among the most common distractor types; high error-prevention value.",
+          "source_learn_keyword_id": "polynomial_multiplication_sign_management"
+        },
+        {
+          "id": "closure_under_polynomial_multiplication",
+          "label": "Closure of polynomials under multiplication",
+          "description": "The product of two polynomials is always a polynomial because multiplication creates only nonnegative integer exponent terms; structural closure property.",
+          "yield_score": 0.22,
+          "yield_rationale": "Structural fact; low direct exam frequency; supports mathematical reasoning in justification tasks.",
+          "source_learn_keyword_id": "closure_under_polynomial_multiplication"
+        }
+      ]
+    },
+    {
+      "id": "gcf_factoring_and_grouping",
+      "label": "GCF Factoring and Grouping",
+      "description": "Factoring polynomial expressions by extracting greatest common monomial factors (including negative GCF), factoring common binomial factors, and using grouping strategies for four-term and other multi-term polynomials.",
+      "ced_topics": [],
+      "yield_score": 0.75,
+      "yield_rationale": "GCF extraction is the first step in most rational-function simplification tasks (AP Precalc 1.8–1.10) and in completely factoring any polynomial before zero/hole analysis.",
+      "source_learn_keyword_id": "gcf_factoring_and_grouping",
+      "in_depth": [
+        {
+          "id": "polynomial_factorization_meaning",
+          "label": "Polynomial factorization meaning",
+          "description": "Factoring rewrites a polynomial as a product of polynomial factors; it is the reverse of polynomial multiplication, and the result must multiply back to the original.",
+          "yield_score": 0.62,
+          "yield_rationale": "Conceptual framing for all factoring; tested in MC recognition questions and as setup for zero-finding.",
+          "source_learn_keyword_id": "polynomial_factorization_meaning"
+        },
+        {
+          "id": "polynomial_gcf_numeric_coefficients",
+          "label": "GCF of polynomial numerical coefficients",
+          "description": "The numerical GCF is the greatest common factor of all term coefficients; one component of the monomial GCF extracted from a polynomial.",
+          "yield_score": 0.65,
+          "yield_rationale": "Numerical-GCF identification is the first sub-step of monomial-GCF factoring; moderate direct frequency.",
+          "source_learn_keyword_id": "polynomial_gcf_numeric_coefficients"
+        },
+        {
+          "id": "polynomial_gcf_variable_powers",
+          "label": "GCF of polynomial variable powers",
+          "description": "The variable part of a polynomial GCF uses the lowest exponent of each variable common to every term; targets variable-factor extraction before coefficient handling.",
+          "yield_score": 0.65,
+          "yield_rationale": "Variable-GCF extraction is required for rational expression simplification in Unit 1.",
+          "source_learn_keyword_id": "polynomial_gcf_variable_powers"
+        },
+        {
+          "id": "polynomial_gcf_monomial",
+          "label": "Monomial GCF of polynomial terms",
+          "description": "The full monomial GCF combines the greatest common numerical factor with all common variable powers at their lowest exponents; the complete factor pulled from all terms.",
+          "yield_score": 0.72,
+          "yield_rationale": "Among top-20 rag_example keywords; monomial GCF factoring is the universal first step in complete polynomial factoring.",
+          "source_learn_keyword_id": "polynomial_gcf_monomial"
+        },
+        {
+          "id": "factoring_gcf_from_binomials",
+          "label": "Factoring a GCF from a binomial",
+          "description": "Pulling out the greatest common monomial factor shared by both terms of a binomial; the simplest polynomial factoring move.",
+          "yield_score": 0.68,
+          "yield_rationale": "Binomial GCF factoring is required before applying difference-of-squares or cube formulas in many AP Precalc expressions.",
+          "source_learn_keyword_id": "factoring_gcf_from_binomials"
+        },
+        {
+          "id": "factoring_gcf_from_trinomials",
+          "label": "Factoring a GCF from a trinomial",
+          "description": "Extracting a monomial GCF shared by all three terms of a trinomial; the GCF must divide every term, not just two of them.",
+          "yield_score": 0.70,
+          "yield_rationale": "GCF extraction before quadratic trinomial factoring is required for complete factoring of expressions in rational function analysis.",
+          "source_learn_keyword_id": "factoring_gcf_from_trinomials"
+        },
+        {
+          "id": "factoring_negative_gcf",
+          "label": "Factoring out a negative GCF",
+          "description": "Factoring out a negative monomial GCF to make the remaining expression's leading coefficient positive; requires changing the sign of every remaining term.",
+          "yield_score": 0.62,
+          "yield_rationale": "Negative GCF is required when factoring denominators or numerators with negative leading coefficients for asymptote analysis.",
+          "source_learn_keyword_id": "factoring_negative_gcf"
+        },
+        {
+          "id": "factoring_by_grouping_four_terms",
+          "label": "Factoring by grouping: four-term polynomials",
+          "description": "Factoring a four-term polynomial by pairing terms, factoring a GCF from each pair, then factoring the common binomial that results; the standard grouping strategy.",
+          "yield_score": 0.68,
+          "yield_rationale": "Grouping is required for the ac method of factoring quadratics and for factoring certain cubic polynomials with real rational zeros.",
+          "source_learn_keyword_id": "factoring_by_grouping_four_terms"
+        },
+        {
+          "id": "grouping_common_binomial_factor",
+          "label": "Factoring a common binomial factor after grouping",
+          "description": "After grouping, each group yields the same binomial factor; that common binomial is then factored out as if it were a common monomial.",
+          "yield_score": 0.65,
+          "yield_rationale": "Common-binomial extraction is the completion step of grouping; must be recognized for the technique to work.",
+          "source_learn_keyword_id": "grouping_common_binomial_factor"
+        },
+        {
+          "id": "grouping_after_reordering_terms",
+          "label": "Factoring by grouping after reordering terms",
+          "description": "Some polynomials require rearranging terms (moving signs with terms) before grouping creates matching binomial factors; the standard grouping structure may not appear in the original order.",
+          "yield_score": 0.52,
+          "yield_rationale": "Term reordering before grouping is a less common but necessary skill; moderate MC frequency.",
+          "source_learn_keyword_id": "grouping_after_reordering_terms"
+        },
+        {
+          "id": "factoring_common_binomial_factor",
+          "label": "Factoring a repeated binomial factor across terms",
+          "description": "When a binomial expression appears as a factor in multiple terms, it can be treated like a common monomial and factored out; equivalent to grouping with an explicit binomial.",
+          "yield_score": 0.65,
+          "yield_rationale": "Required for factoring expressions that arise after completing the square or substituting a composite expression.",
+          "source_learn_keyword_id": "factoring_common_binomial_factor"
+        },
+        {
+          "id": "factoring_out_fractional_gcf",
+          "label": "Factoring out a fractional GCF",
+          "description": "Factoring a fractional common factor from polynomial terms to reveal cleaner structure; requires careful coefficient division.",
+          "yield_score": 0.30,
+          "yield_rationale": "Low direct AP frequency; mostly a procedural tool for coefficient normalization in specific contexts.",
+          "source_learn_keyword_id": "factoring_out_fractional_gcf"
+        },
+        {
+          "id": "factoring_completely_over_integers",
+          "label": "Factoring completely over the integers",
+          "description": "A polynomial is completely factored over the integers when no remaining factor can be reduced further using integer coefficients; requires checking each factor after GCF and quadratic steps.",
+          "yield_score": 0.78,
+          "yield_rationale": "Complete factoring over integers is the prerequisite check before applying the zero-product property or finding rational zeros of rational functions.",
+          "source_learn_keyword_id": "factoring_completely_over_integers"
+        },
+        {
+          "id": "irreducible_polynomial_over_integers",
+          "label": "Irreducible polynomial over the integers",
+          "description": "A polynomial is irreducible over the integers when it cannot be factored into lower-degree factors with integer coefficients; differs from irreducibility over the reals or complex numbers.",
+          "yield_score": 0.48,
+          "yield_rationale": "Irreducibility recognition is needed to identify when factoring is complete and when complex roots must be acknowledged.",
+          "source_learn_keyword_id": "irreducible_polynomial_over_integers"
+        },
+        {
+          "id": "verifying_factorization_by_multiplication",
+          "label": "Verifying polynomial factorization by multiplication",
+          "description": "Checking a proposed factored form by multiplying the factors to recover the original polynomial; detects sign errors, missing terms, or incorrect factor identification.",
+          "yield_score": 0.55,
+          "yield_rationale": "Verification by multiplication is a self-checking strategy used in MC 'which is correct?' format and in FRQ justification.",
+          "source_learn_keyword_id": "verifying_factorization_by_multiplication"
+        }
+      ]
+    },
+    {
+      "id": "quadratic_and_special_form_factoring",
+      "label": "Quadratic and Special-Form Factoring",
+      "description": "Factoring monic and non-monic quadratic trinomials (including by the ac method), recognizing and factoring difference of squares, perfect-square trinomials, sums and differences of cubes, and polynomials in quadratic form.",
+      "ced_topics": [],
+      "yield_score": 0.88,
+      "yield_rationale": "Required for finding rational function zeros and holes (AP Precalc 1.8–1.10), for 1.11 equivalent representations, and for FRQ 4 symbolic manipulations; directly mentioned in the precalc-outline foundation yield calibration as 0.88.",
+      "source_learn_keyword_id": "quadratic_and_special_form_factoring",
+      "in_depth": [
+        {
+          "id": "factoring_monic_quadratic_trinomials",
+          "label": "Factoring monic quadratic trinomials (lead=1)",
+          "description": "Factoring x^2+bx+c by finding two integers whose product is c and sum is b; the entry quadratic factoring method for unit leading coefficient.",
+          "yield_score": 0.85,
+          "yield_rationale": "Most common factoring type in AP Precalc rational-function problems; monic quadratics appear in numerators and denominators of rational functions throughout Unit 1.",
+          "source_learn_keyword_id": "factoring_monic_quadratic_trinomials"
+        },
+        {
+          "id": "factoring_nonmonic_quadratic_trinomials",
+          "label": "Factoring non-monic quadratic trinomials (lead≠1)",
+          "description": "Factoring ax^2+bx+c with a≠1 by accounting for the leading coefficient when forming binomial factors; requires either trial-and-error or the ac method.",
+          "yield_score": 0.82,
+          "yield_rationale": "Among top-20 rag_example keywords; non-monic quadratics appear in rational-function numerators and denominators in AP Precalc 1.8–1.10.",
+          "source_learn_keyword_id": "factoring_nonmonic_quadratic_trinomials"
+        },
+        {
+          "id": "factoring_trinomials_ac_method",
+          "label": "Factoring trinomials by the ac method",
+          "description": "Factoring ax^2+bx+c by finding factors of ac that sum to b, splitting the middle term, and completing by grouping; a systematic algorithm for non-monic trinomials.",
+          "yield_score": 0.78,
+          "yield_rationale": "Systematic ac method is the most reliable approach for non-monic factoring; tested in multi-step symbolic tasks.",
+          "source_learn_keyword_id": "factoring_trinomials_ac_method"
+        },
+        {
+          "id": "factoring_quadratic_with_negative_constant",
+          "label": "Factoring quadratics with negative constant term",
+          "description": "A quadratic trinomial with negative constant term factors into two binomials with opposite-sign constants; targets the sign-reasoning in factor-pair identification.",
+          "yield_score": 0.75,
+          "yield_rationale": "Negative-constant quadratics are the most common type in rational-function factoring tasks; high AP frequency.",
+          "source_learn_keyword_id": "factoring_quadratic_with_negative_constant"
+        },
+        {
+          "id": "factoring_quadratic_positive_constant_negative_middle",
+          "label": "Factoring quadratics: positive constant, negative middle term",
+          "description": "A quadratic with positive constant and negative middle coefficient factors into binomials with both constants negative; targets sign-pattern recognition for this common case.",
+          "yield_score": 0.72,
+          "yield_rationale": "This sign pattern (both factors negative) is a frequent MC distractor source; high-frequency error prevention.",
+          "source_learn_keyword_id": "factoring_quadratic_positive_constant_negative_middle"
+        },
+        {
+          "id": "factoring_perfect_square_trinomials",
+          "label": "Factoring perfect-square trinomials",
+          "description": "Recognizing and factoring a^2 + 2ab + b^2 = (a+b)^2 or a^2 − 2ab + b^2 = (a−b)^2; requires identifying that both end terms are perfect squares and the middle term is twice their product.",
+          "yield_score": 0.80,
+          "yield_rationale": "Perfect-square trinomials appear in completing the square (prerequisite skill), in 1.11 equivalent-form work, and in trig identity manipulation.",
+          "source_learn_keyword_id": "factoring_perfect_square_trinomials"
+        },
+        {
+          "id": "recognizing_nonfactorable_quadratic_trinomials_over_integers",
+          "label": "Recognizing quadratics not factorable over integers",
+          "description": "Determining when no integer factor pair satisfies the product-and-sum conditions; identifies when a quadratic is irreducible over ℤ and a different method (quadratic formula, completing the square) is needed.",
+          "yield_score": 0.62,
+          "yield_rationale": "Recognizing non-factorable quadratics is necessary to know when to switch methods; tested in AP Precalc complex-zero context (1.5).",
+          "source_learn_keyword_id": "recognizing_nonfactorable_quadratic_trinomials_over_integers"
+        },
+        {
+          "id": "factoring_quadratic_after_gcf",
+          "label": "Factoring quadratics after first removing the GCF",
+          "description": "Some quadratic expressions must have a GCF removed first, leaving a simpler trinomial or binomial to factor further; completely factored form requires both steps.",
+          "yield_score": 0.75,
+          "yield_rationale": "Multi-step complete factoring (GCF + quadratic) is the standard pattern for rational-expression simplification in AP Precalc.",
+          "source_learn_keyword_id": "factoring_quadratic_after_gcf"
+        },
+        {
+          "id": "factoring_difference_of_squares",
+          "label": "Factoring difference of squares: A²−B²",
+          "description": "Recognizing and applying A^2 − B^2 = (A−B)(A+B) when both terms are perfect squares separated by subtraction; produces two conjugate binomial factors.",
+          "yield_score": 0.90,
+          "yield_rationale": "Among top-20 rag_example keywords; difference of squares is the most directly tested special factoring pattern in AP Precalc rational-function simplification.",
+          "source_learn_keyword_id": "factoring_difference_of_squares"
+        },
+        {
+          "id": "factoring_difference_of_squares_with_coefficients",
+          "label": "Factoring difference of squares with numerical coefficients",
+          "description": "Applying the difference-of-squares pattern when terms involve squared numerical coefficients (e.g., 9x^2 − 64 = (3x−8)(3x+8)); each term must be recognized as a perfect square.",
+          "yield_score": 0.82,
+          "yield_rationale": "Coefficient-adjusted difference of squares is the form most commonly tested in AP Precalc rational-function examples.",
+          "source_learn_keyword_id": "factoring_difference_of_squares_with_coefficients"
+        },
+        {
+          "id": "factoring_difference_of_squares_multivariable",
+          "label": "Factoring multivariable difference of squares",
+          "description": "Applying A^2 − B^2 factoring when one or both squared terms contain multiple variables (e.g., 4a^2 − 25b^2); each term must be identified as a squared expression.",
+          "yield_score": 0.58,
+          "yield_rationale": "Multivariable difference-of-squares factoring appears in simplifying expressions with two-variable polynomial expressions.",
+          "source_learn_keyword_id": "factoring_difference_of_squares_multivariable"
+        },
+        {
+          "id": "factoring_sum_of_cubes",
+          "label": "Factoring sum of cubes: A³+B³",
+          "description": "Applying A^3 + B^3 = (A+B)(A^2 − AB + B^2); the resulting trinomial factor is not further factorable over the reals.",
+          "yield_score": 0.65,
+          "yield_rationale": "Sum-of-cubes pattern appears in AP Precalc equivalent-form questions and in solving cubic equations; moderate-high frequency.",
+          "source_learn_keyword_id": "factoring_sum_of_cubes"
+        },
+        {
+          "id": "factoring_difference_of_cubes",
+          "label": "Factoring difference of cubes: A³−B³",
+          "description": "Applying A^3 − B^3 = (A−B)(A^2 + AB + B^2); sign pattern is opposite to sum of cubes and targets alternating-sign errors.",
+          "yield_score": 0.65,
+          "yield_rationale": "Difference-of-cubes pattern is tested alongside sum-of-cubes in symbolic-manipulation FRQ tasks.",
+          "source_learn_keyword_id": "factoring_difference_of_cubes"
+        },
+        {
+          "id": "factoring_quadratic_form_polynomials",
+          "label": "Factoring polynomials in quadratic form",
+          "description": "Substituting u = x^n (or u = a repeated expression) to reduce a higher-degree polynomial to a factorable quadratic in u; then factoring and back-substituting.",
+          "yield_score": 0.72,
+          "yield_rationale": "Quadratic-form factoring is required for degree-4 and degree-6 polynomial equations that arise in AP Precalc 1.5 and solving contexts.",
+          "source_learn_keyword_id": "factoring_quadratic_form_polynomials"
+        },
+        {
+          "id": "factoring_biquadratic_polynomials",
+          "label": "Factoring biquadratic polynomials (x⁴, x², constant)",
+          "description": "Factoring a polynomial with only even-degree terms (degree 4, 2, 0) as a quadratic in x^2; a specific quadratic-form substitution.",
+          "yield_score": 0.68,
+          "yield_rationale": "Biquadratic equations appear in AP Precalc zero-finding for degree-4 polynomials; moderate-high AP frequency.",
+          "source_learn_keyword_id": "factoring_biquadratic_polynomials"
+        },
+        {
+          "id": "factoring_higher_degree_with_gcf_and_quadratic",
+          "label": "Factoring higher-degree polynomials by GCF then quadratic",
+          "description": "Removing a monomial GCF from a higher-degree polynomial to leave a quadratic or special-form polynomial that can be factored further; the two-step complete-factoring sequence.",
+          "yield_score": 0.75,
+          "yield_rationale": "Two-step GCF-then-quadratic factoring is the standard procedure for completely factoring any polynomial over the integers.",
+          "source_learn_keyword_id": "factoring_higher_degree_with_gcf_and_quadratic"
+        }
+      ]
+    },
+    {
+      "id": "polynomial_division_and_factor_theorems",
+      "label": "Polynomial Division and Factor Theorems",
+      "description": "Dividing polynomials by monomials and polynomial divisors using long division and synthetic division, interpreting quotient-remainder form, and applying the Remainder Theorem and Factor Theorem to connect roots, factors, and divisibility.",
+      "ced_topics": [],
+      "yield_score": 0.70,
+      "yield_rationale": "Synthetic and long division plus the Remainder Theorem appear directly in AP Precalc 1.11 (equivalent polynomial/rational representations); precalc-outline foundation yield is 0.70.",
+      "source_learn_keyword_id": "polynomial_division_and_factor_theorems",
+      "in_depth": [
+        {
+          "id": "polynomial_division_by_monomial",
+          "label": "Polynomial division by a monomial",
+          "description": "Dividing a polynomial by a monomial term-by-term by dividing coefficients and subtracting exponents; every term in the numerator must be divided.",
+          "yield_score": 0.62,
+          "yield_rationale": "Monomial division is the simplest polynomial division form; required for simplifying rational expressions with monomial denominators.",
+          "source_learn_keyword_id": "polynomial_division_by_monomial"
+        },
+        {
+          "id": "polynomial_long_division_by_binomial",
+          "label": "Polynomial long division by a binomial",
+          "description": "The long-division algorithm for polynomials: divide leading terms, multiply, subtract, bring down, and repeat until the remainder has lower degree than the divisor.",
+          "yield_score": 0.72,
+          "yield_rationale": "Long division by a binomial is required for 1.11 equivalent-form rewriting and appears in AP Precalc FRQ symbolic tasks.",
+          "source_learn_keyword_id": "polynomial_long_division_by_binomial"
+        },
+        {
+          "id": "polynomial_long_division_missing_terms",
+          "label": "Polynomial long division with missing terms",
+          "description": "Inserting zero-coefficient placeholders for missing degree terms before performing long division; prevents misalignment during subtraction steps.",
+          "yield_score": 0.68,
+          "yield_rationale": "Zero-placeholder long division is tested in AP Precalc 1.11 and is a prerequisite for synthetic division with sparse polynomials.",
+          "source_learn_keyword_id": "polynomial_long_division_missing_terms"
+        },
+        {
+          "id": "polynomial_long_division_by_higher_degree_divisor",
+          "label": "Polynomial long division by a higher-degree divisor",
+          "description": "Dividing by a divisor of degree greater than 1 (e.g., a quadratic divisor); the algorithm is the same but the remainder must have degree less than the divisor's degree.",
+          "yield_score": 0.60,
+          "yield_rationale": "Division by quadratic divisors appears in partial-fraction decomposition setup and in simplifying complex rational expressions.",
+          "source_learn_keyword_id": "polynomial_long_division_by_higher_degree_divisor"
+        },
+        {
+          "id": "synthetic_division_by_x_minus_c",
+          "label": "Synthetic division by a linear monic divisor x−c",
+          "description": "Using the compressed synthetic division algorithm to divide by x−c: list coefficients, write c, bring down, multiply and add in sequence.",
+          "yield_score": 0.75,
+          "yield_rationale": "Synthetic division is the efficient path to computing remainders and verifying zeros; directly tested in AP Precalc 1.11.",
+          "source_learn_keyword_id": "synthetic_division_by_x_minus_c"
+        },
+        {
+          "id": "synthetic_division_with_missing_terms",
+          "label": "Synthetic division with missing-term zero placeholders",
+          "description": "Inserting zero coefficients for missing powers in the dividend before running synthetic division; omitting them shifts all subsequent products and sums.",
+          "yield_score": 0.68,
+          "yield_rationale": "Missing-term synthetic division errors are a top distractor; zero-placeholder requirement tested directly.",
+          "source_learn_keyword_id": "synthetic_division_with_missing_terms"
+        },
+        {
+          "id": "synthetic_division_sign_of_c",
+          "label": "Correct sign of c in synthetic division",
+          "description": "For divisor x−c, the synthetic value is +c; for divisor x+k, the synthetic value is −k; targets the common error of using the wrong sign.",
+          "yield_score": 0.65,
+          "yield_rationale": "Sign-of-c error is among the most common synthetic division mistakes; directly targeted in MC distractors.",
+          "source_learn_keyword_id": "synthetic_division_sign_of_c"
+        },
+        {
+          "id": "synthetic_division_limitations_linear_monic_divisor",
+          "label": "Synthetic division requires a monic linear divisor",
+          "description": "Standard synthetic division applies only to divisors of the form x−c; divisors of the form ax−b or quadratic divisors require adjustment or long division.",
+          "yield_score": 0.52,
+          "yield_rationale": "Limitation awareness prevents incorrect application; appears in MC 'can synthetic division be used here?' questions.",
+          "source_learn_keyword_id": "synthetic_division_limitations_linear_monic_divisor"
+        },
+        {
+          "id": "quotient_remainder_form_polynomial_division",
+          "label": "Quotient-remainder form: p(x) = d(x)·q(x) + r(x)",
+          "description": "Writing the result of polynomial division as dividend = divisor × quotient + remainder, where the remainder's degree is less than the divisor's degree.",
+          "yield_score": 0.68,
+          "yield_rationale": "Quotient-remainder form is the statement tested by the Remainder Theorem and is required for partial-fraction setup in 1.11.",
+          "source_learn_keyword_id": "quotient_remainder_form_polynomial_division"
+        },
+        {
+          "id": "remainder_theorem",
+          "label": "Remainder Theorem",
+          "description": "When p(x) is divided by x−c, the remainder equals p(c); connects polynomial evaluation at a point to the result of division by the corresponding linear factor.",
+          "yield_score": 0.78,
+          "yield_rationale": "Remainder Theorem is a direct AP Precalc 1.11 topic and a standard MC/FRQ question type; high-frequency symbolic skill.",
+          "source_learn_keyword_id": "remainder_theorem"
+        },
+        {
+          "id": "factor_theorem",
+          "label": "Factor Theorem",
+          "description": "x−c is a factor of p(x) if and only if p(c) = 0; directly links zeros of a polynomial to its linear factor structure.",
+          "yield_score": 0.82,
+          "yield_rationale": "Factor Theorem is the conceptual bridge between zeros and factors; central to AP Precalc zero/factor analysis in 1.4–1.6 and 1.8–1.10.",
+          "source_learn_keyword_id": "factor_theorem"
+        },
+        {
+          "id": "polynomial_factor_from_zero",
+          "label": "Writing a linear factor from a known zero",
+          "description": "If c is a zero of p(x), then (x−c) is a linear factor of p(x); turns each known zero into a factor for reconstructing or analyzing a polynomial.",
+          "yield_score": 0.78,
+          "yield_rationale": "Zero-to-factor conversion is required for constructing polynomial functions from given zeros in AP Precalc modeling contexts.",
+          "source_learn_keyword_id": "polynomial_factor_from_zero"
+        },
+        {
+          "id": "polynomial_remainder_from_evaluation",
+          "label": "Computing the remainder via evaluation (Remainder Theorem application)",
+          "description": "Evaluating p(c) to find the remainder when p(x) is divided by x−c, avoiding full polynomial division; the computational form of the Remainder Theorem.",
+          "yield_score": 0.72,
+          "yield_rationale": "Evaluation-as-remainder is a fast computational shortcut tested in MC and FRQ contexts.",
+          "source_learn_keyword_id": "polynomial_remainder_from_evaluation"
+        },
+        {
+          "id": "divisor_degree_and_remainder_degree",
+          "label": "Remainder degree constraint: degree(r) < degree(d)",
+          "description": "In polynomial division, the remainder must have degree strictly less than the divisor; this condition determines when the long-division algorithm terminates.",
+          "yield_score": 0.55,
+          "yield_rationale": "Degree constraint is tested in MC 'which could be a valid remainder?' questions and in verifying division results.",
+          "source_learn_keyword_id": "divisor_degree_and_remainder_degree"
+        },
+        {
+          "id": "polynomial_divisibility_by_factor",
+          "label": "Polynomial divisibility: zero remainder means factor",
+          "description": "A polynomial is divisible by (x−c) exactly when division leaves remainder 0, which is equivalent to p(c) = 0 by the Factor Theorem.",
+          "yield_score": 0.72,
+          "yield_rationale": "Divisibility-by-factor reasoning appears in AP Precalc zero analysis and in checking whether a binomial divides a polynomial evenly.",
+          "source_learn_keyword_id": "polynomial_divisibility_by_factor"
+        }
+      ]
+    },
+    {
+      "id": "polynomial_equations_and_roots",
+      "label": "Polynomial Equations and Roots",
+      "description": "Solving polynomial equations by factoring (using GCF, quadratic, and special-form patterns), applying the zero-product property, distinguishing real from complex roots, and using completing the square and the quadratic formula for unfactorable quadratics.",
+      "ced_topics": [],
+      "yield_score": 0.80,
+      "yield_rationale": "Factoring-to-solve is the primary zero-finding method in AP Precalc Unit 1; quadratic formula and completing the square extend solving to irreducible quadratics and are prerequisites for the complex-zero analysis of 1.5.",
+      "source_learn_keyword_id": "polynomial_equations_and_roots",
+      "in_depth": [
+        {
+          "id": "zero_product_property_polynomial_equations",
+          "label": "Zero product property in polynomial equations",
+          "description": "If a product of factors equals zero, at least one factor must equal zero; the foundational principle that converts a factored polynomial equation into individual linear or quadratic equations.",
+          "yield_score": 0.88,
+          "yield_rationale": "Among top-10 rag_example keywords; zero-product property is the core algebraic mechanism for polynomial zero-finding throughout AP Precalc.",
+          "source_learn_keyword_id": "zero_product_property_polynomial_equations"
+        },
+        {
+          "id": "solving_factored_polynomial_equations",
+          "label": "Solving already-factored polynomial equations",
+          "description": "Setting each factor of an already-factored polynomial equal to zero and solving each resulting equation; focuses on equation mechanics once the polynomial is in factored form.",
+          "yield_score": 0.88,
+          "yield_rationale": "Among top-10 rag_example keywords; solving factored equations is the direct payoff of all factoring skills.",
+          "source_learn_keyword_id": "solving_factored_polynomial_equations"
+        },
+        {
+          "id": "solving_polynomial_equations_by_gcf_factoring",
+          "label": "Solving polynomial equations via GCF factoring",
+          "description": "Factoring out the GCF before applying the zero-product property; often reveals a zero root at x=0 and factors out a common power of x.",
+          "yield_score": 0.78,
+          "yield_rationale": "GCF-based equation solving produces the x=0 roots that appear in polynomial function zero analysis; high-frequency skill.",
+          "source_learn_keyword_id": "solving_polynomial_equations_by_gcf_factoring"
+        },
+        {
+          "id": "solving_quadratic_equations_by_factoring",
+          "label": "Solving quadratic equations by factoring",
+          "description": "Moving all terms to one side, factoring the quadratic, and applying the zero-product property; the standard method when integer factor pairs exist.",
+          "yield_score": 0.85,
+          "yield_rationale": "Quadratic equation solving by factoring is the most tested polynomial-equation method across all AP Precalc units.",
+          "source_learn_keyword_id": "solving_quadratic_equations_by_factoring"
+        },
+        {
+          "id": "solving_higher_degree_polynomial_equations_by_factoring",
+          "label": "Solving higher-degree polynomial equations by factoring",
+          "description": "Factoring a cubic, quartic, or higher-degree polynomial into lower-degree factors (often via GCF, grouping, or substitution) and applying the zero-product property to each; excludes numerical approximation.",
+          "yield_score": 0.72,
+          "yield_rationale": "Higher-degree factoring-to-solve is required for AP Precalc 1.4 (polynomial function zeros) and degree-4 biquadratic equations.",
+          "source_learn_keyword_id": "solving_higher_degree_polynomial_equations_by_factoring"
+        },
+        {
+          "id": "solving_polynomial_equations_using_difference_of_squares",
+          "label": "Solving polynomial equations using difference of squares",
+          "description": "Factoring A^2 − B^2 = (A−B)(A+B) and applying the zero-product property; produces two symmetric real roots ±B/A.",
+          "yield_score": 0.78,
+          "yield_rationale": "Difference-of-squares equations appear directly in AP Precalc rational function zero and hole analysis.",
+          "source_learn_keyword_id": "solving_polynomial_equations_using_difference_of_squares"
+        },
+        {
+          "id": "solving_polynomial_equations_using_sum_difference_cubes",
+          "label": "Solving polynomial equations using cube formulas",
+          "description": "Factoring A^3 ± B^3 and applying the zero-product property; the linear factor yields one real root while the quadratic factor may yield real or complex roots depending on the discriminant.",
+          "yield_score": 0.60,
+          "yield_rationale": "Cubic-special-form equations appear in AP Precalc zero-finding; moderate frequency in MC questions.",
+          "source_learn_keyword_id": "solving_polynomial_equations_using_sum_difference_cubes"
+        },
+        {
+          "id": "repeated_roots_in_factored_equations",
+          "label": "Repeated roots and multiplicity in factored equations",
+          "description": "A repeated factor (x−c)^k means c is a zero of multiplicity k; it is one distinct solution listed once as a root, but with multiplicity affecting graph behavior.",
+          "yield_score": 0.75,
+          "yield_rationale": "Multiplicity-from-factored-form is directly tested in AP Precalc 1.4–1.6 zeros and graph analysis.",
+          "source_learn_keyword_id": "repeated_roots_in_factored_equations"
+        },
+        {
+          "id": "polynomial_equations_in_quadratic_form",
+          "label": "Solving polynomial equations in quadratic form",
+          "description": "Substituting u for a repeated expression or power to reduce a higher-degree equation to a quadratic in u, solving for u, then back-substituting to find all roots of the original equation.",
+          "yield_score": 0.70,
+          "yield_rationale": "Quadratic-form substitution is required for degree-4 polynomial equations in AP Precalc 1.5 and for biquadratic zero-finding.",
+          "source_learn_keyword_id": "polynomial_equations_in_quadratic_form"
+        },
+        {
+          "id": "real_solution_count_from_factored_polynomial",
+          "label": "Counting real solutions from a factored polynomial",
+          "description": "Determining how many distinct real solutions a factored polynomial equation has by counting real linear factors and checking whether higher-degree factors yield real roots; irreducible quadratic factors contribute no real roots.",
+          "yield_score": 0.72,
+          "yield_rationale": "Real-solution counting is tested in AP Precalc 1.5 (Fundamental Theorem context) and in rational-function analysis.",
+          "source_learn_keyword_id": "real_solution_count_from_factored_polynomial"
+        },
+        {
+          "id": "irreducible_quadratic_factor_no_real_roots",
+          "label": "Irreducible quadratic factors yield no real roots",
+          "description": "A quadratic factor with negative discriminant (b^2−4ac < 0) contributes no real roots; recognizing such factors prevents incorrectly listing complex solutions as real zeros.",
+          "yield_score": 0.68,
+          "yield_rationale": "Required for distinguishing real zeros from complex zeros in AP Precalc 1.5; sets up the complex-root context.",
+          "source_learn_keyword_id": "irreducible_quadratic_factor_no_real_roots"
+        },
+        {
+          "id": "checking_polynomial_equation_solutions",
+          "label": "Checking polynomial equation solutions by substitution",
+          "description": "Verifying a proposed root by substituting it into the original polynomial equation and confirming the result equals zero; detects errors from factoring or sign mistakes.",
+          "yield_score": 0.58,
+          "yield_rationale": "Verification by substitution is a standard self-check; tested in MC 'which value satisfies the equation?' format.",
+          "source_learn_keyword_id": "checking_polynomial_equation_solutions"
+        },
+        {
+          "id": "poly_completing_the_square",
+          "label": "Completing the square to solve a quadratic equation",
+          "description": "Rewriting ax^2+bx+c=0 in the form (x−h)^2=k by adding and subtracting (b/2a)^2, then solving for x by taking square roots; the context is equation solving, not conic-section rewriting (that context belongs to pvm_conic_complete_the_square in P4).",
+          "yield_score": 0.72,
+          "yield_rationale": "Completing the square is a direct prerequisite for deriving the quadratic formula, for AP Precalc vertex-form interpretation, and for the discriminant analysis in 1.5.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_quadratic_formula",
+          "label": "Quadratic formula for solving quadratic equations",
+          "description": "Applying x = (−b ± √(b^2−4ac))/(2a) to solve any quadratic equation; identifying real distinct, real repeated, or complex (non-real) roots from the discriminant.",
+          "yield_score": 0.75,
+          "yield_rationale": "Quadratic formula is the catch-all method for unfactorable quadratics; discriminant analysis directly feeds AP Precalc 1.5 (complex zeros and irreducible quadratic factors).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_discriminant_and_root_type",
+          "label": "Discriminant and root-type classification",
+          "description": "Evaluating b^2−4ac to determine whether a quadratic has two distinct real roots (>0), one repeated real root (=0), or two complex conjugate roots (<0) without fully solving.",
+          "yield_score": 0.72,
+          "yield_rationale": "Discriminant analysis is the direct tool for AP Precalc 1.5 (identifying real vs. non-real zeros and irreducible quadratic factors).",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "polynomial_zeros_and_graph_behavior",
+      "label": "Polynomial Zeros and Graph Behavior",
+      "description": "Analyzing polynomial functions graphically and algebraically: identifying zeros from factored form, interpreting multiplicity as crossing vs. touching behavior, determining end behavior from degree and leading coefficient, bounding turning-point count, and reading/sketching general polynomial graphs.",
+      "ced_topics": [],
+      "yield_score": 0.90,
+      "yield_rationale": "Direct prerequisite for AP Precalc 1.4–1.6; end behavior, zeros, and multiplicity are among the most-tested skills in AP Precalc Unit 1 and appear in FRQ 1; precalc-outline foundation yield is 0.90.",
+      "source_learn_keyword_id": "polynomial_zeros_and_graph_behavior",
+      "in_depth": [
+        {
+          "id": "polynomial_zero_factor_relationship",
+          "label": "Zero-factor relationship: c is a zero iff (x−c) is a factor",
+          "description": "A real number c is a zero of polynomial p(x) exactly when (x−c) divides p(x) with zero remainder; connects roots, factors, and x-intercepts in one equivalence.",
+          "yield_score": 0.88,
+          "yield_rationale": "Among top-20 rag_example keywords; zero-factor equivalence is the core conceptual link in AP Precalc 1.4–1.6 and rational function analysis.",
+          "source_learn_keyword_id": "polynomial_zero_factor_relationship"
+        },
+        {
+          "id": "zeros_from_factored_form",
+          "label": "Reading zeros from factored polynomial form",
+          "description": "Setting each factor of a fully factored polynomial equal to zero to identify all real zeros; multiplicities are also visible from repeated factors.",
+          "yield_score": 0.90,
+          "yield_rationale": "Among top-5 rag_example keywords; reading zeros directly from factored form is the primary skill tested in AP Precalc 1.4 and 1.5.",
+          "source_learn_keyword_id": "zeros_from_factored_form"
+        },
+        {
+          "id": "y_intercept_of_polynomial_function",
+          "label": "Y-intercept of a polynomial function",
+          "description": "The y-intercept occurs at x=0; for a polynomial in standard form, it equals the constant term.",
+          "yield_score": 0.65,
+          "yield_rationale": "Y-intercept identification from standard form is a standard AP Precalc graph-analysis task.",
+          "source_learn_keyword_id": "y_intercept_of_polynomial_function"
+        },
+        {
+          "id": "x_intercepts_from_real_zeros",
+          "label": "X-intercepts from real zeros",
+          "description": "Each real zero c of a polynomial function gives an x-intercept at (c, 0) on the graph; complex zeros do not produce x-intercepts.",
+          "yield_score": 0.82,
+          "yield_rationale": "Zero-to-intercept mapping is central to AP Precalc 1.5 and 1.6 and appears in FRQ 1 function-concepts tasks.",
+          "source_learn_keyword_id": "x_intercepts_from_real_zeros"
+        },
+        {
+          "id": "multiplicity_even_touch_behavior",
+          "label": "Even multiplicity: graph touches and turns at the zero [MOVED TO P1]",
+          "description": "SOURCE ANCHOR ONLY — not a live testable in F5. Canonical home is poly_zeros_multiplicity_graph_touch_vs_cross in polynomial_and_rational_functions (P1, CED 1.5). Retained here solely to preserve the source_learn_keyword_id DB mapping. Do not generate F5 questions targeting this skill.",
+          "yield_score": 0.00,
+          "yield_rationale": "MECE correction: even-multiplicity touch behavior is owned by P1 (poly_zeros_multiplicity_graph_touch_vs_cross). This F5 entry is a non-testable DB-mapping stub.",
+          "source_learn_keyword_id": "multiplicity_even_touch_behavior"
+        },
+        {
+          "id": "multiplicity_odd_cross_behavior",
+          "label": "Odd multiplicity: graph crosses the x-axis at the zero [MOVED TO P1]",
+          "description": "SOURCE ANCHOR ONLY — not a live testable in F5. Canonical home is poly_zeros_multiplicity_graph_touch_vs_cross in polynomial_and_rational_functions (P1, CED 1.5). Retained here solely to preserve the source_learn_keyword_id DB mapping. Do not generate F5 questions targeting this skill.",
+          "yield_score": 0.00,
+          "yield_rationale": "MECE correction: odd-multiplicity crossing behavior is owned by P1 (poly_zeros_multiplicity_graph_touch_vs_cross). This F5 entry is a non-testable DB-mapping stub.",
+          "source_learn_keyword_id": "multiplicity_odd_cross_behavior"
+        },
+        {
+          "id": "end_behavior_even_degree_positive_leading",
+          "label": "End behavior: even degree, positive leading coefficient [MOVED TO P1]",
+          "description": "SOURCE ANCHOR ONLY — not a live testable in F5. Canonical home is poly_end_behavior_even_degree in polynomial_and_rational_functions (P1, CED 1.6). Retained here solely to preserve the source_learn_keyword_id DB mapping. Do not generate F5 questions targeting this skill.",
+          "yield_score": 0.00,
+          "yield_rationale": "MECE correction: end behavior of even-degree polynomials is owned by P1. This F5 entry is a non-testable DB-mapping stub.",
+          "source_learn_keyword_id": "end_behavior_even_degree_positive_leading"
+        },
+        {
+          "id": "end_behavior_even_degree_negative_leading",
+          "label": "End behavior: even degree, negative leading coefficient [MOVED TO P1]",
+          "description": "SOURCE ANCHOR ONLY — not a live testable in F5. Canonical home is poly_end_behavior_even_degree in polynomial_and_rational_functions (P1, CED 1.6). Retained here solely to preserve the source_learn_keyword_id DB mapping. Do not generate F5 questions targeting this skill.",
+          "yield_score": 0.00,
+          "yield_rationale": "MECE correction: end behavior of even-degree polynomials is owned by P1. This F5 entry is a non-testable DB-mapping stub.",
+          "source_learn_keyword_id": "end_behavior_even_degree_negative_leading"
+        },
+        {
+          "id": "end_behavior_odd_degree_positive_leading",
+          "label": "End behavior: odd degree, positive leading coefficient [MOVED TO P1]",
+          "description": "SOURCE ANCHOR ONLY — not a live testable in F5. Canonical home is poly_end_behavior_odd_degree in polynomial_and_rational_functions (P1, CED 1.6). Retained here solely to preserve the source_learn_keyword_id DB mapping. Do not generate F5 questions targeting this skill.",
+          "yield_score": 0.00,
+          "yield_rationale": "MECE correction: end behavior of odd-degree polynomials is owned by P1. This F5 entry is a non-testable DB-mapping stub.",
+          "source_learn_keyword_id": "end_behavior_odd_degree_positive_leading"
+        },
+        {
+          "id": "end_behavior_odd_degree_negative_leading",
+          "label": "End behavior: odd degree, negative leading coefficient [MOVED TO P1]",
+          "description": "SOURCE ANCHOR ONLY — not a live testable in F5. Canonical home is poly_end_behavior_odd_degree in polynomial_and_rational_functions (P1, CED 1.6). Retained here solely to preserve the source_learn_keyword_id DB mapping. Do not generate F5 questions targeting this skill.",
+          "yield_score": 0.00,
+          "yield_rationale": "MECE correction: end behavior of odd-degree polynomials is owned by P1. This F5 entry is a non-testable DB-mapping stub.",
+          "source_learn_keyword_id": "end_behavior_odd_degree_negative_leading"
+        },
+        {
+          "id": "end_behavior_from_leading_term",
+          "label": "End behavior determined by the leading term [IMPORT ANCHOR — P1 owns testable]",
+          "description": "SOURCE ANCHOR ONLY — retained as an import marker for the source_learn_keyword_id DB row. Not a live testable in F5. Canonical testable home is poly_end_behavior_from_leading_term in polynomial_and_rational_functions (P1, CED 1.6). F5 leading-term knowledge is covered by leading_term_polynomial and leading_coefficient_polynomial in polynomial_structure_and_classification.",
+          "yield_score": 0.00,
+          "yield_rationale": "MECE correction: leading-term-drives-end-behavior is owned by P1. This F5 entry is a non-testable DB-mapping import anchor.",
+          "source_learn_keyword_id": "end_behavior_from_leading_term"
+        },
+        {
+          "id": "maximum_turning_points_degree_n",
+          "label": "At most n−1 turning points for a degree-n polynomial",
+          "description": "A polynomial of degree n has at most n−1 turning points (local maxima or minima); this is an upper bound, not a guarantee.",
+          "yield_score": 0.72,
+          "yield_rationale": "Turning-point count is used to estimate or verify polynomial degree from a graph; tested in AP Precalc 1.4 graph-analysis MC.",
+          "source_learn_keyword_id": "maximum_turning_points_degree_n"
+        },
+        {
+          "id": "polynomial_graph_smoothness_continuity",
+          "label": "Polynomial graphs are smooth and continuous",
+          "description": "Polynomial functions produce smooth (no corners or cusps) and continuous (no breaks, holes, or jumps) graphs; no vertical asymptotes; distinguishes polynomial from rational, piecewise, and radical graphs.",
+          "yield_score": 0.68,
+          "yield_rationale": "Smoothness-and-continuity reasoning is tested in AP Precalc MC questions asking whether a graph could represent a polynomial.",
+          "source_learn_keyword_id": "polynomial_graph_smoothness_continuity"
+        },
+        {
+          "id": "degree_from_polynomial_graph_behavior",
+          "label": "Inferring polynomial degree from graph features",
+          "description": "Reading end-behavior direction and counting turning points from a graph to determine the degree parity (even/odd) and a minimum degree; graph-to-algebra reasoning.",
+          "yield_score": 0.75,
+          "yield_rationale": "Graph-to-degree inference appears in AP Precalc MC and FRQ questions asking students to identify or justify polynomial degree.",
+          "source_learn_keyword_id": "degree_from_polynomial_graph_behavior"
+        },
+        {
+          "id": "polynomial_graph_from_factored_form",
+          "label": "Sketching polynomial graph features from factored form",
+          "description": "Using a fully factored polynomial to identify zeros with multiplicities, the y-intercept, end behavior, and sign intervals, then assembling a qualitative sketch.",
+          "yield_score": 0.82,
+          "yield_rationale": "Graph-from-factored-form is the synthesis skill for AP Precalc 1.4–1.6 and is the primary graphing task for polynomial functions.",
+          "source_learn_keyword_id": "polynomial_graph_from_factored_form"
+        }
+      ]
+    },
+    {
+      "id": "polynomial_tables_and_finite_differences",
+      "label": "Polynomial Tables and Finite Differences",
+      "description": "Using equally spaced input-output tables and finite difference sequences to recognize polynomial degree, verify polynomial behavior, and distinguish polynomial patterns from non-polynomial growth in tabular data.",
+      "ced_topics": [],
+      "yield_score": 0.42,
+      "yield_rationale": "Finite differences appear in AP Precalc 1.3 (linear vs. quadratic rate-of-change comparison) and as a data-analysis tool in FRQ 2 (modeling non-periodic context); moderate foundation yield.",
+      "source_learn_keyword_id": "polynomial_tables_and_finite_differences",
+      "in_depth": [
+        {
+          "id": "constant_first_differences_linear_polynomial",
+          "label": "Constant first differences indicate a linear polynomial",
+          "description": "For equally spaced inputs, constant first differences (Δy constant) indicate a linear (degree 1) polynomial relationship between input and output.",
+          "yield_score": 0.55,
+          "yield_rationale": "First-difference identification directly supports AP Precalc 1.3 (constant rate of change = linear function).",
+          "source_learn_keyword_id": "constant_first_differences_linear_polynomial"
+        },
+        {
+          "id": "constant_second_differences_quadratic_polynomial",
+          "label": "Constant second differences indicate a quadratic polynomial",
+          "description": "For equally spaced inputs, constant second differences (Δ^2y constant) indicate a degree-2 polynomial; the second-difference value equals 2a for a quadratic ax^2+bx+c.",
+          "yield_score": 0.60,
+          "yield_rationale": "Second-difference recognition directly supports AP Precalc 1.3 (changing rate of change = quadratic function); moderate AP frequency.",
+          "source_learn_keyword_id": "constant_second_differences_quadratic_polynomial"
+        },
+        {
+          "id": "constant_nth_differences_polynomial_degree",
+          "label": "nth-level constant differences identify polynomial degree",
+          "description": "The first level at which finite differences become constant (and nonzero) equals the polynomial's degree; this generalizes linear and quadratic difference patterns to any degree.",
+          "yield_score": 0.48,
+          "yield_rationale": "General finite-difference degree identification is the unifying concept behind the specific linear/quadratic cases.",
+          "source_learn_keyword_id": "constant_nth_differences_polynomial_degree"
+        },
+        {
+          "id": "finite_differences_require_equal_input_spacing",
+          "label": "Finite differences require equally spaced inputs",
+          "description": "Finite-difference degree patterns are valid only when input values are equally spaced; unequal spacing invalidates the constant-difference test.",
+          "yield_score": 0.38,
+          "yield_rationale": "Error-prevention concept; tested in MC questions asking whether a given table supports finite-difference analysis.",
+          "source_learn_keyword_id": "finite_differences_require_equal_input_spacing"
+        },
+        {
+          "id": "poly_finite_diff_computing_difference_sequence",
+          "label": "Computing a finite difference sequence from a table",
+          "description": "Calculating the sequence of differences Δy, Δ^2y, Δ^3y, etc., from an equally spaced input-output table until a constant level is reached; the procedure for degree identification.",
+          "yield_score": 0.45,
+          "yield_rationale": "Procedural computation of difference sequences is the mechanical skill that enables degree identification from tables; moderate AP frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_finite_diff_distinguish_polynomial_from_exponential",
+          "label": "Distinguishing polynomial from exponential growth using finite differences",
+          "description": "Polynomial tables eventually produce constant finite differences, while exponential tables produce constant ratios of successive outputs instead; tests whether a tabular pattern is polynomial or exponential.",
+          "yield_score": 0.52,
+          "yield_rationale": "Polynomial-vs-exponential table distinction is directly tested in AP Precalc 2.1–2.2 (arithmetic vs. geometric sequence context) and in FRQ 2 model-selection tasks.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

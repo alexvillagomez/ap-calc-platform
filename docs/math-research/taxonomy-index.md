@@ -1,0 +1,1780 @@
+# Math Taxonomy Index
+
+Auto-generated from `content/math-taxonomy/` (excludes `_prereq_edges.json`).
+
+## Section: foundations
+
+### Algebraic Expressions (`algebraic_expressions`) — 15 umbrellas, 103 in-depth
+- **`algebraic_expression_structure`** Expression Components (8)
+  - `variables_as_quantities` Variables as quantities
+  - `constants_in_expressions` Constants in expressions
+  - `coefficients_of_variable_terms` Coefficients of variable terms
+  - `implied_coefficient_one` Implied coefficient of 1
+  - `implied_coefficient_negative_one` Implied coefficient of -1
+  - `terms_in_algebraic_expressions` Terms in algebraic expressions
+  - `term_signs_in_expressions` Term signs in expressions
+  - `factors_in_algebraic_terms` Factors in algebraic terms
+- **`expression_notation_and_grouping`** Expression Notation and Grouping (9)
+  - `single_variable_terms` Single-variable terms
+  - `multi_variable_terms` Multi-variable terms
+  - `monomial_term_structure` Monomial term structure
+  - `expression_vs_equation_boundary` Expression versus equation
+  - `expression_vs_term_boundary` Expression versus term
+  - `algebraic_operation_symbols` Operation symbols in expressions
+  - `implied_multiplication_notation` Implied multiplication notation
+  - `algebraic_grouping_symbols` Grouping symbols in algebraic expressions
+  - `fraction_bar_grouping_with_variables` Fraction bar grouping with variables
+- **`substitution_into_expressions`** Substitution into Expressions (8)
+  - `single_variable_numeric_substitution` Single-variable numeric substitution
+  - `multiple_occurrences_same_variable_substitution` Multiple occurrences of the same variable
+  - `multi_variable_numeric_substitution` Multi-variable numeric substitution
+  - `substitution_of_negative_values` Substitution of negative values
+  - `substitution_of_zero` Substitution of zero
+  - `substitution_of_fraction_values` Substitution of fraction values
+  - `substitution_of_decimal_values` Substitution of decimal values
+  - `parentheses_for_substitution` Parentheses during substitution
+- **`substitution_advanced_forms`** Substitution: Order of Operations and Expression Forms (5)
+  - `order_of_operations_after_substitution` Order of operations after substitution
+  - `substitution_into_power_terms` Substitution into power terms
+  - `substitution_into_grouped_expressions` Substitution into grouped expressions
+  - `substitution_of_expression_for_variable` Substituting an expression for a variable
+  - `formula_substitution` Formula substitution
+- **`like_terms_and_term_collection`** Like Terms: Identification and Classification (8)
+  - `like_terms_same_variable_part` Like terms with the same variable part
+  - `unlike_terms_different_variables` Unlike terms with different variables
+  - `unlike_terms_different_powers` Unlike terms with different powers
+  - `unlike_terms_different_variable_combinations` Unlike terms with different variable combinations
+  - `coefficient_combination_integer_coefficients` Integer coefficient combination
+  - `coefficient_combination_negative_coefficients` Negative coefficient combination
+  - `coefficient_combination_fraction_coefficients` Fraction coefficient combination
+  - `coefficient_combination_decimal_coefficients` Decimal coefficient combination
+- **`term_collection_strategies`** Term Collection Strategies (6)
+  - `constant_term_collection` Constant term collection
+  - `multi_variable_like_term_collection` Multi-variable like term collection
+  - `preserving_unlike_terms` Preserving unlike terms
+  - `term_reordering_for_collection` Term reordering for collection
+  - `additive_inverse_like_terms` Additive inverse like terms
+  - `like_terms_across_parentheses_after_group_removal` Like terms across removed grouping
+- **`distribution_and_expansion`** Distribution: Factor Types and Basic Forms (8)
+  - `positive_integer_distribution` Distribution by a positive integer
+  - `negative_integer_distribution` Distribution by a negative integer
+  - `fraction_coefficient_distribution` Distribution by a fraction coefficient
+  - `decimal_coefficient_distribution` Distribution by a decimal coefficient
+  - `variable_factor_distribution` Distribution by a variable factor
+  - `monomial_distribution_over_binomial` Monomial distribution over a binomial
+  - `monomial_distribution_over_trinomial` Monomial distribution over a trinomial
+  - `distribution_over_subtraction` Distribution over subtraction
+- **`distribution_advanced_and_error_recognition`** Distribution: Negation, Multi-Group, Nested, and Error Recognition (7)
+  - `negative_one_distribution` Distribution by -1
+  - `subtraction_of_parenthesized_expression` Subtraction of a parenthesized expression
+  - `multiple_distribution_terms` Multiple separate distribution terms
+  - `nested_distribution` Nested distribution
+  - `distribution_followed_by_term_collection` Distribution followed by term collection
+  - `partial_distribution_error_recognition` Partial distribution error recognition
+  - `distribution_sign_error_recognition` Distribution sign error recognition
+- **`equivalent_expression_properties`** Equivalent Expressions: Definition, Verification, and Matching (6)
+  - `equivalent_expressions_definition` Equivalent expressions
+  - `equivalence_by_like_term_collection` Equivalence through like-term collection
+  - `equivalence_by_distribution` Equivalence through distribution
+  - `testing_equivalence_by_substitution` Testing equivalence by substitution
+  - `non_equivalence_from_counterexample` Non-equivalence from a counterexample
+  - `coefficient_matching_in_equivalent_linear_expressions` Coefficient matching in equivalent linear expressions
+- **`algebraic_arithmetic_properties`** Algebraic Arithmetic Properties (6)
+  - `commutative_property_algebraic_addition` Commutative property of algebraic addition
+  - `commutative_property_algebraic_multiplication` Commutative property of algebraic multiplication
+  - `associative_property_algebraic_addition` Associative property of algebraic addition
+  - `associative_property_algebraic_multiplication` Associative property of algebraic multiplication
+  - `identity_properties_in_algebraic_expressions` Identity properties in algebraic expressions
+  - `zero_factor_in_algebraic_expressions` Zero factor in algebraic expressions
+- **`verbal_to_symbolic_expression_structure`** Verbal-to-Symbolic: Basic Operations and Order (8)
+  - `addition_phrase_expressions` Addition phrase expressions
+  - `subtraction_phrase_expressions` Subtraction phrase expressions
+  - `less_than_phrase_order` Less-than phrase order
+  - `more_than_phrase_order` More-than phrase order
+  - `multiplication_phrase_expressions` Multiplication phrase expressions
+  - `division_phrase_expressions` Division phrase expressions
+  - `quotient_order_in_phrases` Quotient phrase order
+  - `power_phrase_expressions` Power phrase expressions
+- **`verbal_to_symbolic_grouped_and_contextual`** Verbal-to-Symbolic: Grouping, Sequences, and Contextual Expressions (7)
+  - `grouped_sum_phrase_expressions` Grouped sum phrase expressions
+  - `grouped_difference_phrase_expressions` Grouped difference phrase expressions
+  - `consecutive_integer_expressions` Consecutive integer expressions
+  - `consecutive_even_integer_expressions` Consecutive even integer expressions
+  - `consecutive_odd_integer_expressions` Consecutive odd integer expressions
+  - `percent_of_variable_expression` Percent of a variable quantity
+  - `variable_expression_from_unit_rate` Variable expression from a unit rate
+- **`algebraic_expression_order_and_grouping`** Algebraic Expression Order and Grouping (8)
+  - `operation_precedence_with_variables` Operation precedence with variables
+  - `grouping_precedence_with_variables` Grouping precedence with variables
+  - `nested_grouping_with_variables` Nested grouping with variables
+  - `coefficient_attached_to_group` Coefficient attached to a group
+  - `power_applied_to_variable_vs_coefficient` Power applied to variable versus coefficient
+  - `negative_variable_power_grouping` Negative variable power grouping
+  - `fraction_coefficient_vs_division_structure` Fraction coefficient versus division structure
+  - `ambiguous_linear_expression_grouping` Ambiguous linear expression grouping
+- **`absolute_value_expressions`** Absolute Value Expressions (5)
+  - `abs_value_expression_definition` Absolute value expression definition
+  - `abs_value_of_variable_expression` Absolute value of a variable expression
+  - `abs_value_negative_base` Absolute value of a negative expression
+  - `abs_value_notation_as_grouping` Absolute value bars as grouping
+  - `abs_value_symmetry_property` Absolute value symmetry property
+- **`rational_expression_structure`** Rational Expression Structure (4)
+  - `rational_expression_definition` Rational expression definition
+  - `rational_expression_domain_restriction` Domain restriction from denominator
+  - `rational_expression_numerator_denominator_structure` Numerator and denominator as polynomial expressions
+  - `rational_expression_equivalent_forms` Equivalent forms of a rational expression
+
+### Exponents and Radicals (`exponents_and_radicals`) — 19 umbrellas, 135 in-depth
+- **`exponent_notation_and_structure`** Exponent Notation and Structure (8)
+  - `base_and_exponent_identification` Base and exponent identification
+  - `positive_integer_exponents_as_repeated_multiplication` Positive integer exponents as repeated multiplication
+  - `power_notation_for_variable_bases` Power notation with variable bases
+  - `power_notation_for_multi_variable_bases` Power notation with multi-variable bases
+  - `parenthesized_base_vs_unparenthesized_base` Parenthesized versus unparenthesized bases
+  - `coefficient_not_in_base_without_parentheses` Coefficient not in base without parentheses
+  - `exponent_applied_to_grouped_sum_or_difference` Powers of grouped sums and differences
+  - `powers_do_not_distribute_over_addition` Powers do not distribute over addition
+- **`exponent_notation_precedence_and_edge_cases`** Exponent Notation — Precedence and Edge Cases (5)
+  - `powers_do_not_distribute_over_subtraction` Powers do not distribute over subtraction
+  - `exponent_precedence_over_multiplication` Exponent precedence over multiplication
+  - `exponent_precedence_over_addition` Exponent precedence over addition
+  - `power_of_one` Power of one
+  - `one_as_base` One as a base
+- **`integer_exponent_basic_rules`** Integer Exponent Basic Rules (9)
+  - `product_rule_same_base_single_variable` Product rule with same single-variable base
+  - `product_rule_same_numeric_base` Product rule with same numeric base
+  - `product_rule_multiple_factors_same_base` Product rule with more than two same-base factors
+  - `product_rule_requires_matching_bases` Product rule requires matching bases
+  - `quotient_rule_same_base_single_variable` Quotient rule with same single-variable base
+  - `quotient_rule_same_numeric_base` Quotient rule with same numeric base
+  - `quotient_rule_negative_exponent_result` Quotient rule producing a negative exponent
+  - `quotient_rule_zero_exponent_result` Quotient rule producing a zero exponent
+  - `power_of_power_rule` Power of a power rule
+- **`integer_exponent_power_product_quotient_rules`** Integer Exponent Power-of-Product, Power-of-Quotient, and Same-Exponent Rules (9)
+  - `power_of_power_with_negative_exponents` Power of a power with negative exponents
+  - `power_of_power_vs_product_rule` Power of a power versus product rule
+  - `power_of_product_rule` Power of a product rule
+  - `power_of_product_with_coefficients` Power of a product with coefficients
+  - `power_of_product_multiple_variables` Power of a product with multiple variables
+  - `power_of_quotient_rule` Power of a quotient rule
+  - `power_of_quotient_with_negative_exponents` Power of a quotient with negative exponents
+  - `same_exponent_different_bases_product` Same exponent with different bases in a product
+  - `same_exponent_different_bases_quotient` Same exponent with different bases in a quotient
+- **`zero_and_negative_exponent_basics`** Zero and Negative Exponent Basics (7)
+  - `zero_exponent_nonzero_base` Zero exponent with nonzero base
+  - `zero_exponent_variable_base_restriction` Variable-base restriction for zero exponents
+  - `zero_to_zero_power_indeterminate` Zero to the zero power
+  - `negative_exponent_as_reciprocal` Negative exponent as reciprocal
+  - `negative_exponent_on_denominator_factor` Negative exponent on denominator factor
+  - `negative_exponent_on_numerator_factor` Negative exponent on numerator factor
+  - `negative_exponent_vs_negative_number` Negative exponent versus negative number
+- **`zero_and_negative_exponent_advanced`** Zero and Negative Exponent Advanced Forms (7)
+  - `negative_exponent_on_grouped_quantity` Negative exponent on a grouped quantity
+  - `negative_exponent_on_fraction` Negative exponent on a fraction
+  - `positive_exponent_convention` Positive-exponent convention
+  - `zero_base_negative_exponent_undefined` Zero base with negative exponent
+  - `variable_restrictions_from_negative_exponents` Variable restrictions from negative exponents
+  - `mixed_positive_zero_negative_exponents` Mixed positive, zero, and negative exponents
+  - `negative_exponents_after_quotient_rule` Negative exponents produced by quotient rule
+- **`scientific_notation_with_powers_of_ten`** Scientific Notation with Powers of Ten (8)
+  - `multiplication_scientific_notation` Multiplication in scientific notation
+  - `division_scientific_notation` Division in scientific notation
+  - `addition_scientific_notation_same_power` Addition in scientific notation with same power
+  - `addition_scientific_notation_different_powers` Addition in scientific notation with different powers
+  - `subtraction_scientific_notation` Subtraction in scientific notation
+  - `scientific_notation_coefficient_adjustment` Scientific-notation coefficient adjustment
+  - `scientific_notation_comparison` Scientific-notation comparison
+  - `scientific_notation_with_negative_powers` Scientific notation with negative powers of ten
+- **`rational_exponent_meaning_and_conversion`** Rational Exponent Meaning and Conversion (7)
+  - `unit_fraction_exponents_as_roots` Unit fraction exponents as roots
+  - `rational_exponent_denominator_as_root_index` Denominator of rational exponent as root index
+  - `rational_exponent_numerator_as_power` Numerator of rational exponent as power
+  - `root_then_power_vs_power_then_root` Root-then-power versus power-then-root
+  - `negative_rational_exponents` Negative rational exponents
+  - `rational_exponents_on_perfect_powers` Rational exponents on perfect powers
+  - `even_denominator_rational_exponents_real_domain` Even-denominator rational exponents and real domain
+- **`rational_exponent_laws_and_domain`** Rational Exponent Laws and Domain (6)
+  - `rational_exponent_product_rule` Product rule with rational exponents
+  - `rational_exponent_quotient_rule` Quotient rule with rational exponents
+  - `rational_exponent_power_rule` Power of a power with rational exponents
+  - `odd_denominator_rational_exponents_negative_bases` Odd-denominator rational exponents with negative bases
+  - `rational_exponents_in_lowest_terms` Rational exponents in lowest terms
+  - `rational_exponent_expression_restrictions` Variable restrictions from rational exponents
+- **`radical_notation_and_root_basics`** Radical Notation and Root Basics (7)
+  - `radicand_identification` Radicand identification
+  - `root_index_identification` Root index identification
+  - `square_root_structure` Square root structure
+  - `cube_root_structure` Cube root structure
+  - `nth_root_structure` Nth-root structure
+  - `principal_square_root` Principal square root
+  - `even_roots_of_negative_numbers_nonreal` Even roots of negative numbers are nonreal
+- **`radical_notation_and_root_domain`** Radical Notation and Root Domain (7)
+  - `even_roots_of_positive_numbers` Even roots of positive numbers
+  - `even_roots_of_zero` Even roots of zero
+  - `odd_roots_of_negative_numbers` Odd roots of negative numbers
+  - `even_root_domain_condition` Even-root radicand condition
+  - `odd_root_no_nonnegative_restriction` Odd-root radicands allow all real values
+  - `radical_coefficient_structure` Coefficient outside a radical
+  - `nested_radical_structure` Nested radical structure
+- **`radical_simplification_numeric`** Radical Simplification — Numeric Factors (8)
+  - `perfect_square_factors_in_square_roots` Perfect-square factors in square roots
+  - `perfect_cube_factors_in_cube_roots` Perfect-cube factors in cube roots
+  - `perfect_nth_power_factors` Perfect nth-power factors
+  - `prime_factorization_in_radicals` Prime factorization in radicals
+  - `radical_product_property` Radical product property
+  - `radical_quotient_property` Radical quotient property
+  - `combining_radicals_into_single_radical` Combining factors into a single radical
+  - `radical_index_must_match_for_combining` Matching radical indices for combining
+- **`radical_simplification_variable`** Radical Simplification — Variable Factors (8)
+  - `square_root_of_variable_even_power` Square root of a variable even power
+  - `square_root_of_variable_odd_power` Square root of a variable odd power
+  - `nth_root_of_variable_power_by_exponent_division` Nth root of variable powers by exponent division
+  - `absolute_value_from_even_roots` Absolute value from even roots
+  - `odd_roots_of_variable_powers` Odd roots of variable powers
+  - `radical_in_lowest_terms` Radical in lowest terms
+  - `radical_rewriting_with_numeric_and_variable_factors` Radical rewriting with numeric and variable factors
+  - `radicals_with_coefficients_and_factor_extraction` Radicals with existing outside coefficients
+- **`radical_addition_and_subtraction`** Radical Addition and Subtraction (9)
+  - `like_radicals_same_index_and_radicand` Like radicals with same index and radicand
+  - `unlike_radicals_different_radicands` Unlike radicals with different radicands
+  - `unlike_radicals_different_indices` Unlike radicals with different indices
+  - `adding_like_square_roots` Adding like square roots
+  - `subtracting_like_square_roots` Subtracting like square roots
+  - `adding_and_subtracting_like_nth_roots` Adding and subtracting like nth roots
+  - `combining_radicals_after_rewriting` Combining radicals after rewriting
+  - `radical_addition_does_not_combine_radicands` Radical addition does not combine radicands
+  - `radical_subtraction_does_not_combine_radicands` Radical subtraction does not combine radicands
+- **`radical_multiplication_and_binomial_products`** Radical Multiplication and Binomial Products (6)
+  - `multiplying_square_roots` Multiplying square roots
+  - `multiplying_nth_roots_same_index` Multiplying nth roots with the same index
+  - `dividing_radicals_same_index` Dividing radicals with the same index
+  - `multiplying_binomial_radical_expressions` Multiplying binomial radical expressions
+  - `squaring_binomial_radical_expressions` Squaring binomial radical expressions
+  - `conjugate_product_radical_difference_of_squares` Conjugate products with radicals
+- **`rationalizing_monomial_denominators`** Rationalizing Monomial Radical Denominators (5)
+  - `radical_denominator_convention` Radical denominator convention
+  - `rationalizing_single_square_root_denominator` Single square-root denominator
+  - `rationalizing_square_root_with_coefficient_denominator` Square-root denominator with coefficient
+  - `rationalizing_nth_root_denominator` Nth-root denominator
+  - `rationalizing_variable_radical_denominator` Variable radical denominator
+- **`rationalizing_binomial_denominators_and_numerators`** Rationalizing Binomial Denominators and Numerators (5)
+  - `rationalizing_binomial_square_root_denominator` Binomial square-root denominator
+  - `conjugate_selection_for_rationalizing` Conjugate selection for rationalizing
+  - `rationalizing_denominator_with_two_radicals` Denominator with two radical terms
+  - `rationalizing_numerator` Rationalizing a numerator
+  - `extraneous_domain_restrictions_from_rationalizing` Restrictions when rationalizing
+- **`radical_equations_isolating_and_solving`** Radical Equations — Isolating and Solving (7)
+  - `radical_equation_structure` Radical equation structure
+  - `isolated_square_root_equations` Isolated square-root equations
+  - `nonisolated_square_root_equations` Non-isolated square-root equations
+  - `square_root_equations_with_linear_radicands` Square-root equations with linear radicands
+  - `square_root_equations_leading_to_quadratics` Square-root equations leading to quadratics
+  - `radical_equations_with_radicals_on_both_sides` Radical equations with radicals on both sides
+  - `radical_equations_requiring_two_squaring_steps` Radical equations requiring two squaring steps
+- **`radical_equations_extraneous_and_rational_exponent`** Radical Equations — Extraneous Solutions and Rational-Exponent Equations (7)
+  - `cube_root_equations` Cube-root equations
+  - `nth_root_equations` Nth-root equations
+  - `rational_exponent_equations` Rational-exponent equations
+  - `reciprocal_power_in_rational_exponent_equations` Reciprocal powers in rational-exponent equations
+  - `extraneous_solutions_from_squaring` Extraneous solutions from squaring
+  - `radical_equation_domain_restrictions` Domain restrictions in radical equations
+  - `no_solution_radical_equations` Radical equations with no real solution
+
+### Functions and Graphs (`functions_and_graphs`) — 10 umbrellas, 54 in-depth
+- **`fg_function_concept`** The Function Concept (5)
+  - `fg_relation_vs_function_definition` Relation vs. function definition
+  - `fg_vertical_line_test` Vertical-line test on a graph
+  - `fg_function_from_table` Identifying a function from a table
+  - `fg_function_from_equation` Deciding if an equation defines a function
+  - `fg_one_to_one_function` One-to-one functions and the horizontal-line test
+- **`fg_function_notation`** Function Notation and Language (6)
+  - `fg_reading_function_notation` Reading f(x) notation
+  - `fg_evaluating_at_a_number` Evaluating f(a) at a specific numeric input
+  - `fg_evaluating_at_an_expression` Evaluating f(expression) — input as an algebraic expression
+  - `fg_function_output_from_graph` Reading function output values from a graph
+  - `fg_function_output_from_table` Reading function output values from a table
+  - `fg_solving_f_of_x_equals_c` Solving f(x) = c — finding inputs from outputs
+- **`fg_domain_and_range`** Domain and Range (6)
+  - `fg_domain_from_graph` Reading domain from a graph
+  - `fg_range_from_graph` Reading range from a graph
+  - `fg_domain_algebraic_restrictions` Domain restrictions from algebraic rules
+  - `fg_range_from_rule` Determining range from a function rule
+  - `fg_domain_from_context` Domain restricted by real-world context
+  - `fg_domain_range_from_table` Domain and range from a table of values
+- **`fg_interval_notation`** Interval Notation (5)
+  - `fg_interval_open_closed_endpoints` Open vs. closed interval endpoints
+  - `fg_interval_notation_from_inequality` Converting inequalities to interval notation
+  - `fg_interval_union_notation` Union and intersection in interval notation
+  - `fg_interval_infinity_notation` Intervals extending to infinity
+  - `fg_interval_notation_from_graph` Writing interval notation from a graph
+- **`fg_graph_reading`** Reading and Interpreting Graphs (6)
+  - `fg_increasing_decreasing_intervals` Identifying increasing and decreasing intervals
+  - `fg_local_max_min_from_graph` Identifying local maxima and minima from a graph
+  - `fg_x_and_y_intercepts_from_graph` Reading x-intercepts and y-intercepts from a graph
+  - `fg_end_behavior_from_graph` Describing end behavior from a graph
+  - `fg_reading_graph_over_interval` Interpreting a function's values over an interval from a graph
+  - `fg_function_value_reading_precision` Precise coordinate reading from a graph
+- **`fg_tables_and_numerical_input_output`** Tables and Numerical Input-Output Relationships (5)
+  - `fg_table_input_output_reading` Reading input-output pairs from a table
+  - `fg_table_consecutive_change` Computing consecutive changes (differences) from a table
+  - `fg_table_output_difference_pattern` Computing consecutive output differences (Δy) and classifying linearity
+  - `fg_table_domain_range_identification` Domain and range from a table
+  - `fg_table_multiple_representations_link` Connecting table values to a corresponding graph
+- **`fg_piecewise_functions`** Piecewise-Defined Functions (5)
+  - `fg_piecewise_evaluating_at_a_point` Evaluating a piecewise function at a specific input
+  - `fg_piecewise_breakpoint_boundary` Handling the boundary value in a piecewise function
+  - `fg_piecewise_graphing` Graphing a piecewise-defined function
+  - `fg_piecewise_definition_from_graph` Writing a piecewise definition from a graph
+  - `fg_piecewise_domain_and_range` Domain and range of a piecewise function
+- **`fg_average_rate_of_change`** Average Rate of Change (6)
+  - `fg_aroc_secant_slope_connection` AROC as slope of the secant line
+  - `fg_aroc_comparing_across_intervals` Comparing AROC over different intervals
+  - `fg_aroc_secant_line_generic_notation` Writing the secant-line slope expression in generic (a, b) notation
+  - `fg_aroc_from_verbal_description` Identifying AROC from a verbally described function relationship
+  - `fg_aroc_sign_meaning` Interpreting the sign of AROC (positive, negative, or zero)
+  - `fg_aroc_zero_and_constant_behavior` AROC of zero and constant function behavior
+- **`fg_symmetry`** Even and Odd Function Symmetry (5)
+  - `fg_even_function_algebraic_test` Algebraic even-function test: f(−x) = f(x)
+  - `fg_odd_function_algebraic_test` Algebraic odd-function test: f(−x) = −f(x)
+  - `fg_symmetry_from_graph` Identifying even/odd symmetry visually from a graph
+  - `fg_neither_even_nor_odd` Classifying a function as neither even nor odd
+  - `fg_symmetry_predict_output_values` Using even/odd symmetry to predict output values without computing
+- **`fg_covariation_and_behavior`** Describing Function Behavior and Covariation (5)
+  - `fg_covariation_increasing_decreasing_language` Using precise language for increasing/decreasing behavior
+  - `fg_constant_function_behavior` Identifying constant behavior over an interval
+  - `fg_concavity_direction_from_graph` Identifying concavity direction (concave up vs. down) from a graph
+  - `fg_sign_of_function_output` Identifying where a function is positive, negative, or zero
+  - `fg_absolute_maximum_minimum` Identifying absolute maximum and minimum over a closed interval
+
+### Linear Equations and Inequalities (`linear_equations_and_inequalities`) — 21 umbrellas, 143 in-depth
+- **`linear_equation_foundations_core`** Linear Equation Foundations: Core Concepts (6)
+  - `equation_statement_structure` Equation statement structure
+  - `linear_equation_solution_meaning` Meaning of a linear equation solution
+  - `linear_equation_solution_verification` Solution verification for linear equations
+  - `equivalent_linear_equations` Equivalent linear equations
+  - `balance_principle_for_equations` Balance principle for equations
+  - `inverse_operations_in_linear_equations` Inverse operations in linear equations
+- **`linear_equation_foundations_properties`** Linear Equation Foundations: Properties and Solution Sets (8)
+  - `addition_property_of_equality` Addition property of equality
+  - `subtraction_property_of_equality` Subtraction property of equality
+  - `multiplication_property_of_equality` Multiplication property of equality
+  - `division_property_of_equality` Division property of equality
+  - `variable_isolation_concept` Variable isolation
+  - `solution_set_single_value` Single-value solution sets
+  - `equation_sides_with_variable_terms` Variable terms on equation sides
+  - `linear_equations_zero_coefficient_after_simplification` Zero variable coefficient after simplification
+- **`one_step_linear_equations_basic`** One-Step Linear Equations: Basic Operations (6)
+  - `one_step_addition_equations` One-step equations with addition
+  - `one_step_subtraction_equations` One-step equations with subtraction
+  - `one_step_variable_subtracted_from_constant_equations` One-step equations with variable subtracted from a constant
+  - `one_step_multiplication_equations` One-step equations with multiplication
+  - `one_step_division_equations` One-step equations with division
+  - `one_step_negative_coefficient_equations` One-step equations with negative coefficients
+- **`one_step_linear_equations_extended`** One-Step Linear Equations: Fractions, Decimals, and Special Cases (6)
+  - `one_step_fraction_coefficient_equations` One-step equations with fraction coefficients
+  - `one_step_decimal_coefficient_equations` One-step equations with decimal coefficients
+  - `one_step_equations_with_fraction_solutions` One-step equations with fraction solutions
+  - `one_step_equations_with_zero_solution` One-step equations with zero solution
+  - `one_step_equations_with_variable_on_right` One-step equations with variable on the right
+  - `one_step_equations_with_signed_constants` One-step equations with signed constants
+- **`two_step_linear_equations_core`** Two-Step Linear Equations: Core Forms (6)
+  - `two_step_equations_ax_plus_b_equals_c` Two-step equations: ax + b = c
+  - `two_step_equations_ax_minus_b_equals_c` Two-step equations: ax − b = c
+  - `two_step_equations_b_plus_ax_equals_c` Two-step equations with constant before variable term
+  - `two_step_equations_variable_term_negative` Two-step equations with negative variable term
+  - `two_step_equations_variable_divided_by_constant` Two-step equations: x/a + b = c
+  - `two_step_equations_operation_order_reversal` Reverse order of operations in two-step equations
+- **`two_step_linear_equations_extended`** Two-Step Linear Equations: Fractions, Decimals, and Special Cases (6)
+  - `two_step_equations_fraction_coefficient` Two-step equations with fraction coefficients
+  - `two_step_equations_decimal_coefficient` Two-step equations with decimal coefficients
+  - `two_step_equations_with_negative_solution` Two-step equations with negative solutions
+  - `two_step_equations_with_zero_solution` Two-step equations with zero solution
+  - `two_step_equations_right_side_variable_expression` Two-step equations with variable expression on the right
+  - `two_step_equations_with_parenthesized_constants` Two-step equations with signed constant grouping
+- **`multi_step_linear_equations_simplification`** Multi-Step Linear Equations: Distribution and Collection (8)
+  - `linear_equations_combining_like_terms_one_side` Linear equations requiring like-term collection on one side
+  - `linear_equations_with_distribution_one_side` Linear equations requiring distribution on one side
+  - `linear_equations_with_negative_distribution` Linear equations requiring negative distribution
+  - `linear_equations_with_subtracted_parentheses` Linear equations with subtracted parentheses
+  - `linear_equations_with_multiple_parentheses` Linear equations with multiple grouped expressions
+  - `linear_equations_variables_on_both_sides` Linear equations with variables on both sides
+  - `linear_equations_constants_on_both_sides` Linear equations with constants on both sides
+  - `linear_equations_distribution_both_sides` Linear equations requiring distribution on both sides
+- **`multi_step_linear_equations_clearing_and_special_cases`** Multi-Step Linear Equations: Clearing and Special Cases (8)
+  - `linear_equations_combining_like_terms_both_sides` Linear equations requiring like-term collection on both sides
+  - `linear_equations_with_fraction_coefficients` Multi-step linear equations with fraction coefficients
+  - `linear_equations_clearing_fraction_coefficients` Clearing fraction coefficients in linear equations
+  - `linear_equations_with_decimal_coefficients` Multi-step linear equations with decimal coefficients
+  - `linear_equations_clearing_decimal_coefficients` Clearing decimal coefficients in linear equations
+  - `linear_equations_from_cross_products_constant_denominators` Cross-product linear equations with constant denominators
+  - `linear_equations_special_case_no_solution` Linear equations with no solution
+  - `linear_equations_special_case_identity` Linear equations with infinitely many solutions
+- **`literal_equations_core`** Literal Equations and Formula Rearrangement: Core Isolation (6)
+  - `literal_equations_isolating_added_variable` Literal equations isolating a variable with addition
+  - `literal_equations_isolating_multiplied_variable` Literal equations isolating a multiplied variable
+  - `literal_equations_isolating_divided_variable` Literal equations isolating a divided variable
+  - `literal_equations_two_step_linear_forms` Literal equations with two-step linear forms
+  - `literal_equations_variable_on_both_sides` Literal equations with the target variable on both sides
+  - `literal_equations_factoring_target_variable` Factoring out the target variable in literal equations
+- **`literal_equations_formula_forms`** Literal Equations and Formula Rearrangement: Standard Formula Forms (7)
+  - `linear_formula_rearrangement_for_y` Linear formula rearrangement for y
+  - `linear_formula_rearrangement_for_x` Linear formula rearrangement for x
+  - `formula_rearrangement_with_fraction_coefficients` Formula rearrangement with fraction coefficients
+  - `formula_rearrangement_with_parentheses` Formula rearrangement with parentheses
+  - `formula_rearrangement_with_subtracted_target_variable` Formula rearrangement with subtracted target variable
+  - `formula_rearrangement_solution_restrictions` Restrictions in formula rearrangement
+  - `linear_proportion_equations_variable_numerator` Linear proportion equations with variable numerator
+- **`linear_inequality_foundations_concepts`** Linear Inequality Foundations: Symbols, Properties, and Solution Meaning (8)
+  - `inequality_statement_structure` Inequality statement structure
+  - `strict_inequality_symbols` Strict inequality symbols
+  - `inclusive_inequality_symbols` Inclusive inequality symbols
+  - `linear_inequality_solution_meaning` Meaning of a linear inequality solution
+  - `linear_inequality_solution_verification` Solution verification for linear inequalities
+  - `equivalent_linear_inequalities` Equivalent linear inequalities
+  - `addition_property_of_inequality` Addition property of inequality
+  - `subtraction_property_of_inequality` Subtraction property of inequality
+- **`linear_inequality_foundations_multiplication`** Linear Inequality Foundations: Multiplication/Division and Representation (7)
+  - `positive_multiplication_property_of_inequality` Positive multiplication property of inequality
+  - `positive_division_property_of_inequality` Positive division property of inequality
+  - `negative_multiplication_property_of_inequality` Negative multiplication property of inequality
+  - `negative_division_property_of_inequality` Negative division property of inequality
+  - `inequality_boundary_values` Inequality boundary values
+  - `number_line_representation_inequalities` Number-line representations of inequalities
+  - `interval_notation_for_inequalities` Interval notation for inequalities (DB row — scope redirected to F7)
+- **`one_step_linear_inequalities`** One-Step Linear Inequalities (8)
+  - `one_step_inequalities_addition` One-step inequalities with addition
+  - `one_step_inequalities_subtraction` One-step inequalities with subtraction
+  - `one_step_inequalities_positive_multiplication` One-step inequalities with positive multiplication
+  - `one_step_inequalities_negative_multiplication` One-step inequalities with negative multiplication
+  - `one_step_inequalities_positive_division` One-step inequalities with positive division
+  - `one_step_inequalities_negative_division` One-step inequalities with negative division
+  - `one_step_inequalities_fraction_coefficients` One-step inequalities with fraction coefficients
+  - `one_step_inequalities_decimal_coefficients` One-step inequalities with decimal coefficients
+- **`two_step_linear_inequalities`** Two-Step Linear Inequalities (8)
+  - `two_step_inequalities_positive_coefficient` Two-step inequalities with positive coefficients
+  - `two_step_inequalities_negative_coefficient` Two-step inequalities with negative coefficients
+  - `two_step_inequalities_variable_divided_by_positive` Two-step inequalities with variable divided by a positive constant
+  - `two_step_inequalities_variable_divided_by_negative` Two-step inequalities with variable divided by a negative constant
+  - `two_step_inequalities_with_fraction_coefficients` Two-step inequalities with fraction coefficients
+  - `two_step_inequalities_with_decimal_coefficients` Two-step inequalities with decimal coefficients
+  - `two_step_inequalities_boundary_inclusion` Boundary inclusion in two-step inequalities
+  - `inequality_symbol_reversal_error_recognition` Inequality symbol reversal errors
+- **`multi_step_linear_inequalities_distribution`** Multi-Step Linear Inequalities: Distribution and Collection (6)
+  - `linear_inequalities_combining_like_terms_one_side` Linear inequalities requiring like-term collection on one side
+  - `linear_inequalities_with_distribution_one_side` Linear inequalities requiring distribution on one side
+  - `linear_inequalities_with_subtracted_parentheses` Linear inequalities with subtracted parentheses
+  - `linear_inequalities_with_multiple_parentheses` Linear inequalities with multiple grouped expressions
+  - `linear_inequalities_variables_on_both_sides` Linear inequalities with variables on both sides
+  - `linear_inequalities_distribution_both_sides` Linear inequalities requiring distribution on both sides
+- **`multi_step_linear_inequalities_clearing_and_special_cases`** Multi-Step Linear Inequalities: Clearing and Special Cases (6)
+  - `linear_inequalities_with_fraction_coefficients` Multi-step linear inequalities with fraction coefficients
+  - `linear_inequalities_clearing_positive_denominators` Clearing positive denominators in linear inequalities
+  - `linear_inequalities_with_decimal_coefficients` Multi-step linear inequalities with decimal coefficients
+  - `linear_inequalities_clearing_decimal_coefficients` Clearing decimal coefficients in linear inequalities
+  - `linear_inequalities_special_case_no_solution` Linear inequalities with no solution
+  - `linear_inequalities_special_case_all_real_numbers` Linear inequalities true for all real numbers
+- **`compound_linear_inequalities_core`** Compound Linear Inequalities: Structure and Solving (6)
+  - `compound_inequalities_and_structure` AND compound inequality structure
+  - `compound_inequalities_or_structure` OR compound inequality structure
+  - `bounded_compound_inequalities` Bounded compound inequalities
+  - `three_part_inequality_solving` Three-part linear inequality solving
+  - `compound_inequalities_from_separate_solutions` Compound inequalities from separate solved inequalities
+  - `compound_inequality_endpoint_inclusion` Endpoint inclusion in compound inequalities
+- **`compound_linear_inequalities_sets_and_notation`** Compound Linear Inequalities: Set Operations and Notation (6)
+  - `compound_inequality_interval_intersections` Interval intersections for compound inequalities
+  - `compound_inequality_interval_unions` Interval unions for compound inequalities
+  - `compound_inequalities_no_overlap` Compound inequalities with no overlap
+  - `compound_inequalities_all_real_union` Compound inequalities with all-real-number union
+  - `interval_notation_for_compound_inequalities` Interval notation for compound inequalities
+  - `number_line_graphs_for_compound_inequalities` Number-line graphs for compound inequalities
+- **`linear_equation_and_inequality_interpretation`** Linear Equation and Inequality Interpretation (8)
+  - `equation_vs_inequality_solution_type` Equation versus inequality solution type
+  - `boundary_value_vs_solution_region` Boundary value versus solution region
+  - `open_vs_closed_endpoint_meaning` Open versus closed endpoint meaning
+  - `infinity_endpoint_notation` Infinity endpoint notation
+  - `solution_set_empty_set_notation` Empty solution set notation
+  - `all_real_numbers_solution_notation` All real numbers solution notation
+  - `extraneous_results_from_invalid_linear_steps` Invalid steps causing wrong linear solutions
+  - `linear_solution_reasonableness` Reasonableness of linear solutions
+- **`absolute_value_equations_and_inequalities`** Absolute Value Equations and Inequalities (6)
+  - `absolute_value_equation_two_cases` Absolute value equations via two-case split
+  - `absolute_value_equation_no_solution` Absolute value equations with no solution
+  - `absolute_value_equation_single_solution` Absolute value equations with single solution
+  - `absolute_value_inequality_less_than` Absolute value inequalities with < or ≤
+  - `absolute_value_inequality_greater_than` Absolute value inequalities with > or ≥
+  - `absolute_value_inequality_all_real_or_no_solution` Absolute value inequalities: trivially true or false
+- **`linear_function_graphs_and_slope`** Linear Function Graphs and Slope (7)
+  - `slope_from_two_points` Slope from two points
+  - `slope_as_rate_of_change` Slope as a rate of change
+  - `slope_intercept_form_graphing` Graphing in slope-intercept form
+  - `point_slope_form` Point-slope form of a linear equation
+  - `slope_and_intercept_from_graph` Reading slope and y-intercept from a graph
+  - `horizontal_and_vertical_lines` Horizontal and vertical lines
+  - `parallel_and_perpendicular_slopes` Parallel and perpendicular slope relationships
+
+### Number Systems and Properties (`number_systems`) — 19 umbrellas, 111 in-depth
+- **`real_number_set_membership`** Real Number Set Membership (7)
+  - `natural_numbers` Natural numbers
+  - `whole_numbers` Whole numbers
+  - `integers` Integers
+  - `rational_numbers` Rational numbers
+  - `irrational_numbers` Irrational numbers
+  - `real_numbers` Real numbers
+  - `number_set_containment_chain` Containment of real-number sets
+- **`real_number_classification_skills`** Real Number Classification Skills (6)
+  - `multiple_number_set_membership` Multiple membership in number sets
+  - `least_restrictive_number_set_classification` Most specific number-set classification
+  - `rational_decimal_forms` Rational decimal forms
+  - `irrational_decimal_forms` Irrational decimal forms
+  - `perfect_square_integer_roots` Perfect-square integer roots
+  - `nonperfect_square_irrational_roots` Non-perfect-square irrational roots
+- **`fraction_and_decimal_representations`** Fraction and Decimal Representations (6)
+  - `decimal_place_value` Decimal place value
+  - `expanded_notation_for_numbers` Expanded notation for numbers
+  - `equivalent_fraction_forms` Equivalent fraction forms
+  - `fractions_lowest_terms_by_gcf` Fractions in lowest terms
+  - `improper_fractions_and_mixed_numbers` Improper fractions and mixed numbers
+  - `terminating_decimal_to_fraction` Terminating decimal fraction forms
+- **`decimal_percent_and_notation_forms`** Decimal, Percent, and Notation Forms (6)
+  - `repeating_decimal_to_fraction` Repeating decimal fraction forms
+  - `fraction_to_decimal_forms` Fraction-to-decimal forms
+  - `fraction_decimal_percent_equivalence` Fraction-decimal-percent equivalence
+  - `scientific_notation_form` Scientific notation form
+  - `standard_form_from_scientific_notation` Standard form from scientific notation
+  - `exact_and_approximate_number_forms` Exact and approximate number forms
+- **`divisibility_rules_and_parity`** Divisibility Rules and Parity (7)
+  - `even_and_odd_integers` Even and odd integers
+  - `parity_of_sums_and_products` Parity of sums and products
+  - `divisibility_by_2_5_10` Divisibility by 2, 5, and 10
+  - `divisibility_by_3_and_9` Divisibility by 3 and 9
+  - `divisibility_by_4_and_8` Divisibility by 4 and 8
+  - `divisibility_by_6_and_12` Divisibility by 6 and 12
+  - `prime_and_composite_numbers` Prime and composite numbers
+- **`prime_factorization_gcf_lcm`** Prime Factorization, GCF, and LCM (6)
+  - `factors_and_multiples` Factors and multiples
+  - `prime_factorization` Prime factorization
+  - `greatest_common_factor_integers` Greatest common factor of integers
+  - `least_common_multiple_integers` Least common multiple of integers
+  - `relatively_prime_integers` Relatively prime integers
+  - `remainders_after_integer_division` Remainders after integer division
+- **`signed_number_concepts`** Signed Number Concepts (6)
+  - `positive_negative_and_zero` Positive numbers, negative numbers, and zero
+  - `opposite_numbers` Opposite numbers
+  - `absolute_value_as_magnitude` Absolute value as magnitude
+  - `distance_between_numbers_on_number_line` Distance between numbers on the number line
+  - `midpoint_between_two_real_numbers` Midpoint between two real numbers
+  - `sign_of_products` Sign of products
+- **`signed_number_arithmetic_rules`** Signed Number Arithmetic Rules (5)
+  - `sign_of_quotients` Sign of quotients
+  - `signed_number_addition_same_signs` Signed-number addition with same signs
+  - `signed_number_addition_opposite_signs` Signed-number addition with opposite signs
+  - `signed_number_subtraction_as_adding_opposite` Signed-number subtraction as adding the opposite
+  - `negative_signs_and_grouping` Negative signs and grouping
+- **`fraction_arithmetic`** Fraction Arithmetic (6)
+  - `fraction_addition_common_denominators` Fraction addition with common denominators
+  - `fraction_subtraction_common_denominators` Fraction subtraction with common denominators
+  - `least_common_denominator` Least common denominator
+  - `fraction_addition_unlike_denominators` Fraction addition with unlike denominators
+  - `fraction_subtraction_unlike_denominators` Fraction subtraction with unlike denominators
+  - `fraction_multiplication` Fraction multiplication
+- **`fraction_division_and_decimal_arithmetic`** Fraction Division and Decimal Arithmetic (5)
+  - `fraction_division_by_reciprocal` Fraction division by reciprocals
+  - `numeric_complex_fractions` Numeric complex fractions
+  - `decimal_addition_and_subtraction_alignment` Decimal addition and subtraction alignment
+  - `decimal_multiplication_place_value` Decimal multiplication place value
+  - `decimal_division_place_value` Decimal division place value
+- **`percent_multipliers_and_change`** Percent Multipliers and Change (7)
+  - `percent_as_rate_per_hundred` Percent as a rate per hundred
+  - `percent_of_a_number` Percent of a number
+  - `percent_increase_factors` Percent increase factors
+  - `percent_decrease_factors` Percent decrease factors
+  - `percent_change` Percent change
+  - `successive_percent_changes` Successive percent changes
+  - `percentage_points_vs_percent_change` Percentage points versus percent change
+- **`ratios_and_unit_rates`** Ratios and Unit Rates (3)
+  - `ratio_part_to_part_structure` Part-to-part ratios
+  - `ratio_part_to_whole_structure` Part-to-whole ratios
+  - `unit_rates` Unit rates
+- **`real_number_ordering`** Real Number Ordering (6)
+  - `number_line_location` Number-line location
+  - `ordering_positive_rational_numbers` Ordering positive rational numbers
+  - `ordering_negative_numbers` Ordering negative numbers
+  - `ordering_mixed_real_numbers` Ordering mixed real-number forms
+  - `benchmark_fraction_comparisons` Benchmark fraction comparisons
+  - `integer_bounds_for_irrational_numbers` Integer bounds for irrational numbers
+- **`inequality_and_order_properties`** Inequality and Order Properties (3)
+  - `inequality_symbols_numeric_comparisons` Inequality symbols in numeric comparisons
+  - `trichotomy_property_real_numbers` Trichotomy property of real numbers
+  - `transitive_property_of_order` Transitive property of order
+- **`arithmetic_operation_properties`** Arithmetic Operation Properties (7)
+  - `commutative_property_addition` Commutative property of addition
+  - `commutative_property_multiplication` Commutative property of multiplication
+  - `associative_property_addition` Associative property of addition
+  - `associative_property_multiplication` Associative property of multiplication
+  - `distributive_property_numeric` Distributive property with numbers
+  - `noncommutativity_subtraction_division` Noncommutativity of subtraction and division
+  - `nonassociativity_subtraction_division` Nonassociativity of subtraction and division
+- **`identity_inverse_and_zero_properties`** Identity, Inverse, and Zero Properties (7)
+  - `additive_identity` Additive identity
+  - `multiplicative_identity` Multiplicative identity
+  - `additive_inverse_property` Additive inverse property
+  - `multiplicative_inverse_property` Multiplicative inverse property
+  - `zero_multiplication_property` Zero multiplication property
+  - `division_by_zero_undefined` Division by zero is undefined
+  - `zero_divided_by_nonzero_number` Zero divided by a nonzero number
+- **`closure_properties_of_number_sets`** Closure Properties of Number Sets (4)
+  - `closure_properties_real_numbers` Closure properties of real numbers
+  - `closure_properties_integers` Closure properties of integers
+  - `closure_properties_rational_numbers` Closure properties of rational numbers
+  - `irrational_number_nonclosure` Nonclosure patterns of irrational numbers
+- **`numeric_expression_structure`** Numeric Expression Structure (8)
+  - `operation_precedence_multiplication_division` Precedence of multiplication and division
+  - `left_to_right_same_precedence_operations` Left-to-right order for same-precedence operations
+  - `parentheses_and_grouping_symbols` Parentheses and grouping symbols
+  - `nested_grouping_symbols` Nested grouping symbols
+  - `fraction_bar_as_grouping` Fraction bar as grouping
+  - `absolute_value_bars_as_grouping` Absolute value bars as grouping
+  - `numeric_exponent_precedence` Numeric exponent precedence
+  - `negative_base_parentheses` Negative bases and parentheses
+- **`approximation_estimation_and_bounds`** Approximation, Estimation, and Bounds (6)
+  - `rounding_to_place_value` Rounding to place value
+  - `truncation_vs_rounding` Truncation versus rounding
+  - `compatible_number_estimation` Compatible-number estimation
+  - `bounds_from_rounded_numbers` Bounds from rounded numbers
+  - `order_of_magnitude_estimation` Order-of-magnitude estimation
+  - `reasonableness_checks_numeric_results` Reasonableness checks for numeric results
+
+### Polynomials (`polynomials`) — 12 umbrellas, 141 in-depth
+- **`polynomial_structure_and_classification`** Polynomial Structure and Classification (8)
+  - `polynomial_expression_definition` Polynomial expression definition
+  - `polynomial_term_structure` Polynomial term structure
+  - `polynomial_coefficients` Polynomial coefficients
+  - `polynomial_constant_term` Polynomial constant term
+  - `leading_term_polynomial` Leading term of a polynomial
+  - `leading_coefficient_polynomial` Leading coefficient of a polynomial
+  - `polynomial_standard_form` Polynomial standard form
+  - `descending_power_order` Descending power order
+- **`polynomial_classification_and_degree`** Polynomial Classification and Degree (8)
+  - `missing_terms_zero_coefficients` Missing terms and zero coefficients
+  - `polynomial_degree_univariate` Degree of a univariate polynomial
+  - `zero_polynomial_degree_undefined` Zero polynomial degree
+  - `polynomial_classification_by_number_of_terms` Polynomial classification by number of terms
+  - `polynomial_classification_by_degree` Polynomial classification by degree
+  - `monomial_polynomial_structure` Monomial polynomial structure
+  - `binomial_polynomial_structure` Binomial polynomial structure
+  - `trinomial_polynomial_structure` Trinomial polynomial structure
+- **`polynomial_univariate_multivariable_and_boundaries`** Univariate, Multivariable, and Non-Polynomial Boundaries (8)
+  - `univariate_polynomials` Univariate polynomials
+  - `multivariable_polynomials` Multivariable polynomials
+  - `multivariable_monomial_degree` Degree of a multivariable monomial
+  - `multivariable_polynomial_degree` Degree of a multivariable polynomial
+  - `polynomial_vs_nonpolynomial_negative_exponents` Non-polynomial forms: negative variable exponents
+  - `polynomial_vs_nonpolynomial_variable_denominators` Non-polynomial forms: variable denominators
+  - `polynomial_vs_nonpolynomial_fractional_exponents` Non-polynomial forms: fractional variable exponents
+  - `polynomial_coefficient_domain` Polynomial coefficient domain
+- **`polynomial_values_and_identities`** Polynomial Values and Identities (10)
+  - `polynomial_value_at_numeric_input` Polynomial evaluation at a numeric input
+  - `negative_input_polynomial_evaluation` Polynomial evaluation at negative inputs
+  - `fractional_decimal_input_polynomial_evaluation` Polynomial evaluation at fractional or decimal inputs
+  - `multivariable_polynomial_evaluation` Multivariable polynomial evaluation
+  - `polynomial_function_notation_evaluation` Polynomial function notation evaluation
+  - `equivalent_polynomial_expressions` Equivalent polynomial expressions
+  - `polynomial_identity_meaning` Polynomial identity meaning
+  - `coefficient_comparison_in_polynomial_identities` Coefficient comparison in polynomial identities
+  - `solving_unknown_coefficients_in_polynomial_identities` Solving for unknown coefficients in polynomial identities
+  - `polynomial_expression_domain_all_real` Polynomial expression domain over the reals
+- **`polynomial_addition_and_subtraction`** Polynomial Addition and Subtraction (10)
+  - `adding_polynomials_like_terms` Adding polynomials by combining like terms
+  - `adding_polynomials_vertical_alignment` Vertical alignment for polynomial addition
+  - `subtracting_polynomials_group_negation` Subtracting polynomials by distributing negation
+  - `subtracting_polynomials_vertical_alignment` Vertical alignment for polynomial subtraction
+  - `polynomial_like_terms_with_matching_exponents` Identifying like terms in polynomials
+  - `polynomial_unlike_terms_different_exponents` Polynomial unlike terms: different exponents cannot combine
+  - `cancellation_creating_missing_terms` Cancellation creating missing polynomial terms
+  - `polynomial_additive_inverse` Additive inverse of a polynomial
+  - `closure_under_polynomial_addition_subtraction` Closure of polynomials under addition and subtraction
+  - `polynomial_degree_after_addition_subtraction` Degree after polynomial addition or subtraction
+- **`polynomial_multiplication_and_special_products`** Polynomial Multiplication and Special Products (15)
+  - `monomial_times_monomial` Monomial times monomial
+  - `monomial_times_polynomial` Monomial times polynomial
+  - `binomial_times_binomial` Binomial times binomial (FOIL)
+  - `binomial_times_trinomial` Binomial times trinomial
+  - `polynomial_times_polynomial_general` General polynomial multiplication
+  - `multiplying_polynomials_with_missing_terms` Multiplying polynomials with missing powers
+  - `polynomial_product_degree` Degree of a polynomial product
+  - `square_of_binomial_sum` Square of a binomial sum: (a+b)² pattern
+  - `square_of_binomial_difference` Square of a binomial difference: (a−b)² pattern
+  - `conjugate_binomial_product` Conjugate binomial product: (a+b)(a−b) = a²−b²
+  - `cube_of_binomial_sum` Cube of a binomial sum: (a+b)³ expansion
+  - `cube_of_binomial_difference` Cube of a binomial difference: (a−b)³ expansion
+  - `product_of_sum_and_difference_of_polynomial_terms` Generalized conjugate product: (A+B)(A−B) = A²−B² with polynomial terms
+  - `polynomial_multiplication_sign_management` Sign management in polynomial multiplication
+  - `closure_under_polynomial_multiplication` Closure of polynomials under multiplication
+- **`gcf_factoring_and_grouping`** GCF Factoring and Grouping (15)
+  - `polynomial_factorization_meaning` Polynomial factorization meaning
+  - `polynomial_gcf_numeric_coefficients` GCF of polynomial numerical coefficients
+  - `polynomial_gcf_variable_powers` GCF of polynomial variable powers
+  - `polynomial_gcf_monomial` Monomial GCF of polynomial terms
+  - `factoring_gcf_from_binomials` Factoring a GCF from a binomial
+  - `factoring_gcf_from_trinomials` Factoring a GCF from a trinomial
+  - `factoring_negative_gcf` Factoring out a negative GCF
+  - `factoring_by_grouping_four_terms` Factoring by grouping: four-term polynomials
+  - `grouping_common_binomial_factor` Factoring a common binomial factor after grouping
+  - `grouping_after_reordering_terms` Factoring by grouping after reordering terms
+  - `factoring_common_binomial_factor` Factoring a repeated binomial factor across terms
+  - `factoring_out_fractional_gcf` Factoring out a fractional GCF
+  - `factoring_completely_over_integers` Factoring completely over the integers
+  - `irreducible_polynomial_over_integers` Irreducible polynomial over the integers
+  - `verifying_factorization_by_multiplication` Verifying polynomial factorization by multiplication
+- **`quadratic_and_special_form_factoring`** Quadratic and Special-Form Factoring (16)
+  - `factoring_monic_quadratic_trinomials` Factoring monic quadratic trinomials (lead=1)
+  - `factoring_nonmonic_quadratic_trinomials` Factoring non-monic quadratic trinomials (lead≠1)
+  - `factoring_trinomials_ac_method` Factoring trinomials by the ac method
+  - `factoring_quadratic_with_negative_constant` Factoring quadratics with negative constant term
+  - `factoring_quadratic_positive_constant_negative_middle` Factoring quadratics: positive constant, negative middle term
+  - `factoring_perfect_square_trinomials` Factoring perfect-square trinomials
+  - `recognizing_nonfactorable_quadratic_trinomials_over_integers` Recognizing quadratics not factorable over integers
+  - `factoring_quadratic_after_gcf` Factoring quadratics after first removing the GCF
+  - `factoring_difference_of_squares` Factoring difference of squares: A²−B²
+  - `factoring_difference_of_squares_with_coefficients` Factoring difference of squares with numerical coefficients
+  - `factoring_difference_of_squares_multivariable` Factoring multivariable difference of squares
+  - `factoring_sum_of_cubes` Factoring sum of cubes: A³+B³
+  - `factoring_difference_of_cubes` Factoring difference of cubes: A³−B³
+  - `factoring_quadratic_form_polynomials` Factoring polynomials in quadratic form
+  - `factoring_biquadratic_polynomials` Factoring biquadratic polynomials (x⁴, x², constant)
+  - `factoring_higher_degree_with_gcf_and_quadratic` Factoring higher-degree polynomials by GCF then quadratic
+- **`polynomial_division_and_factor_theorems`** Polynomial Division and Factor Theorems (15)
+  - `polynomial_division_by_monomial` Polynomial division by a monomial
+  - `polynomial_long_division_by_binomial` Polynomial long division by a binomial
+  - `polynomial_long_division_missing_terms` Polynomial long division with missing terms
+  - `polynomial_long_division_by_higher_degree_divisor` Polynomial long division by a higher-degree divisor
+  - `synthetic_division_by_x_minus_c` Synthetic division by a linear monic divisor x−c
+  - `synthetic_division_with_missing_terms` Synthetic division with missing-term zero placeholders
+  - `synthetic_division_sign_of_c` Correct sign of c in synthetic division
+  - `synthetic_division_limitations_linear_monic_divisor` Synthetic division requires a monic linear divisor
+  - `quotient_remainder_form_polynomial_division` Quotient-remainder form: p(x) = d(x)·q(x) + r(x)
+  - `remainder_theorem` Remainder Theorem
+  - `factor_theorem` Factor Theorem
+  - `polynomial_factor_from_zero` Writing a linear factor from a known zero
+  - `polynomial_remainder_from_evaluation` Computing the remainder via evaluation (Remainder Theorem application)
+  - `divisor_degree_and_remainder_degree` Remainder degree constraint: degree(r) < degree(d)
+  - `polynomial_divisibility_by_factor` Polynomial divisibility: zero remainder means factor
+- **`polynomial_equations_and_roots`** Polynomial Equations and Roots (15)
+  - `zero_product_property_polynomial_equations` Zero product property in polynomial equations
+  - `solving_factored_polynomial_equations` Solving already-factored polynomial equations
+  - `solving_polynomial_equations_by_gcf_factoring` Solving polynomial equations via GCF factoring
+  - `solving_quadratic_equations_by_factoring` Solving quadratic equations by factoring
+  - `solving_higher_degree_polynomial_equations_by_factoring` Solving higher-degree polynomial equations by factoring
+  - `solving_polynomial_equations_using_difference_of_squares` Solving polynomial equations using difference of squares
+  - `solving_polynomial_equations_using_sum_difference_cubes` Solving polynomial equations using cube formulas
+  - `repeated_roots_in_factored_equations` Repeated roots and multiplicity in factored equations
+  - `polynomial_equations_in_quadratic_form` Solving polynomial equations in quadratic form
+  - `real_solution_count_from_factored_polynomial` Counting real solutions from a factored polynomial
+  - `irreducible_quadratic_factor_no_real_roots` Irreducible quadratic factors yield no real roots
+  - `checking_polynomial_equation_solutions` Checking polynomial equation solutions by substitution
+  - `poly_completing_the_square` Completing the square to solve a quadratic equation
+  - `poly_quadratic_formula` Quadratic formula for solving quadratic equations
+  - `poly_discriminant_and_root_type` Discriminant and root-type classification
+- **`polynomial_zeros_and_graph_behavior`** Polynomial Zeros and Graph Behavior (15)
+  - `polynomial_zero_factor_relationship` Zero-factor relationship: c is a zero iff (x−c) is a factor
+  - `zeros_from_factored_form` Reading zeros from factored polynomial form
+  - `y_intercept_of_polynomial_function` Y-intercept of a polynomial function
+  - `x_intercepts_from_real_zeros` X-intercepts from real zeros
+  - `multiplicity_even_touch_behavior` Even multiplicity: graph touches and turns at the zero [MOVED TO P1]
+  - `multiplicity_odd_cross_behavior` Odd multiplicity: graph crosses the x-axis at the zero [MOVED TO P1]
+  - `end_behavior_even_degree_positive_leading` End behavior: even degree, positive leading coefficient [MOVED TO P1]
+  - `end_behavior_even_degree_negative_leading` End behavior: even degree, negative leading coefficient [MOVED TO P1]
+  - `end_behavior_odd_degree_positive_leading` End behavior: odd degree, positive leading coefficient [MOVED TO P1]
+  - `end_behavior_odd_degree_negative_leading` End behavior: odd degree, negative leading coefficient [MOVED TO P1]
+  - `end_behavior_from_leading_term` End behavior determined by the leading term [IMPORT ANCHOR — P1 owns testable]
+  - `maximum_turning_points_degree_n` At most n−1 turning points for a degree-n polynomial
+  - `polynomial_graph_smoothness_continuity` Polynomial graphs are smooth and continuous
+  - `degree_from_polynomial_graph_behavior` Inferring polynomial degree from graph features
+  - `polynomial_graph_from_factored_form` Sketching polynomial graph features from factored form
+- **`polynomial_tables_and_finite_differences`** Polynomial Tables and Finite Differences (6)
+  - `constant_first_differences_linear_polynomial` Constant first differences indicate a linear polynomial
+  - `constant_second_differences_quadratic_polynomial` Constant second differences indicate a quadratic polynomial
+  - `constant_nth_differences_polynomial_degree` nth-level constant differences identify polynomial degree
+  - `finite_differences_require_equal_input_spacing` Finite differences require equally spaced inputs
+  - `poly_finite_diff_computing_difference_sequence` Computing a finite difference sequence from a table
+  - `poly_finite_diff_distinguish_polynomial_from_exponential` Distinguishing polynomial from exponential growth using finite differences
+
+### Systems of Equations (`systems_of_equations`) — 16 umbrellas, 112 in-depth
+- **`system_solution_meaning`** System Solution Meaning and Notation (7)
+  - `system_of_equations_structure` System of equations structure
+  - `simultaneous_solution_meaning` Simultaneous solution meaning
+  - `ordered_pair_solutions_to_two_variable_systems` Ordered-pair solutions to two-variable systems
+  - `ordered_triple_solutions_to_three_variable_systems` Ordered-triple solutions to three-variable systems
+  - `solution_verification_two_variable_systems` Solution verification for two-variable systems
+  - `solution_verification_three_variable_systems` Solution verification for three-variable systems
+  - `system_solution_as_intersection` System solution as intersection point
+- **`system_solution_set_types`** System Solution-Set Types and Classification (5)
+  - `consistent_independent_system_classification` Consistent and independent system classification
+  - `inconsistent_or_dependent_system_classification` Inconsistent and dependent system classification
+  - `system_solution_set_notation` System solution-set notation
+  - `variables_and_equations_count_in_systems` Number of variables and equations in systems
+  - `equivalent_systems` Equivalent systems
+- **`graphical_systems_plotting`** Graphical Systems — Plotting and Intersection (5)
+  - `linear_system_graphical_intersection` Graphical intersection of two lines
+  - `graphing_systems_from_slope_intercept_form` Graphing systems from slope-intercept form
+  - `graphing_systems_from_standard_form` Graphing systems from standard form
+  - `graphing_systems_with_horizontal_lines` Graphing systems with horizontal lines
+  - `graphing_systems_with_vertical_lines` Graphing systems with vertical lines
+- **`graphical_systems_interpretation`** Graphical Systems — Interpretation and Special Cases (6)
+  - `graphical_parallel_lines_no_solution` Parallel lines and no solution
+  - `graphical_coincident_lines_infinite_solutions` Coincident lines and infinitely many solutions
+  - `estimating_system_solutions_from_graphs` Estimating system solutions from graphs
+  - `exact_vs_approximate_system_solutions` Exact versus approximate system solutions
+  - `graph_scale_in_system_solution_reading` Graph scale and axis reading in system solutions
+  - `line_intersection_outside_viewing_window` Intersection outside the viewing window
+- **`substitution_method_setup`** Substitution Method — Setup and Variants (6)
+  - `substitution_method_explicit_variable` Substitution with an explicit variable expression
+  - `substitution_after_isolating_variable` Substitution after isolating a variable
+  - `substitution_into_standard_form_equation` Substitution into a standard-form equation
+  - `substitution_with_negative_expressions` Substitution with negative expressions
+  - `substitution_with_fraction_coefficients` Substitution with fraction coefficients
+  - `substitution_with_decimal_coefficients` Substitution with decimal coefficients
+- **`substitution_method_execution_and_special_cases`** Substitution Method — Execution and Special Cases (5)
+  - `substitution_leading_to_one_variable_equation` One-variable equation formed by substitution
+  - `back_substitution_in_two_variable_systems` Back-substitution in two-variable systems
+  - `substitution_method_no_solution_case` No-solution case detected by substitution
+  - `substitution_method_dependent_case` Dependent case detected by substitution
+  - `choosing_substitution_when_coefficient_is_one` Choosing substitution when a coefficient is 1
+- **`elimination_method_setup`** Elimination Method — Setup and Scaling (7)
+  - `elimination_with_opposite_coefficients` Elimination with opposite coefficients
+  - `elimination_with_matching_coefficients` Elimination with matching coefficients
+  - `elimination_by_adding_equations` Elimination by adding equations
+  - `elimination_by_subtracting_equations` Elimination by subtracting equations
+  - `elimination_by_multiplying_one_equation` Elimination by scaling one equation
+  - `elimination_by_multiplying_both_equations` Elimination by scaling both equations
+  - `choosing_variable_to_eliminate` Choosing a variable to eliminate
+- **`elimination_method_execution_and_special_cases`** Elimination Method — Execution and Special Cases (7)
+  - `elimination_with_negative_coefficients` Elimination with negative coefficients
+  - `elimination_with_fraction_coefficients` Elimination with fraction coefficients
+  - `elimination_with_decimal_coefficients` Elimination with decimal coefficients
+  - `elimination_creating_one_variable_equation` One-variable equation created by elimination
+  - `back_substitution_after_elimination` Back-substitution after elimination
+  - `elimination_method_no_solution_case` No-solution case detected by elimination
+  - `elimination_method_dependent_case` Dependent case detected by elimination
+- **`linear_system_preparation_and_structure`** Linear System Preparation and Structure (10)
+  - `standard_form_linear_systems` Standard-form linear systems
+  - `slope_intercept_form_linear_systems` Slope-intercept form linear systems
+  - `clearing_denominators_in_linear_systems` Clearing denominators in linear systems
+  - `clearing_decimals_in_linear_systems` Clearing decimals in linear systems
+  - `distribution_before_solving_systems` Distribution before solving systems
+  - `like_term_collection_before_solving_systems` Like-term collection before solving systems
+  - `variables_on_both_sides_in_system_equations` Rearranging variables on both sides in system equations
+  - `equation_scaling_in_systems` Equation scaling preserves solution sets
+  - `equivalent_equations_within_systems` Equivalent equations within systems
+  - `method_selection_substitution_vs_elimination` Method selection: substitution versus elimination
+- **`special_case_and_parameter_linear_systems`** Special-Case and Parameter Linear Systems (10)
+  - `same_slope_different_intercepts_systems` Same slope, different intercepts — no solution
+  - `same_slope_same_intercept_systems` Same slope, same intercept — infinitely many solutions
+  - `proportional_coefficients_dependent_systems` Proportional coefficients — dependent system
+  - `proportional_coefficients_inconsistent_systems` Proportional variable coefficients, nonproportional constants — no solution
+  - `nonproportional_coefficients_one_solution_systems` Nonproportional coefficients — one solution
+  - `parameter_values_for_no_solution_systems` Parameter value producing no solution
+  - `parameter_values_for_infinite_solution_systems` Parameter value producing infinitely many solutions
+  - `parameter_values_for_one_solution_systems` Parameter values producing one solution
+  - `contradiction_from_system_simplification` Contradiction after system simplification
+  - `identity_from_system_simplification` Identity after system simplification
+- **`three_variable_linear_systems_non_matrix`** Three-Variable Linear Systems Without Matrices (10)
+  - `three_variable_system_structure` Three-variable system structure
+  - `three_variable_substitution_method` Substitution in three-variable systems
+  - `three_variable_elimination_to_two_variable_system` Elimination reducing three variables to two
+  - `three_variable_elimination_pair_selection` Equation-pair selection in three-variable elimination
+  - `three_variable_back_substitution` Back-substitution in three-variable systems
+  - `three_variable_ordered_triple_completion` Ordered-triple completion
+  - `three_variable_system_one_solution` One-solution three-variable systems
+  - `three_variable_system_no_solution` No-solution three-variable systems
+  - `three_variable_system_infinite_solutions` Infinitely many solutions in three-variable systems
+  - `free_variable_in_three_variable_systems` Free variables in dependent three-variable systems
+- **`linear_inequalities_graphing`** Systems of Linear Inequalities — Graphing (7)
+  - `system_of_linear_inequalities_structure` System of linear inequalities structure
+  - `solution_to_system_of_inequalities_meaning` Solution meaning for systems of inequalities
+  - `boundary_lines_for_linear_inequalities` Boundary lines for linear inequalities
+  - `solid_boundary_lines` Solid boundary lines for inclusive inequalities
+  - `dashed_boundary_lines` Dashed boundary lines for strict inequalities
+  - `shading_above_or_below_boundary` Shading above or below the boundary line
+  - `test_point_for_inequality_shading` Test-point method for determining shading
+- **`linear_inequalities_solution_regions`** Systems of Linear Inequalities — Solution Regions (6)
+  - `overlap_region_for_systems_of_inequalities` Overlap region for systems of inequalities
+  - `bounded_feasible_regions` Bounded feasible regions
+  - `unbounded_feasible_regions` Unbounded feasible regions
+  - `vertices_of_feasible_regions` Vertices of feasible regions
+  - `systems_of_inequalities_no_solution_region` Systems of inequalities with no overlap
+  - `systems_of_inequalities_boundary_point_inclusion` Boundary-point inclusion in inequality systems
+- **`nonlinear_systems_types_and_setup`** Nonlinear Systems — Types and Setup (6)
+  - `nonlinear_system_structure` Nonlinear system structure
+  - `linear_quadratic_systems` Linear-quadratic systems
+  - `quadratic_quadratic_systems` Quadratic-quadratic systems
+  - `line_circle_systems` Line-circle systems
+  - `circle_circle_systems` Circle-circle systems
+  - `nonlinear_system_substitution` Substitution in nonlinear systems
+- **`nonlinear_systems_solution_analysis`** Nonlinear Systems — Solution Analysis (6)
+  - `nonlinear_systems_leading_to_quadratic_equations` Nonlinear systems reducing to a quadratic equation
+  - `number_of_real_solutions_nonlinear_systems` Number of real solutions in nonlinear systems
+  - `tangent_intersection_systems` Tangent intersection in nonlinear systems
+  - `nonlinear_system_solution_verification` Solution verification in nonlinear systems
+  - `extraneous_candidates_in_nonlinear_systems` Extraneous candidates in nonlinear systems
+  - `graphical_intersections_nonlinear_systems` Graphical intersections in nonlinear systems
+- **`structured_linear_system_relationships`** Structured Linear System Relationships (9)
+  - `sum_and_difference_systems` Sum-and-difference systems
+  - `total_and_part_systems` Total-and-part systems
+  - `value_and_quantity_systems` Value-and-quantity systems
+  - `rate_and_total_systems` Rate-and-total systems
+  - `mixture_systems_two_components` Two-component mixture systems
+  - `comparison_systems` Comparison systems
+  - `break_even_systems` Break-even systems
+  - `linear_systems_from_two_constraints` Linear systems from two simultaneous constraints
+  - `sys_writing_system_from_context` Writing a linear system from contextual conditions
+
+## Section: calc_ab
+
+### Limits and Continuity (`calc_unit_1`) — 12 umbrellas, 58 in-depth
+- **`limit_1_introducing_limits_and_notation`** Introducing Limits and Limit Notation (4)
+  - `limit_1_average_vs_instantaneous_rate_preview` Average vs Instantaneous Rate of Change (Preview)
+  - `limit_1_limit_notation_reading` Reading and Writing Limit Notation
+  - `limit_1_two_sided_limit_existence_condition` Two-Sided Limit Existence Condition
+  - `limit_1_one_sided_limit_interpretation` One-Sided Limit Interpretation
+- **`limit_1_estimating_from_graphs`** Estimating Limit Values from Graphs (4)
+  - `limit_1_read_two_sided_limit_from_graph` Reading a Two-Sided Limit from a Graph
+  - `limit_1_read_one_sided_limit_from_graph` Reading One-Sided Limits from a Graph
+  - `limit_1_limit_vs_function_value_at_point` Distinguishing Limit from Function Value at a Point
+  - `limit_1_infinite_behavior_from_graph` Reading Infinite Limit Behavior from a Graph
+- **`limit_1_estimating_from_tables`** Estimating Limit Values from Tables (4)
+  - `limit_1_approximate_limit_from_table` Approximating a Limit from a Numerical Table
+  - `limit_1_one_sided_limit_from_table` Reading One-Sided Limits from a Table
+  - `limit_1_recognize_divergence_from_table` Recognizing Divergence or Non-Existence from a Table
+  - `limit_1_estimate_limit_with_two_sided_table` Using a Two-Sided Table to Confirm a Limit Value
+- **`limit_1_algebraic_properties_of_limits`** Algebraic Properties of Limits (5)
+  - `limit_1_sum_difference_limit_laws` Sum and Difference Limit Laws
+  - `limit_1_product_quotient_limit_laws` Product and Quotient Limit Laws
+  - `limit_1_constant_multiple_power_limit_laws` Constant Multiple and Power Limit Laws
+  - `limit_1_direct_substitution` Direct Substitution for Continuous Functions
+  - `limit_1_composition_limit_law` Limit Law for Compositions
+- **`limit_1_algebraic_manipulation`** Algebraic Manipulation and Strategy Selection for Limits (6)
+  - `limit_1_factor_cancel_for_limit` Factoring and Canceling to Evaluate a 0/0 Limit
+  - `limit_1_rationalize_conjugate_for_limit` Rationalizing with the Conjugate to Evaluate a Limit
+  - `limit_1_common_denominator_for_complex_limit` Common Denominator Technique for Complex Fraction Limits
+  - `limit_1_recognize_indeterminate_form_00` Recognizing an Indeterminate 0/0 Form
+  - `limit_1_strategy_selection_for_limit` Selecting the Appropriate Limit Evaluation Strategy
+  - `limit_1_difference_quotient_limit` Evaluating the Difference Quotient Limit
+- **`limit_1_squeeze_theorem_and_trig_limits`** Squeeze Theorem and Special Trigonometric Limits (4)
+  - `limit_1_squeeze_theorem_statement_and_conditions` Squeeze Theorem: Statement and Conditions
+  - `limit_1_squeeze_theorem_application_trig_bounded` Applying the Squeeze Theorem to a Trigonometric Bounded Function
+  - `limit_1_special_trig_limit_sin_x_over_x` Special Trig Limit: sin(x)/x → 1 as x → 0
+  - `limit_1_special_trig_limit_one_minus_cos` Special Trig Limit: (1 − cos x)/x → 0 as x → 0
+- **`limit_1_multiple_representations`** Connecting Multiple Representations of Limits (4)
+  - `limit_1_verify_limit_across_representations` Verifying a Limit Using Multiple Representations
+  - `limit_1_translate_graph_to_analytic_limit` Translating from Graph to Analytic Limit Statement
+  - `limit_1_translate_table_to_limit_statement` Translating from a Table to a Limit Statement
+  - `limit_1_match_graph_to_limit_statement` Matching a Graph to a Set of Limit Statements
+- **`limit_1_types_of_discontinuities`** Types of Discontinuities (5)
+  - `limit_1_removable_discontinuity_identification` Identifying a Removable Discontinuity (Hole)
+  - `limit_1_jump_discontinuity_identification` Identifying a Jump Discontinuity
+  - `limit_1_infinite_discontinuity_identification` Identifying an Infinite Discontinuity (Vertical Asymptote)
+  - `limit_1_oscillating_discontinuity_recognition` Recognizing Oscillating (Non-Classifiable) Discontinuity
+  - `limit_1_classify_discontinuity_from_graph` Classifying a Discontinuity from a Graph
+- **`limit_1_continuity_definition_and_intervals`** Continuity at a Point, Over an Interval, and Removing Discontinuities (5)
+  - `limit_1_three_part_continuity_definition` Applying the Three-Part Definition of Continuity at a Point
+  - `limit_1_continuity_of_function_families` Continuity of Standard Function Families on Their Domains
+  - `limit_1_continuity_of_piecewise_functions_at_boundary` Testing Continuity of a Piecewise Function at a Boundary Point
+  - `limit_1_find_parameter_for_continuity` Finding a Parameter Value to Make a Function Continuous
+  - `limit_1_define_removable_discontinuity_value` Extending a Function to Remove a Removable Discontinuity
+- **`limit_1_infinite_limits_vertical_asymptotes`** Infinite Limits and Vertical Asymptotes (4)
+  - `limit_1_evaluate_one_sided_infinite_limit` Evaluating a One-Sided Infinite Limit
+  - `limit_1_vertical_asymptote_from_infinite_limit` Connecting Infinite Limits to Vertical Asymptotes
+  - `limit_1_sign_analysis_near_vertical_asymptote` Sign Analysis of One-Sided Infinite Limits Near an Asymptote
+  - `limit_1_infinite_limit_of_rational_function` Evaluating Infinite Limits of Rational Functions
+- **`limit_1_limits_at_infinity_horizontal_asymptotes`** Limits at Infinity and Horizontal Asymptotes (7)
+  - `limit_1_rational_infinity_numerator_lower_degree` Rational Limit at Infinity: Numerator Degree Lower (Limit = 0)
+  - `limit_1_rational_infinity_equal_degrees` Rational Limit at Infinity: Equal Degrees (Limit = Ratio of Leading Coefficients)
+  - `limit_1_rational_infinity_numerator_higher_degree` Rational Limit at Infinity: Numerator Degree Higher (Limit Unbounded)
+  - `limit_1_horizontal_asymptote_from_limit` Connecting a Finite Limit at Infinity to a Horizontal Asymptote
+  - `limit_1_limit_at_infinity_exponential` Limit at Infinity for Exponential Functions
+  - `limit_1_divide_by_highest_power_technique` Dividing by the Highest Power to Evaluate a Limit at Infinity
+  - `limit_1_limit_at_infinity_composite_or_abs` Limits at Infinity for Composite or Absolute Value Expressions
+- **`limit_1_intermediate_value_theorem`** Intermediate Value Theorem (IVT) (6)
+  - `limit_1_ivt_statement_and_conditions` Stating IVT and Verifying Its Conditions
+  - `limit_1_ivt_guarantee_root_existence` Using IVT to Guarantee a Root (Zero) of a Function
+  - `limit_1_ivt_guarantee_specific_output` Using IVT to Guarantee a Specific Output Value
+  - `limit_1_ivt_conclusion_language_and_notation` Writing a Complete IVT Justification in Correct Notation
+  - `limit_1_ivt_mc_condition_checking` Identifying When IVT Conditions Are or Are Not Satisfied (MC)
+  - `limit_1_ivt_from_table_data` Applying IVT from a Table of Function Values
+
+### Differentiation: Definition and Basic Rules (`calc_unit_2`) — 11 umbrellas, 56 in-depth
+- **`u2_average_and_instantaneous_rate`** Average and Instantaneous Rates of Change (5)
+  - `u2_aroc_formula_interval` Average Rate of Change Formula on [a, b]
+  - `u2_aroc_from_table` Average Rate of Change from a Table of Values
+  - `u2_secant_line_slope` Slope of the Secant Line and Its Geometric Meaning
+  - `u2_instantaneous_rate_as_limit` Instantaneous Rate of Change as a Limit
+  - `u2_aroc_vs_iroc_comparison` Comparing Average Rate vs Instantaneous Rate
+- **`u2_derivative_definition_limit`** Derivative as a Limit of a Difference Quotient (5)
+  - `u2_diff_quotient_setup` Setting Up the Difference Quotient f(x+h) − f(x)) / h
+  - `u2_limit_def_compute_derivative` Computing a Derivative via the Limit Definition
+  - `u2_match_limit_to_derivative` Recognizing a Limit Expression as a Derivative
+  - `u2_derivative_notation_fluency` Interchanging Derivative Notation: f'(x), dy/dx, d/dx
+  - `u2_alternate_limit_def_x_to_a` Alternate Limit Form: lim_{x→a} [f(x) − f(a)] / (x − a)
+- **`u2_estimating_derivatives`** Estimating Derivatives Numerically and Graphically (4)
+  - `u2_estimate_deriv_from_table_symmetric` Symmetric Difference Quotient for Derivative Estimation
+  - `u2_estimate_deriv_from_table_one_sided` One-Sided Difference Quotient for Derivative Estimation
+  - `u2_estimate_deriv_from_graph_tangent` Estimating f'(a) from a Graph Using Tangent Slope
+  - `u2_interpret_estimated_derivative_units` Interpreting the Units and Meaning of an Estimated Derivative
+- **`u2_differentiability_and_continuity`** Differentiability and Continuity (5)
+  - `u2_differentiability_implies_continuity` Differentiability Implies Continuity (but Not Vice Versa)
+  - `u2_corner_not_differentiable` Non-Differentiability at a Corner (One-Sided Derivatives Differ)
+  - `u2_cusp_not_differentiable` Non-Differentiability at a Cusp (Infinite One-Sided Derivatives)
+  - `u2_vertical_tangent_not_differentiable` Non-Differentiability at a Vertical Tangent
+  - `u2_discontinuity_blocks_differentiability` Discontinuity Makes f Non-Differentiable
+- **`u2_power_and_linearity_rules`** Power Rule, Constant Rule, and Linearity of Differentiation (7)
+  - `u2_power_rule_integer_exponents` Power Rule for Positive Integer Exponents
+  - `u2_power_rule_negative_exponents` Power Rule for Negative Exponents (Reciprocal Functions)
+  - `u2_power_rule_fractional_exponents` Power Rule for Fractional Exponents (Radical Functions)
+  - `u2_constant_rule` Derivative of a Constant is Zero
+  - `u2_constant_multiple_rule` Constant Multiple Rule: d/dx[c·f(x)] = c·f'(x)
+  - `u2_sum_difference_rule_polynomial` Sum and Difference Rule for Polynomials
+  - `u2_rewrite_before_power_rule` Rewriting the Expression (Radical/Rational) Before Differentiating
+- **`u2_trig_and_transcendental_basic_derivatives`** Derivatives of sin(x), cos(x), e^x, and ln(x) (5)
+  - `u2_derivative_sin_x` Derivative of sin(x): d/dx[sin x] = cos x
+  - `u2_derivative_cos_x` Derivative of cos(x): d/dx[cos x] = −sin x
+  - `u2_derivative_exp_ex` Derivative of e^x
+  - `u2_derivative_ln_x` Derivative of ln(x)
+  - `u2_combine_trig_exp_ln_with_linearity` Combining Transcendental Derivatives with Sum/Constant-Multiple Rules
+- **`u2_product_rule`** The Product Rule (5)
+  - `u2_product_rule_setup` Identifying Factors and Setting Up the Product Rule
+  - `u2_product_rule_poly_times_trig` Product Rule: Polynomial × Trigonometric Function
+  - `u2_product_rule_poly_times_exp` Product Rule: Polynomial × Exponential Function
+  - `u2_product_rule_simplification` Simplifying and Factoring the Product Rule Result
+  - `u2_product_rule_three_factors` Extended Product Rule for Three Factors
+- **`u2_quotient_rule`** The Quotient Rule (5)
+  - `u2_quotient_rule_setup_numerator_order` Quotient Rule Setup and the Numerator Sign Order
+  - `u2_quotient_rule_poly_over_poly` Quotient Rule: Polynomial over Polynomial
+  - `u2_quotient_rule_with_trig` Quotient Rule Involving Trigonometric Functions
+  - `u2_quotient_vs_negative_power` Choosing Between Quotient Rule and Negative Exponent Rewrite
+  - `u2_quotient_rule_g_squared_denominator` Handling the g² Denominator in the Quotient Rule
+- **`u2_remaining_trig_derivatives`** Derivatives of tan(x), cot(x), sec(x), and csc(x) (5)
+  - `u2_derivative_tan_sec_squared` Derivative of tan(x) = sec²(x)
+  - `u2_derivative_sec_csc` Derivatives of sec(x) and csc(x)
+  - `u2_derivative_cot_neg_csc_squared` Derivative of cot(x) = −csc²(x)
+  - `u2_derive_trig_formulas_from_quotient_rule` Deriving tan, cot, sec, csc Derivatives Using the Quotient Rule
+  - `u2_trig_derivatives_in_linear_combinations` Differentiating Linear Combinations Involving All Six Trig Derivatives
+- **`u2_tangent_line_equations`** Tangent Lines and Normal Lines (5)
+  - `u2_tangent_line_slope_from_derivative` Finding the Slope of the Tangent Line via f'(a)
+  - `u2_tangent_line_equation_point_slope` Writing the Tangent Line Equation Using Point-Slope Form
+  - `u2_normal_line_perpendicular_slope` Normal Line to a Curve (Perpendicular Slope)
+  - `u2_tangent_line_from_graph` Identifying the Tangent Line from a Graph (Slope Reading)
+  - `u2_horizontal_tangent_from_derivative` Finding Points Where the Tangent Line is Horizontal
+- **`u2_derivative_rule_selection`** Selecting and Combining Differentiation Rules (5)
+  - `u2_identify_product_vs_chain_structure` Distinguishing Product Structure from Composite Structure
+  - `u2_product_and_quotient_combined` Applying Product and Quotient Rules in a Single Expression
+  - `u2_power_product_quotient_with_transcendental` Combining Power, Product/Quotient, and Transcendental Derivatives
+  - `u2_simplify_before_differentiating` Simplifying the Expression Before Differentiating
+  - `u2_second_derivative_from_basic_rules` Computing the Second Derivative Using Basic Rules
+
+### Differentiation: Composite, Implicit, and Inverse Functions (`calc_unit_3`) — 9 umbrellas, 46 in-depth
+- **`chain_rule_fundamentals`** Chain Rule — Fundamentals (6)
+  - `chain_rule_outer_power_inner_linear` Chain Rule: Outer Power, Linear Inner Function
+  - `chain_rule_outer_power_inner_polynomial` Chain Rule: Outer Power, Polynomial Inner Function
+  - `chain_rule_with_nested_trig` Chain Rule: Composite Trigonometric Function
+  - `chain_rule_with_exponential_composite` Chain Rule: Composite Exponential e^(g(x))
+  - `chain_rule_with_log_composite` Chain Rule: Composite Natural Log ln(g(x))
+  - `chain_rule_identify_inner_outer` Chain Rule: Identifying Inner and Outer Functions
+- **`chain_rule_multiple_layers`** Chain Rule — Multiple Nested Layers (5)
+  - `chain_rule_triple_nested_power_trig` Chain Rule: Triple Nesting with Power and Trig
+  - `chain_rule_product_times_composite` Chain Rule Combined with Product Rule
+  - `chain_rule_quotient_with_composite_numerator` Chain Rule Combined with Quotient Rule
+  - `chain_rule_nested_exponential_polynomial` Chain Rule: e^(polynomial) Nested Inside Another Function
+  - `chain_rule_verify_composite_decomposition` Verify a Proposed Derivative of a Composite Is Correct
+- **`implicit_differentiation_setup`** Implicit Differentiation — Setup and dy/dx (6)
+  - `implicit_diff_polynomial_relation` Implicit Differentiation: Polynomial Relation in x and y
+  - `implicit_diff_with_product_term` Implicit Differentiation: Equation Contains an xy Product Term
+  - `implicit_diff_with_trig_terms` Implicit Differentiation: Equation Contains Trigonometric Terms in y
+  - `implicit_diff_solve_for_dy_dx` Implicit Differentiation: Algebraic Isolation of dy/dx
+  - `implicit_diff_evaluate_at_point` Implicit Differentiation: Evaluate dy/dx at a Given Point
+  - `implicit_diff_find_tangent_line` Implicit Differentiation: Equation of the Tangent Line
+- **`implicit_differentiation_advanced`** Implicit Differentiation — Advanced and Second Derivative (4)
+  - `implicit_diff_exp_log_in_y` Implicit Differentiation: Equation with Exponential or Logarithmic Terms in y
+  - `implicit_diff_verify_dy_dx_at_point` Implicit Differentiation: Verify a dy/dx Expression by Checking a Sample Point
+  - `implicit_diff_second_deriv_trig_y_product` Implicit Second Derivative: Equation with a Trig Function of y and a Product Term
+  - `implicit_diff_second_deriv_two_variable_unsimplified` Implicit Second Derivative: d²y/dx² Left Unsimplified with Two Variable Terms
+- **`inverse_function_derivative`** Differentiating Inverse Functions (4)
+  - `inverse_deriv_formula_from_table` Inverse Function Derivative from a Table of Values
+  - `inverse_deriv_formula_from_graph` Inverse Function Derivative from a Graph of f
+  - `inverse_deriv_formula_analytic` Inverse Function Derivative: Analytic Application of the Formula
+  - `inverse_deriv_condition_one_to_one` Inverse Differentiability: Checking the One-to-One Condition
+- **`inverse_trig_derivatives`** Derivatives of Inverse Trigonometric Functions (5)
+  - `arcsin_derivative_formula` Derivative of arcsin(x): Basic Formula Application
+  - `arctan_derivative_formula` Derivative of arctan(x): Basic Formula Application
+  - `arccos_derivative_formula` Derivative of arccos(x): Formula and Sign
+  - `inverse_trig_chain_rule` Inverse Trig Derivative Combined with Chain Rule
+  - `inverse_trig_derivative_from_definition` Derive the Inverse Trig Derivative Using Implicit Differentiation
+- **`selecting_differentiation_procedures`** Selecting Procedures for Calculating Derivatives (6)
+  - `strategy_chain_vs_product_recognition` Differentiation Strategy: Distinguishing Chain Rule from Product Rule
+  - `strategy_chain_inside_product` Differentiation Strategy: Chain Rule Inside a Product Rule
+  - `strategy_chain_inside_quotient` Differentiation Strategy: Chain Rule Inside a Quotient Rule
+  - `strategy_implicit_multi_rule` Differentiation Strategy: Implicit Differentiation Requiring Product and Chain Rules Simultaneously
+  - `strategy_simplify_before_differentiating` Differentiation Strategy: Simplify the Expression Before Applying Rules
+  - `strategy_logarithmic_differentiation` Logarithmic Differentiation for Variable Exponent Functions
+- **`higher_order_derivatives`** Higher-Order Derivatives (6)
+  - `second_derivative_polynomial` Second Derivative of a Polynomial Function
+  - `second_derivative_requires_chain_rule` Second Derivative of a Composite Function
+  - `second_derivative_requires_product_rule` Second Derivative of a Product Function
+  - `second_derivative_implicit` Second Derivative via Implicit Differentiation
+  - `higher_order_interpret_acceleration` Interpreting f'' as Acceleration in Particle Motion
+  - `higher_order_nth_derivative_pattern` Finding a Pattern for the nth Derivative
+- **`chain_rule_from_tables_and_graphs`** Chain Rule from Tables and Graphs (4)
+  - `chain_rule_evaluate_from_table` Chain Rule: Evaluate a Composite Derivative from a Table of Values
+  - `chain_rule_evaluate_from_graph` Chain Rule: Evaluate a Composite Derivative from a Graph
+  - `chain_rule_composite_with_implicit_at_point` Chain Rule: Evaluate Derivative of a Composite at a Specific Point
+  - `chain_rule_table_product_composite` Chain Rule: Derivative of f(x)·g(h(x)) from a Table
+
+### Contextual Applications of Differentiation (`calc_unit_4`) — 8 umbrellas, 45 in-depth
+- **`u4_derivative_meaning_and_units`** Interpreting Derivative Meaning and Units in Context (6)
+  - `u4_units_of_derivative_quotient` Deriving units of a derivative from a real-world function
+  - `u4_verbal_interpretation_of_derivative_value` Writing a verbal interpretation of a specific derivative value
+  - `u4_sign_of_derivative_in_context` Interpreting the sign of the derivative in context
+  - `u4_magnitude_of_derivative_in_context` Comparing rates of change by derivative magnitude
+  - `u4_derivative_from_table_contextual` Estimating a contextual derivative value from a table
+  - `u4_second_derivative_meaning_in_context` Interpreting f''(a) meaning in context
+- **`u4_position_velocity_acceleration`** Connecting Position, Velocity, and Acceleration (6)
+  - `u4_velocity_from_position_derivative` Computing velocity by differentiating position
+  - `u4_acceleration_from_velocity_derivative` Computing acceleration by differentiating velocity
+  - `u4_direction_of_motion` Determining direction of motion from the sign of velocity
+  - `u4_speed_vs_velocity` Distinguishing speed (|v(t)|) from velocity
+  - `u4_speeding_up_slowing_down` Determining whether a particle is speeding up or slowing down
+  - `u4_change_in_direction_from_v_sign_change` Identifying when a particle changes direction
+- **`u4_rates_in_applied_contexts`** Rates of Change in Non-Motion Applied Contexts (6)
+  - `u4_population_rate_interpretation` Interpreting a population growth/decline rate
+  - `u4_temperature_rate_interpretation` Interpreting a temperature rate of change
+  - `u4_volume_flow_rate_interpretation` Interpreting a volume or flow rate
+  - `u4_difference_quotient_from_table` Estimating an instantaneous rate using a difference quotient from tabular data
+  - `u4_average_vs_instantaneous_rate_in_context` Distinguishing average rate from instantaneous rate in context
+  - `u4_rate_in_context_from_graph` Reading an instantaneous rate from a graph
+- **`u4_related_rates_setup`** Setting Up Related-Rates Equations (5)
+  - `u4_identify_related_quantities` Identifying the related quantities and their rates in a problem
+  - `u4_write_geometric_equation_for_related_rates` Writing the static geometric equation that relates the variables
+  - `u4_implicit_differentiation_wrt_time` Differentiating a multi-variable equation implicitly with respect to t
+  - `u4_substitute_and_solve_related_rate` Substituting known values and solving for the unknown rate
+  - `u4_state_related_rate_answer_in_context` Stating the related-rate answer with correct units and contextual meaning
+- **`u4_related_rates_geometry_scenarios`** Related Rates: Specific Geometric Setups (6)
+  - `u4_rr_right_triangle_pythagorean` Related rates via Pythagorean theorem (ladder/distance problem)
+  - `u4_rr_circle_area_circumference` Related rates for a circle (area and radius rates)
+  - `u4_rr_cone_or_cylinder_volume` Related rates for a cone or cylinder (volume and height/radius rates)
+  - `u4_rr_sphere_volume_surface` Related rates for a sphere (volume or surface area)
+  - `u4_rr_similar_triangles_constraint` Using a similar-triangle constraint to reduce related-rates variables
+  - `u4_rr_shadow_or_angle_problem` Related rates via trigonometric or shadow relationship
+- **`u4_linearization`** Local Linearity and Tangent-Line Approximation (5)
+  - `u4_tangent_line_equation_at_point` Writing the equation of the tangent line at a given point
+  - `u4_linearization_formula_evaluation` Evaluating L(x) to approximate a function value
+  - `u4_overestimate_underestimate_from_concavity` Determining overestimate vs underestimate using concavity
+  - `u4_local_linearity_concept` Explaining local linearity as the reason linearization works
+  - `u4_differentials_and_error_estimation` Using differentials df = f'(x) dx to estimate change
+- **`u4_lhopital_rule`** L'Hôpital's Rule for Indeterminate Forms (6)
+  - `u4_identify_indeterminate_form_zero_zero` Recognizing a 0/0 indeterminate limit form
+  - `u4_identify_indeterminate_form_inf_inf` Recognizing an ∞/∞ indeterminate limit form
+  - `u4_lhopital_single_application` Applying L'Hôpital's Rule once to evaluate a limit
+  - `u4_lhopital_repeated_application` Applying L'Hôpital's Rule twice when the result remains indeterminate
+  - `u4_lhopital_not_applicable_check` Verifying L'Hôpital's Rule does not apply when the form is determinate
+  - `u4_lhopital_with_chain_rule_in_derivative` Executing L'Hôpital when differentiating numerator or denominator requires the chain rule
+- **`u4_particle_motion_analysis`** Particle Motion: Interval Analysis and Derivative-Based Skills (5)
+  - `u4_particle_at_rest_from_velocity` Finding when a particle is at rest by solving v(t) = 0
+  - `u4_acceleration_zero_from_polynomial_position` Finding all times when acceleration equals zero from a polynomial position function
+  - `u4_motion_on_interval_description` Describing all motion events on a specified time interval
+  - `u4_maximum_speed_from_sign_analysis` Determining maximum speed on an interval via v(t) and a(t) sign analysis
+  - `u4_displacement_vs_total_distance_distinction` Distinguishing displacement (signed) from total distance (unsigned)
+
+### Analytical Applications of Differentiation (`calc_unit_5`) — 10 umbrellas, 49 in-depth
+- **`u5_mean_value_theorem`** Mean Value Theorem (5)
+  - `u5_mvt_hypothesis_check` MVT Hypothesis Verification
+  - `u5_mvt_guarantee_c_value` MVT Existence Guarantee
+  - `u5_mvt_average_rate_calculation` Average Rate of Change for MVT Setup
+  - `u5_rolle_theorem_special_case` Rolle's Theorem as Special Case of MVT
+  - `u5_mvt_contextual_interpretation` MVT Interpretation in Context
+- **`u5_extreme_value_theorem_and_critical_points`** Extreme Value Theorem, Global vs. Local Extrema, and Critical Points (4)
+  - `u5_evt_hypothesis_and_guarantee` EVT Hypothesis and Guarantee
+  - `u5_critical_point_from_derivative_zero` Critical Points Where f' = 0
+  - `u5_critical_point_where_derivative_undefined` Critical Points Where f' Is Undefined
+  - `u5_local_vs_global_extrema_distinction` Local vs. Global Extrema Distinction
+- **`u5_increasing_decreasing_intervals`** Increasing and Decreasing Intervals via f' (4)
+  - `u5_sign_chart_of_f_prime` Sign Chart Construction for f'
+  - `u5_interval_of_increase_from_sign_chart` Reading Increasing Intervals from f' Sign Chart
+  - `u5_interval_of_decrease_from_sign_chart` Reading Decreasing Intervals from f' Sign Chart
+  - `u5_increasing_decreasing_from_f_prime_graph` Increasing/Decreasing from a Graph of f'
+- **`u5_first_derivative_test`** First Derivative Test for Relative Extrema (5)
+  - `u5_fdt_pos_to_neg_relative_max` f' Changes + to − Implies Relative Maximum
+  - `u5_fdt_neg_to_pos_relative_min` f' Changes − to + Implies Relative Minimum
+  - `u5_fdt_no_sign_change_neither` No Sign Change of f' — Neither Extremum
+  - `u5_fdt_applied_to_f_prime_graph` First Derivative Test Applied to a Graph of f'
+  - `u5_fdt_justify_written_statement` FDT Justification in Written Form
+- **`u5_candidates_test_absolute_extrema`** Candidates Test for Absolute Extrema on a Closed Interval (4)
+  - `u5_candidates_test_procedure` Full Candidates Test Procedure
+  - `u5_endpoint_evaluation_closed_interval` Endpoint Evaluation in Closed-Interval Analysis
+  - `u5_absolute_vs_relative_extrema_comparison` Distinguishing Absolute from Relative Extrema
+  - `u5_closed_interval_analysis_piecewise` Closed-Interval Analysis on a Piecewise-Defined Function
+- **`u5_concavity_and_inflection_points`** Concavity and Inflection Points via f'' (6)
+  - `u5_sign_chart_of_f_double_prime` Sign Chart of f'' for Concavity
+  - `u5_concave_up_interval_identification` Identifying Concave-Up Intervals
+  - `u5_concave_down_interval_identification` Identifying Concave-Down Intervals
+  - `u5_inflection_point_sign_change_condition` Inflection Point Requires f'' Sign Change
+  - `u5_inflection_point_from_f_prime_graph` Inflection Points from a Graph of f'
+  - `u5_concavity_and_over_under_estimate` Concavity Determines Over/Under-Estimate of Linearization
+- **`u5_second_derivative_test`** Second Derivative Test for Relative Extrema (4)
+  - `u5_sdt_negative_second_derivative_max` f''(c) < 0 at Critical Point Implies Relative Maximum
+  - `u5_sdt_positive_second_derivative_min` f''(c) > 0 at Critical Point Implies Relative Minimum
+  - `u5_sdt_inconclusive_when_zero` SDT Is Inconclusive When f''(c) = 0
+  - `u5_sdt_vs_fdt_selection` Choosing Between SDT and FDT
+- **`u5_graphical_analysis_f_fprime_fdoubleprime`** Connecting Graphs of f, f', and f'' (6)
+  - `u5_infer_f_properties_from_f_prime_graph` Infer f Properties from a Graph of f'
+  - `u5_infer_f_prime_properties_from_f_graph` Infer f' Properties from a Graph of f
+  - `u5_sketch_f_from_f_prime_info` Sketch f from Derivative Information
+  - `u5_match_graph_of_f_to_graph_of_f_prime` Match a Graph of f to Its Derivative Graph
+  - `u5_concavity_and_inflection_from_f_prime_graph` Concavity and Inflection Points from a Graph of f'
+  - `u5_simultaneous_f_fprime_fdoubleprime_synthesis` Simultaneous Synthesis of f, f', and f''
+- **`u5_optimization`** Optimization Problems (6)
+  - `u5_optimization_objective_function_setup` Setting Up the Objective Function
+  - `u5_optimization_constraint_substitution` Constraint Substitution to Reduce Variables
+  - `u5_optimization_domain_identification` Identifying the Feasible Domain
+  - `u5_optimization_critical_point_and_verify` Finding and Verifying the Optimal Critical Point
+  - `u5_optimization_geometric_setup` Geometric Optimization Setup
+  - `u5_optimization_answer_in_context` Stating the Optimization Answer in Context
+- **`u5_implicit_curve_analysis`** Behaviors of Implicit Relations (5)
+  - `u5_implicit_horizontal_tangent_condition` Horizontal Tangent on an Implicit Curve
+  - `u5_implicit_vertical_tangent_condition` Vertical Tangent on an Implicit Curve
+  - `u5_implicit_second_derivative_concavity` Concavity of an Implicit Curve via d²y/dx²
+  - `u5_implicit_curve_sketch_from_tangent_info` Sketching Local Behavior of an Implicit Curve
+  - `u5_implicit_curve_point_substitution_check` Verifying a Point Lies on an Implicit Curve
+
+### Integration and Accumulation of Change (`calc_unit_6`) — 11 umbrellas, 51 in-depth
+- **`u6_accumulation_concept`** Accumulation of Change and Signed Area (4)
+  - `u6_net_change_as_integral` Net Change as a Definite Integral
+  - `u6_signed_area_interpretation` Signed Area and Negative Contributions
+  - `u6_definite_vs_indefinite_distinction` Distinguishing a Definite Integral (Number) from an Indefinite Integral (Family of Functions)
+  - `u6_accumulation_from_area_below_axis` Distinguishing Area from Accumulation When f Is Negative
+- **`u6_riemann_sums`** Riemann Sum Approximations (5)
+  - `u6_left_right_riemann_sum` Left and Right Riemann Sum from a Table
+  - `u6_midpoint_riemann_sum` Midpoint Riemann Sum
+  - `u6_trapezoidal_sum` Trapezoidal Approximation
+  - `u6_riemann_over_under_estimate` Over- and Under-Estimate Analysis for Riemann Sums
+  - `u6_nonuniform_subintervals` Riemann Sums with Unequal Subintervals
+- **`u6_integral_notation`** Riemann Sums, Summation Notation, and Integral Notation (4)
+  - `u6_riemann_sum_to_integral_connection` Connecting Riemann Sum Notation to Integral Notation
+  - `u6_integral_notation_fluency` Reading and Writing Integral Notation
+  - `u6_write_integral_expression_in_context` Writing a Definite Integral Expression for a Described Quantity
+  - `u6_summation_sigma_notation` Summation (Σ) Notation for Riemann Sums
+- **`u6_ftc_part1`** FTC Part 1: Accumulation Functions and Their Derivatives (4)
+  - `u6_ftc1_basic_derivative` FTC Part 1: d/dx of ∫ₐˣ f(t) dt
+  - `u6_ftc1_basic_with_initial_condition` FTC Part 1: Basic Case (Constant Lower Limit, Upper Limit = x) with and without an Initial Condition
+  - `u6_ftc1_variable_lower_limit` FTC Part 1 with Variable Lower Limit
+  - `u6_ftc1_second_derivative_of_accumulation` Second Derivative of an Accumulation Function
+- **`u6_accumulation_function_behavior`** Behavior of Accumulation Functions from a Graph of f (5)
+  - `u6_accum_increasing_decreasing` Determining Where F Is Increasing or Decreasing from the Graph of f
+  - `u6_accum_horizontal_tangent_at_zero` Identifying Horizontal Tangents of F Where f(c) = 0
+  - `u6_accum_sketch_F_from_f` Sketching a Rough Graph of F Given the Graph of f (Without Computing Exact Areas)
+  - `u6_accum_compare_F_values_sign_of_integral` Comparing F(b) to F(a) Using the Sign of ∫f Without Numeric Evaluation
+  - `u6_accum_sign_of_F_on_interval` Identifying Where F Is Positive, Negative, or Zero from the Graph of f
+- **`u6_integral_properties`** Properties of Definite Integrals (5)
+  - `u6_integral_linearity` Linearity of the Definite Integral (Constant Multiple and Sum)
+  - `u6_interval_additivity` Splitting and Combining Intervals (Interval Additivity)
+  - `u6_reversing_bounds` Reversing the Limits of Integration
+  - `u6_zero_width_integral` Integral Over a Zero-Width Interval
+  - `u6_integral_properties_from_graph` Evaluating Integrals Using Properties and a Graph
+- **`u6_ftc_part2`** FTC Part 2: Evaluating Definite Integrals with Antiderivatives (4)
+  - `u6_ftc2_apply_evaluation_rule` Applying the FTC Evaluation Rule F(b) − F(a)
+  - `u6_ftc2_with_trig_exponential` FTC Part 2 Applied to Trig and Exponential Integrands
+  - `u6_ftc2_with_usub_before_evaluation` FTC Part 2 When U-Substitution Is Required Before Evaluating with Bounds
+  - `u6_ftc2_polynomial_definite` FTC Part 2 Applied to Polynomial Integrands
+- **`u6_basic_antiderivatives`** Finding Antiderivatives and Basic Indefinite Integral Rules (6)
+  - `u6_reverse_power_rule` Reverse Power Rule for Antiderivatives
+  - `u6_antiderivative_of_trig` Antiderivatives of sin(x) and cos(x)
+  - `u6_antiderivative_of_exponential` Antiderivative of e^x and Exponential Functions
+  - `u6_antiderivative_of_reciprocal` Antiderivative of 1/x
+  - `u6_antiderivative_linearity` Constant Multiple and Sum/Difference Rules for Antiderivatives
+  - `u6_constant_of_integration` Including and Interpreting the Constant of Integration +C
+- **`u6_u_substitution`** Integration by U-Substitution (6)
+  - `u6_usub_recognize_pattern` Recognizing When U-Substitution Applies
+  - `u6_usub_compute_du` Computing du and Rewriting the Integral in Terms of u
+  - `u6_usub_indefinite_evaluate` Completing an Indefinite U-Substitution and Back-Substituting
+  - `u6_usub_definite_change_bounds` U-Substitution in a Definite Integral — Changing Limits
+  - `u6_usub_with_trig` U-Substitution with Trigonometric Integrands
+  - `u6_usub_adjust_constant` Adjusting a Constant Factor to Complete U-Substitution
+- **`u6_algebraic_rewriting_for_integration`** Algebraic Rewriting for Integration: Long Division and Completing the Square (4)
+  - `u6_long_division_before_integration` Polynomial Long Division to Prepare an Integral
+  - `u6_completing_square_integration` Completing the Square in a Denominator to Enable Integration
+  - `u6_recognize_integrand_requires_rewriting` Identifying When an Integrand Requires Algebraic Rewriting
+  - `u6_integrate_rational_log_form` Integrating Rational Expressions That Yield ln|x|
+- **`u6_antidifferentiation_strategy`** Selecting Techniques for Antidifferentiation (4)
+  - `u6_strategy_direct_vs_usub` Choosing Between Direct Antiderivative and U-Substitution
+  - `u6_strategy_identify_composite_integrand` Identifying a Composite Structure That Triggers U-Substitution
+  - `u6_strategy_algebraic_manipulation_first` Recognizing When Algebraic Manipulation Must Precede Integration
+  - `u6_strategy_multi_step_integration` Executing a Multi-Step Integration Plan
+
+### Differential Equations (`calc_unit_7`) — 10 umbrellas, 51 in-depth
+- **`de_modeling_setup`** Modeling with Differential Equations (5)
+  - `de_translate_rate_description` Translate a verbal rate statement into a DE
+  - `de_identify_dependent_independent_variable` Identify dependent and independent variables in a DE
+  - `de_interpret_solution_in_context` Interpret what a solution function represents
+  - `de_write_from_proportionality_statement` Write a DE from a proportionality statement
+  - `de_check_whether_function_is_solution` Check that a specific function satisfies a DE by substitution
+- **`de_solution_verification`** Verifying Solutions to Differential Equations (4)
+  - `de_verify_by_differentiation_and_substitution` Verify a solution by differentiating and substituting into the DE
+  - `de_verify_with_chain_rule_factor` Verify a composite or exponential solution requiring chain rule
+  - `de_verify_initial_condition_satisfaction` Verify that a particular solution satisfies an initial condition
+  - `de_identify_which_function_satisfies_de` Select which candidate function satisfies a given DE
+- **`slope_field_construction`** Sketching Slope Fields (5)
+  - `de_evaluate_slope_at_grid_point` Evaluate dy/dx at a specific (x, y) point to find the segment slope
+  - `de_draw_slope_field_segments` Draw short tangent segments at multiple grid points to produce a slope field
+  - `de_identify_horizontal_and_vertical_segments` Identify where slope field segments are horizontal or vertical (undefined)
+  - `de_sketch_solution_curve_through_point` Sketch a solution curve through a given point following the slope field
+  - `de_describe_solution_behavior_from_field` Describe long-run or local solution behavior by reading the slope field
+- **`slope_field_reasoning`** Reasoning Using Slope Fields (5)
+  - `de_match_de_to_slope_field` Match a differential equation to its slope field
+  - `de_identify_equilibrium_solution` Identify constant (equilibrium) solutions from a slope field or DE
+  - `de_determine_stability_of_equilibrium` Determine whether an equilibrium is stable or unstable from slope patterns
+  - `de_infer_concavity_from_slope_field` Infer concavity of solution curves from the slope field
+  - `de_use_slope_field_to_bound_solution` Use slope field to argue whether a function value is over- or under-estimated
+- **`eulers_method`** Euler's Method (4)
+  - `euler_method_single_step` Compute one Euler step from a given dy/dx and step size
+  - `euler_method_multi_step_table` Complete a multi-step Euler's Method table for a given IVP
+  - `euler_method_overestimate_underestimate` Determine whether an Euler approximation is an over- or underestimate using concavity
+  - `euler_method_connection_to_slope_field` Connect Euler's Method steps to following the slope field
+- **`separation_of_variables_general`** General Solutions via Separation of Variables (6)
+  - `de_recognize_separable_form` Recognize whether a differential equation is separable
+  - `de_algebraic_separation_step` Rewrite a separable DE with dy and dx on opposite sides
+  - `de_integrate_both_sides` Integrate both sides after separation to obtain the general solution
+  - `de_solve_for_y_explicit_form` Solve for y explicitly after integration to express the general solution
+  - `de_include_absolute_value_and_sign_in_general_solution` Handle absolute value and ± correctly when integrating 1/y
+  - `de_write_general_solution_with_arbitrary_constant` Express the general solution with an arbitrary constant C and state its meaning
+- **`particular_solution_initial_conditions`** Particular Solutions via Initial Conditions (6)
+  - `de_substitute_initial_condition_to_find_c` Substitute the initial condition into the general solution to solve for C
+  - `de_write_particular_solution_with_c_substituted` Write the explicit particular solution after determining C
+  - `de_state_domain_of_particular_solution` State the domain restriction of a particular solution when relevant
+  - `de_distinguish_general_from_particular_solution` Distinguish a general solution (family) from a particular solution (one curve)
+  - `de_apply_ic_to_implicit_solution` Apply an initial condition to an implicitly defined general solution
+  - `de_verify_particular_solution_satisfies_both_de_and_ic` Verify a particular solution satisfies both the DE and the initial condition
+- **`exponential_growth_decay_model`** Exponential Growth and Decay Models (7)
+  - `de_solve_dy_dt_equals_ky` Solve dy/dt = ky by separation of variables to get y = Ce^(kt)
+  - `de_identify_growth_vs_decay_from_k` Identify exponential growth vs decay from the sign of k
+  - `de_determine_initial_value_from_c` Determine the initial value C from y(0) = y₀
+  - `de_find_growth_constant_from_two_data_points` Find the growth constant k from two given data points
+  - `de_interpret_k_in_context` Interpret the meaning and units of the growth/decay constant k
+  - `de_evaluate_exponential_model_at_given_time` Evaluate the exponential model y = Ce^(kt) at a specific time
+  - `de_connect_exponential_de_to_proportional_growth` Connect the DE dy/dt = ky to the concept of proportional growth rate
+- **`de_initial_value_problem_full_procedure`** Initial Value Problem — Full Procedure (5)
+  - `de_identify_ivp_and_plan_procedure` Identify an initial value problem and plan the separation-of-variables procedure
+  - `de_separation_with_composite_integrand` Separate variables when the integrand requires u-substitution or partial fractions
+  - `de_restricted_domain_particular_solution` Recognize when a particular solution requires a restricted domain due to ln|y|
+  - `de_recover_sign_from_absolute_value` Recover the correct ± sign when exponentiating |y| = e^{F(x)+C} to explicit y form
+  - `de_separate_de_with_explicit_constant_k` Apply separation of variables to dy/dx = k·y·h(x) with a given numeric constant k
+- **`de_notation_and_vocabulary`** Differential Equation Notation and Vocabulary (4)
+  - `de_read_and_write_de_notation` Read and write differential equation notation (dy/dx, dy/dt, y')
+  - `de_define_general_solution_vocabulary` Define and use terms: general solution, particular solution, initial condition
+  - `de_identify_order_of_de` Identify the order of a differential equation
+  - `de_distinguish_separable_from_non_separable` Distinguish separable DEs from non-separable DEs
+
+### Applications of Integration (`calc_unit_8`) — 11 umbrellas, 51 in-depth
+- **`u8_average_value`** Average Value of a Function (5)
+  - `u8_avg_value_formula_setup` Setting Up the Average-Value Integral
+  - `u8_avg_value_formula_evaluate` Evaluating the Average-Value Integral
+  - `u8_avg_value_contextual_interpretation` Interpreting Average Value in Context
+  - `u8_avg_value_from_table_or_graph` Estimating Average Value from a Table or Graph
+  - `u8_avg_value_vs_mean_value_theorem` Connecting Average Value to the Mean Value Theorem for Integrals
+- **`u8_particle_motion_integrals`** Particle Motion via Integration (6)
+  - `u8_pm_displacement_from_velocity_integral` Net Displacement as a Definite Integral of Velocity
+  - `u8_pm_total_distance_split_at_zeros` Total Distance Traveled by Splitting at Sign Changes of v(t)
+  - `u8_pm_position_from_initial_condition` Finding Position at Time t Given s(t_0)
+  - `u8_pm_velocity_from_acceleration_integral` Recovering Velocity from Acceleration by Integration
+  - `u8_pm_net_displacement_signed_integral_sign_change` Net Displacement via ∫v(t)dt When v(t) Changes Sign
+  - `u8_pm_motion_from_graphical_v` Reading Total Distance and Displacement from a Graph of v(t)
+- **`u8_accumulation_in_context`** Accumulation Functions and Definite Integrals in Applied Contexts (5)
+  - `u8_accum_net_change_from_rate_integral` Net Change as integral_a^b rate(t) dt
+  - `u8_accum_units_and_context_interpretation` Interpreting the Integral in Applied Context with Units
+  - `u8_accum_flow_in_flow_out` Net Accumulation with Competing Rate Functions (Flow-In / Flow-Out)
+  - `u8_accum_total_quantity_at_time_t` Finding Total Quantity at Time t from an Initial Value
+  - `u8_accum_piecewise_linear_graph_trapezoids` Net Accumulation from a Piecewise-Linear Rate Graph Using Trapezoids
+- **`u8_area_between_curves_x`** Area Between Curves as Functions of x (5)
+  - `u8_area_x_intersection_points` Finding Intersection Points to Determine Limits of Integration
+  - `u8_area_x_top_minus_bottom_setup` Setting Up the 'Top Minus Bottom' Area Integral
+  - `u8_area_x_evaluation_and_simplification` Evaluating the Area Integral and Simplifying
+  - `u8_area_x_split_at_multiple_intersections` Splitting the Area Integral at Additional Intersection Points
+  - `u8_area_x_calculator_numeric_eval` Computing Area Numerically with a Calculator
+- **`u8_area_between_curves_y`** Area Between Curves as Functions of y (4)
+  - `u8_area_y_express_as_function_of_y` Re-expressing Boundary Curves as Functions of y
+  - `u8_area_y_right_minus_left_setup` Setting Up the 'Right Minus Left' Integral in y
+  - `u8_area_y_find_y_bounds` Finding y-Limits of Integration from Intersection Points
+  - `u8_area_y_evaluate_y_integral` Evaluating the Area Integral with Respect to y
+- **`u8_cross_section_volumes`** Volumes with Known Cross Sections (5)
+  - `u8_cs_square_cross_section_setup` Setting Up Volume Integral with Square Cross Sections
+  - `u8_cs_rectangle_cross_section_with_given_ratio` Rectangular Cross Sections with a Prescribed Height-to-Base Ratio
+  - `u8_cs_equilateral_triangle_cross_section` Volume with Equilateral-Triangle Cross Sections
+  - `u8_cs_semicircle_cross_section` Volume with Semicircular Cross Sections
+  - `u8_cs_volume_integral_evaluation` Evaluating the Cross-Section Volume Integral
+- **`u8_disc_method`** Volume by Disc Method (4)
+  - `u8_disc_setup_x_axis` Disc Method Integral Setup Around the x-Axis
+  - `u8_disc_setup_y_axis` Disc Method Integral Setup Around the y-Axis
+  - `u8_disc_offset_horizontal_axis` Disc Method Around a Horizontal Axis y = k (Non-Standard)
+  - `u8_disc_evaluate_and_simplify` Evaluating the Disc Volume Integral
+- **`u8_washer_method`** Volume by Washer Method (5)
+  - `u8_washer_identify_outer_inner_radii` Identifying Outer Radius R and Inner Radius r from the Region Geometry
+  - `u8_washer_setup_standard_axis` Washer Method Integral Setup Around x- or y-Axis
+  - `u8_washer_offset_axis_radius_adjustment` Adjusting Radii for Revolution Around a Non-Standard Axis
+  - `u8_washer_setup_vs_disc_distinguish` Recognizing When to Use Washer vs Disc Method
+  - `u8_washer_evaluate_volume_integral` Evaluating the Washer Volume Integral
+- **`u8_arc_length`** Arc Length of a Smooth Curve (4)
+  - `u8_arc_length_formula_setup` Setting Up the Arc Length Integral
+  - `u8_arc_length_derivative_computation` Computing f'(x) for the Arc Length Integrand
+  - `u8_arc_length_numeric_evaluation` Evaluating the Arc Length Integral Numerically
+  - `u8_arc_length_distance_interpretation` Interpreting Arc Length as Total Distance Traveled
+- **`u8_ftc_and_accumulation_functions`** FTC Applied to Accumulation in Unit 8 Contexts (4)
+  - `u8_ftc_compare_F_values_using_areas` Comparing F Values at Different Points Using Area
+  - `u8_ftc_rate_formula_plus_graph_hybrid` Accumulation When the Rate Is a Formula on One Sub-interval and a Graph on Another
+  - `u8_ftc_accumulation_with_initial_value_and_units` Applying FTC Part 2 to Find Total Quantity with Initial Value and Units in Context
+  - `u8_ftc_net_vs_total_via_signed_integral` Using FTC to Distinguish Net Change from Total Change in Context
+- **`u8_integral_setup_and_expression_writing`** Writing and Interpreting Integral Expressions in Context (4)
+  - `u8_expr_write_area_integral` Writing an Integral Expression for Area from a Description
+  - `u8_expr_write_volume_integral` Writing an Integral Expression for Volume from a Description
+  - `u8_expr_interpret_given_integral` Interpreting What a Given Integral Expression Represents
+  - `u8_expr_select_correct_integral_from_choices` Selecting the Correct Integral Expression from Multiple Choices
+
+## Section: ap_precalc
+
+### Exponential and Logarithmic Functions (`exponential_and_logarithmic_functions`) — 14 umbrellas, 74 in-depth
+- **`exp_log_arithmetic_geometric_sequences`** Arithmetic and Geometric Sequences (4)
+  - `exp_log_arithmetic_sequence_common_difference` Arithmetic Sequence Common Difference
+  - `exp_log_geometric_sequence_common_ratio` Geometric Sequence Common Ratio
+  - `exp_log_sequence_type_classification_from_table` Classifying Sequence Type from a Table
+  - `exp_log_sequence_to_function_connection` Connecting Sequences to Function Families
+- **`exp_log_linear_vs_exponential_change`** Linear vs. Exponential Change (5)
+  - `exp_log_constant_additive_change_linear` Constant Additive Change in Linear Functions
+  - `exp_log_constant_proportional_change_exponential` Constant Proportional Change in Exponential Functions
+  - `exp_log_linear_exponential_discrimination_from_table` Discriminating Linear vs. Exponential from a Table
+  - `exp_log_eventual_dominance_of_exponential` Long-Run Dominance of Exponential Growth over Linear
+  - `exp_log_percent_change_interpretation` Percent Change as the Unit Rate of Exponential Growth/Decay
+- **`exp_log_exponential_functions`** Exponential Functions (7)
+  - `exp_log_exponential_function_initial_value_and_base` Initial Value and Base of an Exponential Function
+  - `exp_log_exponential_domain_and_range` Domain and Range of Exponential Functions
+  - `exp_log_horizontal_asymptote_exponential` Horizontal Asymptote of an Exponential Function
+  - `exp_log_exponential_end_behavior` End Behavior of Exponential Functions
+  - `exp_log_exponential_function_evaluation` Evaluating Exponential Functions at Given Inputs
+  - `exp_log_natural_base_e_definition` The Natural Base e and Recognizing f(x) = ae^(rx)
+  - `exp_log_continuous_growth_rate_r` Interpreting r as the Continuous Growth/Decay Rate
+- **`exp_log_exponential_manipulation`** Exponential Function Manipulation (5)
+  - `exp_log_rewrite_with_exponent_laws` Rewriting Exponential Expressions Using Exponent Laws
+  - `exp_log_rational_exponent_to_radical_form` Connecting Rational Exponents to Radical Form
+  - `exp_log_change_of_base_rewrite` Change of Base for Equivalent Exponential Representations
+  - `exp_log_single_base_product_quotient` Combining Exponential Expressions with the Same Base
+  - `exp_log_negative_and_zero_exponent_in_exponential` Negative and Zero Exponents in Exponential Expressions
+- **`exp_log_exponential_modeling`** Exponential Context and Data Modeling (6)
+  - `exp_log_model_from_two_points` Building an Exponential Model from Two Data Points
+  - `exp_log_interpret_parameters_in_context` Interpreting Exponential Parameters in Context
+  - `exp_log_regression_model_technology` Exponential Regression Using Technology
+  - `exp_log_residual_and_model_validation` Residuals and Model Validation
+  - `exp_log_model_assumptions_and_limitations` Stating Assumptions and Limitations of an Exponential Model
+  - `exp_log_model_application_prediction` Applying an Exponential Model to Make Predictions
+- **`exp_log_composition_of_functions`** Composition of Functions (5)
+  - `exp_log_composition_evaluate_at_value` Evaluating a Composition at a Specific Input
+  - `exp_log_composition_symbolic_formula` Finding the Symbolic Formula for a Composition
+  - `exp_log_composition_decomposition` Decomposing a Function into a Composition
+  - `exp_log_composition_domain` Domain of a Composed Function
+  - `exp_log_composition_from_table_or_graph` Evaluating Compositions from Tables or Graphs
+- **`exp_log_inverse_functions`** Inverse Functions (6)
+  - `exp_log_inverse_input_output_swap` Inverse Function Input-Output Pair Reversal
+  - `exp_log_inverse_formula_derivation` Deriving the Inverse Function Formula Algebraically
+  - `exp_log_domain_restriction_for_invertibility` Restricting the Domain of an Exponential or Logarithmic Function to Create an Invertible Function
+  - `exp_log_inverse_graphical_reflection` Graphical Relationship Between f and f⁻¹
+  - `exp_log_inverse_composition_verification` Verifying an Inverse Using Composition
+  - `exp_log_inverse_domain_and_range_swap` Domain and Range of an Inverse Function
+- **`exp_log_logarithmic_expressions`** Logarithmic Expressions (5)
+  - `exp_log_log_as_exponent_question` Reading log_b(x) as an Exponent Question
+  - `exp_log_evaluate_common_log` Evaluating Common Logarithms (Base 10)
+  - `exp_log_evaluate_natural_log` Evaluating Natural Logarithms (ln)
+  - `exp_log_exact_log_values_special` Exact Logarithm Values at Integer and Unit-Fraction Powers
+  - `exp_log_exponential_to_log_form_conversion` Converting Between Exponential and Logarithmic Form
+- **`exp_log_inverses_of_exponential_functions`** Inverses of Exponential Functions (4)
+  - `exp_log_log_undoes_exponential` Logarithm as the Undoing Operation for an Exponential
+  - `exp_log_exp_log_graph_reflection` Graphical Inverse Relationship of b^x and log_b(x)
+  - `exp_log_inverses_domain_range_connection` Domain and Range Swap for exp/log Inverse Pair
+  - `exp_log_applying_inverse_to_isolate_exponent` Applying log_b to Both Sides to Isolate an Exponent
+- **`exp_log_logarithmic_functions`** Logarithmic Functions (6)
+  - `exp_log_log_function_domain_restriction` Domain Restriction of a Logarithmic Function
+  - `exp_log_log_vertical_asymptote` Vertical Asymptote of a Logarithmic Function
+  - `exp_log_log_increasing_decreasing_from_base` Increasing vs. Decreasing Behavior of log_b Based on Base
+  - `exp_log_log_end_behavior` End Behavior of Logarithmic Functions
+  - `exp_log_log_key_points_and_intercept` Key Points and x-Intercept of a Logarithmic Function
+  - `exp_log_log_horizontal_shift_asymptote` How a Horizontal Shift Moves the Vertical Asymptote of log_b(x - h)
+- **`exp_log_logarithmic_manipulation`** Logarithmic Function Manipulation (6)
+  - `exp_log_product_rule_logs` Product Rule for Logarithms
+  - `exp_log_quotient_rule_logs` Quotient Rule for Logarithms
+  - `exp_log_power_rule_logs` Power Rule for Logarithms
+  - `exp_log_condensing_log_expressions` Condensing a Sum/Difference of Logs to a Single Log
+  - `exp_log_change_of_base_formula` Change of Base Formula for Logarithms
+  - `exp_log_expanding_log_expressions` Expanding a Single Logarithm Using Log Rules
+- **`exp_log_exponential_and_log_equations`** Exponential and Logarithmic Equations and Inequalities (7)
+  - `exp_log_solve_exponential_equation_by_log` Solving an Exponential Equation by Applying a Logarithm
+  - `exp_log_solve_exponential_same_base` Solving Exponential Equations by Matching Bases
+  - `exp_log_solve_log_equation_exponential_form` Solving a Logarithmic Equation by Converting to Exponential Form
+  - `exp_log_extraneous_solutions_log_equations` Identifying Extraneous Solutions in Logarithmic Equations
+  - `exp_log_solve_log_equation_multiple_terms` Solving a Logarithmic Equation with Multiple Log Terms
+  - `exp_log_solve_exponential_inequality` Solving Exponential and Logarithmic Inequalities
+  - `exp_log_solve_quadratic_form_exponential` Solving Quadratic-Form Exponential Equations
+- **`exp_log_logarithmic_modeling`** Logarithmic Function Context and Data Modeling (4)
+  - `exp_log_log_model_from_data` Building a Logarithmic Model from a Data Table
+  - `exp_log_log_model_parameter_interpretation` Interpreting Logarithmic Model Parameters in Context
+  - `exp_log_log_model_prediction` Using a Logarithmic Model for Prediction
+  - `exp_log_log_model_select_over_exponential` Choosing Between an Exponential and Logarithmic Model
+- **`exp_log_semi_log_plots`** Semi-Log Plots (4)
+  - `exp_log_semi_log_linearization` Why Exponential Data Linearizes on a Semi-Log Plot
+  - `exp_log_semi_log_slope_intercept_extraction` Reading Model Parameters from a Semi-Log Plot
+  - `exp_log_semi_log_identify_exponential_linearity` Identifying Exponential Growth from a Semi-Log Plot
+  - `exp_log_semi_log_scale_reading` Reading Values on a Logarithmic Scale Axis
+
+### Parameters, Vectors, and Matrices (`parameters_vectors_and_matrices`) — 14 umbrellas, 61 in-depth
+- **`pvm_parametric_function_intro`** Parametric Functions — Introduction (5)
+  - `pvm_parametric_definition_component_form` Parametric equations as component functions
+  - `pvm_parametric_table_of_values` Generating a table of (x, y) pairs from parametric equations
+  - `pvm_parametric_eliminate_parameter_linear` Eliminating the parameter when x(t) is linear
+  - `pvm_parametric_eliminate_parameter_trig` Eliminating the parameter using a Pythagorean identity
+  - `pvm_parametric_graph_orientation` Identifying the orientation (direction) of a parametric curve
+- **`pvm_parametric_planar_motion`** Parametric Functions and Planar Motion (4)
+  - `pvm_motion_position_at_time` Reading position at a given time from parametric motion equations
+  - `pvm_motion_direction_of_travel` Determining direction of travel from signs of x'(t) and y'(t)
+  - `pvm_motion_speed_magnitude` Computing speed as the magnitude of the velocity vector
+  - `pvm_motion_path_vs_trajectory` Distinguishing path (Cartesian curve) from trajectory (parametric curve with time)
+- **`pvm_parametric_rates_of_change`** Rates of Change in Parametric Functions (4)
+  - `pvm_param_roc_component` Calculating average rate of change for a single parametric component
+  - `pvm_param_roc_slope_of_curve` Finding the slope of a parametric curve as (Δy/Δt) ÷ (Δx/Δt)
+  - `pvm_param_roc_interpret_in_context` Interpreting the meaning of Δx/Δt and Δy/Δt in a real-world motion problem
+  - `pvm_param_roc_increasing_decreasing` Determining intervals where x(t) or y(t) is increasing or decreasing
+- **`pvm_parametric_circles_and_lines`** Parametrically Defined Circles and Lines (4)
+  - `pvm_param_circle_standard_form` Writing parametric equations for a circle from center and radius
+  - `pvm_param_line_vector_form` Writing parametric equations for a line through a point with a direction vector
+  - `pvm_param_circle_identify_features` Identifying center, radius, and orientation from parametric circle equations
+  - `pvm_param_line_segment_restrict_domain` Restricting the parameter range to produce a line segment
+- **`pvm_implicit_functions`** Implicitly Defined Functions (4)
+  - `pvm_implicit_relation_vs_function` Determining whether an implicit equation defines y as a function of x
+  - `pvm_implicit_restrict_to_function` Restricting domain or range to extract a function from an implicit relation
+  - `pvm_implicit_graph_interpretation` Reading key features of an implicitly defined curve from its graph
+  - `pvm_implicit_solve_for_y` Solving an implicit equation for y to obtain explicit function branches
+- **`pvm_conic_sections`** Conic Sections (5)
+  - `pvm_conic_parabola_standard_form` Identifying vertex, axis of symmetry, and direction of opening of a parabola
+  - `pvm_conic_ellipse_standard_form` Identifying center, semi-axes, and orientation of an ellipse from standard form
+  - `pvm_conic_hyperbola_asymptotes` Writing the asymptotes of a hyperbola from its standard equation
+  - `pvm_conic_identify_from_equation` Classifying a conic section from its general second-degree equation
+  - `pvm_conic_complete_the_square` Completing the square to rewrite a conic in standard form
+- **`pvm_parametric_implicit_conics`** Parametrization of Implicit and Conic Curves (4)
+  - `pvm_param_conic_ellipse` Writing parametric equations for an ellipse using cosine and sine
+  - `pvm_param_implicit_verify` Verifying that a parametrization satisfies an implicit equation
+  - `pvm_param_hyperbola_secant_tangent` Parametrizing a hyperbola using sec and tan
+  - `pvm_param_line_to_conic_transition` Converting a piecewise or line parametrization to match an implicit curve restriction
+- **`pvm_vectors_intro`** Vectors — Definition and Operations (6)
+  - `pvm_vector_component_form` Writing a vector in component form given initial and terminal points
+  - `pvm_vector_magnitude` Computing the magnitude of a vector
+  - `pvm_vector_addition_subtraction` Adding and subtracting vectors algebraically and graphically
+  - `pvm_vector_scalar_multiplication` Multiplying a vector by a scalar and interpreting the result
+  - `pvm_vector_direction_angle` Finding the direction angle of a vector from its component form
+  - `pvm_vector_unit_vector` Computing the unit vector in the direction of a given vector
+- **`pvm_vector_valued_functions`** Vector-Valued Functions (4)
+  - `pvm_vvf_evaluate_at_time` Evaluating a vector-valued function at a specific t
+  - `pvm_vvf_connect_to_parametric` Connecting vector-valued function notation to component parametric equations
+  - `pvm_vvf_displacement_vector` Computing the displacement vector over a time interval
+  - `pvm_vvf_identify_path_from_formula` Identifying the Cartesian path traced by a vector-valued function
+- **`pvm_matrix_operations`** Matrix Operations (5)
+  - `pvm_matrix_notation_dimensions` Reading matrix dimensions and entries using row-column notation
+  - `pvm_matrix_addition_subtraction` Adding and subtracting matrices of the same dimensions
+  - `pvm_matrix_scalar_multiplication` Multiplying a matrix by a scalar
+  - `pvm_matrix_multiplication_2x2` Multiplying two 2×2 matrices using the dot-product rule
+  - `pvm_matrix_dimension_compatibility` Determining when matrix multiplication is defined and finding the product dimensions
+- **`pvm_matrix_inverse_determinant`** Inverse and Determinant of a Matrix (4)
+  - `pvm_determinant_2x2` Computing the determinant of a 2×2 matrix
+  - `pvm_invertibility_from_determinant` Determining invertibility from the determinant
+  - `pvm_matrix_inverse_formula_2x2` Finding the inverse of a 2×2 invertible matrix
+  - `pvm_matrix_solve_equation_with_inverse` Solving a 2×2 matrix equation AX = B using the inverse
+- **`pvm_linear_transformations`** Linear Transformations and Matrices (4)
+  - `pvm_transform_image_of_point` Computing the image of a point under a matrix transformation
+  - `pvm_transform_standard_matrices` Identifying standard transformation matrices for reflection and rotation
+  - `pvm_transform_composition` Composing two linear transformations using matrix multiplication
+  - `pvm_transform_determinant_area` Interpreting the determinant as a scaling factor for area under a transformation
+- **`pvm_matrices_as_functions`** Matrices as Functions (4)
+  - `pvm_matrix_function_linearity` Verifying that a matrix transformation satisfies the linearity properties
+  - `pvm_matrix_identity_zero_transformation` Identifying the identity and zero matrix transformations
+  - `pvm_matrix_function_domain_codomain` Describing the domain and codomain of a matrix transformation
+  - `pvm_matrix_function_vs_general_function` Contrasting matrix (linear) functions with general nonlinear functions
+- **`pvm_matrices_modeling`** Matrices Modeling Contexts (4)
+  - `pvm_matrix_model_setup` Setting up a matrix to represent a two-state transition or network
+  - `pvm_matrix_model_multiply_for_next_state` Using matrix multiplication to find the next-state vector
+  - `pvm_matrix_model_interpret_entry` Interpreting the (i, j) entry of a matrix product in context
+  - `pvm_matrix_model_steady_state` Identifying or approximating a steady-state vector by iterating the transition matrix
+
+### Polynomial and Rational Functions (`polynomial_and_rational_functions`) — 14 umbrellas, 65 in-depth
+- **`poly_covariation_and_change_in_tandem`** Change in Tandem (Covariation) (4)
+  - `poly_covariation_direction_from_graph` Identifying co-variation direction from a graph
+  - `poly_covariation_direction_from_table` Identifying co-variation direction from a table
+  - `poly_covariation_comparison_across_representations` Comparing co-variation across two representations
+  - `poly_covariation_contextual_interpretation` Interpreting co-variation in a real-world context
+- **`poly_average_rate_of_change`** Rates of Change (4)
+  - `poly_aroc_sign_and_direction` Interpreting the sign of AROC
+  - `poly_aroc_contextual_units` Interpreting AROC with units in context
+  - `poly_aroc_sub_interval_comparison_concavity` Comparing AROC over sub-intervals of a polynomial to infer concavity
+  - `poly_aroc_sign_changes_bound_extrema` Using AROC sign changes to count or bound the number of local extrema
+- **`poly_linear_vs_quadratic_rate_behavior`** Rates of Change in Linear and Quadratic Functions (4)
+  - `poly_constant_aroc_identifies_linear` Identifying linearity from constant first differences
+  - `poly_changing_aroc_identifies_quadratic` Identifying quadratic behavior from constant second differences
+  - `poly_concavity_from_aroc_change` Connecting increasing/decreasing AROC to concave up/down
+  - `poly_aroc_comparison_linear_quadratic` Comparing AROC over different intervals for quadratic vs linear
+- **`poly_polynomial_rate_behavior`** Polynomial Functions and Rates of Change (4)
+  - `poly_aroc_sign_change_counts_turning_points` Counting AROC sign changes to bound the number of turning points
+  - `poly_aroc_over_intervals_from_graph` Determining the sign of AROC over an interval from a polynomial graph
+  - `poly_degree_from_rate_pattern` Inferring polynomial degree from a rate-of-change table
+  - `poly_local_extremum_as_aroc_zero_crossing` Identifying local extrema as points where AROC changes sign
+- **`poly_zeros_and_complex`** Polynomial Functions and Complex Zeros (5)
+  - `poly_fundamental_theorem_zero_count` Applying the Fundamental Theorem to count total zeros
+  - `poly_complex_conjugate_pairs` Identifying complex zeros as conjugate pairs
+  - `poly_irreducible_quadratic_factor` Recognizing an irreducible quadratic factor
+  - `poly_real_vs_nonreal_zero_classification` Classifying zeros as real or non-real from a factored form
+  - `rational_zero_multiplicity_cross_or_bounce` Zero multiplicity controlling whether a rational function crosses or bounces at an x-intercept
+- **`poly_end_behavior`** Polynomial Functions and End Behavior (2)
+  - `poly_end_behavior_matching_graph_to_description` Matching a polynomial graph to an end-behavior description
+  - `poly_end_behavior_from_expanded_polynomial` Identifying the leading term in an expanded polynomial for end behavior
+- **`rational_end_behavior`** Rational Functions and End Behavior (5)
+  - `rational_ha_degree_less_numerator` Horizontal asymptote y = 0 when degree of numerator < degree of denominator
+  - `rational_ha_equal_degrees` Horizontal asymptote y = a/b when degrees are equal
+  - `rational_ha_none_numerator_higher_degree` No horizontal asymptote when degree of numerator > degree of denominator
+  - `rational_end_behavior_from_graph` Reading end behavior of a rational function from its graph
+  - `rational_oblique_asymptote_concept` Recognizing oblique (slant) asymptote when numerator degree is exactly one more
+- **`rational_zeros`** Rational Functions and Zeros (4)
+  - `rational_zero_from_numerator_factor` Finding a zero of a rational function from a numerator factor
+  - `rational_zero_vs_va_distinction` Distinguishing zeros from vertical asymptotes
+  - `rational_zero_multiplicity_behavior` Zero multiplicity for rational function x-intercept behavior
+  - `rational_zeros_from_graph` Reading zeros of a rational function from its graph
+- **`rational_vertical_asymptotes`** Rational Functions and Vertical Asymptotes (5)
+  - `rational_va_from_denominator_zero` Finding vertical asymptotes by setting denominator equal to zero
+  - `rational_va_behavior_sign_analysis` Describing unbounded behavior (→ +∞ or −∞) near a vertical asymptote
+  - `rational_va_multiplicity_odd_even` Connecting VA behavior to multiplicity of the denominator factor
+  - `rational_va_from_graph` Identifying vertical asymptotes from a rational function graph
+  - `rational_va_count_from_factored_form` Counting vertical asymptotes from a fully factored rational function
+- **`rational_holes`** Rational Functions and Holes (Removable Discontinuities) (5)
+  - `rational_hole_from_common_factor_cancellation` Identifying a hole by cancelling a common factor
+  - `rational_hole_y_value` Finding the y-coordinate of a hole
+  - `rational_hole_vs_va_classification` Classifying a denominator zero as a hole vs. a vertical asymptote
+  - `rational_hole_from_graph` Reading holes from a graph of a rational function
+  - `rational_domain_excluding_holes_and_vas` Stating the domain of a rational function, excluding holes and VAs
+- **`poly_rational_equivalent_representations`** Equivalent Representations of Polynomial and Rational Expressions (5)
+  - `poly_rewrite_by_factoring` Rewriting a polynomial expression by factoring
+  - `poly_long_division_of_polynomials` Using polynomial long division to rewrite a rational expression
+  - `poly_partial_fraction_decomposition_linear` Decomposing a rational expression into partial fractions (linear denominators)
+  - `poly_equivalent_form_connects_to_features` Connecting an equivalent algebraic form to a graph feature
+  - `poly_simplify_rational_by_factoring` Simplifying a rational expression by factoring and cancelling
+- **`poly_transformations_of_functions`** Transformations of Functions (7)
+  - `poly_vertical_translation` Vertical translation by adding a constant outside the function
+  - `poly_horizontal_translation` Horizontal translation by replacing x with (x − h)
+  - `poly_vertical_dilation_and_reflection` Vertical dilation and reflection by multiplying the output by a
+  - `poly_horizontal_dilation` Horizontal dilation by replacing x with bx inside the function
+  - `poly_combined_transformation_order` Applying multiple transformations in the correct order
+  - `poly_transformation_from_graph_to_equation` Writing the equation of a transformed function from its graph
+  - `poly_transformation_effect_on_domain_range` Determining the effect of a transformation on domain and range
+- **`poly_function_model_selection`** Function Model Selection and Assumption Articulation (5)
+  - `poly_model_selection_from_rate_pattern` Selecting polynomial degree from observed rate-of-change pattern
+  - `poly_model_assumption_articulation` Stating assumptions underlying a polynomial function model
+  - `poly_model_domain_restriction_in_context` Identifying contextual domain restrictions for a function model
+  - `poly_model_limitation_identification` Identifying limitations of a polynomial or rational model
+  - `poly_model_type_from_graph_shape` Selecting a function type from the shape of a scatter plot or graph
+- **`poly_function_model_construction`** Function Model Construction and Application (6)
+  - `poly_construct_model_from_zeros_and_point` Constructing a polynomial model from its zeros and one additional point
+  - `poly_construct_quadratic_from_vertex_and_point` Constructing a quadratic model from vertex form and an additional point
+  - `poly_apply_model_to_answer_question` Applying a constructed polynomial model to answer a contextual question
+  - `poly_construct_rational_model_from_context` Constructing a rational function model from asymptote and point information
+  - `poly_regression_model_technology` Using regression technology to fit a polynomial model to data
+  - `poly_model_prediction_and_interpolation` Making predictions and identifying interpolation vs. extrapolation
+
+### Trigonometric and Polar Functions (`trigonometric_and_polar_functions`) — 14 umbrellas, 76 in-depth
+- **`trig_periodic_phenomena`** Periodic Phenomena (6)
+  - `trig_period_from_graph` Period from graph
+  - `trig_amplitude_from_graph` Amplitude from graph
+  - `trig_midline_from_graph` Midline from graph
+  - `trig_periodic_vs_nonperiodic` Periodic vs. non-periodic classification
+  - `trig_period_from_table` Period from table of values
+  - `trig_periodic_context_interpretation` Periodic context interpretation
+- **`trig_sine_cosine_tangent_definitions`** Sine, Cosine, and Tangent — Definitions (5)
+  - `trig_right_triangle_ratios` Right-triangle trig ratios (SOH-CAH-TOA)
+  - `trig_unit_circle_coordinates` Unit-circle coordinates for sine and cosine
+  - `trig_degree_radian_conversion` Degree–radian conversion
+  - `trig_tangent_ratio_unit_circle` Tangent as sine-over-cosine
+  - `trig_quadrant_sign_identification` Sign of trig functions by quadrant
+- **`trig_special_angle_values`** Sine and Cosine Values at Special Angles (5)
+  - `trig_special_values_first_quadrant` Exact values at 0, π/6, π/4, π/3, π/2
+  - `trig_reference_angle_computation` Reference angle computation
+  - `trig_special_values_all_quadrants` Exact trig values in all four quadrants
+  - `trig_coterminal_angles` Coterminal angles
+  - `trig_tangent_special_values` Tangent values at special angles
+- **`trig_sine_cosine_graphs`** Sine and Cosine Function Graphs (5)
+  - `trig_parent_sine_cosine_features` Key features of parent sine and cosine graphs
+  - `trig_max_min_from_graph` Reading maxima and minima from sine/cosine graphs
+  - `trig_zeros_from_graph` Zeros of sine and cosine from graphs
+  - `trig_sketch_from_features` Sketching sine and cosine from stated features
+  - `trig_symmetry_and_periodicity` Symmetry and periodicity of sine and cosine
+- **`trig_sinusoidal_functions`** Sinusoidal Functions — Parameter Model (6)
+  - `trig_amplitude_parameter` Amplitude parameter |A|
+  - `trig_period_from_b_parameter` Period from B parameter (2π/B)
+  - `trig_phase_shift_parameter` Phase shift parameter C
+  - `trig_vertical_shift_midline` Vertical shift and midline D
+  - `trig_all_parameters_from_equation` Extracting all four parameters from an equation
+  - `trig_range_from_parameters` Range from amplitude and midline
+- **`trig_sinusoidal_transformations`** Sinusoidal Function Transformations (6)
+  - `trig_vertical_stretch_compression` Vertical stretch and compression (amplitude change)
+  - `trig_horizontal_stretch_compression` Horizontal stretch and compression (period change)
+  - `trig_horizontal_translation_phase_shift` Horizontal translation (phase shift) in transformed graphs
+  - `trig_vertical_translation` Vertical translation (midline shift)
+  - `trig_reflection_sinusoidal` Reflection of sinusoidal functions
+  - `trig_equation_from_graph` Writing sinusoidal equation from a graph
+- **`trig_sinusoidal_modeling`** Sinusoidal Context and Data Modeling (6)
+  - `trig_model_from_max_min_period` Building a model from maximum, minimum, and period
+  - `trig_model_from_two_data_points` Model construction from two data points
+  - `trig_context_parameter_interpretation` Interpreting parameters in context
+  - `trig_model_prediction` Using a sinusoidal model to predict output values
+  - `trig_model_validation` Validating a sinusoidal model against data
+  - `trig_sinusoidal_cosine_form` Choosing sine vs. cosine form for a model
+- **`trig_tangent_function`** The Tangent Function (5)
+  - `trig_tangent_period` Period of tangent (π, not 2π)
+  - `trig_tangent_vertical_asymptotes` Vertical asymptotes of tangent
+  - `trig_tangent_zeros` Zeros of tangent
+  - `trig_tangent_graph_features` Tangent graph overall behavior
+  - `trig_transformed_tangent` Transformed tangent functions y = A tan(Bx)
+- **`trig_inverse_trig_functions`** Inverse Trigonometric Functions (7)
+  - `arcsin_domain_range` Domain and range of arcsin
+  - `arccos_domain_range` Domain and range of arccos
+  - `arctan_domain_range` Domain and range of arctan
+  - `trig_inverse_trig_special_values` Evaluating inverse trig at special values
+  - `trig_inverse_trig_angle_interpretation` Interpreting arcsin/arccos/arctan outputs as angles
+  - `trig_inverse_trig_composition` Composing trig and inverse trig functions
+  - `trig_inverse_trig_context` Inverse trig in contextual angle-finding
+- **`trig_equations_and_inequalities`** Trigonometric Equations and Inequalities (6)
+  - `trig_basic_trig_equation` Solving basic trig equations (sin x = c, cos x = c)
+  - `trig_general_solution` General solution with + 2πn or + πn
+  - `trig_linear_trig_equation` Solving linear trig equations (A sin(Bx) = c)
+  - `trig_quadratic_trig_equation` Solving quadratic-in-trig equations
+  - `trig_trig_equation_using_identities` Trig equations requiring identity substitution
+  - `trig_equation_on_interval` Trig equation solutions restricted to an interval
+- **`trig_reciprocal_functions`** Secant, Cosecant, and Cotangent Functions (4)
+  - `trig_reciprocal_definitions` Definitions of sec, csc, cot
+  - `trig_reciprocal_asymptotes_domain` Asymptotes and domain of reciprocal functions
+  - `trig_reciprocal_graph_features` Key graph features of sec, csc, and cot
+  - `trig_evaluating_reciprocal_values` Evaluating sec, csc, cot at special angles
+- **`trig_identities`** Equivalent Representations — Trig Identities (5)
+  - `trig_pythagorean_identity_primary` Pythagorean identity sin²x + cos²x = 1
+  - `trig_pythagorean_identity_derived` Derived Pythagorean identities (1 + tan² = sec², 1 + cot² = csc²)
+  - `trig_cofunction_identities` Co-function identities
+  - `trig_simplify_trig_expression` Simplifying trig expressions using identities
+  - `trig_identity_given_value` Finding trig values using Pythagorean identity
+- **`trig_polar_coordinates_and_graphs`** Polar Coordinates and Polar Function Graphs (6)
+  - `trig_polar_to_rectangular` Converting from polar to rectangular coordinates
+  - `trig_rectangular_to_polar` Converting from rectangular to polar coordinates
+  - `trig_polar_graph_circles_limacons` Graphs of polar circles and limaçons
+  - `trig_polar_graph_roses_lemniscates` Graphs of rose curves and lemniscates
+  - `trig_polar_key_features` Key features of polar graphs (max r, symmetry, zeros)
+  - `trig_polar_equation_identification` Matching a polar graph to its equation
+- **`trig_polar_rates_of_change`** Rates of Change in Polar Functions (4)
+  - `trig_polar_r_increasing_decreasing` Identifying where r is increasing or decreasing
+  - `trig_polar_r_concavity` Concavity of r as a function of θ
+  - `trig_polar_average_rate_of_change` Average rate of change of r with respect to θ
+  - `trig_polar_rate_change_graph_connection` Connecting rate of change to polar graph features
+

@@ -1,0 +1,691 @@
+{
+  "category": {
+    "id": "polynomial_and_rational_functions",
+    "label": "Polynomial and Rational Functions",
+    "description": "Analyzes polynomial and rational functions through covariation, rates of change, zeros, end behavior, asymptotes, transformations, and modeling. Covers CED Unit 1 (topics 1.1–1.14) of AP Precalculus, forming 30–40% of the exam and appearing in FRQs 1 and 2.",
+    "section": "ap_precalc",
+    "ced_unit": "AP Precalc Unit 1",
+    "courses": [
+      { "course": "precalc", "role": "core", "order_index": 8 },
+      { "course": "calc_ab", "role": "foundation", "order_index": 8 }
+    ],
+    "yield_score": 0.87,
+    "yield_rationale": "Unit 1 is 30–40% of the AP Precalc exam — the largest and most variable share; FRQs 1 and 2 both draw heavily from it, and every topic from 1.1–1.14 is testable across both MC sections."
+  },
+  "umbrellas": [
+    {
+      "id": "poly_covariation_and_change_in_tandem",
+      "label": "Change in Tandem (Covariation)",
+      "description": "Describes how input and output values of a function co-vary across representations (graph, table, symbolic, context). Tests reading direction and relative magnitude of change, not rate calculation.",
+      "ced_topics": ["1.1"],
+      "yield_score": 0.75,
+      "yield_rationale": "CED 1.1 is foundational covariation reasoning; appears in FRQ 1 (function concepts) and numerous MC items requiring interpretation of increasing/decreasing behavior.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "poly_covariation_direction_from_graph",
+          "label": "Identifying co-variation direction from a graph",
+          "description": "Given a graph of a function, determines whether output increases, decreases, or remains constant as input increases over a specified interval.",
+          "yield_score": 0.77,
+          "yield_rationale": "Direct MC target for 1.1; reading increasing/decreasing intervals from a graph is a repeatable, isolatable skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_covariation_direction_from_table",
+          "label": "Identifying co-variation direction from a table",
+          "description": "Uses an input-output table to determine whether the function is increasing or decreasing and to compare output changes across rows.",
+          "yield_score": 0.70,
+          "yield_rationale": "Table-based covariation is tested in MC Part A (no calc); isolates table-reading skill separately from graph reading.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_covariation_comparison_across_representations",
+          "label": "Comparing co-variation across two representations",
+          "description": "Given the same function in two different representations (e.g., graph and table), identifies whether described co-variation features are consistent between them.",
+          "yield_score": 0.55,
+          "yield_rationale": "Multiple-representation comparison (MP2) is explicitly tested; medium frequency in MC items. Rescored downward (from 0.68): multi-rep comparison is scaffolding for other skills rather than a standalone isolated exam target.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_covariation_contextual_interpretation",
+          "label": "Interpreting co-variation in a real-world context",
+          "description": "Translates a verbal or contextual description of two co-varying quantities into a statement about function behavior (e.g., 'as time increases, height decreases').",
+          "yield_score": 0.72,
+          "yield_rationale": "Context-based covariation questions are common in MC and set up FRQ 2 modeling tasks.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "poly_average_rate_of_change",
+      "label": "Rates of Change",
+      "description": "Calculates and interprets average rate of change of a function over an interval; connects sign of AROC to direction of co-variation and magnitude to steepness.",
+      "ced_topics": ["1.2"],
+      "yield_score": 0.82,
+      "yield_rationale": "CED 1.2 AROC calculation appears in FRQ 2 (non-periodic modeling) and multiple MC; one of the most frequently isolated computational skills in Unit 1.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "poly_aroc_sign_and_direction",
+          "label": "Interpreting the sign of AROC",
+          "description": "Determines whether a positive, negative, or zero average rate of change implies increasing, decreasing, or constant function behavior over an interval.",
+          "yield_score": 0.75,
+          "yield_rationale": "Sign interpretation is tested in MP3 communication items; bridges AROC calculation to function behavior.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_aroc_contextual_units",
+          "label": "Interpreting AROC with units in context",
+          "description": "States the meaning of a computed average rate of change using correct units (e.g., 'feet per second') and relates it to the modeled situation.",
+          "yield_score": 0.82,
+          "yield_rationale": "Contextual interpretation is required in FRQ 2 explanatory sub-parts; tests MP3 communication practice. Rescored upward to separate from mid-range cluster.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_aroc_sub_interval_comparison_concavity",
+          "label": "Comparing AROC over sub-intervals of a polynomial to infer concavity",
+          "description": "Computes or reads AROC values over multiple consecutive equal-width sub-intervals of a polynomial function and determines whether the AROC is increasing (concave up) or decreasing (concave down) — bridging CED 1.2 computation to the 1.3 concavity concept.",
+          "yield_score": 0.78,
+          "yield_rationale": "P1-exclusive: requires polynomial-context AROC comparison across sub-intervals, not just a single interval computation. Bridges CED 1.2 and 1.3; appears in MC items requiring justification of concavity direction.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_aroc_sign_changes_bound_extrema",
+          "label": "Using AROC sign changes to count or bound the number of local extrema",
+          "description": "Given a table of AROC values over successive intervals of a polynomial, identifies the sub-intervals where AROC changes sign (positive to negative or vice versa) and uses each sign change to locate a local extremum, thereby bounding the minimum number of turning points — a CED 1.4 skill applied within the AROC framework.",
+          "yield_score": 0.72,
+          "yield_rationale": "P1-exclusive: connects AROC sign-change reasoning (1.2) to extremum counting (1.4). Not a foundations-level skill; requires interpreting a pattern of AROC values across intervals of a polynomial rather than a single computation.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "poly_linear_vs_quadratic_rate_behavior",
+      "label": "Rates of Change in Linear and Quadratic Functions",
+      "description": "Distinguishes constant rate of change (linear) from non-constant rate of change (quadratic) by analyzing first and second differences in tables or descriptions; connects changing AROC to concavity.",
+      "ced_topics": ["1.3"],
+      "yield_score": 0.72,
+      "yield_rationale": "CED 1.3 provides the conceptual lens for distinguishing function families; referenced in FRQ 2 justification sub-parts about model selection.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "poly_constant_aroc_identifies_linear",
+          "label": "Identifying linearity from constant first differences",
+          "description": "Uses equally-spaced table values to verify that constant first differences imply a linear function; connects this to a constant rate of change.",
+          "yield_score": 0.74,
+          "yield_rationale": "First-difference test is a direct 1.3 skill; also prerequisite for recognizing polynomial degree from tables.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_changing_aroc_identifies_quadratic",
+          "label": "Identifying quadratic behavior from constant second differences",
+          "description": "Checks that first differences change at a constant rate (constant second differences) to identify a quadratic relationship in a table or context.",
+          "yield_score": 0.70,
+          "yield_rationale": "Second-difference test isolates the quadratic vs linear distinction; appears in MC model-selection items.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_concavity_from_aroc_change",
+          "label": "Connecting increasing/decreasing AROC to concave up/down",
+          "description": "Determines whether a function is concave up (AROC increasing) or concave down (AROC decreasing) from a graph or successive table differences.",
+          "yield_score": 0.65,
+          "yield_rationale": "Concavity-language appears in MC context questions and FRQ communication sub-parts; moderate frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_aroc_comparison_linear_quadratic",
+          "label": "Comparing AROC over different intervals for quadratic vs linear",
+          "description": "Given two functions (one linear, one quadratic) on the same interval, explains why the linear function has equal AROCs over equal sub-intervals while the quadratic does not.",
+          "yield_score": 0.60,
+          "yield_rationale": "Comparative reasoning between function families appears in MC justification items; slightly lower frequency than direct calculation items.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "poly_polynomial_rate_behavior",
+      "label": "Polynomial Functions and Rates of Change",
+      "description": "Describes rate-of-change behavior of polynomial functions over intervals; connects the number of sign changes of AROC to the degree, and identifies local extrema in terms of AROC changing sign.",
+      "ced_topics": ["1.4"],
+      "yield_score": 0.68,
+      "yield_rationale": "CED 1.4 bridges AROC to polynomial degree; moderate MC frequency and referenced in FRQ 2 when justifying degree of a polynomial model.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "poly_aroc_sign_change_counts_turning_points",
+          "label": "Counting AROC sign changes to bound the number of turning points",
+          "description": "Uses the fact that a degree-n polynomial has at most n−1 local extrema (AROC sign changes) to infer a lower bound on degree from observed turning points.",
+          "yield_score": 0.70,
+          "yield_rationale": "Degree-from-behavior reasoning is a direct 1.4 MC target; connects degree to function shape.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_aroc_over_intervals_from_graph",
+          "label": "Determining the sign of AROC over an interval from a polynomial graph",
+          "description": "Reads a polynomial graph to state whether the AROC over a given interval is positive, negative, or zero by identifying whether the function rises or falls.",
+          "yield_score": 0.65,
+          "yield_rationale": "Graphical AROC-sign reading is a standard low-difficulty MC item for polynomial behavior.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_degree_from_rate_pattern",
+          "label": "Inferring polynomial degree from a rate-of-change table",
+          "description": "Given a table of AROC values over successive equal-width intervals, determines the minimum polynomial degree that is consistent with the observed AROC pattern.",
+          "yield_score": 0.63,
+          "yield_rationale": "Rate-pattern-to-degree inference appears in MC items; requires integrating 1.3 finite-difference ideas with 1.4 degree concepts.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_local_extremum_as_aroc_zero_crossing",
+          "label": "Identifying local extrema as points where AROC changes sign",
+          "description": "Explains that a local maximum or minimum of a polynomial occurs where the average rate of change transitions from positive to negative (or vice versa), and locates such points on a graph.",
+          "yield_score": 0.62,
+          "yield_rationale": "Conceptual interpretation of extrema in AROC terms is tested in MP3 communication sub-parts.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "poly_zeros_and_complex",
+      "label": "Polynomial Functions and Complex Zeros",
+      "description": "Identifies real and non-real (complex) zeros of polynomials using the Fundamental Theorem of Algebra; relates irreducible quadratic factors to pairs of complex conjugate zeros; determines the total zero count from degree.",
+      "ced_topics": ["1.5"],
+      "yield_score": 0.55,
+      "yield_rationale": "CED 1.5 complex zeros appear occasionally in MC but carry lower weight than end behavior or asymptote topics; less frequent in FRQs.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "poly_fundamental_theorem_zero_count",
+          "label": "Applying the Fundamental Theorem to count total zeros",
+          "description": "States that a degree-n polynomial has exactly n zeros (counting multiplicity and complex) and uses this to determine how many zeros must be non-real given the real zeros found.",
+          "yield_score": 0.58,
+          "yield_rationale": "Total-zero-count reasoning is a clean, isolatable MC skill for 1.5.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_complex_conjugate_pairs",
+          "label": "Identifying complex zeros as conjugate pairs",
+          "description": "Recognizes that non-real zeros of a polynomial with real coefficients come in conjugate pairs (a + bi and a − bi), and uses this to write or factor the corresponding irreducible quadratic.",
+          "yield_score": 0.55,
+          "yield_rationale": "Conjugate-pair rule is a targeted MC item; less frequently tested than real-zero analysis.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_irreducible_quadratic_factor",
+          "label": "Recognizing an irreducible quadratic factor",
+          "description": "Determines whether a quadratic factor of a polynomial has a negative discriminant and therefore cannot be factored over the reals, contributing two complex zeros instead.",
+          "yield_score": 0.52,
+          "yield_rationale": "Discriminant-based irreducibility test is the computational gateway to identifying non-real zeros.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_real_vs_nonreal_zero_classification",
+          "label": "Classifying zeros as real or non-real from a factored form",
+          "description": "Given a polynomial in factored or partially factored form, classifies each factor's zeros as real (x-intercepts) or non-real (no x-intercept), and states the total count of each type.",
+          "yield_score": 0.54,
+          "yield_rationale": "Classification questions at the intersection of zeros and graph behavior appear in MC items linking 1.5 to 1.6.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_zero_multiplicity_cross_or_bounce",
+          "label": "Zero multiplicity controlling whether a rational function crosses or bounces at an x-intercept",
+          "description": "Determines whether the graph of a rational function crosses the x-axis (odd-multiplicity numerator factor at that zero) or bounces off it without crossing (even-multiplicity numerator factor), specifically for rational functions where the zero is not also a denominator root — a P1-exclusive skill distinct from the pure-polynomial case.",
+          "yield_score": 0.58,
+          "yield_rationale": "P1-exclusive: applies multiplicity reasoning to rational function zeros, where the interplay between numerator and denominator factors adds a layer of analysis not present for pure polynomials (already covered in foundations). Moderate MC frequency in rational-function graph-matching items.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "poly_end_behavior",
+      "label": "Polynomial Functions and End Behavior",
+      "description": "Determines the end behavior of a polynomial function from its degree and leading coefficient, describing how f(x) behaves as x → ±∞ using arrow notation and contextual language.",
+      "ced_topics": ["1.6"],
+      "yield_score": 0.83,
+      "yield_rationale": "CED 1.6 end behavior is heavily tested in MC and appears explicitly in FRQ 1 (function concepts task); among the highest-yield polynomial skills on the exam.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "poly_end_behavior_matching_graph_to_description",
+          "label": "Matching a polynomial graph to an end-behavior description",
+          "description": "Selects or draws the graph of a polynomial whose end behavior matches a given symbolic description (e.g., as x → −∞, f(x) → +∞; as x → +∞, f(x) → −∞).",
+          "yield_score": 0.78,
+          "yield_rationale": "Graph-matching items that isolate end behavior appear in MC Part A; tests the graphical representation skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_end_behavior_from_expanded_polynomial",
+          "label": "Identifying the leading term in an expanded polynomial for end behavior",
+          "description": "Given a polynomial in expanded (non-factored) form, identifies the leading term and infers end behavior without fully re-factoring the expression.",
+          "yield_score": 0.75,
+          "yield_rationale": "Extracting the leading term from a sum is a prerequisite procedural step tested in MC items before end-behavior conclusions.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "rational_end_behavior",
+      "label": "Rational Functions and End Behavior",
+      "description": "Determines horizontal asymptotes and end behavior of rational functions by comparing degrees of numerator and denominator polynomials; uses the leading-coefficient ratio or limit argument.",
+      "ced_topics": ["1.7"],
+      "yield_score": 0.78,
+      "yield_rationale": "CED 1.7 rational end behavior is a reliable MC pool topic and also tested in FRQ 1; degree-comparison rule is one of the most testable single-rule skills in Unit 1.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "rational_ha_degree_less_numerator",
+          "label": "Horizontal asymptote y = 0 when degree of numerator < degree of denominator",
+          "description": "States and applies the rule that if deg(numerator) < deg(denominator) the horizontal asymptote is y = 0, and describes end behavior accordingly.",
+          "yield_score": 0.80,
+          "yield_rationale": "The three HA cases are individually isolatable; this is the most distinctive case and frequently tested.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_ha_equal_degrees",
+          "label": "Horizontal asymptote y = a/b when degrees are equal",
+          "description": "States and applies the rule that equal-degree numerator and denominator yield a horizontal asymptote at y = (leading coefficient of numerator) / (leading coefficient of denominator).",
+          "yield_score": 0.82,
+          "yield_rationale": "Equal-degree HA is the most common MC case for rational end behavior; the ratio computation is a clean isolated skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_ha_none_numerator_higher_degree",
+          "label": "No horizontal asymptote when degree of numerator > degree of denominator",
+          "description": "Identifies that when deg(numerator) > deg(denominator) there is no horizontal asymptote, and describes the resulting unbounded end behavior (polynomial-like behavior after division).",
+          "yield_score": 0.72,
+          "yield_rationale": "No-HA case appears in MC items testing all three degree-comparison scenarios; slightly less common than the equal-degree case.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_end_behavior_from_graph",
+          "label": "Reading end behavior of a rational function from its graph",
+          "description": "Uses the graph of a rational function to state the y-value that outputs approach as x → ±∞ and identifies whether a horizontal asymptote exists.",
+          "yield_score": 0.70,
+          "yield_rationale": "Graphical reading of asymptotic end behavior is a multiple-representation MC skill (MP2).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_oblique_asymptote_concept",
+          "label": "Recognizing oblique (slant) asymptote when numerator degree is exactly one more",
+          "description": "Identifies that when deg(numerator) = deg(denominator) + 1, the end behavior is linear (oblique asymptote), and finds the oblique asymptote by polynomial division.",
+          "yield_score": 0.55,
+          "yield_rationale": "Oblique asymptotes appear occasionally in MC (no-calc section); less common than HA cases but included in CED 1.7 scope.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "rational_zeros",
+      "label": "Rational Functions and Zeros",
+      "description": "Identifies x-intercepts (zeros) of a rational function as the values where the numerator equals zero and the denominator does not; distinguishes zeros from vertical asymptotes and holes.",
+      "ced_topics": ["1.8"],
+      "yield_score": 0.65,
+      "yield_rationale": "CED 1.8 zeros of rationals appear in MC; interconnected with 1.9 and 1.10 — frequently tested as a system where students must distinguish zeros, VAs, and holes.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "rational_zero_from_numerator_factor",
+          "label": "Finding a zero of a rational function from a numerator factor",
+          "description": "Sets the numerator equal to zero to find candidate zeros, then verifies the denominator is nonzero at that value, confirming it is an x-intercept.",
+          "yield_score": 0.68,
+          "yield_rationale": "Direct zero-finding from numerator is the core procedural skill for 1.8.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_zero_vs_va_distinction",
+          "label": "Distinguishing zeros from vertical asymptotes",
+          "description": "Given a rational function in factored form, classifies each root of numerator and denominator as producing either a zero (x-intercept) or a vertical asymptote, not confusing the two.",
+          "yield_score": 0.72,
+          "yield_rationale": "Zero/VA confusion is a persistent student error; MC distractors are built around it, making it a high-yield discrimination skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_zero_multiplicity_behavior",
+          "label": "Zero multiplicity for rational function x-intercept behavior",
+          "description": "Determines whether the graph of a rational function crosses or touches the x-axis at a zero based on the multiplicity of the numerator factor at that value.",
+          "yield_score": 0.58,
+          "yield_rationale": "Multiplicity at rational zeros is tested in conjunction with graph sketching; moderate MC frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_zeros_from_graph",
+          "label": "Reading zeros of a rational function from its graph",
+          "description": "Identifies the x-intercepts of a rational function directly from its graph and confirms these correspond to numerator zeros (where the graph actually crosses the x-axis, not just approaches it).",
+          "yield_score": 0.62,
+          "yield_rationale": "Graphical zero identification is a standard multiple-representation MC item.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "rational_vertical_asymptotes",
+      "label": "Rational Functions and Vertical Asymptotes",
+      "description": "Identifies vertical asymptotes of a rational function as x-values where the denominator equals zero and the factor does not cancel with the numerator; describes the unbounded behavior near each asymptote.",
+      "ced_topics": ["1.9"],
+      "yield_score": 0.77,
+      "yield_rationale": "CED 1.9 vertical asymptotes are among the most-tested rational-function concepts; frequent MC target and occasionally appears in FRQ 1.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "rational_va_from_denominator_zero",
+          "label": "Finding vertical asymptotes by setting denominator equal to zero",
+          "description": "Sets the denominator of a rational function equal to zero, solves for x, then checks that the numerator is nonzero there to confirm a vertical asymptote (not a hole).",
+          "yield_score": 0.80,
+          "yield_rationale": "Core procedural skill for 1.9; appears in nearly every MC rational-function item set.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_va_behavior_sign_analysis",
+          "label": "Describing unbounded behavior (→ +∞ or −∞) near a vertical asymptote",
+          "description": "Uses sign analysis to determine whether the function approaches positive or negative infinity from each side of a vertical asymptote, based on the sign of the expression near the asymptote.",
+          "yield_score": 0.72,
+          "yield_rationale": "Sign-of-behavior near VA is a step beyond finding the VA; tested in MC graph-reading and description items.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_va_multiplicity_odd_even",
+          "label": "Connecting VA behavior to multiplicity of the denominator factor",
+          "description": "Recognizes that an odd-multiplicity denominator factor causes the function to approach opposite infinities from each side (sign change), while an even-multiplicity factor causes approach to the same infinity from both sides.",
+          "yield_score": 0.62,
+          "yield_rationale": "Multiplicity-based VA behavior is a more nuanced MC skill; lower frequency but isolatable.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_va_from_graph",
+          "label": "Identifying vertical asymptotes from a rational function graph",
+          "description": "Reads the x-values of vertical asymptotes from a graph of a rational function by locating vertical dashed lines or unbounded behavior, and states the equations x = a.",
+          "yield_score": 0.74,
+          "yield_rationale": "Graphical VA identification is a standard multiple-representation MC item (MP2).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_va_count_from_factored_form",
+          "label": "Counting vertical asymptotes from a fully factored rational function",
+          "description": "Given a rational function in factored form, determines the exact number of vertical asymptotes by identifying denominator roots that do not cancel with numerator factors.",
+          "yield_score": 0.69,
+          "yield_rationale": "Counting VAs correctly (vs holes) requires integrating 1.9 and 1.10 reasoning; tested when factoring is required.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "rational_holes",
+      "label": "Rational Functions and Holes (Removable Discontinuities)",
+      "description": "Identifies removable discontinuities (holes) in rational functions where a common factor cancels from numerator and denominator; finds the location (x-value and y-value of the hole) and distinguishes holes from vertical asymptotes.",
+      "ced_topics": ["1.10"],
+      "yield_score": 0.63,
+      "yield_rationale": "CED 1.10 holes appear regularly in MC; requires factoring fluency and the ability to distinguish from vertical asymptotes — a targeted discrimination skill.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "rational_hole_from_common_factor_cancellation",
+          "label": "Identifying a hole by cancelling a common factor",
+          "description": "Factors numerator and denominator of a rational function, cancels the common factor, and identifies the x-value where the hole occurs (the zero of the cancelled factor).",
+          "yield_score": 0.65,
+          "yield_rationale": "Common-factor cancellation is the core 1.10 move; directly tested in MC items requiring simplification.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_hole_y_value",
+          "label": "Finding the y-coordinate of a hole",
+          "description": "Substitutes the x-value of the hole into the simplified (cancelled) form of the rational function to determine the y-coordinate of the hole.",
+          "yield_score": 0.60,
+          "yield_rationale": "Y-coordinate of a hole is the second step after locating it; tested in MC items asking for the ordered pair of the hole.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_hole_vs_va_classification",
+          "label": "Classifying a denominator zero as a hole vs. a vertical asymptote",
+          "description": "Given the factored form of a rational function, classifies each root of the denominator as producing either a hole (common factor cancels) or a vertical asymptote (no cancellation).",
+          "yield_score": 0.68,
+          "yield_rationale": "Hole/VA classification is the most common discrimination error; high MC-distractor yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_hole_from_graph",
+          "label": "Reading holes from a graph of a rational function",
+          "description": "Identifies an open circle (removable discontinuity) on a graph of a rational function and states its coordinates as the location of the hole.",
+          "yield_score": 0.58,
+          "yield_rationale": "Graphical identification of holes appears in MC graph-reading items; moderate frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "rational_domain_excluding_holes_and_vas",
+          "label": "Stating the domain of a rational function, excluding holes and VAs",
+          "description": "Finds all x-values where the denominator is zero (before or after cancellation) and states the domain of the rational function as all reals excluding those values.",
+          "yield_score": 0.62,
+          "yield_rationale": "Domain determination for rational functions is a recurring MC skill; integrates knowledge of holes and VAs simultaneously.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "poly_rational_equivalent_representations",
+      "label": "Equivalent Representations of Polynomial and Rational Expressions",
+      "description": "Rewrites polynomial and rational expressions in equivalent algebraic forms using factoring, polynomial long division, and partial fraction decomposition; connects different forms to graph features.",
+      "ced_topics": ["1.11"],
+      "yield_score": 0.70,
+      "yield_rationale": "CED 1.11 algebraic manipulation feeds FRQ 4 (symbolic manipulations) and MC computation items; requires procedural fluency with multiple rewriting techniques.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "poly_rewrite_by_factoring",
+          "label": "Rewriting a polynomial expression by factoring",
+          "description": "Factors a polynomial expression (GCF, trinomial, difference of squares, sum/difference of cubes) and recognizes the factored form as an equivalent representation that exposes zeros.",
+          "yield_score": 0.73,
+          "yield_rationale": "Factoring as a rewriting strategy is the gateway skill for 1.11; also unlocks zeros (1.8) and holes (1.10) analysis.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_long_division_of_polynomials",
+          "label": "Using polynomial long division to rewrite a rational expression",
+          "description": "Divides a polynomial numerator by a polynomial denominator using long division to express the rational function as (quotient) + (remainder)/(divisor), revealing end behavior.",
+          "yield_score": 0.68,
+          "yield_rationale": "Long division is tested procedurally in MC and FRQ 4; yields the oblique/polynomial end behavior of an improper rational function.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_partial_fraction_decomposition_linear",
+          "label": "Decomposing a rational expression into partial fractions (linear denominators)",
+          "description": "Rewrites a rational expression with distinct linear factors in the denominator as a sum of simpler fractions A/(x−r1) + B/(x−r2), finding A and B by matching coefficients or substitution.",
+          "yield_score": 0.45,
+          "yield_rationale": "Partial fractions appear in CED 1.11 and FRQ 4 symbolic manipulation tasks; slightly lower frequency than factoring or long division. Rescored downward (from 0.62): partial fraction decomposition appears infrequently in AP Precalc FRQ 4 and is lower-priority relative to AROC and transformation skills; yield anchored in CED 1.11 rationale is lower than initially assigned.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_equivalent_form_connects_to_features",
+          "label": "Connecting an equivalent algebraic form to a graph feature",
+          "description": "Explains how a particular equivalent form (factored, quotient, partial fraction) exposes a specific graph feature (zeros, end behavior, asymptote location).",
+          "yield_score": 0.66,
+          "yield_rationale": "Form-to-feature connections are MP2 items; tested in MC when students must choose the most useful form for a given task.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_simplify_rational_by_factoring",
+          "label": "Simplifying a rational expression by factoring and cancelling",
+          "description": "Factors both numerator and denominator of a rational expression and cancels common factors to produce an equivalent simplified form, noting any domain restrictions.",
+          "yield_score": 0.70,
+          "yield_rationale": "Simplification by cancellation is the most common 1.11 procedural step; bridges to hole identification (1.10) and is MC-staple.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "poly_transformations_of_functions",
+      "label": "Transformations of Functions",
+      "description": "Constructs g(x) as a transformed version of f(x) using vertical/horizontal translations, vertical/horizontal dilations, and reflections; identifies parameter roles (a, h, k) in g(x) = af(x − h) + k.",
+      "ced_topics": ["1.12"],
+      "yield_score": 0.87,
+      "yield_rationale": "CED 1.12 transformations are cross-unit skills appearing in MC across all units and in every FRQ type; 0.85 from the outline plus high cross-unit FRQ applicability.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "poly_vertical_translation",
+          "label": "Vertical translation by adding a constant outside the function",
+          "description": "Identifies that g(x) = f(x) + k shifts the graph of f upward by k units (if k > 0) or downward by |k| units (if k < 0), preserving shape and x-coordinates.",
+          "yield_score": 0.88,
+          "yield_rationale": "Vertical translation is the most straightforward transformation; appears in virtually every transformation MC item set.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_horizontal_translation",
+          "label": "Horizontal translation by replacing x with (x − h)",
+          "description": "Identifies that g(x) = f(x − h) shifts the graph of f right by h units (if h > 0) or left by |h| units (if h < 0); recognizes the counterintuitive direction of the shift.",
+          "yield_score": 0.86,
+          "yield_rationale": "Horizontal shift direction (opposite sign) is the most common student error, making it high-yield for discrimination MC items.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_vertical_dilation_and_reflection",
+          "label": "Vertical dilation and reflection by multiplying the output by a",
+          "description": "Identifies that g(x) = af(x) stretches the graph vertically by |a| (if |a| > 1), compresses it (if 0 < |a| < 1), and reflects over the x-axis if a < 0.",
+          "yield_score": 0.84,
+          "yield_rationale": "Vertical scaling and reflection are consistently tested together; high MC frequency across all function families.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_horizontal_dilation",
+          "label": "Horizontal dilation by replacing x with bx inside the function",
+          "description": "Identifies that g(x) = f(bx) compresses the graph horizontally by a factor of 1/b (if b > 1), stretches it (if 0 < b < 1), and reflects over the y-axis if b < 0.",
+          "yield_score": 0.78,
+          "yield_rationale": "Horizontal dilation (and its reciprocal relationship to b) is a key transformation skill tested in MC; less intuitive than vertical dilation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_combined_transformation_order",
+          "label": "Applying multiple transformations in the correct order",
+          "description": "Given g(x) = af(b(x − h)) + k, identifies the sequence of transformations (horizontal shift, horizontal dilation, vertical dilation/reflection, vertical shift) and applies them in order to obtain the graph of g.",
+          "yield_score": 0.85,
+          "yield_rationale": "Combined transformation questions are the most common 1.12 MC form; requires sequencing multiple operations correctly.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_transformation_from_graph_to_equation",
+          "label": "Writing the equation of a transformed function from its graph",
+          "description": "Given the graph of a transformed function and the parent function, determines the values of a, h, and k in g(x) = af(x − h) + k by identifying key feature shifts.",
+          "yield_score": 0.82,
+          "yield_rationale": "Inverse transformation (graph → equation) is tested in FRQs and MC; requires reading parameter values from graph features.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_transformation_effect_on_domain_range",
+          "label": "Determining the effect of a transformation on domain and range",
+          "description": "Given a transformation g(x) = af(x − h) + k, states the new domain and range of g from the domain and range of f, accounting for shifts and reflections.",
+          "yield_score": 0.72,
+          "yield_rationale": "Domain/range under transformation is a focused MC sub-skill; moderate frequency in transformation item sets.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "poly_function_model_selection",
+      "label": "Function Model Selection and Assumption Articulation",
+      "description": "Selects an appropriate polynomial or rational function type to model a given context; articulates assumptions, domain restrictions, and limitations of the chosen model.",
+      "ced_topics": ["1.13"],
+      "yield_score": 0.73,
+      "yield_rationale": "CED 1.13 is the core skill for FRQ 2 model-selection justification; also appears in MP3 communication items requiring students to state assumptions.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "poly_model_selection_from_rate_pattern",
+          "label": "Selecting polynomial degree from observed rate-of-change pattern",
+          "description": "Uses first/second/higher-order differences from data or context to identify whether a linear, quadratic, or higher-degree polynomial model is appropriate.",
+          "yield_score": 0.75,
+          "yield_rationale": "Rate-pattern model selection is the analytical step in FRQ 2 context questions; directly tests 1.3–1.4 reasoning in a modeling wrapper.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_model_assumption_articulation",
+          "label": "Stating assumptions underlying a polynomial function model",
+          "description": "Explicitly states the mathematical assumptions (e.g., continuous behavior, no restrictions on domain, constant leading behavior) required for a chosen polynomial model to be valid in context.",
+          "yield_score": 0.70,
+          "yield_rationale": "FRQ 2 explicitly asks students to articulate model assumptions; this is the communication (MP3) sub-skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_model_domain_restriction_in_context",
+          "label": "Identifying contextual domain restrictions for a function model",
+          "description": "States the practical domain of a polynomial or rational model based on the context (e.g., only non-negative time values, only positive quantities), distinguishing the mathematical domain from the contextual domain.",
+          "yield_score": 0.72,
+          "yield_rationale": "Contextual domain restriction is tested in MC interpretation items and is a required step in FRQ 2 model-construction sub-parts.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_model_limitation_identification",
+          "label": "Identifying limitations of a polynomial or rational model",
+          "description": "Describes a scenario or data feature that the chosen polynomial/rational model fails to capture accurately (e.g., model predicts negative values for a quantity that must be positive, or unbounded growth).",
+          "yield_score": 0.65,
+          "yield_rationale": "Model-limitation sub-parts appear in FRQ 2 (justify/validate context); MP3 communication skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_model_type_from_graph_shape",
+          "label": "Selecting a function type from the shape of a scatter plot or graph",
+          "description": "Given a scatter plot or data graph, selects whether a linear, quadratic, or rational function is the best-fit model based on visual shape features (direction of curvature, asymptotic behavior, zeros).",
+          "yield_score": 0.50,
+          "yield_rationale": "Visual model selection is a multiple-representation (MP2) skill tested in MC Part B (calculator allowed). Rescored downward (from 0.68): visual scatter-plot model selection is rarely isolated as a standalone MC item; usually paired with other sub-tasks.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "poly_function_model_construction",
+      "label": "Function Model Construction and Application",
+      "description": "Constructs polynomial or rational function models from contextual information or data (using intercepts, a given point, or regression); applies the model to answer questions and make predictions.",
+      "ced_topics": ["1.14"],
+      "yield_score": 0.79,
+      "yield_rationale": "CED 1.14 is the direct target of FRQ 2 (non-periodic model construction and application); high FRQ weight and also tested in calculator-allowed MC.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "poly_construct_model_from_zeros_and_point",
+          "label": "Constructing a polynomial model from its zeros and one additional point",
+          "description": "Writes a polynomial in factored form f(x) = a(x − r1)(x − r2)⋯ using given zeros, then uses a known point to solve for the leading coefficient a.",
+          "yield_score": 0.82,
+          "yield_rationale": "Zeros-plus-point construction is the canonical FRQ 2 model-building procedure; among the most directly tested 1.14 skills.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_construct_quadratic_from_vertex_and_point",
+          "label": "Constructing a quadratic model from vertex form and an additional point",
+          "description": "Writes a quadratic model in vertex form f(x) = a(x − h)² + k using the vertex (h, k) and solves for a using a given point on the parabola.",
+          "yield_score": 0.78,
+          "yield_rationale": "Vertex-form construction is a clean isolated skill; frequently tested when context gives a maximum or minimum point.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_apply_model_to_answer_question",
+          "label": "Applying a constructed polynomial model to answer a contextual question",
+          "description": "Evaluates the polynomial model at a given input or solves f(x) = c for x to answer a question stated in context (e.g., 'when does the height equal 50 ft?').",
+          "yield_score": 0.80,
+          "yield_rationale": "Model application is the final sub-part of FRQ 2; always present and directly graded.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_construct_rational_model_from_context",
+          "label": "Constructing a rational function model from asymptote and point information",
+          "description": "Writes a rational function model using given asymptote locations (to infer numerator/denominator structure) and a known point to determine any remaining constants.",
+          "yield_score": 0.68,
+          "yield_rationale": "Rational model construction from contextual constraints appears in MC and occasionally in FRQ 2; less common than polynomial construction.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_regression_model_technology",
+          "label": "Using regression technology to fit a polynomial model to data",
+          "description": "Describes the process of entering data into a graphing calculator or technology tool, selecting polynomial regression, interpreting the resulting equation, and evaluating its fit using residuals or R².",
+          "yield_score": 0.65,
+          "yield_rationale": "Technology-based regression is tested in calculator-allowed MC (Part B) and FRQ 2; requires procedural and interpretive fluency with regression output.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "poly_model_prediction_and_interpolation",
+          "label": "Making predictions and identifying interpolation vs. extrapolation",
+          "description": "Uses a polynomial model to predict an output value within the data range (interpolation) or outside it (extrapolation), and states whether the prediction is more or less reliable based on this distinction.",
+          "yield_score": 0.62,
+          "yield_rationale": "Interpolation/extrapolation reliability distinction appears in FRQ 2 communication sub-parts (MP3).",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

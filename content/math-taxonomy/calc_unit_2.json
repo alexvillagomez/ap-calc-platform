@@ -1,0 +1,585 @@
+{
+  "category": {
+    "id": "calc_unit_2",
+    "label": "Differentiation: Definition and Basic Rules",
+    "description": "Develops the derivative as a limit of a difference quotient and builds the full toolkit of basic differentiation rules — power, constant, sum/difference, product, quotient, and the standard transcendental derivatives (sin, cos, e^x, ln x, tan, cot, sec, csc). Bridges the conceptual definition of derivative (slope of tangent, instantaneous rate of change) to fluent rule-based computation, including differentiability conditions and numerical/graphical estimation.",
+    "section": "calc_ab",
+    "ced_unit": "AP Calc AB Unit 2",
+    "courses": [
+      { "course": "calc_ab", "role": "core", "order_index": 2 }
+    ],
+    "yield_score": 0.87,
+    "yield_rationale": "Unit 2 is the computational engine of the entire exam — 10-12% unit weight, ~23 FRQ appearances, and every subsequent unit assumes fluent derivative computation; power/product/quotient rules appear implicitly in virtually every FRQ part."
+  },
+  "umbrellas": [
+    {
+      "id": "u2_average_and_instantaneous_rate",
+      "label": "Average and Instantaneous Rates of Change",
+      "description": "Computes the average rate of change over an interval as the slope of a secant line (Δy/Δx), then motivates the instantaneous rate by taking the limit as the interval shrinks to zero.",
+      "ced_topics": ["2.1"],
+      "yield_score": 0.70,
+      "yield_rationale": "Rate-of-change interpretation drives every contextual FRQ sub-part; tables of values require this skill every exam year (Archetype 1 FRQ).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u2_aroc_formula_interval",
+          "label": "Average Rate of Change Formula on [a, b]",
+          "description": "Applies the formula (f(b) − f(a)) / (b − a) to compute the average rate of change of a function on a closed interval, recognizing this as the slope of the secant line through (a, f(a)) and (b, f(b)).",
+          "yield_score": 0.72,
+          "yield_rationale": "AROC computation from an equation or table is a direct sub-task in nearly every Rate/Data FRQ; tested in Part A and Part B.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_aroc_from_table",
+          "label": "Average Rate of Change from a Table of Values",
+          "description": "Reads two function values from a table and computes (f(b) − f(a)) / (b − a), selecting the appropriate rows; recognizes that only the endpoint values are needed regardless of intermediate data.",
+          "yield_score": 0.75,
+          "yield_rationale": "Table-based AROC is the entry step for the Rate/Data FRQ archetype that appears every exam year.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_secant_line_slope",
+          "label": "Slope of the Secant Line and Its Geometric Meaning",
+          "description": "Identifies the average rate of change as the slope of the secant line through two points on a curve and interprets the sign and magnitude of that slope in context.",
+          "yield_score": 0.60,
+          "yield_rationale": "Conceptual link between AROC and secant slope is tested in MC justification questions; prerequisite for the limit definition of derivative.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_instantaneous_rate_as_limit",
+          "label": "Instantaneous Rate of Change as a Limit",
+          "description": "Describes the instantaneous rate of change at x = a as lim_{h→0} [f(a+h) − f(a)] / h, connecting the shrinking-interval process to the slope of the tangent line.",
+          "yield_score": 0.68,
+          "yield_rationale": "Conceptual definition links Unit 1 limit fluency to Unit 2; appears in MC questions that test whether students understand the derivative as a limit.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_aroc_vs_iroc_comparison",
+          "label": "Comparing Average Rate vs Instantaneous Rate",
+          "description": "Distinguishes between average rate of change (secant slope over an interval) and instantaneous rate (derivative at a point); identifies which quantity a given problem context is requesting.",
+          "yield_score": 0.55,
+          "yield_rationale": "Conceptual distinction is tested in MC interpretation questions; a common distractor trap in contextual FRQ sub-parts.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u2_derivative_definition_limit",
+      "label": "Derivative as a Limit of a Difference Quotient",
+      "description": "Formally defines the derivative using the limit definition f'(x) = lim_{h→0} [f(x+h) − f(x)] / h and the equivalent form f'(a) = lim_{x→a} [f(x) − f(a)] / (x − a); establishes derivative notation.",
+      "ced_topics": ["2.2"],
+      "yield_score": 0.75,
+      "yield_rationale": "Limit-definition questions appear in MC every year; notation fluency is required on every derivative FRQ; used as a bridge skill to all downstream differentiation.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u2_diff_quotient_setup",
+          "label": "Setting Up the Difference Quotient f(x+h) − f(x)) / h",
+          "description": "Substitutes x + h into a given function, forms the difference quotient, and simplifies algebraically before taking the limit; tests polynomial and rational function substitution accuracy.",
+          "yield_score": 0.80,
+          "yield_rationale": "Computing f(x+h) accurately (expanding binomials, canceling h) is a direct MC skill tested most years; prerequisite for every limit-definition derivative problem.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_limit_def_compute_derivative",
+          "label": "Computing a Derivative via the Limit Definition",
+          "description": "Evaluates lim_{h→0} [f(x+h) − f(x)] / h by expanding, simplifying, canceling the h in the denominator, and taking the limit to obtain f'(x) or f'(a).",
+          "yield_score": 0.78,
+          "yield_rationale": "Full execution of limit-definition derivative is tested in no-calculator MC and occasionally in FRQ; measures algebraic manipulation fluency under the limit.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_match_limit_to_derivative",
+          "label": "Recognizing a Limit Expression as a Derivative",
+          "description": "Given a limit expression in difference-quotient form, identifies the function f and the point a (or x) so that the limit equals f'(a) or f'(x), without evaluating the derivative directly.",
+          "yield_score": 0.82,
+          "yield_rationale": "Matching a limit to a derivative is one of the highest-frequency MC problem types in Unit 2; tests notation fluency and structural recognition rather than computation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_derivative_notation_fluency",
+          "label": "Interchanging Derivative Notation: f'(x), dy/dx, d/dx",
+          "description": "Reads and writes the derivative using prime notation f'(x), Leibniz notation dy/dx, and operator notation d/dx[f(x)]; interprets each at a point (e.g., f'(a) vs dy/dx|_{x=a}).",
+          "yield_score": 0.70,
+          "yield_rationale": "Notation fluency is required on every derivative question; FRQ answer justifications must use correct notation to earn communication points.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_alternate_limit_def_x_to_a",
+          "label": "Alternate Limit Form: lim_{x→a} [f(x) − f(a)] / (x − a)",
+          "description": "Uses the alternate difference-quotient form with x → a (instead of h → 0) to compute or recognize the derivative at a specific point; applies algebraic cancellation to resolve the 0/0 form.",
+          "yield_score": 0.65,
+          "yield_rationale": "Alternate limit form appears in MC; students must recognize both forms as the same derivative definition — a common source of errors on recognition questions.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u2_estimating_derivatives",
+      "label": "Estimating Derivatives Numerically and Graphically",
+      "description": "Approximates f'(a) by computing a difference quotient with a small h from a table of values, or by reading the slope of a tangent line from a graph; interprets the estimate in context.",
+      "ced_topics": ["2.3"],
+      "yield_score": 0.70,
+      "yield_rationale": "Table-based derivative estimation is a standard FRQ sub-task in the Rate/Data archetype (e.g., 2024 Q1, 2023 Q3); appears in both calculator and no-calculator sections.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u2_estimate_deriv_from_table_symmetric",
+          "label": "Symmetric Difference Quotient for Derivative Estimation",
+          "description": "Estimates f'(a) using the symmetric difference quotient [f(a+h) − f(a−h)] / (2h) when both neighboring table values are available; recognizes this as a more accurate approximation than one-sided.",
+          "yield_score": 0.72,
+          "yield_rationale": "Symmetric difference quotient from a table is the standard FRQ estimation technique; graders award method points for using the closest symmetric pair.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_estimate_deriv_from_table_one_sided",
+          "label": "One-Sided Difference Quotient for Derivative Estimation",
+          "description": "Estimates f'(a) using a forward or backward difference quotient [f(a+h) − f(a)] / h when only one neighboring data point is available; identifies which direction is forced by the table.",
+          "yield_score": 0.65,
+          "yield_rationale": "One-sided estimation arises at endpoints of a table or when asked to interpret a specific sub-interval; tested in both MC and FRQ.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_estimate_deriv_from_graph_tangent",
+          "label": "Estimating f'(a) from a Graph Using Tangent Slope",
+          "description": "Reads the slope of the tangent line to a curve at x = a from a graph by identifying two clear points on the tangent or using the rise-over-run of the curve's local behavior.",
+          "yield_score": 0.60,
+          "yield_rationale": "Graphical derivative estimation appears in MC (Part A) when a graph replaces analytic data; connects to the graphical representation of derivative value.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_interpret_estimated_derivative_units",
+          "label": "Interpreting the Units and Meaning of an Estimated Derivative",
+          "description": "Attaches correct units (output units per input units) to a numerically estimated derivative and states what the value means in the applied context (e.g., 'the temperature is decreasing at 3 degrees per minute').",
+          "yield_score": 0.75,
+          "yield_rationale": "Unit interpretation and contextual meaning of the derivative are required in virtually every applied FRQ sub-part asking for an estimate; graders specifically check for correct units.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u2_differentiability_and_continuity",
+      "label": "Differentiability and Continuity",
+      "description": "Establishes that differentiability implies continuity (but not vice versa); identifies non-differentiable points — corners, cusps, vertical tangents, and discontinuities — by examining one-sided derivatives or the graph.",
+      "ced_topics": ["2.4"],
+      "yield_score": 0.68,
+      "yield_rationale": "Differentiability appears in MC and FRQ justification tasks ('explain why f is not differentiable at x = a'); the FRQ justification demand makes this slightly more exam-relevant than AROC estimation; requires connecting Unit 1 continuity to Unit 2 derivative existence.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u2_differentiability_implies_continuity",
+          "label": "Differentiability Implies Continuity (but Not Vice Versa)",
+          "description": "States and applies the theorem that if f is differentiable at x = a then f is continuous at x = a; provides or identifies a counterexample showing continuity does not guarantee differentiability (e.g., f(x) = |x| at 0).",
+          "yield_score": 0.68,
+          "yield_rationale": "This logical implication is a common MC justification type; distinguishing the two conditions is tested in FRQ explanations.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_corner_not_differentiable",
+          "label": "Non-Differentiability at a Corner (One-Sided Derivatives Differ)",
+          "description": "Identifies a corner (sharp turn) in a graph as a non-differentiable point by showing the left-hand and right-hand derivatives exist but are not equal; uses absolute-value or piecewise functions as examples.",
+          "yield_score": 0.65,
+          "yield_rationale": "Corner non-differentiability is the most commonly tested non-differentiable point type in MC and FRQ; appears most frequently in piecewise-function and absolute-value contexts — the dominant case among the three geometric non-differentiability types.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_cusp_not_differentiable",
+          "label": "Non-Differentiability at a Cusp (Infinite One-Sided Derivatives)",
+          "description": "Identifies a cusp as a point where the one-sided derivatives approach +∞ and −∞ (or both ±∞), making the derivative undefined; distinguishes a cusp from a corner by the blow-up of the secant slopes.",
+          "yield_score": 0.55,
+          "yield_rationale": "Cusps appear less frequently than corners in AP problems but are part of the non-differentiability classification tested in MC; moderately lower priority than corner cases.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_vertical_tangent_not_differentiable",
+          "label": "Non-Differentiability at a Vertical Tangent",
+          "description": "Identifies a vertical tangent as a non-differentiable point because the limit of the difference quotient is ±∞ (derivative undefined); recognizes this graphically as an infinitely steep tangent line.",
+          "yield_score": 0.50,
+          "yield_rationale": "Vertical tangents are tested in MC least frequently among the three geometric non-differentiable point types; appear as a classification option but rarely as the sole focus of an exam question.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_discontinuity_blocks_differentiability",
+          "label": "Discontinuity Makes f Non-Differentiable",
+          "description": "Explains that any discontinuity (removable, jump, or infinite) at x = a makes f non-differentiable at a, since differentiability requires continuity as a prerequisite.",
+          "yield_score": 0.55,
+          "yield_rationale": "Connecting discontinuity to non-differentiability is a standard MC question type; students must apply the contrapositive of the differentiability-implies-continuity theorem.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u2_power_and_linearity_rules",
+      "label": "Power Rule, Constant Rule, and Linearity of Differentiation",
+      "description": "Applies d/dx(x^n) = nx^(n−1) for any real n (including negative and fractional exponents), the constant rule d/dx(c) = 0, and the sum/difference/constant-multiple rules to differentiate polynomial and power-function combinations.",
+      "ced_topics": ["2.5", "2.6"],
+      "yield_score": 0.88,
+      "yield_rationale": "Power rule and linearity rules are prerequisites for every differentiation computation on the exam; yield anchored near the spec's chain rule 0.95 benchmark given ~100% downstream use.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u2_power_rule_integer_exponents",
+          "label": "Power Rule for Positive Integer Exponents",
+          "description": "Applies d/dx(x^n) = nx^(n−1) for positive integer n to differentiate monomials and recognizes the resulting power decrease by one.",
+          "yield_score": 0.92,
+          "yield_rationale": "Integer power rule is the single most-applied differentiation sub-skill on the exam; appears in every polynomial derivative computation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_power_rule_negative_exponents",
+          "label": "Power Rule for Negative Exponents (Reciprocal Functions)",
+          "description": "Rewrites f(x) = 1/x^n as x^(−n) and applies the power rule to obtain −n·x^(−n−1); requires fluency with negative-exponent rewriting before differentiating.",
+          "yield_score": 0.82,
+          "yield_rationale": "Negative-exponent power rule appears frequently in MC and in FRQ setup; a common error is forgetting to rewrite before applying the rule.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_power_rule_fractional_exponents",
+          "label": "Power Rule for Fractional Exponents (Radical Functions)",
+          "description": "Rewrites f(x) = x^(p/q) (from a radical or given form) and applies d/dx(x^(p/q)) = (p/q)·x^(p/q − 1); simplifies the resulting expression with a fractional exponent.",
+          "yield_score": 0.78,
+          "yield_rationale": "Fractional-exponent derivatives appear regularly in MC and are often embedded in larger FRQ expressions; rewriting radicals as powers is a required precalc prerequisite.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_constant_rule",
+          "label": "Derivative of a Constant is Zero",
+          "description": "States and applies d/dx(c) = 0 for any constant c; recognizes that constant terms vanish in differentiation and does not confuse with the constant-multiple rule.",
+          "yield_score": 0.80,
+          "yield_rationale": "Constant-rule application is implicit in every polynomial derivative; errors here (treating a constant as a variable) are among the most common distractor traps.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_constant_multiple_rule",
+          "label": "Constant Multiple Rule: d/dx[c·f(x)] = c·f'(x)",
+          "description": "Applies the constant-multiple rule to pull a scalar coefficient outside the derivative operator before applying the power or other rule.",
+          "yield_score": 0.83,
+          "yield_rationale": "Constant-multiple rule is used in virtually every differentiation problem involving coefficients; failure to apply it correctly is a high-frequency algebraic error.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_sum_difference_rule_polynomial",
+          "label": "Sum and Difference Rule for Polynomials",
+          "description": "Differentiates a sum or difference of functions term-by-term using (f ± g)' = f' ± g', producing the full derivative of a polynomial or combined expression.",
+          "yield_score": 0.87,
+          "yield_rationale": "Sum/difference rule is applied in every polynomial differentiation task on the exam; foundational for all multi-term derivative computations.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_rewrite_before_power_rule",
+          "label": "Rewriting the Expression (Radical/Rational) Before Differentiating",
+          "description": "Rewrites expressions with roots or reciprocals as power functions (e.g., √x = x^(1/2), 1/x² = x^(−2)) before differentiating; identifies when rewriting is necessary.",
+          "yield_score": 0.75,
+          "yield_rationale": "Rewriting is a required pre-step for ~30% of MC power-rule questions; tested as a combined skill with the rule itself.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u2_trig_and_transcendental_basic_derivatives",
+      "label": "Derivatives of sin(x), cos(x), e^x, and ln(x)",
+      "description": "Applies and recalls the four fundamental transcendental derivative formulas — d/dx(sin x) = cos x, d/dx(cos x) = −sin x, d/dx(e^x) = e^x, d/dx(ln x) = 1/x — in isolation and combined with linearity rules.",
+      "ced_topics": ["2.7"],
+      "yield_score": 0.90,
+      "yield_rationale": "Spec anchor: these four formulas appear on virtually every AP exam in both MC and FRQ; essential fluency for all downstream differentiation and integral computation.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u2_derivative_sin_x",
+          "label": "Derivative of sin(x): d/dx[sin x] = cos x",
+          "description": "Recalls the single formula d/dx(sin x) = cos x; applies it to differentiate expressions involving sin(x) multiplied by a constant or added to other terms, isolating the sine derivative rule as the only skill tested.",
+          "yield_score": 0.88,
+          "yield_rationale": "Sine derivative is tested in isolation on MC problems using only sine terms (e.g., 5sin x); appears in nearly every exam year in both sections.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_derivative_cos_x",
+          "label": "Derivative of cos(x): d/dx[cos x] = −sin x",
+          "description": "Recalls the single formula d/dx(cos x) = −sin x, including its negative sign; applies it to differentiate expressions involving cos(x) multiplied by a constant or added to other terms, with the negative sign as the primary precision target.",
+          "yield_score": 0.90,
+          "yield_rationale": "Cosine derivative's negative sign is the most common single-formula error on MC; isolating this rule lets problems specifically test whether the student applies the negative correctly.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_derivative_exp_ex",
+          "label": "Derivative of e^x",
+          "description": "Recalls d/dx(e^x) = e^x; applies this self-referential derivative to expressions involving scalar multiples of e^x or e^x added to other functions.",
+          "yield_score": 0.88,
+          "yield_rationale": "d/dx(e^x) = e^x is the most memorable derivative formula; appears in MC and in DE/integration FRQ sub-parts as a foundational fact.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_derivative_ln_x",
+          "label": "Derivative of ln(x)",
+          "description": "Recalls d/dx(ln x) = 1/x for x > 0; applies this formula to differentiate expressions involving ln(x) with constant multiples, and distinguishes from the derivative of log base b.",
+          "yield_score": 0.85,
+          "yield_rationale": "Derivative of ln(x) appears in MC and FRQ sub-parts involving logarithmic functions; combines with chain rule in Unit 3 (U-sub in Unit 6).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_combine_trig_exp_ln_with_linearity",
+          "label": "Combining Transcendental Derivatives with Sum/Constant-Multiple Rules",
+          "description": "Differentiates expressions like f(x) = 3sin(x) − 2e^x + 4ln(x) by applying linearity rules term-by-term across the four transcendental formulas.",
+          "yield_score": 0.83,
+          "yield_rationale": "Mixed transcendental expressions with constant multiples are a standard MC format; errors arise from misapplying the constant to the wrong formula.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u2_product_rule",
+      "label": "The Product Rule",
+      "description": "Applies the product rule (fg)' = f'g + fg' to differentiate a product of two differentiable functions; identifies which factor is f and which is g, then executes and simplifies the result.",
+      "ced_topics": ["2.8"],
+      "yield_score": 0.85,
+      "yield_rationale": "Product rule appears in ~60% of derivative-heavy FRQ parts; tested explicitly in MC; prerequisite for chain-rule composites involving products in Unit 3.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u2_product_rule_setup",
+          "label": "Identifying Factors and Setting Up the Product Rule",
+          "description": "Recognizes when an expression is a product of two distinct functions and writes the product rule template (fg)' = f'g + fg' with the correct assignments for f and g.",
+          "yield_score": 0.82,
+          "yield_rationale": "Correct identification of the product structure is the gateway step; errors in factor assignment lead to wrong-answer traps in MC.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_product_rule_poly_times_trig",
+          "label": "Product Rule: Polynomial × Trigonometric Function",
+          "description": "Applies the product rule to differentiate a product such as x²·sin(x) or (3x+1)·cos(x), combining polynomial and trig derivatives in a single expression.",
+          "yield_score": 0.84,
+          "yield_rationale": "Polynomial-times-trig products are the most common product rule MC test case; tests both polynomial and trig derivative recall simultaneously.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_product_rule_poly_times_exp",
+          "label": "Product Rule: Polynomial × Exponential Function",
+          "description": "Applies the product rule to differentiate a product such as x³·e^x or (2x−5)·e^x, combining power-rule and e^x derivatives.",
+          "yield_score": 0.80,
+          "yield_rationale": "Poly-times-exp products appear in MC and arise naturally in differential-equation setups (Unit 7); tests e^x derivative fluency under the product structure.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_product_rule_simplification",
+          "label": "Simplifying and Factoring the Product Rule Result",
+          "description": "Collects and simplifies the two terms f'g + fg' by factoring out common factors or combining like terms; recognizes that an un-simplified product rule expression may hide the correct answer.",
+          "yield_score": 0.70,
+          "yield_rationale": "MC answers are typically in simplified form; failure to simplify is a common source of answer-choice mismatches even when the rule is applied correctly.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_product_rule_three_factors",
+          "label": "Extended Product Rule for Three Factors",
+          "description": "Differentiates a triple product f·g·h by applying the product rule twice: (fgh)' = f'gh + fg'h + fgh'; recognizes the pattern as a generalization of the two-factor rule.",
+          "yield_score": 0.42,
+          "yield_rationale": "Three-factor products appear rarely on the AB exam but do appear in MC when testing whether students can extend the product rule beyond two factors.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u2_quotient_rule",
+      "label": "The Quotient Rule",
+      "description": "Applies the quotient rule (f/g)' = (f'g − fg') / g² to differentiate a ratio of two differentiable functions (g ≠ 0); recognizes when a quotient structure requires this rule vs. rewriting as a product.",
+      "ced_topics": ["2.9"],
+      "yield_score": 0.82,
+      "yield_rationale": "Quotient rule is heavily tested in MC; appears in implicit differentiation and related-rates setups that involve ratios; the numerator sign order is the highest-frequency error.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u2_quotient_rule_setup_numerator_order",
+          "label": "Quotient Rule Setup and the Numerator Sign Order",
+          "description": "Sets up the quotient rule formula (f'g − fg') / g² with correct placement of f (numerator) and g (denominator); emphasizes that subtraction in the numerator is not commutative — f'g − fg' ≠ fg' − f'g.",
+          "yield_score": 0.85,
+          "yield_rationale": "Reversed numerator sign is the single most common quotient rule error and a standard distractor in MC; mastery of setup is the critical gate.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_quotient_rule_poly_over_poly",
+          "label": "Quotient Rule: Polynomial over Polynomial",
+          "description": "Differentiates a rational function (polynomial numerator divided by polynomial denominator) by applying the quotient rule and simplifying the resulting expression.",
+          "yield_score": 0.80,
+          "yield_rationale": "Poly-over-poly quotient rule problems are a standard MC type; requires polynomial algebra fluency for the numerator simplification step.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_quotient_rule_with_trig",
+          "label": "Quotient Rule Involving Trigonometric Functions",
+          "description": "Applies the quotient rule to differentiate expressions like sin(x)/x, e^x/cos(x), or x/tan(x), combining trig derivatives with the quotient structure.",
+          "yield_score": 0.72,
+          "yield_rationale": "Trig-in-quotient problems are a frequent MC variant; they also provide the derivation route for sec(x), csc(x), tan(x), cot(x) derivatives covered in topic 2.10.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_quotient_vs_negative_power",
+          "label": "Choosing Between Quotient Rule and Negative Exponent Rewrite",
+          "description": "Recognizes that 1/g(x) can be rewritten as g(x)^(−1) and differentiated via the power rule (or chain rule), whereas f(x)/g(x) requires the quotient rule; selects the efficient approach for a given expression.",
+          "yield_score": 0.58,
+          "yield_rationale": "Strategy selection between methods is tested in MC strategy questions; students who always use the quotient rule make avoidable algebraic errors on simple cases.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_quotient_rule_g_squared_denominator",
+          "label": "Handling the g² Denominator in the Quotient Rule",
+          "description": "Correctly forms g(x)² in the denominator of the quotient rule result and leaves it un-expanded when appropriate; avoids erroneously canceling it with numerator terms.",
+          "yield_score": 0.62,
+          "yield_rationale": "Denominator errors (expanding g², incorrect squaring) are common algebraic mistakes that change the answer; tested in MC through answer-choice comparisons.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u2_remaining_trig_derivatives",
+      "label": "Derivatives of tan(x), cot(x), sec(x), and csc(x)",
+      "description": "Applies the derived formulas d/dx(tan x) = sec²x, d/dx(cot x) = −csc²x, d/dx(sec x) = sec x tan x, d/dx(csc x) = −csc x cot x in problems involving these functions alone and combined with linearity rules.",
+      "ced_topics": ["2.10"],
+      "yield_score": 0.76,
+      "yield_rationale": "All six trig derivatives appear in MC; sec²(x) formula for tan'(x) is particularly common; these formulas are also used in trig-based quotient-rule problems and in integral forms (Unit 6).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u2_derivative_tan_sec_squared",
+          "label": "Derivative of tan(x) = sec²(x)",
+          "description": "Recalls d/dx(tan x) = sec²(x) and applies it to differentiate expressions involving tan(x), including with constant multiples or as part of a sum.",
+          "yield_score": 0.82,
+          "yield_rationale": "tan derivative is the most tested of the four remaining trig derivatives; sec²(x) appears in u-substitution integrals in Unit 6 and chain rule in Unit 3.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_derivative_sec_csc",
+          "label": "Derivatives of sec(x) and csc(x)",
+          "description": "Recalls d/dx(sec x) = sec x tan x and d/dx(csc x) = −csc x cot x; notes the pattern that the derivative involves the same function times the co-function (with sign).",
+          "yield_score": 0.70,
+          "yield_rationale": "sec and csc derivatives appear in MC most years; the product-of-functions form makes them harder to memorize and more frequently missed.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_derivative_cot_neg_csc_squared",
+          "label": "Derivative of cot(x) = −csc²(x)",
+          "description": "Recalls d/dx(cot x) = −csc²(x); distinguishes from d/dx(tan x) = sec²(x) by noting the negative sign and the cosecant-squared rather than secant-squared form.",
+          "yield_score": 0.65,
+          "yield_rationale": "cot derivative is the least commonly isolated but does appear in MC; confusion with the tan derivative formula is a common distractor.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_derive_trig_formulas_from_quotient_rule",
+          "label": "Deriving tan, cot, sec, csc Derivatives Using the Quotient Rule",
+          "description": "Derives d/dx(tan x) = sec²x by applying the quotient rule to sin x / cos x; similarly derives d/dx(sec x) by applying the quotient rule to 1/cos x; demonstrates that the four formulas follow from the sin/cos derivatives.",
+          "yield_score": 0.48,
+          "yield_rationale": "Derivation is occasionally tested in MC as 'which of the following is equivalent to the derivative of tan x found by the quotient rule'; confirms conceptual understanding over memorization.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_trig_derivatives_in_linear_combinations",
+          "label": "Differentiating Linear Combinations Involving All Six Trig Derivatives",
+          "description": "Applies sum/constant-multiple rules to differentiate expressions like f(x) = 2sec(x) − 5tan(x) + cot(x), requiring recall and correct application of all six trig derivative formulas simultaneously.",
+          "yield_score": 0.68,
+          "yield_rationale": "Multi-trig-function derivatives in a single expression appear in MC to test both formula fluency and linearity application.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u2_tangent_line_equations",
+      "label": "Tangent Lines and Normal Lines",
+      "description": "Finds the equation of the tangent line (or normal line) to a function at a given point by computing f'(a) and applying point-slope form; interprets the tangent line as the best linear approximation of f near x = a.",
+      "ced_topics": ["2.2", "2.5", "2.6", "2.7"],
+      "yield_score": 0.80,
+      "yield_rationale": "Tangent line equations are among the most common question types across Units 2-5 in both MC and FRQ; they appear explicitly or as a sub-part in related-rates, implicit differentiation, and linearization problems.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u2_tangent_line_slope_from_derivative",
+          "label": "Finding the Slope of the Tangent Line via f'(a)",
+          "description": "Computes f'(a) using the appropriate differentiation rule to obtain the slope of the tangent line at x = a; recognizes that f'(a) is the slope, not f(a).",
+          "yield_score": 0.85,
+          "yield_rationale": "Slope from derivative is the first step of every tangent-line sub-part; confusion between f(a) and f'(a) is the most common error in these problems.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_tangent_line_equation_point_slope",
+          "label": "Writing the Tangent Line Equation Using Point-Slope Form",
+          "description": "Uses the point (a, f(a)) and slope m = f'(a) to write the tangent line equation y − f(a) = f'(a)(x − a), then simplifies to slope-intercept form when needed.",
+          "yield_score": 0.82,
+          "yield_rationale": "Writing the full tangent line equation is a standard FRQ sub-part; graders award process points for the correct point-slope setup even when arithmetic errors occur.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_normal_line_perpendicular_slope",
+          "label": "Normal Line to a Curve (Perpendicular Slope)",
+          "description": "Finds the equation of the normal line at x = a by using the negative reciprocal of f'(a) as the slope, then applying point-slope form with the same point (a, f(a)).",
+          "yield_score": 0.55,
+          "yield_rationale": "Normal line questions appear in MC occasionally; less common than tangent line but frequently used as a distractor or alternative sub-part.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_tangent_line_from_graph",
+          "label": "Identifying the Tangent Line from a Graph (Slope Reading)",
+          "description": "Reads the slope of the tangent line at a marked point from a function graph by estimating the rise-over-run of the tangent, then writes or identifies the correct tangent line equation.",
+          "yield_score": 0.60,
+          "yield_rationale": "Graph-based tangent line slope reading connects graphical and analytic representations; appears in MC with graph stimuli (Part A no-calculator).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_horizontal_tangent_from_derivative",
+          "label": "Finding Points Where the Tangent Line is Horizontal",
+          "description": "Sets f'(x) = 0 and solves for x to locate points with a horizontal tangent (slope = 0); distinguishes these from vertical tangent points where f'(x) is undefined.",
+          "yield_score": 0.72,
+          "yield_rationale": "Horizontal tangent points are directly tested in MC and serve as the first step in critical-point analysis in Unit 5; high-frequency connection between Unit 2 and Unit 5.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u2_derivative_rule_selection",
+      "label": "Selecting and Combining Differentiation Rules",
+      "description": "Identifies which differentiation rule(s) to apply when differentiating an expression that requires a combination of power, constant-multiple, product, quotient, and/or basic transcendental rules; performs the multi-step computation accurately.",
+      "ced_topics": ["2.5", "2.6", "2.7", "2.8", "2.9", "2.10"],
+      "yield_score": 0.83,
+      "yield_rationale": "Strategy-selection questions are a recurring MC type; combining multiple rules in a single expression is tested in FRQ on any differentiation sub-part.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u2_identify_product_vs_chain_structure",
+          "label": "Distinguishing Product Structure from Composite Structure",
+          "description": "Given an expression, determines whether two functions are multiplied (requiring the product rule) or one is composed inside the other (requiring the chain rule from Unit 3); correctly categorizes before choosing the rule.",
+          "yield_score": 0.80,
+          "yield_rationale": "Product vs. composite misclassification is a major source of MC errors; this structural identification skill is the gateway to correct rule selection.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_product_and_quotient_combined",
+          "label": "Applying Product and Quotient Rules in a Single Expression",
+          "description": "Differentiates an expression that requires both the product and quotient rules — for example, a numerator that is itself a product — by applying the rules in the correct order.",
+          "yield_score": 0.72,
+          "yield_rationale": "Nested product-quotient structures appear in MC difficulty-escalation questions; tests procedural fluency and algebraic simplification simultaneously.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_power_product_quotient_with_transcendental",
+          "label": "Combining Power, Product/Quotient, and Transcendental Derivatives",
+          "description": "Differentiates expressions involving a product or quotient of a power function and a transcendental function (e.g., x²·sin x, e^x / x³), executing each sub-derivative and combining correctly.",
+          "yield_score": 0.78,
+          "yield_rationale": "Mixed-type derivatives are the dominant format for medium-to-hard MC derivative questions; these test simultaneous recall of multiple formula types.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_simplify_before_differentiating",
+          "label": "Simplifying the Expression Before Differentiating",
+          "description": "Recognizes when algebraic simplification (combining terms, canceling factors, distributing) before applying differentiation rules reduces computational complexity and avoids unnecessary use of the product or quotient rule.",
+          "yield_score": 0.65,
+          "yield_rationale": "Simplify-first strategy is tested in MC as the 'elegant' approach; recognizing the opportunity to simplify first is a speed and accuracy strategy on both sections.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u2_second_derivative_from_basic_rules",
+          "label": "Computing the Second Derivative Using Basic Rules",
+          "description": "Differentiates f'(x) a second time using the same basic rules to obtain f''(x); applies the correct rule to each term in f'(x) including terms that involve products introduced by the product rule.",
+          "yield_score": 0.70,
+          "yield_rationale": "Second derivatives via basic rules appear in Unit 2 MC questions about concavity and in FRQ sub-parts before Unit 3 chain rule is needed; connects directly to Units 4 and 5.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,534 @@
+{
+  "category": {
+    "id": "calc_unit_7",
+    "label": "Differential Equations",
+    "description": "Setting up, analyzing, and solving differential equations on the AB exam, including slope field construction and interpretation, separation of variables to find general and particular solutions, and exponential growth/decay modeling. Students apply integration skills from Unit 6 to solve dy/dx equations and use initial conditions to pin a specific solution.",
+    "section": "calc_ab",
+    "ced_unit": "AP Calc AB Unit 7",
+    "courses": [
+      { "course": "calc_ab", "role": "core", "order_index": 7 }
+    ],
+    "yield_score": 0.78,
+    "yield_rationale": "Unit 7 carries 6–12% exam weight; the DE/slope-field FRQ is a near-annual dedicated question (Archetype 6), appearing in 2022 Q5, 2023 Q3, 2024 Q3; unit FRQ appearances ~9 since 2012 — lower raw count but highly predictable structure makes prep payoff high."
+  },
+  "umbrellas": [
+    {
+      "id": "de_modeling_setup",
+      "label": "Modeling with Differential Equations",
+      "description": "Translating a verbal rate-of-change description into a differential equation and interpreting what a solution function represents in context.",
+      "ced_topics": ["7.1"],
+      "yield_score": 0.68,
+      "yield_rationale": "Topic 7.1 appears in the dedicated DE FRQ setup sub-part every exam year; also tested in MC as translation tasks; moderate yield because it is often paired with higher-yield solve sub-parts.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "de_translate_rate_description",
+          "label": "Translate a verbal rate statement into a DE",
+          "description": "Convert a sentence such as 'the temperature changes at a rate proportional to the difference between the temperature and ambient' into the form dy/dt = k(y − A), identifying each term's meaning.",
+          "yield_score": 0.72,
+          "yield_rationale": "Direct translation sub-part appears in DE FRQs (2023 Q3 milk cooling, 2024 Q3 seawater); also a standard MC task.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_identify_dependent_independent_variable",
+          "label": "Identify dependent and independent variables in a DE",
+          "description": "Given a differential equation in context, correctly name which quantity is the dependent variable (y) and which is the independent variable (t or x), and state what dy/dt represents with units.",
+          "yield_score": 0.55,
+          "yield_rationale": "Variable identification underpins correct setup; tested implicitly in contextual FRQ sub-parts but rarely in isolation, keeping yield moderate.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_interpret_solution_in_context",
+          "label": "Interpret what a solution function represents",
+          "description": "Given a particular solution y(t), state in words what value or quantity the function models, including units, and describe its long-run behavior (as t → ∞).",
+          "yield_score": 0.65,
+          "yield_rationale": "Contextual interpretation sub-parts appear on almost every DE FRQ; connects to Unit 4 derivative-interpretation skills but is housed here as a DE-specific skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_write_from_proportionality_statement",
+          "label": "Write a DE from a proportionality statement",
+          "description": "Construct dy/dt = ky (or dy/dt = k(L − y)) directly from a statement that a rate is 'proportional to' a quantity, correctly identifying the proportionality constant k.",
+          "yield_score": 0.70,
+          "yield_rationale": "Proportionality-to-DE conversion is the most common single translation task in both MC and the FRQ setup sub-part; connects directly to exponential model in 7.8.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_check_whether_function_is_solution",
+          "label": "Check that a specific function satisfies a DE by substitution",
+          "description": "Substitute a candidate function y = f(x) into a differential equation, compute dy/dx, and verify (or disprove) that the equation holds for all x — distinct from the more detailed verification topic (7.2).",
+          "yield_score": 0.48,
+          "yield_rationale": "Quick substitution check appears in MC; lower yield than full verification because partial-credit FRQ sub-parts reward the full procedure.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "de_solution_verification",
+      "label": "Verifying Solutions to Differential Equations",
+      "description": "Substituting a proposed function into a differential equation to confirm it is a solution, including computing derivatives and checking algebraic equality.",
+      "ced_topics": ["7.2"],
+      "yield_score": 0.58,
+      "yield_rationale": "Topic 7.2 appears in MC and as FRQ sub-parts; standalone verification questions occur roughly every 2 years; yield is moderate because verification is a supporting skill rather than the primary DE task.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "de_verify_by_differentiation_and_substitution",
+          "label": "Verify a solution by differentiating and substituting into the DE",
+          "description": "Given y = f(x), compute dy/dx (or dy/dt), substitute both y and dy/dx into the left and right sides of the DE, and confirm equality — the standard verification procedure.",
+          "yield_score": 0.62,
+          "yield_rationale": "Core verification procedure tested in MC and FRQ; requires fluent differentiation including chain rule for composite candidates.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_verify_with_chain_rule_factor",
+          "label": "Verify a composite or exponential solution requiring chain rule",
+          "description": "When the proposed solution involves Ce^(kx) or a nested composite, correctly apply the chain rule while differentiating before substituting into the DE.",
+          "yield_score": 0.60,
+          "yield_rationale": "Exponential solution verification is the most common verification sub-type on the AB exam; chain rule fluency is the discriminating skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_verify_initial_condition_satisfaction",
+          "label": "Verify that a particular solution satisfies an initial condition",
+          "description": "Substitute t = t₀ into the proposed y(t) and confirm that y(t₀) equals the given initial value, separate from verifying the differential equation itself.",
+          "yield_score": 0.50,
+          "yield_rationale": "Initial-condition check is a sub-step in verification problems; lower standalone yield because it is algebraically simple once the function is given.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_identify_which_function_satisfies_de",
+          "label": "Select which candidate function satisfies a given DE",
+          "description": "From a list of four functions, identify the one that satisfies the differential equation by differentiating each candidate and substituting — a common MC format.",
+          "yield_score": 0.65,
+          "yield_rationale": "Multiple-choice 'which is a solution' format appears regularly in AB MC; tests the same verification skill in a selection context, raising practical yield.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "slope_field_construction",
+      "label": "Sketching Slope Fields",
+      "description": "Drawing a slope field by evaluating dy/dx at a grid of (x, y) points and plotting short tangent segments with the correct slope, and reading qualitative solution behavior from the field.",
+      "ced_topics": ["7.3"],
+      "yield_score": 0.75,
+      "yield_rationale": "Slope-field sketch or identification appears on nearly every DE FRQ sub-part (2022 Q5, 2023 Q3, 2024 Q3); also a standard MC question type; one of the highest-yield Unit 7 skills.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "de_evaluate_slope_at_grid_point",
+          "label": "Evaluate dy/dx at a specific (x, y) point to find the segment slope",
+          "description": "Substitute a given (x, y) coordinate pair into the right-hand side of dy/dx = g(x, y) to compute the numerical slope of the tangent segment at that grid point.",
+          "yield_score": 0.72,
+          "yield_rationale": "Slope computation at a point is the foundational step in every slope-field problem; tested on its own in MC and as part of FRQ sketch tasks.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_draw_slope_field_segments",
+          "label": "Draw short tangent segments at multiple grid points to produce a slope field",
+          "description": "For a given DE, sketch a slope field on a provided grid by placing line segments of the correct slope at each labeled point, paying attention to sign (positive/negative) and approximate steepness.",
+          "yield_score": 0.75,
+          "yield_rationale": "Slope-field sketch is an FRQ Part (a) sub-task most years when the DE archetype appears; partial-credit structure means each correctly-sloped segment earns points.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_identify_horizontal_and_vertical_segments",
+          "label": "Identify where slope field segments are horizontal or vertical (undefined)",
+          "description": "Determine the isoclines where dy/dx = 0 (horizontal segments) or where dy/dx is undefined (vertical segments) by setting g(x, y) = 0 or examining division-by-zero conditions in the DE.",
+          "yield_score": 0.62,
+          "yield_rationale": "Isocline identification appears as a slope-field MC sub-task and connects to equilibrium analysis in 7.4; moderate-high yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_sketch_solution_curve_through_point",
+          "label": "Sketch a solution curve through a given point following the slope field",
+          "description": "On a given slope field, draw a smooth curve through a specified initial point that is everywhere tangent to the slope-field segments, respecting the direction indicated at each grid location.",
+          "yield_score": 0.70,
+          "yield_rationale": "Drawing the solution curve is a paired FRQ sub-task whenever slope-field sketching appears; earns its own scoring point in the rubric.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_describe_solution_behavior_from_field",
+          "label": "Describe long-run or local solution behavior by reading the slope field",
+          "description": "Use the pattern of slopes in a slope field to qualitatively describe whether a solution through a given point is increasing, decreasing, concave up, or approaching an equilibrium as t → ∞.",
+          "yield_score": 0.65,
+          "yield_rationale": "Qualitative behavior description appears as the final sub-part of FRQ DE questions and in MC; rewards students who can read a slope field without solving the DE analytically.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "slope_field_reasoning",
+      "label": "Reasoning Using Slope Fields",
+      "description": "Using a slope field to match differential equations, identify equilibrium solutions, determine long-term behavior, and reason about solution trajectories without explicitly solving the DE.",
+      "ced_topics": ["7.4"],
+      "yield_score": 0.68,
+      "yield_rationale": "Slope-field matching MC appears every year; FRQ asks about long-run behavior from slope field; this reasoning layer appears alongside construction tasks in the dedicated DE FRQ archetype.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "de_match_de_to_slope_field",
+          "label": "Match a differential equation to its slope field",
+          "description": "Given four slope-field pictures and one DE (or vice versa), select the matching pair by testing characteristic grid points (e.g., where x = 0 or y = 0) to identify which slope field is consistent with the DE.",
+          "yield_score": 0.72,
+          "yield_rationale": "Match-the-slope-field is among the most common Unit 7 MC problem formats; appears almost every exam year.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_identify_equilibrium_solution",
+          "label": "Identify constant (equilibrium) solutions from a slope field or DE",
+          "description": "Find values of y for which dy/dx = 0 for all x (equilibrium solutions); recognize these as horizontal lines in the slope field and determine stability by examining slope signs above and below.",
+          "yield_score": 0.62,
+          "yield_rationale": "Equilibrium identification is tested in MC and occasionally as an FRQ sub-part; connects to long-run behavior analysis.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_determine_stability_of_equilibrium",
+          "label": "Determine whether an equilibrium is stable or unstable from slope patterns",
+          "description": "Classify an equilibrium solution as stable (solutions above and below converge to it) or unstable (solutions diverge away) by analyzing the sign of dy/dx in the neighborhood of the equilibrium value.",
+          "yield_score": 0.45,
+          "yield_rationale": "Stability analysis is occasionally asked in MC context; lower yield because explicit labeling of stable/unstable is more common in BC-level work, though slope-pattern reasoning is tested at AB level.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_infer_concavity_from_slope_field",
+          "label": "Infer concavity of solution curves from the slope field",
+          "description": "Reason that where slope values are increasing left-to-right (or bottom-to-top), the solution curve is concave up; apply this to describe whether a solution through a given point is concave up or down.",
+          "yield_score": 0.58,
+          "yield_rationale": "Concavity inference from slope fields tests the connection between slope-field structure and d²y/dx²; appears in MC and FRQ description sub-parts.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_use_slope_field_to_bound_solution",
+          "label": "Use slope field to argue whether a function value is over- or under-estimated",
+          "description": "Given a slope field and an approximation (such as a linear or Euler-step estimate), use the concavity visible in the field to argue that the approximation is an overestimate or underestimate of the true solution value.",
+          "yield_score": 0.52,
+          "yield_rationale": "Over/under-estimate justification appears in FRQ DE questions and connects to linearization from Unit 4; moderate yield as a supporting reasoning skill.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "eulers_method",
+      "label": "Euler's Method",
+      "description": "Using Euler's Method to approximate solutions to a differential equation numerically: computing successive linear (tangent-line) approximations from an initial value using a given step size, completing a multi-step table, and assessing whether the approximation over- or under-estimates the true solution based on concavity.",
+      "ced_topics": ["7.5"],
+      "yield_score": 0.72,
+      "yield_rationale": "CED topic 7.5 (Euler's Method) appears on every AP Calc AB exam in MC and is included in the DE FRQ archetype approximately every 2–3 years; students who skip it leave guaranteed MC points behind; yield anchored below separation of variables because it is MC-only and the FRQ appearance is cyclic rather than annual.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "euler_method_single_step",
+          "label": "Compute one Euler step from a given dy/dx and step size",
+          "description": "Given a DE dy/dx = g(x, y), a starting point (x₀, y₀), and a step size h, compute the next approximation as y₁ = y₀ + h · g(x₀, y₀), correctly evaluating g at the current point and adding the tangent-line increment.",
+          "yield_score": 0.75,
+          "yield_rationale": "Single-step Euler computation is the most common Euler's Method MC question type; tests the core formula in isolation; appears nearly every exam year.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "euler_method_multi_step_table",
+          "label": "Complete a multi-step Euler's Method table for a given IVP",
+          "description": "Starting from an initial condition, iteratively apply the Euler update rule y_{n+1} = y_n + h · g(x_n, y_n) to fill in a table of (x, y, dy/dx) values for multiple steps, propagating each new y-value as the input to the next step.",
+          "yield_score": 0.68,
+          "yield_rationale": "Multi-step table completion appears as a full MC problem or a calculator-section FRQ sub-part; requires careful arithmetic propagation across steps; moderate-high yield as the most thorough test of Euler's Method fluency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "euler_method_overestimate_underestimate",
+          "label": "Determine whether an Euler approximation is an over- or underestimate using concavity",
+          "description": "Use the concavity of the true solution (d²y/dx² > 0 means concave up, tangent line lies below → underestimate; d²y/dx² < 0 means concave down, tangent line lies above → overestimate) to classify whether one or more Euler steps give a value above or below the actual solution.",
+          "yield_score": 0.70,
+          "yield_rationale": "Over/underestimate questions appear almost every time Euler's Method is tested; connect concavity reasoning from Unit 5 to the tangent-line approximation error; a consistent MC question type that rewards conceptual understanding over rote computation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "euler_method_connection_to_slope_field",
+          "label": "Connect Euler's Method steps to following the slope field",
+          "description": "Recognize that each Euler step moves horizontally by h and vertically by h · (slope at current point), tracing a piecewise-linear path that follows the slope-field tangent segment at each grid location — and that smaller h produces a path closer to the true solution curve.",
+          "yield_score": 0.58,
+          "yield_rationale": "Conceptual connection between Euler steps and slope fields is tested in MC explain/justify questions and is the key conceptual link for CED 7.5; lower yield than the computational steps because it is qualitative rather than numeric.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "separation_of_variables_general",
+      "label": "General Solutions via Separation of Variables",
+      "description": "Algebraically separating a separable DE so that all y-terms are on one side and all x-terms on the other, then integrating both sides to obtain the general solution (with constant C).",
+      "ced_topics": ["7.6"],
+      "yield_score": 0.85,
+      "yield_rationale": "Separation of variables is the core AB integration technique for DEs; appears in the dedicated DE FRQ every exam year (2022 Q5, 2023 Q3, 2024 Q3); ~0.85 anchored to near-annual FRQ appearance and high unit centrality.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "de_recognize_separable_form",
+          "label": "Recognize whether a differential equation is separable",
+          "description": "Identify that a DE is separable when it can be written as dy/dx = f(x) · g(y), i.e., the right side factors into a product of a function of x alone and a function of y alone.",
+          "yield_score": 0.78,
+          "yield_rationale": "Separability recognition is the entry gate to the solve procedure; tested in MC and as prerequisite reasoning in FRQ; moderate-high yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_algebraic_separation_step",
+          "label": "Rewrite a separable DE with dy and dx on opposite sides",
+          "description": "Multiply both sides by dx and divide by g(y) to produce the form h(y) dy = f(x) dx, correctly moving all y-factors (including dy) to the left and all x-factors (including dx) to the right.",
+          "yield_score": 0.82,
+          "yield_rationale": "The algebraic separation step is individually scored in FRQ rubrics; getting dy and dx correctly separated earns a dedicated point; appears every year separation of variables is tested.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_integrate_both_sides",
+          "label": "Integrate both sides after separation to obtain the general solution",
+          "description": "Apply antidifferentiation to each side of h(y) dy = f(x) dx, produce the implicit or explicit general solution, and include a single constant of integration C on one side.",
+          "yield_score": 0.88,
+          "yield_rationale": "Integration of both sides is the central computational step of the separation-of-variables FRQ; earns the most points in rubric scoring; strongly linked to Unit 6 antiderivative skills.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_solve_for_y_explicit_form",
+          "label": "Solve for y explicitly after integration to express the general solution",
+          "description": "After integrating both sides, algebraically isolate y (e.g., exponentiate both sides when ln|y| appears) to write the general solution in the form y = F(x, C).",
+          "yield_score": 0.80,
+          "yield_rationale": "Solving for y explicitly is an FRQ rubric point; especially required in exponential-model problems where y = Ce^(kx) must be written explicitly; appears every year.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_include_absolute_value_and_sign_in_general_solution",
+          "label": "Handle absolute value and ± correctly when integrating 1/y",
+          "description": "When integrating 1/y dy, write ln|y| + C, then resolve the absolute value by considering the domain context or absorbing the sign into the constant C to produce y = Ce^(kx) with C ≠ 0.",
+          "yield_score": 0.70,
+          "yield_rationale": "Absolute-value handling is a common source of errors; partial credit on FRQ rubrics specifically addresses this step; moderate-high yield as a discriminating algebra sub-skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_write_general_solution_with_arbitrary_constant",
+          "label": "Express the general solution with an arbitrary constant C and state its meaning",
+          "description": "Produce a solution family parameterized by an undetermined constant C (not yet fixed by an initial condition), and recognize that each value of C corresponds to a different member of the solution family.",
+          "yield_score": 0.65,
+          "yield_rationale": "Correct use of +C and understanding that it represents a family of solutions is a notation requirement on FRQ; tested conceptually in MC choice questions about general vs particular solutions.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "particular_solution_initial_conditions",
+      "label": "Particular Solutions via Initial Conditions",
+      "description": "Applying a given initial condition y(x₀) = y₀ to a general solution to determine the constant C and write the unique particular solution satisfying the DE and the initial condition.",
+      "ced_topics": ["7.7"],
+      "yield_score": 0.87,
+      "yield_rationale": "Finding the particular solution is a standard FRQ sub-part in the DE archetype every year; pairs with separation of variables and always earns its own rubric point; near-annual FRQ appearance yields 0.87.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "de_substitute_initial_condition_to_find_c",
+          "label": "Substitute the initial condition into the general solution to solve for C",
+          "description": "Plug x = x₀ and y = y₀ into the general solution equation, then solve the resulting algebraic equation for the constant C.",
+          "yield_score": 0.90,
+          "yield_rationale": "Solving for C using initial conditions is the core skill of 7.7; appears as a distinct FRQ rubric step every time an initial condition is given; one of the highest-yield in_depth skills in Unit 7.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_write_particular_solution_with_c_substituted",
+          "label": "Write the explicit particular solution after determining C",
+          "description": "After finding C, substitute its numerical value back into the general solution and write the complete particular solution y = f(x) in simplified form.",
+          "yield_score": 0.88,
+          "yield_rationale": "Writing the final particular solution expression is separately scored in FRQ rubrics; a student who finds C correctly but fails to substitute loses the final solution point — tested every year.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_state_domain_of_particular_solution",
+          "label": "State the domain restriction of a particular solution when relevant",
+          "description": "Identify any domain constraint on the particular solution imposed by the initial condition or by the function form (e.g., a logarithmic solution is only valid for x in an interval where the argument is positive).",
+          "yield_score": 0.40,
+          "yield_rationale": "Domain of solution is occasionally tested in MC and as a justification FRQ sub-part; lower yield because it is not always asked explicitly but matters for full-credit justification.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_distinguish_general_from_particular_solution",
+          "label": "Distinguish a general solution (family) from a particular solution (one curve)",
+          "description": "Articulate that the general solution contains an arbitrary constant C (representing infinitely many curves) while a particular solution has a specific C determined by a single initial condition (one curve through one point).",
+          "yield_score": 0.60,
+          "yield_rationale": "Conceptual distinction between general and particular appears in MC and FRQ justification tasks; medium yield as a conceptual knowledge skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_apply_ic_to_implicit_solution",
+          "label": "Apply an initial condition to an implicitly defined general solution",
+          "description": "When the general solution is left in implicit form (e.g., y² = 2x + C), substitute x₀ and y₀ to find C without first solving for y explicitly, then verify the resulting implicit equation is consistent.",
+          "yield_score": 0.55,
+          "yield_rationale": "Implicit-form initial-condition application appears in harder MC and some FRQ variants; moderate yield as it requires comfort with implicit equations.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_verify_particular_solution_satisfies_both_de_and_ic",
+          "label": "Verify a particular solution satisfies both the DE and the initial condition",
+          "description": "As a final check, differentiate the particular solution and substitute into the DE to confirm it holds, then verify y(x₀) = y₀; connects verification (7.2) to the particular solution procedure (7.7).",
+          "yield_score": 0.62,
+          "yield_rationale": "Full verification of a particular solution is tested as a combined conceptual/computational task in MC and FRQ justification sub-parts.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "exponential_growth_decay_model",
+      "label": "Exponential Growth and Decay Models",
+      "description": "Solving the DE dy/dt = ky to obtain y = Ce^(kt), interpreting the sign of k (growth vs decay), connecting C to the initial value, and applying the model to real-world contexts (population, temperature, radioactive decay).",
+      "ced_topics": ["7.8"],
+      "yield_score": 0.82,
+      "yield_rationale": "Exponential model appears in MC every year and as a FRQ sub-part in contextual DE problems; unit 7.8 is the highest-frequency single topic in Unit 7; yield anchored to near-annual MC appearance and FRQ sub-part presence.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "de_solve_dy_dt_equals_ky",
+          "label": "Solve dy/dt = ky by separation of variables to get y = Ce^(kt)",
+          "description": "Apply separation of variables to the canonical proportional-growth DE: separate 1/y dy = k dt, integrate both sides to get ln|y| = kt + C₀, then exponentiate to obtain y = Ce^(kt) where C = ±e^(C₀).",
+          "yield_score": 0.88,
+          "yield_rationale": "Canonical exponential DE derivation is the most-tested solve-step in Unit 7; appears in MC every year and as the solve sub-part in any exponential-context FRQ.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_identify_growth_vs_decay_from_k",
+          "label": "Identify exponential growth vs decay from the sign of k",
+          "description": "Recognize that k > 0 produces exponential growth (y → ∞ as t → ∞) and k < 0 produces exponential decay (y → 0), and match a given context or graph to the appropriate sign of the constant.",
+          "yield_score": 0.78,
+          "yield_rationale": "Growth vs decay classification is a standard MC question; appears as a contextual interpretation sub-part when k is given numerically or must be inferred from a graph.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_determine_initial_value_from_c",
+          "label": "Determine the initial value C from y(0) = y₀",
+          "description": "Substitute t = 0 into y = Ce^(kt) to establish that C = y(0), the value of the quantity at time zero, and use a given initial data point to compute C numerically.",
+          "yield_score": 0.82,
+          "yield_rationale": "Connecting C to the initial value is tested in both MC and FRQ setup sub-parts; students frequently confuse C with the growth constant k, making this a discriminating question type.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_find_growth_constant_from_two_data_points",
+          "label": "Find the growth constant k from two given data points",
+          "description": "Given y(t₁) = A and y(0) = C (or two general data points), write two equations from y = Ce^(kt), divide to eliminate C, and solve for k using logarithms.",
+          "yield_score": 0.72,
+          "yield_rationale": "Finding k from data is a common calculator-section sub-task (Part A); appears in exponential-model MC and FRQ; requires log properties from P2 prerequisites.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_interpret_k_in_context",
+          "label": "Interpret the meaning and units of the growth/decay constant k",
+          "description": "State what k represents in words (e.g., 'the per-hour growth rate') and give its units (reciprocal of the independent variable's unit), and describe how the magnitude of k affects the rate of growth or decay.",
+          "yield_score": 0.65,
+          "yield_rationale": "Contextual interpretation of k appears in FRQ explain/describe sub-parts; connects to Unit 4 units-of-derivative skill; moderate-high yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_evaluate_exponential_model_at_given_time",
+          "label": "Evaluate the exponential model y = Ce^(kt) at a specific time",
+          "description": "Given C and k (or just determined), substitute a specific value of t to compute y(t) numerically, using a calculator for non-trivial values — a standard final sub-task in DE FRQs.",
+          "yield_score": 0.75,
+          "yield_rationale": "Computing a specific model value is a routine endpoint in DE FRQ calculator sub-parts and MC; high automation but appears nearly every time an exponential model is set up.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_connect_exponential_de_to_proportional_growth",
+          "label": "Connect the DE dy/dt = ky to the concept of proportional growth rate",
+          "description": "Articulate that dy/dt = ky means the instantaneous rate of change is always proportional to the current value y, so larger y begets faster growth — the verbal/conceptual link between the DE form and exponential behavior.",
+          "yield_score": 0.58,
+          "yield_rationale": "Conceptual proportionality question appears in MC; lower yield because many students handle it implicitly rather than explicitly, but conceptual MC distractors are calibrated to this understanding.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "de_initial_value_problem_full_procedure",
+      "label": "Initial Value Problem — Full Procedure",
+      "description": "Executing the complete IVP workflow from end to end: recognizing a separable DE, separating variables, integrating both sides, applying the initial condition to find C, and writing the particular solution — the full FRQ Archetype 6 chain.",
+      "ced_topics": ["7.6", "7.7"],
+      "yield_score": 0.90,
+      "yield_rationale": "The full IVP procedure is the entire Archetype 6 FRQ question that appears almost every year; rubric awards points at each step; training the complete chain end-to-end is the highest-yield practice investment in Unit 7.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "de_identify_ivp_and_plan_procedure",
+          "label": "Identify an initial value problem and plan the separation-of-variables procedure",
+          "description": "Recognize a DE paired with a point (x₀, y₀) as an IVP, confirm the DE is separable, and articulate the plan: separate → integrate → solve for y → apply IC → write particular solution.",
+          "yield_score": 0.78,
+          "yield_rationale": "Planning recognition is rarely tested alone but is the foundational step; yield reflects its gateway role for the full procedure that earns the most FRQ points.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_separation_with_composite_integrand",
+          "label": "Separate variables when the integrand requires u-substitution or partial fractions",
+          "description": "After separating variables, recognize when the resulting integral on one or both sides requires u-substitution (e.g., ∫ cos(x) dx after separating a trig DE) and execute the substitution correctly.",
+          "yield_score": 0.68,
+          "yield_rationale": "U-sub within separation of variables appears in MC and harder FRQ variants; tests the intersection of Units 6 and 7 skills; moderate-high yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_restricted_domain_particular_solution",
+          "label": "Recognize when a particular solution requires a restricted domain due to ln|y|",
+          "description": "After finding a particular solution via separation of variables, identify cases where the presence of ln|y| in the integration step forces a sign constraint on y (e.g., y > 0 or y < 0), state the implied domain restriction, and verify the initial condition is consistent with that domain.",
+          "yield_score": 0.62,
+          "yield_rationale": "Domain restriction from absolute-value handling is a discriminating FRQ justification sub-task; students who obtain the correct formula but state no domain constraint lose the justification point; appears in harder FRQ variants and MC.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_recover_sign_from_absolute_value",
+          "label": "Recover the correct ± sign when exponentiating |y| = e^{F(x)+C} to explicit y form",
+          "description": "When the integration step yields ln|y| = F(x) + C, correctly exponentiate to |y| = e^{F(x)+C}, then resolve the absolute value to y = ±e^{F(x)+C}, argue which sign is consistent with the initial condition, and absorb the sign into the constant C to write y = Ae^{F(x)} with A determined.",
+          "yield_score": 0.72,
+          "yield_rationale": "Mishandling the ± when removing the absolute value is one of the most common FRQ errors in separation-of-variables problems; a dedicated rubric point addresses this step in most scoring guidelines; moderate-high yield as a discriminating algebra sub-skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_separate_de_with_explicit_constant_k",
+          "label": "Apply separation of variables to dy/dx = k·y·h(x) with a given numeric constant k",
+          "description": "Separate variables in a DE of the form dy/dx = k·y·h(x) where k is a specified numeric constant (e.g., dy/dx = 3y·cos(x)), correctly factoring k into the separated form (1/y) dy = k·h(x) dx, and carry k through the integration and solve-for-y steps without absorbing it into C prematurely.",
+          "yield_score": 0.70,
+          "yield_rationale": "DEs of the form dy/dx = k·y·h(x) generalize the canonical dy/dt = ky and require careful constant-handling; a common distractor on MC is absorbing k into C during integration; appears in harder FRQ and MC variants.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "de_notation_and_vocabulary",
+      "label": "Differential Equation Notation and Vocabulary",
+      "description": "Reading and writing correct DE notation (dy/dx, dy/dt, y', dP/dt), distinguishing order and type, and correctly using terms such as general solution, particular solution, initial condition, and separable.",
+      "ced_topics": ["7.1", "7.2", "7.6", "7.7"],
+      "yield_score": 0.52,
+      "yield_rationale": "Notation fluency is prerequisite for every DE task but rarely tested in isolation; yield is moderate — it appears implicitly in every MC and FRQ DE question rather than as a standalone topic.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "de_read_and_write_de_notation",
+          "label": "Read and write differential equation notation (dy/dx, dy/dt, y')",
+          "description": "Interpret differential equations expressed in Leibniz, prime, and operator notation interchangeably; write a given verbal description using any of these notations correctly.",
+          "yield_score": 0.55,
+          "yield_rationale": "Notation fluency is tested in MC answer choices and FRQ writing; students who confuse dy/dx and d/dx(y) or forget the dependent variable lose points regularly.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_define_general_solution_vocabulary",
+          "label": "Define and use terms: general solution, particular solution, initial condition",
+          "description": "Correctly apply the vocabulary: a general solution is a family of functions with arbitrary constant C; a particular solution is one member of the family determined by an initial condition y(x₀) = y₀.",
+          "yield_score": 0.58,
+          "yield_rationale": "Vocabulary appears in MC stem language and FRQ instructions; students must know what 'find the particular solution' means to answer correctly.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_identify_order_of_de",
+          "label": "Identify the order of a differential equation",
+          "description": "Determine the order of a DE as the highest derivative present (e.g., dy/dx is first-order; d²y/dx² terms make it second-order); the AB exam exclusively tests first-order DEs via separation of variables.",
+          "yield_score": 0.32,
+          "yield_rationale": "Order identification is conceptual vocabulary rarely tested as its own MC question; low yield as it is definitional background for first-order AB focus.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "de_distinguish_separable_from_non_separable",
+          "label": "Distinguish separable DEs from non-separable DEs",
+          "description": "Determine whether a given DE can be separated into the form f(y) dy = g(x) dx; recognize non-separable forms (e.g., dy/dx = x + y) where the right side cannot be factored into separate functions of x and y alone.",
+          "yield_score": 0.50,
+          "yield_rationale": "Separability check appears in MC strategy questions; moderate yield because the AB exam only tests separable DEs, making this a binary recognition task.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,659 @@
+{
+  "category": {
+    "id": "parameters_vectors_and_matrices",
+    "label": "Parameters, Vectors, and Matrices",
+    "description": "AP Precalculus Unit 4 enrichment content covering parametric functions and planar motion, implicitly defined functions and conic sections, vectors and vector-valued functions, and matrix operations and transformations. None of these topics appear on the AP Precalculus exam; yields are capped at 0.15 and reflect value as preparation for calculus or state/local curriculum requirements.",
+    "section": "ap_precalc",
+    "ced_unit": "AP Precalc Unit 4",
+    "courses": [
+      { "course": "precalc", "role": "core", "order_index": 11 },
+      { "course": "calc_ab", "role": "foundation", "order_index": 11 }
+    ],
+    "yield_score": 0.08,
+    "yield_rationale": "Unit 4 is explicitly not assessed on the AP Precalculus exam (0% exam weight); category yield reflects modest downstream value for calc_ab (parametric motion, vectors, and matrices appear briefly in some calc contexts) but is capped well below 0.15 per spec."
+  },
+  "umbrellas": [
+    {
+      "id": "pvm_parametric_function_intro",
+      "label": "Parametric Functions — Introduction",
+      "description": "Introduces parametric equations as separate x(t) and y(t) component functions that together trace a plane curve; connects parameter elimination to Cartesian form.",
+      "ced_topics": ["4.1"],
+      "yield_score": 0.12,
+      "yield_rationale": "Parametric representation is a direct precursor to calculus parametric derivatives and motion problems; highest-yield topic in Unit 4 for calc_ab readiness.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_parametric_definition_component_form",
+          "label": "Parametric equations as component functions",
+          "description": "Tests whether a student can identify x(t) and y(t) as functions of a shared parameter t and interpret the parameter as an input that generates ordered pairs tracing a curve.",
+          "yield_score": 0.13,
+          "yield_rationale": "Core definitional skill; gate for all subsequent parametric work and calc_ab parametric derivatives.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_parametric_table_of_values",
+          "label": "Generating a table of (x, y) pairs from parametric equations",
+          "description": "Tests the ability to substitute specific t-values into x(t) and y(t) to produce a table of ordered pairs and identify the direction of traversal.",
+          "yield_score": 0.10,
+          "yield_rationale": "Procedural skill; supports graphing and orientation but limited standalone exam relevance.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_parametric_eliminate_parameter_linear",
+          "label": "Eliminating the parameter when x(t) is linear",
+          "description": "Tests solving x(t) = at + b for t, then substituting into y(t) to obtain a Cartesian equation y = f(x), identifying any domain restrictions inherited from the parameter range.",
+          "yield_score": 0.12,
+          "yield_rationale": "Parameter elimination is the primary algebraic technique of 4.1 and re-appears in conic parametrization (4.7).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_parametric_eliminate_parameter_trig",
+          "label": "Eliminating the parameter using a Pythagorean identity",
+          "description": "Tests using sin²(t) + cos²(t) = 1 to eliminate t from x = r·cos(t), y = r·sin(t)-style equations, obtaining the Cartesian form of a circle or ellipse.",
+          "yield_score": 0.11,
+          "yield_rationale": "Connects parametric and trig content; sets up parametric circles (4.4) and conics (4.7).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_parametric_graph_orientation",
+          "label": "Identifying the orientation (direction) of a parametric curve",
+          "description": "Tests reading or sketching a parametric curve and correctly marking arrows that show the direction of increasing t, distinguishing between two Cartesian curves with opposite orientations.",
+          "yield_score": 0.09,
+          "yield_rationale": "Orientation is a representational concept unique to parametric form; lower yield as a standalone question but conceptually important.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_parametric_planar_motion",
+      "label": "Parametric Functions and Planar Motion",
+      "description": "Uses parametric equations to model an object's position in the plane over time; interprets x(t) and y(t) as horizontal and vertical position components, and determines direction and speed.",
+      "ced_topics": ["4.2"],
+      "yield_score": 0.13,
+      "yield_rationale": "Position-velocity-speed interpretation of parametric motion is directly prerequisite for AP Calc AB parametric derivatives and motion problems; strongest calc_ab connection in Unit 4.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_motion_position_at_time",
+          "label": "Reading position at a given time from parametric motion equations",
+          "description": "Tests substituting a specific t-value into x(t) and y(t) to find the (x, y) location of a moving object, and interpreting the result in a real-world context (e.g., height, horizontal distance).",
+          "yield_score": 0.13,
+          "yield_rationale": "Direct application of parametric evaluation in a motion context; connects to AP Calc AB motion problems.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_motion_direction_of_travel",
+          "label": "Determining direction of travel from signs of x'(t) and y'(t)",
+          "description": "Tests identifying whether an object is moving left/right and up/down at a given instant by interpreting the signs of the average rates of change (or slope of the parametric curve) over a small interval.",
+          "yield_score": 0.12,
+          "yield_rationale": "Sign-of-velocity reasoning is a calc_ab conceptual prerequisite; moderate standalone yield in a precalc context.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_motion_speed_magnitude",
+          "label": "Computing speed as the magnitude of the velocity vector",
+          "description": "Tests computing instantaneous or average speed as √((Δx/Δt)² + (Δy/Δt)²), connecting the Pythagorean theorem to the distance formula in a parametric motion context.",
+          "yield_score": 0.11,
+          "yield_rationale": "Speed formula bridges parametric motion and vector magnitude; useful setup for calc_ab.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_motion_path_vs_trajectory",
+          "label": "Distinguishing path (Cartesian curve) from trajectory (parametric curve with time)",
+          "description": "Tests identifying that two parametric equations can trace the same Cartesian path at different speeds or in different directions, so the parameter carries information beyond the shape.",
+          "yield_score": 0.08,
+          "yield_rationale": "Conceptual distinction; appears in reasoning questions but is lower-yield as an isolated skill.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_parametric_rates_of_change",
+      "label": "Rates of Change in Parametric Functions",
+      "description": "Analyzes average rates of change of x(t) and y(t) separately, and interprets the ratio Δy/Δx (slope of secant) using the parametric components.",
+      "ced_topics": ["4.3"],
+      "yield_score": 0.10,
+      "yield_rationale": "Rate-of-change reasoning in a parametric context previews the dy/dx = (dy/dt)/(dx/dt) formula in calc_ab; moderate downstream value.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_param_roc_component",
+          "label": "Calculating average rate of change for a single parametric component",
+          "description": "Tests computing Δx/Δt or Δy/Δt over an interval [t₁, t₂] from a table or formula and interpreting the sign and magnitude in context.",
+          "yield_score": 0.10,
+          "yield_rationale": "Standard average-rate-of-change skill applied to parametric components; moderate yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_param_roc_slope_of_curve",
+          "label": "Finding the slope of a parametric curve as (Δy/Δt) ÷ (Δx/Δt)",
+          "description": "Tests computing the approximate slope of a parametric curve at a parameter value using the ratio of component rates of change, connecting to the tangent-line concept.",
+          "yield_score": 0.11,
+          "yield_rationale": "Direct preview of parametric derivative formula in AP Calc AB; best yield in this umbrella.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_param_roc_interpret_in_context",
+          "label": "Interpreting the meaning of Δx/Δt and Δy/Δt in a real-world motion problem",
+          "description": "Tests translating numerical values of Δx/Δt and Δy/Δt into contextual language (e.g., 'the object moves 3 meters per second horizontally') given units and scenario description.",
+          "yield_score": 0.08,
+          "yield_rationale": "Contextual interpretation is valued in communication practice but is low-yield as an isolated problem type.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_param_roc_increasing_decreasing",
+          "label": "Determining intervals where x(t) or y(t) is increasing or decreasing",
+          "description": "Tests reading a table or graph to identify t-intervals where a parametric component is increasing (positive rate of change) or decreasing (negative rate of change).",
+          "yield_score": 0.09,
+          "yield_rationale": "Increasing/decreasing analysis using a table is a transferable skill but niche in the parametric context.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_parametric_circles_and_lines",
+      "label": "Parametrically Defined Circles and Lines",
+      "description": "Writes and interprets standard parametric forms for circles (x = h + r·cos t, y = k + r·sin t) and lines (x = x₀ + at, y = y₀ + bt), connecting each parameter to geometric features.",
+      "ced_topics": ["4.4"],
+      "yield_score": 0.09,
+      "yield_rationale": "Parametric form of circles and lines is a clean, bounded topic with direct connections to vectors (4.8) and conics (4.6–4.7); yield is limited by non-exam status.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_param_circle_standard_form",
+          "label": "Writing parametric equations for a circle from center and radius",
+          "description": "Tests producing x(t) = h + r·cos(t), y(t) = k + r·sin(t) given center (h, k) and radius r, and identifying the parameter range for one full traversal.",
+          "yield_score": 0.10,
+          "yield_rationale": "Core parametric form for circles; links to trig unit and elimination-via-Pythagorean-identity skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_param_line_vector_form",
+          "label": "Writing parametric equations for a line through a point with a direction vector",
+          "description": "Tests producing x(t) = x₀ + at, y(t) = y₀ + bt given a point on the line and a direction vector ⟨a, b⟩, and converting to slope-intercept form by eliminating t.",
+          "yield_score": 0.10,
+          "yield_rationale": "Connects parametric lines to vectors (4.8) and to standard Cartesian line equations; useful bridge topic.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_param_circle_identify_features",
+          "label": "Identifying center, radius, and orientation from parametric circle equations",
+          "description": "Tests reading h, k, r, and traversal direction (clockwise vs. counterclockwise) from a given parametric form x(t) = h + r·cos(t), y(t) = k + r·sin(t).",
+          "yield_score": 0.08,
+          "yield_rationale": "Feature-identification question type; lower yield than construction but tests representation literacy.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_param_line_segment_restrict_domain",
+          "label": "Restricting the parameter range to produce a line segment",
+          "description": "Tests determining the t-values corresponding to two given endpoints and expressing the line segment as a parametric function with a restricted domain.",
+          "yield_score": 0.07,
+          "yield_rationale": "Domain restriction of parametric functions is a niche but clean problem type; low standalone yield.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_implicit_functions",
+      "label": "Implicitly Defined Functions",
+      "description": "Analyzes relations defined by an equation F(x, y) = 0 that cannot be written as a single explicit function; identifies when an implicit relation can be restricted to a function and determines domain/range from the equation.",
+      "ced_topics": ["4.5"],
+      "yield_score": 0.08,
+      "yield_rationale": "Implicit functions preview implicit differentiation in calc_ab; precalc treatment is conceptual/graphical and low-yield on its own.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_implicit_relation_vs_function",
+          "label": "Determining whether an implicit equation defines y as a function of x",
+          "description": "Tests applying the vertical-line test or solving for y to check whether a given implicit relation F(x, y) = 0 defines one or more functions, identifying cases where it does not (e.g., full circle).",
+          "yield_score": 0.09,
+          "yield_rationale": "Function/relation distinction is foundational and tested across units; highest yield in this umbrella.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_implicit_restrict_to_function",
+          "label": "Restricting domain or range to extract a function from an implicit relation",
+          "description": "Tests identifying a restriction (e.g., y ≥ 0 for the upper semicircle of x² + y² = r²) that makes the relation a function and writing the resulting explicit function.",
+          "yield_score": 0.08,
+          "yield_rationale": "Connects to inverse-function restricted-domain reasoning; moderate downstream value.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_implicit_graph_interpretation",
+          "label": "Reading key features of an implicitly defined curve from its graph",
+          "description": "Tests identifying x- and y-intercepts, symmetry, and approximate domain/range of an implicitly defined curve displayed graphically, without solving the equation explicitly.",
+          "yield_score": 0.07,
+          "yield_rationale": "Graphical reading skill with low problem-type specificity; borderline useful for calc_ab intuition.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_implicit_solve_for_y",
+          "label": "Solving an implicit equation for y to obtain explicit function branches",
+          "description": "Tests algebraically isolating y from an implicit equation such as x² + y² = r² or 4x² + 9y² = 36 to obtain ±√(…) and interpreting each branch as a separate function.",
+          "yield_score": 0.08,
+          "yield_rationale": "Algebraic manipulation skill linking implicit equations to their explicit function representations; moderate yield.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_conic_sections",
+      "label": "Conic Sections",
+      "description": "Identifies and analyzes parabolas, ellipses, and hyperbolas in standard form; connects equation form to geometric features (vertices, foci, axes, asymptotes).",
+      "ced_topics": ["4.6"],
+      "yield_score": 0.11,
+      "yield_rationale": "Conics appear in many state curricula and in some calc_ab contexts (related rates with ellipses); the structured equation-feature connection makes for clean, well-scoped problems.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_conic_parabola_standard_form",
+          "label": "Identifying vertex, axis of symmetry, and direction of opening of a parabola",
+          "description": "Tests reading a, h, k from y = a(x − h)² + k (or x = a(y − k)² + h) to state the vertex, axis, and whether the parabola opens up/down/left/right.",
+          "yield_score": 0.12,
+          "yield_rationale": "Parabola analysis bridges F5 (polynomial function behavior) and conics; most accessible conic and highest yield here.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_conic_ellipse_standard_form",
+          "label": "Identifying center, semi-axes, and orientation of an ellipse from standard form",
+          "description": "Tests extracting h, k, a, b from (x − h)²/a² + (y − k)²/b² = 1 to determine the center, lengths of the semi-major and semi-minor axes, and which axis is major.",
+          "yield_score": 0.11,
+          "yield_rationale": "Ellipse feature-reading is a clean, well-defined question type; moderate yield given non-exam status.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_conic_hyperbola_asymptotes",
+          "label": "Writing the asymptotes of a hyperbola from its standard equation",
+          "description": "Tests determining asymptote equations y − k = ±(b/a)(x − h) for horizontal hyperbolas and y − k = ±(a/b)(x − h) for vertical ones using the center and a, b values.",
+          "yield_score": 0.10,
+          "yield_rationale": "Asymptote computation is the most distinctive hyperbola skill and a well-scoped problem type.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_conic_identify_from_equation",
+          "label": "Classifying a conic section from its general second-degree equation",
+          "description": "Tests deciding whether Ax² + Bxy + Cy² + Dx + Ey + F = 0 represents a parabola, ellipse, or hyperbola using the discriminant B² − 4AC or by completing the square to reach standard form.",
+          "yield_score": 0.09,
+          "yield_rationale": "Classification is a higher-order skill requiring multiple algebraic steps; moderate yield in enrichment context.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_conic_complete_the_square",
+          "label": "Completing the square to rewrite a conic in standard form",
+          "description": "Tests grouping x- and y-terms, completing the square for each variable, and rewriting the equation in (x − h)²/a² + (y − k)²/b² = 1 (or analogous) standard form to read off center and radii.",
+          "yield_score": 0.11,
+          "yield_rationale": "Completing the square is a high-value algebraic technique used in conics, quadratic functions, and calc_ab optimization; strongest downstream yield in this umbrella.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_parametric_implicit_conics",
+      "label": "Parametrization of Implicit and Conic Curves",
+      "description": "Converts implicitly defined curves and conic sections to parametric form; reverses the elimination process to produce x(t) and y(t) that trace the curve.",
+      "ced_topics": ["4.7"],
+      "yield_score": 0.08,
+      "yield_rationale": "Parametrization of conics synthesizes topics 4.4–4.6 and is useful for calc_ab arc length and polar-to-parametric connections; low standalone yield.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_param_conic_ellipse",
+          "label": "Writing parametric equations for an ellipse using cosine and sine",
+          "description": "Tests producing x(t) = h + a·cos(t), y(t) = k + b·sin(t) from an ellipse equation (x−h)²/a² + (y−k)²/b² = 1 and verifying by eliminating t.",
+          "yield_score": 0.09,
+          "yield_rationale": "Clean, testable skill that links trigonometric parametrization to conic geometry.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_param_implicit_verify",
+          "label": "Verifying that a parametrization satisfies an implicit equation",
+          "description": "Tests substituting given x(t) and y(t) into an implicit equation F(x, y) = 0 and simplifying using identities to confirm the parametrization is valid.",
+          "yield_score": 0.07,
+          "yield_rationale": "Algebraic verification skill; useful for rigor but low practical yield in a precalc enrichment context.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_param_hyperbola_secant_tangent",
+          "label": "Parametrizing a hyperbola using sec and tan",
+          "description": "Tests writing x(t) = h + a·sec(t), y(t) = k + b·tan(t) for a horizontal hyperbola and connecting the identity sec²(t) − tan²(t) = 1 to the standard hyperbola form.",
+          "yield_score": 0.06,
+          "yield_rationale": "Niche skill combining reciprocal trig with conics; lowest yield in the umbrella but covers a distinct parametrization technique.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_param_line_to_conic_transition",
+          "label": "Converting a piecewise or line parametrization to match an implicit curve restriction",
+          "description": "Tests choosing appropriate domain restrictions on t so that the parametrization traces only a specified arc or portion of an implicitly defined curve (e.g., upper half only).",
+          "yield_score": 0.07,
+          "yield_rationale": "Domain restriction in parametric form is a bounded, solvable problem type; connects to restricted-function concepts.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_vectors_intro",
+      "label": "Vectors — Definition and Operations",
+      "description": "Defines vectors as quantities with magnitude and direction; performs vector addition and subtraction and scalar multiplication both algebraically (component form ⟨a, b⟩) and graphically (tip-to-tail).",
+      "ced_topics": ["4.8"],
+      "yield_score": 0.13,
+      "yield_rationale": "Vectors are directly used in AP Calc AB (velocity/displacement as vectors) and in many STEM curricula; highest category-wide yield after parametric motion.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_vector_component_form",
+          "label": "Writing a vector in component form given initial and terminal points",
+          "description": "Tests computing ⟨x₂ − x₁, y₂ − y₁⟩ from a directed segment P₁P₂ and interpreting the components as horizontal and vertical displacements.",
+          "yield_score": 0.13,
+          "yield_rationale": "Component form is the fundamental algebraic representation of vectors; gate for all vector operations.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_vector_magnitude",
+          "label": "Computing the magnitude of a vector",
+          "description": "Tests applying |v| = √(a² + b²) to a vector ⟨a, b⟩ in component form, connecting it to the Pythagorean theorem and the distance formula.",
+          "yield_score": 0.12,
+          "yield_rationale": "Magnitude is used in speed (4.2), unit vectors, and dot product; central vector skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_vector_addition_subtraction",
+          "label": "Adding and subtracting vectors algebraically and graphically",
+          "description": "Tests computing ⟨a₁ + a₂, b₁ + b₂⟩ for vector sum and ⟨a₁ − a₂, b₁ − b₂⟩ for difference, and connecting the algebraic result to the tip-to-tail and parallelogram graphic representations.",
+          "yield_score": 0.13,
+          "yield_rationale": "Vector addition is the central operation in displacement and force contexts; appears in both numeric and graphical problem types.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_vector_scalar_multiplication",
+          "label": "Multiplying a vector by a scalar and interpreting the result",
+          "description": "Tests computing k·⟨a, b⟩ = ⟨ka, kb⟩ for scalar k, describing the effect on direction (same/reversed) and magnitude (|k|·|v|), and identifying unit vectors.",
+          "yield_score": 0.11,
+          "yield_rationale": "Scalar multiplication is prerequisite for unit vectors and linear combinations; moderate yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_vector_direction_angle",
+          "label": "Finding the direction angle of a vector from its component form",
+          "description": "Tests computing θ = arctan(b/a) with quadrant adjustment to find the angle a vector makes with the positive x-axis, connecting to inverse trig (3.9) and polar coordinates (3.13).",
+          "yield_score": 0.10,
+          "yield_rationale": "Direction angle bridges vectors and polar/trig content; useful synthesis but limited standalone yield in enrichment context.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_vector_unit_vector",
+          "label": "Computing the unit vector in the direction of a given vector",
+          "description": "Tests dividing a vector by its magnitude to obtain a vector of length 1, and using unit vectors to write a vector as a magnitude-direction product.",
+          "yield_score": 0.10,
+          "yield_rationale": "Unit vectors are used in physics and calculus contexts; moderate yield as a distinct skill.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_vector_valued_functions",
+      "label": "Vector-Valued Functions",
+      "description": "Expresses planar motion using a position vector r(t) = ⟨x(t), y(t)⟩; evaluates vector-valued functions and connects them to the parametric function representation of a path.",
+      "ced_topics": ["4.9"],
+      "yield_score": 0.10,
+      "yield_rationale": "Vector-valued functions unify parametric motion (4.2) and vectors (4.8) into the notation used throughout AP Calc BC and some calc_ab motion problems; moderate downstream yield.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_vvf_evaluate_at_time",
+          "label": "Evaluating a vector-valued function at a specific t",
+          "description": "Tests substituting a value of t into r(t) = ⟨x(t), y(t)⟩ to obtain a position vector, and interpreting the result as a point in the plane.",
+          "yield_score": 0.11,
+          "yield_rationale": "Basic evaluation skill; gate for motion analysis using vector notation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_vvf_connect_to_parametric",
+          "label": "Connecting vector-valued function notation to component parametric equations",
+          "description": "Tests rewriting r(t) = ⟨x(t), y(t)⟩ as the parametric pair x = x(t), y = y(t) and vice versa, confirming that both describe the same curve with the same orientation.",
+          "yield_score": 0.10,
+          "yield_rationale": "Representation translation between two equivalent notations for the same curve; useful for calc_ab motion problems.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_vvf_displacement_vector",
+          "label": "Computing the displacement vector over a time interval",
+          "description": "Tests finding r(t₂) − r(t₁) = ⟨x(t₂) − x(t₁), y(t₂) − y(t₁)⟩ and interpreting its magnitude as the straight-line distance between two positions.",
+          "yield_score": 0.10,
+          "yield_rationale": "Displacement as a vector subtraction previews integral-based displacement in calc_ab; moderate yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_vvf_identify_path_from_formula",
+          "label": "Identifying the Cartesian path traced by a vector-valued function",
+          "description": "Tests eliminating the parameter from r(t) = ⟨x(t), y(t)⟩ to find the Cartesian equation of the path, and determining any domain restrictions.",
+          "yield_score": 0.09,
+          "yield_rationale": "Path identification combines parametric elimination with vector notation; synthesis skill.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_matrix_operations",
+      "label": "Matrix Operations",
+      "description": "Defines matrices and performs addition, subtraction, and multiplication of matrices; identifies when operations are defined based on matrix dimensions.",
+      "ced_topics": ["4.10"],
+      "yield_score": 0.09,
+      "yield_rationale": "Matrix arithmetic is the foundation for all subsequent matrix topics (4.11–4.14); modest yield as operations appear in linear algebra and statistics downstream but not in AP Calc AB.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_matrix_notation_dimensions",
+          "label": "Reading matrix dimensions and entries using row-column notation",
+          "description": "Tests identifying the number of rows and columns (m × n) of a matrix and accessing entry aᵢⱼ, correctly applying the row-first, column-second convention.",
+          "yield_score": 0.08,
+          "yield_rationale": "Definitional notation skill; prerequisite for multiplication dimension-check.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_matrix_addition_subtraction",
+          "label": "Adding and subtracting matrices of the same dimensions",
+          "description": "Tests performing entry-wise addition/subtraction on matrices of equal dimensions and recognizing that the operation is undefined for matrices of different sizes.",
+          "yield_score": 0.07,
+          "yield_rationale": "Straightforward entry-wise operation; limited standalone yield but necessary foundation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_matrix_scalar_multiplication",
+          "label": "Multiplying a matrix by a scalar",
+          "description": "Tests multiplying every entry of a matrix by a scalar k and interpreting the result, including negative and fractional scalars.",
+          "yield_score": 0.06,
+          "yield_rationale": "Analogous to vector scalar multiplication; low standalone yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_matrix_multiplication_2x2",
+          "label": "Multiplying two 2×2 matrices using the dot-product rule",
+          "description": "Tests computing the 2×2 product AB by taking dot products of rows of A with columns of B, verifying the dimension condition (columns of A = rows of B), and noting non-commutativity.",
+          "yield_score": 0.12,
+          "yield_rationale": "Matrix multiplication is the most conceptually dense matrix operation and directly required for transformations (4.12) and matrix-as-function (4.13); highest yield in this umbrella.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_matrix_dimension_compatibility",
+          "label": "Determining when matrix multiplication is defined and finding the product dimensions",
+          "description": "Tests applying the m×n · n×p → m×p rule to decide whether two matrices can be multiplied and what size the product will be.",
+          "yield_score": 0.09,
+          "yield_rationale": "Dimension compatibility is a clean, bounded rule with frequent application in multi-step matrix problems.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_matrix_inverse_determinant",
+      "label": "Inverse and Determinant of a Matrix",
+      "description": "Computes the determinant of a 2×2 matrix, determines whether the matrix is invertible (det ≠ 0), and finds the inverse matrix using the det-based formula.",
+      "ced_topics": ["4.11"],
+      "yield_score": 0.10,
+      "yield_rationale": "Determinant and inverse are required for solving matrix equations (AX = B → X = A⁻¹B); modest downstream yield for systems of equations and linear transformations.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_determinant_2x2",
+          "label": "Computing the determinant of a 2×2 matrix",
+          "description": "Tests applying det([[a,b],[c,d]]) = ad − bc to a given 2×2 matrix, including cases with negative entries, fractions, and variable entries.",
+          "yield_score": 0.11,
+          "yield_rationale": "Determinant formula is the single most frequently needed matrix computation; highest yield in umbrella.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_invertibility_from_determinant",
+          "label": "Determining invertibility from the determinant",
+          "description": "Tests identifying that a matrix is invertible if and only if its determinant is non-zero, and stating what a zero determinant implies geometrically (collapsed transformation).",
+          "yield_score": 0.09,
+          "yield_rationale": "Invertibility condition connects determinant to solvability of matrix equations; moderate yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_matrix_inverse_formula_2x2",
+          "label": "Finding the inverse of a 2×2 invertible matrix",
+          "description": "Tests applying A⁻¹ = (1/det(A))·[[d,−b],[−c,a]] to a given 2×2 matrix, checking the result via AA⁻¹ = I.",
+          "yield_score": 0.10,
+          "yield_rationale": "Inverse formula is a clean, bounded algorithmic skill; connects to matrix equations and transformations.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_matrix_solve_equation_with_inverse",
+          "label": "Solving a 2×2 matrix equation AX = B using the inverse",
+          "description": "Tests computing X = A⁻¹B when A is invertible, connecting the matrix equation to a system of two linear equations and verifying the solution.",
+          "yield_score": 0.10,
+          "yield_rationale": "Matrix-equation solving is the applied payoff of learning inverses; moderate yield and clean problem type.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_linear_transformations",
+      "label": "Linear Transformations and Matrices",
+      "description": "Represents geometric transformations of the plane (reflections, rotations, dilations, shears) as left-multiplication by a 2×2 matrix, and computes the image of a point or figure under the transformation.",
+      "ced_topics": ["4.12"],
+      "yield_score": 0.10,
+      "yield_rationale": "Linear transformations connect matrix multiplication to geometry; moderate yield for courses covering linear algebra foundations and for understanding function transformations in a coordinate sense.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_transform_image_of_point",
+          "label": "Computing the image of a point under a matrix transformation",
+          "description": "Tests multiplying a 2×2 transformation matrix A by a column vector representing a point to find its image, interpreting the result as a new coordinate pair.",
+          "yield_score": 0.11,
+          "yield_rationale": "Core application of matrix multiplication in a geometric setting; highest yield in umbrella.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_transform_standard_matrices",
+          "label": "Identifying standard transformation matrices for reflection and rotation",
+          "description": "Tests recognizing or producing the matrix for rotation by 90°/180°, reflection across x-axis, y-axis, or y = x, and dilation by factor k.",
+          "yield_score": 0.10,
+          "yield_rationale": "Standard matrices are a memorizable but meaningful set of examples; moderate yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_transform_composition",
+          "label": "Composing two linear transformations using matrix multiplication",
+          "description": "Tests computing the composition of two transformations as the matrix product AB and applying the composite matrix to a point, noting that AB ≠ BA in general.",
+          "yield_score": 0.09,
+          "yield_rationale": "Composition of transformations previews function composition in a geometric context; connects to 2.7.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_transform_determinant_area",
+          "label": "Interpreting the determinant as a scaling factor for area under a transformation",
+          "description": "Tests using |det(A)| to determine how much a linear transformation scales areas, and identifying that det = 1 preserves area while det = 0 collapses the plane.",
+          "yield_score": 0.07,
+          "yield_rationale": "Geometric interpretation of determinant is a rich concept but low-yield as a standalone precalc question type.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_matrices_as_functions",
+      "label": "Matrices as Functions",
+      "description": "Interprets a 2×2 matrix as a linear function T: ℝ² → ℝ² that maps input vectors to output vectors; analyzes properties such as linearity, the identity transformation, and the zero transformation.",
+      "ced_topics": ["4.13"],
+      "yield_score": 0.07,
+      "yield_rationale": "Matrix-as-function is a conceptual bridge to linear algebra; lowest yield in Unit 4 as a standalone topic with limited AP Calc AB application.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_matrix_function_linearity",
+          "label": "Verifying that a matrix transformation satisfies the linearity properties",
+          "description": "Tests confirming T(u + v) = T(u) + T(v) and T(cu) = cT(u) for specific vectors by direct computation, connecting the algebraic definition of linearity to the matrix-multiplication structure.",
+          "yield_score": 0.07,
+          "yield_rationale": "Abstract linearity verification; enrichment-level concept with minimal practical standalone yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_matrix_identity_zero_transformation",
+          "label": "Identifying the identity and zero matrix transformations",
+          "description": "Tests recognizing the 2×2 identity matrix I = [[1,0],[0,1]] and zero matrix as the identity transformation (every vector maps to itself) and the zero transformation (every vector maps to 0) respectively.",
+          "yield_score": 0.06,
+          "yield_rationale": "Definitional knowledge of special matrices; low standalone yield but conceptually necessary.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_matrix_function_domain_codomain",
+          "label": "Describing the domain and codomain of a matrix transformation",
+          "description": "Tests identifying that an m×n matrix defines a function from ℝⁿ to ℝᵐ, and determining whether a given column vector has the correct dimension to be a valid input.",
+          "yield_score": 0.06,
+          "yield_rationale": "Dimension-aware function thinking is useful for linear algebra readiness; very low AP precalc yield.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_matrix_function_vs_general_function",
+          "label": "Contrasting matrix (linear) functions with general nonlinear functions",
+          "description": "Tests identifying features that distinguish linear transformations (no constant term, maps zero to zero) from general function models (exponential, quadratic, sinusoidal) studied in Units 1–3.",
+          "yield_score": 0.07,
+          "yield_rationale": "Conceptual comparison across function families; supports unit-coherence but low problem-type yield.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "pvm_matrices_modeling",
+      "label": "Matrices Modeling Contexts",
+      "description": "Applies matrices to model real-world situations such as transition matrices (Markov chains), network adjacency matrices, and population or economic models; interprets matrix powers and products contextually.",
+      "ced_topics": ["4.14"],
+      "yield_score": 0.08,
+      "yield_rationale": "Contextual matrix applications are the most applied topic in Unit 4; modest yield reflects non-exam status but these problems are engaging and showcase matrix utility.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "pvm_matrix_model_setup",
+          "label": "Setting up a matrix to represent a two-state transition or network",
+          "description": "Tests reading a verbal description of transitions between two states (or connections in a small network) and constructing the corresponding 2×2 matrix with correct entry placement.",
+          "yield_score": 0.09,
+          "yield_rationale": "Matrix setup from context is a clean verbal-to-symbolic skill; highest yield in this umbrella.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_matrix_model_multiply_for_next_state",
+          "label": "Using matrix multiplication to find the next-state vector",
+          "description": "Tests multiplying a transition matrix by a state vector to obtain the distribution after one step, and interpreting each entry of the result as a count or probability.",
+          "yield_score": 0.09,
+          "yield_rationale": "Next-state computation is the core application of transition matrices; clean problem type.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_matrix_model_interpret_entry",
+          "label": "Interpreting the (i, j) entry of a matrix product in context",
+          "description": "Tests reading a matrix product AB and explaining what the entry in row i, column j represents in the real-world scenario encoded by A and B (e.g., two-step path counts in a network).",
+          "yield_score": 0.07,
+          "yield_rationale": "Entry interpretation is a reasoning skill; lower yield as a standalone question but supports conceptual understanding.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "pvm_matrix_model_steady_state",
+          "label": "Identifying or approximating a steady-state vector by iterating the transition matrix",
+          "description": "Tests applying a transition matrix repeatedly to an initial state vector and observing convergence to a limiting distribution, recognizing it as a fixed point satisfying Av = v.",
+          "yield_score": 0.07,
+          "yield_rationale": "Steady-state concept is enrichment-level; interesting for motivated students but low AP exam relevance.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}

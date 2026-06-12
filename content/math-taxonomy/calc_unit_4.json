@@ -1,0 +1,464 @@
+{
+  "category": {
+    "id": "calc_unit_4",
+    "label": "Contextual Applications of Differentiation",
+    "description": "Applies derivatives to real-world settings: interpreting derivative meaning and units, analyzing straight-line particle motion, computing rates of change in non-motion contexts, setting up and solving related-rates problems from geometric relationships, building tangent-line linearizations, and applying L'Hôpital's Rule to indeterminate limits. Covers CED Unit 4 (topics 4.1–4.7).",
+    "section": "calc_ab",
+    "ced_unit": "AP Calc AB Unit 4",
+    "courses": [
+      { "course": "calc_ab", "role": "core", "order_index": 4 }
+    ],
+    "yield_score": 0.83,
+    "yield_rationale": "Unit 4 accounts for 10–15% of the AP exam and ranks second in cumulative FRQ appearances (~37 across 2012–2025); particle motion alone appears in ~80% of exam years, and related rates / L'Hôpital appear most years as FRQ sub-parts."
+  },
+  "umbrellas": [
+    {
+      "id": "u4_derivative_meaning_and_units",
+      "label": "Interpreting Derivative Meaning and Units in Context",
+      "description": "Given a function defined by a real-world scenario, states precisely what the derivative represents — including correct units — and interprets the sign and magnitude of f'(a) in contextual terms.",
+      "ced_topics": ["4.1"],
+      "yield_score": 0.80,
+      "yield_rationale": "Topic 4.1 interpretation sub-parts appear in almost every applied FRQ; 'what does f'(3) mean in context?' is a recurring task worth 1–2 points each year.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u4_units_of_derivative_quotient",
+          "label": "Deriving units of a derivative from a real-world function",
+          "description": "Given f(t) in specified units, determines that f'(t) has units equal to (output units) / (input units), e.g., gallons per minute when f(t) is gallons and t is minutes.",
+          "yield_score": 0.82,
+          "yield_rationale": "Units of the derivative are explicitly scored on nearly every contextual FRQ sub-part; high-frequency, isolatable one-liner.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_verbal_interpretation_of_derivative_value",
+          "label": "Writing a verbal interpretation of a specific derivative value",
+          "description": "Translates f'(a) = k (with units) into a complete English sentence: 'At time a, the [quantity] is [increasing/decreasing] at a rate of k [units] per [input unit].'",
+          "yield_score": 0.85,
+          "yield_rationale": "Completing a full contextual sentence for f'(a) is a direct FRQ scoring target; appears in every contextual archetype question.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_sign_of_derivative_in_context",
+          "label": "Interpreting the sign of the derivative in context",
+          "description": "Connects the sign of f'(a) to whether the modeled quantity is increasing (positive) or decreasing (negative) at a, and identifies what that sign means contextually (e.g., population growing, temperature falling).",
+          "yield_score": 0.78,
+          "yield_rationale": "Sign interpretation is a required inference in most contextual MC and FRQ; tested both directly and as a prerequisite for motion-direction analysis.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_magnitude_of_derivative_in_context",
+          "label": "Comparing rates of change by derivative magnitude",
+          "description": "Uses |f'(a)| vs |f'(b)| to compare how fast a quantity is changing at two different input values, and interprets which instant has a greater rate of change.",
+          "yield_score": 0.65,
+          "yield_rationale": "Magnitude comparison appears in contextual MC questions and as a set-up for 'at which time is the rate greatest?' sub-parts; moderate frequency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_derivative_from_table_contextual",
+          "label": "Estimating a contextual derivative value from a table",
+          "description": "Uses a symmetric or one-sided difference quotient from a data table to numerically estimate f'(a) in a real-world context, then states its meaning with units.",
+          "yield_score": 0.88,
+          "yield_rationale": "Table-based derivative estimation combined with contextual interpretation is the engine of the Rate/Data archetype FRQ, appearing every year; both the computation and the verbal interpretation are scored.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_second_derivative_meaning_in_context",
+          "label": "Interpreting f''(a) meaning in context",
+          "description": "States what the second derivative represents in context (the rate at which the rate is changing) with correct units, e.g., '(gallons per minute) per minute', and relates it to concavity or acceleration.",
+          "yield_score": 0.70,
+          "yield_rationale": "Second derivative interpretation appears as a follow-up in contextual FRQs; units-squared reasoning is a common sub-task.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u4_position_velocity_acceleration",
+      "label": "Connecting Position, Velocity, and Acceleration",
+      "description": "Uses the derivative relationships s'(t) = v(t) and v'(t) = a(t) to move between the three motion functions; evaluates each at a given time and interprets the result in the context of straight-line motion.",
+      "ced_topics": ["4.2"],
+      "yield_score": 0.90,
+      "yield_rationale": "Particle motion is the most-common FRQ archetype (~80% of exam years); computing v(t) and a(t) from s(t) is the foundation of every particle motion problem.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u4_velocity_from_position_derivative",
+          "label": "Computing velocity by differentiating position",
+          "description": "Given s(t), computes v(t) = s'(t) using appropriate differentiation rules and evaluates v at a specific time.",
+          "yield_score": 0.92,
+          "yield_rationale": "Computing v(t) = s'(t) is the opening step of every particle motion FRQ; appears in MC every year as a one-step computation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_acceleration_from_velocity_derivative",
+          "label": "Computing acceleration by differentiating velocity",
+          "description": "Given v(t) or s(t), computes a(t) = v'(t) = s''(t) and evaluates it at a specified time; identifies positive/negative acceleration in context.",
+          "yield_score": 0.88,
+          "yield_rationale": "a(t) = v'(t) is tested in both MC and as a sub-part of particle motion FRQs; requires higher-order differentiation fluency.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_direction_of_motion",
+          "label": "Determining direction of motion from the sign of velocity",
+          "description": "Interprets v(t) > 0 as motion in the positive direction and v(t) < 0 as motion in the negative direction; states the direction of motion at a specified time.",
+          "yield_score": 0.87,
+          "yield_rationale": "Direction-of-motion is an explicit FRQ sub-task in the particle motion archetype every year; one of the most isolatable single-step skills.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_speed_vs_velocity",
+          "label": "Distinguishing speed (|v(t)|) from velocity",
+          "description": "Computes instantaneous speed as |v(t)| and distinguishes it from signed velocity; states that speed is non-negative while velocity carries directional sign.",
+          "yield_score": 0.80,
+          "yield_rationale": "Speed vs velocity is a standard MC distractor target and appears as a conceptual sub-part in particle motion FRQs.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_speeding_up_slowing_down",
+          "label": "Determining whether a particle is speeding up or slowing down",
+          "description": "Applies the rule that a particle is speeding up when v(t) and a(t) share the same sign, and slowing down when they have opposite signs; justifies with both values computed at the given time.",
+          "yield_score": 0.85,
+          "yield_rationale": "Speeding-up/slowing-down is an FRQ sub-part that appears in most particle motion questions; requires simultaneous sign analysis of v and a.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_change_in_direction_from_v_sign_change",
+          "label": "Identifying when a particle changes direction",
+          "description": "Finds the time(s) when v(t) changes sign (not just equals zero) by solving v(t) = 0 and checking the sign change; distinguishes a mere zero from an actual direction reversal.",
+          "yield_score": 0.83,
+          "yield_rationale": "Identifying direction changes is a frequent sub-task; students must solve v(t)=0 and then verify sign change — both steps are scored.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u4_rates_in_applied_contexts",
+      "label": "Rates of Change in Non-Motion Applied Contexts",
+      "description": "Interprets and computes derivatives in scenarios involving population, temperature, volume, flow, and other real-world quantities; reads rates from tables or graphs and writes contextual meaning statements.",
+      "ced_topics": ["4.3"],
+      "yield_score": 0.80,
+      "yield_rationale": "Topic 4.3 drives the Rate/Data archetype (appears every year) and is tested in calculator-active FRQs; every table-based problem requires interpreting a derivative in a non-motion context.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u4_population_rate_interpretation",
+          "label": "Interpreting a population growth/decline rate",
+          "description": "Given P(t) as a population function, states that P'(a) represents the instantaneous rate of change of the population at time t = a with units (people per year, etc.) and describes the biological or contextual meaning.",
+          "yield_score": 0.78,
+          "yield_rationale": "Population context is one of the most common non-motion scenarios in FRQ Part A; appears in 2021 Q1, 2025 Q3.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_temperature_rate_interpretation",
+          "label": "Interpreting a temperature rate of change",
+          "description": "Given T(t) as temperature, states what T'(a) represents (degrees per minute, °F per hour) and interprets positive/negative sign as warming or cooling.",
+          "yield_score": 0.82,
+          "yield_rationale": "Temperature/cooling contexts appear in 2024 Q1 and 2023 Q3; interpretation of T'(t) with sign is an explicit FRQ scoring point.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_volume_flow_rate_interpretation",
+          "label": "Interpreting a volume or flow rate",
+          "description": "Given V(t) as volume or Q(t) as flow rate, interprets Q(t) = V'(t) in context (gallons per minute entering a tank) and distinguishes rate-in from rate-out scenarios.",
+          "yield_score": 0.75,
+          "yield_rationale": "Flow/volume rate interpretation bridges Units 4 and 8; rate-in vs rate-out reasoning appears in the accumulation archetype FRQs.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_difference_quotient_from_table",
+          "label": "Estimating an instantaneous rate using a difference quotient from tabular data",
+          "description": "Selects the two closest surrounding data points from a table and computes a centered or one-sided difference quotient to estimate f'(a); states which approximation is used and why.",
+          "yield_score": 0.90,
+          "yield_rationale": "Difference quotient from a table is the core computation in the Rate/Data archetype (appears every year in FRQ); both the symmetric and one-sided cases are tested.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_average_vs_instantaneous_rate_in_context",
+          "label": "Distinguishing average rate from instantaneous rate in context",
+          "description": "Contrasts (f(b)−f(a))/(b−a) as the average rate of change over [a,b] with f'(c) as the instantaneous rate at c; identifies which calculation is appropriate for a given contextual question.",
+          "yield_score": 0.80,
+          "yield_rationale": "The average vs instantaneous rate distinction is a standard conceptual MC target and FRQ justification task; underpins the MVT application.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_rate_in_context_from_graph",
+          "label": "Reading an instantaneous rate from a graph",
+          "description": "Estimates f'(a) graphically by reading the slope of the tangent line at x = a from a provided graph; interprets that slope value in the context of the modeled quantity.",
+          "yield_score": 0.68,
+          "yield_rationale": "Graph-based derivative estimation in context appears in MC Part A and as a graphical FRQ sub-part; somewhat less frequent than table-based estimation.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u4_related_rates_setup",
+      "label": "Setting Up Related-Rates Equations",
+      "description": "Translates a geometric or physical relationship between two or more changing quantities into an equation relating their derivatives with respect to time, using implicit differentiation applied to t.",
+      "ced_topics": ["4.4"],
+      "yield_score": 0.75,
+      "yield_rationale": "Related-rates setup (topic 4.4) is tested in FRQs most years (2022 Q2, 2023 Q6, 2024 Q5, 2025 Q6) and in MC; the equation-building and implicit-differentiation steps are each worth partial credit.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u4_identify_related_quantities",
+          "label": "Identifying the related quantities and their rates in a problem",
+          "description": "Reads a related-rates problem to name every quantity that changes with time, assigns a variable to each, and lists the known and unknown rates (dx/dt, dy/dt, etc.) before writing any equation.",
+          "yield_score": 0.72,
+          "yield_rationale": "Problem-setup identification is the first partial-credit step in FRQ related-rates problems; students who skip it often lose points on sign errors.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_write_geometric_equation_for_related_rates",
+          "label": "Writing the static geometric equation that relates the variables",
+          "description": "Writes the underlying algebraic or geometric relationship (Pythagorean theorem, area formula, volume formula, similar-triangle ratio) before differentiating with respect to t.",
+          "yield_score": 0.77,
+          "yield_rationale": "The equation-writing step is explicitly scored in FRQ related-rates questions; incorrect equations lead to zero credit on all subsequent steps.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_implicit_differentiation_wrt_time",
+          "label": "Differentiating a multi-variable equation implicitly with respect to t",
+          "description": "Applies the chain rule to differentiate both sides of an equation containing x(t), y(t), etc. with respect to t, producing a rate equation that contains dx/dt and dy/dt terms.",
+          "yield_score": 0.80,
+          "yield_rationale": "Implicit differentiation w.r.t. t is the core skill of related rates; it appears in FRQ every year and requires fluent chain rule application.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_substitute_and_solve_related_rate",
+          "label": "Substituting known values and solving for the unknown rate",
+          "description": "After differentiating, substitutes numerical values for the variables and the known rate at the specified instant, then solves algebraically for the unknown rate.",
+          "yield_score": 0.75,
+          "yield_rationale": "The substitution-and-solve step is scored separately from setup in FRQ partial credit; correct algebra after correct setup still earns full points.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_state_related_rate_answer_in_context",
+          "label": "Stating the related-rate answer with correct units and contextual meaning",
+          "description": "Writes the final answer to a related-rates problem with appropriate units (e.g., cm/s, ft/min) and a brief statement describing what the computed rate represents.",
+          "yield_score": 0.65,
+          "yield_rationale": "Units and contextual statement for the final rate answer are explicitly required for full credit on FRQ; a missed unit loses a point.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u4_related_rates_geometry_scenarios",
+      "label": "Related Rates: Specific Geometric Setups",
+      "description": "Executes related-rates problems for canonical geometric configurations — right triangles (ladder/shadow), circles, cones, spheres, cylinders, and similar-triangle setups — each requiring a specific formula and differentiation chain.",
+      "ced_topics": ["4.4", "4.5"],
+      "yield_score": 0.75,
+      "yield_rationale": "Each geometry type tests a distinct formula-to-rate pipeline; these specific scenarios are the ones that appear in released FRQs (ladder 2022 Q2, cone 2023 Q6, implicit curve 2024 Q5, 2025 Q6).",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u4_rr_right_triangle_pythagorean",
+          "label": "Related rates via Pythagorean theorem (ladder/distance problem)",
+          "description": "Uses x² + y² = r² to relate two changing distances in a right-triangle setup; differentiates implicitly w.r.t. t to find how one leg's rate depends on the other.",
+          "yield_score": 0.77,
+          "yield_rationale": "The ladder and distance-between-moving-objects problems are classic and recur in FRQ Part A; Pythagorean setup is the most common right-triangle form.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_rr_circle_area_circumference",
+          "label": "Related rates for a circle (area and radius rates)",
+          "description": "Differentiates A = πr² or C = 2πr with respect to t to find dA/dt or dC/dt given dr/dt; isolates the chain-rule factor 2πr.",
+          "yield_score": 0.68,
+          "yield_rationale": "Circle-area rate problems appear frequently in MC; the dA/dt = 2πr · (dr/dt) pattern is a single focused skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_rr_cone_or_cylinder_volume",
+          "label": "Related rates for a cone or cylinder (volume and height/radius rates)",
+          "description": "Differentiates V = (1/3)πr²h or V = πr²h with respect to t; handles the case where r and h are both changing or where a similar-triangle constraint reduces the problem to one variable.",
+          "yield_score": 0.80,
+          "yield_rationale": "Cone volume related rates (requiring similar-triangle substitution before differentiation) appear in FRQ most years and are among the most-tested geometric setups.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_rr_sphere_volume_surface",
+          "label": "Related rates for a sphere (volume or surface area)",
+          "description": "Differentiates V = (4/3)πr³ or SA = 4πr² with respect to t; applies the chain rule to get dV/dt = 4πr² · (dr/dt).",
+          "yield_score": 0.65,
+          "yield_rationale": "Sphere volume rate appears in MC roughly every two years; the formula is straightforward but students often forget the r² factor.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_rr_similar_triangles_constraint",
+          "label": "Using a similar-triangle constraint to reduce related-rates variables",
+          "description": "Sets up a proportion r/h = constant from similar triangles (in a cone-filling or shadow-lengthening problem) to eliminate one variable before implicit differentiation, converting a two-variable problem to a one-variable problem.",
+          "yield_score": 0.72,
+          "yield_rationale": "The similar-triangle reduction step is the hardest and most frequently missed step in cone-type related-rates problems; tested as a distinct sub-skill.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_rr_shadow_or_angle_problem",
+          "label": "Related rates via trigonometric or shadow relationship",
+          "description": "Sets up a related-rates equation using tan θ or a shadow-length proportion; differentiates a trig expression implicitly with respect to t to find an angular or shadow rate.",
+          "yield_score": 0.55,
+          "yield_rationale": "Shadow and angle problems appear in MC roughly every 2–3 years; they require a trig formula as the geometric relationship, which is less standard than purely geometric setups.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u4_linearization",
+      "label": "Local Linearity and Tangent-Line Approximation",
+      "description": "Constructs the linearization L(x) = f(a) + f'(a)(x − a) to approximate nearby function values; determines whether the approximation is an overestimate or underestimate using concavity.",
+      "ced_topics": ["4.6"],
+      "yield_score": 0.55,
+      "yield_rationale": "Linearization (4.6) appears in MC and occasionally as an FRQ sub-part; over/under-estimate justification via concavity is the key conceptual layer that distinguishes it from a pure algebra task.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u4_tangent_line_equation_at_point",
+          "label": "Writing the equation of the tangent line at a given point",
+          "description": "Uses y − f(a) = f'(a)(x − a) to write the tangent line equation at x = a, computing f(a) and f'(a) as needed.",
+          "yield_score": 0.60,
+          "yield_rationale": "Tangent line equation is a prerequisite for linearization and is also tested independently in MC and as an FRQ step in implicit/related-rates questions.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_linearization_formula_evaluation",
+          "label": "Evaluating L(x) to approximate a function value",
+          "description": "Substitutes a given x-value close to a into L(x) = f(a) + f'(a)(x − a) to produce a numerical approximation; identifies the base point a and confirms the substitution is valid.",
+          "yield_score": 0.55,
+          "yield_rationale": "L(x) evaluation is the core linearization computation; tested in MC and as a one-step FRQ sub-part when an analytic evaluation would be harder.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_overestimate_underestimate_from_concavity",
+          "label": "Determining overestimate vs underestimate using concavity",
+          "description": "Applies the rule that a tangent line lies below a concave-up function (underestimate) and above a concave-down function (overestimate); justifies the conclusion by computing or reading f''(a).",
+          "yield_score": 0.62,
+          "yield_rationale": "Over/under-estimate justification is the most-scored conceptual piece of linearization; it appears in MC distractor design and FRQ justification sub-parts.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_local_linearity_concept",
+          "label": "Explaining local linearity as the reason linearization works",
+          "description": "States that a differentiable function looks like a straight line when zoomed in close to a point (local linearity), and uses this to justify why L(x) ≈ f(x) for x near a.",
+          "yield_score": 0.40,
+          "yield_rationale": "Local linearity is a conceptual vocabulary topic (CED 4.6 intro); tested occasionally in MC as a 'which statement is true?' question.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_differentials_and_error_estimation",
+          "label": "Using differentials df = f'(x) dx to estimate change",
+          "description": "Writes df = f'(a) · dx and uses it to estimate the approximate change in f when x changes by a small amount Δx; interprets df as an approximation to Δf.",
+          "yield_score": 0.42,
+          "yield_rationale": "Differentials appear in MC occasionally as a notation and estimation tool; less frequent than tangent-line approximation but part of the same topic 4.6 cluster.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u4_lhopital_rule",
+      "label": "L'Hôpital's Rule for Indeterminate Forms",
+      "description": "Recognizes 0/0 and ∞/∞ indeterminate forms in a limit, applies L'Hôpital's Rule by differentiating numerator and denominator separately, and verifies the form is still indeterminate before reapplying if needed.",
+      "ced_topics": ["4.7"],
+      "yield_score": 0.75,
+      "yield_rationale": "L'Hôpital appears in FRQ sub-parts most years (2019 Q6, 2021 Q4) and in MC; testing both form-recognition and the rule execution.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u4_identify_indeterminate_form_zero_zero",
+          "label": "Recognizing a 0/0 indeterminate limit form",
+          "description": "Evaluates the limit by direct substitution; if the result is 0/0, identifies it as an indeterminate form that permits L'Hôpital's Rule application.",
+          "yield_score": 0.78,
+          "yield_rationale": "Correct form-identification is the gating step for L'Hôpital; MC distractors routinely test whether students apply the rule to non-indeterminate forms.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_identify_indeterminate_form_inf_inf",
+          "label": "Recognizing an ∞/∞ indeterminate limit form",
+          "description": "Evaluates whether both numerator and denominator diverge to ±∞ as the limit is approached; if so, confirms ∞/∞ form and permits L'Hôpital's Rule.",
+          "yield_score": 0.70,
+          "yield_rationale": "∞/∞ form is less common than 0/0 in AB exam limits but appears in MC and as an FRQ sub-part; students must distinguish ∞/∞ (indeterminate) from ∞/2 (not indeterminate).",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_lhopital_single_application",
+          "label": "Applying L'Hôpital's Rule once to evaluate a limit",
+          "description": "Differentiates the numerator and denominator separately (not using the quotient rule), then re-evaluates the resulting limit by direct substitution or further analysis.",
+          "yield_score": 0.80,
+          "yield_rationale": "A single application of L'Hôpital is the most common tested form; appears in MC and as the explicit step in FRQ sub-parts that cite it.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_lhopital_repeated_application",
+          "label": "Applying L'Hôpital's Rule twice when the result remains indeterminate",
+          "description": "After a first application yields another indeterminate form, verifies the new form and applies the rule a second time; recognizes when repeated application is appropriate vs when direct evaluation now works.",
+          "yield_score": 0.58,
+          "yield_rationale": "Repeated application is a harder variant tested occasionally in FRQ and MC; a common error is applying the rule when the form is no longer indeterminate.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_lhopital_not_applicable_check",
+          "label": "Verifying L'Hôpital's Rule does not apply when the form is determinate",
+          "description": "Demonstrates that if direct substitution yields a determinate form (e.g., 5/0 → ∞, or 3/7), L'Hôpital's Rule must not be applied; identifies such cases as infinite limits or simple limits instead.",
+          "yield_score": 0.55,
+          "yield_rationale": "Incorrectly applying L'Hôpital to determinate forms is a high-frequency distractor design in MC; testing students' ability to check the precondition.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_lhopital_with_chain_rule_in_derivative",
+          "label": "Executing L'Hôpital when differentiating numerator or denominator requires the chain rule",
+          "description": "Applies L'Hôpital's Rule to a limit whose numerator or denominator contains a composite function; correctly differentiates using the chain rule and re-evaluates.",
+          "yield_score": 0.68,
+          "yield_rationale": "Combining L'Hôpital with chain rule is a multi-step MC target and appears in FRQ Q6 style questions; tests rule execution accuracy under composition.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    },
+    {
+      "id": "u4_particle_motion_analysis",
+      "label": "Particle Motion: Interval Analysis and Derivative-Based Skills",
+      "description": "Analyzes straight-line motion over a time interval using purely derivative-based methods: finds when a particle is at rest, determines when acceleration equals zero from a polynomial position function, establishes maximum speed via simultaneous sign analysis of v(t) and a(t), and constructs a complete motion narrative for a given interval.",
+      "ced_topics": ["4.2"],
+      "yield_score": 0.82,
+      "yield_rationale": "Particle motion over an interval (finding at-rest times, acceleration zeros, speed extrema, direction changes) is tested every year in the calculator FRQ (Part A); these sub-tasks are derivative-based extensions of topic 4.2.",
+      "source_learn_keyword_id": null,
+      "in_depth": [
+        {
+          "id": "u4_particle_at_rest_from_velocity",
+          "label": "Finding when a particle is at rest by solving v(t) = 0",
+          "description": "Sets v(t) = 0 and solves for t to identify all times when the particle is at rest; distinguishes instantaneous rest (zero velocity but no sign change) from actual direction change.",
+          "yield_score": 0.85,
+          "yield_rationale": "Solving v(t) = 0 is a standard FRQ sub-task in particle motion; appears in 2021 Q2, 2022 Q6, 2024 Q2 among others.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_acceleration_zero_from_polynomial_position",
+          "label": "Finding all times when acceleration equals zero from a polynomial position function",
+          "description": "Given s(t) expressed as a polynomial, computes v(t) = s'(t) and a(t) = s''(t) by successive differentiation, then solves a(t) = 0 to find every time at which acceleration is zero; interprets each solution in the context of the particle's motion.",
+          "yield_score": 0.82,
+          "yield_rationale": "Solving a(t) = 0 after double-differentiating a polynomial position function is a focused derivative-chain skill tested in MC and as a sub-part in particle motion FRQs; requires fluent higher-order differentiation.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_motion_on_interval_description",
+          "label": "Describing all motion events on a specified time interval",
+          "description": "Combines v(t) and a(t) analysis to provide a complete narrative: where the particle starts, when it changes direction, whether it is speeding up or slowing down, and where it ends.",
+          "yield_score": 0.80,
+          "yield_rationale": "A comprehensive motion analysis on an interval is the hallmark of the particle motion FRQ archetype; every sub-part in 2023 Q2, 2024 Q2 follows this pattern.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_maximum_speed_from_sign_analysis",
+          "label": "Determining maximum speed on an interval via v(t) and a(t) sign analysis",
+          "description": "Identifies candidate times for maximum speed by finding where v(t) = 0 or the endpoints of the given interval, evaluates |v(t)| at each candidate, and confirms the maximum using the fact that speed is increasing when v(t) and a(t) share the same sign and decreasing when they have opposite signs.",
+          "yield_score": 0.78,
+          "yield_rationale": "Maximum speed on a closed interval is a recurring FRQ and MC target in particle motion; requires synthesizing v(t) zero-finding, sign analysis, and endpoint evaluation — all purely derivative-based steps.",
+          "source_learn_keyword_id": null
+        },
+        {
+          "id": "u4_displacement_vs_total_distance_distinction",
+          "label": "Distinguishing displacement (signed) from total distance (unsigned)",
+          "description": "Computes displacement as ∫v(t)dt (signed, may be negative) vs total distance as ∫|v(t)|dt (always non-negative, requires splitting at sign changes of v); explains the difference contextually.",
+          "yield_score": 0.88,
+          "yield_rationale": "Displacement vs total distance is tested on nearly every particle motion FRQ and in MC distractors; confusing them is the single most common particle-motion error.",
+          "source_learn_keyword_id": null
+        }
+      ]
+    }
+  ]
+}
