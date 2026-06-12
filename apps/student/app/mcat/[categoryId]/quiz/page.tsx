@@ -3,11 +3,20 @@
 import { useState, useEffect, use, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { LoderaLogo } from "@/components/brand/LoderaLogo";
+import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { ProgressBar } from "@/components/ui/ProgressBar";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import MathText from "@/components/mcat/MathText";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
+import { StreakBadge } from "@/components/gamification/StreakBadge";
+import { ComboMeter } from "@/components/gamification/ComboMeter";
+import { SoundToggle } from "@/components/ui/SoundToggle";
+import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
+import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
 
 const QUIZ_COUNT = 8;
 
@@ -75,6 +84,11 @@ function McatQuizInner({
   const [currentIdx, setCurrentIdx] = useState(0);
   const [phase, setPhase] = useState<Phase>("loading");
   const [errorMsg, setErrorMsg] = useState("");
+
+  // ── Gamification ──────────────────────────────────────────────────────────
+  const [combo, setCombo] = useState(0);
+
+  useStreakTouchOnce();
 
   // Resolve umbrella → children ids via taxonomy
   const resolveKeywordIds = async (
@@ -164,6 +178,15 @@ function McatQuizInner({
     const newAnswers = [...answers, newAnswer];
     setAnswers(newAnswers);
 
+    // ── Gamification: quiz answers fire at moment of selection ───────────
+    const correct = !dontKnow && selectedIndex === q.correct_index;
+    setCombo((prev) => {
+      const next = comboReducer({ count: prev }, correct ? "correct" : "incorrect").count;
+      if (correct) onCorrectAnswer(next);
+      else onIncorrectAnswer();
+      return next;
+    });
+
     // Record attempt (fire and forget — don't block UX)
     fetch("/api/mcat/attempt", {
       method: "POST",
@@ -213,42 +236,50 @@ function McatQuizInner({
     : "Quiz";
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
+        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
+            <Link href={backHref} className="shrink-0">
+              <LoderaLogo size={22} />
+            </Link>
             <Link
               href={backHref}
-              className="text-xs text-gray-400 hover:text-gray-600 shrink-0"
+              className="text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors"
             >
               {isScoped ? "← Back" : "← MCAT"}
             </Link>
             {isScoped && scopeLabel && (
-              <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-medium">
+              <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
                 {umbrellaId ? "Topic" : "Keyword"}: {scopeLabel}
               </span>
             )}
-            <p className="font-semibold text-gray-900 text-sm truncate">
+            <p className="font-semibold text-neutral-900 text-sm truncate">
               {headingLabel}
             </p>
           </div>
-          {phase === "quiz" && questions.length > 0 && (
-            <p className="text-xs text-gray-500 shrink-0">
-              {currentIdx + 1} / {questions.length}
-            </p>
-          )}
+          <div className="flex items-center gap-2 shrink-0">
+            {phase === "quiz" && questions.length > 0 && (
+              <p className="text-xs text-neutral-500">
+                {currentIdx + 1} / {questions.length}
+              </p>
+            )}
+            <StreakBadge />
+            <SoundToggle />
+          </div>
         </div>
       </header>
 
       {/* Progress bar */}
       {phase === "quiz" && (
-        <div className="h-1 bg-gray-200">
-          <div
-            className="h-full bg-blue-500 transition-all duration-300"
-            style={{ width: `${Math.round(progress * 100)}%` }}
-          />
-        </div>
+        <ProgressBar
+          value={Math.round(progress * 100)}
+          size="xs"
+          color="brand"
+          label="Quiz progress"
+          className="rounded-none"
+        />
       )}
 
       <main className="max-w-2xl mx-auto px-4 py-8 space-y-4">
@@ -264,23 +295,20 @@ function McatQuizInner({
         {phase === "loading" && (
           <div className="space-y-3 opacity-40 pointer-events-none">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-12 rounded-xl bg-gray-200 animate-pulse" />
+              <div key={i} className="h-12 rounded-xl bg-neutral-200 animate-pulse" />
             ))}
           </div>
         )}
 
         {/* Error state */}
         {phase === "error" && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
-            <p className="text-sm text-red-600 mb-3">
+          <div className="rounded-xl border border-error-200 bg-error-50 p-6 text-center">
+            <p className="text-sm text-error-600 mb-3">
               {errorMsg || "Failed to build quiz"}
             </p>
-            <button
-              onClick={() => fetchQuiz(sessionId)}
-              className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700"
-            >
+            <Button variant="primary" size="sm" onClick={() => fetchQuiz(sessionId)}>
               Try again
-            </button>
+            </Button>
           </div>
         )}
 
@@ -294,21 +322,24 @@ function McatQuizInner({
                   key={i}
                   className={`w-2 h-2 rounded-full transition-colors ${
                     i < currentIdx
-                      ? "bg-blue-500"
+                      ? "bg-brand-500"
                       : i === currentIdx
-                      ? "bg-gray-900"
-                      : "bg-gray-200"
+                      ? "bg-neutral-800"
+                      : "bg-neutral-200"
                   }`}
                 />
               ))}
             </div>
 
             {/* Stem */}
-            <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-              <p className="text-sm font-medium text-gray-900 leading-relaxed">
+            <Card>
+              <p className="text-sm font-medium text-neutral-900 leading-relaxed">
                 <MathText>{currentQ.stem}</MathText>
               </p>
-            </div>
+            </Card>
+
+            {/* Combo meter — appears above choices from combo ≥ 2 */}
+            <ComboMeter combo={combo} />
 
             {/* Choices — no immediate feedback */}
             <div className="space-y-2">
@@ -326,7 +357,7 @@ function McatQuizInner({
             <div className="flex justify-center">
               <button
                 onClick={handleDontKnow}
-                className="text-xs text-gray-400 hover:text-gray-600 underline"
+                className="text-xs text-neutral-400 hover:text-neutral-600 underline"
               >
                 I don&apos;t know — skip
               </button>
@@ -338,33 +369,29 @@ function McatQuizInner({
         {phase === "review" && (
           <div className="space-y-6">
             {/* Score card */}
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 text-center">
-              <p className="text-4xl font-bold text-gray-900 mb-1">
+            <Card className="p-6 text-center">
+              <p className="text-4xl font-bold text-neutral-900 mb-1">
                 {correctCount}/{answers.length}
               </p>
-              <p className="text-2xl font-semibold text-gray-600 mb-2">{scorePct}%</p>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-2xl font-semibold text-neutral-600 mb-2">{scorePct}%</p>
+              <p className="text-sm text-neutral-500 mb-4">
                 {encouragingCopy(scorePct)}
               </p>
               <div className="flex gap-2 justify-center flex-wrap">
-                <button
-                  onClick={() => fetchQuiz(sessionId)}
-                  className="px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition-colors"
-                >
+                <Button variant="primary" size="md" onClick={() => fetchQuiz(sessionId)}>
                   New quiz
-                </button>
-                <Link
-                  href={backHref}
-                  className="px-5 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold hover:bg-gray-50 transition-colors"
-                >
-                  {isScoped ? "Back" : "Back to MCAT"}
+                </Button>
+                <Link href={backHref}>
+                  <Button variant="secondary" size="md">
+                    {isScoped ? "Back" : "Back to MCAT"}
+                  </Button>
                 </Link>
               </div>
-            </div>
+            </Card>
 
             {/* Review list */}
             <div>
-              <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              <h2 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-3">
                 Review
               </h2>
               <div className="space-y-4">
@@ -375,27 +402,27 @@ function McatQuizInner({
                   return (
                     <div
                       key={qi}
-                      className={`rounded-xl border bg-white p-4 shadow-sm ${
+                      className={`rounded-xl border bg-white p-4 shadow-brand-xs ${
                         correct
-                          ? "border-green-200"
+                          ? "border-success-200"
                           : ans.dont_know
-                          ? "border-gray-200"
-                          : "border-red-200"
+                          ? "border-neutral-200"
+                          : "border-error-200"
                       }`}
                     >
                       <div className="flex items-start gap-2 mb-3">
                         <span
                           className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
                             correct
-                              ? "bg-green-500 text-white"
+                              ? "bg-success-500 text-white"
                               : ans.dont_know
-                              ? "bg-gray-300 text-white"
-                              : "bg-red-500 text-white"
+                              ? "bg-neutral-300 text-white"
+                              : "bg-error-500 text-white"
                           }`}
                         >
                           {correct ? "✓" : ans.dont_know ? "?" : "✗"}
                         </span>
-                        <p className="text-sm text-gray-900 font-medium leading-snug">
+                        <p className="text-sm text-neutral-900 font-medium leading-snug">
                           <MathText>{ans.question.stem}</MathText>
                         </p>
                       </div>
@@ -408,10 +435,10 @@ function McatQuizInner({
                           let cls =
                             "flex items-start gap-2 px-3 py-2 rounded-lg text-xs border ";
                           if (isCorrect)
-                            cls += "border-green-400 bg-green-50 text-green-800";
+                            cls += "border-success-400 bg-success-50 text-success-700";
                           else if (isPicked)
-                            cls += "border-red-300 bg-red-50 text-red-700";
-                          else cls += "border-gray-100 text-gray-400";
+                            cls += "border-error-300 bg-error-50 text-error-700";
+                          else cls += "border-neutral-100 text-neutral-400";
                           return (
                             <div key={i} className={cls}>
                               <span className="font-mono font-bold">
@@ -424,14 +451,14 @@ function McatQuizInner({
                       </div>
 
                       {ans.dont_know && (
-                        <p className="text-xs text-gray-400 italic mb-2">
+                        <p className="text-xs text-neutral-400 italic mb-2">
                           You skipped this question.
                         </p>
                       )}
 
                       {ans.question.explanation && (
-                        <div className="bg-blue-50 rounded-lg px-3 py-2">
-                          <p className="text-xs text-blue-700 leading-relaxed">
+                        <div className="bg-brand-50 rounded-lg px-3 py-2">
+                          <p className="text-xs text-brand-700 leading-relaxed">
                             <MathText>{ans.question.explanation}</MathText>
                           </p>
                         </div>
@@ -462,8 +489,11 @@ export default function McatQuizPage({
 }) {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="relative w-10 h-10">
+          <div className="w-10 h-10 rounded-full border-4 border-brand-100" />
+          <div className="absolute inset-0 rounded-full border-4 border-brand-500 border-t-transparent animate-spin" />
+        </div>
       </div>
     }>
       <McatQuizInner params={params} />

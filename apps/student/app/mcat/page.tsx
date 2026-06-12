@@ -2,10 +2,16 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ScoreBar } from "@/components/mcat/ScoreBar";
+import { LoderaLogo } from "@/components/brand/LoderaLogo";
+import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { ProgressBar } from "@/components/ui/ProgressBar";
+import { StreakBadge } from "@/components/gamification/StreakBadge";
+import { SoundToggle } from "@/components/ui/SoundToggle";
 import AuthButtons from "@/components/mcat/AuthButtons";
 import McatOnboarding from "@/components/mcat/McatOnboarding";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
+import { LoginGate } from "@/components/auth/LoginGate";
 
 interface Keyword {
   id: string;
@@ -36,20 +42,19 @@ function categoryMastery(keywords: Keyword[]): { pct: number; attempted: number 
   return { pct: Math.round(avg * 100), attempted: attempted.length };
 }
 
-function MasteryBadge({ pct, attempted, total }: { pct: number; attempted: number; total: number }) {
-  if (attempted === 0) {
-    return <span className="text-xs text-gray-400">Not started</span>;
-  }
-  const color =
-    pct >= 80 ? "text-green-700" : pct >= 50 ? "text-yellow-700" : "text-red-600";
-  return (
-    <span className={`text-xs font-medium ${color}`}>
-      {pct}% · {attempted}/{total} keywords
-    </span>
-  );
+function masteryColor(pct: number): string {
+  if (pct >= 80) return "text-success-500";
+  if (pct >= 50) return "text-amber-600";
+  return "text-error-500";
 }
 
-export default function McatLandingPage() {
+function masteryBarColor(pct: number): "brand" | "success" | "error" {
+  if (pct >= 80) return "success";
+  if (pct >= 50) return "brand";
+  return "error";
+}
+
+function McatLandingPageInner() {
   const [sessionId, setSessionId] = useState<string>("");
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,24 +79,27 @@ export default function McatLandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* First-visit quick onboarding (self-gates on localStorage) */}
+    <div className="min-h-screen bg-neutral-50">
+      {/* First-visit quick onboarding */}
       <McatOnboarding />
 
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-bold text-gray-900">MCAT Practice</h1>
-            <p className="text-xs text-gray-400">AI-powered adaptive preparation</p>
+          <div className="flex items-center gap-3">
+            <LoderaLogo size={28} withWordmark />
+            <span className="text-neutral-300 text-sm">|</span>
+            <h1 className="text-sm font-semibold text-neutral-800">MCAT Practice</h1>
           </div>
           <div className="flex items-center gap-2">
             <Link
               href="/mcat/progress"
-              className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium hover:bg-gray-50 transition-colors"
+              className="text-xs font-medium text-neutral-600 hover:text-brand-600 transition-colors px-2 py-1"
             >
-              My Progress →
+              My Progress
             </Link>
+            <StreakBadge />
+            <SoundToggle />
             <AuthButtons />
           </div>
         </div>
@@ -100,17 +108,17 @@ export default function McatLandingPage() {
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Section tabs */}
         <div className="flex gap-2 mb-8 flex-wrap">
-          <span className="px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium">
+          <span className="px-4 py-2 rounded-full bg-brand-500 text-white text-sm font-medium shadow-brand-sm">
             Biology
           </span>
           {["Chemistry", "Physics", "Psych/Soc"].map((s) => (
             <span
               key={s}
-              className="px-4 py-2 rounded-full border border-gray-200 text-sm text-gray-400 cursor-not-allowed flex items-center gap-1.5"
+              className="px-4 py-2 rounded-full border border-neutral-200 text-sm text-neutral-400 cursor-not-allowed flex items-center gap-1.5"
             >
               {s}
-              <span className="text-xs bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded-full">
-                coming soon
+              <span className="text-xs bg-neutral-100 text-neutral-400 px-1.5 py-0.5 rounded-full">
+                soon
               </span>
             </span>
           ))}
@@ -119,16 +127,21 @@ export default function McatLandingPage() {
         {/* Loading */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-            <p className="text-sm text-gray-500">Loading categories…</p>
+            <div className="relative w-10 h-10">
+              <div className="w-10 h-10 rounded-full border-4 border-brand-100" />
+              <div className="absolute inset-0 rounded-full border-4 border-brand-500 border-t-transparent animate-spin" />
+            </div>
+            <p className="text-sm text-neutral-500">Loading categories…</p>
           </div>
         )}
 
         {/* Error */}
         {!loading && error && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
-            <p className="text-sm text-red-600 mb-3">{error}</p>
-            <button
+          <div className="rounded-xl border border-error-200 bg-error-50 p-6 text-center">
+            <p className="text-sm text-error-600 mb-3">{error}</p>
+            <Button
+              variant="primary"
+              size="sm"
               onClick={() => {
                 setError(null);
                 setLoading(true);
@@ -138,10 +151,9 @@ export default function McatLandingPage() {
                   .catch((e: Error) => setError(e.message))
                   .finally(() => setLoading(false));
               }}
-              className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700"
             >
               Try again
-            </button>
+            </Button>
           </div>
         )}
 
@@ -149,89 +161,88 @@ export default function McatLandingPage() {
         {!loading && !error && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* General Practice card */}
-            <div className="col-span-1 sm:col-span-2 rounded-xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm overflow-hidden">
-              <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">
+            <div className="col-span-1 sm:col-span-2">
+              <Card
+                className="border-brand-200 bg-gradient-to-r from-brand-50 to-indigo-50"
+                noPadding
+              >
+                <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold text-brand-600 uppercase tracking-wide mb-1">
                       General Practice
-                    </span>
+                    </p>
+                    <h2 className="font-bold text-neutral-900 text-base leading-snug mb-1">
+                      Mix questions across any topics you choose
+                    </h2>
+                    <p className="text-xs text-neutral-500">
+                      Select multiple categories, practice at your own pace, and get similar questions on demand.
+                    </p>
                   </div>
-                  <h2 className="font-bold text-gray-900 text-base leading-snug mb-1">
-                    Mix questions across any topics you choose
-                  </h2>
-                  <p className="text-xs text-gray-500">
-                    Select multiple categories, practice at your own pace, and get similar questions on demand.
-                  </p>
+                  <Link href="/mcat/practice" className="shrink-0">
+                    <Button size="md" className="whitespace-nowrap">Start Practice</Button>
+                  </Link>
                 </div>
-                <Link
-                  href="/mcat/practice"
-                  className="shrink-0 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors text-center"
-                >
-                  Start Practice
-                </Link>
-              </div>
+              </Card>
             </div>
+
             {categories.map((cat) => {
               const { pct, attempted } = categoryMastery(cat.keywords);
               return (
-                <div
-                  key={cat.id}
-                  className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"
-                >
+                <Card key={cat.id} hover noPadding>
                   <div className="p-5">
-                    {/* Card body — links to browse page */}
-                    <Link href={`/mcat/${cat.id}`} className="block group mb-3">
+                    {/* Card body */}
+                    <Link href={`/mcat/${cat.id}`} className="block group mb-4">
                       <div className="flex items-start justify-between gap-2 mb-1">
-                        <h2 className="font-semibold text-gray-900 text-sm leading-snug group-hover:text-blue-600 transition-colors">
+                        <h2 className="font-semibold text-neutral-900 text-sm leading-snug group-hover:text-brand-600 transition-colors">
                           {cat.label}
                         </h2>
                       </div>
-                      <p className="text-xs text-gray-500 line-clamp-2 mb-3">
+                      <p className="text-xs text-neutral-500 line-clamp-2 mb-3">
                         {cat.description}
                       </p>
 
                       {/* Mastery bar */}
-                      <div className="mb-1">
-                        <ScoreBar pct={pct} />
-                      </div>
+                      <ProgressBar
+                        value={pct}
+                        size="sm"
+                        color={masteryBarColor(pct)}
+                        label={`${cat.label} mastery`}
+                        className="mb-1"
+                      />
                       <div className="flex items-center justify-between">
-                        <MasteryBadge pct={pct} attempted={attempted} total={cat.keywords.length} />
-                        <span className="text-xs text-gray-400">{cat.keywords.length} keywords</span>
+                        {attempted === 0 ? (
+                          <span className="text-xs text-neutral-400">Not started</span>
+                        ) : (
+                          <span className={`text-xs font-medium ${masteryColor(pct)}`}>
+                            {pct}% · {attempted}/{cat.keywords.length} keywords
+                          </span>
+                        )}
+                        <span className="text-xs text-neutral-400">{cat.keywords.length} keywords</span>
                       </div>
-                      <p className="text-xs text-blue-500 mt-2 font-medium">
+                      <p className="text-xs text-brand-500 mt-2 font-medium group-hover:text-brand-600 transition-colors">
                         Explore topics →
                       </p>
                     </Link>
 
                     {/* Action buttons */}
                     <div className="flex gap-2">
-                      <Link
-                        href={`/mcat/${cat.id}/practice`}
-                        className="flex-1 text-center py-2 rounded-lg bg-gray-900 text-white text-xs font-semibold hover:bg-gray-700 transition-colors"
-                      >
-                        Practice
+                      <Link href={`/mcat/${cat.id}/practice`} className="flex-1">
+                        <Button variant="primary" size="sm" className="w-full">Practice</Button>
                       </Link>
-                      <Link
-                        href={`/mcat/${cat.id}/flashcards`}
-                        className="flex-1 text-center py-2 rounded-lg border border-gray-200 text-xs font-medium hover:bg-gray-50 transition-colors"
-                      >
-                        Flashcards
+                      <Link href={`/mcat/${cat.id}/flashcards`} className="flex-1">
+                        <Button variant="secondary" size="sm" className="w-full">Flashcards</Button>
                       </Link>
-                      <Link
-                        href={`/mcat/${cat.id}/quiz`}
-                        className="flex-1 text-center py-2 rounded-lg border border-gray-200 text-xs font-medium hover:bg-gray-50 transition-colors"
-                      >
-                        Quiz
+                      <Link href={`/mcat/${cat.id}/quiz`} className="flex-1">
+                        <Button variant="secondary" size="sm" className="w-full">Quiz</Button>
                       </Link>
                     </div>
                   </div>
-                </div>
+                </Card>
               );
             })}
 
             {categories.length === 0 && (
-              <div className="col-span-2 text-center py-12 text-gray-400 text-sm">
+              <div className="col-span-2 text-center py-12 text-neutral-400 text-sm">
                 No categories available yet.
               </div>
             )}
@@ -239,5 +250,13 @@ export default function McatLandingPage() {
         )}
       </main>
     </div>
+  );
+}
+
+export default function McatLandingPage() {
+  return (
+    <LoginGate prompt="Sign in to access MCAT Practice.">
+      <McatLandingPageInner />
+    </LoginGate>
   );
 }

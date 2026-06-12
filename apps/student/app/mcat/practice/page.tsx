@@ -2,7 +2,12 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { ScoreBar } from "@/components/mcat/ScoreBar";
+import { LoderaLogo } from "@/components/brand/LoderaLogo";
+import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { ProgressBar } from "@/components/ui/ProgressBar";
+import { StreakBadge } from "@/components/gamification/StreakBadge";
+import { SoundToggle } from "@/components/ui/SoundToggle";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
@@ -129,10 +134,10 @@ function Checkbox({
       onClick={onClick}
       className={`shrink-0 w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${
         isAll
-          ? "border-blue-500 bg-blue-500"
+          ? "border-brand-500 bg-brand-500"
           : isSome
-          ? "border-blue-400 bg-blue-100"
-          : "border-gray-300 bg-white hover:border-blue-400"
+          ? "border-brand-400 bg-brand-100"
+          : "border-neutral-300 bg-white hover:border-brand-400"
       }`}
       aria-label={isAll ? "Deselect" : "Select"}
     >
@@ -152,7 +157,7 @@ function Checkbox({
         </svg>
       )}
       {isSome && (
-        <span className="w-2 h-0.5 bg-blue-500 rounded-full block" />
+        <span className="w-2 h-0.5 bg-brand-500 rounded-full block" />
       )}
     </button>
   );
@@ -189,7 +194,7 @@ function ChildRow({
     child.score !== null ? Math.round(child.score * 100) : null;
 
   return (
-    <div className="flex items-center gap-2 py-2 border-t border-gray-50 first:border-0">
+    <div className="flex items-center gap-2 py-2 border-t border-neutral-50 first:border-0">
       <Checkbox
         state={selected ? "all" : "none"}
         onClick={(e) => {
@@ -197,23 +202,23 @@ function ChildRow({
           onToggle();
         }}
       />
-      <span className="flex-1 text-xs text-gray-700 min-w-0 truncate">
+      <span className="flex-1 text-xs text-neutral-700 min-w-0 truncate">
         {child.label}
       </span>
       {pct !== null ? (
         <span
           className={`text-xs font-medium shrink-0 ${
             pct >= 80
-              ? "text-green-700"
+              ? "text-success-500"
               : pct >= 50
-              ? "text-yellow-700"
-              : "text-red-600"
+              ? "text-amber-600"
+              : "text-error-500"
           }`}
         >
           {pct}%
         </span>
       ) : (
-        <span className="text-xs text-gray-400 shrink-0">—</span>
+        <span className="text-xs text-neutral-400 shrink-0">—</span>
       )}
     </div>
   );
@@ -257,7 +262,7 @@ function UmbrellaRow({
           <button
             type="button"
             onClick={() => onExpandToggle(umbrella.id)}
-            className="shrink-0 w-4 h-4 flex items-center justify-center text-gray-400 hover:text-gray-700 transition-colors"
+            className="shrink-0 w-4 h-4 flex items-center justify-center text-neutral-400 hover:text-neutral-700 transition-colors"
             aria-label={expanded ? "Collapse" : "Expand"}
           >
             <Chevron expanded={expanded} />
@@ -266,7 +271,7 @@ function UmbrellaRow({
           <span className="shrink-0 w-4 h-4" />
         )}
         <span
-          className="flex-1 text-sm font-medium text-gray-800 min-w-0 truncate cursor-pointer select-none"
+          className="flex-1 text-sm font-medium text-neutral-800 min-w-0 truncate cursor-pointer select-none"
           onClick={() => hasChildren && onExpandToggle(umbrella.id)}
         >
           {umbrella.label}
@@ -277,25 +282,25 @@ function UmbrellaRow({
               <span
                 className={`text-xs font-medium ${
                   displayScore >= 80
-                    ? "text-green-700"
+                    ? "text-success-500"
                     : displayScore >= 50
-                    ? "text-yellow-700"
-                    : "text-red-600"
+                    ? "text-amber-600"
+                    : "text-error-500"
                 }`}
               >
                 {displayScore}%
               </span>
-              <ScoreBar pct={displayScore} className="w-12" />
+              <ProgressBar value={displayScore} size="xs" color={displayScore >= 80 ? "success" : displayScore >= 50 ? "brand" : "error"} label={umbrella.label} className="w-12" />
             </>
           ) : (
-            <span className="text-xs text-gray-400">—</span>
+            <span className="text-xs text-neutral-400">—</span>
           )}
         </div>
       </div>
 
       {/* Children */}
       {hasChildren && expanded && (
-        <div className="pl-8 border-l-2 border-blue-100 ml-2 mb-1">
+        <div className="pl-8 border-l-2 border-brand-100 ml-2 mb-1">
           {umbrella.children.map((child) => (
             <ChildRow
               key={child.id}
@@ -340,7 +345,7 @@ function CategoryRow({
   const hasUmbrellas = (cat.umbrellas ?? []).length > 0;
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+    <div className="rounded-xl border border-neutral-200 bg-white shadow-brand-xs overflow-hidden">
       {/* Category header */}
       <div className="px-4 py-3">
         <div className="flex items-center gap-2">
@@ -355,7 +360,7 @@ function CategoryRow({
             <button
               type="button"
               onClick={() => onCategoryExpandToggle(cat.id)}
-              className="shrink-0 w-4 h-4 flex items-center justify-center text-gray-400 hover:text-gray-700 transition-colors"
+              className="shrink-0 w-4 h-4 flex items-center justify-center text-neutral-400 hover:text-neutral-700 transition-colors"
               aria-label={expanded ? "Collapse" : "Expand"}
             >
               <Chevron expanded={expanded} />
@@ -364,7 +369,7 @@ function CategoryRow({
             <span className="shrink-0 w-4 h-4" />
           )}
           <span
-            className="flex-1 text-sm font-semibold text-gray-900 min-w-0 truncate cursor-pointer select-none"
+            className="flex-1 text-sm font-semibold text-neutral-900 min-w-0 truncate cursor-pointer select-none"
             onClick={() => hasUmbrellas && onCategoryExpandToggle(cat.id)}
           >
             {cat.label}
@@ -373,23 +378,23 @@ function CategoryRow({
             <span
               className={`shrink-0 text-xs font-semibold ${
                 displayScore >= 80
-                  ? "text-green-700"
+                  ? "text-success-500"
                   : displayScore >= 50
-                  ? "text-yellow-700"
-                  : "text-red-600"
+                  ? "text-amber-600"
+                  : "text-error-500"
               }`}
             >
               {displayScore}%
             </span>
           ) : (
-            <span className="shrink-0 text-xs text-gray-400">Not started</span>
+            <span className="shrink-0 text-xs text-neutral-400">Not started</span>
           )}
         </div>
       </div>
 
       {/* Umbrella list */}
       {hasUmbrellas && expanded && (
-        <div className="px-4 pb-2 border-t border-gray-100 divide-y-0">
+        <div className="px-4 pb-2 border-t border-neutral-100 divide-y-0">
           {(cat.umbrellas ?? []).map((u) => (
             <UmbrellaRow
               key={u.id}
@@ -689,34 +694,41 @@ export default function McatPracticePage() {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
+        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
+            <Link href="/mcat" className="shrink-0">
+              <LoderaLogo size={22} />
+            </Link>
             <Link
               href="/mcat"
-              className="text-xs text-gray-400 hover:text-gray-600 shrink-0"
+              className="text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors"
             >
               ← MCAT
             </Link>
-            <p className="font-semibold text-gray-900 text-sm truncate">
+            <p className="font-semibold text-neutral-900 text-sm truncate">
               General Practice
             </p>
           </div>
-          {pagePhase === "practice" && (
-            <div className="flex items-center gap-3">
-              <span className="text-xs text-gray-500 shrink-0">
-                {stats.correct}/{stats.answered} correct
-              </span>
-              <button
-                onClick={() => setPagePhase("select")}
-                className="text-xs text-blue-600 hover:text-blue-800 shrink-0"
-              >
-                Change topics
-              </button>
-            </div>
-          )}
+          <div className="flex items-center gap-3 shrink-0">
+            {pagePhase === "practice" && (
+              <>
+                <span className="text-xs text-neutral-500 shrink-0">
+                  {stats.correct}/{stats.answered} correct
+                </span>
+                <button
+                  onClick={() => setPagePhase("select")}
+                  className="text-xs text-brand-600 hover:text-brand-800 shrink-0"
+                >
+                  Change topics
+                </button>
+              </>
+            )}
+            <StreakBadge />
+            <SoundToggle />
+          </div>
         </div>
       </header>
 
@@ -725,30 +737,30 @@ export default function McatPracticePage() {
         {pagePhase === "select" && (
           <>
             <div>
-              <h2 className="text-base font-semibold text-gray-900 mb-1">
+              <h2 className="text-base font-semibold text-neutral-900 mb-1">
                 Choose topics to practice
               </h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-neutral-500">
                 Select categories, umbrellas, or individual keywords.
               </p>
             </div>
 
             {loadingCats && (
               <div className="flex flex-col items-center justify-center py-20 gap-3">
-                <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                <p className="text-sm text-gray-500">Loading categories…</p>
+                <div className="relative w-10 h-10">
+                  <div className="w-10 h-10 rounded-full border-4 border-brand-100" />
+                  <div className="absolute inset-0 rounded-full border-4 border-brand-500 border-t-transparent animate-spin" />
+                </div>
+                <p className="text-sm text-neutral-500">Loading categories…</p>
               </div>
             )}
 
             {!loadingCats && catsError && (
-              <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
-                <p className="text-sm text-red-600 mb-3">{catsError}</p>
-                <button
-                  onClick={() => loadCategories(sessionId)}
-                  className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700"
-                >
+              <div className="rounded-xl border border-error-200 bg-error-50 p-6 text-center">
+                <p className="text-sm text-error-600 mb-3">{catsError}</p>
+                <Button variant="primary" size="sm" onClick={() => loadCategories(sessionId)}>
                   Try again
-                </button>
+                </Button>
               </div>
             )}
 
@@ -756,10 +768,10 @@ export default function McatPracticePage() {
               <>
                 {/* Toolbar: select all + summary */}
                 <div className="flex items-center justify-between">
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-neutral-500">
                     {selectedLeafs.size > 0 ? (
                       <>
-                        <span className="font-medium text-gray-700">
+                        <span className="font-medium text-neutral-700">
                           {selectedLeafs.size}
                         </span>{" "}
                         keyword{selectedLeafs.size !== 1 ? "s" : ""} selected
@@ -767,7 +779,7 @@ export default function McatPracticePage() {
                           <>
                             {" "}
                             across{" "}
-                            <span className="font-medium text-gray-700">
+                            <span className="font-medium text-neutral-700">
                               {topicsWithSelection}
                             </span>{" "}
                             topic{topicsWithSelection !== 1 ? "s" : ""}
@@ -781,7 +793,7 @@ export default function McatPracticePage() {
                   <button
                     type="button"
                     onClick={toggleSelectAll}
-                    className="text-xs font-medium text-blue-600 hover:text-blue-800 shrink-0"
+                    className="text-xs font-medium text-brand-600 hover:text-brand-800 shrink-0"
                   >
                     {selectedLeafs.size === allLeafIds.length &&
                     allLeafIds.length > 0
@@ -809,20 +821,22 @@ export default function McatPracticePage() {
                 </div>
 
                 {categories.length === 0 && (
-                  <p className="text-sm text-gray-400 text-center py-8">
+                  <p className="text-sm text-neutral-400 text-center py-8">
                     No categories available yet.
                   </p>
                 )}
 
                 {/* Start button */}
-                <button
+                <Button
                   type="button"
+                  variant="primary"
+                  size="lg"
                   onClick={startPractice}
                   disabled={selectedLeafs.size === 0}
-                  className="w-full py-3.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed mt-2"
+                  className="w-full mt-2"
                 >
                   Start practice
-                </button>
+                </Button>
               </>
             )}
           </>
@@ -849,16 +863,13 @@ export default function McatPracticePage() {
 
             {/* Error */}
             {questionPhase === "error" && (
-              <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
-                <p className="text-sm text-red-600 mb-3">
+              <div className="rounded-xl border border-error-200 bg-error-50 p-6 text-center">
+                <p className="text-sm text-error-600 mb-3">
                   {errorMsg || "Failed to load question"}
                 </p>
-                <button
-                  onClick={() => fetchNextQuestion(excludeIds)}
-                  className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700"
-                >
+                <Button variant="primary" size="sm" onClick={() => fetchNextQuestion(excludeIds)}>
                   Try again
-                </button>
+                </Button>
               </div>
             )}
 
@@ -868,11 +879,11 @@ export default function McatPracticePage() {
               currentQuestion && (
                 <>
                   {/* Stem */}
-                  <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                    <p className="text-sm font-medium text-gray-900 leading-relaxed">
+                  <Card>
+                    <p className="text-sm font-medium text-neutral-900 leading-relaxed">
                       <MathText>{currentQuestion.stem}</MathText>
                     </p>
-                  </div>
+                  </Card>
 
                   {/* Choices */}
                   <div className="space-y-2">
@@ -903,7 +914,7 @@ export default function McatPracticePage() {
                     <div className="flex justify-center">
                       <button
                         onClick={handleDontKnow}
-                        className="text-xs text-gray-400 hover:text-gray-600 underline"
+                        className="text-xs text-neutral-400 hover:text-neutral-600 underline"
                       >
                         I don&apos;t know
                       </button>
@@ -916,15 +927,15 @@ export default function McatPracticePage() {
                       {/* Result pill */}
                       <div className="flex justify-center">
                         {dontKnow ? (
-                          <span className="px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-medium">
+                          <span className="px-3 py-1 rounded-full bg-neutral-100 text-neutral-600 text-xs font-medium">
                             Skipped — correct answer highlighted above
                           </span>
                         ) : selectedChoice === revealCorrect ? (
-                          <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+                          <span className="px-3 py-1 rounded-full bg-success-100 text-success-600 text-xs font-semibold">
                             Correct!
                           </span>
                         ) : (
-                          <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
+                          <span className="px-3 py-1 rounded-full bg-error-100 text-error-600 text-xs font-semibold">
                             Incorrect
                           </span>
                         )}
@@ -932,11 +943,11 @@ export default function McatPracticePage() {
 
                       {/* Explanation */}
                       {explanation && (
-                        <div className="bg-blue-50 rounded-xl px-4 py-3 border border-blue-100">
-                          <p className="text-xs font-semibold text-blue-600 mb-1 uppercase tracking-wide">
+                        <div className="bg-brand-50 rounded-xl px-4 py-3 border border-brand-100">
+                          <p className="text-xs font-semibold text-brand-600 mb-1 uppercase tracking-wide">
                             Explanation
                           </p>
-                          <p className="text-sm text-blue-800 leading-relaxed">
+                          <p className="text-sm text-brand-800 leading-relaxed">
                             <MathText>{explanation}</MathText>
                           </p>
                         </div>
@@ -952,18 +963,12 @@ export default function McatPracticePage() {
 
                       {/* Action buttons */}
                       <div className="flex gap-2">
-                        <button
-                          onClick={handleSimilar}
-                          className="flex-1 py-3 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
+                        <Button variant="secondary" size="lg" onClick={handleSimilar} className="flex-1">
                           Similar question
-                        </button>
-                        <button
-                          onClick={handleNext}
-                          className="flex-1 py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition-colors"
-                        >
+                        </Button>
+                        <Button variant="primary" size="lg" onClick={handleNext} className="flex-1">
                           Next question →
-                        </button>
+                        </Button>
                       </div>
                     </>
                   )}

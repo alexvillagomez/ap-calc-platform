@@ -3,10 +3,18 @@
 import { useState, useEffect, use, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { LoderaLogo } from "@/components/brand/LoderaLogo";
+import { Button } from "@/components/ui/Button";
+import { ProgressBar } from "@/components/ui/ProgressBar";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import MathText from "@/components/mcat/MathText";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
+import { StreakBadge } from "@/components/gamification/StreakBadge";
+import { ComboMeter } from "@/components/gamification/ComboMeter";
+import { SoundToggle } from "@/components/ui/SoundToggle";
+import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
+import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
 
 const CARD_COUNT = 10;
 
@@ -67,6 +75,11 @@ function McatFlashcardsInner({
   const [flipping, setFlipping] = useState(false);
   // Track whether back has been seen at least once for the current card
   const [seenBack, setSeenBack] = useState(false);
+
+  // ── Gamification ──────────────────────────────────────────────────────────
+  const [combo, setCombo] = useState(0);
+
+  useStreakTouchOnce();
 
   // Resolve umbrella → children ids via taxonomy
   const resolveKeywordIds = async (
@@ -161,6 +174,18 @@ function McatFlashcardsInner({
     const newHistory = [...history, { flashcard: card, result }];
     setHistory(newHistory);
 
+    // ── Gamification: got_it = correct, others = incorrect ────────────────
+    if (result === "got_it") {
+      setCombo((prev) => {
+        const next = comboReducer({ count: prev }, "correct").count;
+        onCorrectAnswer(next);
+        return next;
+      });
+    } else {
+      setCombo((prev) => comboReducer({ count: prev }, "incorrect").count);
+      onIncorrectAnswer();
+    }
+
     // Record attempt (fire and forget)
     fetch("/api/mcat/flashcard-attempt", {
       method: "POST",
@@ -193,42 +218,50 @@ function McatFlashcardsInner({
     : "Flashcards";
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
+        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
+            <Link href={backHref} className="shrink-0">
+              <LoderaLogo size={22} />
+            </Link>
             <Link
               href={backHref}
-              className="text-xs text-gray-400 hover:text-gray-600 shrink-0"
+              className="text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors"
             >
               {isScoped ? "← Back" : "← MCAT"}
             </Link>
             {isScoped && scopeLabel && (
-              <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-medium">
+              <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
                 {umbrellaId ? "Topic" : "Keyword"}: {scopeLabel}
               </span>
             )}
-            <p className="font-semibold text-gray-900 text-sm truncate">
+            <p className="font-semibold text-neutral-900 text-sm truncate">
               {headingLabel}
             </p>
           </div>
-          {pagePhase === "study" && cards.length > 0 && (
-            <p className="text-xs text-gray-500 shrink-0">
-              {currentIdx + 1} / {cards.length}
-            </p>
-          )}
+          <div className="flex items-center gap-2 shrink-0">
+            {pagePhase === "study" && cards.length > 0 && (
+              <p className="text-xs text-neutral-500">
+                {currentIdx + 1} / {cards.length}
+              </p>
+            )}
+            <StreakBadge />
+            <SoundToggle />
+          </div>
         </div>
       </header>
 
       {/* Progress bar */}
       {pagePhase === "study" && cards.length > 0 && (
-        <div className="h-1 bg-gray-200">
-          <div
-            className="h-full bg-blue-500 transition-all duration-300"
-            style={{ width: `${Math.round((currentIdx / cards.length) * 100)}%` }}
-          />
-        </div>
+        <ProgressBar
+          value={Math.round((currentIdx / cards.length) * 100)}
+          size="xs"
+          color="brand"
+          label="Flashcard progress"
+          className="rounded-none"
+        />
       )}
 
       <main className="max-w-2xl mx-auto px-4 py-8 space-y-4">
@@ -242,16 +275,13 @@ function McatFlashcardsInner({
 
         {/* Error */}
         {pagePhase === "error" && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
-            <p className="text-sm text-red-600 mb-3">
+          <div className="rounded-xl border border-error-200 bg-error-50 p-6 text-center">
+            <p className="text-sm text-error-600 mb-3">
               {errorMsg || "Failed to load flashcards"}
             </p>
-            <button
-              onClick={() => fetchCards(sessionId)}
-              className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700"
-            >
+            <Button variant="primary" size="sm" onClick={() => fetchCards(sessionId)}>
               Try again
-            </button>
+            </Button>
           </div>
         )}
 
@@ -262,58 +292,57 @@ function McatFlashcardsInner({
             <button
               type="button"
               onClick={flipCard}
-              className={`w-full text-left bg-white rounded-2xl border-2 shadow-md p-6 min-h-[180px] flex flex-col justify-between transition-opacity duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${
+              className={`w-full text-left bg-white rounded-2xl border-2 shadow-brand-sm p-6 min-h-[180px] flex flex-col justify-between transition-opacity duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 ${
                 flipping ? "opacity-0" : "opacity-100"
-              } ${cardPhase === "front" ? "border-gray-200" : "border-blue-300"}`}
+              } ${cardPhase === "front" ? "border-neutral-200" : "border-brand-300"}`}
             >
               {cardPhase === "front" ? (
                 <div>
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
+                  <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-3">
                     Front
                   </p>
-                  <p className="text-base font-medium text-gray-900 leading-relaxed">
+                  <p className="text-base font-medium text-neutral-900 leading-relaxed">
                     <MathText>{current.front}</MathText>
                   </p>
                 </div>
               ) : (
                 <div>
-                  <p className="text-xs font-semibold text-blue-500 uppercase tracking-wide mb-3">
+                  <p className="text-xs font-semibold text-brand-500 uppercase tracking-wide mb-3">
                     Back
                   </p>
-                  <p className="text-base text-gray-800 leading-relaxed">
+                  <p className="text-base text-neutral-800 leading-relaxed">
                     <MathText>{current.back}</MathText>
                   </p>
                 </div>
               )}
-              {/* Tap to flip hint */}
-              <p className="text-xs text-gray-300 mt-4 text-right select-none">
+              <p className="text-xs text-neutral-300 mt-4 text-right select-none">
                 {cardPhase === "back" ? "tap to flip back" : "tap to flip"}
               </p>
             </button>
 
             {/* Show answer button — only on front when not yet seen back */}
             {cardPhase === "front" && !seenBack && (
-              <button
-                onClick={flipCard}
-                className="w-full py-3.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition-colors"
-              >
+              <Button variant="primary" size="lg" className="w-full" onClick={flipCard}>
                 Show answer
-              </button>
+              </Button>
             )}
 
             {/* Grade buttons — only after back has been seen at least once */}
             {seenBack && (
               <>
+                {/* Combo meter */}
+                <ComboMeter combo={combo} />
+
                 <div className="flex gap-2">
                   <button
                     onClick={() => gradeCard("missed_it")}
-                    className="flex-1 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-semibold hover:bg-red-100 transition-colors"
+                    className="flex-1 py-3 rounded-xl bg-error-50 border border-error-200 text-error-700 text-sm font-semibold hover:bg-error-100 transition-colors"
                   >
                     ✗ Missed it
                   </button>
                   <button
                     onClick={() => gradeCard("got_it")}
-                    className="flex-1 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700 text-sm font-semibold hover:bg-green-100 transition-colors"
+                    className="flex-1 py-3 rounded-xl bg-success-50 border border-success-200 text-success-700 text-sm font-semibold hover:bg-success-100 transition-colors"
                   >
                     ✓ Got it
                   </button>
@@ -321,12 +350,11 @@ function McatFlashcardsInner({
                 <div className="flex justify-center">
                   <button
                     onClick={() => gradeCard("dont_know")}
-                    className="text-xs text-gray-400 hover:text-gray-600 underline"
+                    className="text-xs text-neutral-400 hover:text-neutral-600 underline"
                   >
                     I didn&apos;t know this
                   </button>
                 </div>
-                {/* Feedback widget */}
                 <FeedbackWidget
                   sessionId={sessionId}
                   contentType="flashcard"
@@ -341,41 +369,37 @@ function McatFlashcardsInner({
         {/* Completion screen */}
         {pagePhase === "done" && (
           <div className="text-center py-8 space-y-5">
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <div className="bg-white rounded-2xl border border-neutral-200 shadow-brand-sm p-6">
               <p className="text-3xl mb-2">🎉</p>
-              <p className="text-xl font-bold text-gray-900 mb-1">
+              <p className="text-xl font-bold text-neutral-900 mb-1">
                 All {cards.length} cards done!
               </p>
               <div className="flex justify-center gap-6 mt-4">
                 <div className="text-center">
-                  <p className="text-xl font-bold text-green-600">{gotItCount}</p>
-                  <p className="text-xs text-gray-500">Got it</p>
+                  <p className="text-xl font-bold text-success-500">{gotItCount}</p>
+                  <p className="text-xs text-neutral-500">Got it</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-xl font-bold text-red-500">{missedCount}</p>
-                  <p className="text-xs text-gray-500">Missed</p>
+                  <p className="text-xl font-bold text-error-500">{missedCount}</p>
+                  <p className="text-xs text-neutral-500">Missed</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-xl font-bold text-gray-400">
+                  <p className="text-xl font-bold text-neutral-400">
                     {history.filter((h) => h.result === "dont_know").length}
                   </p>
-                  <p className="text-xs text-gray-500">Didn&apos;t know</p>
+                  <p className="text-xs text-neutral-500">Didn&apos;t know</p>
                 </div>
               </div>
             </div>
 
             <div className="flex flex-col gap-2 sm:flex-row justify-center">
-              <button
-                onClick={() => fetchCards(sessionId)}
-                className="px-6 py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition-colors"
-              >
+              <Button variant="primary" size="lg" onClick={() => fetchCards(sessionId)}>
                 10 more cards
-              </button>
-              <Link
-                href={backHref}
-                className="px-6 py-3 rounded-xl border border-gray-200 text-sm font-semibold hover:bg-gray-50 transition-colors text-center"
-              >
-                {isScoped ? "Back" : "Back to MCAT"}
+              </Button>
+              <Link href={backHref}>
+                <Button variant="secondary" size="lg">
+                  {isScoped ? "Back" : "Back to MCAT"}
+                </Button>
               </Link>
             </div>
           </div>
@@ -392,8 +416,11 @@ export default function McatFlashcardsPage({
 }) {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="relative w-10 h-10">
+          <div className="w-10 h-10 rounded-full border-4 border-brand-100" />
+          <div className="absolute inset-0 rounded-full border-4 border-brand-500 border-t-transparent animate-spin" />
+        </div>
       </div>
     }>
       <McatFlashcardsInner params={params} />

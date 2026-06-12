@@ -3,13 +3,22 @@
 import { useState, useEffect, useCallback, useRef, use, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { LoderaLogo } from "@/components/brand/LoderaLogo";
+import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { ProgressBar } from "@/components/ui/ProgressBar";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
-import { ScoreBar } from "@/components/mcat/ScoreBar";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import { LessonView } from "@/components/mcat/LessonView";
 import MathText from "@/components/mcat/MathText";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
+import { StreakBadge } from "@/components/gamification/StreakBadge";
+import { ComboMeter } from "@/components/gamification/ComboMeter";
+import { SoundToggle } from "@/components/ui/SoundToggle";
+import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
+import { CorrectPulse } from "@/components/ui/CorrectPulse";
+import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -91,9 +100,9 @@ type DifficultyMode = "adaptive" | "easy" | "medium" | "hard";
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function diffLabel(d: number) {
-  if (d < 0.35) return { label: "Easy", cls: "bg-green-100 text-green-800" };
-  if (d < 0.65) return { label: "Medium", cls: "bg-yellow-100 text-yellow-800" };
-  return { label: "Hard", cls: "bg-red-100 text-red-800" };
+  if (d < 0.35) return { label: "Easy",   cls: "bg-success-100 text-success-600" };
+  if (d < 0.65) return { label: "Medium", cls: "bg-amber-100 text-amber-700" };
+  return            { label: "Hard",   cls: "bg-error-100 text-error-600" };
 }
 
 function pickReviewKeyword(pool: ReviewKeyword[]): ReviewKeyword | null {
@@ -183,6 +192,13 @@ function McatPracticeInner({
   // Transition
   const [transitionLabel, setTransitionLabel] = useState("");
 
+  // ── Gamification ──────────────────────────────────────────────────────────
+  const [combo, setCombo] = useState(0);
+  // Last answered correct flag — drives CorrectPulse on the answer area
+  const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
+
+  useStreakTouchOnce();
+
   // ── Manual difficulty control ─────────────────────────────────────────────
   const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>(() => {
     if (typeof window !== "undefined") {
@@ -266,6 +282,7 @@ function McatPracticeInner({
       setSelectedChoice(null);
       setShowLessonOffer(false);
       setErrorMsg("");
+      setLastAnswerCorrect(false);
 
       try {
         let data: { question: Question; generated?: boolean };
@@ -432,6 +449,18 @@ function McatPracticeInner({
         }),
       }).catch(() => {});
 
+      // ── Gamification: got_it = correct, missed_it / dont_know = incorrect ──
+      if (result === "got_it") {
+        setCombo((prev) => {
+          const next = comboReducer({ count: prev }, "correct").count;
+          onCorrectAnswer(next);
+          return next;
+        });
+      } else {
+        setCombo((prev) => comboReducer({ count: prev }, "incorrect").count);
+        onIncorrectAnswer();
+      }
+
       setStats((s) => ({ ...s, flashcards: s.flashcards + 1 }));
 
       const nextIdx = fcIndex + 1;
@@ -464,6 +493,16 @@ function McatPracticeInner({
       setPhase("revealed");
 
       const correct = idx === question.correct_index;
+
+      // ── Gamification: sounds + combo ──────────────────────────────────────
+      setLastAnswerCorrect(correct);
+      setCombo((prev) => {
+        const next = comboReducer({ count: prev }, correct ? "correct" : "incorrect").count;
+        if (correct) onCorrectAnswer(next);
+        else onIncorrectAnswer();
+        return next;
+      });
+
       setStats((s) => ({
         ...s,
         answered: s.answered + 1,
@@ -533,6 +572,11 @@ function McatPracticeInner({
 
     setSelectedChoice(null);
     setPhase("revealed");
+
+    // ── Gamification: incorrect ───────────────────────────────────────────
+    setLastAnswerCorrect(false);
+    setCombo((prev) => comboReducer({ count: prev }, "incorrect").count);
+    onIncorrectAnswer();
 
     setStats((s) => ({ ...s, answered: s.answered + 1 }));
 
@@ -780,20 +824,23 @@ function McatPracticeInner({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* Top bar */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
+        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
+            <Link href={backHref} className="shrink-0">
+              <LoderaLogo size={22} />
+            </Link>
             <Link
               href={backHref}
-              className="text-xs text-gray-400 hover:text-gray-600 shrink-0"
+              className="text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors"
             >
               {isScoped ? "← Back" : "← MCAT"}
             </Link>
             {/* Scope chip */}
             {isScoped && scopeLabel && (
-              <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-medium">
+              <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
                 {umbrellaId ? "Topic" : "Keyword"}: {scopeLabel}
               </span>
             )}
@@ -801,15 +848,15 @@ function McatPracticeInner({
             {currentKeyword && phase !== "loading" && phase !== "done" && (
               <div className="flex items-center gap-2 min-w-0">
                 {isFlashcardPhase ? (
-                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-teal-100 text-teal-700">
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-success-100 text-success-600">
                     Warm-up
                   </span>
                 ) : null}
-                <p className="font-semibold text-gray-900 text-sm truncate">
+                <p className="font-semibold text-neutral-900 text-sm truncate">
                   {currentKeyword.label}
                 </p>
                 {currentKeyword.umbrella_label && (
-                  <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium">
+                  <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
                     {currentKeyword.umbrella_label}
                   </span>
                 )}
@@ -824,7 +871,7 @@ function McatPracticeInner({
               !isReviewCard && (
                 <button
                   onClick={handleStartLesson}
-                  className="text-xs text-gray-400 hover:text-blue-600 underline underline-offset-2 transition-colors"
+                  className="text-xs text-neutral-400 hover:text-brand-600 underline underline-offset-2 transition-colors"
                 >
                   Learn this
                 </button>
@@ -833,11 +880,15 @@ function McatPracticeInner({
             {/* Session stats */}
             <div className="text-right">
               {stats.answered > 0 && (
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-neutral-500">
                   {stats.correct}/{stats.answered} correct
                 </p>
               )}
             </div>
+
+            {/* Streak + sound */}
+            <StreakBadge />
+            <SoundToggle />
           </div>
         </div>
 
@@ -846,12 +897,12 @@ function McatPracticeInner({
           !isReviewCard &&
           (phase === "practicing" || phase === "revealed") && (
             <div className="max-w-2xl mx-auto px-4 pb-1.5">
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-neutral-400">
                 Mastering:{" "}
-                <span className="font-mono tracking-wider text-indigo-500">
+                <span className="font-mono tracking-wider text-brand-600">
                   {masteryDots}
                 </span>{" "}
-                <span className="text-gray-400">
+                <span className="text-neutral-400">
                   ({topicCorrectStreak}/{MASTERY_STREAK}
                   {cappedMessage})
                 </span>
@@ -865,15 +916,15 @@ function McatPracticeInner({
           phase === "generating" ||
           phase === "flashcard") && (
           <div className="max-w-2xl mx-auto px-4 pb-2">
-            <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden text-xs">
+            <div className="inline-flex rounded-lg border border-neutral-200 overflow-hidden text-xs">
               {difficultyOptions.map(({ value, label }) => (
                 <button
                   key={value}
                   onClick={() => setDifficultyMode(value)}
                   className={`px-2.5 py-1 transition-colors font-medium ${
                     difficultyMode === value
-                      ? "bg-gray-900 text-white"
-                      : "bg-white text-gray-500 hover:bg-gray-50"
+                      ? "bg-brand-500 text-white"
+                      : "bg-white text-neutral-500 hover:bg-neutral-50"
                   }`}
                 >
                   {label}
@@ -887,16 +938,15 @@ function McatPracticeInner({
         {queue.length > 0 && phase !== "loading" && phase !== "done" && (
           <div className="max-w-2xl mx-auto px-4 pb-2">
             <div className="flex items-center gap-2">
-              <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-1 bg-blue-500 rounded-full transition-all"
-                  style={{
-                    width: `${Math.round((queueIndex / queue.length) * 100)}%`,
-                  }}
-                />
-              </div>
-              <span className="text-xs text-gray-400 shrink-0">
-                Keyword {queueIndex + 1} of {queue.length}
+              <ProgressBar
+                value={Math.round((queueIndex / queue.length) * 100)}
+                size="xs"
+                color="brand"
+                label="Queue progress"
+                className="flex-1"
+              />
+              <span className="text-xs text-neutral-400 shrink-0">
+                {queueIndex + 1} of {queue.length}
               </span>
             </div>
           </div>
@@ -931,9 +981,11 @@ function McatPracticeInner({
 
         {/* ── Error ── */}
         {phase === "error" && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center space-y-3">
-            <p className="text-sm text-red-600">{errorMsg || "Something went wrong"}</p>
-            <button
+          <div className="rounded-xl border border-error-200 bg-error-50 p-6 text-center space-y-3">
+            <p className="text-sm text-error-600">{errorMsg || "Something went wrong"}</p>
+            <Button
+              variant="primary"
+              size="sm"
               onClick={() => {
                 if (currentKeyword) {
                   loadQuestion(sessionId, currentKeyword.id);
@@ -941,27 +993,26 @@ function McatPracticeInner({
                   fetchQueue(sessionId);
                 }
               }}
-              className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors"
             >
               Try again
-            </button>
+            </Button>
           </div>
         )}
 
         {/* ── Transition interstitial ── */}
         {phase === "transition" && (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm px-6 py-5 text-center space-y-2 max-w-sm w-full">
-              <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+            <Card className="px-6 py-5 text-center space-y-2 max-w-sm w-full">
+              <p className="text-xs text-neutral-400 uppercase tracking-wide font-medium">
                 Keyword complete
               </p>
-              <p className="text-base font-semibold text-gray-900 truncate">
+              <p className="text-base font-semibold text-neutral-900 truncate">
                 {transitionLabel}
               </p>
-              <p className="text-sm text-gray-500 animate-pulse">
+              <p className="text-sm text-neutral-500 animate-pulse">
                 Moving to next keyword…
               </p>
-            </div>
+            </Card>
           </div>
         )}
 
@@ -970,13 +1021,13 @@ function McatPracticeInner({
           <>
             {/* Warm-up hint */}
             <div className="text-center">
-              <p className="text-xs text-teal-600 font-medium bg-teal-50 border border-teal-100 rounded-full inline-block px-3 py-1">
+              <p className="text-xs text-success-600 font-medium bg-success-50 border border-success-100 rounded-full inline-block px-3 py-1">
                 Quick warm-up — get familiar before questions
               </p>
             </div>
 
             {/* Card counter */}
-            <p className="text-xs text-gray-400 text-right">
+            <p className="text-xs text-neutral-400 text-right">
               {fcIndex + 1} / {flashcards.length}
             </p>
 
@@ -984,46 +1035,43 @@ function McatPracticeInner({
             <button
               type="button"
               onClick={flipFcCard}
-              className={`w-full text-left bg-white rounded-2xl border-2 shadow-md p-6 min-h-[180px] flex flex-col justify-between transition-opacity duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 ${
+              className={`w-full text-left bg-white rounded-2xl border-2 shadow-brand-sm p-6 min-h-[180px] flex flex-col justify-between transition-opacity duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 ${
                 fcFlipping ? "opacity-0" : "opacity-100"
               } ${
                 fcBackShown
-                  ? "border-teal-300 hover:border-teal-400"
-                  : "border-gray-200 hover:border-gray-300"
+                  ? "border-brand-300 hover:border-brand-400"
+                  : "border-neutral-200 hover:border-neutral-300"
               }`}
             >
               {!fcBackShown ? (
                 <div>
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
+                  <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-3">
                     Front
                   </p>
-                  <p className="text-base font-medium text-gray-900 leading-relaxed">
+                  <p className="text-base font-medium text-neutral-900 leading-relaxed">
                     <MathText>{currentFc.front}</MathText>
                   </p>
                 </div>
               ) : (
                 <div>
-                  <p className="text-xs font-semibold text-teal-500 uppercase tracking-wide mb-3">
+                  <p className="text-xs font-semibold text-brand-500 uppercase tracking-wide mb-3">
                     Back
                   </p>
-                  <p className="text-base text-gray-800 leading-relaxed">
+                  <p className="text-base text-neutral-800 leading-relaxed">
                     <MathText>{currentFc.back}</MathText>
                   </p>
                 </div>
               )}
-              <p className="text-xs text-gray-300 mt-4 text-right select-none">
+              <p className="text-xs text-neutral-300 mt-4 text-right select-none">
                 {fcBackShown ? "tap to flip back" : "tap to flip"}
               </p>
             </button>
 
             {/* Show answer button */}
             {!fcBackShown && (
-              <button
-                onClick={flipFcCard}
-                className="w-full py-3.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition-colors"
-              >
+              <Button variant="primary" size="lg" className="w-full" onClick={flipFcCard}>
                 Show answer
-              </button>
+              </Button>
             )}
 
             {/* Grade buttons */}
@@ -1032,13 +1080,13 @@ function McatPracticeInner({
                 <div className="flex gap-2">
                   <button
                     onClick={() => gradeFlashcard("missed_it")}
-                    className="flex-1 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-semibold hover:bg-red-100 transition-colors"
+                    className="flex-1 py-3 rounded-xl bg-error-50 border border-error-200 text-error-700 text-sm font-semibold hover:bg-error-100 transition-colors"
                   >
                     ✗ Missed it
                   </button>
                   <button
                     onClick={() => gradeFlashcard("got_it")}
-                    className="flex-1 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700 text-sm font-semibold hover:bg-green-100 transition-colors"
+                    className="flex-1 py-3 rounded-xl bg-success-50 border border-success-200 text-success-700 text-sm font-semibold hover:bg-success-100 transition-colors"
                   >
                     ✓ Got it
                   </button>
@@ -1046,7 +1094,7 @@ function McatPracticeInner({
                 <div className="flex justify-center">
                   <button
                     onClick={() => gradeFlashcard("dont_know")}
-                    className="text-xs text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors"
+                    className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
                   >
                     I didn&apos;t know this
                   </button>
@@ -1073,7 +1121,7 @@ function McatPracticeInner({
             {/* Badge row */}
             <div className="flex items-center gap-2 flex-wrap">
               {isReviewCard && (
-                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700">
+                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-700">
                   Review
                 </span>
               )}
@@ -1087,41 +1135,46 @@ function McatPracticeInner({
             </div>
 
             {/* Stem */}
-            <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-              <p className="text-sm font-medium text-gray-900 leading-relaxed">
+            <Card>
+              <p className="text-sm font-medium text-neutral-900 leading-relaxed">
                 <MathText>{question.stem}</MathText>
               </p>
-            </div>
+            </Card>
+
+            {/* Combo meter — appears above choices from combo ≥ 2 */}
+            <ComboMeter combo={combo} />
 
             {/* Choices */}
-            <div className="space-y-2">
-              {question.choices.map((choice, i) => {
-                let state: "default" | "selected" | "correct" | "wrong" | "dimmed" =
-                  "default";
-                if (phase === "revealed") {
-                  if (i === question.correct_index) state = "correct";
-                  else if (i === selectedChoice) state = "wrong";
-                  else state = "dimmed";
-                }
-                return (
-                  <ChoiceButton
-                    key={i}
-                    index={i}
-                    text={choice}
-                    state={state}
-                    disabled={phase === "revealed"}
-                    onClick={() => handleChoice(i)}
-                  />
-                );
-              })}
-            </div>
+            <CorrectPulse trigger={phase === "revealed" && lastAnswerCorrect} className="block w-full">
+              <div className="space-y-2">
+                {question.choices.map((choice, i) => {
+                  let state: "default" | "selected" | "correct" | "wrong" | "dimmed" =
+                    "default";
+                  if (phase === "revealed") {
+                    if (i === question.correct_index) state = "correct";
+                    else if (i === selectedChoice) state = "wrong";
+                    else state = "dimmed";
+                  }
+                  return (
+                    <ChoiceButton
+                      key={i}
+                      index={i}
+                      text={choice}
+                      state={state}
+                      disabled={phase === "revealed"}
+                      onClick={() => handleChoice(i)}
+                    />
+                  );
+                })}
+              </div>
+            </CorrectPulse>
 
             {/* I don't know */}
             {phase === "practicing" && (
               <div className="flex justify-center">
                 <button
                   onClick={handleDontKnow}
-                  className="text-xs text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors"
+                  className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
                 >
                   I don&apos;t know
                 </button>
@@ -1130,11 +1183,11 @@ function McatPracticeInner({
 
             {/* Explanation */}
             {phase === "revealed" && question.explanation && (
-              <div className="bg-blue-50 rounded-xl border border-blue-100 p-4">
-                <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-1.5">
+              <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
+                <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
                   Explanation
                 </p>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-sm text-neutral-700 leading-relaxed">
                   <MathText>{question.explanation}</MathText>
                 </p>
               </div>
@@ -1149,7 +1202,7 @@ function McatPracticeInner({
                 <div className="flex gap-2">
                   <button
                     onClick={handleStartLesson}
-                    className="flex-1 py-2.5 rounded-xl bg-amber-600 text-white text-sm font-semibold hover:bg-amber-700 transition-colors"
+                    className="flex-1 py-2.5 rounded-xl bg-amber-500 text-white text-sm font-semibold hover:bg-amber-600 transition-colors"
                   >
                     Start lesson
                   </button>
@@ -1175,19 +1228,23 @@ function McatPracticeInner({
 
                 <div className="flex flex-col gap-2 sm:flex-row">
                   {!isReviewCard && (
-                    <button
+                    <Button
+                      variant="secondary"
+                      size="lg"
                       onClick={handleSimilar}
-                      className="flex-1 py-3 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700 text-sm font-medium transition-colors"
+                      className="flex-1"
                     >
                       Similar question
-                    </button>
+                    </Button>
                   )}
-                  <button
+                  <Button
+                    variant="primary"
+                    size="lg"
                     onClick={handleNext}
-                    className="flex-1 py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition-colors"
+                    className="flex-1"
                   >
                     {nextButtonLabel()}
-                  </button>
+                  </Button>
                 </div>
               </>
             )}
@@ -1196,18 +1253,18 @@ function McatPracticeInner({
 
         {/* ── Done screen ── */}
         {phase === "done" && (
-          <div className="bg-white rounded-xl border border-gray-200 p-8 shadow-sm text-center space-y-5">
-            <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto">
-              <span className="text-green-600 text-2xl font-bold">✓</span>
+          <Card className="p-8 text-center space-y-5">
+            <div className="w-14 h-14 rounded-full bg-success-100 flex items-center justify-center mx-auto">
+              <span className="text-success-600 text-2xl font-bold">✓</span>
             </div>
 
             <div>
-              <h1 className="text-xl font-semibold text-gray-900">
+              <h1 className="text-xl font-semibold text-neutral-900">
                 {queue.length === 0
                   ? "All keywords mastered for now"
                   : "Great session!"}
               </h1>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-neutral-500 mt-1">
                 {queue.length === 0
                   ? "Check back later for spaced-review questions."
                   : `You worked through ${queue.length} keyword${queue.length !== 1 ? "s" : ""}.`}
@@ -1216,22 +1273,22 @@ function McatPracticeInner({
 
             {/* Stats */}
             {(stats.answered > 0 || stats.flashcards > 0) && (
-              <div className="bg-gray-50 rounded-xl border border-gray-100 p-4 space-y-2 text-left">
+              <div className="bg-neutral-50 rounded-xl border border-neutral-100 p-4 space-y-2 text-left">
                 {stats.flashcards > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Flashcards reviewed</span>
-                    <span className="font-medium text-gray-900">{stats.flashcards}</span>
+                    <span className="text-neutral-500">Flashcards reviewed</span>
+                    <span className="font-medium text-neutral-900">{stats.flashcards}</span>
                   </div>
                 )}
                 {stats.answered > 0 && (
                   <>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-500">Questions answered</span>
-                      <span className="font-medium text-gray-900">{stats.answered}</span>
+                      <span className="text-neutral-500">Questions answered</span>
+                      <span className="font-medium text-neutral-900">{stats.answered}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-500">Correct</span>
-                      <span className="font-medium text-gray-900">
+                      <span className="text-neutral-500">Correct</span>
+                      <span className="font-medium text-neutral-900">
                         {stats.correct} ({stats.answered > 0 ? Math.round((stats.correct / stats.answered) * 100) : 0}%)
                       </span>
                     </div>
@@ -1239,24 +1296,23 @@ function McatPracticeInner({
                 )}
                 {stats.topicsMastered > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Topics mastered</span>
-                    <span className="font-medium text-gray-900">{stats.topicsMastered}</span>
+                    <span className="text-neutral-500">Topics mastered</span>
+                    <span className="font-medium text-neutral-900">{stats.topicsMastered}</span>
                   </div>
                 )}
                 {stats.lessons > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Lessons taken</span>
-                    <span className="font-medium text-gray-900">{stats.lessons}</span>
+                    <span className="text-neutral-500">Lessons taken</span>
+                    <span className="font-medium text-neutral-900">{stats.lessons}</span>
                   </div>
                 )}
                 {stats.answered > 0 && (
                   <div className="pt-1">
-                    <ScoreBar
-                      pct={
-                        stats.answered > 0
-                          ? Math.round((stats.correct / stats.answered) * 100)
-                          : 0
-                      }
+                    <ProgressBar
+                      value={stats.answered > 0 ? Math.round((stats.correct / stats.answered) * 100) : 0}
+                      size="sm"
+                      color={stats.answered > 0 && Math.round((stats.correct / stats.answered) * 100) >= 80 ? "success" : "brand"}
+                      label="Session accuracy"
                     />
                   </div>
                 )}
@@ -1264,24 +1320,25 @@ function McatPracticeInner({
             )}
 
             <div className="flex flex-col gap-2">
-              <button
+              <Button
+                variant="primary"
+                size="lg"
+                className="w-full"
                 onClick={() => {
                   lessonedKeywordsRef.current = new Set();
                   setStats({ answered: 0, correct: 0, lessons: 0, flashcards: 0, topicsMastered: 0 });
                   fetchQueue(sessionId);
                 }}
-                className="w-full py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition-colors"
               >
                 Practice again
-              </button>
-              <Link
-                href={backHref}
-                className="w-full py-3 rounded-xl border border-gray-200 bg-white text-gray-600 text-sm font-medium hover:bg-gray-50 transition-colors text-center"
-              >
-                {isScoped ? "Back" : "Back to MCAT"}
+              </Button>
+              <Link href={backHref}>
+                <Button variant="secondary" size="lg" className="w-full">
+                  {isScoped ? "Back" : "Back to MCAT"}
+                </Button>
               </Link>
             </div>
-          </div>
+          </Card>
         )}
       </main>
     </div>
@@ -1295,8 +1352,11 @@ export default function McatPracticePage({
 }) {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="relative w-10 h-10">
+          <div className="w-10 h-10 rounded-full border-4 border-brand-100" />
+          <div className="absolute inset-0 rounded-full border-4 border-brand-500 border-t-transparent animate-spin" />
+        </div>
       </div>
     }>
       <McatPracticeInner params={params} />

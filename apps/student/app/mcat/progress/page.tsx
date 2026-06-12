@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ScoreBar } from "@/components/mcat/ScoreBar";
+import { LoderaLogo } from "@/components/brand/LoderaLogo";
+import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { ProgressBar } from "@/components/ui/ProgressBar";
+import { StreakBadge } from "@/components/gamification/StreakBadge";
+import { SoundToggle } from "@/components/ui/SoundToggle";
 import { YieldBadge } from "@/components/mcat/YieldBadge";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
@@ -60,14 +65,12 @@ interface Category {
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-/** Effective score to display for an umbrella (implied → own → null) */
 function umbrellaDisplayScore(u: Umbrella): number | null {
   if (u.implied_score !== null) return Math.round(u.implied_score * 100);
   if (u.score !== null) return Math.round(u.score * 100);
   return null;
 }
 
-/** Sum of children attempts (fallback to umbrella's own total_attempts) */
 function umbrellaAttempts(u: Umbrella): number {
   if (u.children.length > 0) {
     return u.children.reduce((s, c) => s + c.total_attempts, 0);
@@ -75,7 +78,6 @@ function umbrellaAttempts(u: Umbrella): number {
   return u.total_attempts;
 }
 
-/** Umbrella sort: attempted-and-weak first, then attempted-strong, then unattempted */
 function sortUmbrellas(umbrellas: Umbrella[]): Umbrella[] {
   return [...umbrellas].sort((a, b) => {
     const aAtt = umbrellaAttempts(a) > 0;
@@ -83,14 +85,12 @@ function sortUmbrellas(umbrellas: Umbrella[]): Umbrella[] {
     if (!aAtt && !bAtt) return 0;
     if (aAtt && !bAtt) return -1;
     if (!aAtt && bAtt) return 1;
-    // Both attempted — weak first
     const aScore = umbrellaDisplayScore(a) ?? 100;
     const bScore = umbrellaDisplayScore(b) ?? 100;
     return aScore - bScore;
   });
 }
 
-/** Children sort: weakest first */
 function sortChildren(children: InDepthChild[]): InDepthChild[] {
   return [...children].sort((a, b) => {
     const aAtt = a.total_attempts > 0;
@@ -105,7 +105,13 @@ function sortChildren(children: InDepthChild[]): InDepthChild[] {
 }
 
 function scoreColor(pct: number): string {
-  return pct >= 80 ? "text-green-700" : pct >= 50 ? "text-yellow-700" : "text-red-600";
+  return pct >= 80 ? "text-success-500" : pct >= 50 ? "text-amber-600" : "text-error-500";
+}
+
+function scoreBarColor(pct: number): "brand" | "success" | "error" {
+  if (pct >= 80) return "success";
+  if (pct >= 50) return "brand";
+  return "error";
 }
 
 // ── Overall stats helpers ─────────────────────────────────────────────────────
@@ -200,7 +206,7 @@ function UmbrellaRow({
               <button
                 type="button"
                 onClick={() => setExpanded((e) => !e)}
-                className="shrink-0 w-4 h-4 flex items-center justify-center text-gray-400 hover:text-gray-700 transition-colors"
+                className="shrink-0 w-4 h-4 flex items-center justify-center text-neutral-400 hover:text-neutral-700 transition-colors"
                 aria-label={expanded ? "Collapse" : "Expand"}
               >
                 <svg
@@ -214,14 +220,12 @@ function UmbrellaRow({
                 </svg>
               </button>
             )}
-            <span className="text-sm font-medium text-gray-800 truncate">
+            <span className="text-sm font-medium text-neutral-800 truncate">
               {umbrella.label}
             </span>
             <YieldBadge level={umbrella.yield_level} />
             {umbrella.state === "mastered" && (
-              <span title="Mastered" className="text-green-500 text-xs shrink-0">
-                ✓
-              </span>
+              <span title="Mastered" className="text-success-500 text-xs shrink-0">✓</span>
             )}
             {dontKnow > 0 && (
               <span className="text-xs bg-amber-50 text-amber-600 border border-amber-100 px-1.5 py-0.5 rounded shrink-0">
@@ -240,16 +244,23 @@ function UmbrellaRow({
                 {displayScore}%
               </span>
             ) : (
-              <span className="text-xs text-gray-400">Not started</span>
+              <span className="text-xs text-neutral-400">Not started</span>
             )}
           </div>
         </div>
-        {displayScore !== null && <ScoreBar pct={displayScore} />}
+        {displayScore !== null && (
+          <ProgressBar
+            value={displayScore}
+            size="xs"
+            color={scoreBarColor(displayScore)}
+            label={umbrella.label}
+          />
+        )}
       </div>
 
       {/* Children — shown when expanded */}
       {hasChildren && expanded && (
-        <div className="pl-5 border-l-2 border-blue-100 ml-2 mb-2 space-y-0">
+        <div className="pl-5 border-l-2 border-brand-100 ml-2 mb-2 space-y-0">
           {sorted.map((child) => (
             <ChildRow key={child.id} child={child} />
           ))}
@@ -263,15 +274,13 @@ function ChildRow({ child }: { child: InDepthChild }) {
   const pct = child.score !== null ? Math.round(child.score * 100) : null;
 
   return (
-    <div className="py-2.5 border-t border-gray-50 first:border-0">
+    <div className="py-2.5 border-t border-neutral-50 first:border-0">
       <div className="flex items-start justify-between gap-2 mb-1">
         <div className="flex items-center gap-1.5 min-w-0 flex-1">
-          <span className="text-sm text-gray-700 truncate">{child.label}</span>
+          <span className="text-sm text-neutral-700 truncate">{child.label}</span>
           <YieldBadge level={child.yield_level} />
           {child.state === "mastered" && (
-            <span title="Mastered" className="text-green-500 text-xs shrink-0">
-              ✓
-            </span>
+            <span title="Mastered" className="text-success-500 text-xs shrink-0">✓</span>
           )}
           {child.dont_know_count > 0 && (
             <span className="text-xs bg-amber-50 text-amber-600 border border-amber-100 px-1.5 py-0.5 rounded shrink-0">
@@ -279,7 +288,7 @@ function ChildRow({ child }: { child: InDepthChild }) {
             </span>
           )}
           {child.needs_lesson && (
-            <span className="text-xs bg-blue-50 text-blue-600 border border-blue-100 px-1.5 py-0.5 rounded shrink-0">
+            <span className="text-xs bg-brand-50 text-brand-600 border border-brand-100 px-1.5 py-0.5 rounded shrink-0">
               lesson recommended
             </span>
           )}
@@ -293,7 +302,7 @@ function ChildRow({ child }: { child: InDepthChild }) {
           {child.needs_lesson && (
             <Link
               href={`/mcat/lesson/${child.id}?label=${encodeURIComponent(child.label)}`}
-              className="text-xs font-medium text-blue-600 hover:text-blue-800 underline shrink-0"
+              className="text-xs font-medium text-brand-600 hover:text-brand-800 underline shrink-0"
             >
               Lesson
             </Link>
@@ -301,11 +310,13 @@ function ChildRow({ child }: { child: InDepthChild }) {
           {pct !== null ? (
             <span className={`text-sm font-medium ${scoreColor(pct)}`}>{pct}%</span>
           ) : (
-            <span className="text-xs text-gray-400">not started</span>
+            <span className="text-xs text-neutral-400">not started</span>
           )}
         </div>
       </div>
-      {pct !== null && <ScoreBar pct={pct} />}
+      {pct !== null && (
+        <ProgressBar value={pct} size="xs" color={scoreBarColor(pct)} label={child.label} />
+      )}
     </div>
   );
 }
@@ -335,8 +346,7 @@ export default function McatProgressPage() {
 
   useEffect(() => {
     load();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // load is stable (defined in component scope, not changing)
 
   const stats = computeOverallStats(categories);
   const overallAccuracy =
@@ -345,18 +355,25 @@ export default function McatProgressPage() {
       : null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
+        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            <Link href="/mcat" className="shrink-0">
+              <LoderaLogo size={22} />
+            </Link>
             <Link
               href="/mcat"
-              className="text-xs text-gray-400 hover:text-gray-600"
+              className="text-xs text-neutral-400 hover:text-brand-600 transition-colors"
             >
               ← MCAT
             </Link>
-            <h1 className="font-semibold text-gray-900 text-sm">My Progress</h1>
+            <h1 className="font-semibold text-neutral-900 text-sm">My Progress</h1>
+          </div>
+          <div className="flex items-center gap-2">
+            <StreakBadge />
+            <SoundToggle />
           </div>
         </div>
       </header>
@@ -365,21 +382,19 @@ export default function McatProgressPage() {
         {/* Loading */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-20 gap-3">
-            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-            <p className="text-sm text-gray-500">Loading progress…</p>
+            <div className="relative w-10 h-10">
+              <div className="w-10 h-10 rounded-full border-4 border-brand-100" />
+              <div className="absolute inset-0 rounded-full border-4 border-brand-500 border-t-transparent animate-spin" />
+            </div>
+            <p className="text-sm text-neutral-500">Loading progress…</p>
           </div>
         )}
 
         {/* Error */}
         {!loading && error && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
-            <p className="text-sm text-red-600 mb-3">{error}</p>
-            <button
-              onClick={load}
-              className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700"
-            >
-              Try again
-            </button>
+          <div className="rounded-xl border border-error-200 bg-error-50 p-6 text-center">
+            <p className="text-sm text-error-600 mb-3">{error}</p>
+            <Button variant="primary" size="sm" onClick={load}>Try again</Button>
           </div>
         )}
 
@@ -387,22 +402,28 @@ export default function McatProgressPage() {
           <>
             {/* Overall stats */}
             <div className="grid grid-cols-3 gap-3">
-              <div className="rounded-xl border border-gray-200 bg-white p-3 text-center shadow-sm">
-                <p className="text-xl font-bold text-gray-900">
-                  {stats.practicedKeywords}/{stats.totalKeywords}
-                </p>
-                <p className="text-xs text-gray-500 mt-0.5">Keywords practiced</p>
-              </div>
-              <div className="rounded-xl border border-gray-200 bg-white p-3 text-center shadow-sm">
-                <p className="text-xl font-bold text-gray-900">{stats.totalAttempts}</p>
-                <p className="text-xs text-gray-500 mt-0.5">Total attempts</p>
-              </div>
-              <div className="rounded-xl border border-gray-200 bg-white p-3 text-center shadow-sm">
-                <p className="text-xl font-bold text-gray-900">
-                  {overallAccuracy !== null ? `${overallAccuracy}%` : "—"}
-                </p>
-                <p className="text-xs text-gray-500 mt-0.5">Accuracy</p>
-              </div>
+              <Card className="p-3 text-center" noPadding>
+                <div className="p-3 text-center">
+                  <p className="text-xl font-bold text-neutral-900">
+                    {stats.practicedKeywords}/{stats.totalKeywords}
+                  </p>
+                  <p className="text-xs text-neutral-500 mt-0.5">Practiced</p>
+                </div>
+              </Card>
+              <Card className="p-3 text-center" noPadding>
+                <div className="p-3 text-center">
+                  <p className="text-xl font-bold text-neutral-900">{stats.totalAttempts}</p>
+                  <p className="text-xs text-neutral-500 mt-0.5">Attempts</p>
+                </div>
+              </Card>
+              <Card className="p-3 text-center" noPadding>
+                <div className="p-3 text-center">
+                  <p className={`text-xl font-bold ${overallAccuracy !== null ? (overallAccuracy >= 80 ? "text-success-500" : overallAccuracy >= 50 ? "text-amber-600" : "text-error-500") : "text-neutral-900"}`}>
+                    {overallAccuracy !== null ? `${overallAccuracy}%` : "—"}
+                  </p>
+                  <p className="text-xs text-neutral-500 mt-0.5">Accuracy</p>
+                </div>
+              </Card>
             </div>
 
             {/* Per-category sections */}
@@ -412,37 +433,39 @@ export default function McatProgressPage() {
               const sortedUmbrellas = hasUmbrellas ? sortUmbrellas(cat.umbrellas!) : [];
 
               return (
-                <div
-                  key={cat.id}
-                  className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"
-                >
+                <Card key={cat.id} noPadding>
                   {/* Category header */}
-                  <div className="px-4 pt-4 pb-3 border-b border-gray-100">
+                  <div className="px-4 pt-4 pb-3 border-b border-neutral-100">
                     <div className="flex items-center justify-between gap-2 mb-2">
                       <Link
                         href={`/mcat/${cat.id}/practice`}
-                        className="font-semibold text-gray-900 text-sm hover:text-blue-600 transition-colors"
+                        className="font-semibold text-neutral-900 text-sm hover:text-brand-600 transition-colors"
                       >
                         {cat.label}
                       </Link>
                       {avgPct !== null ? (
-                        <span
-                          className={`text-sm font-semibold ${scoreColor(avgPct)}`}
-                        >
+                        <span className={`text-sm font-semibold ${scoreColor(avgPct)}`}>
                           {avgPct}%
                         </span>
                       ) : (
-                        <span className="text-xs text-gray-400">Not started</span>
+                        <span className="text-xs text-neutral-400">Not started</span>
                       )}
                     </div>
-                    {avgPct !== null && <ScoreBar pct={avgPct} />}
+                    {avgPct !== null && (
+                      <ProgressBar
+                        value={avgPct}
+                        size="xs"
+                        color={scoreBarColor(avgPct)}
+                        label={`${cat.label} average`}
+                      />
+                    )}
                   </div>
 
-                  {/* Umbrella rows (new nested format) */}
+                  {/* Umbrella rows */}
                   {hasUmbrellas && (
-                    <div className="px-4 divide-y divide-gray-50">
+                    <div className="px-4 divide-y divide-neutral-50">
                       {sortedUmbrellas.length === 0 && (
-                        <p className="text-xs text-gray-400 py-3">No topics yet.</p>
+                        <p className="text-xs text-neutral-400 py-3">No topics yet.</p>
                       )}
                       {sortedUmbrellas.map((u) => (
                         <UmbrellaRow key={u.id} umbrella={u} />
@@ -452,33 +475,40 @@ export default function McatProgressPage() {
 
                   {/* Fallback: legacy flat keyword list */}
                   {!hasUmbrellas && cat.keywords && cat.keywords.length > 0 && (
-                    <div className="px-4 divide-y divide-gray-50">
+                    <div className="px-4 divide-y divide-neutral-50">
                       {cat.keywords
                         .filter((k) => k.tier === "umbrella" || !k.parent_keyword_id)
                         .map((kw) => (
                           <div key={kw.id} className="py-2.5">
                             <div className="flex items-center justify-between gap-2 mb-1">
-                              <span className="text-sm text-gray-800 truncate">{kw.label}</span>
+                              <span className="text-sm text-neutral-800 truncate">{kw.label}</span>
                               {kw.score !== null ? (
                                 <span className={`text-sm font-medium ${scoreColor(Math.round(kw.score * 100))}`}>
                                   {Math.round(kw.score * 100)}%
                                 </span>
                               ) : (
-                                <span className="text-xs text-gray-400">not started</span>
+                                <span className="text-xs text-neutral-400">not started</span>
                               )}
                             </div>
-                            {kw.score !== null && <ScoreBar pct={Math.round(kw.score * 100)} />}
+                            {kw.score !== null && (
+                              <ProgressBar
+                                value={Math.round(kw.score * 100)}
+                                size="xs"
+                                color={scoreBarColor(Math.round(kw.score * 100))}
+                                label={kw.label}
+                              />
+                            )}
                           </div>
                         ))}
                     </div>
                   )}
-                </div>
+                </Card>
               );
             })}
 
             {categories.length === 0 && (
-              <div className="text-center py-12 text-gray-400 text-sm">
-                <p>No categories available yet.</p>
+              <div className="text-center py-12 text-neutral-400 text-sm">
+                No categories available yet.
               </div>
             )}
           </>

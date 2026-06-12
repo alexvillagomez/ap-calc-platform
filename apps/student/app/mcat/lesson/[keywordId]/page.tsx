@@ -3,6 +3,7 @@
 import { use, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { LoderaLogo } from "@/components/brand/LoderaLogo";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { LessonView } from "@/components/mcat/LessonView";
 
@@ -18,7 +19,6 @@ export default function StandaloneLessonPage({
   const [sessionId, setSessionId] = useState<string>("");
   const [ready, setReady] = useState(false);
 
-  // Label: prefer query param ?label=, fall back to humanizing the id
   const rawLabel = searchParams.get("label") ?? "";
   const keywordLabel = rawLabel
     ? rawLabel
@@ -36,17 +36,22 @@ export default function StandaloneLessonPage({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* Top bar */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link
-            href="/mcat/progress"
-            className="text-xs text-gray-400 hover:text-gray-600 shrink-0"
-          >
-            ← My Progress
-          </Link>
-          <p className="font-semibold text-gray-900 text-sm truncate px-3">
+      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
+        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3 min-w-0">
+            <Link href="/mcat/progress" className="shrink-0">
+              <LoderaLogo size={22} />
+            </Link>
+            <Link
+              href="/mcat/progress"
+              className="text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors"
+            >
+              ← My Progress
+            </Link>
+          </div>
+          <p className="font-semibold text-neutral-900 text-sm truncate px-3">
             {keywordLabel}
           </p>
           <div className="w-20" />
@@ -64,7 +69,10 @@ export default function StandaloneLessonPage({
           />
         ) : (
           <div className="flex items-center justify-center py-32">
-            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <div className="relative w-10 h-10">
+              <div className="w-10 h-10 rounded-full border-4 border-brand-100" />
+              <div className="absolute inset-0 rounded-full border-4 border-brand-500 border-t-transparent animate-spin" />
+            </div>
           </div>
         )}
       </main>
