@@ -22,7 +22,9 @@
     "math:embed": "tsx scripts/embed-math.ts",
     "math:blueprints": "tsx scripts/backfill-math-blueprints.ts",
     "math:import": "tsx scripts/import-math-problems.ts",
-    "math:yield-writeback": "tsx scripts/writeback-learn-yield.ts"
+    "math:yield-writeback": "tsx scripts/writeback-learn-yield.ts",
+    "questions:embed": "tsx scripts/embed-missing-questions.ts",
+    "questions:content": "tsx scripts/backfill-question-content.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",

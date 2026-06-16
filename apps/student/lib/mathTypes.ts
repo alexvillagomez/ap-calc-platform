@@ -77,6 +77,12 @@ export interface MathQuestion {
   solution_latex: string;  // full worked solution in KaTeX
   hint_latex: string;
   keyword_weights: Record<string, number>;
+  /**
+   * Authoritative toolbar keyword for refresher/lesson — the keyword whose
+   * embedding is closest to this question (set by /api/math/next-question).
+   * Optional/back-compat: when absent, surfaces fall back to the max-weight key.
+   */
+  primary_keyword_id?: string | null;
   difficulty: number;  // 0.2–0.9 continuous
   parent_question_id: string | null;
   source: MathQuestionSource;

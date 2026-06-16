@@ -51,6 +51,8 @@ interface Question {
   correct_index: number;
   explanation: string;
   keyword_weights: Record<string, number>;
+  /** Authoritative toolbar keyword (embedding-matched); falls back to max-weight. */
+  primary_keyword_id?: string | null;
   difficulty: number;
   parent_question_id: string | null;
 }
@@ -894,7 +896,10 @@ export default function McatPracticePage() {
 
                   <QuestionToolbar
                     system="mcat"
-                    keywordId={primaryKeywordId(currentQuestion.keyword_weights)}
+                    keywordId={
+                      currentQuestion.primary_keyword_id ??
+                      primaryKeywordId(currentQuestion.keyword_weights)
+                    }
                     sessionId={sessionId}
                     questionId={currentQuestion.id}
                     contentType="question"

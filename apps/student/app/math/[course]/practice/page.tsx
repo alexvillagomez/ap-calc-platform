@@ -700,7 +700,10 @@ function MathGeneralPracticeInner({
             <QuestionToolbar
               system="math"
               course={course}
-              keywordId={primaryKeywordId(question.keyword_weights)}
+              keywordId={
+                question.primary_keyword_id ??
+                primaryKeywordId(question.keyword_weights)
+              }
               sessionId={sessionId}
               questionId={question.id}
               contentType="question"

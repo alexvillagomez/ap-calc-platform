@@ -297,7 +297,10 @@ function MathCategoryQuizInner({
             <QuestionToolbar
               system="math"
               course={course}
-              keywordId={primaryKeywordId(currentQ.keyword_weights)}
+              keywordId={
+                currentQ.primary_keyword_id ??
+                primaryKeywordId(currentQ.keyword_weights)
+              }
               sessionId={sessionId}
               questionId={currentQ.id}
               contentType="question"

@@ -84,6 +84,8 @@ export interface MathQuestion {
   solution_latex: string;
   hint_latex: string | null;
   keyword_weights: Record<string, number>;
+  /** Authoritative toolbar keyword (embedding-matched); falls back to max-weight. */
+  primary_keyword_id?: string | null;
   difficulty: number;
   parent_question_id: string | null;
 }

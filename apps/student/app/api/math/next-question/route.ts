@@ -32,6 +32,7 @@ import { loadTargetKeywords, embedText, tagByEmbedding } from "@/lib/mathTagging
 import { fetchExemplarProblems, buildExemplarBlock } from "@/lib/mathExemplars";
 import { outlineContextForCategory } from "@/lib/mathContentOutline";
 import { loadActivePriorities, PRIORITY_BOOST_FACTOR } from "@/lib/priorities";
+import { bestKeywordForQuestion } from "@/lib/bestKeyword";
 import type { MathCourse } from "@/lib/mathTypes";
 
 export const runtime = "nodejs";
@@ -313,6 +314,16 @@ export async function POST(request: Request) {
   // 6. If enough candidates exist, serve from stored
   if (candidates.length >= 3 && top5.length > 0 && hasInBandCandidate) {
     const selected = weightedRandomPick(top5) ?? top5[0];
+    // Authoritative toolbar keyword: closest keyword (embedding) to the question,
+    // not just the max stored weight. Fail-soft to max-weight.
+    const primaryKeywordId = await bestKeywordForQuestion(supabase, {
+      system: "math",
+      table: "math_questions",
+      keywordTable: "math_keywords",
+      questionId: selected.id,
+      categoryId: primaryCategoryId,
+      fallbackWeights: selected.keyword_weights,
+    });
     return NextResponse.json({
       question: {
         id: selected.id,
@@ -324,6 +335,7 @@ export async function POST(request: Request) {
         keyword_weights: selected.keyword_weights,
         difficulty: selected.difficulty,
         parent_question_id: selected.parent_question_id ?? null,
+        primary_keyword_id: primaryKeywordId,
       },
       generated: false,
     });
@@ -532,6 +544,15 @@ export async function POST(request: Request) {
   const selected = weightedRandomPick(finalPool) ?? finalPool[0];
   const isNewlyGenerated = generated.some((g) => g.id === selected.id);
 
+  const primaryKeywordId = await bestKeywordForQuestion(supabase, {
+    system: "math",
+    table: "math_questions",
+    keywordTable: "math_keywords",
+    questionId: selected.id,
+    categoryId: primaryCategoryId,
+    fallbackWeights: selected.keyword_weights,
+  });
+
   return NextResponse.json({
     question: {
       id: selected.id,
@@ -543,6 +564,7 @@ export async function POST(request: Request) {
       keyword_weights: selected.keyword_weights,
       difficulty: selected.difficulty,
       parent_question_id: selected.parent_question_id ?? null,
+      primary_keyword_id: primaryKeywordId,
     },
     generated: isNewlyGenerated,
   });
