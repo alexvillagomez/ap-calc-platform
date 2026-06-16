@@ -1,9 +1,9 @@
 "use client";
 
-import { use, useState, useEffect } from "react";
+import { use, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { LoginGate } from "@/components/auth/LoginGate";
-import { MathLessonView } from "@/components/math/MathLessonView";
+import { MathLessonView, type LessonData } from "@/components/math/MathLessonView";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { getOrCreateMathSession } from "@/lib/mathSession";
@@ -22,9 +22,38 @@ function MathLessonPageInner({
   const label = searchParams.get("label") ?? undefined;
   const [sessionId, setSessionId] = useState("");
 
+  // Page owns the lesson fetch so it can render a friendly error state on
+  // failure instead of a raw JSON card. On success the lesson is handed to
+  // MathLessonView via initialLesson (no double-fetch).
+  const [lesson, setLesson] = useState<LessonData | null>(null);
+  const [loadError, setLoadError] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     getOrCreateMathSession().then(setSessionId);
   }, []);
+
+  const fetchLesson = useCallback(async () => {
+    setLoading(true);
+    setLoadError(false);
+    setLesson(null);
+    try {
+      const res = await fetch(
+        `/api/math/lesson/${encodeURIComponent(keywordId)}`
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = (await res.json()) as LessonData;
+      setLesson(data);
+    } catch {
+      setLoadError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, [keywordId]);
+
+  useEffect(() => {
+    fetchLesson();
+  }, [fetchLesson]);
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -43,13 +72,48 @@ function MathLessonPageInner({
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-8">
-        <MathLessonView
-          sessionId={sessionId}
-          keywordId={keywordId}
-          keywordLabel={label ?? keywordId}
-          onComplete={() => router.push(returnTo)}
-          onSkip={() => router.push(returnTo)}
-        />
+        {loading ? (
+          <div className="flex items-center justify-center py-32">
+            <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : loadError || !lesson ? (
+          <div className="rounded-2xl border border-neutral-200 bg-white p-8 text-center shadow-brand-xs space-y-4">
+            <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center mx-auto">
+              <span className="text-neutral-400 text-xl">!</span>
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-base font-semibold text-neutral-900">
+                We couldn&apos;t build this lesson right now.
+              </h2>
+              <p className="text-sm text-neutral-500">
+                Please try again in a moment.
+              </p>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <button
+                onClick={fetchLesson}
+                className="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700 transition-colors"
+              >
+                Try again
+              </button>
+              <Link
+                href={returnTo}
+                className="px-4 py-2 rounded-xl border border-neutral-200 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors"
+              >
+                Back
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <MathLessonView
+            sessionId={sessionId}
+            keywordId={keywordId}
+            keywordLabel={label ?? keywordId}
+            initialLesson={lesson}
+            onComplete={() => router.push(returnTo)}
+            onSkip={() => router.push(returnTo)}
+          />
+        )}
       </main>
     </div>
   );

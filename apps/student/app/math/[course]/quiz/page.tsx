@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useEffect, use, Suspense } from "react";
+import { useState, useEffect, useCallback, useRef, use, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { LoginGate } from "@/components/auth/LoginGate";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import MathText from "@/components/mcat/MathText";
 import MathFeedbackWidget from "@/components/math/MathFeedbackWidget";
+import QuestionToolbar from "@/components/practice/QuestionToolbar";
+import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { ComboMeter } from "@/components/gamification/ComboMeter";
 import { SoundToggle } from "@/components/ui/SoundToggle";
@@ -31,6 +34,26 @@ interface UserAnswer {
 
 type Phase = "loading" | "category-pick" | "quiz" | "review" | "error";
 
+/**
+ * Resolve a leaf keyword id to the id of the category that contains it.
+ * Returns null if the keyword is not found in the taxonomy.
+ */
+function categoryIdForKeyword(
+  categories: MathCategory[],
+  keywordId: string
+): string | null {
+  for (const cat of categories) {
+    for (const u of cat.umbrellas) {
+      if (u.children.length > 0) {
+        if (u.children.some((c) => c.id === keywordId)) return cat.id;
+      } else if (u.id === keywordId) {
+        return cat.id;
+      }
+    }
+  }
+  return null;
+}
+
 function encouragingCopy(pct: number): string {
   if (pct === 100) return "Perfect score! Outstanding work!";
   if (pct >= 80) return "Great job — you're really solid on this material!";
@@ -49,6 +72,12 @@ function MathCourseQuizInner({
   const { course } = use(params);
   const courseLabel = COURSE_LABELS[course] ?? course;
 
+  // Optional deep-link scope: auto-start a quiz focused on a single keyword.
+  const searchParams = useSearchParams();
+  const keywordScopeId = searchParams.get("keyword");
+  // Guard so the auto-start only fires once per mount.
+  const autoStartedRef = useRef(false);
+
   const [sessionId, setSessionId] = useState("");
   const [categories, setCategories] = useState<MathCategory[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
@@ -58,10 +87,12 @@ function MathCourseQuizInner({
   const [phase, setPhase] = useState<Phase>("loading");
   const [errorMsg, setErrorMsg] = useState("");
   const [combo, setCombo] = useState(0);
+  const [usedRefresher, setUsedRefresher] = useState(false);
 
   useStreakTouchOnce();
 
-  const fetchQuiz = async (sid: string, categoryId: string) => {
+  const fetchQuiz = useCallback(
+    async (sid: string, categoryId: string, keywordIds?: string[]) => {
     setPhase("loading");
     setQuestions([]);
     setAnswers([]);
@@ -76,6 +107,9 @@ function MathCourseQuizInner({
         mixed: true,
         course: course as MathCourse,
       };
+      if (keywordIds && keywordIds.length > 0) {
+        body.keyword_ids = keywordIds;
+      }
 
       const res = await fetch("/api/math/quiz", {
         method: "POST",
@@ -90,7 +124,9 @@ function MathCourseQuizInner({
       setErrorMsg((e as Error).message ?? "Failed to build quiz");
       setPhase("error");
     }
-  };
+    },
+    [course]
+  );
 
   useEffect(() => {
     (async () => {
@@ -111,10 +147,25 @@ function MathCourseQuizInner({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const startQuiz = (categoryId: string) => {
-    setSelectedCategoryId(categoryId);
-    fetchQuiz(sessionId, categoryId);
-  };
+  const startQuiz = useCallback(
+    (categoryId: string) => {
+      setSelectedCategoryId(categoryId);
+      fetchQuiz(sessionId, categoryId);
+    },
+    [sessionId, fetchQuiz]
+  );
+
+  // Auto-start a keyword-scoped quiz when arriving via a valid deep link.
+  // Falls back to the normal category picker if the keyword can't be resolved.
+  useEffect(() => {
+    if (autoStartedRef.current) return;
+    if (!keywordScopeId || !sessionId || categories.length === 0) return;
+    const catId = categoryIdForKeyword(categories, keywordScopeId);
+    if (!catId) return; // unknown keyword — leave the picker untouched
+    autoStartedRef.current = true;
+    setSelectedCategoryId(catId);
+    fetchQuiz(sessionId, catId, [keywordScopeId]);
+  }, [keywordScopeId, sessionId, categories, fetchQuiz]);
 
   const recordAndAdvance = (selectedIndex: number | null, dontKnow: boolean) => {
     const q = questions[currentIdx];
@@ -141,9 +192,11 @@ function MathCourseQuizInner({
         ...(dontKnow ? { dont_know: true } : { selected_index: selectedIndex }),
         context: "quiz",
         course: course as MathCourse,
+        usedRefresher,
       }),
     }).catch(() => {});
 
+    setUsedRefresher(false);
     if (currentIdx + 1 >= questions.length) {
       setPhase("review");
     } else {
@@ -278,6 +331,17 @@ function MathCourseQuizInner({
                 <MathText>{currentQ.stem_latex}</MathText>
               </p>
             </div>
+
+            <QuestionToolbar
+              system="math"
+              course={course}
+              keywordId={primaryKeywordId(currentQ.keyword_weights)}
+              sessionId={sessionId}
+              questionId={currentQ.id}
+              contentType="question"
+              resetSignal={currentQ.id}
+              onRefresherUsed={() => setUsedRefresher(true)}
+            />
 
             <ComboMeter combo={combo} />
 

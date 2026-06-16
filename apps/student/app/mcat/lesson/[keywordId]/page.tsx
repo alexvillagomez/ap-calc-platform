@@ -1,11 +1,11 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
-import { LessonView } from "@/components/mcat/LessonView";
+import { LessonView, type LessonData } from "@/components/mcat/LessonView";
 
 export default function StandaloneLessonPage({
   params,
@@ -19,6 +19,13 @@ export default function StandaloneLessonPage({
   const [sessionId, setSessionId] = useState<string>("");
   const [ready, setReady] = useState(false);
 
+  // Page owns the lesson fetch so it can render a friendly error state on
+  // failure instead of a raw JSON card. On success the lesson is handed to
+  // LessonView via initialLesson (no double-fetch).
+  const [lesson, setLesson] = useState<LessonData | null>(null);
+  const [loadError, setLoadError] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const rawLabel = searchParams.get("label") ?? "";
   const keywordLabel = rawLabel
     ? rawLabel
@@ -30,6 +37,28 @@ export default function StandaloneLessonPage({
       setReady(true);
     });
   }, []);
+
+  const fetchLesson = useCallback(async () => {
+    setLoading(true);
+    setLoadError(false);
+    setLesson(null);
+    try {
+      const res = await fetch(
+        `/api/mcat/lesson/${encodeURIComponent(keywordId)}`
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = (await res.json()) as LessonData;
+      setLesson(data);
+    } catch {
+      setLoadError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, [keywordId]);
+
+  useEffect(() => {
+    fetchLesson();
+  }, [fetchLesson]);
 
   const handleDone = () => {
     router.back();
@@ -59,21 +88,50 @@ export default function StandaloneLessonPage({
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-8">
-        {ready && sessionId ? (
-          <LessonView
-            sessionId={sessionId}
-            keywordId={keywordId}
-            keywordLabel={keywordLabel}
-            onComplete={handleDone}
-            onSkip={handleDone}
-          />
-        ) : (
+        {!ready || !sessionId || loading ? (
           <div className="flex items-center justify-center py-32">
             <div className="relative w-10 h-10">
               <div className="w-10 h-10 rounded-full border-4 border-brand-100" />
               <div className="absolute inset-0 rounded-full border-4 border-brand-500 border-t-transparent animate-spin" />
             </div>
           </div>
+        ) : loadError || !lesson ? (
+          <div className="rounded-2xl border border-neutral-200 bg-white p-8 text-center shadow-brand-xs space-y-4">
+            <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center mx-auto">
+              <span className="text-neutral-400 text-xl">!</span>
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-base font-semibold text-neutral-900">
+                We couldn&apos;t build this lesson right now.
+              </h2>
+              <p className="text-sm text-neutral-500">
+                Please try again in a moment.
+              </p>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <button
+                onClick={fetchLesson}
+                className="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700 transition-colors"
+              >
+                Try again
+              </button>
+              <Link
+                href="/mcat/progress"
+                className="px-4 py-2 rounded-xl border border-neutral-200 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors"
+              >
+                Back
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <LessonView
+            sessionId={sessionId}
+            keywordId={keywordId}
+            keywordLabel={keywordLabel}
+            initialLesson={lesson}
+            onComplete={handleDone}
+            onSkip={handleDone}
+          />
         )}
       </main>
     </div>

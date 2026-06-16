@@ -9,6 +9,8 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import MathText from "@/components/mcat/MathText";
+import QuestionToolbar from "@/components/practice/QuestionToolbar";
+import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { ComboMeter } from "@/components/gamification/ComboMeter";
@@ -78,6 +80,7 @@ function McatFlashcardsInner({
 
   // ── Gamification ──────────────────────────────────────────────────────────
   const [combo, setCombo] = useState(0);
+  const [usedRefresher, setUsedRefresher] = useState(false);
 
   useStreakTouchOnce();
 
@@ -194,9 +197,12 @@ function McatFlashcardsInner({
         session_id: sessionId,
         flashcard_id: card.id,
         result,
+        // Best-effort: server ignores unknown fields if unsupported.
+        usedRefresher,
       }),
     }).catch(() => {});
 
+    setUsedRefresher(false);
     if (currentIdx + 1 >= cards.length) {
       setPagePhase("done");
     } else {
@@ -319,6 +325,16 @@ function McatFlashcardsInner({
                 {cardPhase === "back" ? "tap to flip back" : "tap to flip"}
               </p>
             </button>
+
+            <QuestionToolbar
+              system="mcat"
+              keywordId={primaryKeywordId(current.keyword_weights)}
+              sessionId={sessionId}
+              questionId={current.id}
+              contentType="flashcard"
+              resetSignal={current.id}
+              onRefresherUsed={() => setUsedRefresher(true)}
+            />
 
             {/* Show answer button — only on front when not yet seen back */}
             {cardPhase === "front" && !seenBack && (

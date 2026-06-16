@@ -24,6 +24,12 @@ function MathCourseChooserInner() {
             <h1 className="text-sm font-semibold text-neutral-800">Math Center</h1>
           </div>
           <div className="flex items-center gap-2">
+            <Link
+              href="/profile"
+              className="text-xs font-medium text-neutral-600 hover:text-brand-600 transition-colors px-2 py-1"
+            >
+              Account
+            </Link>
             <StreakBadge />
             <SoundToggle />
           </div>

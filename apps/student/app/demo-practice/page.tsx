@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Preview } from "@/components/Preview";
 import { cn } from "@/lib/cn";
@@ -854,7 +855,13 @@ export default function DemoPracticePage() {
         </div>
       )}
       {/* Top bar with logout */}
-      <div className="max-w-2xl mx-auto px-6 pt-4 flex justify-end">
+      <div className="max-w-2xl mx-auto px-6 pt-4 flex justify-end items-center gap-4">
+        <Link
+          href="/profile"
+          className="text-xs text-gray-400 hover:text-gray-700 underline underline-offset-2 transition-colors"
+        >
+          Account
+        </Link>
         <button
           type="button"
           onClick={() => {

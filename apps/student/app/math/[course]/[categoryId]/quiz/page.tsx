@@ -7,6 +7,8 @@ import { LoginGate } from "@/components/auth/LoginGate";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import MathText from "@/components/mcat/MathText";
 import MathFeedbackWidget from "@/components/math/MathFeedbackWidget";
+import QuestionToolbar from "@/components/practice/QuestionToolbar";
+import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { ComboMeter } from "@/components/gamification/ComboMeter";
 import { SoundToggle } from "@/components/ui/SoundToggle";
@@ -57,6 +59,7 @@ function MathCategoryQuizInner({
   const [phase, setPhase] = useState<Phase>("loading");
   const [errorMsg, setErrorMsg] = useState("");
   const [combo, setCombo] = useState(0);
+  const [usedRefresher, setUsedRefresher] = useState(false);
 
   useStreakTouchOnce();
 
@@ -154,9 +157,11 @@ function MathCategoryQuizInner({
         ...(dontKnow ? { dont_know: true } : { selected_index: selectedIndex }),
         context: "quiz",
         course: course as MathCourse,
+        usedRefresher,
       }),
     }).catch(() => {});
 
+    setUsedRefresher(false);
     if (currentIdx + 1 >= questions.length) {
       setPhase("review");
     } else {
@@ -288,6 +293,17 @@ function MathCategoryQuizInner({
                 <MathText>{currentQ.stem_latex}</MathText>
               </p>
             </div>
+
+            <QuestionToolbar
+              system="math"
+              course={course}
+              keywordId={primaryKeywordId(currentQ.keyword_weights)}
+              sessionId={sessionId}
+              questionId={currentQ.id}
+              contentType="question"
+              resetSignal={currentQ.id}
+              onRefresherUsed={() => setUsedRefresher(true)}
+            />
 
             {/* Combo meter */}
             <ComboMeter combo={combo} />

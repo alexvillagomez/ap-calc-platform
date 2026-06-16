@@ -18,6 +18,7 @@ import {
   COURSE_LABELS,
   SECTION_LABELS,
 } from "@/components/math/mathUiTypes";
+import CourseSearch from "@/components/search/CourseSearch";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -343,6 +344,14 @@ function MathCourseLandingInner({
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
+        {/* Topic search */}
+        <section className="space-y-2">
+          <h3 className="text-sm font-semibold text-neutral-800">
+            Search {courseLabel} topics
+          </h3>
+          <CourseSearch system="math" course={course} />
+        </section>
+
         {/* Loading */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-24 gap-3">

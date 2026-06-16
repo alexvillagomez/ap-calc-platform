@@ -12,6 +12,8 @@ import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import { LessonView } from "@/components/mcat/LessonView";
 import MathText from "@/components/mcat/MathText";
+import QuestionToolbar from "@/components/practice/QuestionToolbar";
+import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { ComboMeter } from "@/components/gamification/ComboMeter";
@@ -196,6 +198,7 @@ function McatPracticeInner({
   const [combo, setCombo] = useState(0);
   // Last answered correct flag — drives CorrectPulse on the answer area
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
+  const [usedRefresher, setUsedRefresher] = useState(false);
 
   useStreakTouchOnce();
 
@@ -283,6 +286,7 @@ function McatPracticeInner({
       setShowLessonOffer(false);
       setErrorMsg("");
       setLastAnswerCorrect(false);
+      setUsedRefresher(false);
 
       try {
         let data: { question: Question; generated?: boolean };
@@ -446,6 +450,7 @@ function McatPracticeInner({
           session_id: sessionId,
           flashcard_id: card.id,
           result,
+          usedRefresher,
         }),
       }).catch(() => {});
 
@@ -463,6 +468,7 @@ function McatPracticeInner({
 
       setStats((s) => ({ ...s, flashcards: s.flashcards + 1 }));
 
+      setUsedRefresher(false);
       const nextIdx = fcIndex + 1;
       if (nextIdx >= flashcards.length) {
         // Warm-up done → proceed to questions
@@ -472,7 +478,7 @@ function McatPracticeInner({
         setFcBackShown(false);
       }
     },
-    [flashcards, fcIndex, currentKeyword, sessionId, loadQuestion]
+    [flashcards, fcIndex, currentKeyword, sessionId, loadQuestion, usedRefresher]
   );
 
   const flipFcCard = useCallback(() => {
@@ -529,6 +535,7 @@ function McatPracticeInner({
             question_id: question.id,
             selected_index: idx,
             context: "practice",
+            usedRefresher,
           }),
         });
 
@@ -562,7 +569,7 @@ function McatPracticeInner({
         // Non-fatal
       }
     },
-    [question, currentKeyword, phase, sessionId, isReviewCard]
+    [question, currentKeyword, phase, sessionId, isReviewCard, usedRefresher]
   );
 
   // ── Handle "I don't know" ─────────────────────────────────────────────────
@@ -595,6 +602,7 @@ function McatPracticeInner({
           question_id: question.id,
           dont_know: true,
           context: "practice",
+          usedRefresher,
         }),
       });
       if (res.ok) {
@@ -614,7 +622,7 @@ function McatPracticeInner({
     } catch {
       // Non-fatal
     }
-  }, [question, currentKeyword, phase, sessionId, isReviewCard]);
+  }, [question, currentKeyword, phase, sessionId, isReviewCard, usedRefresher]);
 
   // ── Handle "Similar question" (explicit button press) ─────────────────────
 
@@ -1067,6 +1075,16 @@ function McatPracticeInner({
               </p>
             </button>
 
+            <QuestionToolbar
+              system="mcat"
+              keywordId={primaryKeywordId(currentFc.keyword_weights)}
+              sessionId={sessionId}
+              questionId={currentFc.id}
+              contentType="flashcard"
+              resetSignal={currentFc.id}
+              onRefresherUsed={() => setUsedRefresher(true)}
+            />
+
             {/* Show answer button */}
             {!fcBackShown && (
               <Button variant="primary" size="lg" className="w-full" onClick={flipFcCard}>
@@ -1140,6 +1158,16 @@ function McatPracticeInner({
                 <MathText>{question.stem}</MathText>
               </p>
             </Card>
+
+            <QuestionToolbar
+              system="mcat"
+              keywordId={primaryKeywordId(question.keyword_weights)}
+              sessionId={sessionId}
+              questionId={question.id}
+              contentType="question"
+              resetSignal={question.id}
+              onRefresherUsed={() => setUsedRefresher(true)}
+            />
 
             {/* Combo meter — appears above choices from combo ≥ 2 */}
             <ComboMeter combo={combo} />

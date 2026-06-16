@@ -1,7 +1,17 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { getReadClient } from "@/lib/supabaseRead";
+import { cached } from "@/lib/serverCache";
 
 export const runtime = "nodejs";
+
+// Shared, slow-changing MCAT taxonomy (categories + keywords) is cached for
+// 5 minutes. Per-session keyword states are NEVER cached (per-user data).
+const TAXONOMY_TTL_MS = 5 * 60 * 1000;
+
+type TaxonomyBase = {
+  categories: Record<string, unknown>[];
+  keywords: Record<string, unknown>[];
+};
 
 export async function GET(request: Request) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -18,31 +28,45 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const sessionId = searchParams.get("session_id");
 
-  const supabase = createClient(supabaseUrl, key);
+  // Read-only queries go to the read replica when SUPABASE_REPLICA_URL is set.
+  const supabase = getReadClient();
 
-  // Load categories and keywords in parallel
-  const [categoriesRes, keywordsRes] = await Promise.all([
-    supabase
-      .from("mcat_categories")
-      .select("id, section, label, description, order_index")
-      .order("order_index"),
-    supabase
-      .from("mcat_keywords")
-      .select(
-        "id, category_id, label, description, tier, parent_keyword_id, order_index, yield_level"
-      )
-      .eq("status", "approved")
-      .order("order_index"),
-  ]);
+  // Shared taxonomy is identical for every MCAT user → cache it.
+  let base: TaxonomyBase;
+  try {
+    base = await cached<TaxonomyBase>("mcat:taxonomy", TAXONOMY_TTL_MS, async () => {
+      const [categoriesRes, keywordsRes] = await Promise.all([
+        supabase
+          .from("mcat_categories")
+          .select("id, section, label, description, order_index")
+          .order("order_index"),
+        supabase
+          .from("mcat_keywords")
+          .select(
+            "id, category_id, label, description, tier, parent_keyword_id, order_index, yield_level"
+          )
+          .eq("status", "approved")
+          .order("order_index"),
+      ]);
 
-  if (categoriesRes.error) {
-    return NextResponse.json(
-      { error: categoriesRes.error.message },
-      { status: 500 }
-    );
+      if (categoriesRes.error) {
+        throw new Error(categoriesRes.error.message);
+      }
+
+      return {
+        categories: categoriesRes.data ?? [],
+        keywords: keywordsRes.data ?? [],
+      };
+    });
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : "Unknown error";
+    return NextResponse.json({ error: detail }, { status: 500 });
   }
 
-  // Load keyword states for session if provided
+  const categoriesRes = { data: base.categories, error: null };
+  const keywordsRes = { data: base.keywords, error: null };
+
+  // Load keyword states for session if provided (per-user — NOT cached)
   const stateMap: Map<
     string,
     {
@@ -86,7 +110,7 @@ export async function GET(request: Request) {
   }
 
   const categories = (categoriesRes.data ?? []).map((cat) => {
-    const catKws = kwByCategory.get(cat.id) ?? [];
+    const catKws = kwByCategory.get(cat.id as string) ?? [];
 
     // Sort: umbrella first, then in_depth, each by order_index
     const sorted = [...catKws].sort((a, b) => {

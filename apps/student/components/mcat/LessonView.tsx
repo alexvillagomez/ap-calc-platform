@@ -25,7 +25,7 @@ interface MicroStep {
   hint_latex: string;
 }
 
-interface LessonData {
+export interface LessonData {
   id: string;
   keyword_id: string;
   keyword_label: string;
@@ -43,6 +43,13 @@ interface LessonViewProps {
   keywordLabel: string;
   onComplete: () => void;
   onSkip: () => void;
+  /**
+   * Optional pre-fetched lesson. When provided, the view renders it directly
+   * and skips its own fetch (lets a host page own the fetch + error UI without
+   * double-fetching the generation endpoint). Does not affect success
+   * rendering.
+   */
+  initialLesson?: LessonData;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -53,9 +60,10 @@ export function LessonView({
   keywordLabel,
   onComplete,
   onSkip,
+  initialLesson,
 }: LessonViewProps) {
-  const [lesson, setLesson] = useState<LessonData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [lesson, setLesson] = useState<LessonData | null>(initialLesson ?? null);
+  const [loading, setLoading] = useState(!initialLesson);
   const [error, setError] = useState<string | null>(null);
 
   const [stepIndex, setStepIndex] = useState(0);
@@ -90,8 +98,10 @@ export function LessonView({
   }, [keywordId]);
 
   useEffect(() => {
+    // When a host page provides the lesson, skip the internal fetch.
+    if (initialLesson) return;
     fetchLesson();
-  }, [fetchLesson]);
+  }, [fetchLesson, initialLesson]);
 
   const handleChoiceClick = useCallback(
     (idx: number) => {

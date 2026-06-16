@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { LoadingState } from "@/components/ui/LoadingState";
 import { cn } from "@/lib/cn";
 
 const ONBOARDING_KEY  = "lodera_onboarding_done";
@@ -169,7 +170,7 @@ export default function LandingPage() {
   if (screen === "loading") {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
+        <LoadingState message="Loading Lodera…" />
       </div>
     );
   }

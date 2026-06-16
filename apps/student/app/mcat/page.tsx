@@ -12,6 +12,7 @@ import AuthButtons from "@/components/mcat/AuthButtons";
 import McatOnboarding from "@/components/mcat/McatOnboarding";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { LoginGate } from "@/components/auth/LoginGate";
+import CourseSearch from "@/components/search/CourseSearch";
 
 interface Keyword {
   id: string;
@@ -106,6 +107,14 @@ function McatLandingPageInner() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
+        {/* Topic search */}
+        <section className="space-y-2 mb-8">
+          <h3 className="text-sm font-semibold text-neutral-800">
+            Search MCAT topics
+          </h3>
+          <CourseSearch system="mcat" />
+        </section>
+
         {/* Section tabs */}
         <div className="flex gap-2 mb-8 flex-wrap">
           <span className="px-4 py-2 rounded-full bg-brand-500 text-white text-sm font-medium shadow-brand-sm">

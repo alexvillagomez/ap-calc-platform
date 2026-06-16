@@ -1,8 +1,21 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
 import { updateStrengths, computeNextReviewDate } from "@/lib/practiceAlgorithm";
+import {
+  autoResolvePriorities,
+  logServerEvent,
+} from "@/lib/priorities";
 
 export const runtime = "nodejs";
+
+// Post-refresher dampening: when a student used a refresher/hint on THIS question
+// immediately before answering, a correct answer earns only partial mastery
+// credit (Task 4 rule: a correct answer right after a quick refresher must have a
+// reduced — effectively negative-vs-clean — effect on weights). The positive EMA
+// delta is multiplied by this factor and the answer never counts toward the clean
+// consecutive_correct streak that drives mastery.
+const REFRESHER_CREDIT_FACTOR = 0.4;
 
 export async function POST(request: Request) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -22,6 +35,8 @@ export async function POST(request: Request) {
     selected_index?: number;
     dont_know?: boolean;
     context?: "practice" | "quiz";
+    usedRefresher?: boolean;
+    usedHint?: boolean;
   };
 
   const {
@@ -31,6 +46,8 @@ export async function POST(request: Request) {
     dont_know = false,
     context = "practice",
   } = body;
+  // Treat a hint the same as a refresher for dampening purposes.
+  const usedRefresher = body.usedRefresher === true || body.usedHint === true;
 
   if (!session_id || !question_id) {
     return NextResponse.json(
@@ -137,7 +154,20 @@ export async function POST(request: Request) {
   );
 
   // EMA update using practiceAlgorithm.ts updateStrengths (learning rate 0.12)
-  const newStrengths = updateStrengths(currentStrengths, filteredWeights, correct);
+  let newStrengths = updateStrengths(currentStrengths, filteredWeights, correct);
+
+  // Post-refresher dampening: scale down only the positive gain of a correct
+  // answer. Wrong answers and dont_know are unaffected (they already hurt).
+  if (usedRefresher && correct) {
+    const dampened: Record<string, number> = { ...newStrengths };
+    for (const id of Object.keys(filteredWeights)) {
+      const before = currentStrengths[id] ?? 0.5;
+      const after = newStrengths[id] ?? before;
+      const gain = after - before;
+      if (gain > 0) dampened[id] = before + gain * REFRESHER_CREDIT_FACTOR;
+    }
+    newStrengths = dampened;
+  }
 
   const now = new Date().toISOString();
   const upserts = Object.keys(filteredWeights).map((kwId) => {
@@ -152,7 +182,13 @@ export async function POST(request: Request) {
 
     const totalAttempts = prevTotal + 1;
     const correctAttempts = prevCorrect + (correct ? 1 : 0);
-    const consecutiveCorrect = correct ? prevConsecutive + 1 : 0;
+    // A refresher-assisted correct does not advance the clean mastery streak
+    // (but it doesn't reset it either — the student still got it right).
+    const consecutiveCorrect = correct
+      ? usedRefresher
+        ? prevConsecutive
+        : prevConsecutive + 1
+      : 0;
     const dontKnowCount = prevDontKnow + (dont_know ? 1 : 0);
 
     const score = Math.min(1, Math.max(0, newStrengths[kwId] ?? 0.5));
@@ -211,6 +247,44 @@ export async function POST(request: Request) {
       upsertError.message
     );
   }
+
+  // ── Priority auto-resolve + server-side answer metric (best-effort) ─────────
+  // Top keyword = highest weight on this question (for telemetry + cookie uid).
+  const topKeywordId =
+    Object.entries(filteredWeights).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
+  const userId = (await cookies()).get("lodera_uid")?.value ?? null;
+
+  // Auto-resolve any active priority whose target_score is now met.
+  const newScoreByKeyword = new Map(upserts.map((u) => [u.keyword_id, u.score]));
+  const resolved = await autoResolvePriorities(
+    supabase,
+    session_id,
+    "mcat",
+    newScoreByKeyword
+  );
+  for (const kid of resolved) {
+    await logServerEvent(supabase, {
+      event_type: "prioritize_resolved",
+      system: "mcat",
+      session_id,
+      user_id: userId,
+      keyword_id: kid,
+      metadata: { score: newScoreByKeyword.get(kid) ?? null },
+    });
+  }
+
+  // Server-side answer metric.
+  await logServerEvent(supabase, {
+    event_type: "answer",
+    system: "mcat",
+    session_id,
+    user_id: userId,
+    keyword_id: topKeywordId,
+    question_id,
+    content_type: "question",
+    correct,
+    metadata: { usedRefresher, dont_know },
+  });
 
   const keyword_states: Record<
     string,

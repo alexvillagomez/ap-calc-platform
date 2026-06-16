@@ -31,9 +31,28 @@ import {
 import { loadTargetKeywords, embedText, tagByEmbedding } from "@/lib/mathTagging";
 import { fetchExemplarProblems, buildExemplarBlock } from "@/lib/mathExemplars";
 import { outlineContextForCategory } from "@/lib/mathContentOutline";
+import { loadActivePriorities, PRIORITY_BOOST_FACTOR } from "@/lib/priorities";
 import type { MathCourse } from "@/lib/mathTypes";
 
 export const runtime = "nodejs";
+
+/**
+ * Boost a candidate's selection score when its top-weighted keyword is on the
+ * student's active-priority list ("prioritize this topic"). Fail-soft: an empty
+ * set leaves the score unchanged.
+ */
+function priorityBoost(
+  keywordWeights: Record<string, number> | null,
+  prioritizedIds: Set<string>
+): number {
+  if (prioritizedIds.size === 0 || !keywordWeights) return 1;
+  const topKeyword = Object.entries(keywordWeights).sort(
+    (a, b) => b[1] - a[1]
+  )[0]?.[0];
+  return topKeyword && prioritizedIds.has(topKeyword)
+    ? PRIORITY_BOOST_FACTOR
+    : 1;
+}
 
 // ─── Difficulty helpers ────────────────────────────────────────────────────────
 
@@ -186,6 +205,13 @@ export async function POST(request: Request) {
   );
   for (const id of exclude_ids) seenIds.add(id);
 
+  // Active "prioritize this topic" keywords for this session (fail-soft).
+  const { ids: prioritizedIds } = await loadActivePriorities(
+    supabase,
+    session_id,
+    "math"
+  );
+
   // 3. Compute effective target difficulty
   const strengthSource = scopedKeywordIds
     ? keywords.filter((kw) => scopedKeywordIds.has(kw.id))
@@ -267,7 +293,11 @@ export async function POST(request: Request) {
     const qDiff = (q.difficulty as number) ?? 0.5;
     const inBandBoost =
       explicitTier && qDiff >= bandMin && qDiff <= bandMax ? 2.0 : 1.0;
-    return { ...q, score: weakness * diffScore * ratingNudge * inBandBoost };
+    const prioBoost = priorityBoost(q.keyword_weights, prioritizedIds);
+    return {
+      ...q,
+      score: weakness * diffScore * ratingNudge * inBandBoost * prioBoost,
+    };
   });
 
   scored.sort((a, b) => b.score - a.score);
@@ -472,7 +502,8 @@ export async function POST(request: Request) {
         const weakness = totalWeight > 0 ? weightedWeakness / totalWeight : 0.5;
         const diffScore = difficultyFit((q.difficulty as number) ?? 0.5, effectiveTarget);
         const ratingNudge = 0.7 + 0.3 * ((q.avg_rating ?? 3) / 5);
-        return { ...q, score: weakness * diffScore * ratingNudge };
+        const prioBoost = priorityBoost(q.keyword_weights, prioritizedIds);
+        return { ...q, score: weakness * diffScore * ratingNudge * prioBoost };
       });
       generated = insertedScored;
     }

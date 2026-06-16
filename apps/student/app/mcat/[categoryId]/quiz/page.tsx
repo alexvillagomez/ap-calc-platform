@@ -11,6 +11,8 @@ import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import MathText from "@/components/mcat/MathText";
+import QuestionToolbar from "@/components/practice/QuestionToolbar";
+import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { ComboMeter } from "@/components/gamification/ComboMeter";
@@ -87,6 +89,7 @@ function McatQuizInner({
 
   // ── Gamification ──────────────────────────────────────────────────────────
   const [combo, setCombo] = useState(0);
+  const [usedRefresher, setUsedRefresher] = useState(false);
 
   useStreakTouchOnce();
 
@@ -198,9 +201,11 @@ function McatQuizInner({
           ? { dont_know: true }
           : { selected_index: selectedIndex }),
         context: "quiz",
+        usedRefresher,
       }),
     }).catch(() => {});
 
+    setUsedRefresher(false);
     if (currentIdx + 1 >= questions.length) {
       setPhase("review");
     } else {
@@ -337,6 +342,16 @@ function McatQuizInner({
                 <MathText>{currentQ.stem}</MathText>
               </p>
             </Card>
+
+            <QuestionToolbar
+              system="mcat"
+              keywordId={primaryKeywordId(currentQ.keyword_weights)}
+              sessionId={sessionId}
+              questionId={currentQ.id}
+              contentType="question"
+              resetSignal={currentQ.id}
+              onRefresherUsed={() => setUsedRefresher(true)}
+            />
 
             {/* Combo meter — appears above choices from combo ≥ 2 */}
             <ComboMeter combo={combo} />

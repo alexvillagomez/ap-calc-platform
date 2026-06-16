@@ -80,8 +80,8 @@ export function StreakBadge({ className }: StreakBadgeProps) {
           "text-xs font-semibold select-none",
           celebrating && "lodera-correct-pop"
         )}
-        aria-label={`${streak.current_streak}-day streak`}
-        title={`Current streak: ${streak.current_streak} days · Longest: ${streak.longest_streak} days`}
+        aria-label={`Current streak: ${streak.current_streak} day${streak.current_streak === 1 ? "" : "s"}`}
+        title={`Current streak: ${streak.current_streak} day${streak.current_streak === 1 ? "" : "s"} · Longest: ${streak.longest_streak} day${streak.longest_streak === 1 ? "" : "s"}`}
       >
         {/* Brand 4-point star */}
         <svg
@@ -107,6 +107,7 @@ export function StreakBadge({ className }: StreakBadgeProps) {
         <span
           key={`plus1-${celebrateKey.current}`}
           aria-hidden="true"
+          title="Streak +1 today"
           className="absolute -top-5 left-1/2 -translate-x-1/2 text-xs font-bold text-brand-500 pointer-events-none motion-safe:animate-[lodera-float-up_800ms_ease-out_forwards]"
         >
           +1

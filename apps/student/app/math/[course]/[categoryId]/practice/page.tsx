@@ -7,6 +7,8 @@ import { LoginGate } from "@/components/auth/LoginGate";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import MathText from "@/components/mcat/MathText";
 import MathFeedbackWidget from "@/components/math/MathFeedbackWidget";
+import QuestionToolbar from "@/components/practice/QuestionToolbar";
+import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { MathLessonView } from "@/components/math/MathLessonView";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { ComboMeter } from "@/components/gamification/ComboMeter";
@@ -109,6 +111,7 @@ function MathPracticeInner({
   const [transitionLabel, setTransitionLabel] = useState("");
   const [combo, setCombo] = useState(0);
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
+  const [usedRefresher, setUsedRefresher] = useState(false);
 
   useStreakTouchOnce();
 
@@ -141,6 +144,7 @@ function MathPracticeInner({
       setShowHint(false);
       setErrorMsg("");
       setLastAnswerCorrect(false);
+      setUsedRefresher(false);
 
       try {
         let data: { question: MathQuestion; generated?: boolean };
@@ -297,6 +301,7 @@ function MathPracticeInner({
             selected_index: idx,
             context: "practice",
             course: course as MathCourse,
+            usedRefresher,
           }),
         });
         if (res.ok) {
@@ -313,7 +318,7 @@ function MathPracticeInner({
         }
       } catch { /* non-fatal */ }
     },
-    [question, currentKeyword, phase, sessionId, isReviewCard, course]
+    [question, currentKeyword, phase, sessionId, isReviewCard, course, usedRefresher]
   );
 
   // ── Handle don't know ──────────────────────────────────────────────────────
@@ -341,6 +346,7 @@ function MathPracticeInner({
           dont_know: true,
           context: "practice",
           course: course as MathCourse,
+          usedRefresher,
         }),
       });
       if (res.ok) {
@@ -352,7 +358,7 @@ function MathPracticeInner({
         }
       }
     } catch { /* non-fatal */ }
-  }, [question, currentKeyword, phase, sessionId, isReviewCard, course]);
+  }, [question, currentKeyword, phase, sessionId, isReviewCard, course, usedRefresher]);
 
   // ── Advance keyword ────────────────────────────────────────────────────────
 
@@ -669,6 +675,17 @@ function MathPracticeInner({
                 <MathText>{question.stem_latex}</MathText>
               </p>
             </div>
+
+            <QuestionToolbar
+              system="math"
+              course={course}
+              keywordId={primaryKeywordId(question.keyword_weights)}
+              sessionId={sessionId}
+              questionId={question.id}
+              contentType="question"
+              resetSignal={question.id}
+              onRefresherUsed={() => setUsedRefresher(true)}
+            />
 
             {/* Hint button */}
             {phase === "practicing" && question.hint_latex && (

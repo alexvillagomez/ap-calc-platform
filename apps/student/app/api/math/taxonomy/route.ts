@@ -9,11 +9,27 @@
  *   - role from math_course_categories (core | foundation)
  */
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 import type { MathCourse } from "@/lib/mathTypes";
 import { fetchAllPages } from "@/lib/mathPagedQuery";
+import { getReadClient } from "@/lib/supabaseRead";
+import { cached } from "@/lib/serverCache";
 
 export const runtime = "nodejs";
+
+// Shared, slow-changing taxonomy (course memberships + categories + keywords) is
+// cached for 5 minutes. Per-session keyword states are NEVER cached (per-user).
+const TAXONOMY_TTL_MS = 5 * 60 * 1000;
+
+type MembershipRow = {
+  category_id: string;
+  role: string;
+  order_index: number;
+};
+type TaxonomyBase = {
+  memberships: MembershipRow[];
+  categories: Record<string, unknown>[];
+  keywords: Record<string, unknown>[];
+};
 
 export async function GET(request: Request) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -38,59 +54,82 @@ export async function GET(request: Request) {
     );
   }
 
-  const supabase = createClient(supabaseUrl, key);
+  // Read-only queries go to the read replica when SUPABASE_REPLICA_URL is set.
+  const supabase = getReadClient();
 
-  // Load course memberships (category_id, role, order_index for this course)
-  const { data: memberships, error: membErr } = await supabase
-    .from("math_course_categories")
-    .select("category_id, role, order_index")
-    .eq("course", course)
-    .order("order_index");
+  // Shared taxonomy is identical for every user of a course → cache it.
+  let base: TaxonomyBase;
+  try {
+    base = await cached<TaxonomyBase>(
+      `math:taxonomy:${course}`,
+      TAXONOMY_TTL_MS,
+      async () => {
+        const { data: memberships, error: membErr } = await supabase
+          .from("math_course_categories")
+          .select("category_id, role, order_index")
+          .eq("course", course)
+          .order("order_index");
 
-  if (membErr || !memberships || memberships.length === 0) {
+        if (membErr || !memberships || memberships.length === 0) {
+          throw new Error(
+            membErr?.message ?? "No categories found for this course"
+          );
+        }
+
+        const categoryIds = memberships.map((m) => m.category_id as string);
+
+        // Load categories + keywords in parallel (keywords paginated — a
+        // course's full keyword set exceeds PostgREST's 1000-row cap)
+        const [categoriesRes, keywordRows] = await Promise.all([
+          supabase
+            .from("math_categories")
+            .select(
+              "id, label, description, section, ced_unit, yield_score, yield_rationale, order_index"
+            )
+            .in("id", categoryIds),
+          fetchAllPages<Record<string, unknown>>((from, to) =>
+            supabase
+              .from("math_keywords")
+              .select(
+                "id, category_id, label, description, tier, parent_keyword_id, order_index, yield_score, yield_rationale"
+              )
+              .in("category_id", categoryIds)
+              .eq("status", "approved")
+              .order("order_index")
+              .range(from, to)
+          ),
+        ]);
+
+        if (categoriesRes.error) {
+          throw new Error(categoriesRes.error.message);
+        }
+
+        return {
+          memberships: memberships as MembershipRow[],
+          categories: categoriesRes.data ?? [],
+          keywords: keywordRows,
+        };
+      }
+    );
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json(
-      { error: "No categories found for this course", detail: membErr?.message },
+      { error: "No categories found for this course", detail },
       { status: 404 }
     );
   }
 
-  const categoryIds = memberships.map((m) => m.category_id as string);
   const membershipMap = new Map(
-    memberships.map((m) => [
-      m.category_id as string,
-      { role: m.role as string, order_index: m.order_index as number },
+    base.memberships.map((m) => [
+      m.category_id,
+      { role: m.role, order_index: m.order_index },
     ])
   );
 
-  // Load categories + keywords in parallel (keywords paginated — a course's
-  // full keyword set exceeds PostgREST's 1000-row cap)
-  const [categoriesRes, keywordRows] = await Promise.all([
-    supabase
-      .from("math_categories")
-      .select("id, label, description, section, ced_unit, yield_score, yield_rationale, order_index")
-      .in("id", categoryIds),
-    fetchAllPages<Record<string, unknown>>((from, to) =>
-      supabase
-        .from("math_keywords")
-        .select(
-          "id, category_id, label, description, tier, parent_keyword_id, order_index, yield_score, yield_rationale"
-        )
-        .in("category_id", categoryIds)
-        .eq("status", "approved")
-        .order("order_index")
-        .range(from, to)
-    ),
-  ]);
-  const keywordsRes = { data: keywordRows, error: null };
+  const keywordsRes = { data: base.keywords, error: null };
+  const categoriesRes = { data: base.categories, error: null };
 
-  if (categoriesRes.error) {
-    return NextResponse.json(
-      { error: categoriesRes.error.message },
-      { status: 500 }
-    );
-  }
-
-  // Load session keyword states if provided
+  // Load session keyword states if provided (per-user — NOT cached)
   const stateMap = new Map<
     string,
     {

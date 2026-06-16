@@ -23,7 +23,7 @@ interface MicroStep {
   hint_latex: string;
 }
 
-interface LessonData {
+export interface LessonData {
   id: string;
   keyword_id: string;
   keyword_label: string;
@@ -41,6 +41,13 @@ interface MathLessonViewProps {
   onSkip: () => void;
   /** Called with updated combo count on answer (optional) */
   onComboUpdate?: (combo: number) => void;
+  /**
+   * Optional pre-fetched lesson. When provided, the view renders it directly
+   * and skips its own fetch (lets a host page own the fetch + error UI without
+   * double-fetching the generation endpoint). Does not affect success
+   * rendering.
+   */
+  initialLesson?: LessonData;
 }
 
 export function MathLessonView({
@@ -50,9 +57,10 @@ export function MathLessonView({
   onComplete,
   onSkip,
   onComboUpdate,
+  initialLesson,
 }: MathLessonViewProps) {
-  const [lesson, setLesson] = useState<LessonData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [lesson, setLesson] = useState<LessonData | null>(initialLesson ?? null);
+  const [loading, setLoading] = useState(!initialLesson);
   const [error, setError] = useState<string | null>(null);
 
   const [stepIndex, setStepIndex] = useState(0);
@@ -88,8 +96,10 @@ export function MathLessonView({
   }, [keywordId]);
 
   useEffect(() => {
+    // When a host page provides the lesson, skip the internal fetch.
+    if (initialLesson) return;
     fetchLesson();
-  }, [fetchLesson]);
+  }, [fetchLesson, initialLesson]);
 
   const handleChoiceClick = useCallback(
     (idx: number) => {

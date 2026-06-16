@@ -12,6 +12,8 @@ import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import MathText from "@/components/mcat/MathText";
+import QuestionToolbar from "@/components/practice/QuestionToolbar";
+import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -440,6 +442,7 @@ export default function McatPracticePage() {
   const [dontKnow, setDontKnow] = useState(false);
   const [revealCorrect, setRevealCorrect] = useState<number | null>(null);
   const [explanation, setExplanation] = useState<string>("");
+  const [usedRefresher, setUsedRefresher] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [excludeIds, setExcludeIds] = useState<string[]>([]);
   const [stats, setStats] = useState<SessionStats>({ answered: 0, correct: 0 });
@@ -577,6 +580,7 @@ export default function McatPracticePage() {
     setDontKnow(false);
     setRevealCorrect(null);
     setExplanation("");
+    setUsedRefresher(false);
     setErrorMsg("");
 
     try {
@@ -617,6 +621,7 @@ export default function McatPracticePage() {
         question_id: currentQuestion.id,
         dont_know: true,
         context: "practice",
+        usedRefresher,
       }),
     }).catch(() => {});
 
@@ -640,6 +645,7 @@ export default function McatPracticePage() {
         question_id: currentQuestion.id,
         selected_index: idx,
         context: "practice",
+        usedRefresher,
       }),
     }).catch(() => {});
 
@@ -680,6 +686,7 @@ export default function McatPracticePage() {
       setDontKnow(false);
       setRevealCorrect(null);
       setExplanation("");
+      setUsedRefresher(false);
       setQuestionPhase("answering");
     } catch (e) {
       setErrorMsg((e as Error).message ?? "Failed to fetch similar question");
@@ -884,6 +891,16 @@ export default function McatPracticePage() {
                       <MathText>{currentQuestion.stem}</MathText>
                     </p>
                   </Card>
+
+                  <QuestionToolbar
+                    system="mcat"
+                    keywordId={primaryKeywordId(currentQuestion.keyword_weights)}
+                    sessionId={sessionId}
+                    questionId={currentQuestion.id}
+                    contentType="question"
+                    resetSignal={currentQuestion.id}
+                    onRefresherUsed={() => setUsedRefresher(true)}
+                  />
 
                   {/* Choices */}
                   <div className="space-y-2">

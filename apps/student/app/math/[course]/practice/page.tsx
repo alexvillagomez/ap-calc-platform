@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback, use } from "react";
+import { useState, useEffect, useCallback, useRef, use, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { LoginGate } from "@/components/auth/LoginGate";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import MathText from "@/components/mcat/MathText";
 import MathFeedbackWidget from "@/components/math/MathFeedbackWidget";
+import QuestionToolbar from "@/components/practice/QuestionToolbar";
+import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { ComboMeter } from "@/components/gamification/ComboMeter";
@@ -44,6 +47,21 @@ function categoryLeafIds(cat: MathCategory): string[] {
     for (const id of umbrellaLeafIds(u)) ids.push(id);
   }
   return ids;
+}
+
+// Map a set of selected leaf keyword ids to the ids of the categories that
+// contain at least one of them. The next-question API requires category_id(s);
+// keyword_ids alone are only treated as a narrowing scope within those
+// categories, so we must always send the resolved category ids.
+function categoryIdsForSelection(
+  categories: MathCategory[],
+  selected: Set<string>
+): string[] {
+  const out: string[] = [];
+  for (const cat of categories) {
+    if (categoryLeafIds(cat).some((id) => selected.has(id))) out.push(cat.id);
+  }
+  return out;
 }
 
 function selectionState(
@@ -291,6 +309,12 @@ function MathGeneralPracticeInner({
   const { course } = use(params);
   const courseLabel = COURSE_LABELS[course] ?? course;
 
+  // Optional deep-link scope: pre-select & auto-start a single keyword.
+  const searchParams = useSearchParams();
+  const keywordScopeId = searchParams.get("keyword");
+  // Guard so the auto-start only fires once per mount.
+  const autoStartedRef = useRef(false);
+
   const [sessionId, setSessionId] = useState("");
   const [categories, setCategories] = useState<MathCategory[]>([]);
   const [taxonomyLoading, setTaxonomyLoading] = useState(true);
@@ -302,6 +326,7 @@ function MathGeneralPracticeInner({
   const [question, setQuestion] = useState<MathQuestion | null>(null);
   const [questionPhase, setQuestionPhase] = useState<QuestionPhase>("loading-next");
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
+  const [usedRefresher, setUsedRefresher] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [showHint, setShowHint] = useState(false);
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
@@ -325,17 +350,23 @@ function MathGeneralPracticeInner({
           const d = (await r.json()) as MathTaxonomyResponse;
           const cats = d.categories ?? [];
           setCategories(cats);
-          // Pre-select all
+          // Build the set of all known leaf keyword ids.
           const allLeafs = new Set<string>();
           for (const cat of cats) {
             for (const id of categoryLeafIds(cat)) allLeafs.add(id);
           }
-          setSelected(allLeafs);
+          // Deep-link scope: if a valid keyword param is present, pre-select
+          // only that keyword. Otherwise pre-select everything (default).
+          if (keywordScopeId && allLeafs.has(keywordScopeId)) {
+            setSelected(new Set([keywordScopeId]));
+          } else {
+            setSelected(allLeafs);
+          }
         }
       } catch { /* non-fatal */ }
       finally { setTaxonomyLoading(false); }
     })();
-  }, [course]); // intentional: only re-run when course changes
+  }, [course, keywordScopeId]); // re-run when course or deep-link scope changes
 
   // Selection handlers
   const toggleSet = (ids: string[]) => {
@@ -368,16 +399,23 @@ function MathGeneralPracticeInner({
 
   // Fetch next question
   const fetchNextQuestion = useCallback(
-    async (sid: string, keywordIds: string[], excl: string[]) => {
+    async (
+      sid: string,
+      categoryIds: string[],
+      keywordIds: string[],
+      excl: string[]
+    ) => {
       setQuestionPhase("loading-next");
       setShowHint(false);
       setSelectedChoice(null);
+      setUsedRefresher(false);
       setErrorMsg("");
       setLastAnswerCorrect(false);
 
       try {
         const body: Record<string, unknown> = {
           session_id: sid,
+          category_ids: categoryIds,
           keyword_ids: keywordIds,
           exclude_ids: excl,
           course: course as MathCourse,
@@ -388,8 +426,7 @@ function MathGeneralPracticeInner({
           body: JSON.stringify(body),
         });
         if (!res.ok) {
-          const msg = await res.text().catch(() => "Unknown error");
-          setErrorMsg(msg);
+          setErrorMsg("Couldn't load a question — please try again.");
           setQuestionPhase("error");
           return;
         }
@@ -397,22 +434,35 @@ function MathGeneralPracticeInner({
         setQuestion(data.question);
         setExcludeIds((prev) => [...prev, data.question.id]);
         setQuestionPhase("answering");
-      } catch (e) {
-        setErrorMsg((e as Error).message ?? "Failed to load question");
+      } catch {
+        setErrorMsg("Couldn't load a question — please try again.");
         setQuestionPhase("error");
       }
     },
     [course]
   );
 
-  const handleStart = () => {
+  const handleStart = useCallback(() => {
     if (selected.size === 0) return;
+    const categoryIds = categoryIdsForSelection(categories, selected);
+    if (categoryIds.length === 0) return;
     setStats({ answered: 0, correct: 0 });
     setExcludeIds([]);
     setCombo(0);
     setPagePhase("practice");
-    fetchNextQuestion(sessionId, [...selected], []);
-  };
+    fetchNextQuestion(sessionId, categoryIds, [...selected], []);
+  }, [selected, categories, sessionId, fetchNextQuestion]);
+
+  // Auto-start the session when arriving via a valid keyword deep link.
+  useEffect(() => {
+    if (autoStartedRef.current) return;
+    if (taxonomyLoading || !sessionId) return;
+    if (!keywordScopeId) return;
+    // Only auto-start if the scoped keyword resolved to a real selection.
+    if (!selected.has(keywordScopeId)) return;
+    autoStartedRef.current = true;
+    handleStart();
+  }, [taxonomyLoading, sessionId, keywordScopeId, selected, handleStart]);
 
   const handleChoice = async (idx: number) => {
     if (!question || questionPhase !== "answering") return;
@@ -437,6 +487,7 @@ function MathGeneralPracticeInner({
         selected_index: idx,
         context: "practice",
         course: course as MathCourse,
+        usedRefresher,
       }),
     }).catch(() => {});
   };
@@ -458,13 +509,16 @@ function MathGeneralPracticeInner({
         dont_know: true,
         context: "practice",
         course: course as MathCourse,
+        usedRefresher,
       }),
     }).catch(() => {});
   };
 
   const handleNext = () => {
     if (!question) return;
-    fetchNextQuestion(sessionId, [...selected], excludeIds);
+    const categoryIds = categoryIdsForSelection(categories, selected);
+    if (categoryIds.length === 0) return;
+    fetchNextQuestion(sessionId, categoryIds, [...selected], excludeIds);
   };
 
   const diff = question ? diffLabel(question.difficulty) : null;
@@ -643,6 +697,17 @@ function MathGeneralPracticeInner({
               </p>
             </div>
 
+            <QuestionToolbar
+              system="math"
+              course={course}
+              keywordId={primaryKeywordId(question.keyword_weights)}
+              sessionId={sessionId}
+              questionId={question.id}
+              contentType="question"
+              resetSignal={question.id}
+              onRefresherUsed={() => setUsedRefresher(true)}
+            />
+
             {questionPhase === "answering" && question.hint_latex && (
               <div className="flex justify-center">
                 {!showHint ? (
@@ -751,7 +816,15 @@ export default function MathGeneralPracticePage({
 }) {
   return (
     <LoginGate prompt="Sign in to practice math.">
-      <MathGeneralPracticeInner params={params} />
+      <Suspense
+        fallback={
+          <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+            <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
+        <MathGeneralPracticeInner params={params} />
+      </Suspense>
     </LoginGate>
   );
 }

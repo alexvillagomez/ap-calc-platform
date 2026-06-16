@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const ACCOUNT_KEY = "ap_calc_account_id";
@@ -41,9 +42,12 @@ export default function AuthButtons() {
   if (username) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-xs text-neutral-500 hidden sm:inline">
+        <Link
+          href="/profile"
+          className="text-xs font-medium text-neutral-600 hover:text-brand-600 transition-colors px-2 py-1"
+        >
           {username}
-        </span>
+        </Link>
         <button
           onClick={handleLogout}
           className="px-3 py-1.5 rounded-xl border border-neutral-200 text-xs font-medium text-neutral-600 hover:bg-neutral-50 transition-colors"
