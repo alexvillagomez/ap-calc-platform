@@ -26,6 +26,7 @@ import { loadTargetKeywords } from "@/lib/mathTagging";
 import { fetchExemplarProblems, buildExemplarBlock } from "@/lib/mathExemplars";
 import { outlineContextForCategory } from "@/lib/mathContentOutline";
 import type { MathCourse } from "@/lib/mathTypes";
+import { normalizeStem, jaccardSimilarity, NEAR_DUP_THRESHOLD } from "@/lib/questionDiversity";
 
 export const runtime = "nodejs";
 
@@ -193,9 +194,20 @@ export async function POST(request: Request) {
   }
 
   // Gather stored questions (≤2 per keyword, weakness-first)
+  // Also track normalised stems already in the quiz to avoid near-duplicates within the batch.
   const selectedIds = new Set<string>();
   const selectedQs: DbQuestion[] = [];
+  const selectedNormStems: string[] = [];
   const kwCoverage = new Map<string, number>();
+
+  /** Returns true if `stem` is a near-duplicate of any already-selected stem. */
+  function isNearDupOfSelected(stem: string): boolean {
+    const norm = normalizeStem(stem);
+    if (!norm) return false;
+    return selectedNormStems.some(
+      (s) => jaccardSimilarity(norm, s) >= NEAR_DUP_THRESHOLD
+    );
+  }
 
   for (const kw of rankedKws) {
     if (selectedQs.length >= count) break;
@@ -233,8 +245,17 @@ export async function POST(request: Request) {
     for (const q of matching) {
       if (selectedQs.length >= count) break;
       if (selectedIds.has(q.id)) continue;
+      // Skip near-duplicates of already-selected questions within this quiz batch.
+      // Fallback: if every remaining candidate is a near-dup, include the first one anyway.
+      if (isNearDupOfSelected(q.stem_latex)) {
+        console.warn(
+          `[math/quiz] near-dup stem skipped for question ${q.id}; will fall back if no alternative`
+        );
+        continue;
+      }
       selectedQs.push(q);
       selectedIds.add(q.id);
+      selectedNormStems.push(normalizeStem(q.stem_latex));
       for (const id of Object.keys(
         (q.keyword_weights as Record<string, number>) ?? {}
       )) {
@@ -323,6 +344,26 @@ export async function POST(request: Request) {
         return (inserted ?? []) as DbQuestion[];
       };
 
+      /** Push generated items into selectedQs, skipping near-dups within the batch. */
+      function addGeneratedItems(items: DbQuestion[]): void {
+        for (const q of items) {
+          if (selectedQs.length >= count) break;
+          if (isNearDupOfSelected(q.stem_latex)) {
+            console.warn(
+              `[math/quiz] generated near-dup skipped for question ${q.id}`
+            );
+            continue;
+          }
+          selectedQs.push(q);
+          selectedNormStems.push(normalizeStem(q.stem_latex));
+        }
+        // Fallback: if we still have nothing and generation returned items, include first
+        if (selectedQs.length === 0 && items.length > 0) {
+          selectedQs.push(items[0]);
+          selectedNormStems.push(normalizeStem(items[0].stem_latex));
+        }
+      }
+
       try {
         if (mixed && shortfall >= 3) {
           const tierOrder: DifficultyTier[] = ["easy", "medium", "hard"];
@@ -338,17 +379,11 @@ export async function POST(request: Request) {
             const n = tierCounts[tier];
             if (n <= 0) continue;
             const items = await genAndInsert(n, tier);
-            for (const q of items) {
-              if (selectedQs.length >= count) break;
-              selectedQs.push(q);
-            }
+            addGeneratedItems(items);
           }
         } else {
           const items = await genAndInsert(shortfall, effectiveTier);
-          for (const q of items) {
-            if (selectedQs.length >= count) break;
-            selectedQs.push(q);
-          }
+          addGeneratedItems(items);
         }
       } catch (err) {
         if (err instanceof MathGenError) {

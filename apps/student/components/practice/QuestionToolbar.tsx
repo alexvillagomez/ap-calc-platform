@@ -31,6 +31,13 @@ export type QuestionToolbarProps = {
   contentType: "question" | "flashcard";
   /** Changing this value resets the stopwatch (new question/card). */
   resetSignal: unknown;
+  /**
+   * Changing this value auto-dismisses the quick-refresher panel (e.g. when
+   * the student submits an answer). The refresher-used flag is NOT cleared —
+   * ×0.4 credit is still applied if an answer is submitted after the refresher
+   * was opened, regardless of whether the panel is currently visible.
+   */
+  answerSignal?: unknown;
   onRefresherUsed?: () => void;
   label?: string;
 };
@@ -56,6 +63,7 @@ export default function QuestionToolbar({
   questionId,
   contentType,
   resetSignal,
+  answerSignal,
   onRefresherUsed,
   label,
 }: QuestionToolbarProps) {
@@ -143,6 +151,28 @@ export default function QuestionToolbar({
     setRefError(false);
     setRefLoading(false);
   }, [resetSignal]);
+
+  // Auto-dismiss the panel when the student submits an answer (answerSignal
+  // changes). We only close the visual panel — we do NOT touch refContent or
+  // the parent's usedRefresher flag, so ×0.4 credit is fully preserved.
+  useEffect(() => {
+    if (answerSignal === undefined) return;
+    setRefOpen(false);
+  }, [answerSignal]);
+
+  // Secondary: auto-collapse after 30 s of inactivity so the panel never
+  // lingers indefinitely. Same rule: only the visual state; no flag reset.
+  const autoCollapseRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (!refOpen) {
+      if (autoCollapseRef.current) clearTimeout(autoCollapseRef.current);
+      return;
+    }
+    autoCollapseRef.current = setTimeout(() => setRefOpen(false), 30_000);
+    return () => {
+      if (autoCollapseRef.current) clearTimeout(autoCollapseRef.current);
+    };
+  }, [refOpen]);
 
   const handleRefresher = async () => {
     if (!keywordId) return;
@@ -307,9 +337,29 @@ export default function QuestionToolbar({
       {/* Inline refresher panel */}
       {refOpen && (
         <div className="mt-2 rounded-lg border border-brand-100 bg-brand-50 p-3 text-sm text-neutral-700">
-          <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-brand-700">
-            Quick refresher
-          </p>
+          <div className="mb-1.5 flex items-center justify-between">
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand-700">
+              Quick refresher
+            </p>
+            <button
+              onClick={() => setRefOpen(false)}
+              aria-label="Close refresher"
+              className="ml-2 rounded p-0.5 text-neutral-400 hover:bg-brand-100 hover:text-neutral-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+            >
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                aria-hidden="true"
+              >
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
           {refLoading && (
             <p className="text-xs text-neutral-500">Loading a refresher…</p>
           )}

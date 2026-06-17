@@ -926,35 +926,32 @@ function MathAutoInner({
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="w-full px-6 py-3 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
+        <div className="w-full px-4 sm:px-6 py-2.5 flex items-center gap-2 flex-wrap">
+          {/* Left: back + unit indicator + title */}
+          <div className="flex items-center gap-2 min-w-0 flex-1">
             <Link
               href={`/math/${course}`}
-              className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0"
+              className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0 whitespace-nowrap"
             >
               ← {courseLabel}
             </Link>
             {frontier && phase !== "loading" && phase !== "needs_diagnostic" && phase !== "course_complete" && (
-              <div className="flex items-center gap-2 min-w-0">
+              <>
                 {unitNumber !== null && unitTotal > 0 && (
-                  <span className="text-xs font-medium text-brand-600 shrink-0 tabular-nums">
+                  <span className="text-xs font-medium text-brand-600 shrink-0 tabular-nums whitespace-nowrap">
                     Unit {unitNumber}/{unitTotal}
                   </span>
                 )}
-                <span className="text-xs text-neutral-500 truncate">{frontier.label}</span>
-                {frontier.umbrella_label && (
-                  <span className="shrink-0 hidden sm:inline text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
-                    {frontier.umbrella_label}
-                  </span>
-                )}
-              </div>
+                <span className="text-xs text-neutral-700 font-medium truncate min-w-0">{frontier.label}</span>
+              </>
             )}
           </div>
-          <div className="flex items-center gap-3 shrink-0">
+          {/* Right: learn this + widgets */}
+          <div className="flex items-center gap-2 shrink-0">
             {isInPracticePhase && currentKeyword && !isReviewCard && (
               <button
                 onClick={handleStartLesson}
-                className="text-xs text-neutral-400 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                className="hidden sm:inline text-xs text-neutral-400 hover:text-brand-600 underline underline-offset-2 transition-colors whitespace-nowrap"
               >
                 Learn this
               </button>

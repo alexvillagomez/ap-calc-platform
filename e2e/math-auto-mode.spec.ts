@@ -23,31 +23,33 @@ const BASE = process.env.E2E_BASE_URL ?? "http://localhost:3002";
 
 async function registerAndSeedAuth(
   page: Parameters<Parameters<typeof test>[1]>[0]["page"],
-  request: Parameters<Parameters<typeof test>[1]>[0]["request"]
+  _request?: unknown
 ) {
   const stamp = `${Date.now()}_${Math.floor(Math.random() * 1e6)}`;
   const username = `pw_autotest_${stamp}`;
+  const email = `pw_autotest_${stamp}@example.com`;
 
-  // Register via the auth API
-  const res = await request.post(`${BASE}/api/auth/register`, {
-    data: { username, password: "testpass123" },
+  // Authenticate via the cookie flow (LoginGate checks /api/auth/me → httpOnly
+  // lodera_uid cookie). page.request shares the cookie jar with the page.
+  const res = await page.request.post(`${BASE}/api/auth/login`, {
+    data: { email, username, password: "testpass123", mode: "signup" },
   });
   const data = (await res.json()) as {
-    accountId?: string;
+    user?: { id?: string };
     sessionId?: string;
   };
 
-  // Seed localStorage so LoginGate passes
+  // Also seed legacy localStorage keys (some pages still read session_id there).
   await page.addInitScript(
     ([acct, sess, user]) => {
       localStorage.setItem("ap_calc_account_id", acct);
       localStorage.setItem("ap_calc_username", user);
       localStorage.setItem("ap_calc_student_session_id", sess);
     },
-    [data.accountId ?? "", data.sessionId ?? "", username]
+    [data.user?.id ?? "", data.sessionId ?? "", username]
   );
 
-  return { accountId: data.accountId, sessionId: data.sessionId, username };
+  return { accountId: data.user?.id, sessionId: data.sessionId, username };
 }
 
 // ── Tests ────────────────────────────────────────────────────────────────────
@@ -208,23 +210,18 @@ test.describe("Math auto mode", () => {
     const showAnswerBtn = page.getByRole("button", { name: /show answer/i });
     await expect(showAnswerBtn).toBeVisible();
 
-    // Click show answer → back of card appears
+    // Click show answer → grade buttons appear after the 150ms flip animation
     await showAnswerBtn.click();
-    await expect(page.locator("text=Back")).toBeVisible({ timeout: 5000 });
-
-    // Grade buttons appear
+    await expect(
+      page.getByRole("button", { name: /got it/i })
+    ).toBeVisible({ timeout: 6000 });
     await expect(
       page.getByRole("button", { name: /missed it/i })
     ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: /got it/i })
-    ).toBeVisible();
-    await expect(
-      page.locator("text=I didn't know this")
-    ).toBeVisible();
+    await expect(page.getByText(/didn'?t know this/i)).toBeVisible();
 
     // Skip warm-up link is also present
-    await expect(page.locator("text=Skip warm-up")).toBeVisible();
+    await expect(page.getByText(/skip warm-up/i)).toBeVisible();
   });
 
   /**
@@ -254,12 +251,11 @@ test.describe("Math auto mode", () => {
       return;
     }
 
-    // Show the answer on the first card
+    // Show the answer; grade buttons appear after the 150ms flip animation
     await page.getByRole("button", { name: /show answer/i }).click();
-    await expect(page.locator("text=Back")).toBeVisible({ timeout: 5000 });
-
-    // Click "Got it"
-    await page.getByRole("button", { name: /got it/i }).click();
+    const gotIt = page.getByRole("button", { name: /got it/i });
+    await expect(gotIt).toBeVisible({ timeout: 6000 });
+    await gotIt.click();
 
     // Wait for either: next card OR transition to practice
     await Promise.race([

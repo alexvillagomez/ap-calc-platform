@@ -379,9 +379,6 @@ function McatAutoInner() {
       setErrorMsg("");
 
       try {
-        const focusParam = newPlan.next_focus
-          .map((id) => `keyword_id=${encodeURIComponent(id)}`)
-          .join("&");
         const queueUrl =
           `/api/mcat/practice-queue?session_id=${encodeURIComponent(sid)}` +
           `&category_id=${encodeURIComponent(frontierCatId)}`;
@@ -820,35 +817,32 @@ function McatAutoInner() {
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="w-full px-6 py-3 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
+        <div className="w-full px-4 sm:px-6 py-2.5 flex items-center gap-2 flex-wrap">
+          {/* Left: back + category info */}
+          <div className="flex items-center gap-2 min-w-0 flex-1">
             <Link
               href="/mcat"
-              className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0"
+              className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0 whitespace-nowrap"
             >
-              ← MCAT Practice
+              ← MCAT
             </Link>
             {frontier && phase !== "loading" && phase !== "course_complete" && (
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="text-xs text-neutral-500 shrink-0">
-                  Category {frontierOrderIndex + 1} of {totalCategories}
+              <>
+                <span className="hidden sm:inline text-xs text-neutral-500 shrink-0 whitespace-nowrap">
+                  {frontierOrderIndex + 1}/{totalCategories}
                 </span>
-                <span className="text-xs font-medium text-neutral-700 truncate">
+                <span className="text-xs font-medium text-neutral-700 truncate min-w-0">
                   {frontier.label}
                 </span>
-                {frontier.umbrella_label && (
-                  <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
-                    {frontier.umbrella_label}
-                  </span>
-                )}
-              </div>
+              </>
             )}
           </div>
-          <div className="flex items-center gap-3 shrink-0">
+          {/* Right: learn this + widgets */}
+          <div className="flex items-center gap-2 shrink-0">
             {isInPracticePhase && currentKeyword && !isReviewCard && (
               <button
                 onClick={handleStartLesson}
-                className="text-xs text-neutral-400 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                className="hidden sm:inline text-xs text-neutral-400 hover:text-brand-600 underline underline-offset-2 transition-colors whitespace-nowrap"
               >
                 Learn this
               </button>

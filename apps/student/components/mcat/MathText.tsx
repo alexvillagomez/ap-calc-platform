@@ -3,6 +3,9 @@
 import katex from "katex";
 import { stripControlChars } from "@/lib/parseModelJson";
 import { normalizeScienceNotation } from "@/lib/scienceNotation";
+import { parseVizSegments, parseRangePair, parsePoints } from "@/lib/parseVizSegments";
+import { FunctionGraph } from "@/components/FunctionGraph";
+import { SlopeField } from "@/components/SlopeField";
 
 /**
  * Lightweight inline math renderer for MCAT content. Generated questions,
@@ -90,6 +93,39 @@ function render(latex: string, display: boolean): string {
   }
 }
 
+/** Detect if content contains a viz tag — only incur parse cost when needed. */
+const VIZ_TAG_RE = /<(FunctionGraph|SlopeField)\s/i;
+
+/** Render a single latex-only text string (no viz tags). */
+function renderLatexString(text: string, className: string) {
+  const segs = split(text);
+  return (
+    <span className={`whitespace-pre-line ${className}`}>
+      {segs.map((s, i) => {
+        if (s.type === "text") {
+          if (BARE_LATEX_RE.test(s.value)) {
+            return (
+              <span
+                key={i}
+                className="katex-inline"
+                dangerouslySetInnerHTML={{ __html: render(s.value, false) }}
+              />
+            );
+          }
+          return <span key={i}>{s.value}</span>;
+        }
+        return (
+          <span
+            key={i}
+            className={s.type === "display" ? "katex-display-inline" : "katex-inline"}
+            dangerouslySetInnerHTML={{ __html: render(s.value, s.type === "display") }}
+          />
+        );
+      })}
+    </span>
+  );
+}
+
 export default function MathText({
   children,
   className = "",
@@ -110,6 +146,70 @@ export default function MathText({
       ? normalizeScienceNotation(stripped)
       : stripped;
 
+  // ── Viz-segment branch: content contains <FunctionGraph .../> or <SlopeField .../>
+  if (VIZ_TAG_RE.test(text)) {
+    const vizSegs = parseVizSegments(text);
+    return (
+      <span className={`whitespace-pre-line ${className}`}>
+        {vizSegs.map((seg, i) => {
+          if (seg.type === "latex") {
+            // Render the latex portion using the normal split/render path.
+            const latexText = !seg.value.includes("$") && !BARE_LATEX_RE.test(seg.value)
+              ? normalizeScienceNotation(seg.value)
+              : seg.value;
+            if (!latexText.includes("$") && !BARE_LATEX_RE.test(latexText)) {
+              return <span key={i}>{latexText}</span>;
+            }
+            return <span key={i}>{renderLatexString(latexText, "")}</span>;
+          }
+          if (seg.type === "functionGraph") {
+            try {
+              const rangeX = parseRangePair(seg.rangeX, [-5, 5]);
+              const rangeY = parseRangePair(seg.rangeY, [-5, 5]);
+              const pts = parsePoints(seg.points);
+              const eq = (seg.equation ?? "").trim();
+              if (!eq) return null;
+              return (
+                <span key={i} className="block">
+                  <FunctionGraph
+                    equation={eq}
+                    rangeX={rangeX}
+                    rangeY={rangeY}
+                    points={pts}
+                    equalScale={seg.equalScale !== "false"}
+                  />
+                </span>
+              );
+            } catch {
+              // Defensive: invalid expression → skip graph
+              return null;
+            }
+          }
+          if (seg.type === "slopeField") {
+            try {
+              const rangeX = parseRangePair(seg.rangeX, [-3, 3]);
+              const rangeY = parseRangePair(seg.rangeY, [-3, 3]);
+              const eq = (seg.equation ?? "").trim();
+              if (!eq) return null;
+              return (
+                <span key={i} className="block">
+                  <SlopeField
+                    equation={eq}
+                    rangeX={rangeX}
+                    rangeY={rangeY}
+                  />
+                </span>
+              );
+            } catch {
+              return null;
+            }
+          }
+          return null;
+        })}
+      </span>
+    );
+  }
+
   // Fast path: no math delimiters AND no bare LaTeX → plain text, keeping newlines.
   // (Bare-LaTeX-without-$ must NOT short-circuit here, or split()'s bare-LaTeX
   //  branch is never reached and raw commands leak into the page.)
@@ -117,35 +217,5 @@ export default function MathText({
     return <span className={`whitespace-pre-line ${className}`}>{text}</span>;
   }
 
-  const segs = split(text);
-  return (
-    <span className={`whitespace-pre-line ${className}`}>
-      {segs.map((s, i) => {
-        if (s.type === "text") {
-          // Safety net: a text segment that still looks like bare LaTeX (e.g. a
-          // \frac/\int/\begin sitting outside $…$ in otherwise-delimited content)
-          // gets routed through KaTeX instead of dumped as literal backslashes.
-          if (BARE_LATEX_RE.test(s.value)) {
-            return (
-              <span
-                key={i}
-                className="katex-inline"
-                // eslint-disable-next-line react/no-danger
-                dangerouslySetInnerHTML={{ __html: render(s.value, false) }}
-              />
-            );
-          }
-          return <span key={i}>{s.value}</span>;
-        }
-        return (
-          <span
-            key={i}
-            className={s.type === "display" ? "katex-display-inline" : "katex-inline"}
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: render(s.value, s.type === "display") }}
-          />
-        );
-      })}
-    </span>
-  );
+  return renderLatexString(text, className);
 }

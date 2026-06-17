@@ -837,66 +837,49 @@ function McatPracticeInner({
     <div className="min-h-screen bg-neutral-50">
       {/* Top bar */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
+        <div className="max-w-2xl mx-auto px-4 py-2.5 flex items-center gap-2 flex-wrap">
+          {/* Left: logo + back + title */}
+          <div className="flex items-center gap-2 min-w-0 flex-1">
             <Link href={backHref} className="shrink-0">
-              <LoderaLogo size={22} />
+              <LoderaLogo size={20} />
             </Link>
             <Link
               href={backHref}
-              className="text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors"
+              className="text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors whitespace-nowrap"
             >
               {isScoped ? "← Back" : "← MCAT"}
             </Link>
-            {/* Scope chip */}
+            {/* Scope chip — hidden on very small screens */}
             {isScoped && scopeLabel && (
-              <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
+              <span className="hidden sm:inline shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
                 {umbrellaId ? "Topic" : "Keyword"}: {scopeLabel}
               </span>
             )}
-            {/* Keyword label + umbrella chip + phase badge */}
+            {/* Keyword label */}
             {currentKeyword && phase !== "loading" && phase !== "done" && (
-              <div className="flex items-center gap-2 min-w-0">
-                {isFlashcardPhase ? (
-                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-success-100 text-success-600">
-                    Warm-up
-                  </span>
-                ) : null}
-                <p className="font-semibold text-neutral-900 text-sm truncate">
-                  {currentKeyword.label}
-                </p>
-                {currentKeyword.umbrella_label && (
-                  <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
-                    {currentKeyword.umbrella_label}
-                  </span>
-                )}
-              </div>
+              <p className="font-semibold text-neutral-900 text-sm truncate min-w-0">
+                {isFlashcardPhase ? "Warm-up · " : ""}{currentKeyword.label}
+              </p>
             )}
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
-            {/* "Learn this concept" — visible during question phases */}
+          {/* Right: actions + widgets */}
+          <div className="flex items-center gap-2 shrink-0">
             {currentKeyword &&
               (phase === "practicing" || phase === "revealed") &&
               !isReviewCard && (
                 <button
                   onClick={handleStartLesson}
-                  className="text-xs text-neutral-400 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  className="hidden sm:inline text-xs text-neutral-400 hover:text-brand-600 underline underline-offset-2 transition-colors whitespace-nowrap"
                 >
                   Learn this
                 </button>
               )}
-
-            {/* Session stats */}
-            <div className="text-right">
-              {stats.answered > 0 && (
-                <p className="text-xs text-neutral-500">
-                  {stats.correct}/{stats.answered} correct
-                </p>
-              )}
-            </div>
-
-            {/* Streak + sound */}
+            {stats.answered > 0 && (
+              <p className="text-xs text-neutral-500 tabular-nums shrink-0">
+                {stats.correct}/{stats.answered}
+              </p>
+            )}
             <StreakBadge />
             <SoundToggle />
           </div>

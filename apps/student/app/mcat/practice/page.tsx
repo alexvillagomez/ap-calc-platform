@@ -820,34 +820,34 @@ export default function McatPracticePage() {
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3 min-w-0">
+        <div className="max-w-2xl mx-auto px-4 py-2.5 flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
             <Link href="/mcat" className="shrink-0">
-              <LoderaLogo size={22} />
+              <LoderaLogo size={20} />
             </Link>
             <Link
               href="/mcat"
-              className="text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors"
+              className="text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors whitespace-nowrap"
             >
               ← MCAT
             </Link>
-            <p className="font-semibold text-neutral-900 text-sm truncate">
+            <p className="font-semibold text-neutral-900 text-sm truncate min-w-0">
               General Practice
             </p>
           </div>
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
+            {pagePhase === "practice" && stats.answered > 0 && (
+              <span className="text-xs text-neutral-500 tabular-nums shrink-0">
+                {stats.correct}/{stats.answered}
+              </span>
+            )}
             {pagePhase === "practice" && (
-              <>
-                <span className="text-xs text-neutral-500 shrink-0">
-                  {stats.correct}/{stats.answered} correct
-                </span>
-                <button
-                  onClick={() => setPagePhase("select")}
-                  className="text-xs text-brand-600 hover:text-brand-800 shrink-0"
-                >
-                  Change topics
-                </button>
-              </>
+              <button
+                onClick={() => setPagePhase("select")}
+                className="hidden sm:inline text-xs text-brand-600 hover:text-brand-800 shrink-0 whitespace-nowrap"
+              >
+                Change topics
+              </button>
             )}
             <StreakBadge />
             <SoundToggle />

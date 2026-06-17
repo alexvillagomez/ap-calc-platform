@@ -4,6 +4,7 @@ import { fetchTemplateCards } from "@/lib/mcatTemplateCards";
 import { generateMcatQuestions, McatGenError, verifyQuestionsFast } from "@/lib/mcatGenerator";
 import { loadTargetKeywords } from "@/lib/mcatTagging";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
+import { normalizeStem, jaccardSimilarity, NEAR_DUP_THRESHOLD } from "@/lib/questionDiversity";
 
 export const runtime = "nodejs";
 
@@ -192,10 +193,21 @@ export async function POST(request: Request) {
   }
 
   // Gather questions covering weakest keywords (≤2 per keyword)
-  // Apply rating nudge + in-band boost when ranking
+  // Apply rating nudge + in-band boost when ranking.
+  // Also track normalised stems to avoid near-duplicates within this quiz batch.
   const selectedIds = new Set<string>();
   const selectedQs: DbQuestion[] = [];
+  const selectedNormStems: string[] = [];
   const kwCoverage = new Map<string, number>();
+
+  /** Returns true if `stem` is a near-duplicate of any already-selected stem. */
+  function isNearDupOfSelected(stem: string): boolean {
+    const norm = normalizeStem(stem);
+    if (!norm) return false;
+    return selectedNormStems.some(
+      (s) => jaccardSimilarity(norm, s) >= NEAR_DUP_THRESHOLD
+    );
+  }
 
   for (const kw of rankedKws) {
     if (selectedQs.length >= count) break;
@@ -234,8 +246,16 @@ export async function POST(request: Request) {
     for (const q of matching) {
       if (selectedQs.length >= count) break;
       if (selectedIds.has(q.id)) continue;
+      // Skip near-duplicates within the batch; fall through to next candidate.
+      if (isNearDupOfSelected(q.stem)) {
+        console.warn(
+          `[mcat/quiz] near-dup stem skipped for question ${q.id}; will fall back if no alternative`
+        );
+        continue;
+      }
       selectedQs.push(q);
       selectedIds.add(q.id);
+      selectedNormStems.push(normalizeStem(q.stem));
       for (const id of Object.keys(
         (q.keyword_weights as Record<string, number>) ?? {}
       )) {
@@ -263,6 +283,81 @@ export async function POST(request: Request) {
 
       const outlineContext = outlineContextForCategory(category_id);
 
+      /** Push generated items into selectedQs, skipping near-dups within the batch. */
+      function addGeneratedItems(items: DbQuestion[]): void {
+        for (const q of items) {
+          if (selectedQs.length >= count) break;
+          if (isNearDupOfSelected(q.stem)) {
+            console.warn(
+              `[mcat/quiz] generated near-dup skipped for question ${q.id}`
+            );
+            continue;
+          }
+          selectedQs.push(q);
+          selectedNormStems.push(normalizeStem(q.stem));
+        }
+        // Fallback: if we still have nothing and generation returned items, include first
+        if (selectedQs.length === 0 && items.length > 0) {
+          selectedQs.push(items[0]);
+          selectedNormStems.push(normalizeStem(items[0].stem));
+        }
+      }
+
+      /** Generate, verify, insert and return kept DbQuestion rows for one tier. */
+      async function genAndInsert(
+        n: number,
+        tier: DifficultyTier
+      ): Promise<DbQuestion[]> {
+        const genResults = await generateMcatQuestions({
+          keywords: genKws,
+          templateCards,
+          count: n,
+          targetDifficulty: TIER_TARGET[tier],
+          difficultyTier: tier,
+          outlineContext,
+        });
+        if (genResults.length === 0) return [];
+        const sourceCardIds = templateCards.map((c) => c.id);
+        const allRows = genResults.map((q) => ({
+          section: "biology",
+          category_id,
+          stem: q.stem,
+          choices: q.choices,
+          correct_index: q.correct_index,
+          explanation: q.explanation,
+          keyword_weights: q.keyword_weights,
+          difficulty: q.difficulty,
+          source_card_ids: sourceCardIds,
+          generated_by: "gpt-5.4-mini",
+          status: "active",
+        }));
+        const verifyResults = await verifyQuestionsFast(
+          genResults.map((q) => ({
+            stem: q.stem,
+            choices: q.choices,
+            correct_index: q.correct_index,
+          }))
+        );
+        let keptIndices = verifyResults
+          .map((r, i) => (r.agrees ? i : -1))
+          .filter((i) => i !== -1);
+        if (keptIndices.length === 0) {
+          console.warn(
+            `[mcat/quiz] tier=${tier}: all generated questions failed fast-verify; serving best-effort`
+          );
+          keptIndices = allRows.map((_, i) => i);
+        }
+        const keptSet = new Set(keptIndices);
+        const rows = allRows.filter((_, i) => keptSet.has(i));
+        const { data: inserted } = await supabase
+          .from("mcat_questions")
+          .insert(rows)
+          .select(
+            "id, stem, choices, correct_index, explanation, keyword_weights, difficulty, parent_question_id, avg_rating"
+          );
+        return (inserted ?? []) as DbQuestion[];
+      }
+
       try {
         if (mixed && shortfall >= 3) {
           // Mixed mode: split the shortfall across easy / medium / hard tiers
@@ -280,123 +375,13 @@ export async function POST(request: Request) {
           for (const tier of tierOrder) {
             const n = tierCounts[tier];
             if (n <= 0) continue;
-            const genResults = await generateMcatQuestions({
-              keywords: genKws,
-              templateCards,
-              count: n,
-              targetDifficulty: TIER_TARGET[tier],
-              difficultyTier: tier,
-              outlineContext,
-            });
-
-            if (genResults.length > 0) {
-              const sourceCardIds = templateCards.map((c) => c.id);
-              const allRows = genResults.map((q) => ({
-                section: "biology",
-                category_id,
-                stem: q.stem,
-                choices: q.choices,
-                correct_index: q.correct_index,
-                explanation: q.explanation,
-                keyword_weights: q.keyword_weights,
-                difficulty: q.difficulty,
-                source_card_ids: sourceCardIds,
-                generated_by: "gpt-5.4-mini",
-                status: "active",
-              }));
-
-              // Verify concurrently — fail-open if all fail
-              const verifyResults = await verifyQuestionsFast(
-                genResults.map((q) => ({
-                  stem: q.stem,
-                  choices: q.choices,
-                  correct_index: q.correct_index,
-                }))
-              );
-              let keptIndices = verifyResults
-                .map((r, i) => (r.agrees ? i : -1))
-                .filter((i) => i !== -1);
-              if (keptIndices.length === 0) {
-                console.warn(
-                  `[quiz] mixed tier=${tier}: all generated questions failed fast-verify; serving best-effort`
-                );
-                keptIndices = allRows.map((_, i) => i);
-              }
-              const keptSet = new Set(keptIndices);
-              const rows = allRows.filter((_, i) => keptSet.has(i));
-
-              const { data: inserted } = await supabase
-                .from("mcat_questions")
-                .insert(rows)
-                .select(
-                  "id, stem, choices, correct_index, explanation, keyword_weights, difficulty, parent_question_id, avg_rating"
-                );
-
-              for (const q of inserted ?? []) {
-                if (selectedQs.length >= count) break;
-                selectedQs.push(q as DbQuestion);
-              }
-            }
+            const items = await genAndInsert(n, tier);
+            addGeneratedItems(items);
           }
         } else {
           // Normal fill: generate at the effective tier/target
-          const genResults = await generateMcatQuestions({
-            keywords: genKws,
-            templateCards,
-            count: shortfall,
-            targetDifficulty,
-            difficultyTier: effectiveTier,
-            outlineContext,
-          });
-
-          if (genResults.length > 0) {
-            const sourceCardIds = templateCards.map((c) => c.id);
-            const allRows = genResults.map((q) => ({
-              section: "biology",
-              category_id,
-              stem: q.stem,
-              choices: q.choices,
-              correct_index: q.correct_index,
-              explanation: q.explanation,
-              keyword_weights: q.keyword_weights,
-              difficulty: q.difficulty,
-              source_card_ids: sourceCardIds,
-              generated_by: "gpt-5.4-mini",
-              status: "active",
-            }));
-
-            // Verify concurrently — fail-open if all fail
-            const verifyResults = await verifyQuestionsFast(
-              genResults.map((q) => ({
-                stem: q.stem,
-                choices: q.choices,
-                correct_index: q.correct_index,
-              }))
-            );
-            let keptIndices = verifyResults
-              .map((r, i) => (r.agrees ? i : -1))
-              .filter((i) => i !== -1);
-            if (keptIndices.length === 0) {
-              console.warn(
-                "[quiz] all generated questions failed fast-verify; serving best-effort"
-              );
-              keptIndices = allRows.map((_, i) => i);
-            }
-            const keptSet = new Set(keptIndices);
-            const rows = allRows.filter((_, i) => keptSet.has(i));
-
-            const { data: inserted } = await supabase
-              .from("mcat_questions")
-              .insert(rows)
-              .select(
-                "id, stem, choices, correct_index, explanation, keyword_weights, difficulty, parent_question_id, avg_rating"
-              );
-
-            for (const q of inserted ?? []) {
-              if (selectedQs.length >= count) break;
-              selectedQs.push(q as DbQuestion);
-            }
-          }
+          const items = await genAndInsert(shortfall, effectiveTier);
+          addGeneratedItems(items);
         }
       } catch (err) {
         if (err instanceof McatGenError) {

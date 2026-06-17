@@ -189,24 +189,24 @@ function MathCategoryQuizInner({
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="w-full px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3 min-w-0">
-            <Link href={backHref} className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0">
+        <div className="w-full px-4 sm:px-6 py-2.5 flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            <Link href={backHref} className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0 whitespace-nowrap">
               {isScoped ? "← Back" : `← ${courseLabel}`}
             </Link>
             {isScoped && scopeLabel && (
-              <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
+              <span className="hidden sm:inline shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
                 {umbrellaId ? "Topic" : "Keyword"}: {scopeLabel}
               </span>
             )}
-            <p className="font-semibold text-neutral-900 text-sm truncate">
+            <p className="font-semibold text-neutral-900 text-sm truncate min-w-0">
               {headingLabel}
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             {phase === "quiz" && questions.length > 0 && (
-              <p className="text-xs text-neutral-500">
-                {currentIdx + 1} / {questions.length}
+              <p className="text-xs text-neutral-500 tabular-nums shrink-0">
+                {currentIdx + 1}/{questions.length}
               </p>
             )}
             <StreakBadge />

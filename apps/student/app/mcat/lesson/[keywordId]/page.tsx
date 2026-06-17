@@ -6,6 +6,7 @@ import Link from "next/link";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { LessonView, type LessonData } from "@/components/mcat/LessonView";
+import { humanizeSlug } from "@/lib/humanize";
 
 export default function StandaloneLessonPage({
   params,
@@ -27,9 +28,7 @@ export default function StandaloneLessonPage({
   const [loading, setLoading] = useState(true);
 
   const rawLabel = searchParams.get("label") ?? "";
-  const keywordLabel = rawLabel
-    ? rawLabel
-    : keywordId.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  const keywordLabel = rawLabel ? rawLabel : humanizeSlug(keywordId);
 
   useEffect(() => {
     getOrCreateMcatSession().then((sid) => {

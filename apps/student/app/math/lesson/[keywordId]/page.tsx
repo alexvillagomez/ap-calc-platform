@@ -7,6 +7,7 @@ import { MathLessonView, type LessonData } from "@/components/math/MathLessonVie
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { getOrCreateMathSession } from "@/lib/mathSession";
+import { humanizeSlug } from "@/lib/humanize";
 
 // ─── Inner ────────────────────────────────────────────────────────────────────
 
@@ -108,7 +109,7 @@ function MathLessonPageInner({
           <MathLessonView
             sessionId={sessionId}
             keywordId={keywordId}
-            keywordLabel={label ?? keywordId}
+            keywordLabel={label ?? humanizeSlug(keywordId)}
             initialLesson={lesson}
             onComplete={() => router.push(returnTo)}
             onSkip={() => router.push(returnTo)}

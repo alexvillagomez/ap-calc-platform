@@ -6,6 +6,12 @@ import { loadTargetKeywords, embedText, tagByEmbedding } from "@/lib/mcatTagging
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
 import { loadActivePriorities, PRIORITY_BOOST_FACTOR } from "@/lib/priorities";
 import { bestKeywordForQuestion } from "@/lib/bestKeyword";
+import {
+  normalizeStem,
+  filterNearDuplicates,
+  streakKeyword,
+  filterStreakKeyword,
+} from "@/lib/questionDiversity";
 
 export const runtime = "nodejs";
 
@@ -111,9 +117,19 @@ export async function POST(request: Request) {
     keyword_id?: string;
     keyword_ids?: string[];
     difficulty?: DifficultyTier;
+    /** Primary keyword ids of the last N questions served (most-recent last). */
+    recent_keyword_ids?: string[];
+    /** Normalised stems of questions already seen this session. */
+    seen_stems?: string[];
   };
 
   const { session_id, exclude_ids = [], keyword_id } = body;
+  const recentKeywordIds: string[] = Array.isArray(body.recent_keyword_ids)
+    ? body.recent_keyword_ids
+    : [];
+  const seenStems: string[] = Array.isArray(body.seen_stems)
+    ? body.seen_stems
+    : [];
 
   // Normalize category_id / category_ids → array
   let categoryIds: string[] = [];
@@ -300,7 +316,20 @@ export async function POST(request: Request) {
   });
 
   scored.sort((a, b) => b.score - a.score);
-  const top5 = scored.slice(0, 5);
+
+  // 5a. Diversity filters (streak + near-dup) applied before final pool selection.
+  // Each filter degrades gracefully: if it would remove all candidates it falls
+  // back to the unfiltered set and logs a console warning.
+  const blockedKw = streakKeyword(recentKeywordIds);
+  const diverseScored = filterNearDuplicates(
+    filterStreakKeyword(scored, blockedKw).map((q) => ({
+      ...q,
+      stem: normalizeStem(q.stem ?? ""),
+    })),
+    seenStems
+  );
+
+  const top5 = diverseScored.slice(0, 5);
 
   // When explicit difficulty: check if any in-band candidates exist in top5
   // If none, we skip stored selection and go straight to generation at that tier
@@ -547,8 +576,15 @@ export async function POST(request: Request) {
     throw err;
   }
 
-  // Merge existing + newly generated, pick best
-  const allPool = [...top5, ...generated];
+  // Merge existing + newly generated; apply diversity filters to generated too, pick best
+  const diverseGenerated = filterNearDuplicates(
+    filterStreakKeyword(generated, blockedKw).map((q) => ({
+      ...q,
+      stem: normalizeStem(q.stem ?? ""),
+    })),
+    seenStems
+  );
+  const allPool = [...top5, ...diverseGenerated];
   allPool.sort((a, b) => b.score - a.score);
   const finalPool = allPool.slice(0, 5);
 
@@ -560,7 +596,7 @@ export async function POST(request: Request) {
   }
 
   const selected = weightedRandomPick(finalPool) ?? finalPool[0];
-  const isNewlyGenerated = generated.some((g) => g.id === selected.id);
+  const isNewlyGenerated = diverseGenerated.some((g) => g.id === selected.id);
 
   const primaryKeywordId = await bestKeywordForQuestion(supabase, {
     system: "mcat",

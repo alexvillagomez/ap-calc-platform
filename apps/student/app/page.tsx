@@ -13,6 +13,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -413,6 +414,19 @@ function SubjectSelector({ onChoose }: { onChoose: (c: "math" | "mcat") => void 
             </div>
           </Card>
         </button>
+      </div>
+
+      {/* Free-trial entry — visible to unauthenticated visitors before they pick a subject */}
+      <div className="text-center">
+        <p className="text-xs text-neutral-400 mb-2">Not sure yet?</p>
+        <Link
+          href="/try"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700 transition-colors group"
+          data-testid="try-question-link"
+        >
+          Try a free question first
+          <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+        </Link>
       </div>
     </div>
   );
