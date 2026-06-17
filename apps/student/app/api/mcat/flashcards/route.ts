@@ -6,6 +6,7 @@ import { loadTargetKeywords } from "@/lib/mcatTagging";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
 import { ConceptBlueprint } from "@/lib/mcatBlueprint";
 import { MEMORIZED_BOX } from "@/lib/flashcardSrs";
+import { cached, invalidate } from "@/lib/serverCache";
 
 export const runtime = "nodejs";
 
@@ -100,12 +101,17 @@ export async function POST(request: Request) {
     (srsRes.data ?? []).map((r) => [r.flashcard_id as string, r as SrsRow])
   );
 
-  // All active cards in the category.
-  const { data: allFcs } = await supabase
-    .from("mcat_flashcards")
-    .select("id, front, back, keyword_weights, avg_rating")
-    .eq("category_id", category_id)
-    .eq("status", "active");
+  // All active cards in the category — shared across users, safe to cache.
+  // SRS overlay (box/due_at) is applied below from per-session srsByCard.
+  const cacheKey = `mcat:flashcards:deck:${category_id}`;
+  const allFcs = await cached<DbFlashcard[]>(cacheKey, 60_000, async () => {
+    const { data } = await supabase
+      .from("mcat_flashcards")
+      .select("id, front, back, keyword_weights, avg_rating")
+      .eq("category_id", category_id)
+      .eq("status", "active");
+    return (data ?? []) as DbFlashcard[];
+  });
 
   // Scope predicate (single keyword > keyword set > whole category).
   const inScope = (fc: DbFlashcard): boolean => {
@@ -119,7 +125,7 @@ export async function POST(request: Request) {
     return true;
   };
 
-  const scopedFcs: DbFlashcard[] = ((allFcs ?? []) as DbFlashcard[]).filter(inScope);
+  const scopedFcs: DbFlashcard[] = allFcs.filter(inScope);
 
   const nowMs = Date.now();
 
@@ -282,6 +288,10 @@ export async function POST(request: Request) {
             .from("mcat_flashcards")
             .insert(rows)
             .select("id, front, back, keyword_weights, avg_rating");
+
+          // Invalidate the deck cache so new cards are visible on next request.
+          // Fire-and-forget — don't await; a miss on the next request is fine.
+          void invalidate(cacheKey);
 
           for (const fc of inserted ?? []) {
             if (selected.length >= count) break;

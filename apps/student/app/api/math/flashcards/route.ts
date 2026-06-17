@@ -23,6 +23,7 @@ import {
 import { loadTargetKeywords } from "@/lib/mathTagging";
 import { outlineContextForCategory } from "@/lib/mathContentOutline";
 import type { ConceptBlueprint, MathCourse } from "@/lib/mathTypes";
+import { cached, invalidate } from "@/lib/serverCache";
 
 export const runtime = "nodejs";
 
@@ -110,14 +111,19 @@ export async function POST(request: Request) {
     (fcAttemptsRes.data ?? []).map((a) => a.flashcard_id as string)
   );
 
-  // Load unseen stored flashcards
-  const { data: allFcs } = await supabase
-    .from("math_flashcards")
-    .select("id, front_latex, back_latex, keyword_weights, avg_rating")
-    .eq("category_id", category_id)
-    .eq("status", "active");
+  // Load stored flashcards for this category — shared across users, safe to cache.
+  // The per-session "seen" filter (seenFcIds) is applied below after the cache hit.
+  const cacheKey = `math:flashcards:deck:${course}:${category_id}`;
+  const allFcs = await cached<DbFlashcard[]>(cacheKey, 60_000, async () => {
+    const { data } = await supabase
+      .from("math_flashcards")
+      .select("id, front_latex, back_latex, keyword_weights, avg_rating")
+      .eq("category_id", category_id)
+      .eq("status", "active");
+    return (data ?? []) as DbFlashcard[];
+  });
 
-  const unseenFcs: DbFlashcard[] = ((allFcs ?? []) as DbFlashcard[]).filter((fc) => {
+  const unseenFcs: DbFlashcard[] = allFcs.filter((fc) => {
     if (seenFcIds.has(fc.id)) return false;
     if (keyword_id) {
       return Object.prototype.hasOwnProperty.call(
@@ -261,6 +267,10 @@ export async function POST(request: Request) {
             .from("math_flashcards")
             .insert(rows)
             .select("id, front_latex, back_latex, keyword_weights, avg_rating");
+
+          // Invalidate the deck cache so new cards are visible on next request.
+          // Fire-and-forget — don't await; a miss on the next request is fine.
+          void invalidate(cacheKey);
 
           for (const fc of inserted ?? []) {
             if (selected.length >= count) break;
