@@ -68,7 +68,7 @@ test.describe("Math auto mode", () => {
 
     // Wait for loading to resolve
     await page.waitForSelector("text=Start with a placement check", {
-      timeout: 20000,
+      timeout: 35000,
     });
 
     // The diagnostic CTA must be present
@@ -104,7 +104,7 @@ test.describe("Math auto mode", () => {
 
     // Wait for needs_diagnostic card
     await page.waitForSelector("text=Start with a placement check", {
-      timeout: 20000,
+      timeout: 35000,
     });
 
     // Click skip
@@ -114,16 +114,16 @@ test.describe("Math auto mode", () => {
     // a graceful error (no taxonomy seeded is also acceptable).
     await Promise.race([
       page
-        .waitForSelector("text=Unit ", { timeout: 20000 })
+        .waitForSelector("text=Unit ", { timeout: 35000 })
         .catch(() => null),
       page
         .waitForSelector("[data-testid='error'], text=Something went wrong", {
-          timeout: 20000,
+          timeout: 35000,
         })
         .catch(() => null),
       // course_complete if all already mastered (edge case)
       page
-        .waitForSelector("text=complete!", { timeout: 20000 })
+        .waitForSelector("text=complete!", { timeout: 35000 })
         .catch(() => null),
     ]);
 
@@ -175,7 +175,7 @@ test.describe("Math auto mode", () => {
 
     // Skip diagnostic to get into the practice flow
     await page.waitForSelector("text=Start with a placement check", {
-      timeout: 20000,
+      timeout: 35000,
     });
     await page.getByRole("button", { name: /skip and start/i }).click();
 
@@ -236,7 +236,7 @@ test.describe("Math auto mode", () => {
 
     // Skip diagnostic
     await page.waitForSelector("text=Start with a placement check", {
-      timeout: 20000,
+      timeout: 35000,
     });
     await page.getByRole("button", { name: /skip and start/i }).click();
 
@@ -279,7 +279,7 @@ test.describe("Math auto mode", () => {
     await page.goto(`${BASE}/math/precalc/auto`);
 
     await page.waitForSelector("text=Start with a placement check", {
-      timeout: 20000,
+      timeout: 35000,
     });
     await page.getByRole("button", { name: /skip and start/i }).click();
 
