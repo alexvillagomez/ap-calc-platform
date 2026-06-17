@@ -29,3 +29,16 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 .vercel
+
+# Test/scratch artifacts (auto-added)
+test-results/
+apps/*/test-results/
+apps/*/tmp/
+ux-audit-screenshots/
+*.tsbuildinfo
+supabase/.temp/
+/burst_test.mjs
+/check_*.mjs
+/dashboard.html
+/demo-diagnostic-verification-report.txt
+.claude/worktrees/

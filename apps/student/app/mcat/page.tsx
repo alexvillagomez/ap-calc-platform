@@ -169,6 +169,33 @@ function McatLandingPageInner() {
         {/* Category grid */}
         {!loading && !error && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Auto mode card — primary CTA */}
+            <div className="col-span-1 sm:col-span-2">
+              <Card
+                className="border-brand-400 bg-gradient-to-r from-brand-500 to-indigo-600"
+                noPadding
+              >
+                <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold text-brand-100 uppercase tracking-wide mb-1">
+                      Auto Mode · Recommended
+                    </p>
+                    <h2 className="font-bold text-white text-base leading-snug mb-1">
+                      Guided path through all MCAT Biology
+                    </h2>
+                    <p className="text-xs text-brand-100">
+                      Flashcard warm-ups, weakness-first questions, push-lessons when you&apos;re stuck, and category checkpoint quizzes — all in one continuous path.
+                    </p>
+                  </div>
+                  <Link href="/mcat/auto" className="shrink-0">
+                    <Button size="md" className="whitespace-nowrap bg-white text-brand-700 hover:bg-brand-50">
+                      {sessionId ? "Continue" : "Start learning"}
+                    </Button>
+                  </Link>
+                </div>
+              </Card>
+            </div>
+
             {/* General Practice card */}
             <div className="col-span-1 sm:col-span-2">
               <Card

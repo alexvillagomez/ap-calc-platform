@@ -1,6 +1,8 @@
 "use client";
 
 import katex from "katex";
+import { stripControlChars } from "@/lib/parseModelJson";
+import { normalizeScienceNotation } from "@/lib/scienceNotation";
 
 /**
  * Lightweight inline math renderer for MCAT content. Generated questions,
@@ -13,12 +15,18 @@ import katex from "katex";
 type Seg = { type: "text" | "inline" | "display"; value: string };
 
 /**
- * Some generated math content (notably solution_latex) arrives as bare LaTeX —
- * \text{...} prose with \dfrac etc. but no $ delimiters. Without this, it
- * would fall through to the plain-text fast path and show raw commands.
+ * Some generated math content (notably solution_latex and lesson example_latex)
+ * arrives as BARE LaTeX — e.g. `\frac{d}{dx}(x+3)^4`, `\int_0^2 3\,dt`,
+ * `\begin{aligned}…\end{aligned}`, or \text{...} prose with \dfrac — but with no
+ * $ delimiters. Without detection it falls through to the plain-text fast path
+ * and dumps raw backslash commands. Generators are prompted to always wrap math
+ * in $…$/$$…$$; this is the render-side safety net for stored/missed rows.
+ *
+ * The detector is intentionally broad: ANY backslash-led command (`\` + letters),
+ * a LaTeX line break (`\\`), or `\(`/`\[` math delimiters. Math content rarely
+ * contains a literal backslash for non-math reasons, so this is safe here.
  */
-const BARE_LATEX_RE =
-  /\\(text|d?frac|sqrt|sin|cos|tan|ln|log|cdot|times|pi|theta|left|right|begin|int|sum|lim|infty|le|ge|ne|approx)\b/;
+const BARE_LATEX_RE = /\\[a-zA-Z]+|\\\\|\\[([]/;
 
 function splitBareLatex(content: string): Seg[] {
   // Render each paragraph as display math; KaTeX handles \text{} prose fine.
@@ -89,10 +97,23 @@ export default function MathText({
   children: string | null | undefined;
   className?: string;
 }) {
-  const text = children ?? "";
+  // Harden against legacy rows that were stored with ANSI/control-char
+  // corruption (ESC sequences → box glyphs). Stripping them here means already-
+  // cached content renders cleanly without waiting for regeneration.
+  const stripped = stripControlChars(children ?? "");
 
-  // Fast path: no math delimiters → plain text, preserving newlines.
-  if (!text.includes("$")) {
+  // Render-side safety net for stored ASCII science notation.
+  // Only runs when there are no existing delimiters/LaTeX — avoids double-processing
+  // properly-formatted content.
+  const text =
+    !stripped.includes("$") && !BARE_LATEX_RE.test(stripped)
+      ? normalizeScienceNotation(stripped)
+      : stripped;
+
+  // Fast path: no math delimiters AND no bare LaTeX → plain text, keeping newlines.
+  // (Bare-LaTeX-without-$ must NOT short-circuit here, or split()'s bare-LaTeX
+  //  branch is never reached and raw commands leak into the page.)
+  if (!text.includes("$") && !BARE_LATEX_RE.test(text)) {
     return <span className={`whitespace-pre-line ${className}`}>{text}</span>;
   }
 
@@ -100,7 +121,22 @@ export default function MathText({
   return (
     <span className={`whitespace-pre-line ${className}`}>
       {segs.map((s, i) => {
-        if (s.type === "text") return <span key={i}>{s.value}</span>;
+        if (s.type === "text") {
+          // Safety net: a text segment that still looks like bare LaTeX (e.g. a
+          // \frac/\int/\begin sitting outside $…$ in otherwise-delimited content)
+          // gets routed through KaTeX instead of dumped as literal backslashes.
+          if (BARE_LATEX_RE.test(s.value)) {
+            return (
+              <span
+                key={i}
+                className="katex-inline"
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: render(s.value, false) }}
+              />
+            );
+          }
+          return <span key={i}>{s.value}</span>;
+        }
         return (
           <span
             key={i}

@@ -108,16 +108,37 @@ export type TargetMathKeyword = {
  * Prefers in_depth tier when it exists for a category,
  * falls back to umbrella tier when the category has no in_depth keywords.
  *
- * Optionally filtered by course via the math_course_categories join table —
- * pass `course` to restrict to categories belonging to that course.
+ * When `course` is provided, also restricts to categories that belong to that
+ * course (via math_course_categories) so that generated fallback questions are
+ * always course-appropriate. This prevents calc_ab from generating precalc-only
+ * questions when no stored questions exist.
  */
 export async function loadTargetKeywords(
   supabase: SupabaseClient,
   categoryIds: string[],
-  course?: MathCourse  // reserved for future course-filtered queries; not yet used in DB query
+  course?: MathCourse
 ): Promise<TargetMathKeyword[]> {
-  void course; // suppress unused-var; future: filter via math_course_categories join
   if (categoryIds.length === 0) return [];
+
+  // When course is specified, filter categoryIds to only those that belong to
+  // the requested course — prevents off-course keyword contamination
+  let effectiveCategoryIds = categoryIds;
+  if (course) {
+    try {
+      const { data: memberships } = await supabase
+        .from("math_course_categories")
+        .select("category_id")
+        .eq("course", course)
+        .in("category_id", categoryIds);
+      if (memberships && memberships.length > 0) {
+        const courseSet = new Set(memberships.map((m) => m.category_id as string));
+        effectiveCategoryIds = categoryIds.filter((id) => courseSet.has(id));
+      }
+      // If no memberships found (e.g. taxonomy not seeded), fall back to all categoryIds
+    } catch {
+      // fail-open — use all categoryIds
+    }
+  }
 
   // Paginated — a whole-course scope (1700+ keywords) exceeds PostgREST's 1000-row cap
   let data: TargetMathKeyword[];
@@ -128,7 +149,7 @@ export async function loadTargetKeywords(
         .select(
           "id, label, description, tier, parent_keyword_id, category_id, embedding, concept_blueprint, yield_score"
         )
-        .in("category_id", categoryIds)
+        .in("category_id", effectiveCategoryIds)
         .eq("status", "approved")
         .order("order_index")
         .range(from, to)
@@ -147,7 +168,7 @@ export async function loadTargetKeywords(
   }
 
   const result: TargetMathKeyword[] = [];
-  for (const catId of categoryIds) {
+  for (const catId of effectiveCategoryIds) {
     const rows = byCat.get(catId) ?? [];
     const inDepth = rows.filter((r) => r.tier === "in_depth");
     if (inDepth.length > 0) {

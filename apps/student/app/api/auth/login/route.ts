@@ -46,9 +46,9 @@ function supabaseAdmin() {
 }
 
 export async function POST(request: Request) {
-  let body: { email?: string; username?: string; password?: string };
+  let body: { email?: string; username?: string; password?: string; mode?: string };
   try {
-    body = (await request.json()) as { email?: string; username?: string; password?: string };
+    body = (await request.json()) as { email?: string; username?: string; password?: string; mode?: string };
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
@@ -56,9 +56,17 @@ export async function POST(request: Request) {
   const email    = body.email?.trim().toLowerCase();
   const username = body.username?.trim();
   const password = body.password;
+  // "login"  → verify an existing account, never auto-create.
+  // "signup" → create a new account, reject if the email already exists.
+  // undefined → legacy auto behavior (verify if exists, else create).
+  const mode = body.mode === "login" || body.mode === "signup" ? body.mode : undefined;
 
-  if (!email || !username || !password) {
-    return NextResponse.json({ error: "email, username, and password are required" }, { status: 400 });
+  if (!email || !password) {
+    return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
+  }
+  // Username is only needed when creating an account (signup / legacy auto-create).
+  if (mode !== "login" && !username) {
+    return NextResponse.json({ error: "Username is required to create an account" }, { status: 400 });
   }
   if (password.length < 6) {
     return NextResponse.json({ error: "Password must be at least 6 characters" }, { status: 400 });
@@ -82,18 +90,32 @@ export async function POST(request: Request) {
   let resolvedUsername: string;
 
   if (existingUser) {
-    // Email registered — verify password
+    // In signup mode, an existing email is a conflict — guide them to log in.
+    if (mode === "signup") {
+      return NextResponse.json(
+        { error: "An account with that email already exists. Switch to Log in.", code: "email_exists" },
+        { status: 409 }
+      );
+    }
+    // Email registered — verify password (login or legacy auto mode)
     const valid = await verifyPassword(password, existingUser.password_hash);
     if (!valid) {
       return NextResponse.json(
-        { error: "That email is registered with a different password." },
+        { error: "Incorrect password for that email. Try again.", code: "bad_password" },
         { status: 401 }
       );
     }
     userId = existingUser.id as string;
     resolvedUsername = existingUser.username as string;
   } else {
-    // New email — auto-create account
+    // In login mode, never auto-create — tell them to sign up.
+    if (mode === "login") {
+      return NextResponse.json(
+        { error: "No account found with that email. Switch to Sign up to create one.", code: "no_account" },
+        { status: 404 }
+      );
+    }
+    // New email — create account (signup or legacy auto mode)
     const hash = await hashPassword(password);
     const { data: newUser, error: createErr } = await sb
       .from("app_users")

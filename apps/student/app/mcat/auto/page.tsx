@@ -1,43 +1,37 @@
 "use client";
 
 /**
- * Fully-automatic mode — Duolingo-style "just press Continue".
+ * MCAT Automatic Mode — Duolingo-style "just press Continue".
+ *
+ * Mirrors the math auto page (`/math/[course]/auto/page.tsx`) adapted for MCAT:
+ *   - No diagnostic gate (MCAT has no diagnostic; starts at first category)
+ *   - Flat category list (no course sections)
+ *   - Uses mcat_* tables and existing MCAT APIs
+ *   - Reuses LessonView, ChoiceButton, MathText, ProgressBar, etc.
  *
  * States:
  *   loading          → fetching auto-plan
- *   needs_diagnostic → card routing to /math/[course]/diagnostic?return=auto
- *   flashcard        → flashcard warm-up before first question on a new keyword
- *   practicing       → embedded practice loop (mirrors category practice page)
- *   revealed         → showing answer before Next
- *   category_complete → interstitial: "Unit complete 🎉 → next unit"
- *   mini_quiz        → 4-question checkpoint quiz before advancing
- *   mini_quiz_revealed → showing quiz answer before next
- *   mini_quiz_loading → loading quiz questions
+ *   flashcard        → warm-up flashcards for the frontier category
+ *   practicing       → question loop (weakness-first, mastery gate)
+ *   revealed         → answer revealed, waiting for Continue
+ *   lesson           → inline LessonView (triggered on struggle)
+ *   generating       → fetching next question
+ *   transition       → brief "moving to next keyword" interstitial
+ *   category_complete → "Category complete! Take a checkpoint quiz?"
+ *   mini_quiz        → 4-question checkpoint quiz
+ *   mini_quiz_revealed → quiz question revealed
+ *   mini_quiz_loading → fetching quiz questions
  *   course_complete  → all categories mastered
- *   error            → recoverable error card
- *
- * Decision: focused COPY of the practice loop rather than a shared extraction,
- * because the auto page needs tight control over how it advances (re-fetching
- * auto-plan after every mastery event / every 8 questions) and adds layers
- * (category interstitial, mini-quiz checkpoint) that would require many props
- * to thread through a shared component.  A clean, self-contained copy keeps
- * both pages simple. Key differences from category/practice page:
- *   - fetchQueue hits practice-queue with the next_focus keyword ids as scope
- *   - After queue done / every 8 questions → re-fetch auto-plan → roll forward
- *   - Category avg crossing 0.8 triggers optional 4-question quiz checkpoint
- *   - Top bar shows course ProgressBar (overall_pct) + "Unit X of N" indicator
- *   - NEW keywords get a 2-card flashcard warm-up before first question
- *     (gracefully degrades if /api/math/flashcards returns 0 cards or 502s)
+ *   error            → recoverable error
  */
 
-import { useState, useEffect, useCallback, useRef, use, Suspense } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { LoginGate } from "@/components/auth/LoginGate";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
+import { LessonView } from "@/components/mcat/LessonView";
 import MathText from "@/components/mcat/MathText";
-import MathFeedbackWidget from "@/components/math/MathFeedbackWidget";
-import { MathLessonView } from "@/components/math/MathLessonView";
+import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { ComboMeter } from "@/components/gamification/ComboMeter";
 import { SoundToggle } from "@/components/ui/SoundToggle";
@@ -45,31 +39,21 @@ import { CorrectPulse } from "@/components/ui/CorrectPulse";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
-import { getOrCreateMathSession } from "@/lib/mathSession";
-import {
-  MathQueueKeyword,
-  MathReviewKeyword,
-  MathPracticeQueueResponse,
-  MathQuestion,
-  diffLabel,
-  COURSE_LABELS,
-} from "@/components/math/mathUiTypes";
-import type { MathCourse } from "@/lib/mathTypes";
+import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const TOPIC_MAX_QUESTIONS = 8;
-const MASTERY_STREAK = 3;
+const MASTERY_STREAK = 4; // MCAT uses 4 consecutive correct (per existing practice page)
 const REVIEW_PROBABILITY = 0.35;
-const AUTO_REPLAN_INTERVAL = 8; // re-fetch auto-plan every N questions answered
+const AUTO_REPLAN_INTERVAL = 8;
 const MINI_QUIZ_COUNT = 4;
-const AUTO_COURSE_KEY = "lodera_auto_course";
+const MAX_WARMUP_FLASHCARDS = 3;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Phase =
   | "loading"
-  | "needs_diagnostic"
   | "flashcard"
   | "lesson"
   | "practicing"
@@ -81,29 +65,18 @@ type Phase =
   | "mini_quiz"
   | "mini_quiz_revealed"
   | "course_complete"
-  | "done"
   | "error";
-
-interface MathFlashcard {
-  id: string;
-  front_latex: string;
-  back_latex: string;
-  keyword_weights: Record<string, number>;
-}
 
 interface AutoPlanFrontier {
   id: string;
   label: string;
-  section: string;
-  role: string;
-  umbrella_label: string | null;
   order_index: number;
+  umbrella_label: string | null;
 }
 
 interface AutoPlanCategoryProgress {
   id: string;
   label: string;
-  section: string;
   order_index: number;
   avg_score: number | null;
   mastered_count: number;
@@ -112,11 +85,54 @@ interface AutoPlanCategoryProgress {
 }
 
 interface AutoPlanResponse {
-  needs_diagnostic: boolean;
   frontier: AutoPlanFrontier | null;
   next_focus: string[];
   progress: AutoPlanCategoryProgress[];
   overall_pct: number;
+}
+
+interface QueueKeyword {
+  id: string;
+  label: string;
+  description: string;
+  umbrella_id: string | null;
+  umbrella_label: string | null;
+  score: number | null;
+  state: string | null;
+  total_attempts: number;
+  needs_lesson: boolean;
+  yield_level: string | null;
+}
+
+interface ReviewKeyword {
+  id: string;
+  label: string;
+  score: number | null;
+  spaced_review_due_at: string | null;
+}
+
+interface PracticeQueueResponse {
+  queue: QueueKeyword[];
+  review_pool: ReviewKeyword[];
+}
+
+interface Question {
+  id: string;
+  stem: string;
+  choices: string[];
+  correct_index: number;
+  explanation: string;
+  keyword_weights: Record<string, number>;
+  primary_keyword_id?: string | null;
+  difficulty: number;
+  parent_question_id: string | null;
+}
+
+interface Flashcard {
+  id: string;
+  front: string;
+  back: string;
+  keyword_weights: Record<string, number>;
 }
 
 interface AttemptResponse {
@@ -127,7 +143,13 @@ interface AttemptResponse {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function pickReviewKeyword(pool: MathReviewKeyword[]): MathReviewKeyword | null {
+function diffLabel(d: number) {
+  if (d < 0.35) return { label: "Easy",   cls: "bg-success-100 text-success-600" };
+  if (d < 0.65) return { label: "Medium", cls: "bg-amber-100 text-amber-700" };
+  return            { label: "Hard",   cls: "bg-error-100 text-error-600" };
+}
+
+function pickReviewKeyword(pool: ReviewKeyword[]): ReviewKeyword | null {
   if (pool.length === 0) return null;
   const now = new Date();
   const pastDue = pool.filter(
@@ -139,36 +161,23 @@ function pickReviewKeyword(pool: MathReviewKeyword[]): MathReviewKeyword | null 
   );
 }
 
-// ─── Auto inner component ─────────────────────────────────────────────────────
+// ─── Inner component ──────────────────────────────────────────────────────────
 
-function MathAutoInner({
-  params,
-}: {
-  params: Promise<{ course: string }>;
-}) {
-  const { course } = use(params);
-  const searchParams = useSearchParams();
-  const returnParam = searchParams.get("return");
-  const courseLabel = COURSE_LABELS[course] ?? course;
-
-  // ── Session ───────────────────────────────────────────────────────────────
-
+function McatAutoInner() {
+  // Session
   const [sessionId, setSessionId] = useState("");
   const [phase, setPhase] = useState<Phase>("loading");
   const [errorMsg, setErrorMsg] = useState("");
 
-  // ── Auto plan ──────────────────────────────────────────────────────────────
-
+  // Auto plan
   const [plan, setPlan] = useState<AutoPlanResponse | null>(null);
   const [frontier, setFrontier] = useState<AutoPlanFrontier | null>(null);
   const planRef = useRef<AutoPlanResponse | null>(null);
 
-  // ── Practice queue state ───────────────────────────────────────────────────
-
-  const [queue, setQueue] = useState<MathQueueKeyword[]>([]);
-  const [reviewPool, setReviewPool] = useState<MathReviewKeyword[]>([]);
+  // Practice queue state
+  const [queue, setQueue] = useState<QueueKeyword[]>([]);
+  const [reviewPool, setReviewPool] = useState<ReviewKeyword[]>([]);
   const [queueIndex, setQueueIndex] = useState(0);
-
   const currentKeyword = queue[queueIndex] ?? null;
 
   const lessonedKeywordsRef = useRef<Set<string>>(new Set());
@@ -176,66 +185,60 @@ function MathAutoInner({
   const [topicQuestionCount, setTopicQuestionCount] = useState(0);
   const excludeIdsRef = useRef<string[]>([]);
 
-  const [question, setQuestion] = useState<MathQuestion | null>(null);
+  const [question, setQuestion] = useState<Question | null>(null);
   const [isReviewCard, setIsReviewCard] = useState(false);
   const [pendingReviewBetweenTopics, setPendingReviewBetweenTopics] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
   const [showLessonOffer, setShowLessonOffer] = useState(false);
-  const [showHint, setShowHint] = useState(false);
   const consecutiveWrongRef = useRef(0);
 
+  // Flashcard warm-up
+  const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
+  const [fcIndex, setFcIndex] = useState(0);
+  const [fcBackShown, setFcBackShown] = useState(false);
+  const warmupDoneCategoriesRef = useRef<Set<string>>(new Set());
+
+  // Stats + gamification
   const [stats, setStats] = useState({ answered: 0, correct: 0, lessons: 0, topicsMastered: 0 });
   const [transitionLabel, setTransitionLabel] = useState("");
   const [combo, setCombo] = useState(0);
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
-  const sessionAnswersRef = useRef(0); // for re-plan trigger
+  const sessionAnswersRef = useRef(0);
 
-  // ── Mini-quiz state ────────────────────────────────────────────────────────
+  // Category complete
+  const [completedCategoryLabel, setCompletedCategoryLabel] = useState("");
+  const [skipQuizPending, setSkipQuizPending] = useState(false);
+  const pendingAdvanceCategoryRef = useRef<string | null>(null);
 
-  const [quizQuestions, setQuizQuestions] = useState<MathQuestion[]>([]);
+  // Mini-quiz
+  const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizSelectedChoice, setQuizSelectedChoice] = useState<number | null>(null);
   const [quizCorrect, setQuizCorrect] = useState(0);
-  const pendingAdvanceCategoryRef = useRef<string | null>(null); // category id to advance past
 
-  // ── Category complete ──────────────────────────────────────────────────────
-
-  const [completedCategoryLabel, setCompletedCategoryLabel] = useState("");
-  const [skipQuizPending, setSkipQuizPending] = useState(false);
-
-  // ── Flashcard warm-up state ────────────────────────────────────────────────
-
-  const [flashcards, setFlashcards] = useState<MathFlashcard[]>([]);
-  const [fcIndex, setFcIndex] = useState(0);
-  const [fcBackShown, setFcBackShown] = useState(false);
-  const [fcFlipping, setFcFlipping] = useState(false);
-  // Track which keyword ids have already had a flashcard warm-up this session
-  const warmUpSeenRef = useRef<Set<string>>(new Set());
+  // Refs for handlers that need latest state
+  const topicStreakRef = useRef(topicCorrectStreak);
+  const topicCountRef = useRef(topicQuestionCount);
+  const currentFrontierIdRef = useRef<string | null>(null);
+  useEffect(() => { topicStreakRef.current = topicCorrectStreak; }, [topicCorrectStreak]);
+  useEffect(() => { topicCountRef.current = topicQuestionCount; }, [topicQuestionCount]);
+  useEffect(() => { currentFrontierIdRef.current = frontier?.id ?? null; }, [frontier]);
 
   useStreakTouchOnce();
 
-  // Store last used course for persistence
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem(AUTO_COURSE_KEY, course);
-    }
-  }, [course]);
-
-  // ─── Fetch auto-plan ───────────────────────────────────────────────────────
+  // ─── Fetch auto-plan ─────────────────────────────────────────────────────
 
   const fetchPlan = useCallback(async (sid: string): Promise<AutoPlanResponse | null> => {
-    const url = `/api/math/auto-plan?session_id=${encodeURIComponent(sid)}&course=${encodeURIComponent(course)}`;
-    const res = await fetch(url);
+    const res = await fetch(`/api/mcat/auto-plan?session_id=${encodeURIComponent(sid)}`);
     if (res.status === 404) return null;
     if (!res.ok) throw new Error(await res.text().catch(() => "Failed to load plan"));
-    const data = (await res.json()) as AutoPlanResponse;
-    return data;
-  }, [course]);
+    return (await res.json()) as AutoPlanResponse;
+  }, []);
 
-  // ─── Fetch mini-quiz questions ─────────────────────────────────────────────
+  // ─── Fetch mini-quiz questions ────────────────────────────────────────────
 
-  const fetchMiniQuiz = useCallback(async (sid: string, categoryId: string): Promise<MathQuestion[]> => {
-    const res = await fetch("/api/math/quiz", {
+  const fetchMiniQuiz = useCallback(async (sid: string, categoryId: string): Promise<Question[]> => {
+    const res = await fetch("/api/mcat/quiz", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -243,133 +246,120 @@ function MathAutoInner({
         category_id: categoryId,
         count: MINI_QUIZ_COUNT,
         mixed: true,
-        course: course as MathCourse,
       }),
     });
     if (!res.ok) return [];
-    const data = (await res.json()) as { questions: MathQuestion[] };
+    const data = (await res.json()) as { questions: Question[] };
     return data.questions ?? [];
-  }, [course]);
+  }, []);
 
-  // ─── Load flashcards for warm-up ──────────────────────────────────────────
+  // ─── Fetch warmup flashcards ─────────────────────────────────────────────
 
-  const loadFlashcards = useCallback(
-    async (sid: string, kwId: string, categoryId: string): Promise<MathFlashcard[]> => {
+  const fetchFlashcards = useCallback(async (sid: string, categoryId: string, keywordIds: string[]): Promise<Flashcard[]> => {
+    try {
+      const res = await fetch("/api/mcat/flashcards", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: sid,
+          category_id: categoryId,
+          count: MAX_WARMUP_FLASHCARDS,
+          keyword_ids: keywordIds,
+        }),
+      });
+      if (!res.ok) return [];
+      const data = (await res.json()) as { flashcards: Flashcard[] };
+      return (data.flashcards ?? []).slice(0, MAX_WARMUP_FLASHCARDS);
+    } catch {
+      return [];
+    }
+  }, []);
+
+  // ─── Load question ────────────────────────────────────────────────────────
+
+  const loadQuestion = useCallback(
+    async (sid: string, keywordId: string, categoryId: string) => {
+      setPhase("generating");
+      setQuestion(null);
+      setSelectedChoice(null);
+      setShowLessonOffer(false);
+      setLastAnswerCorrect(false);
+
       try {
-        const res = await fetch("/api/math/flashcards", {
+        const res = await fetch("/api/mcat/next-question", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             session_id: sid,
             category_id: categoryId,
-            keyword_id: kwId,
-            count: 2,
-            course: course as MathCourse,
+            keyword_id: keywordId,
+            exclude_ids: excludeIdsRef.current,
           }),
         });
+
         if (!res.ok) {
-          // Non-fatal: skip warm-up if flashcards unavailable (e.g. 502 from generation)
-          console.error("[auto] math/flashcards fetch failed:", res.status);
-          return [];
-        }
-        const data = (await res.json()) as { flashcards: MathFlashcard[] };
-        return data.flashcards ?? [];
-      } catch (e) {
-        console.error("[auto] math/flashcards fetch error:", (e as Error).message);
-        return [];
-      }
-    },
-    [course]
-  );
-
-  // ─── Load question ─────────────────────────────────────────────────────────
-
-  const loadQuestion = useCallback(
-    async (sid: string, keywordId: string, categoryId: string, forReview?: MathReviewKeyword) => {
-      setPhase("generating");
-      setQuestion(null);
-      setSelectedChoice(null);
-      setShowLessonOffer(false);
-      setShowHint(false);
-      setErrorMsg("");
-      setLastAnswerCorrect(false);
-
-      try {
-        const body: Record<string, unknown> = {
-          session_id: sid,
-          category_id: categoryId,
-          keyword_id: keywordId,
-          exclude_ids: excludeIdsRef.current,
-          course: course as MathCourse,
-        };
-
-        const res = await fetch("/api/math/next-question", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-        if (!res.ok) {
+          // Degrade gracefully: if generation 502s, show error but allow retry
           const msg = await res.text().catch(() => "Unknown error");
-          setErrorMsg(msg);
+          if (res.status === 502) {
+            setErrorMsg("Question generation is temporarily unavailable. Please try again.");
+          } else {
+            setErrorMsg(msg);
+          }
           setPhase("error");
           return;
         }
-        const data = (await res.json()) as { question: MathQuestion; generated?: boolean };
+
+        const data = (await res.json()) as { question: Question; generated?: boolean };
         setQuestion(data.question);
         excludeIdsRef.current = [...excludeIdsRef.current, data.question.id];
-        setIsReviewCard(!!forReview);
+        setIsReviewCard(false);
         setPhase("practicing");
       } catch (e) {
         setErrorMsg((e as Error).message ?? "Failed to load question");
         setPhase("error");
       }
     },
-    [course]
+    []
   );
 
-  // ─── Start keyword (with flashcard warm-up for new/unseen keywords) ──────
+  // ─── Start keyword ────────────────────────────────────────────────────────
 
   const startKeyword = useCallback(
-    async (sid: string, kw: MathQueueKeyword, categoryId: string) => {
+    async (sid: string, kw: QueueKeyword, categoryId: string) => {
       setTopicCorrectStreak(0);
       setTopicQuestionCount(0);
       consecutiveWrongRef.current = 0;
-
-      // Only show flashcard warm-up once per keyword per session, and only for
-      // keywords the student hasn't practiced much (total_attempts === 0 or null).
-      const isNew =
-        (kw.total_attempts === 0 || kw.total_attempts == null) &&
-        !warmUpSeenRef.current.has(kw.id);
-
-      if (isNew) {
-        warmUpSeenRef.current.add(kw.id);
-        const cards = await loadFlashcards(sid, kw.id, categoryId);
-        if (cards.length > 0) {
-          setFlashcards(cards);
-          setFcIndex(0);
-          setFcBackShown(false);
-          setPhase("flashcard");
-          return; // will continue to loadQuestion after all cards are graded
-        }
-        // Zero cards (no stored + generation 502d) → fall through to question
-      }
-
       await loadQuestion(sid, kw.id, categoryId);
     },
-    [loadQuestion, loadFlashcards]
+    [loadQuestion]
   );
 
-  // ─── Apply new plan (start practicing from frontier) ──────────────────────
+  // ─── Advance to next category (re-plan) ───────────────────────────────────
+
+  const advanceToNextCategory = useCallback(
+    async (sid: string) => {
+      try {
+        const newPlan = await fetchPlan(sid);
+        if (!newPlan || !newPlan.frontier) {
+          setPhase("course_complete");
+          return;
+        }
+        await applyPlan(sid, newPlan);
+      } catch (e) {
+        setErrorMsg((e as Error).message ?? "Failed to advance");
+        setPhase("error");
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fetchPlan]
+  );
+
+  // ─── Apply plan ───────────────────────────────────────────────────────────
 
   const applyPlan = useCallback(
     async (sid: string, newPlan: AutoPlanResponse) => {
       setPlan(newPlan);
       planRef.current = newPlan;
-
-      if (newPlan.needs_diagnostic) {
-        setPhase("needs_diagnostic");
-        return;
-      }
 
       if (!newPlan.frontier) {
         setPhase("course_complete");
@@ -380,63 +370,43 @@ function MathAutoInner({
       const frontierCatId = newPlan.frontier.id;
 
       if (newPlan.next_focus.length === 0) {
-        // Frontier has no unmastered keywords → treat as category complete → advance
         setPhase("course_complete");
         return;
       }
 
-      // Build a scoped practice queue using the next_focus keyword ids
+      // Build scoped practice queue using next_focus keyword ids
       setPhase("loading");
       setErrorMsg("");
+
       try {
         const focusParam = newPlan.next_focus
-          .map((id) => `keyword_ids=${encodeURIComponent(id)}`)
+          .map((id) => `keyword_id=${encodeURIComponent(id)}`)
           .join("&");
-        const url =
-          `/api/math/practice-queue?session_id=${encodeURIComponent(sid)}` +
-          `&course=${encodeURIComponent(course)}` +
-          `&category_id=${encodeURIComponent(frontierCatId)}` +
-          (focusParam ? `&${focusParam}` : "");
+        const queueUrl =
+          `/api/mcat/practice-queue?session_id=${encodeURIComponent(sid)}` +
+          `&category_id=${encodeURIComponent(frontierCatId)}`;
 
-        const res = await fetch(url);
+        // Try scoped queue first (using keyword_id param for single, fallback to category)
+        const res = await fetch(queueUrl);
         if (!res.ok) {
-          // Fallback: use full category queue if scoped fails
-          const fallbackUrl =
-            `/api/math/practice-queue?session_id=${encodeURIComponent(sid)}` +
-            `&course=${encodeURIComponent(course)}` +
-            `&category_id=${encodeURIComponent(frontierCatId)}`;
-          const fallbackRes = await fetch(fallbackUrl);
-          if (!fallbackRes.ok) {
-            const msg = await fallbackRes.text().catch(() => "Unknown error");
-            setErrorMsg(msg);
-            setPhase("error");
-            return;
-          }
-          const data = (await fallbackRes.json()) as MathPracticeQueueResponse;
-          if (data.queue.length === 0) {
-            // No unmastered keywords left in category → category done
-            setPhase("course_complete");
-            return;
-          }
-          setQueue(data.queue);
-          setReviewPool(data.review_pool ?? []);
-          setQueueIndex(0);
-          setTopicCorrectStreak(0);
-          setTopicQuestionCount(0);
-          excludeIdsRef.current = [];
-          setIsReviewCard(false);
-          setPendingReviewBetweenTopics(false);
-          await startKeyword(sid, data.queue[0]!, frontierCatId);
+          setErrorMsg("Failed to load practice queue");
+          setPhase("error");
           return;
         }
 
-        const data = (await res.json()) as MathPracticeQueueResponse;
-        if (data.queue.length === 0) {
-          setPhase("course_complete");
+        const data = (await res.json()) as PracticeQueueResponse;
+        // Filter queue to next_focus keywords
+        const focusSet = new Set(newPlan.next_focus);
+        let scopedQueue = data.queue.filter((kw) => focusSet.has(kw.id));
+        // Fallback to full queue if nothing matches
+        if (scopedQueue.length === 0) scopedQueue = data.queue;
+        if (scopedQueue.length === 0) {
+          // No unmastered keywords → advance
+          await advanceToNextCategory(sid);
           return;
         }
 
-        setQueue(data.queue);
+        setQueue(scopedQueue);
         setReviewPool(data.review_pool ?? []);
         setQueueIndex(0);
         setTopicCorrectStreak(0);
@@ -445,25 +415,38 @@ function MathAutoInner({
         setIsReviewCard(false);
         setPendingReviewBetweenTopics(false);
 
-        await startKeyword(sid, data.queue[0]!, frontierCatId);
+        // Flashcard warm-up for new category (once per session per category)
+        if (!warmupDoneCategoriesRef.current.has(frontierCatId)) {
+          warmupDoneCategoriesRef.current.add(frontierCatId);
+          const cards = await fetchFlashcards(sid, frontierCatId, newPlan.next_focus);
+          if (cards.length > 0) {
+            setFlashcards(cards);
+            setFcIndex(0);
+            setFcBackShown(false);
+            setPhase("flashcard");
+            return;
+          }
+        }
+
+        await startKeyword(sid, scopedQueue[0]!, frontierCatId);
       } catch (e) {
         setErrorMsg((e as Error).message ?? "Failed to load practice queue");
         setPhase("error");
       }
     },
-    [course, startKeyword]
+    [advanceToNextCategory, fetchFlashcards, startKeyword]
   );
 
-  // ─── Initial mount ─────────────────────────────────────────────────────────
+  // ─── Initial mount ────────────────────────────────────────────────────────
 
   useEffect(() => {
     (async () => {
       try {
-        const sid = await getOrCreateMathSession();
+        const sid = await getOrCreateMcatSession();
         setSessionId(sid);
         const newPlan = await fetchPlan(sid);
         if (!newPlan) {
-          setPhase("needs_diagnostic");
+          setPhase("course_complete");
           return;
         }
         await applyPlan(sid, newPlan);
@@ -475,7 +458,7 @@ function MathAutoInner({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ─── Re-plan after N answers ───────────────────────────────────────────────
+  // ─── Re-plan after N answers ──────────────────────────────────────────────
 
   const maybeTriggerReplan = useCallback(async (sid: string) => {
     const count = sessionAnswersRef.current;
@@ -485,12 +468,11 @@ function MathAutoInner({
         if (!newPlan) return;
         planRef.current = newPlan;
         setPlan(newPlan);
-        // Don't interrupt mid-queue — just update plan state for next advance
       } catch { /* non-fatal */ }
     }
   }, [fetchPlan]);
 
-  // ─── Handle choice ─────────────────────────────────────────────────────────
+  // ─── Handle choice ────────────────────────────────────────────────────────
 
   const handleChoice = useCallback(
     async (idx: number) => {
@@ -525,7 +507,7 @@ function MathAutoInner({
       await maybeTriggerReplan(sessionId);
 
       try {
-        const res = await fetch("/api/math/attempt", {
+        const res = await fetch("/api/mcat/attempt", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -533,7 +515,6 @@ function MathAutoInner({
             question_id: question.id,
             selected_index: idx,
             context: "practice",
-            course: course as MathCourse,
           }),
         });
         if (res.ok) {
@@ -541,19 +522,16 @@ function MathAutoInner({
           const kwState = data.keyword_states[currentKeyword.id];
           const needsLesson = kwState?.needs_lesson === true;
           const tooManyWrong = consecutiveWrongRef.current >= 2;
-          if (
-            (tooManyWrong || needsLesson) &&
-            !lessonedKeywordsRef.current.has(currentKeyword.id)
-          ) {
+          if ((tooManyWrong || needsLesson) && !lessonedKeywordsRef.current.has(currentKeyword.id)) {
             setShowLessonOffer(true);
           }
         }
       } catch { /* non-fatal */ }
     },
-    [question, currentKeyword, phase, sessionId, isReviewCard, course, maybeTriggerReplan]
+    [question, currentKeyword, phase, sessionId, isReviewCard, maybeTriggerReplan]
   );
 
-  // ─── Handle don't know ─────────────────────────────────────────────────────
+  // ─── Handle don't know ────────────────────────────────────────────────────
 
   const handleDontKnow = useCallback(async () => {
     if (!question || !currentKeyword || phase !== "practicing") return;
@@ -573,7 +551,7 @@ function MathAutoInner({
     await maybeTriggerReplan(sessionId);
 
     try {
-      const res = await fetch("/api/math/attempt", {
+      const res = await fetch("/api/mcat/attempt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -581,7 +559,6 @@ function MathAutoInner({
           question_id: question.id,
           dont_know: true,
           context: "practice",
-          course: course as MathCourse,
         }),
       });
       if (res.ok) {
@@ -593,38 +570,9 @@ function MathAutoInner({
         }
       }
     } catch { /* non-fatal */ }
-  }, [question, currentKeyword, phase, sessionId, isReviewCard, maybeTriggerReplan, course]);
+  }, [question, currentKeyword, phase, sessionId, isReviewCard, maybeTriggerReplan]);
 
-  // ─── Advance to next category ──────────────────────────────────────────────
-
-  const advanceToNextCategory = useCallback(
-    async (sid: string) => {
-      try {
-        const newPlan = await fetchPlan(sid);
-        if (!newPlan) {
-          setPhase("course_complete");
-          return;
-        }
-        await applyPlan(sid, newPlan);
-      } catch (e) {
-        setErrorMsg((e as Error).message ?? "Failed to advance");
-        setPhase("error");
-      }
-    },
-    [fetchPlan, applyPlan]
-  );
-
-  // ─── Advance keyword in queue ──────────────────────────────────────────────
-
-  const topicStreakRef = useRef(topicCorrectStreak);
-  const topicCountRef = useRef(topicQuestionCount);
-  useEffect(() => { topicStreakRef.current = topicCorrectStreak; }, [topicCorrectStreak]);
-  useEffect(() => { topicCountRef.current = topicQuestionCount; }, [topicQuestionCount]);
-
-  const currentFrontierIdRef = useRef<string | null>(null);
-  useEffect(() => {
-    currentFrontierIdRef.current = frontier?.id ?? null;
-  }, [frontier]);
+  // ─── Advance keyword in queue ─────────────────────────────────────────────
 
   const advanceKeyword = useCallback(
     async (opts?: { wasMastered: boolean }) => {
@@ -635,7 +583,7 @@ function MathAutoInner({
       const nextIndex = queueIndex + 1;
 
       if (nextIndex >= queue.length) {
-        // Queue exhausted → re-plan (may have crossed 0.8 threshold)
+        // Queue exhausted → check if category crossed mastery threshold
         const latestPlan = planRef.current;
         const catId = currentFrontierIdRef.current;
         const catProgress = latestPlan?.progress.find((p) => p.id === catId);
@@ -650,7 +598,6 @@ function MathAutoInner({
           pendingAdvanceCategoryRef.current = catId;
           setPhase("category_complete");
         } else {
-          // Re-plan and continue
           await advanceToNextCategory(sessionId);
         }
         return;
@@ -667,20 +614,17 @@ function MathAutoInner({
         if (shouldInsertReview) {
           const reviewKw = pickReviewKeyword(reviewPool);
           if (reviewKw && frontier?.id) {
-            loadQuestion(sessionId, reviewKw.id, frontier.id, reviewKw);
+            loadQuestion(sessionId, reviewKw.id, frontier.id);
             return;
           }
         }
         if (frontier?.id) startKeyword(sessionId, nextKw, frontier.id);
       }, 1200);
     },
-    [
-      currentKeyword, queueIndex, queue, reviewPool, sessionId,
-      loadQuestion, startKeyword, advanceToNextCategory, frontier,
-    ]
+    [currentKeyword, queueIndex, queue, reviewPool, sessionId, loadQuestion, startKeyword, advanceToNextCategory, frontier]
   );
 
-  // ─── Handle Next (after answer) ────────────────────────────────────────────
+  // ─── Handle Next (after answer) ───────────────────────────────────────────
 
   const handleNext = useCallback(() => {
     if (!currentKeyword) return;
@@ -716,22 +660,13 @@ function MathAutoInner({
       return;
     }
 
-    const lastWasCorrect = streak > 0;
-    const useSimilarPath = lastWasCorrect && question !== null && Math.random() < 0.5;
-    setTopicQuestionCount((n) => n + 1);
-    if (useSimilarPath && question && frontier?.id) {
-      // Use similar question path via next-question with same keyword
-      loadQuestion(sessionId, currentKeyword.id, frontier.id);
-    } else if (frontier?.id) {
-      loadQuestion(sessionId, currentKeyword.id, frontier.id);
-    }
+    if (frontier?.id) loadQuestion(sessionId, currentKeyword.id, frontier.id);
   }, [
     currentKeyword, isReviewCard, pendingReviewBetweenTopics, queue, queueIndex,
-    sessionId, loadQuestion, startKeyword, advanceKeyword, question, frontier,
-    advanceToNextCategory,
+    sessionId, loadQuestion, startKeyword, advanceKeyword, frontier, advanceToNextCategory,
   ]);
 
-  // ─── Lesson handlers ───────────────────────────────────────────────────────
+  // ─── Lesson handlers ──────────────────────────────────────────────────────
 
   const handleStartLesson = useCallback(() => {
     setShowLessonOffer(false);
@@ -755,58 +690,7 @@ function MathAutoInner({
     loadQuestion(sessionId, currentKeyword.id, frontier.id);
   }, [currentKeyword, sessionId, frontier, loadQuestion]);
 
-  // ─── Flashcard warm-up handlers ───────────────────────────────────────────
-
-  const flipFcCard = useCallback(() => {
-    setFcFlipping(true);
-    setTimeout(() => {
-      setFcBackShown((prev) => !prev);
-      setFcFlipping(false);
-    }, 150);
-  }, []);
-
-  const gradeFlashcard = useCallback(
-    async (result: "got_it" | "missed_it" | "dont_know") => {
-      const card = flashcards[fcIndex];
-      if (!card || !currentKeyword || !frontier?.id) return;
-
-      // Record attempt — fire and forget (non-fatal)
-      fetch("/api/math/flashcard-attempt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          session_id: sessionId,
-          flashcard_id: card.id,
-          result,
-          course: course as MathCourse,
-        }),
-      }).catch(() => {});
-
-      // Gamification
-      if (result === "got_it") {
-        setCombo((prev) => {
-          const next = comboReducer({ count: prev }, "correct").count;
-          onCorrectAnswer(next);
-          return next;
-        });
-      } else {
-        setCombo((prev) => comboReducer({ count: prev }, "incorrect").count);
-        onIncorrectAnswer();
-      }
-
-      const nextIdx = fcIndex + 1;
-      if (nextIdx >= flashcards.length) {
-        // Warm-up complete → proceed to first question
-        await loadQuestion(sessionId, currentKeyword.id, frontier.id);
-      } else {
-        setFcIndex(nextIdx);
-        setFcBackShown(false);
-      }
-    },
-    [flashcards, fcIndex, currentKeyword, frontier, sessionId, course, loadQuestion]
-  );
-
-  // ─── Category complete handlers ────────────────────────────────────────────
+  // ─── Category complete handlers ───────────────────────────────────────────
 
   const handleTakeQuiz = useCallback(async () => {
     const catId = pendingAdvanceCategoryRef.current;
@@ -815,7 +699,6 @@ function MathAutoInner({
     try {
       const qs = await fetchMiniQuiz(sessionId, catId);
       if (qs.length === 0) {
-        // No quiz available → just advance
         await advanceToNextCategory(sessionId);
         return;
       }
@@ -835,7 +718,7 @@ function MathAutoInner({
     setSkipQuizPending(false);
   }, [sessionId, advanceToNextCategory]);
 
-  // ─── Mini-quiz handlers ────────────────────────────────────────────────────
+  // ─── Mini-quiz handlers ───────────────────────────────────────────────────
 
   const currentQuizQuestion = quizQuestions[quizIndex] ?? null;
 
@@ -857,7 +740,7 @@ function MathAutoInner({
 
       sessionAnswersRef.current += 1;
       try {
-        await fetch("/api/math/attempt", {
+        await fetch("/api/mcat/attempt", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -865,18 +748,16 @@ function MathAutoInner({
             question_id: currentQuizQuestion.id,
             selected_index: idx,
             context: "quiz",
-            course: course as MathCourse,
           }),
         });
       } catch { /* non-fatal */ }
     },
-    [currentQuizQuestion, phase, sessionId, course]
+    [currentQuizQuestion, phase, sessionId]
   );
 
   const handleQuizNext = useCallback(async () => {
     const nextIdx = quizIndex + 1;
     if (nextIdx >= quizQuestions.length) {
-      // Quiz done → advance
       await advanceToNextCategory(sessionId);
       return;
     }
@@ -886,41 +767,54 @@ function MathAutoInner({
     setPhase("mini_quiz");
   }, [quizIndex, quizQuestions.length, sessionId, advanceToNextCategory]);
 
-  const quizScorePct =
-    quizQuestions.length > 0
-      ? Math.round((quizCorrect / quizQuestions.length) * 100)
-      : 0;
+  // ─── Flashcard handlers ───────────────────────────────────────────────────
 
-  // ─── Render helpers ────────────────────────────────────────────────────────
+  const handleFlashcardFlip = useCallback(() => {
+    setFcBackShown(true);
+  }, []);
+
+  const handleFlashcardNext = useCallback(async () => {
+    const nextIdx = fcIndex + 1;
+    if (nextIdx >= flashcards.length || nextIdx >= MAX_WARMUP_FLASHCARDS) {
+      // Warm-up done → start practice
+      if (queue.length > 0 && frontier?.id) {
+        await startKeyword(sessionId, queue[0]!, frontier.id);
+      } else {
+        await advanceToNextCategory(sessionId);
+      }
+      return;
+    }
+    setFcIndex(nextIdx);
+    setFcBackShown(false);
+    setStats((s) => ({ ...s, flashcards: (s as typeof s & { flashcards: number }).flashcards + 1 }));
+  }, [fcIndex, flashcards.length, queue, frontier, sessionId, startKeyword, advanceToNextCategory]);
+
+  const handleSkipFlashcards = useCallback(async () => {
+    if (queue.length > 0 && frontier?.id) {
+      await startKeyword(sessionId, queue[0]!, frontier.id);
+    } else {
+      await advanceToNextCategory(sessionId);
+    }
+  }, [queue, frontier, sessionId, startKeyword, advanceToNextCategory]);
+
+  // ─── Derived state ────────────────────────────────────────────────────────
 
   const diff = question ? diffLabel(question.difficulty) : null;
   const quizDiff = currentQuizQuestion ? diffLabel(currentQuizQuestion.difficulty) : null;
-
   const masteryDots = Array.from({ length: MASTERY_STREAK }, (_, i) =>
     i < topicCorrectStreak ? "●" : "○"
   ).join("");
-
   const overallPct = plan?.overall_pct ?? 0;
+  const totalCategories = plan?.progress.length ?? 0;
+  const completedCategories = plan?.progress.filter((p) => p.complete).length ?? 0;
+  const frontierOrderIndex = frontier?.order_index ?? 0;
   const isInQuizPhase = phase === "mini_quiz" || phase === "mini_quiz_revealed" || phase === "mini_quiz_loading";
   const isInPracticePhase = phase === "practicing" || phase === "revealed";
-  const isInFlashcardPhase = phase === "flashcard";
-  const currentFc = isInFlashcardPhase ? (flashcards[fcIndex] ?? null) : null;
+  const quizScorePct = quizQuestions.length > 0
+    ? Math.round((quizCorrect / quizQuestions.length) * 100)
+    : 0;
 
-  // Unit X of N — derived from sorted progress list
-  const unitTotal = plan?.progress.filter((p) => p.keyword_count > 0).length ?? 0;
-  const unitIndex = frontier
-    ? (plan?.progress.filter((p) => p.keyword_count > 0).findIndex((p) => p.id === frontier.id) ?? -1)
-    : -1;
-  const unitNumber = unitIndex >= 0 ? unitIndex + 1 : null;
-
-  // Category mastery pct for frontier
-  const frontierProgress = frontier ? plan?.progress.find((p) => p.id === frontier.id) : null;
-  const frontierPct =
-    frontierProgress && frontierProgress.keyword_count > 0
-      ? Math.round((frontierProgress.mastered_count / frontierProgress.keyword_count) * 100)
-      : null;
-
-  // ─── Render ────────────────────────────────────────────────────────────────
+  // ─── Render ───────────────────────────────────────────────────────────────
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -929,21 +823,21 @@ function MathAutoInner({
         <div className="w-full px-6 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <Link
-              href={`/math/${course}`}
+              href="/mcat"
               className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0"
             >
-              ← {courseLabel}
+              ← MCAT Practice
             </Link>
-            {frontier && phase !== "loading" && phase !== "needs_diagnostic" && phase !== "course_complete" && (
+            {frontier && phase !== "loading" && phase !== "course_complete" && (
               <div className="flex items-center gap-2 min-w-0">
-                {unitNumber !== null && unitTotal > 0 && (
-                  <span className="text-xs font-medium text-brand-600 shrink-0 tabular-nums">
-                    Unit {unitNumber}/{unitTotal}
-                  </span>
-                )}
-                <span className="text-xs text-neutral-500 truncate">{frontier.label}</span>
+                <span className="text-xs text-neutral-500 shrink-0">
+                  Category {frontierOrderIndex + 1} of {totalCategories}
+                </span>
+                <span className="text-xs font-medium text-neutral-700 truncate">
+                  {frontier.label}
+                </span>
                 {frontier.umbrella_label && (
-                  <span className="shrink-0 hidden sm:inline text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
+                  <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
                     {frontier.umbrella_label}
                   </span>
                 )}
@@ -964,32 +858,21 @@ function MathAutoInner({
           </div>
         </div>
 
-        {/* Course + unit progress bars */}
-        {plan && phase !== "loading" && phase !== "needs_diagnostic" && (
-          <div className="w-full px-6 pb-2 space-y-1.5">
-            {/* Course-level overall progress */}
+        {/* Overall progress bar */}
+        {plan && phase !== "loading" && (
+          <div className="w-full px-6 pb-2">
             <div className="flex items-center gap-2">
               <ProgressBar
                 value={overallPct}
                 size="sm"
                 color={overallPct >= 80 ? "success" : "brand"}
-                label={`${courseLabel} overall progress`}
+                label="MCAT overall progress"
                 className="flex-1"
               />
-              <span className="text-xs text-neutral-400 shrink-0 tabular-nums w-8 text-right">{overallPct}%</span>
+              <span className="text-xs text-neutral-400 shrink-0">
+                {completedCategories}/{totalCategories} categories
+              </span>
             </div>
-            {/* Unit-level progress (only when inside a unit) */}
-            {frontierPct !== null && frontier && (
-              <div className="flex items-center gap-2">
-                <div className="flex-1 h-1 bg-neutral-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-1 bg-brand-200 rounded-full transition-all"
-                    style={{ width: `${frontierPct}%` }}
-                  />
-                </div>
-                <span className="text-xs text-neutral-300 shrink-0 tabular-nums w-8 text-right">{frontierPct}%</span>
-              </div>
-            )}
           </div>
         )}
 
@@ -1020,7 +903,7 @@ function MathAutoInner({
               </div>
               <span className="text-xs text-neutral-400 shrink-0">
                 Quiz {quizIndex + 1}/{quizQuestions.length}
-                {quizQuestions.length > 0 && quizIndex > 0 && ` · ${quizScorePct}%`}
+                {quizIndex > 0 && ` · ${quizScorePct}%`}
               </span>
             </div>
           </div>
@@ -1044,51 +927,6 @@ function MathAutoInner({
           <div className="flex flex-col items-center justify-center py-24 gap-3">
             <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin" />
             <p className="text-sm text-neutral-500">Finding your next question…</p>
-            <p className="text-xs text-neutral-400">Can take 5–30 seconds</p>
-          </div>
-        )}
-
-        {/* Needs diagnostic */}
-        {phase === "needs_diagnostic" && (
-          <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs text-center space-y-5">
-            <div className="w-14 h-14 rounded-full bg-brand-100 flex items-center justify-center mx-auto">
-              <span className="text-brand-600 text-2xl">✦</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-semibold text-neutral-900">
-                Start with a placement check
-              </h1>
-              <p className="text-sm text-neutral-500 mt-1 leading-relaxed">
-                A quick 8–14 question diagnostic will find your starting point so
-                automatic mode begins where you need it most.
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Link
-                href={`/math/${course}/diagnostic?return=auto`}
-                className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors text-center"
-              >
-                Take placement diagnostic
-              </Link>
-              <button
-                onClick={async () => {
-                  // Skip diagnostic — start from beginning
-                  setPhase("loading");
-                  try {
-                    const newPlan = await fetchPlan(sessionId);
-                    if (!newPlan) { setPhase("needs_diagnostic"); return; }
-                    // Force skip diagnostic by faking no needs_diagnostic
-                    await applyPlan(sessionId, { ...newPlan, needs_diagnostic: false });
-                  } catch (e) {
-                    setErrorMsg((e as Error).message ?? "Failed to start");
-                    setPhase("error");
-                  }
-                }}
-                className="w-full py-3 rounded-xl border border-neutral-200 bg-white text-neutral-600 text-sm font-medium hover:bg-neutral-50 transition-colors"
-              >
-                Skip and start from the beginning
-              </button>
-            </div>
           </div>
         )}
 
@@ -1121,6 +959,59 @@ function MathAutoInner({
               <p className="text-sm text-neutral-500 animate-pulse">
                 Moving to next keyword…
               </p>
+            </div>
+          </div>
+        )}
+
+        {/* Flashcard warm-up */}
+        {phase === "flashcard" && flashcards[fcIndex] && (
+          <div className="space-y-4">
+            {/* Warm-up header */}
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-neutral-400 uppercase tracking-wide font-medium mb-0.5">
+                  Warm-up · {fcIndex + 1} of {Math.min(flashcards.length, MAX_WARMUP_FLASHCARDS)}
+                </p>
+                <p className="text-sm font-semibold text-neutral-800">{frontier?.label}</p>
+              </div>
+              <button
+                onClick={handleSkipFlashcards}
+                className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2"
+              >
+                Skip warm-up
+              </button>
+            </div>
+
+            {/* Flashcard */}
+            <div className="bg-white rounded-xl border border-neutral-200 shadow-brand-xs overflow-hidden">
+              <div className="p-6 text-center">
+                <p className="text-xs text-brand-500 font-semibold uppercase tracking-wide mb-3">
+                  {fcBackShown ? "Answer" : "Question"}
+                </p>
+                <p className="text-sm font-medium text-neutral-900 leading-relaxed">
+                  <MathText>{fcBackShown ? flashcards[fcIndex]!.back : flashcards[fcIndex]!.front}</MathText>
+                </p>
+              </div>
+              {!fcBackShown && (
+                <div className="border-t border-neutral-100 p-4 flex justify-center">
+                  <button
+                    onClick={handleFlashcardFlip}
+                    className="px-6 py-2.5 rounded-lg bg-brand-50 text-brand-700 text-sm font-semibold hover:bg-brand-100 transition-colors"
+                  >
+                    Reveal answer
+                  </button>
+                </div>
+              )}
+              {fcBackShown && (
+                <div className="border-t border-neutral-100 p-4 flex justify-center">
+                  <button
+                    onClick={handleFlashcardNext}
+                    className="px-6 py-2.5 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
+                  >
+                    {fcIndex + 1 >= Math.min(flashcards.length, MAX_WARMUP_FLASHCARDS) ? "Start practice" : "Next card"}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -1164,12 +1055,9 @@ function MathAutoInner({
               <span className="text-success-600 text-3xl font-bold">✓</span>
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-neutral-900">
-                {courseLabel} complete!
-              </h1>
+              <h1 className="text-xl font-semibold text-neutral-900">MCAT Biology complete!</h1>
               <p className="text-sm text-neutral-500 mt-1 leading-relaxed">
-                You&apos;ve mastered all categories. Come back for spaced review or explore
-                the full course.
+                You&apos;ve mastered all categories. Come back for spaced review or browse by topic.
               </p>
             </div>
             {stats.answered > 0 && (
@@ -1200,123 +1088,18 @@ function MathAutoInner({
                 Find spaced review
               </button>
               <Link
-                href={`/math/${course}`}
+                href="/mcat"
                 className="w-full py-3 rounded-xl border border-neutral-200 bg-white text-neutral-600 text-sm font-medium hover:bg-neutral-50 transition-colors text-center"
               >
-                View all categories
+                Browse all categories
               </Link>
             </div>
           </div>
         )}
 
-        {/* ─── Flashcard warm-up ──────────────────────────────────────────── */}
-        {isInFlashcardPhase && currentFc && (
-          <>
-            {/* Warm-up label */}
-            <div className="text-center">
-              <p className="text-xs text-success-600 font-medium bg-success-50 border border-success-100 rounded-full inline-block px-3 py-1">
-                Quick warm-up — get familiar before practice
-              </p>
-            </div>
-
-            {/* Card counter */}
-            <p className="text-xs text-neutral-400 text-right">
-              {fcIndex + 1} / {flashcards.length}
-            </p>
-
-            {/* Flip card */}
-            <button
-              type="button"
-              onClick={flipFcCard}
-              className={`w-full text-left bg-white rounded-2xl border-2 shadow-brand-sm p-6 min-h-[180px] flex flex-col justify-between transition-opacity duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 ${
-                fcFlipping ? "opacity-0" : "opacity-100"
-              } ${
-                fcBackShown
-                  ? "border-brand-300 hover:border-brand-400"
-                  : "border-neutral-200 hover:border-neutral-300"
-              }`}
-            >
-              {!fcBackShown ? (
-                <div>
-                  <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-3">
-                    Front
-                  </p>
-                  <p className="text-base font-medium text-neutral-900 leading-relaxed">
-                    <MathText>{currentFc.front_latex}</MathText>
-                  </p>
-                </div>
-              ) : (
-                <div>
-                  <p className="text-xs font-semibold text-brand-500 uppercase tracking-wide mb-3">
-                    Back
-                  </p>
-                  <p className="text-base text-neutral-800 leading-relaxed">
-                    <MathText>{currentFc.back_latex}</MathText>
-                  </p>
-                </div>
-              )}
-              <p className="text-xs text-neutral-300 mt-4 text-right select-none">
-                {fcBackShown ? "tap to flip back" : "tap to flip"}
-              </p>
-            </button>
-
-            {/* Show answer button */}
-            {!fcBackShown && (
-              <button
-                onClick={flipFcCard}
-                className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
-              >
-                Show answer
-              </button>
-            )}
-
-            {/* Grade buttons */}
-            {fcBackShown && (
-              <>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => gradeFlashcard("missed_it")}
-                    className="flex-1 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-semibold hover:bg-red-100 transition-colors"
-                  >
-                    ✗ Missed it
-                  </button>
-                  <button
-                    onClick={() => gradeFlashcard("got_it")}
-                    className="flex-1 py-3 rounded-xl bg-success-50 border border-success-200 text-success-700 text-sm font-semibold hover:bg-success-100 transition-colors"
-                  >
-                    ✓ Got it
-                  </button>
-                </div>
-                <div className="flex justify-center">
-                  <button
-                    onClick={() => gradeFlashcard("dont_know")}
-                    className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
-                  >
-                    I didn&apos;t know this
-                  </button>
-                </div>
-              </>
-            )}
-
-            {/* Skip warm-up entirely */}
-            <div className="flex justify-center">
-              <button
-                onClick={() => {
-                  if (currentKeyword && frontier?.id) {
-                    loadQuestion(sessionId, currentKeyword.id, frontier.id);
-                  }
-                }}
-                className="text-xs text-neutral-300 hover:text-neutral-500 underline underline-offset-2 transition-colors"
-              >
-                Skip warm-up
-              </button>
-            </div>
-          </>
-        )}
-
         {/* Lesson (inline) */}
         {phase === "lesson" && currentKeyword && sessionId && (
-          <MathLessonView
+          <LessonView
             sessionId={sessionId}
             keywordId={currentKeyword.id}
             keywordLabel={currentKeyword.label}
@@ -1325,7 +1108,7 @@ function MathAutoInner({
           />
         )}
 
-        {/* ─── Practice / Revealed ─────────────────────────────────────────── */}
+        {/* ─── Practice / Revealed ──────────────────────────────────────────── */}
         {isInPracticePhase && question && (
           <>
             {/* Badge row */}
@@ -1345,30 +1128,9 @@ function MathAutoInner({
             {/* Stem */}
             <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
               <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                <MathText>{question.stem_latex}</MathText>
+                <MathText>{question.stem}</MathText>
               </p>
             </div>
-
-            {/* Hint */}
-            {phase === "practicing" && question.hint_latex && (
-              <div className="flex justify-center">
-                {!showHint ? (
-                  <button
-                    onClick={() => setShowHint(true)}
-                    className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2"
-                  >
-                    Show hint
-                  </button>
-                ) : (
-                  <div className="bg-amber-50 rounded-xl border border-amber-100 p-3 w-full text-left">
-                    <p className="text-xs font-semibold text-amber-700 mb-1">Hint</p>
-                    <p className="text-sm text-neutral-700 leading-relaxed">
-                      <MathText>{question.hint_latex}</MathText>
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
 
             {/* Combo meter */}
             <ComboMeter combo={combo} />
@@ -1412,14 +1174,14 @@ function MathAutoInner({
               </div>
             )}
 
-            {/* Worked solution */}
-            {phase === "revealed" && question.solution_latex && (
+            {/* Explanation */}
+            {phase === "revealed" && question.explanation && (
               <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
                 <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
-                  Solution
+                  Explanation
                 </p>
                 <p className="text-sm text-neutral-700 leading-relaxed">
-                  <MathText>{question.solution_latex}</MathText>
+                  <MathText>{question.explanation}</MathText>
                 </p>
               </div>
             )}
@@ -1450,7 +1212,7 @@ function MathAutoInner({
             {/* Feedback + Continue */}
             {phase === "revealed" && (
               <>
-                <MathFeedbackWidget
+                <FeedbackWidget
                   sessionId={sessionId}
                   contentType="question"
                   contentId={question.id}
@@ -1467,10 +1229,9 @@ function MathAutoInner({
           </>
         )}
 
-        {/* ─── Mini-quiz ──────────────────────────────────────────────────── */}
+        {/* ─── Mini-quiz ───────────────────────────────────────────────────── */}
         {(phase === "mini_quiz" || phase === "mini_quiz_revealed") && currentQuizQuestion && (
           <>
-            {/* Checkpoint badge */}
             <div className="flex items-center gap-2">
               <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700">
                 Checkpoint
@@ -1482,17 +1243,14 @@ function MathAutoInner({
               )}
             </div>
 
-            {/* Stem */}
             <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
               <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                <MathText>{currentQuizQuestion.stem_latex}</MathText>
+                <MathText>{currentQuizQuestion.stem}</MathText>
               </p>
             </div>
 
-            {/* Combo */}
             <ComboMeter combo={combo} />
 
-            {/* Choices */}
             <CorrectPulse
               trigger={phase === "mini_quiz_revealed" && lastAnswerCorrect}
               className="block w-full"
@@ -1519,14 +1277,13 @@ function MathAutoInner({
               </div>
             </CorrectPulse>
 
-            {/* Solution */}
-            {phase === "mini_quiz_revealed" && currentQuizQuestion.solution_latex && (
+            {phase === "mini_quiz_revealed" && currentQuizQuestion.explanation && (
               <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
                 <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
-                  Solution
+                  Explanation
                 </p>
                 <p className="text-sm text-neutral-700 leading-relaxed">
-                  <MathText>{currentQuizQuestion.solution_latex}</MathText>
+                  <MathText>{currentQuizQuestion.explanation}</MathText>
                 </p>
               </div>
             )}
@@ -1542,34 +1299,14 @@ function MathAutoInner({
           </>
         )}
 
-        {/* Done (shouldn't appear — course_complete replaces it) */}
-        {phase === "done" && (
-          <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs text-center space-y-4">
-            <p className="text-neutral-900 font-semibold">Session complete!</p>
-            <button
-              onClick={() => advanceToNextCategory(sessionId)}
-              className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
-            >
-              Continue
-            </button>
-          </div>
-        )}
-
       </main>
-
-      {/* Auto-scroll to keep return param usage harmless */}
-      {returnParam && <span className="hidden">{returnParam}</span>}
     </div>
   );
 }
 
 // ─── Suspense wrapper ─────────────────────────────────────────────────────────
 
-function MathAutoPage({
-  params,
-}: {
-  params: Promise<{ course: string }>;
-}) {
+function McatAutoPage() {
   return (
     <Suspense
       fallback={
@@ -1578,19 +1315,15 @@ function MathAutoPage({
         </div>
       }
     >
-      <MathAutoInner params={params} />
+      <McatAutoInner />
     </Suspense>
   );
 }
 
-export default function MathAutoPageGated({
-  params,
-}: {
-  params: Promise<{ course: string }>;
-}) {
+export default function McatAutoPageGated() {
   return (
     <LoginGate prompt="Sign in to use automatic mode.">
-      <MathAutoPage params={params} />
+      <McatAutoPage />
     </LoginGate>
   );
 }

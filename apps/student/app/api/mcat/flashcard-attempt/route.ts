@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { updateStrengths } from "@/lib/practiceAlgorithm";
+import { nextSrsState, type FlashcardResult } from "@/lib/flashcardSrs";
 
 export const runtime = "nodejs";
 
@@ -58,12 +59,62 @@ export async function POST(request: Request) {
   const correct = result === "got_it";
   const isDontKnow = result === "dont_know";
 
-  // Insert attempt
+  // Insert attempt (audit log of every review)
   await supabase.from("mcat_flashcard_attempts").insert({
     session_id,
     flashcard_id,
     result,
   });
+
+  // ── Spaced-repetition (Leitner) update ──────────────────────────────────────
+  // Load the existing SRS row, advance it, and upsert. Missing a card drops it
+  // to box 1 / due-now so it recirculates this session; getting it right
+  // promotes it. Fail-soft: never block the response on SRS write errors.
+  const { data: srsPrev } = await supabase
+    .from("mcat_flashcard_srs")
+    .select("box, reps, lapses, learned")
+    .eq("session_id", session_id)
+    .eq("flashcard_id", flashcard_id)
+    .maybeSingle();
+
+  const transition = nextSrsState(
+    srsPrev
+      ? {
+          box: (srsPrev.box as number) ?? 1,
+          reps: (srsPrev.reps as number) ?? 0,
+          lapses: (srsPrev.lapses as number) ?? 0,
+          learned: (srsPrev.learned as boolean) ?? false,
+        }
+      : null,
+    result as FlashcardResult
+  );
+
+  const nowIso = new Date().toISOString();
+  const { error: srsError } = await supabase
+    .from("mcat_flashcard_srs")
+    .upsert(
+      {
+        session_id,
+        flashcard_id,
+        category_id: flashcard.category_id as string,
+        box: transition.box,
+        due_at: transition.due_at,
+        reps: transition.reps,
+        lapses: transition.lapses,
+        learned: transition.learned,
+        last_result: result,
+        last_reviewed_at: nowIso,
+        updated_at: nowIso,
+      },
+      { onConflict: "session_id,flashcard_id" }
+    );
+
+  if (srsError) {
+    console.error(
+      "mcat/flashcard-attempt: failed to upsert SRS state",
+      srsError.message
+    );
+  }
 
   const keywordWeights =
     (flashcard.keyword_weights as Record<string, number>) ?? {};
@@ -168,5 +219,13 @@ export async function POST(request: Request) {
       upserts.map((u) => [u.keyword_id, { score: u.score, state: u.state }])
     );
 
-  return NextResponse.json({ keyword_states });
+  return NextResponse.json({
+    keyword_states,
+    srs: {
+      box: transition.box,
+      due_at: transition.due_at,
+      learned: transition.learned,
+      lapses: transition.lapses,
+    },
+  });
 }

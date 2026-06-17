@@ -5,6 +5,8 @@
  */
 import OpenAI from "openai";
 import { buildBlueprintBlock, type ConceptBlueprint } from "./mcatBlueprint";
+import { parseModelJson } from "./parseModelJson";
+import { assembleChoices } from "./assembleChoices";
 
 const GEN_MODEL = "gpt-5.4-mini";
 
@@ -27,6 +29,26 @@ export class McatGenError extends Error {
   }
 }
 
+// ─── Shared LaTeX delimiter rule ──────────────────────────────────────────────
+
+/**
+ * MCAT content is mostly prose, but any math/chemistry notation (pH, pKa, charges,
+ * ratios, $H_2O$, aligned steps in solutions/examples) MUST be delimited or it
+ * renders as literal backslashes. Included in every system prompt.
+ */
+const MCAT_DELIMITER_RULE = `MATH/NOTATION DELIMITERS (mandatory in EVERY field — stem, choices, explanation, example, solution):
+Wrap EVERY math or chemistry expression in $...$ (inline) or $$...$$ (block). NEVER emit bare LaTeX and NEVER use \\text{}. Bare LaTeX outside delimiters does not render.
+  ✅ CORRECT: "At physiological pH, the side chain carries a charge of $+1$." / "$$\\text{rate} \\propto [S]$$"
+  ❌ WRONG (bare): "\\frac{[A^-]}{[HA]}" or "\\begin{aligned}...\\end{aligned}" without $$...$$
+
+SCIENCE SUBSCRIPTS & IONS (mandatory — use KaTeX notation for ALL biochemistry/chemistry symbols):
+  ✅ CORRECT enzyme kinetics: "$V_{max}$" not "Vmax" / "$K_m$" not "Km" / "$K_{cat}$" not "Kcat"
+  ✅ CORRECT acid-base: "$pK_a$" not "pKa" / "$pK_b$" not "pKb" / "$K_{eq}$" not "Keq"
+  ✅ CORRECT molecules: "$H_2O$" not "H2O" / "$CO_2$" not "CO2" / "$O_2$" not "O2" / "$NH_3$" not "NH3"
+  ✅ CORRECT ions: "$MnO_4^-$" not "MnO4-" / "$OH^-$" not "OH-" / "$H^+$" not "H+" / "$H_3O^+$" not "H3O+"
+  ✅ CORRECT cofactors: "$NAD^+$" not "NAD+" / "$FADH_2$" not "FADH2" / "$HCO_3^-$" not "HCO3-"
+  ❌ WRONG: writing "H2O", "CO2", "Vmax", "Km", "pKa", "NAD+", "MnO4-", "OH-" — these render as flat ASCII`;
+
 // ─── Shared types ─────────────────────────────────────────────────────────────
 
 export interface GeneratedQuestion {
@@ -45,38 +67,6 @@ export interface GeneratedFlashcard {
 }
 
 type KeywordMeta = { id: string; label: string; description: string; blueprint?: ConceptBlueprint | null };
-
-// ─── Shuffle helper ────────────────────────────────────────────────────────────
-
-/**
- * Fisher–Yates shuffle of choices[] while tracking where correct_index lands.
- * Returns a new object with shuffled choices and updated correct_index.
- * Skips shuffle if choices has duplicates or length !== 4 (safety guard).
- */
-function shuffleChoices<T extends { choices: string[]; correct_index: number }>(q: T): T {
-  const { choices, correct_index } = q;
-
-  // Guard: must be exactly 4 choices with no duplicates
-  if (choices.length !== 4) return q;
-  const unique = new Set(choices);
-  if (unique.size !== 4) return q;
-
-  // Build an index map [0,1,2,3] and shuffle it
-  const indices = [0, 1, 2, 3];
-  for (let i = indices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const tmp = indices[i];
-    indices[i] = indices[j];
-    indices[j] = tmp;
-  }
-
-  // indices[newPos] = oldPos  →  newChoices[newPos] = choices[oldPos]
-  const newChoices = indices.map((oldIdx) => choices[oldIdx]) as [string, string, string, string];
-  // Find where the original correct answer ended up
-  const newCorrectIndex = indices.indexOf(correct_index);
-
-  return { ...q, choices: newChoices, correct_index: newCorrectIndex };
-}
 
 // ─── Difficulty band helpers ───────────────────────────────────────────────────
 
@@ -150,7 +140,7 @@ async function callGen(
     throw new McatGenError(`AI provider request failed: ${msg}`);
   }
   try {
-    return JSON.parse(text) as Record<string, unknown>;
+    return parseModelJson<Record<string, unknown>>(text);
   } catch {
     throw new McatGenError("AI provider returned non-JSON output");
   }
@@ -163,21 +153,31 @@ async function callGen(
  * The model no longer returns correct_index — that is assigned by the caller after validation.
  * Returns true and mutates obj.difficulty (clamp) if valid.
  */
+/** Raw model output for a question, BEFORE code assembles choices/correct_index. */
+interface RawQuestion {
+  stem: string;
+  explanation: string;
+  correct_answer: string;
+  distractors: string[];
+  keyword_weights: Record<string, number>;
+  difficulty: number;
+}
+
 function isValidQuestion(
   q: unknown,
   allowedKeywordIds: Set<string>,
   targetDifficulty?: number
-): q is Omit<GeneratedQuestion, "correct_index"> {
+): q is RawQuestion {
   if (!q || typeof q !== "object") return false;
   const obj = q as Record<string, unknown>;
 
   if (typeof obj.stem !== "string" || !obj.stem.trim()) return false;
-  if (!Array.isArray(obj.choices) || obj.choices.length !== 4) return false;
-  if (!(obj.choices as unknown[]).every((c) => typeof c === "string" && (c as string).trim())) return false;
-  // Choices must be 4 distinct strings
-  const uniqueChoices = new Set(obj.choices as string[]);
-  if (uniqueChoices.size !== 4) return false;
   if (typeof obj.explanation !== "string" || !obj.explanation.trim()) return false;
+  // Correct answer is taken from the explanation's concluded answer.
+  if (typeof obj.correct_answer !== "string" || !obj.correct_answer.trim()) return false;
+  // Need ≥3 distractors to assemble a 4-option item (assembleChoices re-checks distinctness).
+  if (!Array.isArray(obj.distractors) || obj.distractors.length < 3) return false;
+  if (!(obj.distractors as unknown[]).every((c) => typeof c === "string" && (c as string).trim())) return false;
   if (!obj.keyword_weights || typeof obj.keyword_weights !== "object") return false;
   // keyword ids must be a subset of allowed
   for (const id of Object.keys(obj.keyword_weights as object)) {
@@ -191,6 +191,24 @@ function isValidQuestion(
   obj.difficulty = clampDifficulty(rawD, target);
 
   return true;
+}
+
+/**
+ * Assemble a validated raw question into a GeneratedQuestion: the correct choice
+ * is correct_answer (from the explanation), placed at a random index.
+ * Returns null if choices can't be formed (caller drops it).
+ */
+function assembleQuestion(raw: RawQuestion): GeneratedQuestion | null {
+  const assembled = assembleChoices(raw.correct_answer, raw.distractors);
+  if (!assembled) return null;
+  return {
+    stem: raw.stem,
+    explanation: raw.explanation,
+    keyword_weights: raw.keyword_weights,
+    difficulty: raw.difficulty,
+    choices: assembled.choices,
+    correct_index: assembled.correct_index,
+  };
 }
 
 function isValidFlashcard(f: unknown): f is { front: string; back: string; keyword_weights: Record<string, number> } {
@@ -225,15 +243,20 @@ QUESTION RULES:
 - Three plausible distractors built from common MCAT misconceptions or closely related concepts.
 - Explanation: 2–4 sentences explaining why the correct answer is right AND why the most tempting distractor is wrong.
 
+${MCAT_DELIMITER_RULE}
+
 KEYWORD WEIGHTS:
 - keyword_weights maps keyword_id → weight. ONLY use keyword ids explicitly provided.
 - Weights must be positive and sum to approximately 1.0.
 - Assign higher weight to the primary concept tested.
 
-OUTPUT ORDER — YOU MUST FOLLOW THIS EXACTLY:
-FIRST write the stem. THEN write the explanation: fully work out the correct answer step by step. THEN write the four choices. Never decide the choices or the answer before completing the explanation. In the explanation, refer to the correct answer by its VALUE/content, never by a letter or position.
+OUTPUT ORDER — YOU MUST FOLLOW THIS EXACTLY (mandatory; do not reorder):
+1. FIRST write the stem.
+2. THEN write the explanation: fully work out the correct answer step by step until you reach a single best answer. Never decide the answer before completing the explanation; refer to it by its VALUE/content, never by a letter or position.
+3. THEN set correct_answer to EXACTLY the answer your explanation concluded (copy it verbatim). This value WILL become the correct choice.
+4. THEN write distractors: EXACTLY 3 plausible-but-wrong answers built from common MCAT misconceptions, all distinct from one another AND from correct_answer.
 
-The user prompt will specify an ANSWER PLACEMENT: which 0-based index in choices the correct answer must occupy. Place the correct answer at exactly that index and fill the other three positions with plausible distractors. Do NOT include a correct_index field in your output.
+Do NOT output a "choices" array and do NOT output a "correct_index": the app builds the four choices from correct_answer + distractors and randomly places the correct one. Because the correct choice is taken from correct_answer, it MUST match what the explanation concluded.
 
 Return a JSON object where each question has fields in this order:
 {
@@ -241,7 +264,8 @@ Return a JSON object where each question has fields in this order:
     {
       "stem": "string",
       "explanation": "string",
-      "choices": ["string", "string", "string", "string"],
+      "correct_answer": "string",
+      "distractors": ["string", "string", "string"],
       "keyword_weights": { "keyword_id": 0.8, "keyword_id_2": 0.2 },
       "difficulty": 0.5
     }
@@ -273,12 +297,17 @@ QUESTION RULES:
 - Three plausible distractors from common MCAT misconceptions.
 - Explanation: 2–4 sentences on why correct and why the tempting distractor is wrong.
 
+${MCAT_DELIMITER_RULE}
+
 KEYWORD WEIGHTS: Only use the keyword ids provided. Weights sum to ~1.0.
 
-OUTPUT ORDER — YOU MUST FOLLOW THIS EXACTLY:
-FIRST write the stem. THEN write the explanation: fully work out the correct answer step by step. THEN write the four choices. Never decide the choices or the answer before completing the explanation. In the explanation, refer to the correct answer by its VALUE/content, never by a letter or position.
+OUTPUT ORDER — YOU MUST FOLLOW THIS EXACTLY (mandatory):
+1. FIRST write the stem.
+2. THEN write the explanation: fully work out the correct answer step by step. Refer to it by VALUE/content, never by letter or position.
+3. THEN set correct_answer to EXACTLY the answer the explanation concluded (copy verbatim). This becomes the correct choice.
+4. THEN write distractors: EXACTLY 3 plausible-but-wrong answers from common MCAT misconceptions, all distinct from each other and from correct_answer.
 
-The user prompt will specify an ANSWER PLACEMENT: which 0-based index in choices the correct answer must occupy. Place the correct answer at exactly that index and fill the other three positions with plausible distractors. Do NOT include a correct_index field in your output.
+Do NOT output "choices" or "correct_index" — the app assembles the four options and randomly places the correct one.
 
 Return a JSON object where each question has fields in this order:
 {
@@ -286,7 +315,8 @@ Return a JSON object where each question has fields in this order:
     {
       "stem": "string",
       "explanation": "string",
-      "choices": ["string", "string", "string", "string"],
+      "correct_answer": "string",
+      "distractors": ["string", "string", "string"],
       "keyword_weights": { "keyword_id": 1.0 },
       "difficulty": 0.5
     }
@@ -295,11 +325,32 @@ Return a JSON object where each question has fields in this order:
 
 Return valid JSON only. No markdown.`;
 
-const FLASHCARD_SYSTEM = `You write MCAT Biology flashcards for a practice app.
+const FLASHCARD_SYSTEM = `You write SIMPLE MCAT Biology memorization flashcards — the kind a student drills to commit bare facts to memory. Think of the canonical "memorize all 20 amino acids" deck: each card is one tiny fact, term, or list to recall.
 
-FLASHCARD FORMAT:
-- front: a focused prompt, question, or cloze-style cue (1–2 sentences). Clear and specific.
-- back: a concise direct answer (1–3 sentences) plus one additional sentence elaborating on mechanism, significance, or a common point of confusion.
+THESE ARE NOT QUIZ QUESTIONS. Do NOT write multiple-choice, scenario, reasoning, or "why/how" application cards. No cloze deletions. No elaboration paragraphs.
+
+FLASHCARD FORMAT — keep both sides as short as possible:
+- front: a bare term, name, structure, or direct cue. Usually 1 short line (≤ 12 words). Examples of GOOD fronts:
+    "Lysine — charge at physiological pH?"
+    "Enzyme that unwinds DNA at the replication fork"
+    "Codon for Methionine / start"
+    "Three stop codons"
+- back: the bare fact only — a term, value, short list, or one short clause. Usually ≤ 15 words, no second "elaboration" sentence. Examples of GOOD backs:
+    "Positive (+1)"
+    "Helicase"
+    "AUG"
+    "UAA, UAG, UGA"
+
+RULES:
+- One atomic fact per card. If a fact has several parts (e.g. a short list), the list IS the answer — do not split into prose.
+- Prefer recall of names, values, classifications, pairings, and short canonical lists.
+- Plain text. Put any chemistry/notation in $...$ — ALWAYS use KaTeX for science symbols:
+    ✅ "$H_2O$" not "H2O" / "$CO_2$" not "CO2" / "$pK_a$" not "pKa" / "$V_{max}$" not "Vmax"
+    ✅ "$K_m$" not "Km" / "$NAD^+$" not "NAD+" / "$OH^-$" not "OH-" / "$MnO_4^-$" not "MnO4-"
+    ✅ "$FADH_2$" not "FADH2" / "$H_3O^+$" not "H3O+" / "$NH_3$" not "NH3" / "$K_{eq}$" not "Keq"
+    ❌ WRONG: plain ASCII "H2O", "CO2", "NAD+", "pKa", "Vmax" — these render as flat unformatted text
+- Never use \\text{}.
+- No "Explain…", "Why does…", "What happens when…" framing. Cue → fact.
 
 KEYWORD WEIGHTS: Only use the keyword ids provided. Weights sum to ~1.0.
 
@@ -367,33 +418,22 @@ export async function generateMcatQuestions(opts: {
       ? `${opts.outlineContext}\n\nUse the outline above to keep this question within the scope and depth the MCAT actually tests for this area: prefer the listed canonical topics, use MCAT-appropriate terminology, and do not drift into out-of-scope trivia.\n`
       : "";
 
-  // Pre-determine where the correct answer must land in each question's choices array.
-  // The model places the correct answer at the instructed index; we record it as correct_index.
-  const targetIndices = Array.from({ length: count }, () => Math.floor(Math.random() * 4));
-
-  const placementLines = targetIndices
-    .map((t, i) => `Question ${i + 1} → index ${t}`)
-    .join("; ");
-
-  const placementBlock = `\nANSWER PLACEMENT (the correct answer MUST be at this position in choices; fill the other three with plausible distractors): ${placementLines}`;
-
   const userPrompt = `Generate ${count} MCAT Biology multiple-choice questions.
 
 ${outlineBlock}${scopeEnforcement}${difficultyInstruction(effectiveTarget)}
 
 KEYWORDS TO TEST (use ONLY these keyword ids in keyword_weights):
 ${keywordBlock}
-${templateBlock}${placementBlock}`;
+${templateBlock}`;
 
   const runOnce = async (): Promise<GeneratedQuestion[]> => {
     const parsed = await callGen(QUESTION_SYSTEM, userPrompt);
     const items = Array.isArray(parsed.questions) ? parsed.questions : [];
-    const validItems = items.filter((q) => isValidQuestion(q, allowedIds, effectiveTarget));
-    // Assign correct_index from the pre-determined target indices (by order)
-    return validItems.map((q, i) => ({
-      ...(q as Omit<GeneratedQuestion, "correct_index">),
-      correct_index: targetIndices[i] ?? 0,
-    })) as GeneratedQuestion[];
+    // Correct choice = explanation's concluded answer, placed at a random index.
+    return items
+      .filter((q) => isValidQuestion(q, allowedIds, effectiveTarget))
+      .map((q) => assembleQuestion(q as RawQuestion))
+      .filter((q): q is GeneratedQuestion => q !== null);
   };
 
   let valid = await runOnce();
@@ -452,9 +492,6 @@ export async function generateSimilarQuestion(opts: {
       ? `${opts.outlineContext}\n\nUse the outline above to keep this question within the scope and depth the MCAT actually tests for this area: prefer the listed canonical topics, use MCAT-appropriate terminology, and do not drift into out-of-scope trivia.\n\n`
       : "";
 
-  // Pre-determine where the correct answer must land in the choices array.
-  const targetIndex = Math.floor(Math.random() * 4);
-
   const userPrompt = `Generate a NEW question testing the same concept from a different angle.
 
 ${outlineBlock}${scopeEnforcement}${difficultyInstruction(effectiveTarget)}
@@ -464,20 +501,16 @@ Stem: ${question.stem}
 Choices: ${question.choices.map((c, i) => `[${i}] ${c}`).join("; ")}
 Explanation: ${question.explanation}
 
-ANSWER PLACEMENT (the correct answer MUST be at this position in choices; fill the other three with plausible distractors): Question 1 → index ${targetIndex}
-
 KEYWORDS (use ONLY these keyword ids in keyword_weights):
 ${keywordBlock}`;
 
   const runOnce = async (): Promise<GeneratedQuestion[]> => {
     const parsed = await callGen(SIMILAR_QUESTION_SYSTEM, userPrompt);
     const items = Array.isArray(parsed.questions) ? parsed.questions : [];
-    const validItems = items.filter((q) => isValidQuestion(q, allowedIds, effectiveTarget));
-    // Assign correct_index from the pre-determined target index
-    return validItems.map((q) => ({
-      ...(q as Omit<GeneratedQuestion, "correct_index">),
-      correct_index: targetIndex,
-    })) as GeneratedQuestion[];
+    return items
+      .filter((q) => isValidQuestion(q, allowedIds, effectiveTarget))
+      .map((q) => assembleQuestion(q as RawQuestion))
+      .filter((q): q is GeneratedQuestion => q !== null);
   };
 
   let valid = await runOnce();
@@ -534,9 +567,9 @@ MicroStep:
   "example_latex": string,
   "check_question": {
     "latex_content": string,
-    "choices": ["A", "B", "C", "D"],
-    "correct_index": 0-3,
-    "solution_latex": string
+    "solution_latex": string,
+    "correct_answer_latex": string,
+    "distractors": [string, string, string]
   },
   "hint_latex": string
 }
@@ -551,22 +584,43 @@ A concrete worked example or applied MCAT scenario. Plain prose with math in $..
 Show every intermediate step.
 
 ━━━ check_question (every step) ━━━
+ORDER (mandatory): write latex_content first, THEN solution_latex (work it fully to a final answer),
+THEN copy that final answer verbatim into correct_answer_latex, THEN write distractors.
 • latex_content: clear problem statement in plain text.
-• choices: exactly 4 DISTINCT options. Each is a realistic MCAT misconception or plausible distractor.
-• correct_index: 0–3.
+• solution_latex: worked explanation ending at the final answer; show why it is right and why the key distractor is wrong.
+• correct_answer_latex: EXACTLY the answer solution_latex concluded. The app makes this the correct choice — it MUST match the solution.
+• distractors: EXACTLY 3 DISTINCT wrong options, each a realistic MCAT misconception, all different from correct_answer_latex.
+• Do NOT output a "choices" array or a "correct_index"; the app assembles and randomizes them.
 • Step 1 check: EASY — confirm the student grasped the most basic idea. One concept, distractor is clearly wrong to anyone who read step 1.
 • Step 2 check: MEDIUM — apply the idea from step 1 in a slightly different form. Distractors reflect common misconceptions.
-• Steps 3–4 check: HARD — require MULTI-STEP reasoning or integration of concepts covered so far. The stem must present a scenario or specific case, not a bare-fact question. ALL FOUR choices must be plausible to a student who only half-understands; distractors encode realistic partial-reasoning errors (right idea/wrong step, correct mechanism/wrong direction, swapped cause-and-effect). A well-prepared student should still have to think carefully. Do NOT make it obscure trivia — make it require reasoning.
-• solution_latex: worked explanation showing why the correct answer is right and why the key distractor is wrong.
+• Steps 3–4 check: HARD — require MULTI-STEP reasoning or integration of concepts covered so far. The stem must present a scenario or specific case, not a bare-fact question. ALL FOUR options must be plausible to a student who only half-understands; distractors encode realistic partial-reasoning errors (right idea/wrong step, correct mechanism/wrong direction, swapped cause-and-effect). A well-prepared student should still have to think carefully. Do NOT make it obscure trivia — make it require reasoning.
 
 ━━━ hint_latex ━━━
 One sentence, max 15 words. Guide the student toward the correct approach without giving it away.
+
+${MCAT_DELIMITER_RULE}
 
 Return valid JSON only. No markdown.`;
 
 // ─── Lesson validation ────────────────────────────────────────────────────────
 
-function isValidMicroStep(s: unknown): s is McatMicroStep {
+/** Raw check_question from the model, before code assembles choices/correct_index. */
+interface RawCheckQuestion {
+  latex_content: string;
+  solution_latex: string;
+  correct_answer_latex: string;
+  distractors: string[];
+}
+
+interface RawMicroStep {
+  step_index: number;
+  explanation_latex: string;
+  example_latex: string;
+  hint_latex: string;
+  check_question: RawCheckQuestion;
+}
+
+function isValidMicroStep(s: unknown): s is RawMicroStep {
   if (!s || typeof s !== "object") return false;
   const obj = s as Record<string, unknown>;
   if (typeof obj.step_index !== "number") return false;
@@ -576,20 +630,26 @@ function isValidMicroStep(s: unknown): s is McatMicroStep {
   const cq = obj.check_question as Record<string, unknown> | undefined;
   if (!cq || typeof cq !== "object") return false;
   if (typeof cq.latex_content !== "string") return false;
-  if (!Array.isArray(cq.choices) || cq.choices.length !== 4) return false;
-  if (typeof cq.correct_index !== "number") return false;
-  const ci = cq.correct_index as number;
-  if (ci < 0 || ci > 3 || !Number.isInteger(ci)) return false;
   if (typeof cq.solution_latex !== "string") return false;
+  // Correct answer comes from the solution; need ≥3 distractors to assemble.
+  if (typeof cq.correct_answer_latex !== "string" || !cq.correct_answer_latex.trim()) return false;
+  if (!Array.isArray(cq.distractors) || cq.distractors.length < 3) return false;
   return true;
 }
 
 function validateLesson(parsed: Record<string, unknown>): GeneratedMcatLesson | null {
   if (!Array.isArray(parsed.micro_steps)) return null;
-  const steps = parsed.micro_steps.filter(isValidMicroStep);
-  if (steps.length < 3 || steps.length > 5) return null;
-  return {
-    micro_steps: steps.map((s): McatMicroStep => ({
+  const rawSteps = parsed.micro_steps.filter(isValidMicroStep);
+  if (rawSteps.length < 3 || rawSteps.length > 5) return null;
+  // Assemble each check question: correct choice = solution's answer, random index.
+  const steps: McatMicroStep[] = [];
+  for (const s of rawSteps) {
+    const assembled = assembleChoices(
+      s.check_question.correct_answer_latex,
+      s.check_question.distractors
+    );
+    if (!assembled) return null; // couldn't form valid choices — reject lesson, retry
+    steps.push({
       step_index: s.step_index,
       has_check: true,
       explanation_latex: s.explanation_latex,
@@ -597,26 +657,13 @@ function validateLesson(parsed: Record<string, unknown>): GeneratedMcatLesson | 
       hint_latex: s.hint_latex,
       check_question: {
         latex_content: s.check_question.latex_content,
-        choices: (s.check_question.choices as string[]).slice(0, 4) as [string, string, string, string],
-        correct_index: s.check_question.correct_index,
+        choices: assembled.choices,
+        correct_index: assembled.correct_index,
         solution_latex: s.check_question.solution_latex,
       },
-    })),
-  };
-}
-
-/** Shuffle each micro-step's check_question choices (Fisher–Yates, same logic as shuffleChoices). */
-function shuffleLessonStep(step: McatMicroStep): McatMicroStep {
-  const cq = step.check_question;
-  const shuffled = shuffleChoices({ choices: [...cq.choices], correct_index: cq.correct_index });
-  return {
-    ...step,
-    check_question: {
-      ...cq,
-      choices: shuffled.choices as [string, string, string, string],
-      correct_index: shuffled.correct_index,
-    },
-  };
+    });
+  }
+  return { micro_steps: steps };
 }
 
 // ─── Exported lesson generator ────────────────────────────────────────────────
@@ -662,10 +709,8 @@ Think carefully about what a student who has NEVER seen this MCAT Biology concep
     throw new McatGenError("Lesson generation produced no valid output after retry");
   }
 
-  // Shuffle choices in every micro-step's check_question
-  return {
-    micro_steps: lesson.micro_steps.map(shuffleLessonStep),
-  };
+  // Choice placement is already randomized during assembly in validateLesson.
+  return lesson;
 }
 
 // ─── Fast correctness verifier ────────────────────────────────────────────────

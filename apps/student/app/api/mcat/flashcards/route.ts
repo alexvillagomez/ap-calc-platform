@@ -5,11 +5,12 @@ import { generateMcatFlashcards, McatGenError, verifyFlashcardsFast } from "@/li
 import { loadTargetKeywords } from "@/lib/mcatTagging";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
 import { ConceptBlueprint } from "@/lib/mcatBlueprint";
+import { MEMORIZED_BOX } from "@/lib/flashcardSrs";
 
 export const runtime = "nodejs";
 
-const DEFAULT_COUNT = 10;
-const MAX_COUNT = 20;
+const DEFAULT_COUNT = 12;
+const MAX_COUNT = 30;
 
 type DbFlashcard = {
   id: string;
@@ -17,6 +18,12 @@ type DbFlashcard = {
   back: string;
   keyword_weights: Record<string, number>;
   avg_rating: number | null;
+};
+
+type SrsRow = {
+  flashcard_id: string;
+  box: number;
+  due_at: string;
 };
 
 export async function POST(request: Request) {
@@ -51,17 +58,19 @@ export async function POST(request: Request) {
 
   const supabase = createClient(supabaseUrl, key);
 
-  // Load keywords via loadTargetKeywords (in_depth preferred) + states + seen flashcards
-  const [keywords, statesRes, fcAttemptsRes] = await Promise.all([
+  // Load keywords, per-keyword states (for weakness ranking of NEW cards), and
+  // all SRS rows for this session+category (drives the due-review queue).
+  const [keywords, statesRes, srsRes] = await Promise.all([
     loadTargetKeywords(supabase, [category_id]),
     supabase
       .from("mcat_student_keyword_states")
       .select("keyword_id, score")
       .eq("session_id", session_id),
     supabase
-      .from("mcat_flashcard_attempts")
-      .select("flashcard_id")
-      .eq("session_id", session_id),
+      .from("mcat_flashcard_srs")
+      .select("flashcard_id, box, due_at")
+      .eq("session_id", session_id)
+      .eq("category_id", category_id),
   ]);
 
   if (keywords.length === 0) {
@@ -71,14 +80,12 @@ export async function POST(request: Request) {
     );
   }
 
-  // Resolve keyword_ids scope — only active when keyword_id (single) is absent
-  // Filter incoming ids to ones that exist in the category keyword set
+  // Resolve keyword scope — only active when keyword_id (single) is absent.
   const categoryKeywordIdSet = new Set(keywords.map((k) => k.id));
   const rawKeywordIds = Array.isArray(body.keyword_ids) ? body.keyword_ids : [];
-  const filteredKeywordIds =
-    !keyword_id
-      ? rawKeywordIds.filter((id) => categoryKeywordIdSet.has(id))
-      : [];
+  const filteredKeywordIds = !keyword_id
+    ? rawKeywordIds.filter((id) => categoryKeywordIdSet.has(id))
+    : [];
   const scopedKeywordIds: Set<string> | null =
     filteredKeywordIds.length > 0 ? new Set(filteredKeywordIds) : null;
 
@@ -89,62 +96,83 @@ export async function POST(request: Request) {
     ])
   );
 
-  const seenFcIds = new Set<string>(
-    (fcAttemptsRes.data ?? []).map((a) => a.flashcard_id as string)
+  const srsByCard = new Map<string, SrsRow>(
+    (srsRes.data ?? []).map((r) => [r.flashcard_id as string, r as SrsRow])
   );
 
-  // Load unseen stored flashcards with avg_rating
-  // Precedence: keyword_id (single) > keyword_ids (set) > category
+  // All active cards in the category.
   const { data: allFcs } = await supabase
     .from("mcat_flashcards")
     .select("id, front, back, keyword_weights, avg_rating")
     .eq("category_id", category_id)
     .eq("status", "active");
 
-  const unseenFcs: DbFlashcard[] = ((allFcs ?? []) as DbFlashcard[]).filter(
-    (fc) => {
-      if (seenFcIds.has(fc.id)) return false;
-      if (keyword_id) {
-        // Single-keyword scope
-        const kw = (fc.keyword_weights as Record<string, number>) ?? {};
-        return Object.prototype.hasOwnProperty.call(kw, keyword_id);
-      }
-      if (scopedKeywordIds) {
-        // Set scope: card must carry at least one id in the set
-        return (
-          fc.keyword_weights &&
-          Object.keys(fc.keyword_weights).some((id) =>
-            scopedKeywordIds.has(id)
-          )
-        );
-      }
-      return true;
-    }
-  );
-
-  // Rank unseen flashcards by keyword weakness score + rating nudge
-  const scored = unseenFcs.map((fc) => {
+  // Scope predicate (single keyword > keyword set > whole category).
+  const inScope = (fc: DbFlashcard): boolean => {
     const kw = (fc.keyword_weights as Record<string, number>) ?? {};
-    let weightedWeakness = 0;
-    let totalWeight = 0;
-    for (const [id, w] of Object.entries(kw)) {
-      if (w > 0) {
-        weightedWeakness += w * (1 - (strengths[id] ?? 0.5));
-        totalWeight += w;
-      }
+    if (keyword_id) {
+      return Object.prototype.hasOwnProperty.call(kw, keyword_id);
     }
-    const weakness = totalWeight > 0 ? weightedWeakness / totalWeight : 0.5;
-    const ratingNudge = 0.7 + 0.3 * ((fc.avg_rating ?? 3) / 5);
-    return {
-      ...fc,
-      score: weakness * ratingNudge,
-    };
-  });
+    if (scopedKeywordIds) {
+      return Object.keys(kw).some((id) => scopedKeywordIds.has(id));
+    }
+    return true;
+  };
 
-  scored.sort((a, b) => b.score - a.score);
-  const selected = scored.slice(0, count);
+  const scopedFcs: DbFlashcard[] = ((allFcs ?? []) as DbFlashcard[]).filter(inScope);
 
-  // Generate shortfall if needed
+  const nowMs = Date.now();
+
+  // ── Due reviews ─────────────────────────────────────────────────────────────
+  // Cards with an SRS row whose due_at has passed. Box-1 lapses come first
+  // (top priority), then ascending box, then earliest due.
+  const dueReviews = scopedFcs
+    .map((fc) => ({ fc, srs: srsByCard.get(fc.id) }))
+    .filter((x): x is { fc: DbFlashcard; srs: SrsRow } => {
+      if (!x.srs) return false;
+      return new Date(x.srs.due_at).getTime() <= nowMs;
+    })
+    .sort((a, b) => {
+      if (a.srs.box !== b.srs.box) return a.srs.box - b.srs.box;
+      return new Date(a.srs.due_at).getTime() - new Date(b.srs.due_at).getTime();
+    });
+
+  // ── New cards ───────────────────────────────────────────────────────────────
+  // Never-seen cards (no SRS row), ranked by keyword weakness + rating nudge so
+  // the student first memorizes what they're weakest on.
+  const newCards = scopedFcs
+    .filter((fc) => !srsByCard.has(fc.id))
+    .map((fc) => {
+      const kw = (fc.keyword_weights as Record<string, number>) ?? {};
+      let weightedWeakness = 0;
+      let totalWeight = 0;
+      for (const [id, w] of Object.entries(kw)) {
+        if (w > 0) {
+          weightedWeakness += w * (1 - (strengths[id] ?? 0.5));
+          totalWeight += w;
+        }
+      }
+      const weakness = totalWeight > 0 ? weightedWeakness / totalWeight : 0.5;
+      const ratingNudge = 0.7 + 0.3 * ((fc.avg_rating ?? 3) / 5);
+      return { fc, score: weakness * ratingNudge };
+    })
+    .sort((a, b) => b.score - a.score);
+
+  // Build the batch: due reviews first, then new cards.
+  type OutCard = DbFlashcard & { box: number; is_review: boolean };
+  const selected: OutCard[] = [];
+
+  for (const { fc, srs } of dueReviews) {
+    if (selected.length >= count) break;
+    selected.push({ ...fc, box: srs.box, is_review: true });
+  }
+  for (const { fc } of newCards) {
+    if (selected.length >= count) break;
+    selected.push({ ...fc, box: 0, is_review: false });
+  }
+
+  // ── Generate shortfall ───────────────────────────────────────────────────────
+  // If the scope simply doesn't have enough cards yet, generate fresh ones.
   const shortfall = count - selected.length;
   if (shortfall > 0) {
     const kwStateMap = new Map(
@@ -154,7 +182,6 @@ export async function POST(request: Request) {
     let weakestKws: { id: string; label: string; description: string; blueprint?: ConceptBlueprint | null }[];
 
     if (keyword_id) {
-      // Single-keyword: generate only for that keyword
       const { data: kwRow } = await supabase
         .from("mcat_keywords")
         .select("id, label, description, concept_blueprint")
@@ -172,7 +199,6 @@ export async function POST(request: Request) {
           ]
         : [];
     } else if (scopedKeywordIds) {
-      // Set scope: pick up to 3 weakest within the scoped set
       weakestKws = keywords
         .filter((k) => scopedKeywordIds.has(k.id))
         .sort((a, b) => {
@@ -188,7 +214,6 @@ export async function POST(request: Request) {
           blueprint: kw.concept_blueprint,
         }));
     } else {
-      // Category scope: pick 3 weakest overall
       weakestKws = [...keywords]
         .sort((a, b) => {
           const aScore = (kwStateMap.get(a.id)?.score as number) ?? 0.5;
@@ -221,7 +246,7 @@ export async function POST(request: Request) {
           outlineContext,
         });
 
-        // Verify generated flashcards; keep only valid ones (fail-safe: keep all if none pass)
+        // Verify generated flashcards; keep only valid ones (fail-safe).
         let keptResults = genResults;
         if (genResults.length > 0) {
           const verifyResults = await verifyFlashcardsFast(
@@ -229,7 +254,6 @@ export async function POST(request: Request) {
           );
           const validResults = genResults.filter((_, i) => {
             const r = verifyResults[i];
-            // Keep if valid OR if verifier didn't run cleanly (fail-open on !ok)
             return !r || !r.ok || r.valid;
           });
           if (validResults.length === 0) {
@@ -261,7 +285,7 @@ export async function POST(request: Request) {
 
           for (const fc of inserted ?? []) {
             if (selected.length >= count) break;
-            selected.push({ ...(fc as DbFlashcard), score: 0 });
+            selected.push({ ...(fc as DbFlashcard), box: 0, is_review: false });
           }
         }
       } catch (err) {
@@ -279,6 +303,9 @@ export async function POST(request: Request) {
     front: fc.front,
     back: fc.back,
     keyword_weights: fc.keyword_weights,
+    box: fc.box,
+    is_review: fc.is_review,
+    memorized: fc.box >= MEMORIZED_BOX,
   }));
 
   return NextResponse.json({ flashcards });

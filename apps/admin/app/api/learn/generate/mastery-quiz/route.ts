@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
+import { assembleChoices } from "@/lib/assembleChoices";
 
 const SYSTEM_PROMPT = `You are a math assessment author. Generate a short mastery quiz for a specific keyword skill.
 
@@ -14,16 +15,24 @@ Return exactly one JSON object: { "problems": [ QuizProb, ... ] }
 Each QuizProb:
 {
   "latex_content": string,
-  "choices": [string, string, string, string],
-  "correct_index": number,
   "solution_latex": string,
+  "correct_answer": string,
+  "distractors": [string, string, string],
   "difficulty": number
 }
 
+OUTPUT ORDER — mandatory: write latex_content, THEN solution_latex (work the problem fully to a final answer), THEN copy that final answer verbatim into correct_answer, THEN write distractors. Never decide the answer before finishing solution_latex.
+
+DELIMITERS (mandatory): every math expression in EVERY field (latex_content, solution_latex, correct_answer, distractors) MUST be wrapped in $...$ (inline) or $$...$$ (block). Bare LaTeX outside delimiters does NOT render — it shows literal backslashes.
+  ✅ CORRECT (block): "$$\\begin{aligned} 6y &= 30 \\\\ y &= 5 \\end{aligned}$$"
+  ❌ WRONG (bare): "\\begin{aligned} ... \\end{aligned}" or "\\frac{a}{b}" without $...$.
+
 Rules:
 - Generate exactly 4 problems.
-- choices: 4 strings each wrapped in $...$. Traps and distractors should be plausible.
-- solution_latex: use \\begin{aligned}...\\end{aligned} with &= and \\\\ between each step. Never chain equalities on one line.
+- solution_latex: a $$\\begin{aligned}...\\end{aligned}$$ block with &= and \\\\ between each step (the WHOLE block wrapped in $$...$$). Never chain equalities on one line.
+- correct_answer: EXACTLY the final answer solution_latex concluded, wrapped in $...$. The app makes this the correct choice — it MUST match the solution.
+- distractors: exactly 3 strings each wrapped in $...$, all different from correct_answer. Traps and distractors should be plausible.
+- Do NOT output a "choices" array or a "correct_index"; the app assembles and randomizes them.
 - difficulty: 3 or 4 for each problem.
 - All LaTeX valid KaTeX. \\\\ for line breaks. No markdown. Return raw JSON only.`;
 
@@ -72,7 +81,7 @@ export async function POST(request: Request) {
   let parsed: { problems: unknown[] };
   try {
     const completion = await openai.chat.completions.create({
-      model: "gemini-3.5-flash",
+      model: "gpt-5.4-mini",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userPrompt },
@@ -92,20 +101,31 @@ export async function POST(request: Request) {
 
   type QuizRow = {
     latex_content: string;
-    choices: string[];
-    correct_index: number;
+    correct_answer?: string;
+    distractors?: string[];
     solution_latex: string;
     difficulty?: number;
   };
 
-  const rows = (parsed.problems as QuizRow[]).map((p) => ({
-    keyword_id,
-    latex_content: p.latex_content,
-    choices: p.choices,
-    correct_index: p.correct_index,
-    solution_latex: p.solution_latex ?? "",
-    difficulty: p.difficulty ?? 3,
-  }));
+  // Assemble choices in code: correct choice = solution's answer at a random index.
+  const rows = (parsed.problems as QuizRow[])
+    .map((p) => {
+      const assembled = assembleChoices(p.correct_answer, p.distractors);
+      if (!assembled) return null;
+      return {
+        keyword_id,
+        latex_content: p.latex_content,
+        choices: assembled.choices,
+        correct_index: assembled.correct_index,
+        solution_latex: p.solution_latex ?? "",
+        difficulty: p.difficulty ?? 3,
+      };
+    })
+    .filter((r): r is NonNullable<typeof r> => r !== null);
+
+  if (rows.length === 0) {
+    return NextResponse.json({ error: "No valid quiz problems assembled from model output" }, { status: 502 });
+  }
 
   const { data: inserted, error: insertErr } = await supabase
     .from("learn_mastery_quiz_problems")

@@ -11,6 +11,7 @@
  */
 import OpenAI from "openai";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { parseModelJson } from "./parseModelJson";
 
 const GEN_MODEL = "gpt-5.4-mini";
 
@@ -32,8 +33,11 @@ function createGenClient(): OpenAI {
 
 const FORMAT_RULES = `FORMATTING:
 - Write prose as PLAIN TEXT — never use \\text{}.
-- Wrap every variable, symbol, or expression in $...$.
-- Plain-text prose must contain no backslash, ^, _, or { } — anything that needs them goes inside $...$.`;
+- Wrap every variable, symbol, or expression in $...$ (inline) or $$...$$ (block). This applies to BOTH rule_latex and example_latex.
+- Plain-text prose must contain no backslash, ^, _, or { } — anything that needs them goes inside $...$.
+- Bare LaTeX outside $...$ does NOT render — it shows literal backslashes.
+  ✅ CORRECT: "Factor by difference of squares: $a^2-b^2=(a-b)(a+b)$."
+  ❌ WRONG (bare): "\\frac{d}{dx}(x+3)^4" or "\\begin{aligned}...\\end{aligned}" without $$...$$`;
 
 const MATH_SYSTEM = `You are a tutor writing a SHORT refresher for a student who just forgot a precalculus/calculus skill. This is a quick rundown — a concise rule plus ONE worked example — NOT a full lesson.
 
@@ -81,7 +85,7 @@ async function callGen(
     throw new RefresherGenError(`AI provider request failed: ${msg}`);
   }
   try {
-    return JSON.parse(text) as Record<string, unknown>;
+    return parseModelJson<Record<string, unknown>>(text);
   } catch {
     throw new RefresherGenError("AI provider returned non-JSON output");
   }

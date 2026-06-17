@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use, Suspense } from "react";
+import { useState, useEffect, useRef, use, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
@@ -17,14 +17,19 @@ import { ComboMeter } from "@/components/gamification/ComboMeter";
 import { SoundToggle } from "@/components/ui/SoundToggle";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
+import { nextSrsState, MEMORIZED_BOX, type SrsState } from "@/lib/flashcardSrs";
 
-const CARD_COUNT = 10;
+const CARD_COUNT = 12;
+// How many cards ahead a missed card is re-queued (so it returns this session).
+const RECIRCULATE_GAP = 3;
 
 interface Flashcard {
   id: string;
   front: string;
   back: string;
   keyword_weights: Record<string, number>;
+  /** Leitner box at load time (0 = brand-new, never seen). */
+  box?: number;
 }
 
 type Result = "got_it" | "missed_it" | "dont_know";
@@ -68,8 +73,15 @@ function McatFlashcardsInner({
 
   const [sessionId, setSessionId] = useState("");
   const [categoryLabel, setCategoryLabel] = useState("");
+  // Distinct cards loaded this session (for the total / progress denominator).
   const [cards, setCards] = useState<Flashcard[]>([]);
-  const [currentIdx, setCurrentIdx] = useState(0);
+  // Active queue — index 0 is the current card. Missed cards are re-inserted a
+  // few positions later so they recirculate within the session until memorized.
+  const [queue, setQueue] = useState<Flashcard[]>([]);
+  // Cards that graduated (reached MEMORIZED_BOX) this session.
+  const [graduated, setGraduated] = useState<Set<string>>(new Set());
+  // Live in-session Leitner state per card id (mirrors the server SRS).
+  const localSrs = useRef<Map<string, SrsState>>(new Map());
   const [cardPhase, setCardPhase] = useState<CardPhase>("front");
   const [pagePhase, setPagePhase] = useState<PagePhase>("loading");
   const [errorMsg, setErrorMsg] = useState("");
@@ -108,7 +120,9 @@ function McatFlashcardsInner({
   const fetchCards = async (sid: string) => {
     setPagePhase("loading");
     setCards([]);
-    setCurrentIdx(0);
+    setQueue([]);
+    setGraduated(new Set());
+    localSrs.current = new Map();
     setCardPhase("front");
     setSeenBack(false);
     setHistory([]);
@@ -129,8 +143,21 @@ function McatFlashcardsInner({
       });
       if (!res.ok) throw new Error(await res.text().catch(() => "Unknown error"));
       const data = await res.json() as { flashcards: Flashcard[] };
-      setCards(data.flashcards ?? []);
-      setPagePhase("study");
+      const loaded = data.flashcards ?? [];
+
+      // Seed local SRS from each card's loaded box so review cards advance from
+      // where they left off (and brand-new box-0 cards start fresh).
+      const srs = new Map<string, SrsState>();
+      for (const c of loaded) {
+        if (c.box && c.box > 0) {
+          srs.set(c.id, { box: c.box, reps: 0, lapses: 0, learned: c.box >= 5 });
+        }
+      }
+      localSrs.current = srs;
+
+      setCards(loaded);
+      setQueue(loaded);
+      setPagePhase(loaded.length > 0 ? "study" : "done");
     } catch (e) {
       setErrorMsg((e as Error).message ?? "Failed to load flashcards");
       setPagePhase("error");
@@ -171,11 +198,10 @@ function McatFlashcardsInner({
   };
 
   const gradeCard = async (result: Result) => {
-    const card = cards[currentIdx];
+    const card = queue[0];
     if (!card) return;
 
-    const newHistory = [...history, { flashcard: card, result }];
-    setHistory(newHistory);
+    setHistory((h) => [...h, { flashcard: card, result }]);
 
     // ── Gamification: got_it = correct, others = incorrect ────────────────
     if (result === "got_it") {
@@ -189,7 +215,21 @@ function McatFlashcardsInner({
       onIncorrectAnswer();
     }
 
-    // Record attempt (fire and forget)
+    // ── In-session spaced repetition ──────────────────────────────────────
+    // Advance the local Leitner state. A card graduates (leaves the session)
+    // once it reaches MEMORIZED_BOX; otherwise it recirculates a few cards
+    // later so missed items keep coming back until memorized.
+    const prev = localSrs.current.get(card.id) ?? null;
+    const t = nextSrsState(prev, result);
+    localSrs.current.set(card.id, {
+      box: t.box,
+      reps: t.reps,
+      lapses: t.lapses,
+      learned: t.learned,
+    });
+    const didGraduate = t.box >= MEMORIZED_BOX;
+
+    // Record attempt server-side (fire and forget — server persists SRS too)
     fetch("/api/mcat/flashcard-attempt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -203,18 +243,35 @@ function McatFlashcardsInner({
     }).catch(() => {});
 
     setUsedRefresher(false);
-    if (currentIdx + 1 >= cards.length) {
+
+    // Rebuild the queue.
+    const [, ...rest] = queue;
+    let nextQueue: Flashcard[];
+    if (didGraduate) {
+      setGraduated((g) => {
+        const s = new Set(g);
+        s.add(card.id);
+        return s;
+      });
+      nextQueue = rest;
+    } else {
+      const at = Math.min(rest.length, RECIRCULATE_GAP);
+      nextQueue = [...rest.slice(0, at), card, ...rest.slice(at)];
+    }
+
+    setQueue(nextQueue);
+    if (nextQueue.length === 0) {
       setPagePhase("done");
     } else {
-      setCurrentIdx((i) => i + 1);
       setCardPhase("front");
       setSeenBack(false);
     }
   };
 
-  const current = cards[currentIdx];
+  const current = queue[0];
   const gotItCount = history.filter((h) => h.result === "got_it").length;
   const missedCount = history.filter((h) => h.result === "missed_it").length;
+  const memorizedCount = graduated.size;
 
   // Derive heading label
   const headingLabel = isScoped && scopeLabel
@@ -250,7 +307,7 @@ function McatFlashcardsInner({
           <div className="flex items-center gap-2 shrink-0">
             {pagePhase === "study" && cards.length > 0 && (
               <p className="text-xs text-neutral-500">
-                {currentIdx + 1} / {cards.length}
+                {memorizedCount} / {cards.length} memorized
               </p>
             )}
             <StreakBadge />
@@ -262,7 +319,7 @@ function McatFlashcardsInner({
       {/* Progress bar */}
       {pagePhase === "study" && cards.length > 0 && (
         <ProgressBar
-          value={Math.round((currentIdx / cards.length) * 100)}
+          value={Math.round((memorizedCount / cards.length) * 100)}
           size="xs"
           color="brand"
           label="Flashcard progress"
@@ -388,29 +445,34 @@ function McatFlashcardsInner({
             <div className="bg-white rounded-2xl border border-neutral-200 shadow-brand-sm p-6">
               <p className="text-3xl mb-2">🎉</p>
               <p className="text-xl font-bold text-neutral-900 mb-1">
-                All {cards.length} cards done!
+                {memorizedCount > 0
+                  ? `${memorizedCount} card${memorizedCount !== 1 ? "s" : ""} memorized!`
+                  : "Session complete!"}
+              </p>
+              <p className="text-xs text-neutral-500 mb-2">
+                Memorized cards return in a day or two; missed ones come back sooner.
               </p>
               <div className="flex justify-center gap-6 mt-4">
                 <div className="text-center">
-                  <p className="text-xl font-bold text-success-500">{gotItCount}</p>
+                  <p className="text-xl font-bold text-success-500">{memorizedCount}</p>
+                  <p className="text-xs text-neutral-500">Memorized</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-xl font-bold text-success-400">{gotItCount}</p>
                   <p className="text-xs text-neutral-500">Got it</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-xl font-bold text-error-500">{missedCount}</p>
-                  <p className="text-xs text-neutral-500">Missed</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xl font-bold text-neutral-400">
-                    {history.filter((h) => h.result === "dont_know").length}
+                  <p className="text-xl font-bold text-error-500">
+                    {missedCount + history.filter((h) => h.result === "dont_know").length}
                   </p>
-                  <p className="text-xs text-neutral-500">Didn&apos;t know</p>
+                  <p className="text-xs text-neutral-500">Missed</p>
                 </div>
               </div>
             </div>
 
             <div className="flex flex-col gap-2 sm:flex-row justify-center">
               <Button variant="primary" size="lg" onClick={() => fetchCards(sessionId)}>
-                10 more cards
+                More cards
               </Button>
               <Link href={backHref}>
                 <Button variant="secondary" size="lg">

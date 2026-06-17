@@ -17,6 +17,8 @@
  */
 import OpenAI from "openai";
 import { buildBlueprintBlock } from "./mathBlueprint";
+import { parseModelJson } from "./parseModelJson";
+import { assembleChoices } from "./assembleChoices";
 import type {
   ConceptBlueprint,
   GeneratedMathQuestion,
@@ -50,39 +52,6 @@ export class MathGenError extends Error {
     this.name = "MathGenError";
     this.status = status;
   }
-}
-
-// ─── Shuffle helper ────────────────────────────────────────────────────────────
-
-/**
- * Fisher–Yates shuffle of choices[] while tracking where correct_index lands.
- */
-function shuffleChoices<T extends { choices: string[]; correct_index: number }>(
-  q: T
-): T {
-  const { choices, correct_index } = q;
-
-  if (choices.length !== 4) return q;
-  const unique = new Set(choices);
-  if (unique.size !== 4) return q;
-
-  const indices = [0, 1, 2, 3];
-  for (let i = indices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const tmp = indices[i];
-    indices[i] = indices[j];
-    indices[j] = tmp;
-  }
-
-  const newChoices = indices.map((oldIdx) => choices[oldIdx]) as [
-    string,
-    string,
-    string,
-    string
-  ];
-  const newCorrectIndex = indices.indexOf(correct_index);
-
-  return { ...q, choices: newChoices, correct_index: newCorrectIndex };
 }
 
 // ─── Difficulty band helpers ───────────────────────────────────────────────────
@@ -154,7 +123,7 @@ async function callGen(
     throw new MathGenError(`AI provider request failed: ${msg}`);
   }
   try {
-    return JSON.parse(text) as Record<string, unknown>;
+    return parseModelJson<Record<string, unknown>>(text);
   } catch {
     throw new MathGenError("AI provider returned non-JSON output");
   }
@@ -162,26 +131,43 @@ async function callGen(
 
 // ─── Validation helpers ───────────────────────────────────────────────────────
 
+/** Raw model output for a question, BEFORE code assembles choices/correct_index. */
+interface RawMathQuestion {
+  stem_latex: string;
+  solution_latex: string;
+  final_answer_latex: string;
+  distractors: string[];
+  hint_latex: string;
+  keyword_weights: Record<string, number>;
+  difficulty: number;
+}
+
 function isValidMathQuestion(
   q: unknown,
   allowedKeywordIds: Set<string>,
   targetDifficulty?: number
-): q is Omit<GeneratedMathQuestion, "correct_index"> {
+): q is RawMathQuestion {
   if (!q || typeof q !== "object") return false;
   const obj = q as Record<string, unknown>;
 
   if (typeof obj.stem_latex !== "string" || !obj.stem_latex.trim())
     return false;
-  if (!Array.isArray(obj.choices) || obj.choices.length !== 4) return false;
+  if (typeof obj.solution_latex !== "string" || !obj.solution_latex.trim())
+    return false;
+  // Correct answer is taken from the solution's concluded final answer.
   if (
-    !(obj.choices as unknown[]).every(
+    typeof obj.final_answer_latex !== "string" ||
+    !obj.final_answer_latex.trim()
+  )
+    return false;
+  // Need 3 distractors to assemble a 4-option item (assembleChoices re-checks distinctness).
+  if (!Array.isArray(obj.distractors) || obj.distractors.length < 3)
+    return false;
+  if (
+    !(obj.distractors as unknown[]).every(
       (c) => typeof c === "string" && (c as string).trim()
     )
   )
-    return false;
-  const uniqueChoices = new Set(obj.choices as string[]);
-  if (uniqueChoices.size !== 4) return false;
-  if (typeof obj.solution_latex !== "string" || !obj.solution_latex.trim())
     return false;
   if (typeof obj.hint_latex !== "string") return false;
   if (!obj.keyword_weights || typeof obj.keyword_weights !== "object")
@@ -196,6 +182,25 @@ function isValidMathQuestion(
   obj.difficulty = clampDifficulty(rawD, target);
 
   return true;
+}
+
+/**
+ * Assemble a validated raw question into a GeneratedMathQuestion: the correct
+ * choice is final_answer_latex (from the solution), placed at a random index.
+ * Returns null if choices can't be formed (caller drops it).
+ */
+function assembleMathQuestion(raw: RawMathQuestion): GeneratedMathQuestion | null {
+  const assembled = assembleChoices(raw.final_answer_latex, raw.distractors);
+  if (!assembled) return null;
+  return {
+    stem_latex: raw.stem_latex,
+    solution_latex: raw.solution_latex,
+    hint_latex: raw.hint_latex,
+    keyword_weights: raw.keyword_weights,
+    difficulty: raw.difficulty,
+    choices: assembled.choices,
+    correct_index: assembled.correct_index,
+  };
 }
 
 function isValidFlashcard(
@@ -218,8 +223,18 @@ function isValidFlashcard(
 
 // ─── System prompts ───────────────────────────────────────────────────────────
 
+const DELIMITER_FEWSHOT = `DELIMITERS ARE MANDATORY IN EVERY FIELD (stem, choices, solution, hint, example).
+EVERY piece of math — every variable, number-in-math, operator, fraction, integral, derivative, or aligned block — MUST be wrapped in $...$ (inline) or $$...$$ (block). Bare LaTeX outside delimiters does NOT render — it shows literal backslashes to the student.
+  ✅ CORRECT: "Differentiate: $\\dfrac{d}{dx}(x+3)^4 = 4(x+3)^3$."
+  ✅ CORRECT (block step): "$$\\int_0^2 3\\,dt = 6$$"
+  ✅ CORRECT (aligned): "$$\\begin{aligned} x^3\\cdot x^5 &= x^{3+5} \\\\ &= x^8 \\end{aligned}$$"
+  ❌ WRONG (bare — never do this): "\\frac{d}{dx}(x+3)^4"
+  ❌ WRONG (bare aligned): "\\begin{aligned} ... \\end{aligned}"  ← must be inside $$...$$
+  ❌ WRONG (mixing prose into math): "\\text{the slope is } 3x^2"  ← write prose as plain text, then $3x^2$`;
+
 const LATEX_RULES = `LATEX RULES (MANDATORY — violations produce unusable output):
 - ALL math MUST be in KaTeX-compatible LaTeX: $...$ for inline, $$...$$ for display.
+${DELIMITER_FEWSHOT}
 - stem_latex: the problem statement as PLAIN PROSE with every math expression wrapped in $...$.
   E.g. "What is the sign of $\\dfrac{-9}{-3}$?" — never \\text{} for prose, never bare commands.
 - solution_latex: full WORKED SOLUTION showing every step with \\n\\n between steps.
@@ -230,7 +245,8 @@ const LATEX_RULES = `LATEX RULES (MANDATORY — violations produce unusable outp
 - hint_latex: one sentence max 15 words guiding toward the approach without giving the answer.
 - choices: EXACTLY 4 strings. Each choice that contains math MUST wrap it in $...$. Prose-only choices need no delimiters.
 - NO unicode math symbols (×, ÷, ≤, ≥, √, π in plain text, etc.) — use \\times, \\div, \\leq, \\geq, \\sqrt{}, \\pi instead.
-- NO \\text{} abuse for math: do not write \\text{3x^2} — write $3x^2$ or just 3x^2 in the math context.`;
+- NO \\text{} abuse for math: do not write \\text{3x^2} — write $3x^2$ or just 3x^2 in the math context.
+- SCIENCE/CHEMISTRY SUBSCRIPTS: if a problem references a physical or chemistry quantity, use KaTeX — e.g. "$CO_2$" not "CO2", "$H_2O$" not "H2O", "$pK_a$" not "pKa". Same rule: subscripts/superscripts must be inside $...$.`;
 
 const DISTRACTOR_RULES = `DISTRACTOR RULES:
 - Each of the 3 wrong choices must embody ONE specific, predictable student error:
@@ -251,10 +267,13 @@ DIFFICULTY BANDS:
   MEDIUM (0.45–0.65): Apply one concept or execute one algebraic/calculus step. Distractors reflect common sign errors or formula confusions.
   HARD (0.70–0.90): Multi-step reasoning or integrating two related concepts. Stem presents a specific problem requiring work. ALL FOUR choices must be plausible to a student who only half-understands; distractors encode realistic partial-reasoning errors. Do NOT make hard questions obscure trivia.
 
-OUTPUT ORDER — FOLLOW EXACTLY:
-FIRST write stem_latex. THEN write solution_latex: fully work out the correct answer step by step. THEN write the four choices. Never decide the answer before completing solution_latex. In solution_latex, refer to the correct answer by its VALUE, never by a letter or position.
+OUTPUT ORDER — FOLLOW EXACTLY (this order is mandatory; do not reorder):
+1. FIRST write stem_latex (the problem).
+2. THEN write solution_latex: fully work the problem step by step until you reach a single final answer. Do not pick an answer before completing this.
+3. THEN set final_answer_latex to EXACTLY the value your solution concluded — copy it from the end of solution_latex verbatim. Do NOT recompute or alter it. This value WILL become the correct choice.
+4. THEN write distractors: an array of EXACTLY 3 plausible-but-wrong answers, each embodying one specific predictable student error, all distinct from one another AND from final_answer_latex.
 
-The user prompt specifies an ANSWER PLACEMENT: which 0-based index the correct answer must occupy. Place the correct answer at exactly that index; fill the other three with plausible distractors. Do NOT include a correct_index field in your output.
+Do NOT output a "choices" array and do NOT output a "correct_index": the app builds the four choices from final_answer_latex + distractors and places the correct answer at a random position. Because the correct choice is taken from final_answer_latex, it MUST equal what solution_latex concluded — a stem whose solution derives X but whose final_answer_latex is not X is INVALID.
 
 Return a JSON object:
 {
@@ -262,8 +281,9 @@ Return a JSON object:
     {
       "stem_latex": "string",
       "solution_latex": "string",
+      "final_answer_latex": "string",
+      "distractors": ["string", "string", "string"],
       "hint_latex": "string",
-      "choices": ["string", "string", "string", "string"],
       "keyword_weights": { "keyword_id": 0.8, "keyword_id_2": 0.2 },
       "difficulty": 0.5
     }
@@ -287,10 +307,13 @@ ${DISTRACTOR_RULES}
 DIFFICULTY BANDS (match the target):
   EASY (0.20–0.40) | MEDIUM (0.45–0.65) | HARD (0.70–0.90) — see main system prompt for details.
 
-OUTPUT ORDER — FOLLOW EXACTLY:
-FIRST write stem_latex. THEN write solution_latex. THEN write choices. Refer to the correct answer by VALUE in solution_latex.
+OUTPUT ORDER — FOLLOW EXACTLY (mandatory):
+1. FIRST write stem_latex.
+2. THEN write solution_latex: fully work it step by step to a single final answer.
+3. THEN set final_answer_latex to EXACTLY the value solution_latex concluded (copy verbatim — do not recompute). This becomes the correct choice.
+4. THEN write distractors: EXACTLY 3 plausible-but-wrong answers, each a specific student error, all distinct from each other and from final_answer_latex.
 
-The user prompt specifies an ANSWER PLACEMENT index. Do NOT include correct_index.
+Do NOT output "choices" or "correct_index" — the app assembles the four options and randomly places the correct one.
 
 Return a JSON object:
 {
@@ -298,8 +321,9 @@ Return a JSON object:
     {
       "stem_latex": "string",
       "solution_latex": "string",
+      "final_answer_latex": "string",
+      "distractors": ["string", "string", "string"],
       "hint_latex": "string",
-      "choices": ["string", "string", "string", "string"],
       "keyword_weights": { "keyword_id": 1.0 },
       "difficulty": 0.5
     }
@@ -349,9 +373,9 @@ MicroStep:
   "example_latex": string,
   "check_question": {
     "latex_content": string,
-    "choices": ["A", "B", "C", "D"],
-    "correct_index": 0-3,
-    "solution_latex": string
+    "solution_latex": string,
+    "correct_answer_latex": string,
+    "distractors": [string, string, string]
   },
   "hint_latex": string
 }
@@ -364,17 +388,22 @@ CRITICAL: teach EXACTLY the ONE in-scope skill defined in the scope contract —
 
 ━━━ example_latex ━━━
 A concrete WORKED EXAMPLE applying the in-scope skill. Show every intermediate step.
-Use \\text{ prose. } math_result format. Separate steps with \\n\\n.
-Include a common-mistake callout: "\\text{Common mistake: } ..." pointing to the most likely error.
+Write prose as PLAIN TEXT and wrap EVERY math expression in $...$ (inline) or $$...$$ (a standalone step result). NEVER emit bare LaTeX and NEVER put prose inside \\text{}. Separate steps with \\n\\n.
+  ✅ "Apply the power rule: $\\dfrac{d}{dx}[x^3]=3x^2$.\\n\\nSo the slope at $x=2$ is $3(2)^2=12$.\\n\\nCommon mistake: writing $2x^3$ by forgetting to bring the exponent down."
+  ❌ "\\text{Apply the power rule. } \\frac{d}{dx}[x^3]=3x^2"  ← bare LaTeX, will not render.
+Include a common-mistake callout (as plain-text "Common mistake:" with any math in $...$) pointing to the most likely error.
 
 ━━━ check_question ━━━
+ORDER (mandatory): write latex_content first, THEN solution_latex (work it fully to a final answer),
+THEN copy that final answer verbatim into correct_answer_latex, THEN write distractors.
 • latex_content: clear problem statement using $...$ for math.
-• choices: exactly 4 DISTINCT options in $...$ if they contain math.
-• correct_index: 0–3.
+• solution_latex: worked explanation ending at the final answer; state why it is right and why the key distractor is wrong.
+• correct_answer_latex: EXACTLY the final answer solution_latex concluded (use $...$ if it contains math). The app makes this the correct choice — it MUST match the solution.
+• distractors: EXACTLY 3 DISTINCT wrong options (use $...$ if they contain math), each a realistic student error, all different from correct_answer_latex.
+• Do NOT output a "choices" array or a "correct_index"; the app assembles and randomizes them.
 • Step 1: EASY — confirm the student grasped the most basic idea. One concept; distractor is clearly wrong to anyone who read step 1.
 • Step 2: MEDIUM — apply the idea in a slightly different form. Distractors reflect common misconceptions (sign error, wrong rule, off-by-one exponent).
-• Steps 3–4: HARD — multi-step reasoning or integration of concepts so far. ALL FOUR choices plausible to a half-understanding student; distractors encode realistic partial-reasoning errors. Make it require work, not trivia.
-• solution_latex: worked explanation; state why the correct answer is right and why the key distractor is wrong.
+• Steps 3–4: HARD — multi-step reasoning or integration of concepts so far. ALL FOUR options plausible to a half-understanding student; distractors encode realistic partial-reasoning errors. Make it require work, not trivia.
 
 ━━━ hint_latex ━━━
 One sentence, max 15 words. Guide toward the correct approach without giving it away.
@@ -385,7 +414,23 @@ Return valid JSON only. No markdown.`;
 
 // ─── Lesson validation ────────────────────────────────────────────────────────
 
-function isValidMicroStep(s: unknown): s is MathMicroStep {
+/** Raw check_question from the model, before code assembles choices/correct_index. */
+interface RawCheckQuestion {
+  latex_content: string;
+  solution_latex: string;
+  correct_answer_latex: string;
+  distractors: string[];
+}
+
+interface RawMicroStep {
+  step_index: number;
+  explanation_latex: string;
+  example_latex: string;
+  hint_latex: string;
+  check_question: RawCheckQuestion;
+}
+
+function isValidMicroStep(s: unknown): s is RawMicroStep {
   if (!s || typeof s !== "object") return false;
   const obj = s as Record<string, unknown>;
   if (typeof obj.step_index !== "number") return false;
@@ -400,11 +445,14 @@ function isValidMicroStep(s: unknown): s is MathMicroStep {
   const cq = obj.check_question as Record<string, unknown> | undefined;
   if (!cq || typeof cq !== "object") return false;
   if (typeof cq.latex_content !== "string") return false;
-  if (!Array.isArray(cq.choices) || cq.choices.length !== 4) return false;
-  if (typeof cq.correct_index !== "number") return false;
-  const ci = cq.correct_index as number;
-  if (ci < 0 || ci > 3 || !Number.isInteger(ci)) return false;
   if (typeof cq.solution_latex !== "string") return false;
+  // Correct answer comes from the solution; need ≥3 distractors to assemble.
+  if (
+    typeof cq.correct_answer_latex !== "string" ||
+    !cq.correct_answer_latex.trim()
+  )
+    return false;
+  if (!Array.isArray(cq.distractors) || cq.distractors.length < 3) return false;
   return true;
 }
 
@@ -412,46 +460,31 @@ function validateLesson(
   parsed: Record<string, unknown>
 ): GeneratedMathLesson | null {
   if (!Array.isArray(parsed.micro_steps)) return null;
-  const steps = parsed.micro_steps.filter(isValidMicroStep);
-  if (steps.length < 3 || steps.length > 5) return null;
-  return {
-    micro_steps: steps.map(
-      (s): MathMicroStep => ({
-        step_index: s.step_index,
-        has_check: true,
-        explanation_latex: s.explanation_latex,
-        example_latex: s.example_latex,
-        hint_latex: s.hint_latex,
-        check_question: {
-          latex_content: s.check_question.latex_content,
-          choices: (s.check_question.choices as string[]).slice(0, 4) as [
-            string,
-            string,
-            string,
-            string
-          ],
-          correct_index: s.check_question.correct_index,
-          solution_latex: s.check_question.solution_latex,
-        } as MathLessonCheckQuestion,
-      })
-    ),
-  };
-}
-
-function shuffleLessonStep(step: MathMicroStep): MathMicroStep {
-  const cq = step.check_question;
-  const shuffled = shuffleChoices({
-    choices: [...cq.choices],
-    correct_index: cq.correct_index,
-  });
-  return {
-    ...step,
-    check_question: {
-      ...cq,
-      choices: shuffled.choices as [string, string, string, string],
-      correct_index: shuffled.correct_index,
-    },
-  };
+  const rawSteps = parsed.micro_steps.filter(isValidMicroStep);
+  if (rawSteps.length < 3 || rawSteps.length > 5) return null;
+  // Assemble each check question: correct choice = solution's answer, random index.
+  const steps: MathMicroStep[] = [];
+  for (const s of rawSteps) {
+    const assembled = assembleChoices(
+      s.check_question.correct_answer_latex,
+      s.check_question.distractors
+    );
+    if (!assembled) return null; // couldn't form valid choices — reject lesson, retry
+    steps.push({
+      step_index: s.step_index,
+      has_check: true,
+      explanation_latex: s.explanation_latex,
+      example_latex: s.example_latex,
+      hint_latex: s.hint_latex,
+      check_question: {
+        latex_content: s.check_question.latex_content,
+        choices: assembled.choices,
+        correct_index: assembled.correct_index,
+        solution_latex: s.check_question.solution_latex,
+      } as MathLessonCheckQuestion,
+    });
+  }
+  return { micro_steps: steps };
 }
 
 // ─── Keyword block builder ────────────────────────────────────────────────────
@@ -511,34 +544,21 @@ export async function generateMathQuestions(opts: {
     ? `\n${opts.exemplarBlock}\n\nMATCH the above house style exactly: KaTeX stems, $...$ choices, worked solution with steps, distractors that each embody one specific student error.\n`
     : "";
 
-  const targetIndices = Array.from({ length: count }, () =>
-    Math.floor(Math.random() * 4)
-  );
-
-  const placementLines = targetIndices
-    .map((t, i) => `Question ${i + 1} → index ${t}`)
-    .join("; ");
-
-  const placementBlock = `\nANSWER PLACEMENT (the correct answer MUST be at this index in choices; fill the other three with plausible distractors): ${placementLines}`;
-
   const userPrompt = `Generate ${count} AP math multiple-choice question${count > 1 ? "s" : ""}.
 
 ${outlineBlock}${scopeEnforcement}${difficultyInstruction(effectiveTarget)}
 
 KEYWORDS TO TEST (use ONLY these keyword ids in keyword_weights):
 ${keywordBlock}
-${exemplarSection}${placementBlock}`;
+${exemplarSection}`;
 
   const runOnce = async (): Promise<GeneratedMathQuestion[]> => {
     const parsed = await callGen(QUESTION_SYSTEM, userPrompt);
     const items = Array.isArray(parsed.questions) ? parsed.questions : [];
-    const validItems = items.filter((q) =>
-      isValidMathQuestion(q, allowedIds, effectiveTarget)
-    );
-    return validItems.map((q, i) => ({
-      ...(q as Omit<GeneratedMathQuestion, "correct_index">),
-      correct_index: targetIndices[i] ?? 0,
-    })) as GeneratedMathQuestion[];
+    return items
+      .filter((q) => isValidMathQuestion(q, allowedIds, effectiveTarget))
+      .map((q) => assembleMathQuestion(q as RawMathQuestion))
+      .filter((q): q is GeneratedMathQuestion => q !== null);
   };
 
   let valid = await runOnce();
@@ -590,8 +610,6 @@ export async function generateSimilarMathQuestion(opts: {
     ? `\n${opts.exemplarBlock}\n\nMatch the house style: KaTeX stems, $...$ choices, worked solution.\n`
     : "";
 
-  const targetIndex = Math.floor(Math.random() * 4);
-
   const userPrompt = `Generate a NEW question testing the same concept from a different angle.
 
 ${outlineBlock}${scopeEnforcement}${difficultyInstruction(effectiveTarget)}
@@ -601,8 +619,6 @@ stem_latex: ${question.stem_latex}
 choices: ${question.choices.map((c, i) => `[${i}] ${c}`).join("; ")}
 solution: ${question.solution_latex.slice(0, 200)}...
 
-ANSWER PLACEMENT: Question 1 → index ${targetIndex}
-
 KEYWORDS (use ONLY these keyword ids):
 ${keywordBlock}
 ${exemplarSection}`;
@@ -610,13 +626,10 @@ ${exemplarSection}`;
   const runOnce = async (): Promise<GeneratedMathQuestion[]> => {
     const parsed = await callGen(SIMILAR_QUESTION_SYSTEM, userPrompt);
     const items = Array.isArray(parsed.questions) ? parsed.questions : [];
-    const validItems = items.filter((q) =>
-      isValidMathQuestion(q, allowedIds, effectiveTarget)
-    );
-    return validItems.map((q) => ({
-      ...(q as Omit<GeneratedMathQuestion, "correct_index">),
-      correct_index: targetIndex,
-    })) as GeneratedMathQuestion[];
+    return items
+      .filter((q) => isValidMathQuestion(q, allowedIds, effectiveTarget))
+      .map((q) => assembleMathQuestion(q as RawMathQuestion))
+      .filter((q): q is GeneratedMathQuestion => q !== null);
   };
 
   let valid = await runOnce();
@@ -722,9 +735,8 @@ Every check question must stay strictly within the scope contract.`;
     );
   }
 
-  return {
-    micro_steps: lesson.micro_steps.map(shuffleLessonStep),
-  };
+  // Choice placement is already randomized during assembly in validateLesson.
+  return lesson;
 }
 
 // ─── Fast correctness verifier ────────────────────────────────────────────────

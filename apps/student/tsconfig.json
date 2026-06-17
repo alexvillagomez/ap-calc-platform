@@ -32,6 +32,16 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
+    "/tmp/iso-build/types/**/*.ts",
+    "/tmp/iso-build2/types/**/*.ts",
+    "/tmp/iso-final/types/**/*.ts",
+    "/tmp/iso-final2/types/**/*.ts",
+    "/tmp/iso-infra/types/**/*.ts",
+    "/tmp/iso-kw/types/**/*.ts",
+    "/tmp/iso-kw2/types/**/*.ts",
+    "/tmp/iso-kw3/types/**/*.ts",
+    "/tmp/iso-kwfix/types/**/*.ts",
+    "/tmp/iso-srs/types/**/*.ts",
     "/tmp/iso_code/types/**/*.ts",
     "/tmp/iso_final/types/**/*.ts",
     "/tmp/iso_fix/types/**/*.ts",
@@ -39,6 +49,7 @@
     "/tmp/iso_gate2/types/**/*.ts",
     "/tmp/iso_gate3/types/**/*.ts",
     "/tmp/iso_la/types/**/*.ts",
+    "/tmp/iso_la2/types/**/*.ts",
     "/tmp/iso_qa/types/**/*.ts",
     "/tmp/iso_reset/types/**/*.ts",
     "/tmp/iso_var/types/**/*.ts",
@@ -47,7 +58,7 @@
     "/tmp/next_student_build/types/**/*.ts",
     "/tmp/student_prod_iso/types/**/*.ts",
     "next-env.d.ts",
-    "/tmp/iso_la2/types/**/*.ts"
+    "/tmp/iso-srs2/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

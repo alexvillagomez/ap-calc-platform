@@ -132,8 +132,42 @@ export async function POST(request: Request) {
 
   const categoryChain = memberships.map((m) => m.category_id as string);
   const N = categoryChain.length;
-  const startPos = Math.floor(N / 2);
-  const startCategoryId = categoryChain[startPos];
+
+  // ── Starting position ──────────────────────────────────────────────────────
+  // For calc_ab: the chain is foundations → ap_precalc → calc_ab (core).
+  // A global floor(N/2) lands in the middle of precalc, meaning the whole
+  // 16-question budget gets consumed by foundations/precalc before we ever
+  // reach calc topics.
+  //
+  // Design-spec intent: "start mid-chain; strong answers skip upstream basics".
+  // For calc_ab we interpret "mid-chain" as the midpoint of the CORE section
+  // (calc_ab categories) so the diagnostic probes calc topics first and only
+  // falls back to precalc/foundations when the student answers wrong.
+  //
+  // For precalc: all categories are 'core', so floor(N/2) is correct.
+
+  let startPos: number;
+  if (course === "calc_ab") {
+    // Find the index range of 'core' categories (calc_ab section)
+    const coreIndices = memberships
+      .map((m, idx) => ({ idx, role: m.role as string }))
+      .filter((m) => m.role === "core")
+      .map((m) => m.idx);
+
+    if (coreIndices.length > 0) {
+      // Start at the midpoint of the core section
+      const coreMid = Math.floor(coreIndices.length / 2);
+      startPos = coreIndices[coreMid]!;
+    } else {
+      // Fallback: global midpoint (shouldn't happen if taxonomy is seeded)
+      startPos = Math.floor(N / 2);
+    }
+  } else {
+    // precalc: all categories are core — start at global midpoint
+    startPos = Math.floor(N / 2);
+  }
+
+  const startCategoryId = categoryChain[startPos]!;
 
   // Initialize all priors at 0.5
   const priors: Record<string, number> = {};

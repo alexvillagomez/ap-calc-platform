@@ -97,7 +97,6 @@ function DiagnosticInner({
   const [dontKnow, setDontKnow] = useState(false);
   const [showHint, setShowHint] = useState(false);
 
-  const [startingCategory, setStartingCategory] = useState("");
   const [categoryEstimates, setCategoryEstimates] = useState<
     CategoryEstimate[]
   >([]);
@@ -186,7 +185,6 @@ function DiagnosticInner({
             .sort((a, b) => b.estimate - a.estimate);
 
           setCategoryEstimates(estimates);
-          setStartingCategory(data.starting_category ?? "");
           setPhase("done");
           return;
         }
@@ -200,7 +198,13 @@ function DiagnosticInner({
           setShowHint(false);
           setPhase("question");
         } else {
-          setPhase("done");
+          // Server returned completed=false but no next question — treat as
+          // unexpected completion (no estimates) and show error so the user
+          // is not silently dropped to an empty done screen.
+          setErrorMsg(
+            "Something went wrong processing your answer. Please try again."
+          );
+          setPhase("error");
         }
       } catch (e) {
         const msg = (e as Error).message ?? "Failed to submit answer";
@@ -501,21 +505,13 @@ function DiagnosticInner({
               )}
             </Card>
 
-            {/* Start here CTA */}
+            {/* Start learning CTA — enters the auto (Duolingo-style) mode */}
             <div className="space-y-2">
-              {startingCategory ? (
-                <Link href={`/math/${course}/${startingCategory}/practice`}>
-                  <Button variant="primary" size="lg" className="w-full">
-                    Start here
-                  </Button>
-                </Link>
-              ) : (
-                <Link href={`/math/${course}/practice`}>
-                  <Button variant="primary" size="lg" className="w-full">
-                    Start practicing
-                  </Button>
-                </Link>
-              )}
+              <Link href={`/math/${course}/auto`}>
+                <Button variant="primary" size="lg" className="w-full">
+                  Start learning
+                </Button>
+              </Link>
               <Link href={`/math/${course}`}>
                 <Button variant="secondary" size="md" className="w-full">
                   View all categories

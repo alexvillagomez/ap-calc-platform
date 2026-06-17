@@ -157,7 +157,7 @@ export async function POST(request: Request) {
   const [membershipsRes, prereqEdgesRes] = await Promise.all([
     supabase
       .from("math_course_categories")
-      .select("category_id, order_index")
+      .select("category_id, role, order_index")
       .eq("course", course)
       .order("order_index"),
     supabase
@@ -165,9 +165,15 @@ export async function POST(request: Request) {
       .select("from_category_id, to_category_id, strength"),
   ]);
 
-  const categoryChain = (membershipsRes.data ?? []).map(
-    (m) => m.category_id as string
+  const memberships = membershipsRes.data ?? [];
+  const categoryChain = memberships.map((m) => m.category_id as string);
+  // For diagnostic logging: track which categories are 'core' vs 'foundation'
+  const coreCategories = new Set(
+    memberships
+      .filter((m) => (m.role as string) === "core")
+      .map((m) => m.category_id as string)
   );
+  void coreCategories; // used in debug logging below
   const N = categoryChain.length;
 
   // Build prereq edge maps
@@ -274,14 +280,25 @@ export async function POST(request: Request) {
 
   if (shouldComplete) {
     // ── COMPLETION ────────────────────────────────────────────────────────────
-    // Determine starting category (first category with prior ≥ 0.45)
-    let startingCategory = categoryChain[0];
-    for (const catId of categoryChain) {
-      if ((priors[catId] ?? 0.5) >= 0.45) {
-        startingCategory = catId;
-        break;
-      }
-    }
+    // Determine starting category:
+    // For calc_ab: prefer starting in the core (calc) section at the first
+    //   core category with prior ≥ 0.45. Fall back to first core category,
+    //   then first category overall.
+    // For precalc: first category with prior ≥ 0.45, or first overall.
+    const coreChain = categoryChain.filter((c) => coreCategories.has(c));
+    const searchChain = coreChain.length > 0 ? coreChain : categoryChain;
+    const goodStart = searchChain.find((c) => (priors[c] ?? 0.5) >= 0.45);
+    const startingCategory = goodStart ?? searchChain[0] ?? categoryChain[0]!;
+
+    // Log sampled categories for verification
+    const sampledCats = new Set(updatedAsked.map((a) => a.category_id));
+    const sampledCore = [...sampledCats].filter((c) => coreCategories.has(c));
+    console.log(
+      `[diagnostic/answer] Completing diagnostic: course=${course}, asked=${asked.length}, ` +
+      `sampledCategories=${[...sampledCats].join(",")}, ` +
+      `sampledCoreCategories=${sampledCore.join(",")}, ` +
+      `startingCategory=${startingCategory}`
+    );
 
     // Write umbrella-level priors into math_student_keyword_states
     await writeUmbrellaPriors(supabase, session_id, course, categoryChain, priors);
@@ -325,8 +342,10 @@ export async function POST(request: Request) {
 
     if (skipPos === null) {
       // No more questions anywhere — complete
+      const _coreChainA = categoryChain.filter((c) => coreCategories.has(c));
+      const _searchChainA = _coreChainA.length > 0 ? _coreChainA : categoryChain;
       const startingCategory =
-        categoryChain.find((c) => (priors[c] ?? 0.5) >= 0.45) ?? categoryChain[0];
+        _searchChainA.find((c) => (priors[c] ?? 0.5) >= 0.45) ?? _searchChainA[0] ?? categoryChain[0];
       await writeUmbrellaPriors(supabase, session_id, course, categoryChain, priors);
       await supabase
         .from("math_diagnostic_sessions")
@@ -356,8 +375,10 @@ export async function POST(request: Request) {
 
     if (!skipQuestion) {
       // Still nothing — complete
+      const _coreChainB = categoryChain.filter((c) => coreCategories.has(c));
+      const _searchChainB = _coreChainB.length > 0 ? _coreChainB : categoryChain;
       const startingCategory =
-        categoryChain.find((c) => (priors[c] ?? 0.5) >= 0.45) ?? categoryChain[0];
+        _searchChainB.find((c) => (priors[c] ?? 0.5) >= 0.45) ?? _searchChainB[0] ?? categoryChain[0];
       await writeUmbrellaPriors(supabase, session_id, course, categoryChain, priors);
       await supabase
         .from("math_diagnostic_sessions")
@@ -468,7 +489,20 @@ function findNextAvailableCategory(
 
 /**
  * Write umbrella-level priors into math_student_keyword_states.
- * For each category with ≥ 1 umbrella keyword, create/update state rows.
+ *
+ * Strategy (robust to categories with no approved umbrella keywords):
+ *   1. Prefer umbrella keywords — one state row per umbrella captures the
+ *      category's prior and is what the taxonomy read uses for display scores.
+ *   2. For categories that have NO approved umbrella keywords, fall back to
+ *      whichever approved keywords exist (in_depth or any tier) so that the
+ *      category still surfaces a score on the course home.
+ *   3. If a category has NO approved keywords at all, skip it (cannot write
+ *      a state without a keyword_id FK).
+ *
+ * The taxonomy read (GET /api/math/taxonomy) computes categoryMasteryPct from
+ * umbrella.score / umbrella.implied_score — so we must populate umbrella rows.
+ * Writing to in_depth keywords is a best-effort fallback that at minimum keeps
+ * the practice loop from treating the category as "never touched".
  */
 async function writeUmbrellaPriors(
   supabase: SupabaseClient,
@@ -478,43 +512,97 @@ async function writeUmbrellaPriors(
   priors: Record<string, number>
 ): Promise<void> {
   try {
-    // Load all umbrella keywords for these categories
-    const { data: umbrellaKws } = await supabase
+    // Load ALL approved keywords for these categories (all tiers)
+    const { data: allKws } = await supabase
       .from("math_keywords")
-      .select("id, category_id")
+      .select("id, category_id, tier")
       .in("category_id", categoryChain)
-      .eq("tier", "umbrella")
       .eq("status", "approved");
 
-    if (!umbrellaKws || umbrellaKws.length === 0) return;
+    if (!allKws || allKws.length === 0) {
+      console.warn("[diagnostic/answer] writeUmbrellaPriors: no approved keywords found for any category in chain");
+      return;
+    }
+
+    // Group keywords by category
+    const kwsByCategory = new Map<string, { id: string; tier: string }[]>();
+    for (const kw of allKws) {
+      const catId = kw.category_id as string;
+      if (!kwsByCategory.has(catId)) kwsByCategory.set(catId, []);
+      kwsByCategory.get(catId)!.push({ id: kw.id as string, tier: kw.tier as string });
+    }
 
     const now = new Date().toISOString();
-    const upserts = umbrellaKws.map((kw) => {
-      const catPrior = priors[kw.category_id as string] ?? 0.5;
-      return {
-        session_id,
-        keyword_id: kw.id as string,
-        category_id: kw.category_id as string,
-        score: Math.min(1, Math.max(0, catPrior)),
-        total_attempts: 0,
-        correct_attempts: 0,
-        consecutive_correct: 0,
-        dont_know_count: 0,
-        state: catPrior >= 0.8 ? "mastered" : "in_progress",
-        course,
-        updated_at: now,
-      };
-    });
+    const upserts: {
+      session_id: string;
+      keyword_id: string;
+      category_id: string;
+      score: number;
+      total_attempts: number;
+      correct_attempts: number;
+      consecutive_correct: number;
+      dont_know_count: number;
+      state: string;
+      course: MathCourse;
+      updated_at: string;
+    }[] = [];
+
+    for (const catId of categoryChain) {
+      const catPrior = Math.min(1, Math.max(0, priors[catId] ?? 0.5));
+      const state = catPrior >= 0.8 ? "mastered" : "in_progress";
+      const kws = kwsByCategory.get(catId) ?? [];
+
+      if (kws.length === 0) {
+        // No approved keywords — cannot write state rows for this category.
+        // The course home will show "Not started" for it, which is acceptable.
+        console.warn(
+          `[diagnostic/answer] writeUmbrellaPriors: category ${catId} has no approved keywords — cannot write prior`
+        );
+        continue;
+      }
+
+      // Prefer umbrella keywords; fall back to anything else
+      const umbrellaKws = kws.filter((k) => k.tier === "umbrella");
+      const targetKws = umbrellaKws.length > 0 ? umbrellaKws : kws;
+
+      for (const kw of targetKws) {
+        upserts.push({
+          session_id,
+          keyword_id: kw.id,
+          category_id: catId,
+          score: catPrior,
+          total_attempts: 0,
+          correct_attempts: 0,
+          consecutive_correct: 0,
+          dont_know_count: 0,
+          state,
+          course,
+          updated_at: now,
+        });
+      }
+    }
+
+    if (upserts.length === 0) return;
 
     const BATCH = 50;
     for (let i = 0; i < upserts.length; i += BATCH) {
-      await supabase
+      const { error: upsertErr } = await supabase
         .from("math_student_keyword_states")
         .upsert(upserts.slice(i, i + BATCH), {
           onConflict: "session_id,keyword_id",
           ignoreDuplicates: false,
         });
+      if (upsertErr) {
+        console.error(
+          "[diagnostic/answer] writeUmbrellaPriors upsert batch error:",
+          upsertErr.message
+        );
+      }
     }
+
+    console.log(
+      `[diagnostic/answer] writeUmbrellaPriors: wrote ${upserts.length} keyword state rows for ${categoryChain.length} categories (course=${course})`
+    );
   } catch (err) {
     console.error(
       "[diagnostic/answer] writeUmbrellaPriors failed:",

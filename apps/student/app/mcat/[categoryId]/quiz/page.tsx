@@ -56,7 +56,15 @@ interface TaxonomyCategory {
   umbrellas?: TaxonomyUmbrella[];
 }
 
-type Phase = "loading" | "quiz" | "review" | "error";
+type Phase = "loading" | "locked" | "quiz" | "review" | "error";
+
+interface GateInfo {
+  unlocked: boolean;
+  memorized: number;
+  active: number;
+  remaining: number;
+  required: number;
+}
 
 function encouragingCopy(pct: number): string {
   if (pct === 100) return "Perfect score! Outstanding work!";
@@ -88,6 +96,17 @@ function McatQuizInner({
   const [currentIdx, setCurrentIdx] = useState(0);
   const [phase, setPhase] = useState<Phase>("loading");
   const [errorMsg, setErrorMsg] = useState("");
+  const [gate, setGate] = useState<GateInfo | null>(null);
+
+  // Preserve the current scope when linking to flashcards from the gate screen.
+  const flashcardsHref = (() => {
+    const qs = new URLSearchParams();
+    if (umbrellaId) qs.set("umbrella", umbrellaId);
+    if (keywordScopeId) qs.set("keyword", keywordScopeId);
+    if (scopeLabel) qs.set("label", scopeLabel);
+    const s = qs.toString();
+    return `/mcat/${categoryId}/flashcards${s ? `?${s}` : ""}`;
+  })();
 
   // ── Gamification ──────────────────────────────────────────────────────────
   const [combo, setCombo] = useState(0);
@@ -125,6 +144,32 @@ function McatQuizInner({
 
     try {
       const keywordIds = await resolveKeywordIds(sid);
+
+      // ── Memorize-before-quiz gate ──────────────────────────────────────────
+      // Don't let the student quiz a topic until its core flashcards are
+      // memorized. Fail-open: if the gate check errors, allow the quiz.
+      try {
+        const gateBody: Record<string, unknown> = {
+          session_id: sid,
+          category_id: categoryId,
+        };
+        if (keywordIds) gateBody.keyword_ids = keywordIds;
+        const gateRes = await fetch("/api/mcat/quiz-gate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(gateBody),
+        });
+        if (gateRes.ok) {
+          const g = (await gateRes.json()) as GateInfo;
+          setGate(g);
+          if (!g.unlocked) {
+            setPhase("locked");
+            return;
+          }
+        }
+      } catch {
+        // Non-fatal — fall through and build the quiz.
+      }
 
       const body: Record<string, unknown> = {
         session_id: sid,
@@ -305,6 +350,50 @@ function McatQuizInner({
               <div key={i} className="h-12 rounded-xl bg-neutral-200 animate-pulse" />
             ))}
           </div>
+        )}
+
+        {/* Locked — memorize first */}
+        {phase === "locked" && (
+          <Card className="p-6 text-center space-y-4">
+            <div className="text-4xl">🔒</div>
+            <div>
+              <p className="text-lg font-bold text-neutral-900 mb-1">
+                Memorize first, then quiz
+              </p>
+              <p className="text-sm text-neutral-500">
+                Quizzes apply what you&apos;ve learned. Lock in the core facts with
+                flashcards and this quiz unlocks automatically.
+              </p>
+            </div>
+            {gate && (
+              <div className="space-y-2">
+                <ProgressBar
+                  value={
+                    gate.required > 0
+                      ? Math.min(100, Math.round((gate.memorized / gate.required) * 100))
+                      : 0
+                  }
+                  size="sm"
+                  color="brand"
+                  label="Memorization progress"
+                />
+                <p className="text-xs text-neutral-500">
+                  {gate.memorized} of {gate.required} core cards memorized
+                  {gate.remaining > 0 ? ` — ${gate.remaining} to go` : ""}
+                </p>
+              </div>
+            )}
+            <div className="flex gap-2 justify-center flex-wrap">
+              <Link href={flashcardsHref}>
+                <Button variant="primary" size="md">
+                  Study flashcards
+                </Button>
+              </Link>
+              <Button variant="secondary" size="md" onClick={() => fetchQuiz(sessionId)}>
+                Re-check
+              </Button>
+            </div>
+          </Card>
         )}
 
         {/* Error state */}

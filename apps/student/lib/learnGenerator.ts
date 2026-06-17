@@ -6,6 +6,8 @@
  */
 import OpenAI from "openai";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { parseModelJson } from "./parseModelJson";
+import { assembleChoices } from "./assembleChoices";
 
 const GEN_MODEL = "gpt-5.4-mini";
 
@@ -22,7 +24,10 @@ function createGenClient(): OpenAI {
 const FORMAT_RULES = `FORMATTING:
 • Write prose as PLAIN TEXT — never use \\\\text{}.
 • Wrap every variable, symbol, or expression in $...$, e.g. "Use $A^2-B^2=(A-B)(A+B)$ with $A=m^2n$ and $B=4$."
-• Plain-text prose must contain no backslash, ^, _, or { } — anything that needs them goes inside $...$.`;
+• Plain-text prose must contain no backslash, ^, _, or { } — anything that needs them goes inside $...$.
+• This applies to EVERY field including solutions and worked examples. Bare LaTeX outside $...$ does NOT render — it shows literal backslashes.
+  ✅ CORRECT: "Apply the power rule: $\\\\frac{d}{dx}(x^3)=3x^2$." or block: "$$\\\\frac{d}{dx}(x+3)^4=4(x+3)^3$$"
+  ❌ WRONG (bare): "\\\\frac{d}{dx}(x+3)^4" or "\\\\begin{aligned}...\\\\end{aligned}" without $$...$$`;
 
 // Worked-example / solution illustration, in the universal format.
 const WORKED_EXAMPLE = `"Recognize each term as a square. $m^4n^2=(m^2n)^2$ because squaring $m^2n$ gives $m^4n^2$. Also $16=4^2$. Use $A^2-B^2=(A-B)(A+B)$ with $A=m^2n$ and $B=4$, so $m^4n^2-16=(m^2n-4)(m^2n+4)$."`;
@@ -58,9 +63,9 @@ MicroStep:
   "example_latex": string,
   "check_question": {
     "latex_content": string,
-    "choices": ["$A$","$B$","$C$","$D$"],
-    "correct_index": 0-3,
-    "solution_latex": string
+    "solution_latex": string,
+    "correct_answer": "$...$",
+    "distractors": ["$...$","$...$","$...$"]
   },
   "hint_latex": string
 }
@@ -85,12 +90,13 @@ ${EXAMPLE_FORMAT}
 • After showing the computation, add a sentence of reasoning that explains WHY the result is what it is — connect the answer back to the concept.
 
 ━━━ check_question (every step has one) ━━━
+ORDER (mandatory): write latex_content, THEN solution_latex (work it fully to a final answer), THEN copy that final answer verbatim into correct_answer, THEN write distractors. Never decide the answer before finishing solution_latex.
 • latex_content: clear problem statement as plain text with math in $...$, e.g. "A student claims $x=-2$ solves $x^3+2x^2-5x-6=0$. Is the student correct?" Never use \\text{}.
-• choices: exactly 4 DISTINCT options. Each in $...$. No duplicates.
-• correct_index: 0–3.
-• DISTRACTORS MUST reflect realistic student mistakes — each wrong choice should correspond to a specific common error (e.g. off-by-one, sign error, wrong operation, forgetting a rule). Do NOT use random or implausible values.
 • solution_latex:
 ${SOLUTION_FORMAT}
+• correct_answer: EXACTLY the final answer solution_latex concluded, in $...$. The app makes this the correct choice — it MUST match the solution.
+• distractors: exactly 3 DISTINCT wrong options in $...$, all different from correct_answer. Each MUST reflect a realistic student mistake (off-by-one, sign error, wrong operation, forgetting a rule). Do NOT use random or implausible values.
+• Do NOT output a "choices" array or a "correct_index"; the app assembles and randomizes them.
 
 ━━━ hint_latex (every step) ━━━
 One sentence, max 15 words. Plain text, math in $...$ (never \\text{}). Guide the student toward the correct approach without giving it away.
@@ -105,9 +111,9 @@ Return a JSON object:
   "example_latex": string,
   "check_question": {
     "latex_content": string,
-    "choices": ["$A$","$B$","$C$","$D$"],
-    "correct_index": 0-3,
-    "solution_latex": string
+    "solution_latex": string,
+    "correct_answer": "$...$",
+    "distractors": ["$...$","$...$","$...$"]
   }
 }
 
@@ -118,9 +124,12 @@ Return a JSON object:
 ${EXAMPLE_FORMAT}
 
 ━━━ check_question ━━━
-• choices: exactly 4 distinct options in $...$. No duplicates.
+ORDER (mandatory): latex_content, THEN solution_latex (work it fully to a final answer), THEN correct_answer (copied verbatim from the solution), THEN distractors.
 • solution_latex:
 ${SOLUTION_FORMAT}
+• correct_answer: EXACTLY the final answer solution_latex concluded, in $...$. The app makes this the correct choice — it MUST match the solution.
+• distractors: exactly 3 distinct wrong options in $...$, all different from correct_answer, each a realistic student mistake.
+• Do NOT output a "choices" array or a "correct_index"; the app assembles and randomizes them.
 
 Return valid JSON only. No markdown.`;
 
@@ -141,18 +150,21 @@ Return: { "problems": [ PracticeProb, ... ] }
 PracticeProb:
 {
   "latex_content": string,
-  "choices": ["$...$","$...$","$...$","$...$"],
-  "correct_index": 0-3,
   "solution_latex": string,
+  "correct_answer": "$...$",
+  "distractors": ["$...$","$...$","$...$"],
   "hint_latex": string
 }
 
 Difficulty: 1 = single step, 2 = two steps, 3 = unfamiliar form.
+ORDER (mandatory): write latex_content, THEN solution_latex (work it fully to a final answer), THEN copy that final answer verbatim into correct_answer, THEN distractors. Never decide the answer before finishing solution_latex.
 • Each problem directly tests the keyword.
 • latex_content: full problem statement as PLAIN TEXT with all math in $...$, e.g. "Expand and simplify: $(x-4)(x+2)$." or "A student claims $x=-2$ solves $x^3+2x^2-5x-6=0$. Is the student correct?" Never use \\\\text{} — write words as plain text and wrap only math in $...$.
-• choices: 4 distinct strings in $...$. Distractors reflect real mistakes.
 • solution_latex:
 ${SOLUTION_FORMAT}
+• correct_answer: EXACTLY the final answer solution_latex concluded, in $...$. The app makes this the correct choice — it MUST match the solution.
+• distractors: exactly 3 distinct strings in $...$, all different from correct_answer, each reflecting a real student mistake.
+• Do NOT output a "choices" array or a "correct_index"; the app assembles and randomizes them.
 • hint_latex: one sentence as plain text with math in $...$. Never use \\\\text{}.
 • Return valid JSON only. No markdown.`;
 
@@ -163,18 +175,21 @@ Return: { "problems": [ QuizProb, ... ] }
 QuizProb:
 {
   "latex_content": string,
-  "choices": ["$...$","$...$","$...$","$...$"],
-  "correct_index": 0-3,
   "solution_latex": string,
+  "correct_answer": "$...$",
+  "distractors": ["$...$","$...$","$...$"],
   "difficulty": 3 or 4
 }
 
 • All 4 questions difficulty 3 or 4.
 • At least one question in unfamiliar or reversed form.
+ORDER (mandatory): write latex_content, THEN solution_latex (work it fully to a final answer), THEN copy that final answer verbatim into correct_answer, THEN distractors. Never decide the answer before finishing solution_latex.
 • latex_content: plain text with all math in $...$, e.g. "A student claims $x=-2$ solves $x^3+2x^2-5x-6=0$. Is the student correct?" Never use \\\\text{}.
-• choices: 4 distinct strings in $...$. Include realistic traps.
 • solution_latex:
 ${SOLUTION_FORMAT}
+• correct_answer: EXACTLY the final answer solution_latex concluded, in $...$. The app makes this the correct choice — it MUST match the solution.
+• distractors: exactly 3 distinct strings in $...$, all different from correct_answer, each a realistic trap.
+• Do NOT output a "choices" array or a "correct_index"; the app assembles and randomizes them.
 • Return valid JSON only. No markdown.`;
 
 // ─── Post-processing ──────────────────────────────────────────────────────────
@@ -254,7 +269,7 @@ async function callGen(system: string, user: string): Promise<Record<string, unk
     throw new LearnGenError(`AI provider request failed: ${msg}`);
   }
   try {
-    return JSON.parse(text) as Record<string, unknown>;
+    return parseModelJson<Record<string, unknown>>(text);
   } catch {
     throw new LearnGenError("AI provider returned non-JSON output");
   }
@@ -281,20 +296,28 @@ Think carefully about what a student who has NEVER seen this concept before woul
   );
   if (!Array.isArray(parsed.micro_steps) || parsed.micro_steps.length === 0) return null;
 
-  type StepLike = { has_check?: boolean; explanation_latex?: string; example_latex?: string; hint_latex?: string; check_question?: { latex_content?: string; solution_latex?: string } };
+  type StepLike = { has_check?: boolean; explanation_latex?: string; example_latex?: string; hint_latex?: string; check_question?: { latex_content?: string; solution_latex?: string; correct_answer?: string; distractors?: string[] } };
+  const EMPTY_CHECK = { latex_content: "", choices: ["", "", "", ""], correct_index: 0, solution_latex: "" };
   const cleanedSteps = (parsed.micro_steps as StepLike[]).map((step) => {
-    const hasCheck = step.has_check !== false; // treat missing as true for backward compat
+    const wantsCheck = step.has_check !== false; // treat missing as true for backward compat
+    // Assemble choices in code: correct choice = solution's answer, at a random index.
+    const cq = step.check_question;
+    const assembled = wantsCheck && cq
+      ? assembleChoices(cq.correct_answer, (cq.distractors ?? []).map((d) => fixTabCorruptedText(d)))
+      : null;
+    const hasCheck = wantsCheck && !!assembled;
     return {
       ...step,
       has_check: hasCheck,
       explanation_latex: step.explanation_latex ? sanitizeLearnLatex(step.explanation_latex) : step.explanation_latex,
       example_latex: step.example_latex ? sanitizeLearnLatex(step.example_latex) : step.example_latex,
       hint_latex: hasCheck && step.hint_latex ? sanitizeLearnLatex(step.hint_latex) : (step.hint_latex ?? ""),
-      check_question: hasCheck && step.check_question ? {
-        ...step.check_question,
-        latex_content: step.check_question.latex_content ? sanitizeLearnLatex(step.check_question.latex_content) : step.check_question.latex_content,
-        solution_latex: step.check_question.solution_latex ? sanitizeLearnLatex(step.check_question.solution_latex) : step.check_question.solution_latex,
-      } : { latex_content: "", choices: ["", "", "", ""], correct_index: 0, solution_latex: "" },
+      check_question: hasCheck && cq && assembled ? {
+        latex_content: cq.latex_content ? sanitizeLearnLatex(cq.latex_content) : (cq.latex_content ?? ""),
+        solution_latex: cq.solution_latex ? sanitizeLearnLatex(cq.solution_latex) : (cq.solution_latex ?? ""),
+        choices: assembled.choices.map((c) => sanitizeLearnLatex(c)),
+        correct_index: assembled.correct_index,
+      } : EMPTY_CHECK,
     };
   });
 
@@ -316,14 +339,33 @@ export async function generateAndStoreRefresher(
   );
   if (!parsed.rule_latex || !parsed.check_question) return null;
 
+  // Assemble choices in code so the correct choice is the solution's answer.
+  const rawCq = parsed.check_question as {
+    latex_content?: string;
+    solution_latex?: string;
+    correct_answer?: string;
+    distractors?: string[];
+  };
+  const assembled = assembleChoices(
+    rawCq.correct_answer,
+    (rawCq.distractors ?? []).map((d) => fixTabCorruptedText(d))
+  );
+  if (!assembled) return null; // can't form a valid check question — let the route surface a soft failure
+  const checkQuestion = {
+    latex_content: sanitizeLearnLatex(fixTabCorruptedText(rawCq.latex_content ?? "")),
+    solution_latex: sanitizeLearnLatex(fixTabCorruptedText(rawCq.solution_latex ?? "")),
+    choices: assembled.choices.map((c) => sanitizeLearnLatex(c)),
+    correct_index: assembled.correct_index,
+  };
+
   await supabase
     .from("learn_refreshers")
     .upsert(
-      { keyword_id: kw.id, rule_latex: sanitizeLearnLatex(String(parsed.rule_latex)), example_latex: sanitizeLearnLatex(String(parsed.example_latex ?? "")), check_question: parsed.check_question, model: GEN_MODEL },
+      { keyword_id: kw.id, rule_latex: sanitizeLearnLatex(String(parsed.rule_latex)), example_latex: sanitizeLearnLatex(String(parsed.example_latex ?? "")), check_question: checkQuestion, model: GEN_MODEL },
       { onConflict: "keyword_id" }
     );
 
-  return { rule_latex: parsed.rule_latex as string, example_latex: parsed.example_latex as string, check_question: parsed.check_question };
+  return { rule_latex: parsed.rule_latex as string, example_latex: parsed.example_latex as string, check_question: checkQuestion };
 }
 
 export async function generateAndStoreTip(
@@ -355,20 +397,32 @@ export async function generateAndStoreProblems(
   );
   if (!Array.isArray(parsed.problems) || parsed.problems.length === 0) return null;
 
-  type PRow = { latex_content: string; choices: string[]; correct_index: number; solution_latex?: string; hint_latex?: string };
-  const rows = (parsed.problems as PRow[]).map((p) => ({
-    keyword_id: kw.id,
-    topic_id: kw.category_id,
-    // fixTabCorruptedText runs first: repairs <TAB>ext{ → \text{ before the
-    // backslash-normalisation pass in sanitizeLearnLatex.
-    latex_content: sanitizeLearnLatex(fixTabCorruptedText(p.latex_content)),
-    solution_latex: sanitizeLearnLatex(fixTabCorruptedText(p.solution_latex ?? "")),
-    choices: p.choices.map((c) => fixTabCorruptedText(c)),
-    correct_index: p.correct_index,
-    difficulty,
-    hint_latex: p.hint_latex ? fixTabCorruptedText(p.hint_latex) : null,
-  }));
+  type PRow = { latex_content: string; correct_answer?: string; distractors?: string[]; solution_latex?: string; hint_latex?: string };
+  // Assemble choices in code: correct choice = solution's answer at a random index.
+  // Drop any problem whose choices can't be formed (no contradictory items stored).
+  const rows = (parsed.problems as PRow[])
+    .map((p) => {
+      const assembled = assembleChoices(
+        p.correct_answer,
+        (p.distractors ?? []).map((d) => fixTabCorruptedText(d))
+      );
+      if (!assembled) return null;
+      return {
+        keyword_id: kw.id,
+        topic_id: kw.category_id,
+        // fixTabCorruptedText runs first: repairs <TAB>ext{ → \text{ before the
+        // backslash-normalisation pass in sanitizeLearnLatex.
+        latex_content: sanitizeLearnLatex(fixTabCorruptedText(p.latex_content)),
+        solution_latex: sanitizeLearnLatex(fixTabCorruptedText(p.solution_latex ?? "")),
+        choices: assembled.choices.map((c) => sanitizeLearnLatex(c)),
+        correct_index: assembled.correct_index,
+        difficulty,
+        hint_latex: p.hint_latex ? fixTabCorruptedText(p.hint_latex) : null,
+      };
+    })
+    .filter((r): r is NonNullable<typeof r> => r !== null);
 
+  if (rows.length === 0) return null;
   await supabase.from("learn_practice_problems").insert(rows);
   return rows;
 }
@@ -383,16 +437,27 @@ export async function generateAndStoreMasteryQuiz(
   );
   if (!Array.isArray(parsed.problems) || parsed.problems.length === 0) return null;
 
-  type QRow = { latex_content: string; choices: string[]; correct_index: number; solution_latex?: string; difficulty?: number };
-  const rows = (parsed.problems as QRow[]).map((p) => ({
-    keyword_id: kw.id,
-    latex_content: p.latex_content,
-    choices: p.choices,
-    correct_index: p.correct_index,
-    solution_latex: p.solution_latex ?? "",
-    difficulty: p.difficulty ?? 3,
-  }));
+  type QRow = { latex_content: string; correct_answer?: string; distractors?: string[]; solution_latex?: string; difficulty?: number };
+  // Assemble choices in code: correct choice = solution's answer at a random index.
+  const rows = (parsed.problems as QRow[])
+    .map((p) => {
+      const assembled = assembleChoices(
+        p.correct_answer,
+        (p.distractors ?? []).map((d) => fixTabCorruptedText(d))
+      );
+      if (!assembled) return null;
+      return {
+        keyword_id: kw.id,
+        latex_content: sanitizeLearnLatex(fixTabCorruptedText(p.latex_content)),
+        choices: assembled.choices.map((c) => sanitizeLearnLatex(c)),
+        correct_index: assembled.correct_index,
+        solution_latex: sanitizeLearnLatex(fixTabCorruptedText(p.solution_latex ?? "")),
+        difficulty: p.difficulty ?? 3,
+      };
+    })
+    .filter((r): r is NonNullable<typeof r> => r !== null);
 
+  if (rows.length === 0) return null;
   await supabase.from("learn_mastery_quiz_problems").insert(rows);
   return rows;
 }

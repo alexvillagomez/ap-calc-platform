@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
 import { Card } from "@/components/ui/Card";
@@ -449,6 +449,14 @@ export default function McatPracticePage() {
   const [excludeIds, setExcludeIds] = useState<string[]>([]);
   const [stats, setStats] = useState<SessionStats>({ answered: 0, correct: 0 });
 
+  // ── Struggle detection (mirrors category practice) ────────────────────────
+  /** Consecutive wrong answers on the current question stream. Reset on correct. */
+  const consecutiveWrongRef = useRef(0);
+  /** Keywords already offered a lesson this session — show banner at most once. */
+  const lessonedKeywordsRef = useRef<Set<string>>(new Set());
+  /** Controls the "Struggling? take a lesson" push banner. */
+  const [showLessonOffer, setShowLessonOffer] = useState(false);
+
   useEffect(() => {
     (async () => {
       const sid = await getOrCreateMcatSession();
@@ -584,6 +592,7 @@ export default function McatPracticePage() {
     setExplanation("");
     setUsedRefresher(false);
     setErrorMsg("");
+    setShowLessonOffer(false);
 
     try {
       const payload = buildApiPayload();
@@ -615,6 +624,9 @@ export default function McatPracticePage() {
     if (!currentQuestion || questionPhase !== "answering") return;
     setDontKnow(true);
 
+    // Struggle detection: "don't know" counts as a miss
+    consecutiveWrongRef.current += 1;
+
     fetch("/api/mcat/attempt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -625,7 +637,53 @@ export default function McatPracticePage() {
         context: "practice",
         usedRefresher,
       }),
-    }).catch(() => {});
+    })
+      .then(async (res) => {
+        if (res.ok) {
+          const data = (await res.json()) as {
+            keyword_states?: Record<string, { needs_lesson?: boolean }>;
+          };
+          const primaryKwId =
+            currentQuestion.primary_keyword_id ??
+            primaryKeywordId(currentQuestion.keyword_weights);
+          const kwState = primaryKwId
+            ? data.keyword_states?.[primaryKwId]
+            : undefined;
+          const needsLessonFromServer = kwState?.needs_lesson === true;
+          const tooManyWrong = consecutiveWrongRef.current >= 2;
+          if (
+            (tooManyWrong || needsLessonFromServer) &&
+            primaryKwId &&
+            !lessonedKeywordsRef.current.has(primaryKwId)
+          ) {
+            setShowLessonOffer(true);
+          }
+        } else {
+          // Non-fatal fallback: use client-side counter only
+          const primaryKwId =
+            currentQuestion.primary_keyword_id ??
+            primaryKeywordId(currentQuestion.keyword_weights);
+          if (
+            consecutiveWrongRef.current >= 2 &&
+            primaryKwId &&
+            !lessonedKeywordsRef.current.has(primaryKwId)
+          ) {
+            setShowLessonOffer(true);
+          }
+        }
+      })
+      .catch(() => {
+        const primaryKwId =
+          currentQuestion.primary_keyword_id ??
+          primaryKeywordId(currentQuestion.keyword_weights);
+        if (
+          consecutiveWrongRef.current >= 2 &&
+          primaryKwId &&
+          !lessonedKeywordsRef.current.has(primaryKwId)
+        ) {
+          setShowLessonOffer(true);
+        }
+      });
 
     const newExclude = [...excludeIds, currentQuestion.id];
     setExcludeIds(newExclude);
@@ -639,6 +697,15 @@ export default function McatPracticePage() {
     if (!currentQuestion || questionPhase !== "answering") return;
     setSelectedChoice(idx);
 
+    const isCorrect = idx === currentQuestion.correct_index;
+
+    // Struggle detection: reset on correct, increment on wrong
+    if (isCorrect) {
+      consecutiveWrongRef.current = 0;
+    } else {
+      consecutiveWrongRef.current += 1;
+    }
+
     fetch("/api/mcat/attempt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -649,9 +716,56 @@ export default function McatPracticePage() {
         context: "practice",
         usedRefresher,
       }),
-    }).catch(() => {});
+    })
+      .then(async (res) => {
+        if (res.ok && !isCorrect) {
+          const data = (await res.json()) as {
+            keyword_states?: Record<string, { needs_lesson?: boolean }>;
+          };
+          const primaryKwId =
+            currentQuestion.primary_keyword_id ??
+            primaryKeywordId(currentQuestion.keyword_weights);
+          const kwState = primaryKwId
+            ? data.keyword_states?.[primaryKwId]
+            : undefined;
+          const needsLessonFromServer = kwState?.needs_lesson === true;
+          const tooManyWrong = consecutiveWrongRef.current >= 2;
+          if (
+            (tooManyWrong || needsLessonFromServer) &&
+            primaryKwId &&
+            !lessonedKeywordsRef.current.has(primaryKwId)
+          ) {
+            setShowLessonOffer(true);
+          }
+        } else if (!res.ok && !isCorrect) {
+          // Non-fatal fallback
+          const primaryKwId =
+            currentQuestion.primary_keyword_id ??
+            primaryKeywordId(currentQuestion.keyword_weights);
+          if (
+            consecutiveWrongRef.current >= 2 &&
+            primaryKwId &&
+            !lessonedKeywordsRef.current.has(primaryKwId)
+          ) {
+            setShowLessonOffer(true);
+          }
+        }
+      })
+      .catch(() => {
+        if (!isCorrect) {
+          const primaryKwId =
+            currentQuestion.primary_keyword_id ??
+            primaryKeywordId(currentQuestion.keyword_weights);
+          if (
+            consecutiveWrongRef.current >= 2 &&
+            primaryKwId &&
+            !lessonedKeywordsRef.current.has(primaryKwId)
+          ) {
+            setShowLessonOffer(true);
+          }
+        }
+      });
 
-    const isCorrect = idx === currentQuestion.correct_index;
     const newExclude = [...excludeIds, currentQuestion.id];
     setExcludeIds(newExclude);
     setRevealCorrect(currentQuestion.correct_index);
@@ -974,6 +1088,48 @@ export default function McatPracticePage() {
                           </p>
                         </div>
                       )}
+
+                      {/* Lesson offer banner — pushed when struggling (≥2 consecutive misses) */}
+                      {showLessonOffer && (() => {
+                        const primaryKwId =
+                          currentQuestion.primary_keyword_id ??
+                          primaryKeywordId(currentQuestion.keyword_weights);
+                        if (!primaryKwId) return null;
+                        return (
+                          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 space-y-3">
+                            <p className="text-sm font-medium text-amber-800">
+                              Struggling? A quick lesson might help.
+                            </p>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => {
+                                  lessonedKeywordsRef.current.add(primaryKwId);
+                                  setShowLessonOffer(false);
+                                  window.open(
+                                    `/mcat/lesson/${encodeURIComponent(primaryKwId)}`,
+                                    "_blank",
+                                    "noopener"
+                                  );
+                                }}
+                                className="flex-1 py-2.5 rounded-xl bg-amber-500 text-white text-sm font-semibold hover:bg-amber-600 transition-colors"
+                              >
+                                Take a lesson
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (primaryKwId) {
+                                    lessonedKeywordsRef.current.add(primaryKwId);
+                                  }
+                                  setShowLessonOffer(false);
+                                }}
+                                className="flex-1 py-2.5 rounded-xl border border-amber-200 bg-white text-amber-700 text-sm font-medium hover:bg-amber-50 transition-colors"
+                              >
+                                Keep practicing
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })()}
 
                       {/* Feedback widget */}
                       <FeedbackWidget

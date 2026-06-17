@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
+import { assembleChoices } from "@/lib/assembleChoices";
 
 const SYSTEM_PROMPT = `You are a math tutor generating a short skill refresher for a student who once learned this but forgot it.
 
@@ -10,19 +11,26 @@ Return exactly one JSON object:
   "example_latex": string,
   "check_question": {
     "latex_content": string,
-    "choices": [string, string, string, string],
-    "correct_index": number,
-    "solution_latex": string
+    "solution_latex": string,
+    "correct_answer": string,
+    "distractors": [string, string, string]
   }
 }
 
+DELIMITERS (mandatory): every math expression in EVERY field (rule_latex, example_latex, check_question.latex_content, solution_latex, correct_answer, distractors) MUST be wrapped in $...$ (inline) or $$...$$ (block). Write prose as plain text, NOT inside \\text{}. Bare LaTeX outside delimiters does NOT render — it shows literal backslashes.
+  ✅ CORRECT (block): "$$\\begin{aligned} a^2-b^2 &= (a-b)(a+b) \\end{aligned}$$"
+  ✅ CORRECT (inline): "Factor the difference of squares: $a^2-b^2=(a-b)(a+b)$."
+  ❌ WRONG (bare): "\\begin{aligned} ... \\end{aligned}" or "\\frac{a}{b}" without $...$.
+
 Rules:
-- rule_latex: 1-2 sentences stating the rule or property. Concise. Prose inside \\text{}, math outside.
-- example_latex: use \\begin{aligned}...\\end{aligned} with &= and \\\\ for each step. Never chain equalities on one line.
-- check_question.latex_content: a short question testing the rule (KaTeX). Prose in \\text{}.
-- check_question.choices: exactly 4 choices each wrapped in $...$. Include common error distractors.
-- check_question.correct_index: 0-3.
-- check_question.solution_latex: use \\begin{aligned}...\\end{aligned} with &= and \\\\ between steps.
+- rule_latex: 1-2 sentences stating the rule or property. Plain-text prose; wrap any math in $...$.
+- example_latex: a $$\\begin{aligned}...\\end{aligned}$$ block (the WHOLE block wrapped in $$...$$) with &= and \\\\ for each step. Never chain equalities on one line.
+- check_question ORDER (mandatory): write latex_content, THEN solution_latex (work it fully to a final answer), THEN copy that final answer verbatim into correct_answer, THEN write distractors. Never decide the answer before finishing solution_latex.
+- check_question.latex_content: a short question testing the rule. Plain-text prose; wrap any math in $...$.
+- check_question.solution_latex: a $$\\begin{aligned}...\\end{aligned}$$ block (wrapped in $$...$$) with &= and \\\\ between steps.
+- check_question.correct_answer: EXACTLY the final answer solution_latex concluded, wrapped in $...$. The app makes this the correct choice — it MUST match the solution.
+- check_question.distractors: exactly 3 choices each wrapped in $...$, all different from correct_answer. Include common error distractors.
+- Do NOT output a "choices" array or a "correct_index" in check_question; the app assembles and randomizes them.
 - All LaTeX: valid KaTeX. \\\\ for line breaks. No markdown. Return raw JSON only.`;
 
 export async function POST(request: Request) {
@@ -68,7 +76,7 @@ export async function POST(request: Request) {
   let parsed: { rule_latex: string; example_latex: string; check_question: unknown };
   try {
     const completion = await openai.chat.completions.create({
-      model: "gemini-3.5-flash",
+      model: "gpt-5.4-mini",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userPrompt },
@@ -86,10 +94,28 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid response from model" }, { status: 500 });
   }
 
+  // Assemble choices in code so the correct choice is the solution's final answer.
+  const rawCq = parsed.check_question as {
+    latex_content?: string;
+    solution_latex?: string;
+    correct_answer?: string;
+    distractors?: string[];
+  };
+  const assembled = assembleChoices(rawCq.correct_answer, rawCq.distractors);
+  if (!assembled) {
+    return NextResponse.json({ error: "Could not assemble a valid check question from model output" }, { status: 502 });
+  }
+  const checkQuestion = {
+    latex_content: rawCq.latex_content ?? "",
+    solution_latex: rawCq.solution_latex ?? "",
+    choices: assembled.choices,
+    correct_index: assembled.correct_index,
+  };
+
   const { data: inserted, error: insertErr } = await supabase
     .from("learn_refreshers")
     .upsert(
-      { keyword_id, rule_latex: parsed.rule_latex, example_latex: parsed.example_latex, check_question: parsed.check_question, model: "gemini-3.5-flash" },
+      { keyword_id, rule_latex: parsed.rule_latex, example_latex: parsed.example_latex, check_question: checkQuestion, model: "gpt-5.4-mini" },
       { onConflict: "keyword_id" }
     )
     .select("id")
