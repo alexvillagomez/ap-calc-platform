@@ -1018,6 +1018,7 @@ export default function McatPracticePage() {
                     questionId={currentQuestion.id}
                     contentType="question"
                     resetSignal={currentQuestion.id}
+                    answerSignal={questionPhase}
                     onRefresherUsed={() => setUsedRefresher(true)}
                   />
 

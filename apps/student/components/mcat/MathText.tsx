@@ -133,10 +133,20 @@ export default function MathText({
   children: string | null | undefined;
   className?: string;
 }) {
-  // Harden against legacy rows that were stored with ANSI/control-char
-  // corruption (ESC sequences → box glyphs). Stripping them here means already-
-  // cached content renders cleanly without waiting for regeneration.
-  const stripped = stripControlChars(children ?? "");
+  // Repair LaTeX-command corruption from JSON single-escaping: a model that
+  // emitted `\frac`/`\theta`/`\tan` with ONE backslash inside a JSON string has
+  // its `\f`/`\t`/`\b`/`\r` parsed into the literal control chars FF/TAB/BS/CR,
+  // dropping the backslash (e.g. `\frac` → `<FF>rac` → renders as "rac"). Map
+  // those control chars back to `\f`/`\t`/`\b`/`\r` so the command renders.
+  // Newlines (\n) are legitimate (step breaks) and left intact.
+  const repaired = (children ?? "")
+    .replace(/\x08/g, "\\b")
+    .replace(/\t/g, "\\t")
+    .replace(/\f/g, "\\f")
+    .replace(/\r/g, "\\r");
+
+  // Harden against legacy rows stored with ANSI/ESC corruption (→ box glyphs).
+  const stripped = stripControlChars(repaired);
 
   // Render-side safety net for stored ASCII science notation.
   // Only runs when there are no existing delimiters/LaTeX — avoids double-processing

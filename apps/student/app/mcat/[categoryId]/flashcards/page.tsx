@@ -141,7 +141,23 @@ function McatFlashcardsInner({
           ...scopeBody,
         }),
       });
-      if (!res.ok) throw new Error(await res.text().catch(() => "Unknown error"));
+      if (!res.ok) {
+        // Surface a friendly message, not the raw JSON body. The most common
+        // case here is an umbrella/section category with no drillable keywords.
+        const raw = await res.text().catch(() => "");
+        let friendly = "We couldn't load flashcards for this topic yet.";
+        try {
+          const parsed = JSON.parse(raw) as { error?: string };
+          if (parsed?.error && /no keywords|unknown category/i.test(parsed.error)) {
+            friendly = "No flashcards here yet — pick a specific topic to study.";
+          } else if (parsed?.error) {
+            friendly = parsed.error;
+          }
+        } catch {
+          /* non-JSON body → keep the generic friendly message */
+        }
+        throw new Error(friendly);
+      }
       const data = await res.json() as { flashcards: Flashcard[] };
       const loaded = data.flashcards ?? [];
 

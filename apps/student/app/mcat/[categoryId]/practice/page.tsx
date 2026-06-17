@@ -1154,6 +1154,7 @@ function McatPracticeInner({
               questionId={question.id}
               contentType="question"
               resetSignal={question.id}
+              answerSignal={phase}
               onRefresherUsed={() => setUsedRefresher(true)}
             />
 

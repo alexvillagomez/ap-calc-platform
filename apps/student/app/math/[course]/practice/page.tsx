@@ -708,6 +708,7 @@ function MathGeneralPracticeInner({
               questionId={question.id}
               contentType="question"
               resetSignal={question.id}
+              answerSignal={questionPhase}
               onRefresherUsed={() => setUsedRefresher(true)}
             />
 
