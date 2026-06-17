@@ -233,5 +233,27 @@ export async function GET(request: Request) {
     };
   });
 
-  return NextResponse.json({ categories });
+  // Honest per-question counts from the attempt log (NOT the summed-per-keyword
+  // totals, which over-count a question by its number of tagged keywords).
+  let questionsAnswered = 0;
+  let correctAnswers = 0;
+  if (sessionId) {
+    const { count: total } = await supabase
+      .from("mcat_question_attempts")
+      .select("id", { count: "exact", head: true })
+      .eq("session_id", sessionId);
+    const { count: corr } = await supabase
+      .from("mcat_question_attempts")
+      .select("id", { count: "exact", head: true })
+      .eq("session_id", sessionId)
+      .eq("correct", true);
+    questionsAnswered = total ?? 0;
+    correctAnswers = corr ?? 0;
+  }
+
+  return NextResponse.json({
+    categories,
+    questions_answered: questionsAnswered,
+    correct_answers: correctAnswers,
+  });
 }

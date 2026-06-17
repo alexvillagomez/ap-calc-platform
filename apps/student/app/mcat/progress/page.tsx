@@ -327,6 +327,9 @@ export default function McatProgressPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Honest per-question counts from the attempt log (NOT summed per-keyword).
+  const [questionsAnswered, setQuestionsAnswered] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
 
   const load = async () => {
     setLoading(true);
@@ -335,8 +338,10 @@ export default function McatProgressPage() {
       const sid = await getOrCreateMcatSession();
       const res = await fetch(`/api/mcat/taxonomy?session_id=${sid}`);
       if (!res.ok) throw new Error(await res.text());
-      const data = await res.json() as { categories: Category[] };
+      const data = await res.json() as { categories: Category[]; questions_answered?: number; correct_answers?: number };
       setCategories(data.categories ?? []);
+      setQuestionsAnswered(data.questions_answered ?? 0);
+      setCorrectAnswers(data.correct_answers ?? 0);
     } catch (e) {
       setError((e as Error).message ?? "Failed to load progress");
     } finally {
@@ -350,8 +355,8 @@ export default function McatProgressPage() {
 
   const stats = computeOverallStats(categories);
   const overallAccuracy =
-    stats.totalAttempts > 0
-      ? Math.round((stats.totalCorrect / stats.totalAttempts) * 100)
+    questionsAnswered > 0
+      ? Math.round((correctAnswers / questionsAnswered) * 100)
       : null;
 
   return (
@@ -412,8 +417,8 @@ export default function McatProgressPage() {
               </Card>
               <Card className="p-3 text-center" noPadding>
                 <div className="p-3 text-center">
-                  <p className="text-xl font-bold text-neutral-900">{stats.totalAttempts}</p>
-                  <p className="text-xs text-neutral-500 mt-0.5">Attempts</p>
+                  <p className="text-xl font-bold text-neutral-900">{questionsAnswered}</p>
+                  <p className="text-xs text-neutral-500 mt-0.5">Questions answered</p>
                 </div>
               </Card>
               <Card className="p-3 text-center" noPadding>

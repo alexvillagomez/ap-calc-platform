@@ -287,6 +287,10 @@ function MathProgressInner({
   const [error, setError] = useState<string | null>(null);
   const [categories, setCategories] = useState<MathCategory[]>([]);
   const [sectionFilter, setSectionFilter] = useState<string | null>(null);
+  // Honest per-question counts from the attempt log (see /api/math/taxonomy).
+  // NOT the summed-per-keyword totals, which over-count multi-tagged questions.
+  const [questionsAnswered, setQuestionsAnswered] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
 
   const load = async () => {
     setLoading(true);
@@ -297,8 +301,13 @@ function MathProgressInner({
         `/api/math/taxonomy?session_id=${encodeURIComponent(sid)}&course=${encodeURIComponent(course)}`
       );
       if (!r.ok) throw new Error(await r.text().catch(() => "Unknown error"));
-      const d = (await r.json()) as MathTaxonomyResponse;
+      const d = (await r.json()) as MathTaxonomyResponse & {
+        questions_answered?: number;
+        correct_answers?: number;
+      };
       setCategories(d.categories ?? []);
+      setQuestionsAnswered(d.questions_answered ?? 0);
+      setCorrectAnswers(d.correct_answers ?? 0);
     } catch (e) {
       setError((e as Error).message ?? "Failed to load progress");
     } finally {
@@ -313,8 +322,8 @@ function MathProgressInner({
 
   const stats = computeOverallStats(categories);
   const overallPct =
-    stats.totalAttempts > 0
-      ? Math.round((stats.totalCorrect / stats.totalAttempts) * 100)
+    questionsAnswered > 0
+      ? Math.round((correctAnswers / questionsAnswered) * 100)
       : null;
 
   // Section filter
@@ -384,7 +393,7 @@ function MathProgressInner({
                   <p className="text-xs text-neutral-500 mt-0.5">Keywords practiced</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-neutral-900">{stats.totalAttempts}</p>
+                  <p className="text-2xl font-bold text-neutral-900">{questionsAnswered}</p>
                   <p className="text-xs text-neutral-500 mt-0.5">Questions answered</p>
                 </div>
                 <div>
@@ -394,7 +403,7 @@ function MathProgressInner({
                   <p className="text-xs text-neutral-500 mt-0.5">Overall accuracy</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-neutral-900">{stats.totalCorrect}</p>
+                  <p className="text-2xl font-bold text-neutral-900">{correctAnswers}</p>
                   <p className="text-xs text-neutral-500 mt-0.5">Correct answers</p>
                 </div>
               </div>

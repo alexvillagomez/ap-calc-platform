@@ -277,5 +277,31 @@ export async function GET(request: Request) {
     };
   });
 
-  return NextResponse.json({ categories });
+  // Honest per-question counts (NOT summed per-keyword, which over-counts a
+  // question by its number of tagged keywords). Count rows in the attempt log
+  // for questions belonging to THIS course's categories.
+  let questionsAnswered = 0;
+  let correctAnswers = 0;
+  if (sessionId) {
+    const courseCatIds = [...membershipMap.keys()] as string[];
+    const { count: total } = await supabase
+      .from("math_question_attempts")
+      .select("id, q:math_questions!inner(category_id)", { count: "exact", head: true })
+      .eq("session_id", sessionId)
+      .in("q.category_id", courseCatIds);
+    const { count: corr } = await supabase
+      .from("math_question_attempts")
+      .select("id, q:math_questions!inner(category_id)", { count: "exact", head: true })
+      .eq("session_id", sessionId)
+      .eq("correct", true)
+      .in("q.category_id", courseCatIds);
+    questionsAnswered = total ?? 0;
+    correctAnswers = corr ?? 0;
+  }
+
+  return NextResponse.json({
+    categories,
+    questions_answered: questionsAnswered,
+    correct_answers: correctAnswers,
+  });
 }
