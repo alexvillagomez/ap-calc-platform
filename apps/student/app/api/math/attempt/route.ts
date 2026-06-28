@@ -3,16 +3,24 @@
  *
  * Record a student's answer to a math question.
  * - Inserts into math_question_attempts.
- * - EMA-updates math_student_keyword_states (learning rate 0.12, same as MCAT).
- * - State machine: mastered (score ≥ 0.8 AND consecutive_correct ≥ 4),
- *   needs_lesson (dont_know OR score < 0.35 after ≥ 3 attempts), in_progress otherwise.
+ * - Updates math_student_keyword_states via the logarithmic, difficulty/source-
+ *   weighted mastery model in lib/courseEngine/adaptive.ts (updateMasteryMap).
+ * - State machine: mastered (score ≥ MASTERY_ADVANCE — threshold only, NO
+ *   consecutive-correct gate), needs_lesson (dont_know OR score < 0.35 after
+ *   ≥ 3 attempts), in_progress otherwise.
  * - Sets course on states (passed in body; defaults to "precalc").
  * - Returns keyword_states + needs_lesson flag.
  */
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
-import { updateStrengths, computeNextReviewDate } from "@/lib/practiceAlgorithm";
+import { computeNextReviewDate } from "@/lib/practiceAlgorithm";
+import {
+  updateMasteryMap,
+  isMastered,
+  difficultyTierFromScore,
+  MASTERY_START,
+} from "@/lib/courseEngine/adaptive";
 import {
   autoResolvePriorities,
   logServerEvent,
@@ -28,6 +36,41 @@ export const runtime = "nodejs";
 // delta is multiplied by this factor and the answer never counts toward the clean
 // consecutive_correct streak that drives mastery.
 const REFRESHER_CREDIT_FACTOR = 0.4;
+
+// Wrong-answer-driven (distractor-specific) weighting. When a student picks a
+// specific wrong choice, that distractor encodes a specific misconception tied to
+// its own keyword_weights (stored in math_questions.wrong_answer_data, aligned to
+// choices). Picking it is strong evidence of weakness on THOSE keywords, so we
+// shift the student's mastery on each toward the misconception by up to ~20%
+// (scaled by the distractor's weight for that keyword): score → score·(1−0.20·w).
+// This is ON TOP OF the generic EMA on the question's own keyword_weights, and is
+// fully fail-soft — questions with no wrong_answer_data fall back to old behavior.
+const DISTRACTOR_WRONG_SHIFT = 0.20;
+
+type WrongAnswerEntry = {
+  description?: string | null;
+  embedding?: number[] | null;
+  keyword_weights?: Record<string, number> | null;
+} | null;
+
+/** Pull the selected distractor's keyword_weights, if present + this was wrong. */
+function selectedDistractorWeights(
+  wrongAnswerData: unknown,
+  selectedIndex: number | undefined,
+  wasCorrect: boolean
+): Record<string, number> {
+  if (wasCorrect || selectedIndex == null) return {};
+  if (!Array.isArray(wrongAnswerData)) return {};
+  const entry = wrongAnswerData[selectedIndex] as WrongAnswerEntry;
+  const w = entry?.keyword_weights;
+  if (!w || typeof w !== "object") return {};
+  const out: Record<string, number> = {};
+  for (const [id, val] of Object.entries(w)) {
+    const num = typeof val === "number" ? val : Number(val);
+    if (Number.isFinite(num) && num > 0) out[id] = Math.min(1, num);
+  }
+  return out;
+}
 
 export async function POST(request: Request) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -79,10 +122,10 @@ export async function POST(request: Request) {
 
   const supabase = createClient(supabaseUrl, key);
 
-  // Load question
+  // Load question (wrong_answer_data carries per-distractor misconception weights)
   const { data: question, error: questionError } = await supabase
     .from("math_questions")
-    .select("correct_index, keyword_weights, category_id")
+    .select("correct_index, keyword_weights, category_id, wrong_answer_data, difficulty")
     .eq("id", question_id)
     .maybeSingle();
 
@@ -110,7 +153,17 @@ export async function POST(request: Request) {
 
   const keywordWeights =
     (question.keyword_weights as Record<string, number>) ?? {};
-  const kwIds = Object.keys(keywordWeights);
+  // The selected distractor's misconception keywords (empty if correct / no data).
+  const distractorWeights = selectedDistractorWeights(
+    question.wrong_answer_data,
+    selected_index,
+    correct
+  );
+  // Union of the question's keywords and the chosen distractor's keywords — the
+  // misconception may implicate a DIFFERENT keyword than the question's main one.
+  const kwIds = [
+    ...new Set([...Object.keys(keywordWeights), ...Object.keys(distractorWeights)]),
+  ];
 
   if (kwIds.length === 0) {
     return NextResponse.json({
@@ -134,8 +187,19 @@ export async function POST(request: Request) {
   const filteredWeights = Object.fromEntries(
     Object.entries(keywordWeights).filter(([id]) => validKwSet.has(id))
   );
+  const filteredDistractorWeights = Object.fromEntries(
+    Object.entries(distractorWeights).filter(([id]) => validKwSet.has(id))
+  );
 
-  if (Object.keys(filteredWeights).length === 0) {
+  // Every keyword we'll write a state for: question keywords ∪ distractor keywords.
+  const targetKwIds = [
+    ...new Set([
+      ...Object.keys(filteredWeights),
+      ...Object.keys(filteredDistractorWeights),
+    ]),
+  ];
+
+  if (targetKwIds.length === 0) {
     return NextResponse.json({
       correct,
       correct_index: question.correct_index as number,
@@ -150,21 +214,30 @@ export async function POST(request: Request) {
       "keyword_id, score, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, spaced_review_due_at, spaced_review_count"
     )
     .eq("session_id", session_id)
-    .in("keyword_id", Object.keys(filteredWeights));
+    .in("keyword_id", targetKwIds);
 
   const existingMap = new Map(
     (existingStates ?? []).map((s) => [s.keyword_id as string, s])
   );
 
-  // EMA update (learning rate 0.12 — same as MCAT)
+  // EMA update (learning rate 0.12 — same as MCAT) over the union of keywords.
   const currentStrengths: Record<string, number> = Object.fromEntries(
-    Object.keys(filteredWeights).map((id) => [
+    targetKwIds.map((id) => [
       id,
-      (existingMap.get(id)?.score as number) ?? 0.5,
+      (existingMap.get(id)?.score as number) ?? MASTERY_START,
     ])
   );
 
-  let newStrengths = updateStrengths(currentStrengths, filteredWeights, correct);
+  // Logarithmic, context-aware mastery update on the QUESTION's keyword weights.
+  // Source = question (worth more than a flashcard); difficulty tier from the
+  // stored 0–1 difficulty (a correct HARD item boosts more). dont_know = small drop.
+  const difficultyTier = difficultyTierFromScore(question.difficulty as number);
+  let newStrengths = updateMasteryMap(currentStrengths, filteredWeights, {
+    correct,
+    dontKnow: dont_know,
+    difficulty: difficultyTier,
+    source: "question",
+  });
 
   // Post-refresher dampening: scale down only the positive gain of a correct
   // answer. Wrong answers and dont_know are unaffected (they already hurt).
@@ -179,8 +252,20 @@ export async function POST(request: Request) {
     newStrengths = dampened;
   }
 
+  // Wrong-answer-driven shift: pull the chosen distractor's misconception keywords
+  // toward the misconception (~20% scaled by the distractor's weight). Applied on
+  // top of the generic EMA so the specific wrong idea is penalized harder.
+  if (!correct && Object.keys(filteredDistractorWeights).length > 0) {
+    const shifted: Record<string, number> = { ...newStrengths };
+    for (const [id, w] of Object.entries(filteredDistractorWeights)) {
+      const base = shifted[id] ?? currentStrengths[id] ?? 0.5;
+      shifted[id] = Math.max(0, base * (1 - DISTRACTOR_WRONG_SHIFT * w));
+    }
+    newStrengths = shifted;
+  }
+
   const now = new Date().toISOString();
-  const upserts = Object.keys(filteredWeights).map((kwId) => {
+  const upserts = targetKwIds.map((kwId) => {
     const prev = existingMap.get(kwId);
     const prevTotal = (prev?.total_attempts as number) ?? 0;
     const prevCorrect = (prev?.correct_attempts as number) ?? 0;
@@ -208,7 +293,10 @@ export async function POST(request: Request) {
     let spacedReviewDueAt: string | null = prevSpacedReviewDueAt;
     let spacedReviewCount = prevSpacedReviewCount;
 
-    const masteryMet = score >= 0.8 && consecutiveCorrect >= 4;
+    // THRESHOLD-based mastery — no "N correct in a row" gate. Crossing the 0–1
+    // MASTERY_ADVANCE score is sufficient (consecutive_correct is still recorded
+    // for telemetry / the next-question difficulty escalation bump, not gating).
+    const masteryMet = isMastered(score);
     const wasAlreadyMastered = prevState === "mastered";
 
     if (masteryMet && !wasAlreadyMastered) {

@@ -14,8 +14,10 @@ export interface FunctionGraphProps {
   width?: number;
   /** SVG height (default 320) */
   height?: number;
-  /** Optional points to mark */
+  /** Optional points to mark (filled dots) */
   points?: Array<{ x: number; y: number; label?: string }>;
+  /** Optional removable-discontinuity points to mark as OPEN circles (holes). */
+  holes?: Array<{ x: number; y: number; label?: string }>;
   /** Enforce equal (1:1) scaling between x- and y-axis units (default true). Set false when the
    *  ranges are too lopsided for 1:1 to be readable (e.g. rangeX=[-10,10], rangeY=[-2,2]). */
   equalScale?: boolean;
@@ -42,6 +44,7 @@ export function FunctionGraph({
   width = 420,
   height = 320,
   points = [],
+  holes = [],
   equalScale = true,
 }: FunctionGraphProps) {
   const fn = useMemo(() => parseFunctionEquation(equation), [equation]);
@@ -218,6 +221,22 @@ export function FunctionGraph({
       );
     });
 
+  // Holes = removable discontinuities: an OPEN circle (white fill, dark ring)
+  // sitting on the curve to show f is undefined / not equal there.
+  const holeNodes = holes
+    .filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y))
+    .map((p, i) => {
+      const text = p.label ?? `(${formatTick(p.x)}, ${formatTick(p.y)})`;
+      return (
+        <g key={`hole-${i}`}>
+          <circle cx={toSvgX(p.x)} cy={toSvgY(p.y)} r={3.6} fill="#ffffff" stroke="#111827" strokeWidth="1.5" />
+          <text x={toSvgX(p.x) + 8} y={toSvgY(p.y) - 7} fontFamily={SERIF} fontSize={12} fill="#111827">
+            {text}
+          </text>
+        </g>
+      );
+    });
+
   return (
     <div className="my-4 flex justify-center overflow-x-auto w-full">
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="max-w-full">
@@ -227,6 +246,7 @@ export function FunctionGraph({
         {labels}
         <path d={d} fill="none" stroke="#111827" strokeWidth="1.5" />
         {pointNodes}
+        {holeNodes}
       </svg>
     </div>
   );

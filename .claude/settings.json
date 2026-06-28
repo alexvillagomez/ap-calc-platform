@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm ls *)",
+      "Bash(which chromium-cli *)",
+      "Read(//Applications/**)",
+      "Bash(npm install *)",
+      "Read(//tmp/**)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -s -X DELETE https://nnkpvezsyumryhnulyvt.supabase.co/rest/v1/learn_lessons?id=neq.00000000-0000-0000-0000-000000000000 -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ua3B2ZXpzeXVtcnlobnVseXZ0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzQ0MjczMCwiZXhwIjoyMDg5MDE4NzMwfQ.eHSzg_4wBZaTjAvIm5fTmdL3w_e-GhsiHaXrimmES4E' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ua3B2ZXpzeXVtcnlobnVseXZ0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzQ0MjczMCwiZXhwIjoyMDg5MDE4NzMwfQ.eHSzg_4wBZaTjAvIm5fTmdL3w_e-GhsiHaXrimmES4E' -H 'Prefer: return=representation,count=exact')",
+      "Bash(curl -s https://nnkpvezsyumryhnulyvt.supabase.co/rest/v1/learn_lessons?select=count -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ua3B2ZXpzeXVtcnlobnVseXZ0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzQ0MjczMCwiZXhwIjoyMDg5MDE4NzMwfQ.eHSzg_4wBZaTjAvIm5fTmdL3w_e-GhsiHaXrimmES4E' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ua3B2ZXpzeXVtcnlobnVseXZ0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzQ0MjczMCwiZXhwIjoyMDg5MDE4NzMwfQ.eHSzg_4wBZaTjAvIm5fTmdL3w_e-GhsiHaXrimmES4E' -H 'Prefer: count=exact' -I)"
+    ]
+  }
+}

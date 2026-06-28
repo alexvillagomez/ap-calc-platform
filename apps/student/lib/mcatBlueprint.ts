@@ -106,7 +106,7 @@ export function buildBlueprintBlock(
     `OUT OF SCOPE — do NOT make any item PRIMARILY about these or require the student to apply them as the tested skill (they may appear only as incidental context or as the stated conclusion):\n${outOfScopeBullets}`,
     `KEY TERMS: ${keyTermsLine}`,
     `BOUNDARY: ${blueprint.boundary_statement}`,
-    "Any question or lesson content whose PRIMARY tested skill or required computation is out-of-scope is INVALID. Stay strictly inside the in-scope concepts.",
+    "Any question or lesson content whose PRIMARY tested skill or required computation is out-of-scope is INVALID. You may NAME an out-of-scope concept as incidental context, but you must NOT build the question's reasoning, its worked solution, or the justification of the correct answer on an out-of-scope skill (e.g. if ionization/pKa is out of scope, do not justify an answer by reasoning about proton loss or charge at a given pH). Stay strictly inside the in-scope concepts.",
   ].join("\n");
 }
 

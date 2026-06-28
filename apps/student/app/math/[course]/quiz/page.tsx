@@ -10,8 +10,8 @@ import MathFeedbackWidget from "@/components/math/MathFeedbackWidget";
 import QuestionToolbar from "@/components/practice/QuestionToolbar";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { ComboMeter } from "@/components/gamification/ComboMeter";
-import { SoundToggle } from "@/components/ui/SoundToggle";
+import { GrindMeter } from "@/components/gamification/GrindMeter";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
 import { getOrCreateMathSession } from "@/lib/mathSession";
@@ -19,7 +19,6 @@ import {
   MathQuestion,
   MathCategory,
   MathTaxonomyResponse,
-  diffLabel,
   COURSE_LABELS,
 } from "@/components/math/mathUiTypes";
 import type { MathCourse } from "@/lib/mathTypes";
@@ -87,6 +86,7 @@ function MathCourseQuizInner({
   const [phase, setPhase] = useState<Phase>("loading");
   const [errorMsg, setErrorMsg] = useState("");
   const [combo, setCombo] = useState(0);
+  const [sessionStart] = useState(() => Date.now());
   const [usedRefresher, setUsedRefresher] = useState(false);
 
   useStreakTouchOnce();
@@ -210,7 +210,6 @@ function MathCourseQuizInner({
   const scorePct =
     answers.length > 0 ? Math.round((correctCount / answers.length) * 100) : 0;
   const currentQ = questions[currentIdx];
-  const progress = questions.length > 0 ? currentIdx / questions.length : 0;
   const selectedCat = categories.find((c) => c.id === selectedCategoryId);
 
   return (
@@ -233,19 +232,10 @@ function MathCourseQuizInner({
               </p>
             )}
             <StreakBadge />
-            <SoundToggle />
+            <NavMenu />
           </div>
         </div>
       </header>
-
-      {phase === "quiz" && (
-        <div className="h-1 bg-neutral-200">
-          <div
-            className="h-full bg-brand-500 transition-all duration-300"
-            style={{ width: `${Math.round(progress * 100)}%` }}
-          />
-        </div>
-      )}
 
       <main className="max-w-2xl mx-auto px-4 py-8 space-y-4">
         {/* Category picker */}
@@ -304,6 +294,9 @@ function MathCourseQuizInner({
         {/* Active quiz question */}
         {phase === "quiz" && currentQ && (
           <>
+            <div className="pb-1">
+              <GrindMeter mode="quiz" streak={combo} answered={answers.length} startedAt={sessionStart} hidden />
+            </div>
             <div className="flex gap-1.5 flex-wrap justify-center">
               {questions.map((_, i) => (
                 <div
@@ -314,17 +307,6 @@ function MathCourseQuizInner({
                 />
               ))}
             </div>
-
-            {(() => {
-              const diff = diffLabel(currentQ.difficulty);
-              return diff ? (
-                <div className="flex">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${diff.cls}`}>
-                    {diff.label}
-                  </span>
-                </div>
-              ) : null;
-            })()}
 
             <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
               <p className="text-sm font-medium text-neutral-900 leading-relaxed">
@@ -345,8 +327,6 @@ function MathCourseQuizInner({
               resetSignal={currentQ.id}
               onRefresherUsed={() => setUsedRefresher(true)}
             />
-
-            <ComboMeter combo={combo} />
 
             <div className="space-y-2">
               {currentQ.choices.map((choice, i) => (

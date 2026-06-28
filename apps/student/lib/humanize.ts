@@ -11,7 +11,10 @@
 
 /** Known prefix patterns to strip, ordered from longest to shortest. */
 const STRIP_PREFIXES = [
+  "mcat_psychsoc_",
   "mcat_biology_",
+  "mcat_physics_",
+  "mcat_chemistry_",
   "mcat_",
   "calc_ab_",
   "calc_unit_",
@@ -53,6 +56,15 @@ export function humanizeSlug(slug: string): string {
       s = s.slice(prefix.length);
       break;
     }
+  }
+
+  // Strip a leading umbrella/topic prefix like "limit_1_", "deriv_3_", "integ_6_"
+  // (an abbrev + unit number that prefixes math calc keyword ids). These are
+  // internal grouping slugs, never meaningful display text. Only strip when at
+  // least one real word remains after it.
+  {
+    const stripped = s.replace(/^[a-z]+_\d+_(?=[a-z])/, "");
+    if (stripped) s = stripped;
   }
 
   // Strip known suffixes

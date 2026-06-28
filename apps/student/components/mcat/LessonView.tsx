@@ -7,6 +7,7 @@ import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import MathText from "@/components/mcat/MathText";
+import { EndScreenActions, type EndAction } from "@/components/practice/EndScreenActions";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -19,10 +20,21 @@ interface CheckQuestion {
 
 interface MicroStep {
   step_index: number;
+  /** Optional understanding-check. When false (or choices blank), the page has no quiz. */
+  has_check?: boolean;
   explanation_latex: string;
   example_latex: string;
   check_question: CheckQuestion;
   hint_latex: string;
+}
+
+/** A page carries a check only when flagged AND it has real (non-blank) choices. */
+function stepHasCheck(step: MicroStep): boolean {
+  return (
+    step.has_check !== false &&
+    Array.isArray(step.check_question?.choices) &&
+    step.check_question.choices.some((c) => c.trim() !== "")
+  );
 }
 
 export interface LessonData {
@@ -50,6 +62,16 @@ interface LessonViewProps {
    * rendering.
    */
   initialLesson?: LessonData;
+  /**
+   * Optional end-of-lesson actions. When provided, the completion screen shows
+   * these choices (practice more / back to topic / home) instead of a single
+   * "Continue" button. Omit it to keep the single-Continue → onComplete behavior.
+   */
+  completionActions?: EndAction[];
+  /** When true, render a "← Previous lesson" control (page 1 / footer). */
+  hasPreviousLesson?: boolean;
+  /** Invoked when the student chooses to go to the previous lesson. */
+  onPreviousLesson?: () => void;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -61,10 +83,17 @@ export function LessonView({
   onComplete,
   onSkip,
   initialLesson,
+  completionActions,
+  hasPreviousLesson,
+  onPreviousLesson,
 }: LessonViewProps) {
   const [lesson, setLesson] = useState<LessonData | null>(initialLesson ?? null);
   const [loading, setLoading] = useState(!initialLesson);
   const [error, setError] = useState<string | null>(null);
+
+  // Prefer the clean DB label carried by the loaded lesson over a (possibly
+  // humanized-slug) prop, so the heading never shows an internal id prefix.
+  const displayLabel = lesson?.keyword_label?.trim() || keywordLabel;
 
   const [stepIndex, setStepIndex] = useState(0);
   const [stepPhase, setStepPhase] = useState<StepPhase>("read");
@@ -85,13 +114,15 @@ export function LessonView({
     try {
       const res = await fetch(`/api/mcat/lesson/${encodeURIComponent(keywordId)}`);
       if (!res.ok) {
-        const body = await res.text().catch(() => "Unknown error");
-        throw new Error(body || `HTTP ${res.status}`);
+        // Log the server detail for debugging, but NEVER surface raw error JSON
+        // to the student — show a friendly message instead.
+        await res.text().then((b) => console.error("mcat lesson load failed:", b)).catch(() => {});
+        throw new Error("friendly");
       }
       const data = (await res.json()) as LessonData;
       setLesson(data);
-    } catch (e) {
-      setError((e as Error).message ?? "Failed to load lesson");
+    } catch {
+      setError("We couldn't load this lesson right now — try again or skip.");
     } finally {
       setLoading(false);
     }
@@ -131,9 +162,19 @@ export function LessonView({
     }
   }, [lesson, stepIndex]);
 
+  // Spec: a wrong understanding-quiz answer returns the student to the read
+  // phase of the same page so they re-read it.
   const handleTryAgain = useCallback(() => {
     setSelectedChoice(null);
-    setStepPhase("question");
+    setStepPhase("read");
+    setShowHint(false);
+  }, []);
+
+  // Spec: free backward navigation between lesson pages.
+  const handleBack = useCallback(() => {
+    setStepIndex((i) => Math.max(0, i - 1));
+    setStepPhase("read");
+    setSelectedChoice(null);
     setShowHint(false);
   }, []);
 
@@ -174,7 +215,8 @@ export function LessonView({
             Lesson complete!
           </h2>
           <p className="text-sm text-neutral-500">
-            Great work on <span className="font-medium text-neutral-700">{keywordLabel}</span>. Time to practice.
+            Great work on <span className="font-medium text-neutral-700"><MathText>{keywordLabel}</MathText></span>.
+            {completionActions && completionActions.length > 0 ? " What's next?" : " Time to practice."}
           </p>
         </div>
         <div className="border-t border-neutral-100 pt-4">
@@ -184,9 +226,13 @@ export function LessonView({
             contentId={lesson.id}
           />
         </div>
-        <Button variant="primary" size="lg" className="w-full" onClick={onComplete}>
-          Continue →
-        </Button>
+        {completionActions && completionActions.length > 0 ? (
+          <EndScreenActions actions={completionActions} />
+        ) : (
+          <Button variant="primary" size="lg" className="w-full" onClick={onComplete}>
+            Continue →
+          </Button>
+        )}
       </div>
     );
   }
@@ -226,7 +272,7 @@ export function LessonView({
         {/* Lesson label */}
         <div className="px-5 py-3 border-b border-neutral-100 bg-neutral-50">
           <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
-            Lesson: {keywordLabel}
+            Lesson: {displayLabel}
           </p>
         </div>
 
@@ -239,9 +285,10 @@ export function LessonView({
                 <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-2">
                   Explanation
                 </p>
-                <p className="text-sm text-neutral-800 leading-relaxed">
+                {/* div (not p): MathText may render a figure block (Molecule/Mermaid/table). */}
+                <div className="text-sm text-neutral-800 leading-relaxed">
                   <MathText>{step.explanation_latex}</MathText>
-                </p>
+                </div>
               </div>
 
               {/* Example */}
@@ -250,20 +297,22 @@ export function LessonView({
                   <p className="text-xs font-semibold text-brand-600 uppercase tracking-wide mb-2">
                     Example
                   </p>
-                  <p className="text-sm text-neutral-800 leading-relaxed">
+                  <div className="text-sm text-neutral-800 leading-relaxed">
                     <MathText>{step.example_latex}</MathText>
-                  </p>
+                  </div>
                 </div>
               )}
 
-              <Button variant="primary" size="lg" className="w-full" onClick={() => setStepPhase("question")}>
-                Try a question →
-              </Button>
+              {stepHasCheck(step) && (
+                <Button variant="primary" size="lg" className="w-full" onClick={() => setStepPhase("question")}>
+                  Try a question →
+                </Button>
+              )}
             </>
           )}
 
-          {/* Question phase */}
-          {(stepPhase === "question" || stepPhase === "correct" || stepPhase === "wrong") && (
+          {/* Question phase — only rendered for pages that carry a check */}
+          {stepHasCheck(step) && (stepPhase === "question" || stepPhase === "correct" || stepPhase === "wrong") && (
             <>
               {/* Question stem */}
               <div>
@@ -306,11 +355,6 @@ export function LessonView({
                       <MathText>{step.check_question.solution_latex}</MathText>
                     </p>
                   )}
-                  <div className="flex justify-end pt-1">
-                    <Button variant="primary" size="md" onClick={handleNext}>
-                      {stepIndex + 1 >= totalSteps ? "Finish lesson →" : "Next step →"}
-                    </Button>
-                  </div>
                 </div>
               )}
 
@@ -334,18 +378,35 @@ export function LessonView({
                     </p>
                   )}
 
-                  <div className="flex gap-2 pt-1">
+                  <div className="flex pt-1">
                     <Button variant="primary" size="md" onClick={handleTryAgain} className="flex-1">
-                      Try again
-                    </Button>
-                    <Button variant="secondary" size="md" onClick={handleNext} className="flex-1">
-                      {stepIndex + 1 >= totalSteps ? "Finish lesson →" : "Move on →"}
+                      Re-read the page
                     </Button>
                   </div>
                 </div>
               )}
             </>
           )}
+        </div>
+
+        {/* Persistent footer: free navigation — answering the check is optional */}
+        <div className="px-5 py-3 border-t border-neutral-100 bg-neutral-50 flex items-center gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleBack}
+            disabled={stepIndex === 0}
+          >
+            ← Back
+          </Button>
+          {stepIndex === 0 && hasPreviousLesson && onPreviousLesson && (
+            <Button variant="secondary" size="sm" onClick={onPreviousLesson}>
+              ← Previous lesson
+            </Button>
+          )}
+          <Button variant="primary" size="sm" className="ml-auto" onClick={handleNext}>
+            {stepIndex + 1 >= totalSteps ? "Finish lesson →" : "Next →"}
+          </Button>
         </div>
       </div>
     </div>

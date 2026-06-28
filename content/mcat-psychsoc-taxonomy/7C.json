@@ -1,0 +1,432 @@
+{
+  "category_code": "7C",
+  "umbrellas": [
+    {
+      "slug": "habituation_dishabituation",
+      "label": "Habituation and Dishabituation",
+      "description": "The simplest form of learning — decreasing or restoring a response to a repeated, non-consequential stimulus.",
+      "intro": {
+        "slug": "habituation_dishabituation_intro",
+        "label": "Habituation and Dishabituation Overview",
+        "description": "Habituation is the decrease in a response after repeated, harmless exposure to the same stimulus — the simplest form of learning. Dishabituation is the recovery of that response when a novel or significant stimulus is introduced. Together they illustrate that even without reinforcement or association, organisms adapt their behavior based on experience.",
+        "examples": ["tuning out background traffic noise", "startle response weakens with repeated noise", "new smell restores faded response"]
+      },
+      "in_depth": [
+        {
+          "slug": "habituation",
+          "label": "Habituation",
+          "description": "Identify habituation as the gradual decrease in a behavioral response after repeated exposure to the same, consequence-free stimulus. This focuses on response decrease from repetition, not on extinction (which requires prior reinforcement, a separate keyword).",
+          "examples": ["habituating to a ticking clock in a quiet room", "startle response fades after repeated identical noise", "decreased attention to a repeated neutral stimulus"]
+        },
+        {
+          "slug": "dishabituation",
+          "label": "Dishabituation",
+          "description": "Identify dishabituation as the recovery of a habituated response when a novel or intense stimulus is presented, breaking the pattern of familiarity. This focuses on response restoration via novelty, not spontaneous recovery (which follows extinction in conditioning, a separate keyword).",
+          "examples": ["changing the sound frequency restores the startle response", "introducing a new smell reignites attention", "novel stimulus re-engages a habituated organism"]
+        }
+      ]
+    },
+    {
+      "slug": "classical_conditioning_basics",
+      "label": "Classical Conditioning — Stimuli and Responses",
+      "description": "The foundational stimulus-response elements of Pavlovian conditioning — what gets paired, what is learned, and the terminology for each.",
+      "intro": {
+        "slug": "classical_conditioning_basics_intro",
+        "label": "Classical Conditioning: Stimuli, Responses, and Pavlov",
+        "description": "Classical conditioning (Pavlov) is a form of associative learning in which a neutral stimulus becomes associated with a biologically significant one, eventually eliciting a response on its own. Understanding the terminology — unconditioned stimulus, unconditioned response, conditioned stimulus, conditioned response — is essential before studying the conditioning processes. The CS–US pairing is the engine of the whole system.",
+        "examples": ["Pavlov's dogs: bell → salivation", "CS–US temporal pairing", "neutral stimulus becomes conditioned"]
+      },
+      "in_depth": [
+        {
+          "slug": "unconditioned_stimulus_response",
+          "label": "Unconditioned stimulus and unconditioned response",
+          "description": "Define the unconditioned stimulus (US) as a stimulus that naturally and automatically triggers a response, and the unconditioned response (UR) as the unlearned, automatic reaction to it. This focuses on the innate US–UR pair, not the learned CS–CR pair (a separate keyword).",
+          "examples": ["food (US) → salivation (UR)", "loud noise (US) → flinch (UR)", "US requires no prior learning to produce a response"]
+        },
+        {
+          "slug": "conditioned_stimulus_response",
+          "label": "Conditioned stimulus and conditioned response",
+          "description": "Define the conditioned stimulus (CS) as a previously neutral stimulus that, after repeated pairing with the US, elicits a learned response, and the conditioned response (CR) as the learned reaction to the CS alone. This focuses on the acquired CS–CR relationship, not the innate US–UR pair (a separate keyword).",
+          "examples": ["bell (CS) → salivation (CR) after training", "tone paired with shock → fear to tone alone", "CR is often weaker than the UR"]
+        },
+        {
+          "slug": "neutral_stimulus",
+          "label": "Neutral stimulus",
+          "description": "Identify the neutral stimulus (NS) as a stimulus that initially produces no relevant response but becomes the conditioned stimulus after association with the US. This focuses on the pre-conditioning status of the future CS, not on what it becomes after conditioning (covered in the CS/CR keyword).",
+          "examples": ["bell before conditioning produces no salivation", "light that precedes food during acquisition", "NS → CS transformation through repeated pairing"]
+        }
+      ]
+    },
+    {
+      "slug": "classical_conditioning_processes",
+      "label": "Classical Conditioning — Processes",
+      "description": "The five dynamic processes by which classical conditioning is established, changed, and refined over time.",
+      "intro": {
+        "slug": "classical_conditioning_processes_intro",
+        "label": "Classical Conditioning: Acquisition, Extinction, and Beyond",
+        "description": "After the CS–US association is established, conditioning is not static — it can be strengthened (acquisition), eliminated (extinction), spontaneously returned (spontaneous recovery), broadened (generalization), or narrowed (discrimination). Each process describes a distinct phase or modification of the conditioned response and carries its own MCAT implications (e.g., phobia treatment via extinction).",
+        "examples": ["CS–US pairings build then fade the conditioned response", "five processes: acquisition extinction spontaneous recovery generalization discrimination", "therapy exploits extinction to reduce fear CRs"]
+      },
+      "in_depth": [
+        {
+          "slug": "cc_acquisition",
+          "label": "Acquisition (classical conditioning)",
+          "description": "Identify acquisition as the initial learning phase in which repeated CS–US pairings gradually strengthen the conditioned response. This focuses on the building of the association, not on its disappearance (extinction, a separate keyword).",
+          "examples": ["repeated bell–food pairings increase salivation to the bell", "CR strengthens across training trials", "contiguity and contingency determine acquisition rate"]
+        },
+        {
+          "slug": "cc_extinction",
+          "label": "Extinction (classical conditioning)",
+          "description": "Identify extinction as the gradual weakening and disappearance of the CR when the CS is repeatedly presented without the US. This focuses on eliminating the conditioned response; the return of the CR after a rest interval is spontaneous recovery (a separate keyword).",
+          "examples": ["ringing the bell without food until salivation ceases", "presenting CS alone → CR decreases", "extinction ≠ unlearning; the association is suppressed not erased"]
+        },
+        {
+          "slug": "spontaneous_recovery",
+          "label": "Spontaneous recovery",
+          "description": "Identify spontaneous recovery as the reappearance of a previously extinguished CR after a rest period, without further CS–US pairings. This focuses on the time-gap-induced return of the response, not on re-acquisition through new pairings (a separate keyword).",
+          "examples": ["extinguished fear response reappears after a night's sleep", "CR returns weakly after rest following extinction", "evidence that extinction suppresses but does not erase the association"]
+        },
+        {
+          "slug": "cc_generalization",
+          "label": "Stimulus generalization (classical conditioning)",
+          "description": "Identify stimulus generalization as the tendency for stimuli similar to the CS to also elicit the CR, with response strength decreasing as similarity decreases. This focuses on the spread of the response to related stimuli, not on restricting the response to only the trained CS (discrimination, a separate keyword).",
+          "examples": ["dog salivates to tones similar to the trained bell", "fear conditioned to one dog generalizes to other dogs", "generalization gradient: response decreases as stimuli differ more"]
+        },
+        {
+          "slug": "cc_discrimination",
+          "label": "Stimulus discrimination (classical conditioning)",
+          "description": "Identify stimulus discrimination as the learned ability to respond to the CS but not to similar stimuli that were never paired with the US. This focuses on narrowing the response to a specific stimulus, not on its spread to related stimuli (generalization, a separate keyword).",
+          "examples": ["dog learns to salivate only to a 1000 Hz tone, not 900 Hz", "fear response restricted to the specific dog that bit the child", "discrimination develops through differential reinforcement of the CS vs. similar stimuli"]
+        }
+      ]
+    },
+    {
+      "slug": "operant_conditioning_basics",
+      "label": "Operant Conditioning — Basics and Shaping",
+      "description": "The foundational concepts of Skinnerian conditioning: behavior is controlled by its consequences, and complex behaviors are built through shaping.",
+      "intro": {
+        "slug": "operant_conditioning_basics_intro",
+        "label": "Operant Conditioning: Behavior and Consequences",
+        "description": "Operant conditioning (Skinner) holds that voluntary behaviors increase or decrease in frequency depending on the consequences that follow them — reinforcement increases behavior, punishment decreases it. Unlike classical conditioning, which pairs stimuli, operant conditioning pairs behaviors with outcomes. Shaping extends this to build complex behaviors step-by-step through successive approximations.",
+        "examples": ["rat presses lever → food pellet → more lever pressing", "behavior–consequence contingency", "Skinner box / operant chamber"]
+      },
+      "in_depth": [
+        {
+          "slug": "law_of_effect",
+          "label": "Law of effect (Thorndike)",
+          "description": "State Thorndike's law of effect: behaviors followed by satisfying outcomes are strengthened; behaviors followed by unsatisfying outcomes are weakened. This is the conceptual ancestor of operant conditioning, not a specific reinforcement schedule or punishment procedure (separate keywords).",
+          "examples": ["cat escaping puzzle box faster over trials", "satisfying consequence → response more likely", "historical precursor to Skinner's operant work"]
+        },
+        {
+          "slug": "shaping",
+          "label": "Shaping (successive approximations)",
+          "description": "Define shaping as a procedure of reinforcing successive approximations toward a target behavior that the organism has never performed. This focuses on the incremental building of a new behavior, not on maintaining an existing one via scheduled reinforcement (a separate keyword).",
+          "examples": ["reinforcing a rat for moving toward, then touching, then pressing a lever", "training a dog to roll over step by step", "used when the target behavior never occurs spontaneously"]
+        },
+        {
+          "slug": "oc_extinction",
+          "label": "Extinction (operant conditioning)",
+          "description": "Identify operant extinction as the decrease and eventual cessation of a previously reinforced behavior when reinforcement is withheld. This focuses on eliminating an operant behavior by removing its consequence, not on eliminating a conditioned reflex via CS-alone presentations (classical extinction, a separate keyword).",
+          "examples": ["vending machine takes money without dispensing → stops using it", "child's tantrum stops being reinforced → tantrums decrease", "extinction burst often precedes the behavioral decline"]
+        }
+      ]
+    },
+    {
+      "slug": "reinforcement_types",
+      "label": "Types of Reinforcement",
+      "description": "The four types of reinforcement — positive, negative, primary, and conditioned — and how they differ in mechanism and example.",
+      "intro": {
+        "slug": "reinforcement_types_intro",
+        "label": "Reinforcement: Positive, Negative, Primary, and Conditioned",
+        "description": "Reinforcement always increases the likelihood of a behavior, but it does so in different ways: by adding something desirable (positive), by removing something aversive (negative), through biologically innate rewards (primary), or through learned rewards (conditioned/secondary). Distinguishing these types — especially positive vs negative reinforcement — is a high-yield MCAT skill because both increase behavior, unlike punishment.",
+        "examples": ["all reinforcement → more behavior", "positive adds; negative removes", "primary is unlearned; conditioned is learned"]
+      },
+      "in_depth": [
+        {
+          "slug": "positive_reinforcement",
+          "label": "Positive reinforcement",
+          "description": "Identify positive reinforcement as increasing a behavior by adding a desirable stimulus after it. This focuses on adding something rewarding, not removing something aversive (negative reinforcement, a separate keyword).",
+          "examples": ["giving a child candy for cleaning their room", "paycheck for working", "praise after a correct answer increases future responding"]
+        },
+        {
+          "slug": "negative_reinforcement",
+          "label": "Negative reinforcement",
+          "description": "Identify negative reinforcement as increasing a behavior by removing or avoiding an aversive stimulus after it. This focuses on removal of something unpleasant to increase behavior — not punishment (which decreases behavior, a separate keyword).",
+          "examples": ["taking aspirin removes a headache → more aspirin-taking", "fastening a seatbelt stops the alarm → more seatbelt-fastening", "negative reinforcement ≠ punishment; both differ in direction of behavior change"]
+        },
+        {
+          "slug": "primary_reinforcer",
+          "label": "Primary (unconditioned) reinforcer",
+          "description": "Identify primary reinforcers as stimuli that satisfy biological needs and are innately rewarding, requiring no prior learning. This focuses on unlearned reinforcement value, not on acquired reward value (conditioned reinforcers, a separate keyword).",
+          "examples": ["food, water, warmth, and sex as primary reinforcers", "no conditioning needed for food to be rewarding", "biologically driven reinforcement"]
+        },
+        {
+          "slug": "conditioned_reinforcer",
+          "label": "Conditioned (secondary) reinforcer",
+          "description": "Identify conditioned reinforcers as stimuli that have acquired reinforcing value through prior association with a primary reinforcer. This focuses on learned reward value, not innate reward value (primary reinforcers, a separate keyword).",
+          "examples": ["money is reinforcing only after learning it buys food", "tokens in a token economy", "praise becomes reinforcing after repeated pairing with primary rewards"]
+        }
+      ]
+    },
+    {
+      "slug": "reinforcement_schedules",
+      "label": "Reinforcement Schedules",
+      "description": "The four partial-reinforcement schedules — FR, VR, FI, VI — and how each pattern of reinforcement delivery shapes response rate and resistance to extinction.",
+      "intro": {
+        "slug": "reinforcement_schedules_intro",
+        "label": "Schedules of Reinforcement Overview",
+        "description": "After a behavior is established, partial (intermittent) reinforcement schedules determine when reinforcement is delivered, producing characteristic patterns of responding and striking differences in resistance to extinction. The four basic schedules are fixed-ratio, variable-ratio, fixed-interval, and variable-interval. Variable schedules produce higher rates and more resistance to extinction than fixed schedules — a core MCAT pattern.",
+        "examples": ["partial reinforcement produces greater extinction resistance than continuous", "ratio schedules → higher response rates than interval schedules", "slot machine = variable-ratio; paycheck = fixed-interval"]
+      },
+      "in_depth": [
+        {
+          "slug": "fixed_ratio_schedule",
+          "label": "Fixed-ratio (FR) schedule",
+          "description": "Identify the fixed-ratio schedule as one in which reinforcement is delivered after a set, predictable number of responses, producing high response rates with a post-reinforcement pause. This focuses on number-based fixed delivery, not on time-based or variable delivery (separate keywords).",
+          "examples": ["FR-5: reinforced after every 5 lever presses", "piecework pay: paid per set number of items produced", "post-reinforcement pause followed by rapid responding"]
+        },
+        {
+          "slug": "variable_ratio_schedule",
+          "label": "Variable-ratio (VR) schedule",
+          "description": "Identify the variable-ratio schedule as one in which reinforcement is delivered after an unpredictable, varying number of responses, producing the highest, most steady response rates and greatest resistance to extinction. This focuses on response-count variability, not on time-based variability (variable-interval, a separate keyword).",
+          "examples": ["slot machines: unpredictable payout after varying number of pulls", "fishing: catch varies in number of casts", "VR produces the strongest and most persistent responding"]
+        },
+        {
+          "slug": "fixed_interval_schedule",
+          "label": "Fixed-interval (FI) schedule",
+          "description": "Identify the fixed-interval schedule as one in which reinforcement is available only after a set time has elapsed, producing a scalloped response pattern (slow start, rapid increase near the interval end). This focuses on predictable time-based delivery, not on response-based delivery (ratio schedules, separate keywords).",
+          "examples": ["FI-60: first response after 60 s is reinforced", "weekly paycheck: little work early, rush at week's end", "scalloped cumulative record"]
+        },
+        {
+          "slug": "variable_interval_schedule",
+          "label": "Variable-interval (VI) schedule",
+          "description": "Identify the variable-interval schedule as one in which reinforcement is available after unpredictable time intervals, producing steady, moderate response rates and good resistance to extinction. This focuses on time-based variability, not on response-count variability (variable-ratio, a separate keyword).",
+          "examples": ["checking email: sometimes a message is there after varying waits", "pop quizzes on unpredictable days", "VI produces steady responding, unlike the bursting of ratio schedules"]
+        }
+      ]
+    },
+    {
+      "slug": "punishment",
+      "label": "Punishment",
+      "description": "The two forms of punishment — positive and negative — and how they differ from reinforcement in their effect on behavior.",
+      "intro": {
+        "slug": "punishment_intro",
+        "label": "Punishment: Positive, Negative, and Pitfalls",
+        "description": "Punishment decreases the future likelihood of a behavior, in contrast to reinforcement (which increases it). Positive punishment adds an aversive stimulus; negative punishment removes a desirable one — both reduce behavior. Understanding the positive/negative distinction and the limitations of punishment (aggression, fear, suppression without elimination) is a recurring MCAT theme.",
+        "examples": ["punishment always decreases behavior", "positive punishment adds an aversive stimulus", "negative punishment removes a desired stimulus"]
+      },
+      "in_depth": [
+        {
+          "slug": "positive_punishment",
+          "label": "Positive punishment",
+          "description": "Identify positive punishment as decreasing a behavior by adding an aversive stimulus following it. This focuses on adding something unpleasant to reduce responding, not on removing something to reduce behavior (negative punishment, a separate keyword).",
+          "examples": ["scolding a child after misbehavior", "electric shock after bar press in the lab", "speeding ticket following speeding"]
+        },
+        {
+          "slug": "negative_punishment",
+          "label": "Negative punishment",
+          "description": "Identify negative punishment as decreasing a behavior by removing a desirable stimulus following it. This focuses on removing something pleasant to reduce responding, not on adding something aversive (positive punishment, a separate keyword).",
+          "examples": ["taking away a teenager's phone after bad behavior", "losing screen time for not completing homework", "response cost: removing tokens in a token economy"]
+        }
+      ]
+    },
+    {
+      "slug": "escape_avoidance_learning",
+      "label": "Escape and Avoidance Learning",
+      "description": "Two negatively-reinforced operant behaviors in which organisms learn to terminate or prevent aversive stimuli.",
+      "intro": {
+        "slug": "escape_avoidance_learning_intro",
+        "label": "Escape and Avoidance: Negative Reinforcement in Action",
+        "description": "Escape and avoidance learning are both driven by negative reinforcement — the behavior increases because it removes or prevents an aversive outcome. In escape learning the organism responds after the aversive stimulus begins to terminate it; in avoidance learning the organism responds before the aversive stimulus occurs to prevent it entirely. Avoidance is especially resistant to extinction and underlies anxiety-driven behavior patterns.",
+        "examples": ["escape: response terminates ongoing shock", "avoidance: response prevents shock from occurring", "both increase behavior via negative reinforcement"]
+      },
+      "in_depth": [
+        {
+          "slug": "escape_learning",
+          "label": "Escape learning",
+          "description": "Identify escape learning as a form of negative reinforcement in which an organism learns a response that terminates an aversive stimulus that is already present. This focuses on ending ongoing aversive stimulation, not on preventing future aversive stimulation (avoidance learning, a separate keyword).",
+          "examples": ["rat learns to press lever to turn off a shock floor", "leaving a loud room once the noise starts", "response occurs after the aversive event begins"]
+        },
+        {
+          "slug": "avoidance_learning",
+          "label": "Avoidance learning",
+          "description": "Identify avoidance learning as a form of negative reinforcement in which an organism learns a response that prevents an aversive stimulus from occurring at all. This focuses on preventing the aversive event before it begins — more resistant to extinction than escape, because the organism never contacts the US.",
+          "examples": ["rat hears tone and jumps to avoid the shock", "checking gas gauge to avoid running out", "avoidance behavior persists long after the aversive stimulus is discontinued"]
+        }
+      ]
+    },
+    {
+      "slug": "cognitive_biological_factors_conditioning",
+      "label": "Cognitive and Biological Factors in Associative Learning",
+      "description": "How mental processes and biological constraints shape and limit what and how quickly organisms can learn through classical and operant conditioning.",
+      "intro": {
+        "slug": "cognitive_biological_factors_conditioning_intro",
+        "label": "Beyond Behaviorism: Cognitive and Biological Constraints on Learning",
+        "description": "Classical behaviorism treated organisms as blank slates, but research revealed that both cognitive processes (expectations, mental representations) and biological predispositions constrain what is learned and how fast. Cognitive factors — like the expectation that the CS predicts the US — govern acquisition; biological factors — like taste aversion and instinctive drift — show that evolution has made certain associations easier than others. These findings expanded conditioning theory into cognitive-behavioral and biopsychological frameworks.",
+        "examples": ["Garcia's taste aversion: one-trial learning after illness", "instinctive drift: trained behavior reverts to species-typical action", "Rescorla: contingency not contiguity drives classical conditioning"]
+      },
+      "in_depth": [
+        {
+          "slug": "cognitive_processes_conditioning",
+          "label": "Cognitive processes in associative learning",
+          "description": "Explain how cognitive factors — expectations, attention, and mental representations of CS–US contingencies — mediate classical and operant conditioning. This focuses on internal mental processes that modulate learning, not on the behavioral outcomes themselves (separate keywords).",
+          "examples": ["Rescorla's contingency model: CS must predict US, not just co-occur", "blocking: a pre-trained CS blocks learning about a new one", "latent learning: learning without immediate reinforcement (Tolman)"]
+        },
+        {
+          "slug": "biological_predispositions",
+          "label": "Biological predispositions in associative learning",
+          "description": "Identify biological preparedness as the evolved tendency for organisms to associate certain stimuli or responses more easily than others, challenging the 'equipotentiality' assumption. This focuses on innate constraints that shape what is learned, not on cognitive expectation effects (a separate keyword).",
+          "examples": ["rats readily associate taste with illness but not lights with illness", "Garcia effect: one-trial taste aversion", "humans rapidly acquire fear of snakes but not guns or cars"]
+        },
+        {
+          "slug": "instinctive_drift",
+          "label": "Instinctive drift",
+          "description": "Define instinctive drift as the tendency for trained behaviors to gradually revert toward species-typical, instinctual behaviors, even when such reversion is not reinforced. This focuses on evolutionary biology overriding operant training, not on cognitive processes modulating acquisition (a separate keyword).",
+          "examples": ["raccoons trained to deposit coins begin rubbing and washing them", "pigs root at discs they were trained to deposit", "Breland and Breland's misbehavior of organisms"]
+        }
+      ]
+    },
+    {
+      "slug": "observational_learning",
+      "label": "Observational Learning",
+      "description": "Learning by watching others — the mechanisms, neural bases, and real-world applications of Bandura's social learning theory.",
+      "intro": {
+        "slug": "observational_learning_intro",
+        "label": "Observational Learning: Modeling and Vicarious Experience",
+        "description": "Observational learning (Bandura) occurs when an individual acquires a behavior by watching a model perform it, without direct reinforcement. Key processes include attention, retention, reproduction, and motivation (ARRM). It explains transmission of social behaviors, skills, and even fears across individuals, and is underpinned by mirror-neuron systems that enable vicarious emotional experience. Applications range from phobia acquisition to prosocial media effects.",
+        "examples": ["Bandura's Bobo doll experiment", "children imitate aggressive or prosocial models", "learning surgical technique by watching an expert"]
+      },
+      "in_depth": [
+        {
+          "slug": "modeling",
+          "label": "Modeling",
+          "description": "Define modeling as the process by which an observer acquires a new behavior or modifies an existing one by observing a model, with factors like model similarity, prestige, and reward status influencing the likelihood of imitation. This focuses on the core observational mechanism, not on the neural substrate that enables it (mirror neurons, a separate keyword).",
+          "examples": ["Bandura's Bobo doll: children imitate adult aggression", "children more likely to copy high-status or same-sex models", "vicarious reinforcement: watching a model rewarded increases imitation"]
+        },
+        {
+          "slug": "mirror_neurons",
+          "label": "Mirror neurons",
+          "description": "Identify mirror neurons as neurons that fire both when an individual performs an action and when they observe another performing the same action, providing a neural basis for imitation and vicarious experience. This focuses on the underlying neural mechanism, not on the behavioral outcomes of observational learning (a separate keyword).",
+          "examples": ["mirror neurons in premotor cortex fire for own and observed grasping", "proposed neural basis for imitation and empathy", "originally discovered in macaque monkeys"]
+        },
+        {
+          "slug": "vicarious_emotions",
+          "label": "Role of the brain in vicarious emotions",
+          "description": "Explain how observing others' emotional experiences activates the observer's own emotional-processing brain circuits, enabling vicarious emotions such as empathy, vicarious fear, and secondhand embarrassment. This focuses on the brain-based vicarious emotional response, not on the mirror-neuron mechanism per se (a separate keyword).",
+          "examples": ["watching someone receive a painful shock activates observer's pain regions", "vicarious fear: seeing a model scared of a stimulus induces fear in the observer", "insular cortex and amygdala active during empathic responses"]
+        },
+        {
+          "slug": "observational_learning_applications",
+          "label": "Applications of observational learning",
+          "description": "Apply observational learning theory to explain acquisition and maintenance of individual behaviors — including phobias, aggression, prosocial behavior, and clinical interventions like modeling therapy. This focuses on real-world behavioral outcomes, not on the mechanisms (modeling or mirror neurons, separate keywords).",
+          "examples": ["phobia of dogs acquired by watching parent react fearfully", "media violence and aggressive behavior in children", "modeling therapy: therapist demonstrates approach to feared object"]
+        }
+      ]
+    },
+    {
+      "slug": "elaboration_likelihood_model",
+      "label": "Elaboration Likelihood Model",
+      "description": "Petty and Cacioppo's dual-route framework for how attitudes are changed through either deep argument processing or superficial peripheral cues.",
+      "intro": {
+        "slug": "elaboration_likelihood_model_intro",
+        "label": "ELM: Central and Peripheral Routes to Persuasion",
+        "description": "The Elaboration Likelihood Model (Petty & Cacioppo) proposes two routes through which persuasive messages change attitudes. The central route involves careful, effortful evaluation of the message's arguments and produces durable attitude change. The peripheral route relies on heuristics and superficial cues (source attractiveness, number of arguments) and produces less stable change. Motivation and ability to process determine which route dominates.",
+        "examples": ["central route: reading full drug-trial evidence and updating vaccine attitude", "peripheral route: endorsing a product because a celebrity uses it", "high elaboration → central; low elaboration → peripheral"]
+      },
+      "in_depth": [
+        {
+          "slug": "elm_central_route",
+          "label": "Central route to persuasion (ELM)",
+          "description": "Identify the central route as the ELM pathway in which attitude change results from careful, thoughtful processing of the message's actual arguments, producing durable attitudes that are more resistant to counter-persuasion. This focuses on deep cognitive elaboration, not on heuristic-based attitude change (peripheral route, a separate keyword).",
+          "examples": ["carefully reading a research summary before changing health behavior", "high personal relevance of the topic drives central processing", "attitude change via central route lasts longer and predicts behavior better"]
+        },
+        {
+          "slug": "elm_peripheral_route",
+          "label": "Peripheral route to persuasion (ELM)",
+          "description": "Identify the peripheral route as the ELM pathway in which attitude change results from superficial cues — source attractiveness, expertise, number of arguments — without deep processing of the message content, producing less durable attitudes. This focuses on heuristic-based persuasion, not on argument-quality evaluation (central route, a separate keyword).",
+          "examples": ["buying a product because the spokesperson is attractive", "agreeing with a speaker because they have many credentials", "low motivation or distraction → reliance on peripheral cues"]
+        },
+        {
+          "slug": "elm_elaboration_factors",
+          "label": "Factors determining elaboration (ELM)",
+          "description": "Identify the conditions — motivation (personal relevance, need for cognition) and ability (time, prior knowledge, freedom from distraction) — that determine whether the central or peripheral route is taken. This focuses on what drives route selection, not on the routes themselves (separate keywords).",
+          "examples": ["high personal relevance → more elaboration → central route", "distracted audience defaults to peripheral cues", "need for cognition as a personality predictor of central processing"]
+        }
+      ]
+    },
+    {
+      "slug": "social_cognitive_theory_attitude",
+      "label": "Social Cognitive Theory and Attitude Change",
+      "description": "Bandura's social cognitive theory as an account of how observation, self-efficacy, and reciprocal determinism drive behavior and attitude change.",
+      "intro": {
+        "slug": "social_cognitive_theory_attitude_intro",
+        "label": "Social Cognitive Theory: Self-Efficacy and Reciprocal Determinism",
+        "description": "Bandura's social cognitive theory extends observational learning to attitude and behavior change by emphasizing self-efficacy (belief in one's ability to perform a behavior) and reciprocal determinism (ongoing interaction among person, behavior, and environment). People observe models, form expectations, judge their own capability, and regulate behavior accordingly — a more cognitive and self-directed account than pure conditioning.",
+        "examples": ["self-efficacy belief predicts whether a behavior is attempted", "reciprocal determinism: environment shapes behavior shapes environment", "social cognitive theory bridges behaviorism and cognitive psychology"]
+      },
+      "in_depth": [
+        {
+          "slug": "self_efficacy",
+          "label": "Self-efficacy",
+          "description": "Define self-efficacy as an individual's belief in their capacity to execute a specific behavior or achieve a particular goal, which influences whether the behavior is attempted, how much effort is invested, and how long the person persists. This focuses on belief in one's own capability, not on general self-esteem or locus of control (separate concepts).",
+          "examples": ["high self-efficacy for exercise → more likely to start and maintain a fitness program", "Bandura: mastery experiences are the strongest source of self-efficacy", "low self-efficacy leads to avoidance of challenging tasks"]
+        },
+        {
+          "slug": "reciprocal_determinism",
+          "label": "Reciprocal determinism",
+          "description": "Define reciprocal determinism as Bandura's principle that behavior, personal factors (cognitions, emotions), and environmental factors continuously influence one another in a dynamic, bidirectional way. This focuses on the triadic mutual causation, not on self-efficacy as a construct (a separate keyword).",
+          "examples": ["shy person avoids social situations → less social skill development → more shyness", "a person's beliefs alter their environment which then alters their behavior", "contrasts with one-way environmentalist accounts of behavior"]
+        }
+      ]
+    },
+    {
+      "slug": "factors_attitude_change",
+      "label": "Factors That Affect Attitude Change",
+      "description": "The source, message, and audience characteristics that determine whether a persuasive attempt succeeds in changing attitudes.",
+      "intro": {
+        "slug": "factors_attitude_change_intro",
+        "label": "What Makes Persuasion Effective? Source, Message, and Audience",
+        "description": "Beyond the route taken (ELM), the effectiveness of attitude change depends on characteristics of the communicator (credibility, attractiveness, similarity), the message itself (fear appeals, one- vs two-sided arguments, repetition), and the audience (prior attitudes, susceptibility). Social factors like group norms and social pressure also shift attitudes, often through conformity or compliance rather than genuine belief change.",
+        "examples": ["credible source → more persuasive regardless of route", "fear appeals effective when paired with efficacy information", "foot-in-the-door: behavior change precedes attitude change"]
+      },
+      "in_depth": [
+        {
+          "slug": "source_characteristics",
+          "label": "Source characteristics in persuasion",
+          "description": "Identify how communicator credibility (expertise + trustworthiness) and attractiveness/similarity increase persuasive impact. This focuses on who delivers the message, not on the content of the message or the audience's characteristics (separate keywords).",
+          "examples": ["doctor's advice more persuasive than a friend's on medical matters", "attractive spokesperson increases product liking", "similar source (same-group member) perceived as more trustworthy"]
+        },
+        {
+          "slug": "message_characteristics",
+          "label": "Message characteristics in persuasion",
+          "description": "Identify how message features — fear appeals, one- vs two-sided framing, message repetition (mere exposure), and argument quality — affect the likelihood of attitude change. This focuses on the content and structure of the message, not on source or audience factors (separate keywords).",
+          "examples": ["two-sided arguments are more persuasive for knowledgeable audiences", "fear appeal + self-efficacy information → behavior change", "mere-exposure effect: familiarity breeds liking"]
+        },
+        {
+          "slug": "audience_characteristics",
+          "label": "Audience characteristics in persuasion",
+          "description": "Identify how target characteristics — prior attitudes, need for cognition, mood, and susceptibility to social influence — moderate the effect of a persuasive message. This focuses on who receives the message, not on source or message properties (separate keywords).",
+          "examples": ["high need for cognition → more persuaded by strong arguments (central route)", "positive mood → easier attitude change via peripheral route", "strongly held attitudes resist change regardless of message quality"]
+        },
+        {
+          "slug": "behavior_changes_attitude",
+          "label": "Behavior-to-attitude change: foot-in-the-door and role-playing",
+          "description": "Explain how engaging in a behavior can cause attitude change — through the foot-in-the-door technique (small compliance escalates to larger compliance) and role-playing effects (adopting a role alters related attitudes). This focuses on the behavior → attitude direction, not on the attitude → behavior direction (a separate concept).",
+          "examples": ["signing a small petition makes later large-petition compliance more likely", "Stanford Prison Experiment: role-playing guard fostered authoritarian attitudes", "foot-in-the-door exploits self-perception: 'I must care because I acted'"]
+        },
+        {
+          "slug": "cognitive_dissonance_attitude",
+          "label": "Cognitive dissonance and attitude change",
+          "description": "Apply cognitive dissonance theory (Festinger): when behavior conflicts with an attitude, the resulting psychological discomfort motivates attitude change to restore consistency. This focuses on internal inconsistency as a driver of attitude change, not on external persuasion by a source or message (separate keywords).",
+          "examples": ["smoker who knows smoking is harmful changes attitudes about its risks", "saying 'I am free to choose' removes external justification → more attitude change", "induced compliance paradigm: paid $1 vs $20 for counter-attitudinal speech"]
+        },
+        {
+          "slug": "social_factors_attitude_change",
+          "label": "Social factors in attitude change",
+          "description": "Identify how group norms, social comparison, and social pressure (conformity, peer influence) drive attitude change, sometimes producing public compliance without private acceptance. This focuses on external social influences on attitudes, not on internal inconsistency (cognitive dissonance, a separate keyword).",
+          "examples": ["joining a group where recycling is the norm shifts environmental attitudes", "peer pressure to adopt shared political views", "normative social influence: changing attitude to fit the group"]
+        }
+      ]
+    }
+  ]
+}

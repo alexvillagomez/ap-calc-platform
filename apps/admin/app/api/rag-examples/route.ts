@@ -3,6 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
 import { autoTagKeywords } from "@/lib/ai/keywordTagger";
 
+export const runtime = "nodejs";
+
 const DESCRIPTION_SYSTEM = `You are a math problem analyst. Given a multiple-choice problem and its solution, return:
 1. A plain-English problem_description (one sentence describing what skill the problem tests — no LaTeX).
 2. wrong_answer_descriptions: for each of the 4 choices in order, a short plain-English explanation of the specific error or misconception a student makes when choosing that answer. For the correct answer, return null.
@@ -30,7 +32,7 @@ async function generateDescriptions(
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gemini-3.5-flash",
+      model: "gpt-5.4-mini",
       messages: [
         { role: "system", content: DESCRIPTION_SYSTEM },
         { role: "user", content: userMsg },
@@ -75,6 +77,17 @@ export async function POST(request: Request) {
     difficulty?: number;
     notes?: string;
     course?: "ap_calc" | "precalc";
+    problem_description?: string;
+    wrong_answer_descriptions?: (string | null)[];
+    wrong_answer_data?: { index: number; description: string }[];
+    topic_description?: string;
+    keyword_weights?: Record<string, number>;
+    action_description?: string;
+    action_weights?: Record<string, number>;
+    representation_description?: string;
+    representation_weights?: Record<string, number>;
+    prerequisite_description?: string;
+    prerequisite_weights?: Record<string, number>;
   };
   const course = body.course === "precalc" ? "precalc" : "ap_calc";
 
@@ -92,14 +105,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: fetchError?.message ?? "Problem not found" }, { status: 404 });
     }
 
-    const topicWeights = (problem.topic_weights ?? {}) as Record<string, number>;
-    const topicId = Object.entries(topicWeights).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
     const difficultyValue = typeof difficulty === "number" && difficulty >= 1 && difficulty <= 5 ? difficulty : null;
 
     const { data: inserted, error: insertError } = await supabase
       .from("rag_examples")
       .insert({
-        topic_id: topicId,
         keyword_weights: problem.keyword_weights ?? {},
         latex_content: problem.latex_content,
         solution_latex: problem.solution_latex,
@@ -148,7 +158,12 @@ export async function POST(request: Request) {
   }
 
   // ── Mode 2: direct content insert ────────────────────────────────────────
-  const { latex_content, solution_latex, choices, correct_index, difficulty, notes } = body;
+  const {
+    latex_content, solution_latex, choices, correct_index, difficulty, notes,
+    topic_description, keyword_weights, action_description, action_weights,
+    representation_description, representation_weights, prerequisite_description, prerequisite_weights,
+    wrong_answer_data: inputWrongAnswerData,
+  } = body;
 
   if (!latex_content || typeof latex_content !== "string" || !latex_content.trim()) {
     return NextResponse.json({ error: "latex_content is required" }, { status: 400 });
@@ -165,7 +180,7 @@ export async function POST(request: Request) {
   const { data: inserted, error: insertError } = await supabase
     .from("rag_examples")
     .insert({
-      keyword_weights: {},
+      keyword_weights: keyword_weights ?? {},
       latex_content: latex_content.trim(),
       solution_latex: solution_latex.trim(),
       choices: choicesForInsert,
@@ -173,6 +188,13 @@ export async function POST(request: Request) {
       difficulty: difficultyValue,
       notes: typeof notes === "string" && notes.trim() ? notes.trim() : null,
       course,
+      ...(topic_description ? { topic_description } : {}),
+      ...(action_weights && Object.keys(action_weights).length > 0 ? { action_weights } : {}),
+      ...(action_description ? { action_description } : {}),
+      ...(representation_weights && Object.keys(representation_weights).length > 0 ? { representation_weights } : {}),
+      ...(representation_description ? { representation_description } : {}),
+      ...(prerequisite_weights && Object.keys(prerequisite_weights).length > 0 ? { prerequisite_weights } : {}),
+      ...(prerequisite_description ? { prerequisite_description } : {}),
     })
     .select("id")
     .single();
@@ -187,28 +209,41 @@ export async function POST(request: Request) {
   if (openai) {
     void (async () => {
       try {
+        // Convert {index, description}[] → position-indexed (string|null)[]
+        const wrongAnswerDescriptions: (string | null)[] = Array.from({ length: 4 }, (_, i) => {
+          if (i === correctIndexForInsert) return null;
+          return inputWrongAnswerData?.find((w) => w.index === i)?.description ?? null;
+        });
+
         const [taggingResult, embedding, descriptions] = await Promise.all([
-          autoTagKeywords(openai, latex_content, solution_latex),
+          autoTagKeywords(
+            openai, latex_content, solution_latex, supabase,
+            undefined, wrongAnswerDescriptions, correctIndexForInsert ?? undefined,
+            topic_description, action_description, representation_description, prerequisite_description,
+          ),
           openai.embeddings.create({
             model: "text-embedding-3-small",
             input: `${latex_content.trim()}\n\n${solution_latex.trim()}`,
           }).then((r) => r.data[0]?.embedding ?? null),
-          isMcq
+          isMcq && !body.problem_description
             ? generateDescriptions(openai, latex_content, solution_latex, choicesForInsert, correctIndexForInsert)
             : null,
         ]);
 
-        const { keyword_weights, tag_weights } = taggingResult;
+        const { keyword_weights: autoKwWeights, action_weights: autoActionWeights, representation_weights: autoReprWeights, prerequisite_weights: autoPrereqWeights } = taggingResult;
 
-        await supabase.from("rag_examples").update({
-          ...(Object.keys(keyword_weights).length > 0 ? { keyword_weights } : {}),
-          ...(Object.keys(tag_weights).length > 0 ? { tag_weights } : {}),
+        const taggedWad = taggingResult.wrong_answer_data;
+
+        const { error: updateErr } = await supabase.from("rag_examples").update({
+          ...(Object.keys(autoKwWeights).length > 0 && Object.keys(keyword_weights ?? {}).length === 0 ? { keyword_weights: autoKwWeights } : {}),
+          ...(Object.keys(autoActionWeights).length > 0 ? { action_weights: autoActionWeights } : {}),
+          ...(Object.keys(autoReprWeights).length > 0 ? { representation_weights: autoReprWeights } : {}),
+          ...(Object.keys(autoPrereqWeights).length > 0 ? { prerequisite_weights: autoPrereqWeights } : {}),
+          ...(taggedWad.some((e) => e.description !== null) ? { wrong_answer_data: taggedWad } : {}),
           ...(embedding ? { embedding } : {}),
-          ...(descriptions ? {
-            problem_description: descriptions.problem_description,
-            wrong_answer_descriptions: descriptions.wrong_answer_descriptions,
-          } : {}),
+          ...(descriptions?.problem_description ? { problem_description: descriptions.problem_description } : {}),
         }).eq("id", newId);
+        if (updateErr) console.error("rag-examples: enrichment update failed for", newId, updateErr.message);
       } catch (err) {
         console.error("rag-examples: post-insert enrichment failed", err);
       }

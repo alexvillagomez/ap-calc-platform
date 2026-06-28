@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { supabaseBrowser } from "@/lib/supabaseBrowser";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
 
 const SEEN_KEY = "mcat_onboarding_seen";
@@ -37,8 +38,15 @@ export default function McatOnboarding() {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    const loggedIn = !!localStorage.getItem("ap_calc_account_id");
-    if (loggedIn && !localStorage.getItem(SEEN_KEY)) setShow(true);
+    let active = true;
+    supabaseBrowser()
+      .auth.getUser()
+      .then((res: { data: { user: unknown } }) => {
+        if (!active) return;
+        if (res.data.user && !localStorage.getItem(SEEN_KEY)) setShow(true);
+      })
+      .catch(() => { /* ignore */ });
+    return () => { active = false; };
   }, []);
 
   const dismiss = () => {

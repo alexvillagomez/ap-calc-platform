@@ -1,0 +1,317 @@
+{
+  "section": "chemistry",
+  "category_code": "C5",
+  "category_label": "Gases & Solutions",
+  "order_index": 4,
+  "umbrellas": [
+    {
+      "slug": "temperature_pressure_fundamentals",
+      "label": "Temperature, Pressure & Gas Measurement",
+      "description": "Foundational measurement concepts for gas systems: the Kelvin temperature scale, pressure units, and the mercury barometer.",
+      "intro": {
+        "slug": "temperature_pressure_fundamentals_intro",
+        "label": "Temperature & Pressure Fundamentals Overview",
+        "description": "Quantitative gas behavior requires absolute temperature (Kelvin) and a consistent pressure scale. The Kelvin scale anchors zero at absolute zero, eliminating negative temperatures in gas-law calculations. Pressure is measured as force per area, and the mercury barometer provides the standard atmospheric reference (760 mmHg = 1 atm). Together these measurements ground every gas-law relation.",
+        "examples": ["$T(K) = T(°C) + 273$", "760 mmHg = 1 atm at sea level", "barometer column height ∝ atmospheric pressure"]
+      },
+      "in_depth": [
+        {
+          "slug": "absolute_temperature_kelvin",
+          "label": "Absolute temperature & the Kelvin scale",
+          "description": "Convert between Celsius and Kelvin using $T(\\text{K}) = T(^\\circ\\text{C}) + 273$ and explain why gas-law equations require absolute (Kelvin) temperature — doubling $T$ in Kelvin doubles the average kinetic energy, whereas Celsius does not preserve proportional ratios. This focuses on the temperature scale itself, not on applying it within a specific gas law (separate keywords).",
+          "examples": ["$T(K) = T(°C) + 273$", "0 K = absolute zero, no negative T in gas laws", "300 K doubles to 600 K → proportional change valid"]
+        },
+        {
+          "slug": "pressure_mercury_barometer",
+          "label": "Pressure & the mercury barometer",
+          "description": "Define pressure as force per unit area ($P = F/A$) and explain how a simple mercury barometer measures atmospheric pressure as the height of a mercury column supported by air: $P = \\rho g h$, where 1 atm = 760 mmHg. This focuses on measurement of pressure, not on pressure–volume relationships in gas laws (separate keywords).",
+          "examples": ["$P = \\rho g h$ → 760 mmHg = 1 atm", "higher altitude → shorter mercury column", "units: atm, mmHg, kPa, torr (1 atm ≈ 101 kPa)"]
+        }
+      ]
+    },
+    {
+      "slug": "stp_molar_volume",
+      "label": "STP & Molar Volume",
+      "description": "Standard conditions (STP) and the molar volume of an ideal gas at those conditions, which follow from the ideal gas law.",
+      "intro": {
+        "slug": "stp_molar_volume_intro",
+        "label": "STP & Molar Volume Overview",
+        "description": "Standard Temperature and Pressure (STP: 0 °C, 1 atm) defines a convenient reference state. At STP, one mole of any ideal gas occupies exactly 22.4 L — a universal constant that allows rapid mole-to-volume conversions without solving $PV = nRT$ each time. STP also underpins gas-density calculations.",
+        "examples": ["22.4 L/mol at STP (0 °C, 1 atm)", "moles → volume: multiply by 22.4 L/mol", "STP ≠ SATP (25 °C, 1 bar)"]
+      },
+      "in_depth": [
+        {
+          "slug": "stp_definition",
+          "label": "Standard Temperature and Pressure (STP)",
+          "description": "Identify STP as $T = 0\\,^\\circ\\text{C}$ (273 K) and $P = 1\\,\\text{atm}$ and apply it as the reference state for gas-law comparisons. This focuses on defining STP, not on what the molar volume is at STP (a separate keyword).",
+          "examples": ["STP: 0 °C (273 K) and 1 atm", "use STP as reference to compare gas samples", "distinct from standard state (25 °C) used in thermodynamics"]
+        },
+        {
+          "slug": "molar_volume_stp",
+          "label": "Molar volume 22.4 L/mol at STP",
+          "description": "Apply the molar volume of an ideal gas at STP — $V_m = 22.4\\,\\text{L/mol}$ — to interconvert moles and volumes without recalculating $PV = nRT$. This focuses on using 22.4 L/mol as a conversion factor at STP, not on the ideal gas law at arbitrary conditions (a separate keyword).",
+          "examples": ["$V = n \\times 22.4\\,\\text{L/mol}$ at STP", "2 mol gas → 44.8 L at STP", "derived from $PV = nRT$ with $T = 273$ K, $P = 1$ atm"]
+        },
+        {
+          "slug": "gas_density_from_ideal_gas_law",
+          "label": "Gas density from $PV = nRT$",
+          "description": "Calculate the density of a gas using $d = \\frac{PM}{RT}$, where $M$ is the molar mass, derived by substituting $n/V = P/(RT)$ into $d = (n \\cdot M)/V$. This focuses on density as a derived quantity, not on the basic ideal-gas law statement (a separate keyword).",
+          "examples": ["$d = \\frac{PM}{RT}$", "heavier molar mass → greater density at same T and P", "use at STP: $d = M/22.4$ g/L"]
+        }
+      ]
+    },
+    {
+      "slug": "ideal_gas_laws",
+      "label": "Ideal Gas Laws",
+      "description": "The definition of an ideal gas and the four quantitative relationships — $PV = nRT$, Boyle's, Charles's, and Avogadro's laws — that describe how P, V, n, and T interrelate.",
+      "intro": {
+        "slug": "ideal_gas_laws_intro",
+        "label": "Ideal Gas Laws Overview",
+        "description": "An ideal gas is a theoretical model in which molecules have negligible volume and no intermolecular attractions. From this model, $PV = nRT$ unifies four simpler pairwise relations — Boyle's (P–V), Charles's (V–T), Avogadro's (V–n), and Gay-Lussac's (P–T) — each obtained by holding the remaining variables constant. Mastering each law separately makes it easy to recognize which variables change and which are fixed on any MCAT problem.",
+        "examples": ["$PV = nRT$, $R = 0.0821\\,\\text{L·atm/mol·K}$", "Boyle: fixed n, T → $P_1V_1 = P_2V_2$", "Charles: fixed n, P → $V_1/T_1 = V_2/T_2$"]
+      },
+      "in_depth": [
+        {
+          "slug": "ideal_gas_definition",
+          "label": "Definition of an ideal gas",
+          "description": "State the two assumptions that define an ideal gas — (1) molecules occupy negligible volume and (2) there are no intermolecular forces — and recognize when a real gas approximates ideal behavior (low pressure, high temperature). This focuses on the molecular model, not on the equation that results from it (a separate keyword).",
+          "examples": ["no IMFs + negligible molecular volume", "ideal behavior: low P, high T", "real gases deviate at high P / low T"]
+        },
+        {
+          "slug": "ideal_gas_law_pv_nrt",
+          "label": "Ideal Gas Law: $PV = nRT$",
+          "description": "Apply $PV = nRT$ to solve for any one of pressure, volume, moles, or temperature given the other three, using $R = 0.0821\\,\\text{L·atm/(mol·K)}$. This is the master equation; Boyle's, Charles's, and Avogadro's laws are each special cases (separate keywords).",
+          "examples": ["$PV = nRT$; $R = 0.0821$ L·atm/(mol·K)", "solve for $n$: $n = PV/(RT)$", "consistent units: P in atm, V in L, T in K"]
+        },
+        {
+          "slug": "boyles_law",
+          "label": "Boyle's Law: $PV = \\text{constant}$",
+          "description": "Apply Boyle's Law — at constant temperature and moles, $P_1V_1 = P_2V_2$ — to predict the inverse relationship between pressure and volume. This focuses on the P–V relationship at fixed $n$ and $T$, not on the V–T relationship (Charles's law, a separate keyword).",
+          "examples": ["$P_1V_1 = P_2V_2$ at constant $n$, $T$", "double P → half V", "P vs. V graph is a hyperbola"]
+        },
+        {
+          "slug": "charles_law",
+          "label": "Charles' Law: $V/T = \\text{constant}$",
+          "description": "Apply Charles's Law — at constant pressure and moles, $V_1/T_1 = V_2/T_2$ (T in Kelvin) — to predict the direct proportionality between volume and absolute temperature. This focuses on the V–T relationship at fixed $n$ and $P$, not on the P–V relationship (Boyle's law, a separate keyword).",
+          "examples": ["$V_1/T_1 = V_2/T_2$ at constant $n$, $P$", "double T (K) → double V", "V vs. T (Kelvin) is a straight line through origin"]
+        },
+        {
+          "slug": "avogadros_law",
+          "label": "Avogadro's Law: $V/n = \\text{constant}$",
+          "description": "Apply Avogadro's Law — at constant temperature and pressure, $V_1/n_1 = V_2/n_2$ — to recognize that equal volumes of gases at the same T and P contain equal numbers of moles. This focuses on the V–n relationship at fixed $T$ and $P$, not on P–V or V–T (separate keywords).",
+          "examples": ["$V_1/n_1 = V_2/n_2$ at constant $T$, $P$", "double moles → double volume", "foundation of 22.4 L/mol at STP"]
+        },
+        {
+          "slug": "combined_gas_law",
+          "label": "Combined gas law & Gay-Lussac's Law",
+          "description": "Apply the combined gas law $\\frac{P_1V_1}{T_1} = \\frac{P_2V_2}{T_2}$ (fixed $n$) when two of three variables change simultaneously, and apply Gay-Lussac's Law ($P/T = \\text{constant}$ at fixed $n$, $V$) for pressure–temperature problems. This focuses on multi-variable gas comparisons, complementing the individual laws (separate keywords).",
+          "examples": ["$\\frac{P_1V_1}{T_1} = \\frac{P_2V_2}{T_2}$ at constant $n$", "Gay-Lussac: $P_1/T_1 = P_2/T_2$ at constant $V$", "covers any two-state comparison with fixed moles"]
+        }
+      ]
+    },
+    {
+      "slug": "kinetic_molecular_theory",
+      "label": "Kinetic Molecular Theory of Gases",
+      "description": "The molecular model behind gas behavior: KMT postulates, the Boltzmann constant, heat capacity at constant volume and pressure, and Graham's law of effusion.",
+      "intro": {
+        "slug": "kinetic_molecular_theory_intro",
+        "label": "Kinetic Molecular Theory Overview",
+        "description": "Kinetic Molecular Theory (KMT) explains macroscopic gas properties from molecular-level motion: gas molecules move randomly, exert pressure through collisions with container walls, and their average kinetic energy is proportional to absolute temperature ($\\frac{3}{2}k_BT$ per molecule). KMT predicts heat capacity differences between constant-volume and constant-pressure processes, the Boltzmann distribution of speeds, and Graham's law of effusion.",
+        "examples": ["avg KE = $\\frac{3}{2}k_BT$", "$k_B = 1.38 \\times 10^{-23}$ J/K", "pressure from molecular collisions with walls"]
+      },
+      "in_depth": [
+        {
+          "slug": "kmt_postulates",
+          "label": "KMT postulates & molecular speed",
+          "description": "State the postulates of Kinetic Molecular Theory — gas molecules are point masses in constant random motion, collisions are perfectly elastic, and average kinetic energy is directly proportional to Kelvin temperature ($\\overline{KE} = \\frac{3}{2}k_BT$) — and use them to explain pressure and temperature qualitatively. This covers the conceptual foundation, not the quantitative heat capacities derived from KMT (separate keywords).",
+          "examples": ["$\\overline{KE} = \\frac{3}{2}k_BT$ per molecule", "elastic collisions → no net energy loss", "higher T → faster molecules → higher P"]
+        },
+        {
+          "slug": "boltzmann_constant",
+          "label": "Boltzmann's constant $k_B$",
+          "description": "Recognize the Boltzmann constant $k_B = 1.38 \\times 10^{-23}\\,\\text{J/K}$ as the per-molecule gas constant ($k_B = R/N_A$) and use it in the KMT kinetic-energy relation $\\overline{KE} = \\frac{3}{2}k_BT$. This focuses on the constant itself and its role in molecular-level energy, not on macroscopic heat capacity (a separate keyword).",
+          "examples": ["$k_B = 1.38 \\times 10^{-23}$ J/K", "$k_B = R/N_A$", "$\\overline{KE} = \\frac{3}{2}k_BT$ per molecule"]
+        },
+        {
+          "slug": "heat_capacity_constant_volume",
+          "label": "Heat capacity at constant volume ($C_V$)",
+          "description": "Apply the KMT result that the molar heat capacity of an ideal monatomic gas at constant volume is $C_V = \\frac{3}{2}R$, because all added heat raises translational kinetic energy with no PV work done ($\\Delta V = 0$, so $q_V = \\Delta U$). This focuses on $C_V$ and constant-volume processes, not on $C_P$ (a separate keyword).",
+          "examples": ["$C_V = \\frac{3}{2}R$ for monatomic ideal gas", "at const V: all heat → $\\Delta U$ (no work)", "$q = nC_V\\Delta T$ at constant volume"]
+        },
+        {
+          "slug": "heat_capacity_constant_pressure",
+          "label": "Heat capacity at constant pressure ($C_P$)",
+          "description": "Apply the relation $C_P = C_V + R$ (for ideal gases, at constant pressure the gas does PV expansion work so more heat is needed for the same $\\Delta T$) and the ratio $\\gamma = C_P/C_V > 1$. This focuses on $C_P$ and the distinction from $C_V$ (a separate keyword).",
+          "examples": ["$C_P = C_V + R$ for ideal gas", "at const P: gas does work expanding → $C_P > C_V$", "$\\gamma = C_P/C_V = 5/3$ for monatomic ideal gas"]
+        },
+        {
+          "slug": "grahams_law_effusion",
+          "label": "Graham's law of effusion",
+          "description": "Apply Graham's law — the rate of effusion of a gas is inversely proportional to the square root of its molar mass: $\\frac{r_1}{r_2} = \\sqrt{\\frac{M_2}{M_1}}$ — to compare how quickly different gases escape through a tiny orifice. This focuses on effusion/diffusion rate comparisons, not on gas density (a separate keyword).",
+          "examples": ["$r_1/r_2 = \\sqrt{M_2/M_1}$", "lighter gas effuses faster", "He effuses 4× faster than O$_2$: $\\sqrt{32/4} = 2\\sqrt{2}$"]
+        }
+      ]
+    },
+    {
+      "slug": "real_gas_deviations",
+      "label": "Deviations from Ideal Gas Behavior",
+      "description": "Qualitative and quantitative treatment of how real gases deviate from the ideal gas law, including the Van der Waals equation.",
+      "intro": {
+        "slug": "real_gas_deviations_intro",
+        "label": "Real Gas Deviations Overview",
+        "description": "Real gases deviate from ideal behavior because molecules have finite volume and experience intermolecular attractions. At high pressure, volume is underestimated (molecules take up space); at low temperature or high pressure, attractions cause volume to be smaller than predicted (compressibility below 1). The Van der Waals equation corrects for both effects with empirical constants $a$ (attractions) and $b$ (volume).",
+        "examples": ["real deviation: high P or low T", "van der Waals: $\\left(P + \\frac{an^2}{V^2}\\right)(V - nb) = nRT$", "$a$ = attraction correction; $b$ = volume correction"]
+      },
+      "in_depth": [
+        {
+          "slug": "real_gas_qualitative_deviations",
+          "label": "Qualitative deviations of real gases",
+          "description": "Predict when and why real gases deviate from ideal behavior: high pressure makes molecules crowd together (volume correction needed); low temperature and high pressure allow intermolecular attractions to become significant (pressure correction needed); polar or large molecules deviate more than small nonpolar ones. This focuses on the conceptual picture, not on the Van der Waals equation (a separate keyword).",
+          "examples": ["high P: volume underestimated (molecules not points)", "low T: attractions significant → lower P than ideal", "He ≈ ideal; CO$_2$ deviates substantially"]
+        },
+        {
+          "slug": "van_der_waals_equation",
+          "label": "Van der Waals equation (quantitative)",
+          "description": "Apply the Van der Waals equation $\\left(P + \\frac{an^2}{V^2}\\right)(V - nb) = nRT$ and interpret the constants: $a$ corrects for intermolecular attractions (adds to observed pressure), $b$ corrects for excluded molecular volume (subtracts from available volume). This focuses on the quantitative correction, not the qualitative reasoning (a separate keyword).",
+          "examples": ["$\\left(P + \\frac{an^2}{V^2}\\right)(V - nb) = nRT$", "$a$ large → strong attractions (e.g. polar gas)", "$b$ large → large molecules with significant own volume"]
+        }
+      ]
+    },
+    {
+      "slug": "partial_pressure_gas_mixtures",
+      "label": "Partial Pressure & Gas Mixtures",
+      "description": "How gas mixtures distribute total pressure among components via mole fractions and Dalton's law.",
+      "intro": {
+        "slug": "partial_pressure_gas_mixtures_intro",
+        "label": "Partial Pressure & Gas Mixtures Overview",
+        "description": "In a mixture of ideal gases, each component exerts a partial pressure proportional to its mole fraction of the total moles. Dalton's law states the total pressure equals the sum of all partial pressures. These concepts are central to respiratory physiology problems (O$_2$/CO$_2$ partial pressures) and to collecting gases over water.",
+        "examples": ["$P_{total} = P_1 + P_2 + \\ldots$ (Dalton's law)", "$P_i = \\chi_i P_{total}$", "mole fraction $\\chi_i = n_i / n_{total}$"]
+      },
+      "in_depth": [
+        {
+          "slug": "mole_fraction",
+          "label": "Mole fraction",
+          "description": "Calculate the mole fraction of a component $i$ in a gas mixture as $\\chi_i = n_i / n_{\\text{total}}$ (dimensionless, 0–1) and use it to relate composition to partial pressure. This focuses on defining and computing mole fraction, not on Dalton's law itself (a separate keyword).",
+          "examples": ["$\\chi_i = n_i / n_{total}$", "all mole fractions sum to 1", "20.9% O$_2$ by mole → $\\chi_{O_2} = 0.209$"]
+        },
+        {
+          "slug": "daltons_law_partial_pressure",
+          "label": "Dalton's Law of partial pressures",
+          "description": "Apply Dalton's Law — $P_{\\text{total}} = \\sum_i P_i$ — and the relation $P_i = \\chi_i P_{\\text{total}}$ to find individual component pressures in a gas mixture or to find total pressure from components. This focuses on summing partial pressures in mixtures, not on mole-fraction calculation alone (a separate keyword).",
+          "examples": ["$P_{total} = P_{O_2} + P_{N_2} + P_{CO_2} + \\ldots$", "$P_i = \\chi_i P_{total}$", "collecting gas over water: $P_{gas} = P_{total} - P_{H_2O}$"]
+        }
+      ]
+    },
+    {
+      "slug": "ions_in_solution",
+      "label": "Ions in Solution",
+      "description": "Common ion names, formulas, and charges; the hydration of ions in water; and the hydronium ion.",
+      "intro": {
+        "slug": "ions_in_solution_intro",
+        "label": "Ions in Solution Overview",
+        "description": "When ionic compounds dissolve, they dissociate into cations and anions that are stabilized by hydration — a shell of oriented water molecules. Recognizing common polyatomic ion names, formulas, and charges (e.g., $\\text{NH}_4^+$, $\\text{SO}_4^{2-}$, $\\text{PO}_4^{3-}$) is essential for writing equations. The hydronium ion ($\\text{H}_3\\text{O}^+$) is the carrier of acidity in aqueous solution.",
+        "examples": ["$\\text{NH}_4^+$ ammonium; $\\text{SO}_4^{2-}$ sulfate", "$\\text{H}_3\\text{O}^+$ hydronium = hydrated proton", "ion hydration: water dipoles surround ions"]
+      },
+      "in_depth": [
+        {
+          "slug": "common_ion_names_formulas",
+          "label": "Common ion names, formulas & charges",
+          "description": "Recognize and write the formulas, names, and charges of frequently tested polyatomic ions: $\\text{NH}_4^+$ (ammonium), $\\text{NO}_3^-$ (nitrate), $\\text{NO}_2^-$ (nitrite), $\\text{SO}_4^{2-}$ (sulfate), $\\text{SO}_3^{2-}$ (sulfite), $\\text{PO}_4^{3-}$ (phosphate), $\\text{HPO}_4^{2-}$ (hydrogen phosphate), $\\text{CO}_3^{2-}$ (carbonate), $\\text{HCO}_3^-$ (bicarbonate), $\\text{OH}^-$ (hydroxide), $\\text{CN}^-$ (cyanide), $\\text{MnO}_4^-$ (permanganate), $\\text{Cr}_2\\text{O}_7^{2-}$ (dichromate). This focuses on name–formula–charge recognition, not on acid–base behavior (a separate category, C6).",
+          "examples": ["$\\text{SO}_4^{2-}$ sulfate; $\\text{PO}_4^{3-}$ phosphate", "$\\text{NH}_4^+$ ammonium (the only common polyatomic cation)", "$\\text{HCO}_3^-$ bicarbonate vs. $\\text{CO}_3^{2-}$ carbonate"]
+        },
+        {
+          "slug": "ion_hydration",
+          "label": "Hydration of ions in water",
+          "description": "Explain how cations and anions are hydrated (stabilized) in aqueous solution by oriented water dipoles — the negative oxygen end near cations, the positive hydrogen end near anions — and how hydration energy drives dissolution of ionic compounds. This focuses on the solvation shell concept, not on Ksp equilibria (a separate category, C9).",
+          "examples": ["water O-end points toward cations", "hydration energy stabilizes dissolved ions", "larger charge density → stronger hydration"]
+        },
+        {
+          "slug": "hydronium_ion",
+          "label": "The hydronium ion $\\text{H}_3\\text{O}^+$",
+          "description": "Describe the hydronium ion $\\text{H}_3\\text{O}^+$ as the form of the proton in aqueous solution (a proton accepts a lone pair from water) and recognize it as equivalent to the shorthand $\\text{H}^+$ in acid–base equations. This focuses on the hydronium species, not on pH calculation or acid–base equilibria (a separate category, C6).",
+          "examples": ["$\\text{H}^+ + \\text{H}_2\\text{O} \\rightarrow \\text{H}_3\\text{O}^+$", "proton solvated by water molecule", "$\\text{H}_3\\text{O}^+$ and $\\text{H}^+$ used interchangeably in equations"]
+        }
+      ]
+    },
+    {
+      "slug": "solution_concentration",
+      "label": "Concentration Units & Solution Preparation",
+      "description": "Quantitative ways to express how much solute is dissolved: molarity, molality, mole fraction, mass percent, and dilution.",
+      "intro": {
+        "slug": "solution_concentration_intro",
+        "label": "Concentration Units Overview",
+        "description": "Concentration describes the amount of solute per amount of solution or solvent. Molarity ($M$ = mol solute / L solution) is the most common unit and is temperature-sensitive; molality ($m$ = mol solute / kg solvent) is temperature-independent. Mole fraction and mass percent are dimensionless ratio units. Dilution ($M_1V_1 = M_2V_2$) conserves moles of solute when water is added.",
+        "examples": ["molarity $M = n_{solute}/V_{solution}$ (mol/L)", "molality $m = n_{solute}/kg_{solvent}$", "$M_1V_1 = M_2V_2$ for dilution"]
+      },
+      "in_depth": [
+        {
+          "slug": "molarity",
+          "label": "Molarity",
+          "description": "Calculate molarity as $M = n_{\\text{solute}} / V_{\\text{solution}}$ in units of mol/L and use it to find moles from volume or volume from moles. This focuses on the molarity definition and calculation, not on other concentration units (separate keywords).",
+          "examples": ["$M = n/V$ (mol/L)", "0.5 M NaCl: 0.5 mol NaCl per liter", "moles = $M \\times V$ (L)"]
+        },
+        {
+          "slug": "molality",
+          "label": "Molality",
+          "description": "Calculate molality as $m = n_{\\text{solute}} / m_{\\text{solvent}}$ in units of mol/kg and distinguish it from molarity: molality is temperature-independent (based on mass, not volume) and is used in colligative property equations. This focuses on molality, not molarity (a separate keyword).",
+          "examples": ["$m = n_{solute} / kg_{solvent}$ (mol/kg)", "temperature-independent: mass doesn't change with T", "used in $\\Delta T_{bp}$ and $\\Delta T_{fp}$ (colligative properties)"]
+        },
+        {
+          "slug": "mole_fraction_solution",
+          "label": "Mole fraction in solutions",
+          "description": "Calculate the mole fraction of solute or solvent in a solution as $\\chi_i = n_i / n_{\\text{total}}$ and recognize that mole fractions sum to 1. This applies the same mole-fraction concept from gas mixtures (where it connects to Dalton's law) to liquid solutions (where it connects to Raoult's law). This focuses on the definition and calculation, not on Raoult's law specifically.",
+          "examples": ["$\\chi_{solute} = n_{solute} / (n_{solute} + n_{solvent})$", "all mole fractions sum to 1", "relates to vapor-pressure lowering (Raoult)"]
+        },
+        {
+          "slug": "mass_percent",
+          "label": "Mass percent (% w/w)",
+          "description": "Calculate mass percent as $\\% w/w = (m_{\\text{solute}} / m_{\\text{solution}}) \\times 100\\%$ and convert between mass percent and molarity or molality given the solution density. This focuses on the mass-based fraction, not mole-based units (separate keywords).",
+          "examples": ["$\\%w/w = (m_{solute}/m_{solution}) \\times 100$", "5% NaCl: 5 g NaCl per 100 g solution", "need density to convert % w/w → molarity"]
+        },
+        {
+          "slug": "dilution_equation",
+          "label": "Dilution: $M_1V_1 = M_2V_2$",
+          "description": "Apply the dilution equation $M_1V_1 = M_2V_2$ to find the new molarity or required volume when a solution is diluted with solvent, recognizing that moles of solute are conserved while volume increases. This focuses on dilution calculations, not on preparing stock solutions from solid solute (a distinct procedure).",
+          "examples": ["$M_1V_1 = M_2V_2$ (moles conserved)", "dilute 0.5 M × 100 mL to 250 mL → 0.2 M", "add solvent only; solute amount constant"]
+        }
+      ]
+    },
+    {
+      "slug": "dissolution_solvation",
+      "label": "Dissolution, Solvation & Electrolytes",
+      "description": "How solutes dissolve in water (dissolution/solvation), and the classification of solutes as strong electrolytes, weak electrolytes, or nonelectrolytes.",
+      "intro": {
+        "slug": "dissolution_solvation_intro",
+        "label": "Dissolution & Electrolytes Overview",
+        "description": "Dissolution is driven by the interplay of solute–solute, solvent–solvent, and solute–solvent interactions. When an ionic or molecular solute dissociates or ionizes in water, it conducts electricity (electrolyte); if it stays molecular, it does not (nonelectrolyte). Strong electrolytes dissociate completely; weak electrolytes only partially. These distinctions affect colligative properties and solution conductivity.",
+        "examples": ["NaCl (strong electrolyte): fully dissociates", "acetic acid (weak electrolyte): partial ionization", "sugar (nonelectrolyte): no ions formed"]
+      },
+      "in_depth": [
+        {
+          "slug": "dissolution_solvation_process",
+          "label": "Dissolution & solvation process",
+          "description": "Explain dissolution as the disruption of solute–solute lattice forces and solvent–solvent hydrogen bonds, replaced by favorable solute–solvent (solvation) interactions; apply the rule 'like dissolves like' to predict solubility (polar/ionic solutes in polar solvents, nonpolar in nonpolar). This focuses on the energetic and structural basis of dissolving, not on quantitative solubility equilibria (a separate category, C9).",
+          "examples": ["'like dissolves like': ionic → water; nonpolar → hexane", "solvation: water molecules surround ions", "dissolution = breaking lattice + forming hydration shell"]
+        },
+        {
+          "slug": "strong_electrolytes",
+          "label": "Strong electrolytes",
+          "description": "Classify strong electrolytes — strong acids (HCl, HBr, HI, $\\text{HNO}_3$, $\\text{H}_2\\text{SO}_4$, $\\text{HClO}_4$), strong bases (group 1 and heavy group 2 hydroxides), and soluble ionic salts — as species that dissociate completely in water, giving the highest conductivity and particle count per formula unit. This focuses on the strong-electrolyte class, not on weak electrolytes (a separate keyword).",
+          "examples": ["NaCl → Na$^+$ + Cl$^-$ (100% dissociation)", "HCl → H$^+$ + Cl$^-$ (strong acid = strong electrolyte)", "1 mol NaCl → 2 mol particles (van 't Hoff $i = 2$)"]
+        },
+        {
+          "slug": "weak_electrolytes",
+          "label": "Weak electrolytes",
+          "description": "Classify weak electrolytes — weak acids (e.g., acetic acid), weak bases (e.g., ammonia), and slightly soluble salts — as species that only partially ionize in water, establishing a dynamic equilibrium with their molecular form. Recognize that weak electrolytes have lower conductivity and fewer particles than strong electrolytes at the same concentration. This focuses on the weak-electrolyte class; detailed equilibrium math → C6/C9.",
+          "examples": ["CH$_3$COOH $\\rightleftharpoons$ CH$_3$COO$^-$ + H$^+$ (partial)", "lower conductivity than strong electrolyte at same $c$", "weak electrolyte: $i$ between 1 and the max dissociation value"]
+        },
+        {
+          "slug": "nonelectrolytes",
+          "label": "Nonelectrolytes",
+          "description": "Classify nonelectrolytes — molecular compounds that dissolve without ionizing (e.g., glucose, ethanol, urea) — as species that produce no ions in solution and therefore do not conduct electricity, with van 't Hoff factor $i = 1$. This focuses on the nonelectrolyte class and contrasts it with electrolytes (separate keywords).",
+          "examples": ["glucose in water: no ions, $i = 1$", "zero conductivity (no charge carriers)", "ethanol, sucrose, urea = nonelectrolytes"]
+        }
+      ]
+    }
+  ]
+}

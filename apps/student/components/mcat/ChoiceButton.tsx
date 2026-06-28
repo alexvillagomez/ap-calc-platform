@@ -39,8 +39,9 @@ export function ChoiceButton({
     state === "default"  && "border-neutral-300 text-neutral-500"
   );
 
-  const badgeContent =
-    state === "correct" ? "✓" : state === "wrong" ? "✗" : LABELS[index];
+  // Keep the A/B/C/D label always — the green/red badge fill conveys correctness,
+  // so no inline check/cross glyph is needed.
+  const badgeContent = LABELS[index];
 
   return (
     <button

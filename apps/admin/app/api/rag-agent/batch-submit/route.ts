@@ -11,7 +11,7 @@ import { buildMcqSchemaJson } from "@/lib/ragProblemParser";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const GENERATION_MODEL = "gemini-3.5-flash";
+const GENERATION_MODEL = "gpt-5.4-mini";
 const RAG_SYSTEM_SUFFIX =
   "\n\nIMPORTANT: This is a gold-star RAG seed example. AP Exam authenticity, LaTeX correctness, and zero rendering issues take priority above all else.";
 

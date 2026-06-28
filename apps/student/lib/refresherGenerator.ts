@@ -9,9 +9,11 @@
  * Called by /api/{math,mcat}/refresher/[keywordId]. Generates → stores → returns.
  * Delete the cached row to force regeneration.
  */
-import OpenAI from "openai";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { clientForModel } from "./genClient";
 import { parseModelJson } from "./parseModelJson";
+import { resolveSystemPrompt, promptSlot } from "./promptOverrides";
+import { buildIdentityScopeBlock } from "./scopeIds";
 
 const GEN_MODEL = "gpt-5.4-mini";
 
@@ -25,53 +27,96 @@ export class RefresherGenError extends Error {
   }
 }
 
-function createGenClient(): OpenAI {
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) throw new RefresherGenError("OPENAI_API_KEY not set", 500);
-  return new OpenAI({ apiKey: key });
+export const REFRESHER_MATH_SYSTEM = `You are a math tutor writing a SHORT refresher for a student who just forgot this precalc/calculus skill and is seconds from being tested on it. NOT a lesson — a fast, scannable rundown.
+
+COVERAGE (the whole point): the bullets must TOUCH every in-scope rule, formula, and notation of THIS keyword — the same things its problems test. Name each by its actual term; combine closely related ones into one bullet. Leave nothing in-scope out; add nothing out-of-scope.
+
+FORMAT — rule_latex is a list of BULLETS, each on its own line starting with "• ": one terse rule, formula, or fact per bullet — a phrase, not a sentence, no preamble or transitions. As few bullets as cover the in-scope content. NO worked example: return example_latex as "".
+
+NOTATION — write prose as PLAIN TEXT and wrap EVERY variable/symbol/expression in $...$; never \\text{}, never bare LaTeX (it shows literal backslashes).
+
+Return JSON only, no markdown: { "rule_latex": "• …\\n• …", "example_latex": "" }`;
+
+export const REFRESHER_MCAT_SYSTEM = `You are an MCAT tutor writing a SHORT refresher for a student who just forgot this concept and is seconds from being tested on it. NOT a lesson — a fast, scannable rundown.
+
+COVERAGE (the whole point): the bullets must TOUCH every in-scope fact and term of THIS keyword — the same things its flashcards and questions test. Use each key term by its actual name; combine closely related ones into one bullet. Leave nothing in-scope out; add nothing out-of-scope.
+
+FORMAT — rule_latex is a list of BULLETS, each on its own line starting with "• ": one terse fact, rule, value, or direction per bullet — a phrase, not a sentence, no preamble. As few bullets as cover the in-scope content. NO illustration: return example_latex as "".
+
+DEPTH — directions, ranges, classifications, not precise constants (no decimal $pK_a$, no exact $K_m$/$V_{max}$).
+
+NOTATION — wrap all math/chemistry in $...$ KaTeX with real sub/superscripts ($V_{max}$, $H_2O$); flat ASCII and \\text{} are WRONG. A Greek letter naming a structure → write the word (alpha carbon), not the symbol.
+
+Return JSON only, no markdown: { "rule_latex": "• …\\n• …", "example_latex": "" }`;
+
+/** Minimal blueprint shape shared by math_keywords.concept_blueprint and mcat_keywords.concept_blueprint. */
+type BlueprintLike = {
+  key_terms?: unknown;
+  in_scope_concepts?: unknown;
+  out_of_scope?: unknown;
+  boundary_statement?: unknown;
+} | null;
+
+type KwMeta = {
+  id: string;
+  label: string;
+  description: string | null;
+  examples?: string[] | string | null;
+  blueprint?: BlueprintLike;
+};
+
+/** Normalize an examples column (text[] or text) into a single readable line. */
+function examplesToLine(examples: KwMeta["examples"]): string {
+  if (!examples) return "";
+  if (Array.isArray(examples)) return examples.filter(Boolean).join("; ");
+  return String(examples);
 }
 
-const FORMAT_RULES = `FORMATTING:
-- Write prose as PLAIN TEXT — never use \\text{}.
-- Wrap every variable, symbol, or expression in $...$ (inline) or $$...$$ (block). This applies to BOTH rule_latex and example_latex.
-- Plain-text prose must contain no backslash, ^, _, or { } — anything that needs them goes inside $...$.
-- Bare LaTeX outside $...$ does NOT render — it shows literal backslashes.
-  ✅ CORRECT: "Factor by difference of squares: $a^2-b^2=(a-b)(a+b)$."
-  ❌ WRONG (bare): "\\frac{d}{dx}(x+3)^4" or "\\begin{aligned}...\\end{aligned}" without $$...$$`;
+/** Pull the topic's essential vocabulary from its blueprint key_terms / in_scope_concepts. */
+function keyTermsLine(blueprint: BlueprintLike): string {
+  if (!blueprint) return "";
+  const terms = Array.isArray(blueprint.key_terms)
+    ? (blueprint.key_terms as unknown[]).filter((t): t is string => typeof t === "string")
+    : [];
+  const concepts = Array.isArray(blueprint.in_scope_concepts)
+    ? (blueprint.in_scope_concepts as unknown[]).filter((t): t is string => typeof t === "string")
+    : [];
+  const merged = [...terms, ...concepts].map((s) => s.trim()).filter(Boolean);
+  return merged.join("; ");
+}
 
-const MATH_SYSTEM = `You are a tutor writing a SHORT refresher for a student who just forgot a precalculus/calculus skill. This is a quick rundown — a concise rule plus ONE worked example — NOT a full lesson.
+/** Pull the out-of-scope fence from the blueprint, if present. */
+function outOfScopeLine(blueprint: BlueprintLike): string {
+  if (!blueprint) return "";
+  const items = Array.isArray(blueprint.out_of_scope)
+    ? (blueprint.out_of_scope as unknown[]).filter((t): t is string => typeof t === "string")
+    : [];
+  return items.map((s) => s.trim()).filter(Boolean).join("; ");
+}
 
-Return a JSON object: { "rule_latex": string, "example_latex": string }
+/** Build the user prompt: label + description + examples + key terms + scope fence + a coverage instruction. */
+async function buildRefresherUserPrompt(
+  system: "math" | "mcat",
+  kw: KwMeta
+): Promise<string> {
+  const identityBlock = await buildIdentityScopeBlock(system, [
+    { id: kw.id, label: kw.label, description: kw.description ?? "" },
+  ]);
+  return `${identityBlock}
 
-rule_latex: 1-2 sentences stating the rule clearly.
-example_latex: one short worked example showing the key steps.
-
-${FORMAT_RULES}
-
-Return valid JSON only. No markdown.`;
-
-const MCAT_SYSTEM = `You are a tutor writing a SHORT refresher for a student who just forgot an MCAT concept. This is a quick rundown — a concise rule/principle plus ONE worked example or illustration — NOT a full lesson.
-
-Return a JSON object: { "rule_latex": string, "example_latex": string }
-
-rule_latex: 1-2 sentences stating the core principle clearly.
-example_latex: one short worked example or concrete illustration.
-
-Write prose as PLAIN TEXT. Wrap any math in $...$ — never use \\text{}.
-
-Return valid JSON only. No markdown.`;
-
-type KwMeta = { id: string; label: string; description: string | null };
+Write the refresher as bullets covering EVERY in-scope fact/term of THIS keyword — the student is about to be tested on exactly these. Combine closely related ones into one bullet. Stay STRICTLY inside this keyword's scope; touch nothing out-of-scope.`;
+}
 
 async function callGen(
   system: string,
-  user: string
+  user: string,
+  model: string = GEN_MODEL
 ): Promise<Record<string, unknown>> {
   let text: string;
   try {
-    const client = createGenClient();
+    const client = clientForModel(model);
     const completion = await client.chat.completions.create({
-      model: GEN_MODEL,
+      model,
       messages: [
         { role: "system", content: system },
         { role: "user", content: user },
@@ -102,8 +147,8 @@ export async function generateAndStoreRefresher(
   kw: KwMeta
 ): Promise<{ rule_latex: string; example_latex: string } | null> {
   const parsed = await callGen(
-    system === "math" ? MATH_SYSTEM : MCAT_SYSTEM,
-    `keyword: ${kw.id}\nLabel: ${kw.label}\nDescription: ${kw.description ?? ""}`
+    await resolveSystemPrompt(promptSlot(system, "refresher"), defaultRefresherSystem(system)),
+    await buildRefresherUserPrompt(system, kw)
   );
   if (!parsed.rule_latex) return null;
 
@@ -125,4 +170,33 @@ export async function generateAndStoreRefresher(
     );
 
   return { rule_latex: ruleLatex, example_latex: exampleLatex };
+}
+
+/** Default refresher system prompt for a system (dev lab). */
+export function defaultRefresherSystem(system: "math" | "mcat"): string {
+  return system === "math" ? REFRESHER_MATH_SYSTEM : REFRESHER_MCAT_SYSTEM;
+}
+
+/**
+ * Generate a refresher FRESH for the dev lab — never stores, accepts a system-prompt
+ * and model override, and reports the assembled user prompt. Mirrors the lesson lab.
+ */
+export async function generateRefresherPreview(
+  system: "math" | "mcat",
+  kw: KwMeta,
+  opts?: { systemPrompt?: string; model?: string; onUserPrompt?: (p: string) => void; previewOnly?: boolean }
+): Promise<{ rule_latex: string; example_latex: string } | null> {
+  const userPrompt = await buildRefresherUserPrompt(system, kw);
+  opts?.onUserPrompt?.(userPrompt);
+  if (opts?.previewOnly) return null;
+  const parsed = await callGen(
+    opts?.systemPrompt ?? defaultRefresherSystem(system),
+    userPrompt,
+    opts?.model
+  );
+  if (!parsed.rule_latex) return null;
+  return {
+    rule_latex: String(parsed.rule_latex),
+    example_latex: String(parsed.example_latex ?? ""),
+  };
 }

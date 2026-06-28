@@ -1,17 +1,22 @@
 /**
- * Math session helper — reuses the same student session as MCAT.
- * Requires a logged-in account. If no account in localStorage,
- * redirects to /login?next=<current path> and never resolves.
+ * Math session helper — Supabase Auth is the source of truth (shares the same
+ * student session anchor as MCAT). Returns the authenticated user's uid and
+ * ensures a `student_sessions` row keyed by that uid exists. Redirects to
+ * /login?next=<path> if there is no session.
  */
-const ACCOUNT_KEY = "ap_calc_account_id";
-const SESSION_KEY = "ap_calc_student_session_id";
+import { supabaseBrowser } from "@/lib/supabaseBrowser";
+
 const MATH_COURSE_KEY = "math_last_course";
 
 export type MathCourseId = "precalc" | "calc_ab";
 
 export async function getOrCreateMathSession(): Promise<string> {
-  const accountId = localStorage.getItem(ACCOUNT_KEY);
-  if (!accountId) {
+  const supabase = supabaseBrowser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
     const next = encodeURIComponent(
       window.location.pathname + window.location.search
     );
@@ -19,19 +24,13 @@ export async function getOrCreateMathSession(): Promise<string> {
     return new Promise<string>(() => {});
   }
 
-  let id = localStorage.getItem(SESSION_KEY);
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem(SESSION_KEY, id);
-  }
-
   await fetch("/api/session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sessionId: id }),
+    body: JSON.stringify({ sessionId: user.id }),
   }).catch(() => {});
 
-  return id;
+  return user.id;
 }
 
 export function getLastMathCourse(): MathCourseId {

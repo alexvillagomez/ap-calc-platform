@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--workspace=apps/student"],
       "port": 3002
+    },
+    {
+      "name": "student-verify",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd apps/student && NEXT_DIST_DIR=/tmp/verify-next npx next dev --port 3011"],
+      "port": 3011
     }
   ]
 }

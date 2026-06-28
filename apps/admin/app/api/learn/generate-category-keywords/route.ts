@@ -67,7 +67,7 @@ export async function POST(request: Request) {
   let parsed: { keywords: unknown[] };
   try {
     const completion = await openai.chat.completions.create({
-      model: "gemini-3.5-flash",
+      model: "gpt-5.4-mini",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userPrompt },

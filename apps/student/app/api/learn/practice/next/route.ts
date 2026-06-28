@@ -247,8 +247,12 @@ async function fetchCandidatesForKeyword(
 
   const { data: candidates } = await query.limit(20);
 
-  // Also fetch from rag_examples (precalc), excluding already-seen ones
-  let ragQuery = supabase
+  // Also fetch from rag_examples (precalc), excluding already-seen ones.
+  // Note: typed `any` deliberately — reassigning a PostgREST filter builder onto
+  // the same `let` overflows TS's type recursion (TS2589) after the @supabase/ssr
+  // type bump; widening this one local breaks the inference without behavior change.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let ragQuery: any = supabase
     .from("rag_examples")
     .select("id, latex_content, choices, correct_index, difficulty, solution_latex, keyword_weights, avg_rating")
     .eq("course", "precalc")

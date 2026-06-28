@@ -1,0 +1,244 @@
+{
+  "section": "physics",
+  "category_code": "P4",
+  "category_label": "Work, Energy & Power",
+  "order_index": 3,
+  "umbrellas": [
+    {
+      "slug": "work_by_constant_force",
+      "label": "Work by a Constant Force",
+      "description": "How a constant force does work on an object, including the role of the angle between force and displacement.",
+      "intro": {
+        "slug": "work_by_constant_force_intro",
+        "label": "Work by a Constant Force Overview",
+        "description": "Work measures how much energy a force transfers to an object by acting over a displacement. The key insight is that only the component of force parallel to the displacement does work, captured by the dot product $W = Fd\\cos\\theta$. This umbrella covers how to compute and interpret work done by a single constant force, setting up the energy concepts that follow.",
+        "examples": ["$W = Fd\\cos\\theta$", "force perpendicular to motion does zero work", "negative work: force opposes displacement"]
+      },
+      "in_depth": [
+        {
+          "slug": "work_constant_force_formula",
+          "label": "Work done by a constant force: $W = Fd\\cos\\theta$",
+          "description": "Calculate the work done by a constant force using $W = Fd\\cos\\theta$, where $F$ is the force magnitude, $d$ is the displacement magnitude, and $\\theta$ is the angle between them; work is measured in joules (J = N·m). This focuses on the scalar dot-product definition for a single constant force, not work done by a varying force (which requires integration, beyond MCAT scope).",
+          "examples": ["$W = Fd\\cos\\theta$; $\\theta=0$ → maximum work", "force perpendicular ($\\theta=90°$) → $W=0$", "force opposing motion ($\\theta=180°$) → negative work"]
+        },
+        {
+          "slug": "work_done_by_gravity",
+          "label": "Work done by gravity",
+          "description": "Apply $W = Fd\\cos\\theta$ to gravity: gravity does positive work when an object descends ($W = mgh$, with $h$ the drop) and negative work when it rises. This focuses on the gravitational force as the agent doing work, not the general conservation of energy (a separate umbrella).",
+          "examples": ["object falls height $h$: $W_{grav} = mgh$", "object rises: gravity does negative work", "horizontal motion: gravity does zero work"]
+        },
+        {
+          "slug": "work_done_by_friction",
+          "label": "Work done by friction",
+          "description": "Recognize that kinetic friction does negative work on a sliding object because the friction force always opposes displacement ($\\theta = 180°$, so $W_f = -f_k d$); static friction does zero work when there is no slipping. This focuses on friction as the agent, not the net-work concept (a separate keyword).",
+          "examples": ["$W_{friction} = -f_k d$ (always negative for kinetic friction)", "static friction on non-slipping surface: $W=0$", "friction converts KE to thermal energy"]
+        },
+        {
+          "slug": "net_work_multiple_forces",
+          "label": "Net work and superposition of forces",
+          "description": "Compute net work on an object as the algebraic sum of work done by each individual force ($W_{net} = \\sum W_i$), or equivalently by applying $W = F_{net}d\\cos\\theta$. This focuses on summing contributions from multiple agents; the link between net work and kinetic energy change is the Work–Kinetic Energy Theorem (a separate keyword).",
+          "examples": ["$W_{net} = W_{applied} + W_{friction} + W_{gravity}$", "zero net work → no change in speed", "superposition: add signed work values"]
+        }
+      ]
+    },
+    {
+      "slug": "mechanical_advantage",
+      "label": "Mechanical Advantage & Simple Machines",
+      "description": "How simple machines trade force for distance (or vice versa), allowing a smaller input force to do the same work.",
+      "intro": {
+        "slug": "mechanical_advantage_intro",
+        "label": "Mechanical Advantage Overview",
+        "description": "A simple machine multiplies the applied force at the cost of a longer displacement, so that the total work input equals the total work output (in an ideal machine). Mechanical advantage $MA = F_{out}/F_{in}$ quantifies this trade-off. This umbrella covers the concept and its application to levers, pulleys, and inclined planes.",
+        "examples": ["$MA = F_{out}/F_{in}$", "longer input distance → smaller input force needed", "ideal machine: work in = work out"]
+      },
+      "in_depth": [
+        {
+          "slug": "ideal_mechanical_advantage",
+          "label": "Ideal mechanical advantage",
+          "description": "Define and calculate ideal mechanical advantage as $MA = F_{out}/F_{in} = d_{in}/d_{out}$: a machine that multiplies force by $MA$ requires the input to move $MA$ times farther than the output, so net work is conserved. This focuses on the ideal (frictionless) case; real machines have efficiency less than 100% (a natural extension not separately itemized at this level).",
+          "examples": ["$MA = F_{out}/F_{in} = d_{in}/d_{out}$", "lever with long input arm: large $MA$", "pulley with 3 rope segments: $MA = 3$"]
+        },
+        {
+          "slug": "levers_mechanical_advantage",
+          "label": "Levers and mechanical advantage",
+          "description": "Apply the lever principle — $F_1 \\cdot d_1 = F_2 \\cdot d_2$ about the fulcrum — to determine mechanical advantage of first-, second-, and third-class levers, identifying which arm length is input vs. output. This focuses on levers; pulley systems are a separate keyword.",
+          "examples": ["seesaw (class 1): fulcrum between effort and load", "wheelbarrow (class 2): load between fulcrum and effort", "$MA = d_{effort\\ arm}/d_{load\\ arm}$"]
+        },
+        {
+          "slug": "pulley_inclined_plane_ma",
+          "label": "Pulleys and inclined planes: mechanical advantage",
+          "description": "Determine the mechanical advantage of a pulley system (number of supporting rope segments) and of an inclined plane ($MA = L/h$, where $L$ is ramp length and $h$ is height), recognizing that both reduce required force by increasing input distance. This focuses on these two simple machine types, not levers (a separate keyword).",
+          "examples": ["single fixed pulley: $MA = 1$ (changes direction only)", "inclined plane: $MA = L/h = 1/\\sin\\theta$", "compound pulley with 4 segments: $MA = 4$"]
+        }
+      ]
+    },
+    {
+      "slug": "work_kinetic_energy_theorem",
+      "label": "Work–Kinetic Energy Theorem",
+      "description": "The fundamental link between net work done on an object and the resulting change in its kinetic energy.",
+      "intro": {
+        "slug": "work_kinetic_energy_theorem_intro",
+        "label": "Work–Kinetic Energy Theorem Overview",
+        "description": "The Work–Kinetic Energy Theorem states that the net work done on an object equals its change in kinetic energy: $W_{net} = \\Delta KE = \\frac{1}{2}mv_f^2 - \\frac{1}{2}mv_i^2$. This is a powerful scalar relationship that connects force, displacement, mass, and velocity without needing to track time or acceleration directly.",
+        "examples": ["$W_{net} = \\Delta KE$", "net work > 0 → object speeds up", "find final speed after known net work"]
+      },
+      "in_depth": [
+        {
+          "slug": "work_energy_theorem_application",
+          "label": "Applying the Work–Kinetic Energy Theorem",
+          "description": "Use $W_{net} = \\frac{1}{2}mv_f^2 - \\frac{1}{2}mv_i^2$ to find final speed, stopping distance, or net force when direct kinematics would require more steps; recognize that zero net work means constant kinetic energy. This focuses on relating net work to KE change for translation; rotational kinetic energy is beyond MCAT scope.",
+          "examples": ["braking car: friction's net work = $-\\Delta KE$", "given $W_{net}$ and $m$, solve for $v_f$", "$W_{net}=0$ → constant speed (balanced forces)"]
+        }
+      ]
+    },
+    {
+      "slug": "conservative_forces",
+      "label": "Conservative vs. Non-Conservative Forces",
+      "description": "The distinction between forces whose work is path-independent (conservative) and those that dissipate energy (non-conservative).",
+      "intro": {
+        "slug": "conservative_forces_intro",
+        "label": "Conservative Forces Overview",
+        "description": "A conservative force does work that depends only on start and end positions, not on the path taken, and can be associated with a stored potential energy. Non-conservative forces (e.g., kinetic friction, air drag) convert mechanical energy to heat, making the path matter. This umbrella sets up why potential energy is only definable for conservative forces.",
+        "examples": ["gravity: path-independent → conservative", "friction: path-dependent, dissipates energy", "conservative force ↔ potential energy exists"]
+      },
+      "in_depth": [
+        {
+          "slug": "conservative_force_definition",
+          "label": "Identifying conservative forces",
+          "description": "Classify a force as conservative if the work it does on any round trip is zero (equivalently, if the work is path-independent and depends only on endpoints); examples include gravity and spring force. Contrast with non-conservative forces — friction, air resistance, applied external forces — whose work depends on path and dissipates mechanical energy. This focuses on the classification; potential energy storage is a separate umbrella.",
+          "examples": ["gravity: same work up-and-back → conservative", "kinetic friction: longer path → more energy lost → non-conservative", "spring force is conservative; $W_{spring}$ depends only on endpoints"]
+        },
+        {
+          "slug": "potential_energy_conservative_force_link",
+          "label": "Potential energy as stored work of a conservative force",
+          "description": "Recognize that a potential energy function $U$ can be defined only for conservative forces, such that $W_{conservative} = -\\Delta U$; doing negative work against a conservative force stores potential energy. This focuses on the conceptual link between conservative work and $U$; the specific forms $U = mgh$ and $U = \\frac{1}{2}kx^2$ are developed in the next umbrella.",
+          "examples": ["$W_{cons} = -\\Delta U$ (lifting stores PE)", "releasing stored PE → conservative force does positive work", "non-conservative forces cannot store potential energy"]
+        }
+      ]
+    },
+    {
+      "slug": "kinetic_energy",
+      "label": "Kinetic Energy",
+      "description": "The energy of motion of a translating object, given by $KE = \\frac{1}{2}mv^2$.",
+      "intro": {
+        "slug": "kinetic_energy_intro",
+        "label": "Kinetic Energy Overview",
+        "description": "Kinetic energy is the energy an object possesses because of its translational motion: $KE = \\frac{1}{2}mv^2$, measured in joules. It scales with the square of speed and linearly with mass. Understanding KE is essential for applying the work–kinetic energy theorem and the conservation of mechanical energy.",
+        "examples": ["$KE = \\frac{1}{2}mv^2$; units = J", "doubling speed quadruples KE", "KE is always non-negative"]
+      },
+      "in_depth": [
+        {
+          "slug": "ke_formula_calculation",
+          "label": "Kinetic energy formula and units",
+          "description": "Calculate translational kinetic energy as $KE = \\frac{1}{2}mv^2$, where $m$ is mass in kg and $v$ is speed in m/s, giving energy in joules (J = kg·m²/s²). Recognize that KE depends on speed squared, so a factor-of-2 speed change gives a factor-of-4 KE change. This focuses on computing KE; linking KE change to net work is the Work–Kinetic Energy Theorem (a separate keyword).",
+          "examples": ["$KE = \\frac{1}{2}mv^2$", "2 kg at 3 m/s: $KE = 9$ J", "speed × 2 → KE × 4"]
+        },
+        {
+          "slug": "ke_mass_speed_dependence",
+          "label": "Dependence of KE on mass and speed",
+          "description": "Predict how kinetic energy changes when mass or speed is scaled: KE is linear in mass (double mass → double KE) but quadratic in speed (double speed → quadruple KE), with implications for why stopping distance grows rapidly with vehicle speed. This focuses on qualitative and ratio reasoning, not numerical computation (handled in the KE formula keyword).",
+          "examples": ["doubling $m$ → KE × 2; doubling $v$ → KE × 4", "stopping distance ∝ $v^2$ (via work–energy theorem)", "heavier vs. faster: compare KE by ratios"]
+        }
+      ]
+    },
+    {
+      "slug": "potential_energy_forms",
+      "label": "Gravitational & Spring Potential Energy",
+      "description": "The two main forms of mechanical potential energy tested on the MCAT: gravitational PE near Earth's surface and elastic PE stored in a spring.",
+      "intro": {
+        "slug": "potential_energy_forms_intro",
+        "label": "Potential Energy Forms Overview",
+        "description": "Potential energy is stored mechanical energy associated with position or configuration. For objects near Earth's surface, $PE_{grav} = mgh$ measures energy stored by lifting against gravity. For an ideal spring, $PE_{spring} = \\frac{1}{2}kx^2$ measures energy stored by compressing or stretching from equilibrium. Both forms can be fully converted to kinetic energy in a frictionless system.",
+        "examples": ["$PE_{grav} = mgh$ (gravitational, local)", "$PE_{spring} = \\frac{1}{2}kx^2$ (elastic)", "PE converted to KE as object falls or spring releases"]
+      },
+      "in_depth": [
+        {
+          "slug": "gravitational_pe_mgh",
+          "label": "Gravitational potential energy: $PE = mgh$",
+          "description": "Calculate gravitational potential energy near Earth's surface as $PE = mgh$, where $m$ is mass, $g \\approx 9.8\\,\\text{m/s}^2$, and $h$ is height above a chosen reference level; $PE$ increases when $h$ increases and the reference level is arbitrary. This focuses on the local (flat-Earth) approximation, not the universal $-GMm/r$ form (beyond typical MCAT depth).",
+          "examples": ["$PE = mgh$; reference level is arbitrary", "raise 2 kg by 5 m: $\\Delta PE = 98$ J", "higher reference can give negative PE (sign is relative)"]
+        },
+        {
+          "slug": "spring_pe_half_kx_squared",
+          "label": "Spring (elastic) potential energy: $PE = \\frac{1}{2}kx^2$",
+          "description": "Calculate the elastic potential energy stored in an ideal spring as $PE_{spring} = \\frac{1}{2}kx^2$, where $k$ is the spring constant (N/m) and $x$ is the displacement from equilibrium; $PE_{spring}$ is always non-negative and is maximum at maximum compression or extension. This focuses on stored energy, not the spring force $F = -kx$ (Hooke's law, which belongs to P7 on oscillation dynamics per the boundary).",
+          "examples": ["$PE_{spring} = \\frac{1}{2}kx^2$; always ≥ 0", "compress by $x$ or stretch by $x$: same PE", "stiffer spring (larger $k$) stores more PE for same $x$"]
+        },
+        {
+          "slug": "reference_level_pe",
+          "label": "Choosing and using a reference level for PE",
+          "description": "Recognize that the gravitational PE reference level ($h = 0$) is chosen by the problem-solver and that only changes in PE ($\\Delta PE = mg\\Delta h$) are physically meaningful; choosing a convenient reference (e.g., the lowest point of motion) simplifies energy conservation calculations. This focuses on the conceptual use of reference levels, not on computing $\\Delta PE$ for specific scenarios (done in adjacent keywords).",
+          "examples": ["set $h=0$ at ground, lowest point, or initial position", "only $\\Delta PE$ matters in energy equations", "negative PE is fine: it just means below the reference"]
+        }
+      ]
+    },
+    {
+      "slug": "conservation_of_energy",
+      "label": "Conservation of Mechanical Energy",
+      "description": "The principle that total mechanical energy (KE + PE) is constant in systems with only conservative forces, and how non-conservative forces modify this.",
+      "intro": {
+        "slug": "conservation_of_energy_intro",
+        "label": "Conservation of Energy Overview",
+        "description": "In a system where only conservative forces do work, total mechanical energy $E = KE + PE$ remains constant: energy converts between kinetic and potential forms but the sum never changes. When non-conservative forces (friction, air drag) act, they remove mechanical energy as heat, so $\\Delta E_{mech} = W_{non-conservative}$. Mastering this principle allows solving a wide range of motion problems without tracking forces at every instant.",
+        "examples": ["$KE_i + PE_i = KE_f + PE_f$ (conservative only)", "friction present: $E_{mech\\ final} = E_{mech\\ initial} + W_{friction}$", "roller coaster: height ↔ speed trade-off"]
+      },
+      "in_depth": [
+        {
+          "slug": "conservation_energy_conservative_only",
+          "label": "Conservation of mechanical energy (conservative forces only)",
+          "description": "Apply $KE_i + PE_i = KE_f + PE_f$ to find unknown speeds or heights in frictionless scenarios — a falling object, a pendulum swing, or a ball rolling off a ramp — by equating total mechanical energy at two points. This focuses on the lossless case; adding non-conservative forces is handled in a separate keyword.",
+          "examples": ["ball dropped from $h$: $mgh = \\frac{1}{2}mv^2$ → $v = \\sqrt{2gh}$", "pendulum: max PE at top ↔ max KE at bottom", "frictionless roller coaster: higher hill → slower at top"]
+        },
+        {
+          "slug": "energy_conservation_non_conservative",
+          "label": "Energy dissipation by non-conservative forces",
+          "description": "Apply the modified energy equation $KE_i + PE_i + W_{nc} = KE_f + PE_f$ (equivalently $W_{friction} = \\Delta E_{mech}$, which is negative) to account for thermal energy lost to friction or drag; the magnitude of lost mechanical energy equals the work done by the non-conservative force. This focuses on how friction modifies the energy balance, not on defining conservative forces (a separate keyword).",
+          "examples": ["block slides down ramp with friction: $\\Delta E_{mech} = -f_k d$", "$E_{mech\\ lost} = $ heat generated by friction", "compare final speeds with/without friction"]
+        },
+        {
+          "slug": "energy_conservation_problem_setup",
+          "label": "Selecting energy states and applying conservation",
+          "description": "Identify the initial and final energy states (choosing reference levels, listing all KE and PE terms, assessing which forces are conservative), then write and solve the energy equation — a systematic strategy applicable to projectiles, springs, pendulums, and inclines. This focuses on the problem-solving workflow; the underlying formulas appear in adjacent keywords.",
+          "examples": ["choose reference level to eliminate one PE term", "compressed spring launches block: $\\frac{1}{2}kx^2 = \\frac{1}{2}mv^2 + mgh$", "identify all non-conservative forces before applying conservation"]
+        },
+        {
+          "slug": "energy_conservation_spring_mass",
+          "label": "Energy conservation with a spring",
+          "description": "Apply conservation of mechanical energy to spring–mass systems: at maximum compression/extension all energy is $PE_{spring} = \\frac{1}{2}kx^2$; at equilibrium (natural length) all energy is $KE = \\frac{1}{2}mv^2$; intermediate positions split between the two forms ($\\frac{1}{2}kx^2 + \\frac{1}{2}mv^2 = E_{total}$). This focuses on the spring–mass energy exchange; the oscillation period/frequency of SHM → P7 (boundary).",
+          "examples": ["$\\frac{1}{2}kx_{max}^2 = \\frac{1}{2}mv_{max}^2$", "at equilibrium: all PE converts to KE", "intermediate position: split between PE and KE"]
+        }
+      ]
+    },
+    {
+      "slug": "power",
+      "label": "Power",
+      "description": "The rate at which work is done or energy is transferred, measured in watts.",
+      "intro": {
+        "slug": "power_intro",
+        "label": "Power Overview",
+        "description": "Power is the rate at which work is done: $P = W/t = Fv\\cos\\theta$, measured in watts (W = J/s). High power means delivering energy quickly; the same total work done faster requires more power. Power is relevant to engines, muscles, and any situation where the time-rate of energy delivery matters.",
+        "examples": ["$P = W/t$; units = watts (W = J/s)", "$P = Fv$ for constant force parallel to velocity", "1 horsepower ≈ 746 W (recognition level)"]
+      },
+      "in_depth": [
+        {
+          "slug": "power_definition_formula",
+          "label": "Power: $P = W/t$ and units",
+          "description": "Define power as the rate of doing work, $P = W/t$, with SI unit watt (W = J/s = kg·m²/s³); recognize that average power equals total energy transferred divided by time. This focuses on the basic definition and unit; expressing power in terms of force and velocity is a separate keyword.",
+          "examples": ["$P = W/t$; 1 W = 1 J/s", "lift 100 J of work in 2 s: $P = 50$ W", "same work, half the time → double the power"]
+        },
+        {
+          "slug": "power_force_velocity",
+          "label": "Instantaneous power: $P = Fv\\cos\\theta$",
+          "description": "Calculate instantaneous power as $P = Fv\\cos\\theta$ (or simply $P = Fv$ when force is parallel to velocity), useful when a constant force acts on a moving object and time is not directly given. This focuses on the force–velocity form; the basic $P = W/t$ definition is a separate keyword.",
+          "examples": ["car engine force $F$ at speed $v$: $P = Fv$", "push at angle $\\theta$ to motion: $P = Fv\\cos\\theta$", "constant power → force must decrease as speed increases"]
+        },
+        {
+          "slug": "power_efficiency",
+          "label": "Power and mechanical efficiency",
+          "description": "Apply the concept of mechanical efficiency $\\eta = P_{out}/P_{in} \\times 100\\%$: because non-conservative forces dissipate energy, a real machine delivers less useful power than it consumes; efficiency is always less than 100% when friction or drag is present. This focuses on the efficiency ratio; the energy dissipation mechanism is covered in the conservation-of-energy umbrella.",
+          "examples": ["$\\eta = P_{out}/P_{in}$ (always < 1 for real machines)", "80% efficient motor: 20% of input power lost to heat", "higher efficiency → less energy wasted per unit time"]
+        }
+      ]
+    }
+  ]
+}

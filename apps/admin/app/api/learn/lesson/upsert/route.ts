@@ -1,0 +1,25 @@
+import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+
+export async function POST(request: Request) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!supabaseUrl || !key) return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
+
+  const body = await request.json() as { keyword_id: string; micro_steps: unknown[] };
+  const { keyword_id, micro_steps } = body;
+
+  if (!keyword_id || !Array.isArray(micro_steps) || micro_steps.length === 0) {
+    return NextResponse.json({ error: "keyword_id and non-empty micro_steps are required" }, { status: 400 });
+  }
+
+  const supabase = createClient(supabaseUrl, key);
+
+  const { error } = await supabase
+    .from("learn_lessons")
+    .upsert({ keyword_id, micro_steps, model: "manual" }, { onConflict: "keyword_id" });
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  return NextResponse.json({ ok: true });
+}

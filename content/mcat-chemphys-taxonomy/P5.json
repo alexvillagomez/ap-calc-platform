@@ -1,0 +1,245 @@
+{
+  "section": "physics",
+  "category_code": "P5",
+  "category_label": "Fluids",
+  "order_index": 4,
+  "umbrellas": [
+    {
+      "slug": "density_specific_gravity",
+      "label": "Density & Specific Gravity",
+      "description": "Quantitative measures of how much mass a substance packs into a given volume, and how that compares to water.",
+      "intro": {
+        "slug": "density_specific_gravity_intro",
+        "label": "Density & Specific Gravity Overview",
+        "description": "Density ($\\rho = m/V$) characterizes how compactly a material stores mass; specific gravity compares that density to water's. These two quantities underlie buoyancy calculations, pressure–depth relations, and fluid-flow problems throughout the MCAT. Understanding density as a material property — distinct from mass or volume alone — sets up every subsequent fluid concept.",
+        "examples": ["$\\rho = m/V$ in kg/m³ or g/mL", "specific gravity = ratio to water at 4°C", "denser fluid sinks beneath lighter fluid"]
+      },
+      "in_depth": [
+        {
+          "slug": "density_definition",
+          "label": "Density",
+          "description": "Calculate density using $\\rho = m/V$, and recognize its SI unit (kg/m³) and the common g/mL equivalent. This focuses on density as a scalar material property, not on buoyancy forces (a separate keyword).",
+          "examples": ["$\\rho = m/V$; water $\\approx 1000$ kg/m³", "greater density → more mass per unit volume", "density determines whether an object sinks or floats"]
+        },
+        {
+          "slug": "specific_gravity",
+          "label": "Specific gravity",
+          "description": "Define specific gravity as the dimensionless ratio of a substance's density to the density of water at 4°C ($\\rho_{\\text{water}} \\approx 1000$ kg/m³), and use it to quickly assess whether a material floats or sinks. This focuses on the comparison ratio, not on the buoyant-force calculation (a separate keyword).",
+          "examples": ["SG = $\\rho_{\\text{substance}} / \\rho_{\\text{water}}$", "SG < 1 → floats; SG > 1 → sinks", "urine SG $\\approx 1.010$–$1.030$"]
+        }
+      ]
+    },
+    {
+      "slug": "buoyancy_archimedes",
+      "label": "Buoyancy & Archimedes' Principle",
+      "description": "The upward force a fluid exerts on a submerged or floating object, quantified by the weight of fluid displaced.",
+      "intro": {
+        "slug": "buoyancy_archimedes_intro",
+        "label": "Buoyancy & Archimedes' Principle Overview",
+        "description": "Archimedes' principle states that the buoyant force on an object equals the weight of fluid it displaces: $F_b = \\rho_{\\text{fluid}} V_{\\text{displaced}} g$. Whether an object sinks, floats, or is neutrally buoyant depends on the comparison between the object's density and the fluid's density. This principle governs everything from ships to the cardiovascular packing of red blood cells.",
+        "examples": ["$F_b = \\rho_{\\text{fluid}} V_{\\text{displaced}} g$", "floating object displaces weight equal to its own weight", "apparent weight = true weight $- F_b$"]
+      },
+      "in_depth": [
+        {
+          "slug": "archimedes_principle",
+          "label": "Archimedes' principle",
+          "description": "Apply Archimedes' principle to calculate the buoyant force: $F_b = \\rho_{\\text{fluid}} V_{\\text{displaced}} g$, where $V_{\\text{displaced}}$ is the volume of fluid displaced. This focuses on computing $F_b$, not on the floating/sinking condition (a separate keyword).",
+          "examples": ["$F_b = \\rho_{\\text{fluid}} V_{\\text{displaced}} g$", "fully submerged: $V_{\\text{displaced}}$ = object volume", "partially submerged: $V_{\\text{displaced}}$ < object volume"]
+        },
+        {
+          "slug": "floating_sinking_condition",
+          "label": "Floating, sinking & neutral buoyancy",
+          "description": "Predict whether an object floats, sinks, or is neutrally buoyant by comparing the buoyant force to gravitational weight: float when $\\rho_{\\text{object}} < \\rho_{\\text{fluid}}$, sink when $\\rho_{\\text{object}} > \\rho_{\\text{fluid}}$, neutral when equal. This focuses on the density-comparison condition, not on calculating the magnitude of $F_b$ (a separate keyword).",
+          "examples": ["float: $\\rho_{\\text{obj}} < \\rho_{\\text{fluid}}$", "neutral buoyancy: $\\rho_{\\text{obj}} = \\rho_{\\text{fluid}}$", "apparent weight = 0 at neutral buoyancy"]
+        },
+        {
+          "slug": "apparent_weight",
+          "label": "Apparent weight in a fluid",
+          "description": "Calculate the apparent weight of a submerged object as $W_{\\text{apparent}} = W_{\\text{true}} - F_b = (\\rho_{\\text{object}} - \\rho_{\\text{fluid}}) V g$, and interpret what a scale reads when an object is weighed underwater. This focuses on the weight-minus-buoyancy calculation, not on the floating/sinking density criterion (a separate keyword).",
+          "examples": ["$W_{\\text{app}} = W_{\\text{true}} - F_b$", "object feels lighter submerged", "density measurement by weighing in air vs. water"]
+        }
+      ]
+    },
+    {
+      "slug": "hydrostatic_pressure",
+      "label": "Hydrostatic Pressure & Pascal's Law",
+      "description": "How pressure varies with depth in a static fluid and how pressure transmissions propagate through enclosed fluids.",
+      "intro": {
+        "slug": "hydrostatic_pressure_intro",
+        "label": "Hydrostatic Pressure & Pascal's Law Overview",
+        "description": "In a fluid at rest, pressure increases with depth according to $P = P_0 + \\rho g h$: each extra meter of fluid column adds $\\rho g$ pascals of pressure. Pascal's law states that a pressure change applied anywhere in an enclosed static fluid is transmitted undiminished to every point — the principle behind hydraulic machines. These ideas directly underlie blood pressure, IV drip pressure, and hydraulic equipment.",
+        "examples": ["$P = P_0 + \\rho g h$ with $g \\approx 9.8$ m/s²", "Pascal: pressure change transmits equally throughout", "gauge pressure vs. absolute pressure"]
+      },
+      "in_depth": [
+        {
+          "slug": "hydrostatic_pressure_depth",
+          "label": "Hydrostatic pressure vs. depth",
+          "description": "Calculate gauge pressure at depth $h$ in a fluid of density $\\rho$ using $P = \\rho g h$, and total absolute pressure as $P = P_0 + \\rho g h$, recognizing that pressure at a given depth is independent of container shape (only depth and fluid density matter). This focuses on the depth–pressure relation, not on Pascal's transmission principle (a separate keyword).",
+          "examples": ["$P_{\\text{gauge}} = \\rho g h$", "pressure depends on depth, not container shape", "10 m of water $\\approx 1$ atm additional pressure"]
+        },
+        {
+          "slug": "pascal_law",
+          "label": "Pascal's law",
+          "description": "Apply Pascal's law — a pressure increase applied to any point in a confined, incompressible fluid is transmitted undiminished to all other points — to analyze hydraulic systems where a small force on a small piston creates a large force on a large piston ($F_1/A_1 = F_2/A_2$). This focuses on pressure transmission in enclosed systems, not on pressure varying with depth (a separate keyword).",
+          "examples": ["$P_1 = P_2$; $F_1/A_1 = F_2/A_2$", "hydraulic press: small force in → large force out", "pressure change undiminished throughout fluid"]
+        },
+        {
+          "slug": "gauge_vs_absolute_pressure",
+          "label": "Gauge pressure vs. absolute pressure",
+          "description": "Distinguish gauge pressure (pressure above atmospheric baseline, $P_{\\text{gauge}} = P_{\\text{abs}} - P_{\\text{atm}}$) from absolute pressure, and convert between the two using $P_{\\text{atm}} \\approx 1.01 \\times 10^5$ Pa ($\\approx 760$ mmHg). This focuses on the gauge/absolute distinction, not on how pressure varies with depth (a separate keyword).",
+          "examples": ["$P_{\\text{abs}} = P_{\\text{atm}} + P_{\\text{gauge}}$", "tire pressure is gauge; blood pressure is gauge", "$P_{\\text{atm}} \\approx 101{,}325$ Pa $\\approx 760$ mmHg"]
+        }
+      ]
+    },
+    {
+      "slug": "viscosity_poiseuille",
+      "label": "Viscosity & Poiseuille Flow",
+      "description": "How a fluid's internal resistance to flow (viscosity) determines the flow rate through a tube under a pressure gradient.",
+      "intro": {
+        "slug": "viscosity_poiseuille_intro",
+        "label": "Viscosity & Poiseuille Flow Overview",
+        "description": "Viscosity ($\\eta$) is the fluid property that quantifies resistance to shearing — thick fluids (honey, blood at high hematocrit) have higher viscosity than thin ones (water). For laminar flow in a cylindrical tube, Poiseuille's law governs flow rate: $Q = \\frac{\\pi r^4 \\Delta P}{8 \\eta L}$. The dramatic dependence on radius ($r^4$) makes small changes in vessel diameter clinically enormous.",
+        "examples": ["$Q = \\frac{\\pi r^4 \\Delta P}{8 \\eta L}$", "doubling radius → 16× flow rate", "high viscosity → lower flow rate for same $\\Delta P$"]
+      },
+      "in_depth": [
+        {
+          "slug": "viscosity_definition",
+          "label": "Viscosity",
+          "description": "Define viscosity $\\eta$ as the measure of a fluid's internal resistance to flow (shear), recognize that higher viscosity means slower flow for the same driving pressure, and identify qualitative factors that raise viscosity (e.g. temperature decrease, higher concentration of solutes, higher hematocrit). This focuses on the property itself, not on the Poiseuille flow-rate formula (a separate keyword).",
+          "examples": ["$\\eta$: high for honey/blood; low for water", "viscosity ↑ as temperature ↓ for liquids", "hematocrit ↑ → blood viscosity ↑"]
+        },
+        {
+          "slug": "poiseuille_law",
+          "label": "Poiseuille's law",
+          "description": "Apply Poiseuille's law $Q = \\frac{\\pi r^4 \\Delta P}{8 \\eta L}$ to predict volume flow rate through a tube of radius $r$ and length $L$ under pressure difference $\\Delta P$, and reason about how changes in $r$, $\\eta$, or $L$ affect $Q$ (especially the $r^4$ dependence). This focuses on the quantitative flow-rate formula, not on the definition of viscosity (a separate keyword) or turbulence (a separate keyword).",
+          "examples": ["$Q \\propto r^4$: doubling radius → 16× flow", "$Q \\propto \\Delta P$: double pressure → double flow", "vascular resistance: $R = 8\\eta L / (\\pi r^4)$"]
+        }
+      ]
+    },
+    {
+      "slug": "continuity_equation",
+      "label": "Continuity Equation",
+      "description": "Conservation of mass in flowing fluids: the relationship between cross-sectional area and fluid speed in a steady flow.",
+      "intro": {
+        "slug": "continuity_equation_intro",
+        "label": "Continuity Equation Overview",
+        "description": "For an incompressible fluid in steady flow, the volume flow rate $Q = Av$ must be the same everywhere in the pipe. The continuity equation $A_1 v_1 = A_2 v_2$ expresses conservation of mass: where the pipe narrows, the fluid speeds up; where it widens, the fluid slows. This sets up the Venturi effect and is the partner equation to Bernoulli's principle.",
+        "examples": ["$A_1 v_1 = A_2 v_2$ for incompressible flow", "narrow tube → faster speed", "$Q = Av$ constant along streamline"]
+      },
+      "in_depth": [
+        {
+          "slug": "continuity_equation_av",
+          "label": "Continuity equation ($Av = \\text{const}$)",
+          "description": "Apply the continuity equation $A_1 v_1 = A_2 v_2$ for an incompressible fluid in steady flow to relate the cross-sectional areas and fluid speeds at two points in a pipe, and predict whether the fluid speeds up or slows down as the pipe narrows or widens. This focuses on the area–velocity relation, not on the pressure changes that accompany velocity changes (Bernoulli, a separate keyword).",
+          "examples": ["$A_1 v_1 = A_2 v_2$: area halves → speed doubles", "volume flow rate $Q = Av$ is conserved", "wider aorta → slower blood than narrow arteriole"]
+        },
+        {
+          "slug": "volume_flow_rate",
+          "label": "Volume flow rate",
+          "description": "Define volume flow rate as $Q = Av$ (cross-sectional area × speed), express it in m³/s or L/min, and use it to convert between speed and volumetric flow in different parts of a circulatory-style circuit. This focuses on the definition and units of $Q$, not on the continuity relation between two cross-sections (a separate keyword).",
+          "examples": ["$Q = A v$ in m³/s", "$Q$ constant in a series pipe — area×speed tradeoff", "cardiac output $\\approx 5$ L/min at rest"]
+        }
+      ]
+    },
+    {
+      "slug": "turbulence",
+      "label": "Turbulence",
+      "description": "The conditions under which smooth (laminar) flow breaks down into chaotic (turbulent) flow.",
+      "intro": {
+        "slug": "turbulence_intro",
+        "label": "Turbulence Overview",
+        "description": "At low velocities, fluids flow in smooth laminar layers; above a critical velocity, flow becomes turbulent — chaotic with eddies and cross-stream mixing. The Reynolds number ($Re = \\rho v d / \\eta$) predicts the onset of turbulence: low $Re$ → laminar; high $Re$ → turbulent. Turbulence increases resistance to flow and is clinically relevant in murmurs and arterial stenoses.",
+        "examples": ["laminar flow: smooth parallel layers", "turbulent flow: eddies, chaotic at high velocity", "$Re = \\rho v d / \\eta$; $Re > \\sim 2000$ → turbulent"]
+      },
+      "in_depth": [
+        {
+          "slug": "laminar_vs_turbulent",
+          "label": "Laminar vs. turbulent flow",
+          "description": "Distinguish laminar flow (smooth, ordered streamlines, Poiseuille's law applies) from turbulent flow (chaotic eddies, higher resistance, occurs at high velocity or in wide tubes with low viscosity), and predict which regime dominates qualitatively from the conditions. This focuses on the qualitative distinction, not on the Reynolds number formula (a separate keyword).",
+          "examples": ["laminar: viscous, slow, narrow tube", "turbulent: fast, wide, low-viscosity fluid", "turbulence increases effective flow resistance"]
+        },
+        {
+          "slug": "reynolds_number",
+          "label": "Reynolds number",
+          "description": "Use the Reynolds number $Re = \\rho v d / \\eta$ to predict the onset of turbulence: $Re \\lesssim 2000$ indicates laminar flow; $Re \\gtrsim 4000$ indicates turbulent flow; intermediate values are transitional. This focuses on the quantitative criterion for turbulence, not on the qualitative description of what turbulence looks like (a separate keyword).",
+          "examples": ["$Re = \\rho v d / \\eta$", "$Re < 2000$ → laminar; $Re > 4000$ → turbulent", "large $Re$: high speed or low viscosity favors turbulence"]
+        }
+      ]
+    },
+    {
+      "slug": "surface_tension",
+      "label": "Surface Tension",
+      "description": "The cohesive force per unit length at a fluid surface that causes liquids to minimize surface area.",
+      "intro": {
+        "slug": "surface_tension_intro",
+        "label": "Surface Tension Overview",
+        "description": "Surface tension arises from unbalanced cohesive forces on molecules at a liquid–air interface, giving the surface an effective elastic membrane that resists stretching ($\\gamma$, units N/m). It governs capillary rise, the spherical shape of droplets, and — critically for the MCAT — the work of breathing (surfactant lowers alveolar surface tension). Wettability (contact angle) determines whether a liquid spreads or beads on a surface.",
+        "examples": ["$\\gamma$: energy per unit area (J/m²) or force per unit length (N/m)", "water strider walking on surface tension", "surfactant reduces $\\gamma$ in alveoli"]
+      },
+      "in_depth": [
+        {
+          "slug": "surface_tension_definition",
+          "label": "Surface tension coefficient",
+          "description": "Define surface tension $\\gamma$ as the force per unit length (or energy per unit area) acting along a liquid surface, explain it in terms of unbalanced intermolecular attractions at the surface, and predict how temperature or surfactants reduce $\\gamma$. This focuses on the property and its molecular origin, not on capillary action (a separate keyword).",
+          "examples": ["$\\gamma$ = force per unit length (N/m)", "surface molecules have net inward force", "surfactant (e.g. lung surfactant) lowers $\\gamma$"]
+        },
+        {
+          "slug": "capillary_action",
+          "label": "Capillary action",
+          "description": "Explain capillary rise as the result of the balance between adhesive forces (liquid–wall) and surface tension pulling the meniscus upward against gravity, and predict the direction of a meniscus (concave for water in glass, convex for mercury) from the relative strength of cohesion vs. adhesion. This focuses on the rise/fall phenomenon, not on the surface-tension coefficient itself (a separate keyword).",
+          "examples": ["capillary rise: adhesion > cohesion (water–glass)", "capillary depression: cohesion > adhesion (mercury–glass)", "narrower tube → greater capillary rise"]
+        }
+      ]
+    },
+    {
+      "slug": "bernoulli_equation",
+      "label": "Bernoulli's Equation",
+      "description": "Conservation of energy in ideal fluid flow: the trade-off between pressure, kinetic energy, and gravitational potential energy per unit volume.",
+      "intro": {
+        "slug": "bernoulli_equation_intro",
+        "label": "Bernoulli's Equation Overview",
+        "description": "Bernoulli's equation, $P + \\tfrac{1}{2}\\rho v^2 + \\rho g h = \\text{constant}$ along a streamline, expresses conservation of mechanical energy for steady, incompressible, inviscid flow. Where fluid speeds up (e.g., in a constriction found by the continuity equation), pressure drops. This inverse speed–pressure relation is the heart of the Venturi effect, pitot tube, and lift.",
+        "examples": ["$P + \\tfrac{1}{2}\\rho v^2 + \\rho gh = \\text{const}$", "faster flow → lower pressure (at same height)", "applies along a streamline for ideal (inviscid) fluid"]
+      },
+      "in_depth": [
+        {
+          "slug": "bernoulli_principle",
+          "label": "Applying Bernoulli's equation",
+          "description": "Apply Bernoulli's equation $P_1 + \\tfrac{1}{2}\\rho v_1^2 + \\rho g h_1 = P_2 + \\tfrac{1}{2}\\rho v_2^2 + \\rho g h_2$ between two points on a streamline to relate pressure, speed, and height in an ideal fluid. This focuses on the full three-term energy relation, not on the special-case pressure–speed trade-off at constant height (a separate keyword).",
+          "examples": ["$P_1 + \\tfrac{1}{2}\\rho v_1^2 + \\rho g h_1 = P_2 + \\tfrac{1}{2}\\rho v_2^2 + \\rho g h_2$", "at same height: speed ↑ → pressure ↓", "assumes steady, incompressible, inviscid flow along streamline"]
+        },
+        {
+          "slug": "bernoulli_speed_pressure",
+          "label": "Speed–pressure trade-off (Bernoulli at constant height)",
+          "description": "Apply the constant-height form of Bernoulli's equation, $P + \\tfrac{1}{2}\\rho v^2 = \\text{const}$, to predict that a higher-speed region has lower static pressure and vice versa — the directional rule underlying the Venturi effect and pitot tube. This focuses on the qualitative and quantitative inverse relationship between speed and pressure at equal elevations, not on the full three-term form that includes height (a separate keyword).",
+          "examples": ["$P + \\tfrac{1}{2}\\rho v^2 = \\text{const}$ (flat pipe)", "constriction → faster → lower pressure", "airplane wing: faster upper surface → lower pressure → lift"]
+        }
+      ]
+    },
+    {
+      "slug": "venturi_pitot",
+      "label": "Venturi Effect & Pitot Tube",
+      "description": "Practical applications of Bernoulli's equation and the continuity equation to measure flow speed and create suction.",
+      "intro": {
+        "slug": "venturi_pitot_intro",
+        "label": "Venturi Effect & Pitot Tube Overview",
+        "description": "The Venturi effect is the pressure drop in a constricted region of a flow, following directly from Bernoulli + continuity: the narrower the pipe, the faster the flow, the lower the static pressure. The pitot tube exploits the same physics in reverse — stagnating the flow to convert kinetic pressure back into static pressure, enabling airspeed measurement. Both are direct MCAT applications of ideal-fluid principles.",
+        "examples": ["Venturi: narrow throat → low pressure → suction", "pitot: stagnation pressure = static + dynamic", "Venturi meter measures $v$ from measured $\\Delta P$"]
+      },
+      "in_depth": [
+        {
+          "slug": "venturi_effect",
+          "label": "Venturi effect",
+          "description": "Explain the Venturi effect: in a constricted section of a pipe, continuity requires increased flow speed, and Bernoulli's equation then requires reduced static pressure at the constriction; use $\\Delta P = \\tfrac{1}{2}\\rho(v_2^2 - v_1^2)$ to relate the pressure drop to the speed increase. This focuses on the constriction-induced pressure drop, not on pitot-tube stagnation (a separate keyword).",
+          "examples": ["constriction: $v$ ↑, $P$ ↓ (Bernoulli + continuity)", "$\\Delta P = \\tfrac{1}{2}\\rho(v_2^2 - v_1^2)$", "Venturi meter: measure $\\Delta P$ → find $v$"]
+        },
+        {
+          "slug": "pitot_tube",
+          "label": "Pitot tube",
+          "description": "Explain how a pitot tube measures fluid velocity by stagnating the flow: the stagnation pressure $P_0 = P_{\\text{static}} + \\tfrac{1}{2}\\rho v^2$ equals the sum of static and dynamic pressure, so measuring $P_0 - P_{\\text{static}}$ gives $v = \\sqrt{2(P_0 - P_{\\text{static}})/\\rho}$. This focuses on stagnation-point pressure measurement, not on the constriction-based Venturi device (a separate keyword).",
+          "examples": ["stagnation: $P_0 = P_{\\text{static}} + \\tfrac{1}{2}\\rho v^2$", "$v = \\sqrt{2\\Delta P / \\rho}$ from pitot reading", "aircraft airspeed indicator uses pitot principle"]
+        }
+      ]
+    }
+  ]
+}

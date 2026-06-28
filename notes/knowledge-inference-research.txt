@@ -1,0 +1,144 @@
+KNOWLEDGE INFERENCE FOR ADAPTIVE LEARNING: RESEARCH OVERVIEW
+Applied to the AP Calc Platform
+
+===== 1. KNOWLEDGE SPACE THEORY (KST) =====
+
+Knowledge Space Theory (Doignon & Falmagne, 1985) models student competence as a "knowledge state"—a subset K of all possible skills/items that a student has mastered. The full set of feasible states forms a knowledge space, constrained by prerequisite relationships.
+
+Core insight: not all combinations of skills are valid. If a student masters skill B, they likely already master prerequisite skill A. This structure is called a "quasi-order" (reachability via prerequisite edges).
+
+For this platform:
+- Define skills S = {keyword_1, keyword_2, ..., keyword_n} from learn_keywords table
+- Prerequisite edges encode the four-dimensional tagger output (e.g., "Polynomial Division" → "Polynomial Structure")
+- Student's knowledge state is the set of keywords with in_depth_score > threshold
+- Query: given student answers to a subset of problems, which keywords are now mastered (or not)?
+
+Advantage: psychometrically sound, directly captures prerequisite structure
+Disadvantage: doesn't quantify uncertainty; assumes binary mastery (hard to adapt to soft skill strengths 0–1)
+Current platform fit: GOOD for umbrella→in-depth navigation; MISSING hard prerequisite enforcement
+
+===== 2. BAYESIAN KNOWLEDGE TRACING (BKT) =====
+
+BKT (Corbett & Anderson, 1994) models each skill as a Hidden Markov Model:
+- Two states: LEARNED (probability p_L), NOT_LEARNED (probability 1 - p_L)
+- Transition probabilities: p_learn (guess mastery by lucky guess), p_slip (forget despite mastery)
+- Observation model: P(correct | learned) = 1 - p_slip, P(correct | not learned) = p_guess
+
+Bayesian update after each observation:
+  p_L(t+1) = P(learned | observation_t, p_L(t), p_learn, p_slip, p_guess)
+
+Using Bayes' rule, given correct answer:
+  p_L(t+1) = p_L(t) * (1 - p_slip) / [p_L(t) * (1 - p_slip) + (1 - p_L(t)) * p_guess]
+
+Engineering realization for AP Calc:
+- Initialize p_L = 0.0 for each keyword (guest student)
+- Per problem attempt:
+  - Fetch skill-to-problem mapping from four-dimensional tags
+  - For each involved keyword, update p_L using observed correctness
+  - Store only p_L in learn_student_keyword_states.in_depth_score (normalized 0–1)
+- Personalize: target next problem's difficulty to p_L ≈ 0.5 (highest info gain)
+
+Advantage: probabilistic; accounts for guessing/slipping; widely validated in Ed research
+Disadvantage: parameter estimation hard; assumes skill independence (breaks when prerequisites matter)
+Current platform fit: PARTIALLY—in_depth_score already tracked but lacks principled update rule; no p_guess/p_slip tuning
+
+===== 3. ITEM RESPONSE THEORY (IRT) =====
+
+IRT models problem difficulty and student ability on a latent continuum, typically [-∞, +∞]:
+- θ = student ability (unknown latent trait)
+- β = problem difficulty (calibrated, usually 0 mean/1 sd)
+- 2-PL (two-parameter logistic) model: P(correct | θ, β) = 1 / (1 + exp(-(θ - β)))
+
+At θ = β, probability correct = 0.5. Larger θ - β → higher chance of correct.
+
+For multi-dimensional variants (MIRT), replace scalar θ with vector:
+  θ = [θ_algebra, θ_calculus, θ_graphing, ...] (one latent trait per skill)
+  P(correct | θ, problem) = 1 / (1 + exp(- (a_algebra * θ_algebra + a_calculus * θ_calculus + ... - β)))
+
+Where a_* are "discrimination" weights learned from data.
+
+Engineering fit for AP Calc:
+- Identify 4–6 latent traits matching the four-dimensional tagger (e.g., θ_symbolic, θ_numeric, θ_graphical)
+- Use estimated_difficulty as problem β (already tracked 0–1; shift to ~[-2, 2] for IRT scale)
+- Estimate student θ from attempt history; update via MLE or EM after each attempt
+- Recommend next problem: pick one where student ability θ matches problem difficulty β ± 0.3
+
+Advantage: psychometrically rigorous; handles multi-dimensional mastery; calibrates problem difficulty
+Disadvantage: needs large student population for reliable calibration; requires Mirt R/Python library
+Current platform fit: MEDIUM—estimated_difficulty exists but isn't used for personalization; no multi-dimensional θ
+
+===== 4. CO-OCCURRENCE & PREREQUISITE GRAPH APPROACHES =====
+
+Lighter-weight than IRT/BKT; mine student answer patterns to infer implicit skill graphs:
+
+1. **Co-occurrence matrix**: for all keyword pairs, compute how often students who mastered A also mastered B
+   - High co-occurrence → likely prerequisites or strongly correlated skills
+   - Build directed graph: prerequisite_score(A → B) = P(B mastered | A mastered AND problem tests B)
+
+2. **Attempt clustering**: cluster similar problem attempts; infer shared skills
+   - If student X and Y both miss the same problem set, likely deficiency in shared prerequisite
+   - Apply LDA (Latent Dirichlet Allocation) or NMF to problem-attempt matrix
+
+3. **Graph-based filtering for practice**: given student's current mastery set K:
+   - Recommend next problem whose skill prerequisites are all in K (or mostly in K + one new skill)
+   - Avoids "too hard too fast"; respects learned structure
+
+Engineering fit:
+- Compute co-occurrence post-hoc: ingest all learn_student_keyword_states + learn_keywords rows, build adjacency matrix
+- Update weekly; use to prune practice recommendations (filter next-problem results to feasible K + Δ)
+- Combine with IRT: recommend problem if IRT difficulty matches AND prerequisite graph says it's reachable
+
+Advantage: simple; works with small data; directly exploits problem semantics (four-dimensional tagger)
+Disadvantage: noisy from student errors; doesn't quantify uncertainty; requires dense attempt history
+Current platform fit: GOOD—keywords + parent_keyword_id structure already in place; just needs co-occurrence logic in practice/next/route.ts
+
+===== 5. HYBRID RECOMMENDATION FOR AP CALC PLATFORM =====
+
+Proposed three-layer stack:
+
+**Layer 1: Knowledge Space (immediate)**
+- Enforce prerequisite graph from learn_keywords.parent_keyword_id
+- Filter practice recommendations to keywords where all prerequisites are in K
+- Implement in: apps/student/app/api/learn/practice/next/route.ts
+  ```
+  const feasibleKeywords = keywords.filter(kw =>
+    !kw.prerequisites.some(prereq => state[prereq].score < 0.5)
+  );
+  ```
+
+**Layer 2: Bayesian Skill Tracking (3-month horizon)**
+- Keep in_depth_score ∈ [0, 1] (current behavior, good)
+- Update rule on each attempt (replace current naive average):
+  ```
+  oldScore = state[keyword].in_depth_score
+  correct = attempt.correct
+  p_slip = 0.1  // tune empirically
+  p_guess = 0.2 // tune empirically
+  newScore = correct
+      ? oldScore * (1 - p_slip) / (oldScore * (1 - p_slip) + (1 - oldScore) * p_guess)
+      : oldScore * (1 - p_guess) / (oldScore * (1 - p_slip) + (1 - oldScore) * p_guess)
+  ```
+- Pick next problem difficulty to maximize information gain: target_difficulty ≈ oldScore
+
+**Layer 3: IRT Calibration (long-term, later)**
+- Once student cohort is N > 500 with 1000+ attempts each:
+  - Fit MIRT model with 4 latent traits (one per tagger dimension: topic, action, representation, prerequisite)
+  - Estimate student θ_i for each trait from attempt history
+  - Update problem discrimination weights a_j and difficulty β_j
+  - Switch recommendation to: pick problem where (θ_i · a_j) ≈ β_j for all dimensions
+
+**Implementation order**:
+1. Layer 1 (graph filtering) — 1 week; low risk; immediate UX improvement
+2. Layer 2 (Bayesian updates) — 2 weeks; swap in_depth_score update logic; A/B test p_slip/p_guess
+3. Layer 3 (MIRT) — 3 months; requires data accumulation; use Stan or mirt R package offline, serve θ_i/β_j estimates via API
+
+**Fallback**: if calibration data is sparse, keep Layer 1+2; Layer 2 alone is sufficient for 80% of platform goals (e.g., recommend "not too hard, not too easy" given current in_depth_score).
+
+This hybrid balances theory (IRT/BKT) with pragmatism (no large-scale data yet) and aligns with existing four-dimensional keyword structure.
+
+===== REFERENCES =====
+
+- Doignon, J.-P., & Falmagne, J.-C. (1985). Spaces for the assessment of knowledge. Int. J. Man-Machine Studies, 23(2), 175–196.
+- Corbett, A. T., & Anderson, J. R. (1994). Knowledge tracing: Modeling the acquisition of procedural knowledge. User Modeling and User-Adapted Interaction, 4(4), 253–278.
+- Baker, R. S., Corbett, A. T., Aleven, V. (2008). More accurate student modeling through contextual influence of problem solving behaviors. IJCAI, 727–733.
+- Reckase, M. D. (2009). Multidimensional Item Response Theory. Springer.

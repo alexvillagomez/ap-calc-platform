@@ -6,7 +6,7 @@ import { LoginGate } from "@/components/auth/LoginGate";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
 import { Card } from "@/components/ui/Card";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { SoundToggle } from "@/components/ui/SoundToggle";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { setLastMathCourse } from "@/lib/mathSession";
 
 function MathCourseChooserInner() {
@@ -19,19 +19,15 @@ function MathCourseChooserInner() {
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
         <div className="w-full px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <LoderaLogo size={28} withWordmark />
+            <Link href="/" aria-label="Lodera home" className="shrink-0">
+              <LoderaLogo size={28} withWordmark />
+            </Link>
             <span className="text-neutral-300 text-sm">|</span>
             <h1 className="text-sm font-semibold text-neutral-800">Math Center</h1>
           </div>
           <div className="flex items-center gap-2">
-            <Link
-              href="/profile"
-              className="text-xs font-medium text-neutral-600 hover:text-brand-600 transition-colors px-2 py-1"
-            >
-              Account
-            </Link>
             <StreakBadge />
-            <SoundToggle />
+            <NavMenu />
           </div>
         </div>
       </header>

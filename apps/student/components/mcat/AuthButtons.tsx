@@ -3,16 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-const ACCOUNT_KEY = "ap_calc_account_id";
-const USERNAME_KEY = "ap_calc_username";
-const SESSION_KEY = "ap_calc_student_session_id";
-const DIAG_DONE_KEY = "ap_calc_diagnostic_done";
+import { supabaseBrowser } from "@/lib/supabaseBrowser";
 
 /**
  * Login / logout control for the MCAT header.
  * - Logged out: "Log in" button → /login?next=/mcat
- * - Logged in: shows the username + "Log out" (clears the account + session so
+ * - Logged in: shows the username + "Log out" (signs out of Supabase Auth so
  *   the next visitor starts as a fresh guest).
  */
 export default function AuthButtons() {
@@ -21,16 +17,26 @@ export default function AuthButtons() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const accountId = localStorage.getItem(ACCOUNT_KEY);
-    setUsername(accountId ? localStorage.getItem(USERNAME_KEY) : null);
-    setReady(true);
+    let active = true;
+    supabaseBrowser()
+      .auth.getUser()
+      .then((res: { data: { user: { email?: string; user_metadata?: { username?: string } } | null } }) => {
+        if (!active) return;
+        const user = res.data.user;
+        if (user) {
+          const meta = user.user_metadata ?? {};
+          setUsername(meta.username || user.email || "Account");
+        } else {
+          setUsername(null);
+        }
+        setReady(true);
+      })
+      .catch(() => { if (active) setReady(true); });
+    return () => { active = false; };
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem(ACCOUNT_KEY);
-    localStorage.removeItem(USERNAME_KEY);
-    localStorage.removeItem(SESSION_KEY);
-    localStorage.removeItem(DIAG_DONE_KEY);
+  const handleLogout = async () => {
+    try { await supabaseBrowser().auth.signOut(); } catch { /* ignore */ }
     setUsername(null);
     window.location.href = "/mcat";
   };

@@ -1,0 +1,242 @@
+{
+  "section": "physics",
+  "category_code": "P9",
+  "category_label": "Electrostatics & Magnetism",
+  "order_index": 8,
+  "umbrellas": [
+    {
+      "slug": "charge_and_conductors",
+      "label": "Charge, Conductors & Insulators",
+      "description": "The nature of electric charge, how charge is conserved and distributed, and how conductors and insulators differ in their response to charge.",
+      "intro": {
+        "slug": "charge_and_conductors_intro",
+        "label": "Charge & Conductors Overview",
+        "description": "Electric charge is a fundamental property that comes in positive and negative varieties; the total charge in an isolated system is always conserved. Conductors allow charge to move freely to their surfaces, while insulators keep charge fixed in place. Understanding these distinctions underpins Coulomb's law, electric fields, and potential.",
+        "examples": ["charge conservation: $q_{total}$ stays constant", "conductor: free electrons migrate to surface", "insulator: charge stays localized"]
+      },
+      "in_depth": [
+        {
+          "slug": "types_of_charge",
+          "label": "Types of electric charge",
+          "description": "Identify positive and negative charge, predict the sign of the net charge after adding or removing electrons, and state that like charges repel while unlike charges attract. This focuses on the identity and sign of charge, not the quantitative force law (Coulomb's law, a separate keyword).",
+          "examples": ["protons carry $+e$; electrons carry $-e$", "removing electrons leaves object positive", "unlike charges attract; like charges repel"]
+        },
+        {
+          "slug": "charge_conservation",
+          "label": "Conservation of charge",
+          "description": "Apply conservation of charge to determine the net charge of a system before and after charge transfer: $q_{final,1} + q_{final,2} = q_{initial,1} + q_{initial,2}$. This focuses on the bookkeeping of total charge, not the spatial distribution of charge on conductors (a separate keyword).",
+          "examples": ["total charge of isolated system is constant", "two identical spheres touched: charge splits equally", "$q_{net}$ unchanged by rubbing or grounding"]
+        },
+        {
+          "slug": "conductors_charge_distribution",
+          "label": "Conductors and charge distribution",
+          "description": "Predict how excess charge distributes on a conductor at electrostatic equilibrium: charge resides on the surface, and the interior electric field is zero. This focuses on metallic conductor behavior, not insulator charge localization (a separate keyword).",
+          "examples": ["excess charge → conductor surface only", "E = 0 inside a conductor in equilibrium", "higher surface curvature → greater surface charge density"]
+        },
+        {
+          "slug": "insulators_charge_localization",
+          "label": "Insulators and charge localization",
+          "description": "Explain that in insulators (dielectrics), charge cannot flow freely so charge deposited at one location remains localized there. This focuses on insulator behavior, not conductor charge redistribution (a separate keyword).",
+          "examples": ["rubber, glass, plastic: charge stays where placed", "no free electrons to carry charge through bulk", "polarization: insulator can be attracted without net charge transfer"]
+        },
+        {
+          "slug": "charge_transfer_methods",
+          "label": "Methods of charging: conduction, induction, friction",
+          "description": "Distinguish charging by conduction (direct contact transfers charge), induction (nearby charge redistributes without contact), and friction (triboelectric effect). This focuses on the mechanism of charge transfer, not the equilibrium distribution on the charged object (a separate keyword).",
+          "examples": ["conduction: touch rod to sphere → charge shared", "induction: near negative rod, near side of sphere goes positive", "friction: glass rod rubbed with silk → glass becomes positive"]
+        }
+      ]
+    },
+    {
+      "slug": "coulombs_law",
+      "label": "Coulomb's Law",
+      "description": "The quantitative law giving the electrostatic force between two point charges separated by a distance.",
+      "intro": {
+        "slug": "coulombs_law_intro",
+        "label": "Coulomb's Law Overview",
+        "description": "Coulomb's law, $F = k\\frac{q_1 q_2}{r^2}$, describes the force between two point charges: proportional to each charge and inversely proportional to the square of the separation. Like Newton's law of gravitation in form, it is repulsive for like signs and attractive for unlike signs, and it obeys the superposition principle. Mastering this law is the entry point to understanding electric fields and electrostatic energy.",
+        "examples": ["$F = k\\frac{q_1 q_2}{r^2}$, $k \\approx 9\\times10^9\\,\\text{N·m}^2/\\text{C}^2$", "double $r$ → force drops by factor 4", "opposite signs → attractive force"]
+      },
+      "in_depth": [
+        {
+          "slug": "coulombs_law_formula",
+          "label": "Coulomb's law magnitude and direction",
+          "description": "Calculate the magnitude of the electrostatic force using $F = k\\frac{|q_1||q_2|}{r^2}$ (with $k \\approx 9\\times10^9\\,\\text{N·m}^2/\\text{C}^2$) and determine whether the force is attractive or repulsive from the signs of the charges. This focuses on the two-charge force, not superposition with multiple charges (a separate keyword).",
+          "examples": ["$F = k|q_1||q_2|/r^2$", "both positive → repulsion; opposite signs → attraction", "$k = 9\\times10^9\\,\\text{N·m}^2/\\text{C}^2$"]
+        },
+        {
+          "slug": "coulombs_law_inverse_square",
+          "label": "Inverse-square distance dependence of Coulomb's law",
+          "description": "Apply the $1/r^2$ scaling to predict how the electrostatic force changes when separation changes: doubling $r$ reduces $F$ by a factor of 4; halving $r$ quadruples $F$. This focuses on the distance scaling, not the charge-magnitude dependence (a separate keyword).",
+          "examples": ["$r \\to 2r$: $F \\to F/4$", "$r \\to r/2$: $F \\to 4F$", "same $1/r^2$ form as Newton's gravity"]
+        },
+        {
+          "slug": "coulombs_law_superposition",
+          "label": "Superposition of electrostatic forces",
+          "description": "Find the net electrostatic force on a charge due to multiple source charges by adding the individual Coulomb forces as vectors ($\\vec{F}_{net} = \\sum_i \\vec{F}_i$). This focuses on vector addition of forces from multiple charges, not the force from a single pair (a separate keyword).",
+          "examples": ["three charges in a line: add forces as signed vectors", "forces are vectors: need direction as well as magnitude", "net force points in direction of vector sum"]
+        }
+      ]
+    },
+    {
+      "slug": "electric_field",
+      "label": "Electric Field",
+      "description": "The concept of an electric field, how field lines represent it, and how to determine the field due to point charges or charge distributions.",
+      "intro": {
+        "slug": "electric_field_intro",
+        "label": "Electric Field Overview",
+        "description": "The electric field $\\vec{E}$ at a point in space is the force per unit positive test charge placed at that point: $\\vec{E} = \\vec{F}/q_{test}$. Field lines give a visual map of the field — they start on positive charges, end on negative charges, and never cross. For a point charge, $E = k\\frac{|q|}{r^2}$, and for more complex distributions the field is found by superposition.",
+        "examples": ["$\\vec{E} = \\vec{F}/q_0$", "field lines: dense → strong field; sparse → weak", "field line direction = force on positive test charge"]
+      },
+      "in_depth": [
+        {
+          "slug": "electric_field_definition",
+          "label": "Definition of electric field",
+          "description": "Define the electric field as the force per unit positive test charge, $\\vec{E} = \\vec{F}/q_0$, and use it to find the force on any charge $q$ placed at that point: $\\vec{F} = q\\vec{E}$. This focuses on the field concept and the force it exerts, not how to calculate the field produced by a charge distribution (a separate keyword).",
+          "examples": ["$\\vec{E} = \\vec{F}/q_0$ (N/C or V/m)", "$\\vec{F} = q\\vec{E}$: positive charge in direction of $\\vec{E}$", "test charge must be small to avoid distorting the field"]
+        },
+        {
+          "slug": "electric_field_point_charge",
+          "label": "Electric field due to a point charge",
+          "description": "Calculate the magnitude of the electric field produced by a point charge $q$ at distance $r$: $E = k\\frac{|q|}{r^2}$, directed radially away from a positive charge and toward a negative charge. This focuses on the single-source field, not superposition from multiple charges (a separate keyword).",
+          "examples": ["$E = k|q|/r^2$ (same $1/r^2$ dependence as Coulomb's law)", "positive source: $\\vec{E}$ points outward; negative source: inward", "double $r$: field drops by factor 4"]
+        },
+        {
+          "slug": "electric_field_superposition",
+          "label": "Superposition of electric fields",
+          "description": "Find the net electric field at a point due to multiple charges by adding the individual field vectors: $\\vec{E}_{net} = \\sum_i \\vec{E}_i$. This focuses on vector superposition, not the field from a single point charge (a separate keyword).",
+          "examples": ["two equal positive charges: midpoint field cancels", "add $\\vec{E}$ vectors component-by-component", "superposition applies to both fields and forces"]
+        },
+        {
+          "slug": "electric_field_lines",
+          "label": "Electric field lines",
+          "description": "Interpret electric field-line diagrams: lines originate on positive charges and terminate on negative charges, the direction of a line gives the field direction, and line density indicates field strength. This focuses on reading field-line maps, not calculating the field magnitude at a point (a separate keyword).",
+          "examples": ["field lines never cross each other", "near a positive charge: lines radiate outward", "uniform field between parallel plates: equally spaced parallel lines"]
+        },
+        {
+          "slug": "uniform_electric_field",
+          "label": "Uniform electric field between parallel plates",
+          "description": "Recognize that a uniform electric field $E = V/d$ exists between two parallel plates with potential difference $V$ and separation $d$, with field lines perpendicular to the plates, directed from positive to negative plate. This focuses on the parallel-plate geometry, not curved or non-uniform field distributions (a separate keyword).",
+          "examples": ["$E = V/d$ between plates", "field lines perpendicular to plates, from $+$ to $-$", "force on charge inside: $F = qE$, constant and uniform"]
+        }
+      ]
+    },
+    {
+      "slug": "electrostatic_energy_potential",
+      "label": "Electrostatic Energy & Electric Potential",
+      "description": "The potential energy stored in charge configurations and the scalar electric potential at a point in space.",
+      "intro": {
+        "slug": "electrostatic_energy_potential_intro",
+        "label": "Electrostatic Energy & Potential Overview",
+        "description": "Electric potential $V$ is the electric potential energy per unit charge at a point in space: $V = U/q = kq/r$ for a point charge, measured in volts. Moving a charge through a potential difference $\\Delta V$ involves work $W = q\\Delta V$. Electrostatic potential energy is stored in the configuration of charges and can be converted to kinetic energy. Unlike the vector electric field, potential is a scalar, making calculations by superposition straightforward.",
+        "examples": ["$V = kq/r$ for a point charge (volts, V)", "$W = q\\Delta V = q(V_f - V_i)$", "equipotential surfaces: no work to move charge along them"]
+      },
+      "in_depth": [
+        {
+          "slug": "electric_potential_definition",
+          "label": "Electric potential (voltage) at a point",
+          "description": "Define electric potential $V$ as the electric potential energy per unit positive charge at a point ($V = U/q_0$, units: volts), and state that potential is a scalar that can be summed algebraically from multiple sources. This focuses on the concept and units of potential, not on calculating it from a charge distribution (a separate keyword).",
+          "examples": ["$V = U/q_0$, units: volts (V = J/C)", "scalar quantity: add algebraically, not as vectors", "potential is defined relative to a reference (often $V=0$ at infinity)"]
+        },
+        {
+          "slug": "electric_potential_point_charge",
+          "label": "Electric potential due to a point charge",
+          "description": "Calculate the electric potential produced by a point charge at distance $r$: $V = k\\frac{q}{r}$, noting that potential is positive for positive charges and negative for negative charges, and falls off as $1/r$ (not $1/r^2$ like the field). This focuses on the single-source formula, not superposition (a separate keyword).",
+          "examples": ["$V = kq/r$ (note: $1/r$, not $1/r^2$)", "positive charge: $V > 0$; negative charge: $V < 0$", "at $r \\to \\infty$: $V \\to 0$ (the reference)"]
+        },
+        {
+          "slug": "electrostatic_potential_energy",
+          "label": "Electrostatic potential energy of a charge pair",
+          "description": "Calculate the potential energy stored in a pair of point charges separated by distance $r$: $U = k\\frac{q_1 q_2}{r}$, and interpret its sign (positive = repulsive configuration; negative = attractive). This focuses on stored energy, not on the work done moving a charge through a potential difference (a separate keyword).",
+          "examples": ["$U = kq_1 q_2 / r$", "$U > 0$: like charges (energy released by separating)", "$U < 0$: unlike charges (energy released by bringing together)"]
+        },
+        {
+          "slug": "work_and_potential_difference",
+          "label": "Work done moving a charge through a potential difference",
+          "description": "Calculate the work done by the electric force when a charge $q$ moves through a potential difference $\\Delta V$: $W_{electric} = q\\Delta V = q(V_i - V_f)$; this equals the loss in potential energy $\\Delta U = q\\Delta V$. This focuses on the work-energy relationship for moving charges, not on calculating the potential itself (a separate keyword).",
+          "examples": ["$W = q(V_i - V_f) = -\\Delta U$", "positive charge moves from high to low $V$: field does positive work", "electron ($-e$) moves from low to high $V$: field does positive work"]
+        },
+        {
+          "slug": "equipotential_surfaces",
+          "label": "Equipotential surfaces",
+          "description": "Identify equipotential surfaces as loci of constant $V$ where no work is done moving a charge, and recognize that they are always perpendicular to electric field lines. This focuses on geometric interpretation of potential, not on calculating potential values (a separate keyword).",
+          "examples": ["no work: $W = q\\Delta V = 0$ along equipotential", "equipotentials $\\perp$ field lines at every point", "concentric spheres around a point charge are equipotentials"]
+        },
+        {
+          "slug": "relationship_e_v",
+          "label": "Relationship between electric field and potential",
+          "description": "State that the electric field points from high to low potential and equals the negative rate of change of potential: conceptually $E \\approx -\\Delta V / \\Delta r$ (field strength = magnitude of potential gradient). This focuses on connecting $\\vec{E}$ and $V$, not on deriving one from the other with calculus.",
+          "examples": ["$\\vec{E}$ points from high $V$ to low $V$", "$E = -\\Delta V/\\Delta r$ (conceptual, no calculus required)", "uniform field: $E = V/d$ between plates"]
+        }
+      ]
+    },
+    {
+      "slug": "magnetic_field",
+      "label": "Magnetic Field",
+      "description": "The definition and properties of the magnetic field $B$ and how it is generated and visualized.",
+      "intro": {
+        "slug": "magnetic_field_intro",
+        "label": "Magnetic Field Overview",
+        "description": "The magnetic field $\\vec{B}$ (measured in tesla, T) is a vector field that exerts forces on moving charges but does no work on them. Magnetic field lines form closed loops — they have no start or end — and their density indicates field strength. On the MCAT, you need to identify the direction of $\\vec{B}$ from common sources and predict the force on a moving charge using the Lorentz law.",
+        "examples": ["$B$ in tesla (T = kg/(A·s²))", "magnetic field lines form closed loops (no monopoles)", "right-hand rule: thumb = current, fingers curl = $B$ direction"]
+      },
+      "in_depth": [
+        {
+          "slug": "definition_magnetic_field",
+          "label": "Definition of the magnetic field $B$",
+          "description": "Define the magnetic field $\\vec{B}$ as the vector field (SI unit: tesla, T) that exerts a force on a moving charge but does zero work on it (since the force is always perpendicular to velocity). This focuses on defining $B$ and its units, not on calculating $B$ from a current source (not required on MCAT) or the force it exerts (a separate keyword).",
+          "examples": ["$[B]$ = tesla (T); 1 T = 1 N/(A·m)", "magnetic force is always $\\perp$ velocity: zero work done", "magnetic field lines form closed loops; no magnetic monopoles"]
+        },
+        {
+          "slug": "magnetic_field_sources",
+          "label": "Sources of magnetic fields: current-carrying wires and bar magnets",
+          "description": "Qualitatively describe how a current-carrying wire produces a circular magnetic field around it (right-hand rule: thumb along current, fingers curl in direction of $\\vec{B}$) and how a bar magnet's field loops from north to south outside the magnet. This focuses on identifying field geometry from common sources at a conceptual level, not on quantitative $B$-field calculations from Biot–Savart (not MCAT-required).",
+          "examples": ["right-hand rule for current: thumb = $I$, curled fingers = $\\vec{B}$", "bar magnet: field exits north pole, enters south pole", "parallel currents in same direction attract each other"]
+        }
+      ]
+    },
+    {
+      "slug": "lorentz_force_charged_particles",
+      "label": "Lorentz Force & Motion of Charged Particles",
+      "description": "The force on a charged particle moving in a magnetic field and the resulting circular or helical trajectories.",
+      "intro": {
+        "slug": "lorentz_force_charged_particles_intro",
+        "label": "Lorentz Force Overview",
+        "description": "A charged particle moving through a magnetic field experiences the Lorentz magnetic force $F = qvB\\sin\\theta$, directed perpendicular to both the velocity and the field. Because the force is always perpendicular to velocity, it changes direction but not speed, causing the particle to move in a circle (or helix). The radius of the circular path links the particle's momentum to the field strength, which underlies mass spectrometry and particle accelerators.",
+        "examples": ["$F = qvB\\sin\\theta$", "force $\\perp$ velocity: no work, no speed change", "circular path radius $r = mv/(qB)$"]
+      },
+      "in_depth": [
+        {
+          "slug": "lorentz_force_formula",
+          "label": "Lorentz force on a moving charge",
+          "description": "Calculate the magnitude of the magnetic force on a charge moving through a field using $F = qvB\\sin\\theta$, where $\\theta$ is the angle between $\\vec{v}$ and $\\vec{B}$, and determine its direction using the right-hand rule (or left-hand for negative charges). This focuses on the force formula and direction, not the resulting trajectory (a separate keyword).",
+          "examples": ["$F = qvB\\sin\\theta$ (maximum when $\\vec{v} \\perp \\vec{B}$, zero when parallel)", "right-hand rule: fingers point along $v$, curl to $B$, thumb = force on $+q$", "negative charge: force is opposite to right-hand direction"]
+        },
+        {
+          "slug": "circular_motion_in_magnetic_field",
+          "label": "Circular motion of a charged particle in a magnetic field",
+          "description": "Derive that a charged particle moving perpendicular to a uniform magnetic field follows a circular path, setting $qvB = mv^2/r$ to find the radius $r = mv/(qB)$; the period and frequency of the orbit are independent of speed ($T = 2\\pi m/(qB)$). This focuses on the circular-orbit case, not helical motion when $\\vec{v}$ has a component along $\\vec{B}$ (a separate keyword).",
+          "examples": ["$r = mv/(qB)$: heavier/faster → larger circle", "period $T = 2\\pi m/(qB)$: independent of speed (cyclotron principle)", "set magnetic force = centripetal force: $qvB = mv^2/r$"]
+        },
+        {
+          "slug": "helical_motion_in_magnetic_field",
+          "label": "Helical motion of a charged particle in a magnetic field",
+          "description": "Explain that when a charged particle's velocity has components both perpendicular and parallel to $\\vec{B}$, the particle moves in a helix: the perpendicular component produces circular orbiting while the parallel component is unchanged (no magnetic force along $\\vec{B}$). This focuses on the combined case, not pure circular motion (a separate keyword).",
+          "examples": ["velocity along $\\vec{B}$: no force; velocity $\\perp \\vec{B}$: circular", "helical path = circle + straight-line drift along field", "relevant in aurora borealis: charged particles spiral along Earth's $B$"]
+        },
+        {
+          "slug": "magnetic_force_on_current",
+          "label": "Magnetic force on a current-carrying conductor",
+          "description": "Apply the force law for a current-carrying wire in a magnetic field: $F = BIL\\sin\\theta$, where $I$ is current, $L$ is wire length, and $\\theta$ is the angle between current direction and $\\vec{B}$. This focuses on force on a macroscopic conductor, not on an individual moving charge (a separate keyword).",
+          "examples": ["$F = BIL\\sin\\theta$", "force maximum when $I \\perp B$; zero when $I \\parallel B$", "right-hand rule: fingers along $I$, curl to $B$, thumb = force direction"]
+        },
+        {
+          "slug": "right_hand_rule",
+          "label": "Right-hand rule for magnetic force direction",
+          "description": "Apply the right-hand rule to determine the direction of the magnetic force: point fingers of the right hand along $\\vec{v}$ (or current), curl toward $\\vec{B}$; the thumb points in the direction of the force on a positive charge (reverse for negative). This focuses on directional reasoning alone, not magnitude calculation (a separate keyword).",
+          "examples": ["$v$ in $+x$, $B$ in $+y$ → force in $+z$ (positive charge)", "mnemonic: $\\vec{F} = q\\vec{v}\\times\\vec{B}$", "electron (negative): force is OPPOSITE to right-hand result"]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+PRECALC KEYWORD CATALOG — PROJECT BRIEF
+========================================
+
+GOAL
+----
+Build a ~1000 topic keyword catalog for a precalculus adaptive learning platform.
+Keywords are used to tag problems via cosine similarity: a problem description is
+embedded and matched against keyword embeddings. Description and example quality
+directly determines tagging accuracy.
+
+
+STRUCTURE
+---------
+Two levels: UMBRELLA → TOPIC
+
+UMBRELLA keywords group related topic keywords within a category. A student's umbrella
+score = average of its children's scores. Umbrellas need a description only — no examples.
+
+TOPIC keywords are specific learnable skills. Each belongs to one umbrella.
+Each topic keyword needs four fields:
+
+  id           snake_case, specific. "factoring_trinomials_leading_coefficient_1" not "factoring"
+  label        Human-readable. "Factoring trinomials (a = 1)"
+  description  1–2 sentences. Precise enough to distinguish from neighboring keywords.
+               Name what the student does, what mathematical form is involved, and
+               what makes this different from similar skills.
+  examples     3–5 complete problem stems. EVERY example must start with an action verb.
+               "Factor x² + 5x + 6" not "x² + 5x + 6"
+               The verb is what separates factoring from evaluating, solving, or graphing
+               the same expression.
+
+
+OUTPUT FORMAT
+-------------
+JSON, one category per message (catalog is too large for one response).
+
+{
+  "category_id": "polynomials",
+  "category_label": "Polynomials",
+  "umbrellas": [
+    {
+      "id": "polynomial_factoring",
+      "label": "Polynomial Factoring",
+      "description": "Rewriting polynomial expressions as products of simpler factors.",
+      "keywords": [
+        {
+          "id": "factoring_trinomials_leading_coefficient_1",
+          "label": "Factoring trinomials (a = 1)",
+          "description": "Factor a monic quadratic x² + bx + c into (x + p)(x + q) by finding integers p, q where p·q = c and p + q = b.",
+          "examples": [
+            "Factor x² + 7x + 12.",
+            "Factor x² - 5x + 6.",
+            "Factor x² + x - 20.",
+            "Write x² - 3x - 18 as a product of two binomials."
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+
+GRANULARITY RULE
+----------------
+One keyword = one specific teachable sub-skill.
+
+Too broad → split:   "factoring" → GCF / trinomials a=1 / trinomials a≠1 /
+                     difference of squares / sum of cubes / by grouping
+Too narrow → merge:  "factoring x² + 5x + 6" is a problem, not a skill
+
+
+CATEGORIES (~1000 keywords total)
+----------------------------------
+Generate all 20. Aim for the counts shown.
+
+ 1. number_systems_and_properties           ~40
+ 2. algebraic_expressions                   ~50
+ 3. linear_equations_and_inequalities       ~55
+ 4. systems_of_equations                    ~45
+ 5. exponents_and_radicals                  ~60
+ 6. polynomials                             ~70
+ 7. quadratic_functions                     ~60 ---done until here
+ 8. rational_expressions_and_functions      ~60
+ 9. functions                               ~65
+10. function_transformations                ~55
+11. inverse_functions                       ~45
+12. piecewise_and_absolute_value            ~40
+13. exponential_and_logarithmic             ~70
+14. sequences_and_series                    ~50
+15. trigonometry                           ~100
+16. conic_sections                          ~55
+17. complex_numbers                         ~35
+18. matrices_and_linear_systems             ~45
+19. parametric_equations_and_vectors        ~35
+20. probability_and_counting                ~30
+
+
+DELIVERY
+--------
+One category per message, largest first. List umbrella keywords first, then topic
+keywords grouped under each umbrella. End with a total count and any keywords where
+granularity felt uncertain.

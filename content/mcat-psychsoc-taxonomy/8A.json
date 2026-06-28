@@ -1,0 +1,190 @@
+{
+  "category_code": "8A",
+  "umbrellas": [
+    {
+      "slug": "self_concept_and_identity",
+      "label": "Self-Concept and Self-Identity",
+      "description": "The beliefs, evaluations, and attributes a person holds about themselves — what makes up the 'self' and how it is organized.",
+      "intro": {
+        "slug": "self_concept_and_identity_intro",
+        "label": "Self-Concept and Self-Identity Overview",
+        "description": "Self-concept is the overall mental picture a person holds about who they are — their traits, roles, values, and abilities. Self-identity is the subjective sense of continuity and uniqueness over time. These internal representations are shaped by personal experience, feedback from others, and the social groups one belongs to. This umbrella sets up the components of self-knowledge before moving into specific evaluative dimensions (self-esteem, self-efficacy, locus of control) and the types of identities people carry.",
+        "examples": ["'I am a student, an athlete, and a kind person'", "self-schema organizing personal traits", "stable sense of who one is across contexts"]
+      },
+      "in_depth": [
+        {
+          "slug": "self_concept_definition",
+          "label": "Self-concept",
+          "description": "Define self-concept as the collection of beliefs a person holds about their own traits, roles, and attributes (the cognitive answer to 'Who am I?'). This focuses on the descriptive, cognitive content of self-knowledge, not the evaluative judgment of that content (self-esteem, a separate keyword).",
+          "examples": ["listing personal traits: 'I am curious, introverted, a biology major'", "self-schema filtering social information", "descriptive self-knowledge vs evaluative self-esteem"]
+        },
+        {
+          "slug": "self_esteem",
+          "label": "Self-esteem",
+          "description": "Identify self-esteem as the overall evaluative judgment of one's own worth — how positively or negatively a person appraises themselves. This focuses on the affective evaluation of the self, not the belief that one can perform a specific task (self-efficacy, a separate keyword).",
+          "examples": ["high vs low self-esteem and its effects on behavior", "self-esteem as global positive/negative self-regard", "self-esteem protecting mental health after failure"]
+        },
+        {
+          "slug": "self_efficacy",
+          "label": "Self-efficacy",
+          "description": "Distinguish self-efficacy (Bandura) as the belief in one's ability to succeed at a specific task or in a specific domain, predicting effort and persistence. This focuses on task-specific competence beliefs, not the overall sense of personal worth (self-esteem, a separate keyword).",
+          "examples": ["high math self-efficacy → more effort on hard problems", "Bandura: mastery experiences raise self-efficacy", "self-efficacy differs by domain (social vs academic)"]
+        },
+        {
+          "slug": "locus_of_control",
+          "label": "Locus of control",
+          "description": "Classify locus of control (Rotter) as internal (outcomes attributed to one's own effort/ability) versus external (outcomes attributed to luck, fate, or powerful others), and predict how each orientation shapes motivation and coping. This focuses on the internal-external attribution of control, not generalized self-worth (self-esteem, a separate keyword).",
+          "examples": ["internal LOC: 'My grade reflects how hard I studied'", "external LOC: 'The test was just unfair'", "internal LOC linked to greater persistence and health behaviors"]
+        }
+      ]
+    },
+    {
+      "slug": "social_identity",
+      "label": "Social Identity",
+      "description": "The portion of self-concept derived from membership in social groups — how group belonging shapes who we think we are.",
+      "intro": {
+        "slug": "social_identity_intro",
+        "label": "Social Identity Overview",
+        "description": "Social identity is the part of a person's self-concept that comes from their membership in social groups such as racial/ethnic groups, gender categories, age cohorts, social classes, and sexual orientation groups. According to social identity theory (Tajfel and Turner), people classify themselves and others into in-groups and out-groups, and these group memberships influence self-esteem, behavior, and intergroup relations. This umbrella covers the major types of identities and the theory that explains why group membership matters to the self.",
+        "examples": ["'I am a Latina woman' as social identity", "Tajfel & Turner's social identity theory", "in-group favoritism from shared group membership"]
+      },
+      "in_depth": [
+        {
+          "slug": "social_identity_theory",
+          "label": "Social identity theory",
+          "description": "Apply social identity theory (Tajfel and Turner) to explain how group membership contributes to self-concept, and how people use in-group favoritism and out-group derogation to maintain a positive social identity. This focuses on the theory of group-based self-concept, not the specific types of identity categories (separate keyword).",
+          "examples": ["Tajfel minimal group paradigm: even arbitrary groups → in-group bias", "people boost self-esteem by elevating their in-group", "social identity → intergroup discrimination"]
+        },
+        {
+          "slug": "racial_ethnic_identity",
+          "label": "Racial and ethnic identity",
+          "description": "Recognize racial and ethnic identity as a key dimension of social identity — the sense of belonging to a racial or ethnic group and the psychological significance of that membership. This focuses on race/ethnicity as identity categories, not the sociological construction of race (covered in 9B).",
+          "examples": ["racial identity salience in a predominantly white institution", "ethnic pride as part of self-concept", "bicultural identity in immigrant communities"]
+        },
+        {
+          "slug": "gender_identity_as_social_id",
+          "label": "Gender identity (as social identity)",
+          "description": "Recognize gender identity as a person's internal sense of their own gender (man, woman, nonbinary, etc.) and as a dimension of social identity that shapes self-concept and group belonging. This focuses on gender identity as a social-identity category, not the developmental theories of how gender identity forms (covered under identity development).",
+          "examples": ["gender identity as a core part of self-concept", "gender identity distinct from biological sex", "gender identity influencing group affiliations and norms"]
+        },
+        {
+          "slug": "age_and_class_identity",
+          "label": "Age and social class as identity",
+          "description": "Identify age cohort membership and socioeconomic class as dimensions of social identity that shape values, expectations, and group affiliation. This focuses on age and class as identity categories, not the demographic or stratification structures themselves (covered in 9B and 10A).",
+          "examples": ["Millennial generational identity and shared cultural references", "'middle-class' identity shaping lifestyle expectations", "age identity salient in retirement transition"]
+        },
+        {
+          "slug": "sexual_orientation_identity",
+          "label": "Sexual orientation as identity",
+          "description": "Recognize sexual orientation (heterosexual, gay, lesbian, bisexual, etc.) as a dimension of self-identity and social identity, noting that identity formation around sexual orientation is a developmental and social process. This focuses on sexual orientation as an identity category, not the biological bases of sexual orientation.",
+          "examples": ["coming-out process as identity formation", "LGB identity and in-group community", "sexual orientation identity salient in certain contexts"]
+        }
+      ]
+    },
+    {
+      "slug": "identity_development_theories",
+      "label": "Theories of Identity Development",
+      "description": "Stage-based and process-based theories that explain how identity is formed across the lifespan, covering psychosocial, psychosexual, moral, and gender dimensions.",
+      "intro": {
+        "slug": "identity_development_theories_intro",
+        "label": "Theories of Identity Development Overview",
+        "description": "Multiple theoretical frameworks explain how a person's identity takes shape over time. Erikson's psychosocial theory maps identity formation across eight life stages; Freud's psychosexual theory links early childhood stages to personality and identity; Kohlberg's theory traces the development of moral identity; and gender identity development describes how one's sense of gender emerges. These theories share a stage-based logic but differ in what drives development — social crises, libidinal energy, moral reasoning, or social learning. Each is tested separately on the MCAT.",
+        "examples": ["Erikson's identity vs role confusion in adolescence", "Freud's Oedipus complex and psychosexual stages", "Kohlberg's conventional morality level"]
+      },
+      "in_depth": [
+        {
+          "slug": "erikson_psychosocial_stages",
+          "label": "Erikson's psychosocial stages",
+          "description": "Recall Erikson's eight psychosocial stages, each defined by a psychosocial crisis (e.g., trust vs mistrust in infancy; identity vs role confusion in adolescence; generativity vs stagnation in middle adulthood) whose resolution shapes personality and identity. This focuses on the full eight-stage sequence, not on Freud's psychosexual stages (a separate keyword).",
+          "examples": ["identity vs role confusion: key adolescent crisis", "trust vs mistrust: first year of life", "integrity vs despair: late adulthood reflection"]
+        },
+        {
+          "slug": "freud_psychosexual_stages",
+          "label": "Freud's psychosexual stages",
+          "description": "Recall Freud's five psychosexual stages (oral, anal, phallic, latency, genital) and the claim that fixation at any stage (due to unresolved conflict) shapes adult personality and identity. This focuses on Freud's libido-based developmental framework, not Erikson's social-crisis model (a separate keyword).",
+          "examples": ["oral stage: infancy, dependency fixation", "phallic stage: Oedipus/Electra complex", "anal fixation → orderliness or messiness in adulthood"]
+        },
+        {
+          "slug": "kohlberg_moral_development",
+          "label": "Kohlberg's moral development",
+          "description": "Apply Kohlberg's three levels of moral reasoning — preconventional (self-interest/punishment), conventional (rules/social order), postconventional (abstract principles) — to classify a person's moral identity and reasoning. This focuses on Kohlberg's moral-reasoning stages, not Erikson's broader psychosocial crises (a separate keyword).",
+          "examples": ["preconventional: 'I won't steal because I'll get caught'", "conventional: 'I follow rules to be a good citizen'", "postconventional: civil disobedience based on universal justice"]
+        },
+        {
+          "slug": "gender_identity_development",
+          "label": "Gender identity development",
+          "description": "Describe how a child develops a stable sense of their own gender identity, drawing on social learning (observing and imitating gender roles), cognitive-developmental (Kohlberg's gender constancy), and gender schema theories (Bem). This focuses on the process of gender identity formation, not gender as a social identity category in adulthood (a separate keyword).",
+          "examples": ["gender constancy: understanding gender is stable despite costume changes", "children imitate same-gender models (social learning)", "gender schema filtering information by gender category"]
+        }
+      ]
+    },
+    {
+      "slug": "social_influence_on_identity",
+      "label": "Social Influences on Identity Formation",
+      "description": "How interactions with individuals and group memberships shape the developing self — including mirroring, role-taking, and reference-group effects.",
+      "intro": {
+        "slug": "social_influence_on_identity_intro",
+        "label": "Social Influences on Identity Formation Overview",
+        "description": "Identity does not form in isolation — it is continuously shaped by social interaction. Two classic frameworks capture individual-level influence: Cooley's looking-glass self (we see ourselves in others' reactions to us) and Mead's symbolic interactionism (we develop an 'I' and a 'me' through role-taking and internalizing the generalized other). At the group level, reference groups provide the standards against which people compare and evaluate themselves. Understanding which mechanism is at play — reflected appraisal vs internalized norms vs group comparison — is essential for MCAT questions.",
+        "examples": ["forming self-image from a parent's praise or criticism", "child playing 'house' and taking on adult roles", "comparing oneself to a professional peer group"]
+      },
+      "in_depth": [
+        {
+          "slug": "looking_glass_self",
+          "label": "Looking-glass self (Cooley)",
+          "description": "Apply Cooley's looking-glass self: we imagine how we appear to others, imagine their judgment of that appearance, and develop our self-concept based on that perceived judgment — a three-step reflective process. This focuses on Cooley's reflected-appraisal mechanism, not Mead's role-taking and generalized other (a separate keyword).",
+          "examples": ["child develops confidence after repeated teacher praise", "three steps: imagine appearance → imagine judgment → self-feeling", "negative reflected appraisals lowering self-esteem"]
+        },
+        {
+          "slug": "role_taking_mead",
+          "label": "Role-taking and the generalized other (Mead)",
+          "description": "Explain Mead's symbolic interactionism: the self emerges through role-taking (adopting another's perspective), producing the 'I' (spontaneous, acting self) and the 'me' (socialized, reflective self); the 'generalized other' is the internalized sense of collective social expectations. This focuses on Mead's I/me distinction and generalized other, not Cooley's looking-glass self (a separate keyword).",
+          "examples": ["child at play stage takes role of one other (mother, doctor)", "game stage: coordinating multiple roles simultaneously", "internalized 'generalized other' guides behavior when alone"]
+        },
+        {
+          "slug": "imitation_and_modeling_identity",
+          "label": "Imitation in identity formation",
+          "description": "Recognize imitation as a mechanism by which individuals — especially children — adopt behaviors, mannerisms, and self-conceptions by observing and copying significant others, contributing to identity formation. This focuses on imitation as an individual-level social mechanism, not the broader observational-learning (Bandura) framework covered in 7C.",
+          "examples": ["toddler imitating parent's gestures and speech", "adolescent adopting a mentor's values and style", "imitation of peer group norms shaping self-presentation"]
+        },
+        {
+          "slug": "reference_groups",
+          "label": "Reference groups",
+          "description": "Define reference groups as the groups individuals use as standards for self-evaluation and attitude formation, distinguishing normative reference groups (provide norms to conform to) from comparative reference groups (provide a benchmark for self-assessment). This focuses on group-level comparison influence on identity, not face-to-face role-taking at the individual level (a separate keyword).",
+          "examples": ["pre-med students comparing GPA to the medical-school applicant pool", "working-class family adopting middle-class consumption norms", "positive vs negative reference groups"]
+        }
+      ]
+    },
+    {
+      "slug": "culture_socialization_identity",
+      "label": "Culture and Socialization in Identity Formation",
+      "description": "How cultural context, socialization agents, and internalized cultural norms shape identity across the lifespan.",
+      "intro": {
+        "slug": "culture_socialization_identity_intro",
+        "label": "Culture and Socialization in Identity Formation Overview",
+        "description": "Culture provides the values, norms, narratives, and categories through which people understand who they are. Socialization — the lifelong process by which individuals learn and internalize cultural expectations — is carried out by agents including family, peers, schools, media, and religion. The cultural framing of identity differs cross-culturally: individualist cultures emphasize personal traits and autonomy, while collectivist cultures emphasize relational and group-defined selves. These cultural and socialization forces layer onto the individual-interaction and stage-theory mechanisms in the other umbrellas.",
+        "examples": ["family socializing gender roles from birth", "collectivist vs individualist self-construal", "media shaping cultural ideals of beauty and success"]
+      },
+      "in_depth": [
+        {
+          "slug": "socialization_agents",
+          "label": "Agents of socialization",
+          "description": "Identify the primary agents of socialization — family, peers, schools, mass media, religion, and workplace — and explain how each transmits norms, values, and role expectations that shape identity. This focuses on who carries out socialization, not the stage-based theories of how identity develops internally (a separate keyword).",
+          "examples": ["family as primary socialization agent in early childhood", "peer groups socializing gender and status norms in adolescence", "media transmitting cultural ideals that become identity benchmarks"]
+        },
+        {
+          "slug": "individualism_vs_collectivism",
+          "label": "Individualist vs collectivist self-construal",
+          "description": "Contrast individualist cultures (self defined by personal traits, independence, uniqueness) with collectivist cultures (self defined by relationships, group roles, interdependence) and predict how each shapes self-concept and identity. This focuses on the cultural dimension of self-construal, not specific socialization agents (a separate keyword).",
+          "examples": ["American 'I am creative and ambitious' vs Japanese 'I am a good son and team member'", "collectivist cultures → interdependent self-construal", "individualism linked to higher personal self-esteem emphasis"]
+        },
+        {
+          "slug": "culture_and_identity_formation",
+          "label": "Cultural influence on identity formation",
+          "description": "Explain how cultural narratives, rituals, and norms provide the categories and standards through which individuals construct their identities — including cultural definitions of gender roles, age-related expectations, and ethnic heritage. This focuses on culture as an identity-shaping force at the macro level, not the micro-level interactions of individual socialization agents (a separate keyword).",
+          "examples": ["quinceañera as a cultural ritual marking identity transition", "cultural scripts for 'what a man/woman should be'", "ethnic heritage as a resource for identity construction"]
+        }
+      ]
+    }
+  ]
+}

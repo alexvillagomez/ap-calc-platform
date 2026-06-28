@@ -1,0 +1,283 @@
+{
+  "section": "chemistry",
+  "category_code": "C3",
+  "category_label": "Intermolecular Forces & Phases",
+  "order_index": 2,
+  "umbrellas": [
+    {
+      "slug": "types_of_imf",
+      "label": "Types of Intermolecular Forces",
+      "description": "The four major classes of intermolecular attractions — London dispersion, dipole–dipole, hydrogen bonding, and ion–dipole — and what structural features give rise to each.",
+      "intro": {
+        "slug": "types_of_imf_intro",
+        "label": "Intermolecular Forces Overview",
+        "description": "Intermolecular forces (IMFs) are attractive interactions between separate molecules (or ions and molecules). Unlike covalent bonds, IMFs are weaker electrostatic attractions that arise from charge asymmetry — permanent, induced, or ionic. The four types covered here (London dispersion, dipole–dipole, hydrogen bonding, ion–dipole) differ in origin and strength, and together they determine the bulk physical properties of every substance.",
+        "examples": [
+          "IMFs are between molecules, not within them",
+          "stronger IMF → higher boiling point",
+          "all substances have London dispersion forces"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "london_dispersion_forces",
+          "label": "London dispersion forces",
+          "description": "Identify London dispersion forces as temporary dipoles induced by electron-cloud fluctuations present in ALL molecules; recognize that strength increases with molecular size (more electrons → greater polarizability) and surface area (branched < linear). This focuses on induced-dipole attractions, not permanent-dipole interactions (a separate keyword).",
+          "examples": [
+            "instantaneous dipole induces dipole in neighbor",
+            "larger molecule → stronger London forces",
+            "$\\text{n-pentane}$ boils higher than neopentane (same formula, less surface area)"
+          ]
+        },
+        {
+          "slug": "dipole_dipole_interactions",
+          "label": "Dipole–dipole interactions",
+          "description": "Identify dipole–dipole forces as the electrostatic attraction between the $\\delta^+$ end of one polar molecule and the $\\delta^-$ end of another; apply the rule that only polar molecules (net dipole $\\mu \\neq 0$) experience this attraction. This focuses on permanent-dipole interactions, not the stronger special case of hydrogen bonding (a separate keyword) or London forces in nonpolar molecules (a separate keyword).",
+          "examples": [
+            "polar molecules align $\\delta^+ \\cdots \\delta^-$",
+            "$\\text{HCl}$ molecules attract via dipole–dipole",
+            "requires net molecular dipole moment"
+          ]
+        },
+        {
+          "slug": "hydrogen_bonding",
+          "label": "Hydrogen bonding",
+          "description": "Identify a hydrogen bond as the especially strong dipole–dipole attraction that occurs when H is covalently bonded to N, O, or F and attracted to a lone pair on N, O, or F of a neighboring molecule; predict which molecules are hydrogen-bond donors vs. acceptors. This focuses on the N/O/F–H$\\cdots$N/O/F requirement and anomalously high boiling points, not ordinary dipole–dipole forces (a separate keyword).",
+          "examples": [
+            "H covalently to N, O, or F — then attracted to lone pair on N/O/F",
+            "$\\text{H}_2\\text{O}$ and $\\text{HF}$ have anomalously high bp due to H-bonding",
+            "donor vs. acceptor: $\\text{NH}_3$ can do both"
+          ]
+        },
+        {
+          "slug": "ion_dipole_interactions",
+          "label": "Ion–dipole interactions",
+          "description": "Describe ion–dipole forces as the attraction between an ion (cation or anion) and the oppositely charged end of a polar molecule; recognize that these are the dominant IMF in ionic-compound dissolution in polar solvents and that they are generally stronger than dipole–dipole or hydrogen bonds. This focuses on ion–polar-molecule interactions, not ion–ion (ionic bond) attractions (a separate keyword in C2/C4).",
+          "examples": [
+            "$\\text{Na}^+$ attracts $\\delta^-$ O of water during solvation",
+            "stronger than dipole–dipole; drives dissolution of NaCl in water",
+            "hydration energy reflects ion–dipole strength"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "imf_strength_ranking",
+      "label": "Ranking & Comparing IMF Strength",
+      "description": "Rules for ordering the four IMF types by strength and predicting which force dominates for a given compound or mixture.",
+      "intro": {
+        "slug": "imf_strength_ranking_intro",
+        "label": "IMF Strength Ranking Overview",
+        "description": "Not all IMFs are equal. A reliable hierarchy exists: ion–dipole > hydrogen bonding > dipole–dipole > London dispersion (all else equal). On the MCAT you must quickly classify which force dominates for a substance and rank or compare the boiling points, solubilities, and other bulk properties that follow from that ranking.",
+        "examples": [
+          "general hierarchy: ion–dipole > H-bond > dipole–dipole > London",
+          "for nonpolar molecules, only London forces apply",
+          "large nonpolar molecule can have stronger London forces than a small polar one"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "imf_hierarchy",
+          "label": "IMF strength hierarchy",
+          "description": "Apply the general ranking ion–dipole > hydrogen bonding > dipole–dipole > London dispersion to predict which force dominates a substance; recognize that molecular size/polarizability can make London forces competitive with or stronger than dipole–dipole forces when comparing different molecules. This focuses on qualitative ordering, not calculating exact energies.",
+          "examples": [
+            "ion–dipole strongest; London weakest per-unit",
+            "large $\\text{I}_2$ vs. small $\\text{HCl}$: London can dominate",
+            "H-bonding in $\\text{H}_2\\text{O}$ stronger than dipole–dipole in $\\text{HCl}$"
+          ]
+        },
+        {
+          "slug": "identifying_dominant_imf",
+          "label": "Identifying the dominant IMF for a molecule",
+          "description": "Classify any given molecule into the highest applicable IMF category: check for ions + polar neighbor (ion–dipole), then H on N/O/F (H-bond), then net dipole (dipole–dipole), then fall back to London dispersion. This is a classification skill (which category applies) not the ranking of multiple compounds (a separate keyword).",
+          "examples": [
+            "$\\text{CH}_4$: nonpolar → London only",
+            "$\\text{CH}_3\\text{Cl}$: polar, no N/O/F–H → dipole–dipole + London",
+            "$\\text{CH}_3\\text{OH}$: O–H present → H-bonding (dominant)"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "imf_and_physical_properties",
+      "label": "IMFs and Physical Properties",
+      "description": "How the strength of intermolecular forces quantitatively and qualitatively sets boiling/melting points, vapor pressure, viscosity, and surface tension of a substance.",
+      "intro": {
+        "slug": "imf_and_physical_properties_intro",
+        "label": "IMFs and Physical Properties Overview",
+        "description": "Because IMFs must be overcome to convert liquid to gas (or solid to liquid), stronger IMFs directly raise boiling and melting points, lower vapor pressure, and increase viscosity and surface tension. Understanding these connections lets you predict relative physical properties from molecular structure — a recurring MCAT skill.",
+        "examples": [
+          "stronger IMF → higher bp, lower vapor pressure",
+          "$\\text{H}_2\\text{O}$ has anomalously high bp and surface tension",
+          "viscosity tracks molecular entanglement + IMF strength"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "imf_and_boiling_point",
+          "label": "IMF effect on boiling point",
+          "description": "Predict relative boiling points from IMF strength: stronger or more IMFs require more energy to overcome, raising the normal boiling point ($T_b$). Compare molecules by: IMF type hierarchy, then molecular mass/polarizability (London contribution), then H-bonding count. This focuses on the IMF → bp trend, not the thermodynamic latent heat calculation $Q = mL$ (P6 boundary).",
+          "examples": [
+            "$\\text{H}_2\\text{O}$ bp = 100°C vs. $\\text{H}_2\\text{S}$ bp = −60°C (H-bonding)",
+            "larger alkane → higher bp (more London)",
+            "rank: $\\text{HF} > \\text{HCl} > \\text{HBr}$… wait, $\\text{HF}$ wins by H-bonding"
+          ]
+        },
+        {
+          "slug": "imf_and_melting_point",
+          "label": "IMF effect on melting point",
+          "description": "Predict relative melting points using the same IMF-strength logic as boiling points: stronger lattice-stabilizing forces (IMFs in molecular solids, or ionic/metallic bonds in their respective solids) raise the melting point. Distinguish the trend from the boiling-point trend (gases must escape — bp is usually more IMF-sensitive than mp for similar molecules). This focuses on qualitative trend prediction, not quantitative lattice-energy calculations.",
+          "examples": [
+            "molecular solids: stronger IMF → higher mp",
+            "ice melts at 0°C because H-bonds must partly break",
+            "compare $\\text{Br}_2$ (solid at room temp) vs. $\\text{Cl}_2$ (gas): more London in $\\text{Br}_2$"
+          ]
+        },
+        {
+          "slug": "vapor_pressure_and_imf",
+          "label": "Vapor pressure and IMF strength",
+          "description": "Explain vapor pressure as the equilibrium partial pressure of a substance's vapor above its liquid; predict that stronger IMFs lower vapor pressure at a given temperature by making it harder for molecules to escape the liquid phase. Recognize the inverse relationship: stronger IMF → lower vapor pressure → higher boiling point. This focuses on the qualitative IMF connection, not Raoult's law or colligative effects (C9 boundary).",
+          "examples": [
+            "diethyl ether (weak IMF) → high vapor pressure, volatile",
+            "$\\text{H}_2\\text{O}$ (strong H-bonding) → low vapor pressure at 25°C",
+            "volatile ≡ weak IMF, low bp"
+          ]
+        },
+        {
+          "slug": "viscosity_and_imf",
+          "label": "Viscosity and IMF strength",
+          "description": "Define viscosity as resistance to flow; predict that stronger or more numerous IMFs and longer molecular chains increase viscosity by increasing intermolecular 'stickiness' and entanglement. Recognize that viscosity decreases with temperature (more KE overcomes IMF). This focuses on the IMF → viscosity link, not fluid-flow physics such as Poiseuille's law (P5 boundary).",
+          "examples": [
+            "glycerol (multiple OH groups, H-bonding) → highly viscous",
+            "longer carbon chain → higher viscosity (more London)",
+            "heating oil decreases viscosity"
+          ]
+        },
+        {
+          "slug": "surface_tension_and_imf",
+          "label": "Surface tension and IMF strength",
+          "description": "Define surface tension as the energy per unit area (or inward force) at a liquid surface caused by the net inward pull on surface molecules from IMFs; predict that stronger IMFs give higher surface tension. Recognize $\\text{H}_2\\text{O}$ as having unusually high surface tension due to extensive H-bonding. This focuses on the molecular-level IMF explanation, not the physics fluid-mechanics treatment of surface tension (P5 boundary).",
+          "examples": [
+            "water beads on surfaces: strong H-bond network pulls inward",
+            "detergents lower surface tension by disrupting H-bonds",
+            "stronger IMF → higher surface tension"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "like_dissolves_like",
+      "label": "Solubility and \"Like Dissolves Like\"",
+      "description": "The principle that polar/ionic solutes dissolve in polar solvents and nonpolar solutes in nonpolar solvents, explained through IMF compatibility.",
+      "intro": {
+        "slug": "like_dissolves_like_intro",
+        "label": "Solubility and IMF Overview",
+        "description": "Solubility is governed by whether solute–solvent IMFs can replace solute–solute and solvent–solvent IMFs with a net energy advantage. The shorthand \"like dissolves like\" means polar (or ionic) solutes dissolve in polar solvents because ion–dipole or dipole–dipole/H-bond attractions can replace the original solute–solute and solvent–solvent forces, while nonpolar solutes dissolve in nonpolar solvents via London-for-London substitution.",
+        "examples": [
+          "NaCl (ionic) dissolves in water (polar): ion–dipole > ion–ion in solid",
+          "oil (nonpolar) does NOT dissolve in water",
+          "ethanol mixes with water: –OH group H-bonds with $\\text{H}_2\\text{O}$"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "polar_solute_polar_solvent",
+          "label": "Polar solute in polar solvent",
+          "description": "Predict that a polar or ionic solute dissolves readily in a polar solvent because solute–solvent dipole–dipole or ion–dipole IMFs compensate for broken solute–solute and solvent–solvent attractions; recognize hydration/solvation as the driving IMF process. This covers the polar-in-polar case, not nonpolar mixtures (a separate keyword).",
+          "examples": [
+            "$\\text{NaCl}$ dissolves in $\\text{H}_2\\text{O}$ via ion–dipole solvation",
+            "$\\text{HCl}$ (polar) dissolves in $\\text{H}_2\\text{O}$ (polar)",
+            "methanol miscible with water: dipole–dipole + H-bonding"
+          ]
+        },
+        {
+          "slug": "nonpolar_solute_nonpolar_solvent",
+          "label": "Nonpolar solute in nonpolar solvent",
+          "description": "Predict that a nonpolar solute dissolves in a nonpolar solvent because London forces are of similar magnitude on both sides (London-for-London substitution costs little energy). Recognize that nonpolar solutes are immiscible in polar solvents because the polar solvent's stronger self-associations exclude the nonpolar solute. This focuses on the nonpolar-in-nonpolar/immiscible-in-polar cases, not ionic dissolution (a separate keyword).",
+          "examples": [
+            "oil dissolves in hexane; insoluble in water",
+            "hydrophobic effect: water excludes nonpolar solute",
+            "iodine ($\\text{I}_2$) more soluble in CCl$_4$ than in water"
+          ]
+        },
+        {
+          "slug": "amphiphilic_molecules",
+          "label": "Amphiphilic molecules and dual solubility",
+          "description": "Identify amphiphilic molecules as those with both a polar (hydrophilic) head and a nonpolar (hydrophobic) tail; predict their behavior at interfaces and their tendency to form micelles, explaining why soaps and detergents solubilize oils in water. This focuses on the structural IMF basis of amphiphilicity, not the biology of membrane lipids (Biology boundary).",
+          "examples": [
+            "soap: polar carboxylate head + nonpolar hydrocarbon tail",
+            "micelle: tails point inward (away from water), heads outward",
+            "ethanol partially miscible in all ratios with water and oil due to dual character"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "states_of_matter",
+      "label": "States of Matter",
+      "description": "The defining characteristics of solids, liquids, and gases at the molecular level, and the vocabulary for the six phase transitions between them.",
+      "intro": {
+        "slug": "states_of_matter_intro",
+        "label": "States of Matter Overview",
+        "description": "Matter exists in three ordinary states — solid, liquid, and gas — distinguished by the balance of IMF attraction versus thermal kinetic energy. Six phase transitions interconnect these states, each with its own direction of enthalpy change. Mastering the vocabulary (melting, freezing, vaporization, condensation, sublimation, deposition) and the molecular-level picture is the foundation for everything else in C3 and in P6's phase-diagram treatment.",
+        "examples": [
+          "solid: fixed shape, high order; liquid: fixed volume, fluid; gas: no fixed shape or volume",
+          "six transitions: melt, freeze, vaporize, condense, sublime, deposit",
+          "higher temperature → more KE overcomes IMF → higher state"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "solid_liquid_gas_properties",
+          "label": "Properties of solids, liquids, and gases",
+          "description": "Describe the three states of matter at the molecular level: solids have strong IMFs > KE (fixed shape, high order, low compressibility); liquids have IMF ≈ KE (fixed volume, fluid, slight compressibility); gases have KE >> IMF (no fixed shape or volume, highly compressible). Predict how temperature or pressure changes shift the balance. This focuses on the molecular-level description, not quantitative gas laws (C5 boundary).",
+          "examples": [
+            "solid: IMF dominates; molecules vibrate in fixed lattice",
+            "gas: molecules far apart, rapid random motion, fills container",
+            "liquid: IMF holds molecules close but allows flow"
+          ]
+        },
+        {
+          "slug": "phase_transition_vocabulary",
+          "label": "Phase transition terminology",
+          "description": "Identify and correctly name all six phase transitions: solid→liquid (melting/fusion), liquid→solid (freezing/solidification), liquid→gas (vaporization/evaporation/boiling), gas→liquid (condensation/liquefaction), solid→gas (sublimation), gas→solid (deposition). Recognize that solid→liquid and liquid→gas transitions are endothermic (break IMFs), and the reverse transitions are exothermic. This focuses on naming and direction; latent heat $Q = mL$ calculations are in P6.",
+          "examples": [
+            "sublimation: dry ice ($\\text{CO}_2$) solid → gas directly",
+            "deposition: frost forming on windows (gas → solid)",
+            "vaporization endothermic; condensation exothermic"
+          ]
+        },
+        {
+          "slug": "melting_and_freezing",
+          "label": "Melting and freezing transitions",
+          "description": "Describe melting as the solid-to-liquid transition where added heat overcomes lattice IMFs to increase molecular mobility (endothermic), and freezing as the reverse (exothermic, heat released to surroundings). Recognize that at the melting point both phases coexist at equilibrium and temperature stays constant while heat is absorbed (latent heat — the quantitative treatment $Q = mL$ is P6). This focuses on the qualitative IMF picture and phase-equilibrium concept.",
+          "examples": [
+            "ice melts at 0°C: H-bonds partially disrupted",
+            "freezing releases heat: liquid water → ice releases energy",
+            "melting point = temperature of solid–liquid equilibrium"
+          ]
+        },
+        {
+          "slug": "vaporization_and_condensation",
+          "label": "Vaporization and condensation transitions",
+          "description": "Distinguish evaporation (surface molecules escape to gas below the boiling point) from boiling (bulk liquid vaporizes at the boiling point, vapor pressure = atmospheric pressure); describe condensation as the reverse (exothermic). Recognize that the boiling point is the temperature at which vapor pressure equals external pressure, linking IMF strength to boiling point. Quantitative latent-heat ($Q = mL$) and P–T phase-diagram treatment are in P6.",
+          "examples": [
+            "boiling: vapor pressure = $P_{atm}$",
+            "evaporation cools a surface (endothermic escape of high-KE molecules)",
+            "condensation: steam → liquid water releases energy"
+          ]
+        },
+        {
+          "slug": "sublimation_and_deposition",
+          "label": "Sublimation and deposition transitions",
+          "description": "Identify sublimation as the direct solid-to-gas transition (endothermic; occurs when a substance's vapor pressure reaches the external pressure below its melting point) and deposition as the reverse direct gas-to-solid transition (exothermic). Recognize real examples: dry ice ($\\text{CO}_2$), iodine ($\\text{I}_2$), naphthalene. This focuses on the vocabulary and conditions; the triple point and phase-diagram construction are in P6.",
+          "examples": [
+            "dry ice sublimes at −78.5°C at 1 atm",
+            "frost: water vapor deposits directly as ice",
+            "iodine crystals sublime when gently heated in open air"
+          ]
+        }
+      ]
+    }
+  ]
+}

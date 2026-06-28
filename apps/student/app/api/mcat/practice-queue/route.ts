@@ -121,7 +121,7 @@ export async function GET(request: Request) {
         const { data: umbRow } = await supabase
           .from("mcat_keywords")
           .select(
-            "id, label, description, tier, parent_keyword_id, category_id, embedding, concept_blueprint, yield_level"
+            "id, label, description, tier, parent_keyword_id, category_id, embedding, concept_blueprint, yield_level, order_index"
           )
           .eq("id", umbrellaId)
           .eq("status", "approved")
@@ -139,6 +139,7 @@ export async function GET(request: Request) {
                 embedding: umbRow.embedding,
                 concept_blueprint: umbRow.concept_blueprint ?? null,
                 yield_level: (umbRow.yield_level as "high" | "medium" | "low" | null) ?? null,
+                order_index: (umbRow.order_index as number | null) ?? 0,
               },
             ]
           : allKeywords; // last-resort: whole category

@@ -1,0 +1,92 @@
+/**
+ * POST /api/math/master-skill
+ * Body: { session_id, keyword_id, category_id, course }
+ *
+ * AUTHORITATIVE mastery write. The auto-mode client advances a subtopic once the
+ * student hits the consecutive-correct MASTERY_STREAK (math=3). The EMA state
+ * machine in /api/math/attempt only flips `state='mastered'` at score≥0.8 AND
+ * consecutive≥4 — a bar that a 3-4 correct streak can't reach from a 0.5 start —
+ * so without this endpoint the server frontier never advances and reopening auto
+ * mode resets to the start (re-serving an already-completed topic's lesson).
+ *
+ * This endpoint makes the server agree with what the user actually did: when the
+ * client decides a skill is mastered, it persists state='mastered' + intro_seen
+ * (so the lesson is never re-served) + a spaced-review due date. It MERGES onto the
+ * existing row, never clobbering score/attempt counters.
+ */
+import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { computeNextReviewDate } from "@/lib/practiceAlgorithm";
+
+export const runtime = "nodejs";
+
+export async function POST(request: Request) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ??
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !key) {
+    return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
+  }
+
+  let body: {
+    session_id?: string;
+    keyword_id?: string;
+    category_id?: string;
+    course?: string;
+  };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "invalid JSON" }, { status: 400 });
+  }
+
+  const { session_id, keyword_id, category_id, course } = body;
+  if (!session_id || !keyword_id || !category_id) {
+    return NextResponse.json(
+      { error: "session_id, keyword_id and category_id are required" },
+      { status: 400 }
+    );
+  }
+
+  const supabase = createClient(supabaseUrl, key);
+
+  // Merge onto the existing row so we preserve score/attempt history.
+  const { data: existing } = await supabase
+    .from("math_student_keyword_states")
+    .select("score, spaced_review_count")
+    .eq("session_id", session_id)
+    .eq("keyword_id", keyword_id)
+    .maybeSingle();
+
+  // A mastered skill should read ≥0.8 so the spiral-review decay logic is consistent.
+  const prevScore = (existing?.score as number | null) ?? 0.8;
+  const score = Math.max(prevScore, 0.8);
+  const spacedReviewCount = ((existing?.spaced_review_count as number | null) ?? 0) + 1;
+  const spacedReviewDueAt = computeNextReviewDate(score, spacedReviewCount).toISOString();
+  const now = new Date().toISOString();
+
+  const row: Record<string, unknown> = {
+    session_id,
+    keyword_id,
+    category_id,
+    state: "mastered",
+    intro_seen: true,
+    score,
+    spaced_review_due_at: spacedReviewDueAt,
+    spaced_review_count: spacedReviewCount,
+    last_practiced_at: now,
+    updated_at: now,
+  };
+  if (course) row.course = course;
+
+  const { error } = await supabase
+    .from("math_student_keyword_states")
+    .upsert(row, { onConflict: "session_id,keyword_id" });
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ ok: true });
+}

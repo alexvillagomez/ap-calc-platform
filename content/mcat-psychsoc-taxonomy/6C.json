@@ -1,0 +1,252 @@
+{
+  "category_code": "6C",
+  "umbrellas": [
+    {
+      "slug": "emotion_components_types",
+      "label": "Components and Types of Emotion",
+      "description": "The fundamental building blocks of emotion — its three defining components and the set of universal emotions recognized across cultures.",
+      "intro": {
+        "slug": "emotion_components_types_intro",
+        "label": "What emotions are and how they are structured",
+        "description": "Emotions are complex states that can be broken down into cognitive, physiological, and behavioral components — all three typically occur together in an emotional experience. Psychologists have also identified a core set of universal emotions that appear across cultures, providing a biological baseline for emotional life. Understanding these components and categories sets the stage for theories about how and why emotions arise.",
+        "examples": ["cognitive + physiological + behavioral in anger", "Ekman's six universal emotions", "facial expression of disgust across cultures"]
+      },
+      "in_depth": [
+        {
+          "slug": "three_components_of_emotion",
+          "label": "Three components of emotion",
+          "description": "Identify the three components of emotion: the cognitive component (subjective interpretation/appraisal), the physiological component (bodily arousal), and the behavioral component (expression and action tendency). This focuses on the component model itself, not on any single theory of how the components are sequenced or caused (separate keywords).",
+          "examples": ["cognitive: labeling fear as 'I am afraid'", "physiological: heart racing during fear", "behavioral: running away or freezing"]
+        },
+        {
+          "slug": "universal_emotions",
+          "label": "Universal emotions",
+          "description": "Recognize the set of universal basic emotions — fear, anger, happiness, surprise, disgust, sadness, and (sometimes) contempt — proposed by Ekman and supported by cross-cultural facial-expression research. This focuses on the universality claim and which emotions are on the list, not on the adaptive function of individual emotions (a separate keyword).",
+          "examples": ["Ekman's cross-cultural recognition study", "happiness vs joy as basic emotions", "disgust expression is universal"]
+        },
+        {
+          "slug": "adaptive_role_of_emotion",
+          "label": "Adaptive role of emotion",
+          "description": "Explain how emotions serve adaptive (evolutionary) functions: fear mobilizes fight-or-flight, disgust prevents contact with contaminants, sadness signals loss and recruits social support. This focuses on the 'why emotions evolved' rationale, not on which emotions are universal (separate keyword) or how arousal is generated (separate keywords).",
+          "examples": ["fear as survival signal", "disgust evolved to avoid pathogens", "sadness recruits social support"]
+        }
+      ]
+    },
+    {
+      "slug": "theories_of_emotion",
+      "label": "Theories of Emotion",
+      "description": "The major psychological theories that explain the sequence and causes of emotional experience, each proposing a different relationship among physiological arousal, cognitive appraisal, and felt emotion.",
+      "intro": {
+        "slug": "theories_of_emotion_intro",
+        "label": "Overview of the three major emotion theories",
+        "description": "Three classic theories disagree on what comes first in an emotional experience: the body's physical response, simultaneous brain signals, or a cognitive label applied to ambiguous arousal. James-Lange, Cannon-Bard, and Schachter-Singer each offer a distinct model, and MCAT passages often ask you to classify a scenario under the correct theory or identify what each theory predicts. Knowing the key claim and the classic evidence/critique for each is sufficient.",
+        "examples": ["which theory says the body leads?", "Cannon-Bard vs James-Lange on speed", "Schachter-Singer's two-factor label"]
+      },
+      "in_depth": [
+        {
+          "slug": "james_lange_theory",
+          "label": "James-Lange theory of emotion",
+          "description": "Apply the James-Lange theory: we experience emotion BECAUSE we notice our own physiological arousal — the body's reaction comes first, and the felt emotion follows (e.g., 'I am afraid because I am trembling'). This focuses on the body-leads-to-feeling sequence, not on the competing claim that arousal and emotion are simultaneous (Cannon-Bard, a separate keyword).",
+          "examples": ["'I am sad because I am crying'", "trembling → then feeling fear", "peripheral feedback determines emotion"]
+        },
+        {
+          "slug": "cannon_bard_theory",
+          "label": "Cannon-Bard theory of emotion",
+          "description": "Apply the Cannon-Bard theory: physiological arousal and subjective emotional experience occur simultaneously and independently — the thalamus relays signals to the cortex (feeling) and body (arousal) at the same time, so one does not cause the other. This focuses on the simultaneity and independence claim, not on the role of cognitive labeling (Schachter-Singer, a separate keyword).",
+          "examples": ["fear and trembling happen at the same time", "thalamus → cortex AND body simultaneously", "Cannon's critique: visceral responses are too slow for James-Lange"]
+        },
+        {
+          "slug": "schachter_singer_theory",
+          "label": "Schachter-Singer two-factor theory of emotion",
+          "description": "Apply Schachter-Singer's two-factor theory: emotion requires two elements — general physiological arousal PLUS a cognitive label that attributes that arousal to a specific cause. The same arousal can produce different emotions depending on the situational label (misattribution of arousal). This focuses on the arousal-plus-label mechanism, not on whether arousal precedes or is simultaneous with emotion (separate keywords).",
+          "examples": ["adrenaline injection + angry confederate → anger", "bridge study: arousal mislabeled as attraction", "excitation transfer (misattribution of arousal)"]
+        }
+      ]
+    },
+    {
+      "slug": "biological_bases_of_emotion",
+      "label": "Biological Bases of Emotion",
+      "description": "The brain structures, neural circuits, and physiological systems that generate, modulate, and express emotional experience, covered at the intro-psych level.",
+      "intro": {
+        "slug": "biological_bases_of_emotion_intro",
+        "label": "Brain and body in emotional processing",
+        "description": "Emotions are not purely psychological — they are rooted in specific brain regions and body-wide physiological systems. The limbic system (especially the amygdala) is central to emotion generation, while the autonomic nervous system produces the bodily arousal associated with emotional states. Physiological markers such as heart rate, skin conductance, and hormonal changes can be measured as 'signatures' of emotion. Understanding these biological systems complements the psychological theories.",
+        "examples": ["amygdala damage → impaired fear response", "sympathetic activation during anger", "polygraph as physiological marker"]
+      },
+      "in_depth": [
+        {
+          "slug": "amygdala_and_emotion",
+          "label": "Amygdala and emotion",
+          "description": "Identify the amygdala's role as the brain's key emotion-processing center, especially for fear detection, threat appraisal, and emotional memory consolidation (e.g., amygdala lesions impair conditioned fear). This focuses on the amygdala specifically, not on the full limbic system network (a separate keyword).",
+          "examples": ["amygdala lesion → no fear response to snake", "amygdala → fear conditioning", "amygdala activates during threat detection"]
+        },
+        {
+          "slug": "limbic_system_emotion",
+          "label": "Limbic system in emotion",
+          "description": "Identify the major structures of the limbic system and their roles in emotion: the amygdala (fear/threat), hippocampus (emotional memory context), hypothalamus (regulates autonomic arousal and hormonal stress response), and cingulate cortex (emotion regulation). This focuses on the system-level overview, not on any single structure in isolation (amygdala has its own keyword).",
+          "examples": ["hippocampus contextualizes emotional memories", "hypothalamus links limbic system to ANS arousal", "limbic system = emotional brain"]
+        },
+        {
+          "slug": "emotion_and_autonomic_ns",
+          "label": "Emotion and the autonomic nervous system",
+          "description": "Describe how the autonomic nervous system (ANS) mediates the physiological arousal component of emotion: sympathetic activation produces fight-or-flight responses (increased heart rate, dilated pupils, inhibited digestion), while parasympathetic activation supports rest-and-digest. This focuses on ANS as the arousal mechanism, not on the specific brain regions generating the signal (separate keywords).",
+          "examples": ["sympathetic: heart rate up during fear", "parasympathetic: calm after threat passes", "ANS arousal is nonspecific — same physiology for different emotions"]
+        },
+        {
+          "slug": "physiological_markers_of_emotion",
+          "label": "Physiological markers (signatures) of emotion",
+          "description": "Recognize the measurable physiological correlates of emotion used in research and assessment: galvanic skin response (GSR/skin conductance), heart rate changes, cortisol level, facial EMG, and pupil dilation. These are 'signatures' because they index emotional intensity but are not always emotion-specific. This focuses on what can be measured and what each marker reflects, not on the autonomic mechanism producing them (separate keyword).",
+          "examples": ["galvanic skin response as arousal measure", "elevated cortisol during stress or fear", "facial EMG detects micro-expressions"]
+        }
+      ]
+    },
+    {
+      "slug": "stress_appraisal",
+      "label": "Stress and Appraisal",
+      "description": "How individuals cognitively evaluate potential stressors — determining whether something is threatening and whether they can cope — and how that appraisal shapes the stress experience.",
+      "intro": {
+        "slug": "stress_appraisal_intro",
+        "label": "Cognitive appraisal: how we decide something is stressful",
+        "description": "Not every demand becomes a stressor — whether something stresses us depends on how we appraise it. Lazarus and Folkman's two-stage appraisal model proposes a primary appraisal (is this a threat?) and a secondary appraisal (can I cope?). Only when a demand is seen as threatening AND beyond one's coping resources does full-blown stress result. Understanding appraisal is key to understanding why the same event stresses one person but not another.",
+        "examples": ["exam = challenge vs threat (primary appraisal)", "'I can handle this' = secondary appraisal", "same event, different stress responses"]
+      },
+      "in_depth": [
+        {
+          "slug": "primary_appraisal",
+          "label": "Primary appraisal of stressors",
+          "description": "Apply Lazarus's primary appraisal: the initial evaluation of whether a situation is irrelevant, benign-positive, or stressful (threatening, harmful, or challenging). A threatening primary appraisal triggers the stress process; a benign-positive one does not. This focuses on the first-stage evaluation of the situation's meaning, not on whether one has resources to cope (secondary appraisal, a separate keyword).",
+          "examples": ["'Is this exam a threat to me?'", "benign vs. harmful appraisal of a job review", "primary appraisal determines IF stress begins"]
+        },
+        {
+          "slug": "secondary_appraisal",
+          "label": "Secondary appraisal of coping resources",
+          "description": "Apply Lazarus's secondary appraisal: the evaluation of one's available coping resources and options after identifying a stressor ('Can I handle this?'). When coping resources are judged insufficient relative to the demand, stress is intensified; when resources feel adequate, stress is reduced. This focuses on the coping-resources evaluation, not on identifying the threat itself (primary appraisal, a separate keyword).",
+          "examples": ["'Do I have time to study for this exam?'", "high secondary appraisal → less felt stress", "appraisal of support/resources moderates stress"]
+        }
+      ]
+    },
+    {
+      "slug": "types_of_stressors",
+      "label": "Types of Stressors",
+      "description": "The categories of external and internal demands that trigger the stress response, from large-scale catastrophes to everyday hassles.",
+      "intro": {
+        "slug": "types_of_stressors_intro",
+        "label": "What counts as a stressor and how stressors are classified",
+        "description": "Stressors vary enormously in scale, duration, and source. Researchers distinguish cataclysmic events (large-scale disasters affecting many people), personal stressors (significant life changes to an individual), and background stressors or daily hassles (minor but frequent annoyances). Life changes — whether positive or negative — impose demands that require adjustment. Understanding stressor type helps predict magnitude and duration of the stress response.",
+        "examples": ["hurricane as cataclysmic stressor", "divorce as personal stressor", "daily commute as background stressor"]
+      },
+      "in_depth": [
+        {
+          "slug": "cataclysmic_stressors",
+          "label": "Cataclysmic stressors",
+          "description": "Identify cataclysmic stressors as sudden, powerful events that affect many people simultaneously, typically outside individual control (natural disasters, wars, terrorist attacks). These share features with PTSD triggers and differ from personal stressors in their collective impact. This focuses on the large-scale, many-person nature, not on individual life-event stressors (a separate keyword).",
+          "examples": ["earthquake affecting a whole community", "war as cataclysmic stressor", "shared cataclysm can produce collective trauma"]
+        },
+        {
+          "slug": "personal_stressors",
+          "label": "Personal stressors and life events",
+          "description": "Identify personal stressors as significant life events affecting the individual — job loss, divorce, illness, bereavement, even positive changes like marriage or promotion — that require substantial adjustment. The Holmes-Rahe Social Readjustment Rating Scale ranks life events by stress load. This focuses on individual-scale major life changes, not on widespread collective disasters (a separate keyword) or minor daily hassles (a separate keyword).",
+          "examples": ["death of a spouse: highest Holmes-Rahe score", "divorce, job loss as major personal stressors", "even positive events (marriage) are stressors"]
+        },
+        {
+          "slug": "background_stressors_daily_hassles",
+          "label": "Background stressors and daily hassles",
+          "description": "Identify background stressors (daily hassles) as minor, recurring annoyances — traffic, minor conflicts, misplaced items — that individually seem trivial but cumulatively elevate stress and erode well-being. Contrast with major life events: hassles are frequent and low-severity but highly impactful in aggregate. This focuses on the chronic, cumulative, low-level demand, not on acute major events (separate keywords).",
+          "examples": ["daily traffic jam as chronic hassle", "Kanner's Hassles Scale", "cumulative hassles predict health outcomes"]
+        }
+      ]
+    },
+    {
+      "slug": "stress_response_outcomes",
+      "label": "Stress Response and Outcomes",
+      "description": "The physiological, emotional, and behavioral consequences of stress exposure, including the general adaptation syndrome describing how the body responds over time.",
+      "intro": {
+        "slug": "stress_response_outcomes_intro",
+        "label": "How stress affects body, mind, and behavior",
+        "description": "Stress triggers a coordinated set of responses across biological, emotional, and behavioral systems. Selye's General Adaptation Syndrome (GAS) maps the body's response over time into three phases. Alongside these physiological changes, stress alters emotion and drives behavioral coping attempts. Chronic stress, when the body stays in sustained arousal, leads to damage across all three domains. Understanding these outcomes is essential for explaining stress-related health consequences.",
+        "examples": ["GAS: alarm → resistance → exhaustion", "chronic stress → immune suppression", "stress-induced anxiety and behavioral withdrawal"]
+      },
+      "in_depth": [
+        {
+          "slug": "general_adaptation_syndrome",
+          "label": "General adaptation syndrome (GAS)",
+          "description": "Describe Selye's three-stage General Adaptation Syndrome: (1) alarm — initial fight-or-flight activation (HPA axis + sympathetic surge); (2) resistance — sustained mobilization as the body attempts to cope, with stress hormones remaining elevated; (3) exhaustion — depletion of resources, immune suppression, and vulnerability to illness if the stressor persists. This focuses on the sequence and what happens in each stage, not on specific stress-management interventions (a separate keyword).",
+          "examples": ["alarm stage: adrenaline + cortisol spike", "resistance stage: body adapts but at a cost", "exhaustion stage: illness and burnout risk"]
+        },
+        {
+          "slug": "physiological_stress_outcomes",
+          "label": "Physiological outcomes of stress",
+          "description": "Identify the major physiological consequences of acute and chronic stress: elevated cortisol, suppressed immune function, increased cardiovascular risk (hypertension), disrupted digestion, and impaired sleep. These outcomes reflect sustained HPA axis and sympathetic activation. This focuses on the biological health consequences, not on the GAS framework that describes the temporal sequence (a separate keyword).",
+          "examples": ["chronic stress → elevated cortisol → immune suppression", "stress increases hypertension risk", "stress disrupts sleep and digestion"]
+        },
+        {
+          "slug": "emotional_stress_outcomes",
+          "label": "Emotional outcomes of stress",
+          "description": "Identify the emotional consequences of stress: anxiety, depression, irritability, emotional exhaustion, and burnout. Chronic stress is a major risk factor for clinical anxiety and depressive disorders. This focuses on affective/psychological consequences of stress, not on behavioral responses (a separate keyword) or the physiological consequences (a separate keyword).",
+          "examples": ["chronic stress → anxiety and depression", "emotional exhaustion = component of burnout", "stress-induced irritability and mood dysregulation"]
+        },
+        {
+          "slug": "behavioral_stress_outcomes",
+          "label": "Behavioral outcomes of stress",
+          "description": "Identify the behavioral consequences of stress: changes in eating (over- or under-eating), increased substance use, social withdrawal, impaired performance, and decreased sleep. These behavioral responses can be maladaptive coping strategies. This focuses on observable behavior changes, not on the internal emotional states (a separate keyword) or physiological changes (a separate keyword) that accompany them.",
+          "examples": ["stress → increased alcohol use", "social withdrawal under high stress", "stress-induced overeating or appetite loss"]
+        },
+        {
+          "slug": "effects_of_stress_on_cognitive_function",
+          "label": "Effects of stress on psychological functions",
+          "description": "Describe how stress impairs psychological and cognitive functions: it narrows attention, disrupts working memory, impairs decision-making, and at high levels degrades performance (consistent with the Yerkes-Dodson inverted-U). This focuses on the cognitive/psychological performance effects of stress, not on emotional mood outcomes (a separate keyword) or behavioral coping changes (a separate keyword).",
+          "examples": ["exam anxiety narrows attention", "high cortisol impairs prefrontal decision-making", "Yerkes-Dodson: high arousal hurts hard-task performance"]
+        }
+      ]
+    },
+    {
+      "slug": "stress_management",
+      "label": "Stress Management",
+      "description": "Evidence-based and commonly practiced strategies individuals use to reduce the intensity, duration, or impact of stress.",
+      "intro": {
+        "slug": "stress_management_intro",
+        "label": "Approaches to managing and coping with stress",
+        "description": "Stress management encompasses a wide range of strategies aimed at either addressing the stressor directly (problem-focused coping) or regulating the emotional response to it (emotion-focused coping). Common approaches include physical exercise, relaxation techniques, mindfulness/meditation, social support, and spiritual/religious practice. At the intro level, the key is recognizing what type of coping a strategy represents and knowing the evidence for its effectiveness.",
+        "examples": ["problem-focused vs emotion-focused coping", "exercise reduces cortisol chronically", "mindfulness as emotion-regulation strategy"]
+      },
+      "in_depth": [
+        {
+          "slug": "problem_focused_coping",
+          "label": "Problem-focused coping",
+          "description": "Identify problem-focused coping strategies as those that target the stressor itself — gathering information, making a plan, taking direct action, or removing the source of stress. Problem-focused coping is most effective when the stressor is controllable. This focuses on the stressor-directed approach, not on strategies that regulate emotional responses to the stressor (emotion-focused coping, a separate keyword).",
+          "examples": ["making a study schedule to reduce exam stress", "seeking information about a medical diagnosis", "directly solving the problem causing stress"]
+        },
+        {
+          "slug": "emotion_focused_coping",
+          "label": "Emotion-focused coping",
+          "description": "Identify emotion-focused coping strategies as those that manage the emotional response to an uncontrollable stressor — venting, reframing, seeking social support, meditation, distraction, or acceptance. Emotion-focused coping is most adaptive when the stressor cannot be changed. This focuses on regulating the feeling rather than changing the situation (problem-focused coping, a separate keyword).",
+          "examples": ["journaling to process grief", "reframing a diagnosis as a challenge", "calling a friend after a bad day"]
+        },
+        {
+          "slug": "exercise_and_stress",
+          "label": "Exercise as stress management",
+          "description": "Explain how regular aerobic exercise reduces stress: it lowers resting cortisol, promotes release of endorphins, improves sleep quality, and builds physiological resilience to future stressors. This focuses on the exercise-specific mechanism and outcome, not on relaxation or mindfulness strategies (separate keywords).",
+          "examples": ["aerobic exercise → lower resting cortisol", "endorphin release during running", "exercise buffers cardiovascular stress reactivity"]
+        },
+        {
+          "slug": "relaxation_and_mindfulness",
+          "label": "Relaxation techniques and mindfulness",
+          "description": "Identify relaxation-based stress-management approaches — progressive muscle relaxation, deep breathing, biofeedback, and mindfulness meditation — and how they activate the parasympathetic nervous system to counteract stress arousal. Mindfulness specifically involves non-judgmental present-moment awareness. This focuses on relaxation/mindfulness methods, not on physical exercise (a separate keyword) or social/spiritual support (a separate keyword).",
+          "examples": ["progressive muscle relaxation reduces tension", "diaphragmatic breathing activates parasympathetic NS", "mindfulness reduces rumination"]
+        },
+        {
+          "slug": "social_support_stress",
+          "label": "Social support as a stress buffer",
+          "description": "Explain the stress-buffering role of social support: perceived or received support (emotional, informational, tangible) moderates the appraisal of stressors and the severity of stress responses. Strong social networks are consistently linked to better health outcomes under stress. This focuses on the social relationship as a coping resource, not on individual relaxation or exercise strategies (separate keywords).",
+          "examples": ["social support reduces perceived severity of stressor", "tangible support: a friend helps with chores during illness", "social isolation worsens stress outcomes"]
+        },
+        {
+          "slug": "spirituality_and_stress",
+          "label": "Spirituality and religion as stress management",
+          "description": "Recognize that spiritual and religious practices — prayer, meditation, community worship, and meaning-making — function as coping resources by providing a sense of coherence, social community, and emotional comfort. Research links religiosity/spirituality to lower stress reactivity in many populations. This focuses on the spiritual/religious dimension of coping, distinct from secular relaxation or social support (separate keywords).",
+          "examples": ["prayer as emotion-focused coping", "religious community provides social support and meaning", "sense of meaning buffers existential stress"]
+        }
+      ]
+    }
+  ]
+}

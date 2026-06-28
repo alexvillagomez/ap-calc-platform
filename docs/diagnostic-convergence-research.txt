@@ -1,0 +1,193 @@
+DIAGNOSTIC CONVERGENCE RESEARCH
+AP Calc Platform — Demo Diagnostic (apps/student/app/demo/page.tsx)
+Prepared: 2026-06-08
+=======================================================================
+
+
+1. CURRENT ALGORITHM
+──────────────────────────────────────────────────────────────────────
+
+UMBRELLA TOUCH COUNTING
+Each time commitAnswer() fires, recordUmbrellaTouches(kw) is called with
+the problem's keyword_weights map (kw). For every in-depth keyword ID that
+appears in kw, it looks up that keyword's umbrella parent in
+inDepthToUmbrellaRef and increments umbrellaTouchCounts[umbrellaId] by 1.
+
+The stop condition (lines 320-325 of demo/page.tsx) fires when ALL umbrellas
+have been touched >= UMBRELLA_WELL_TESTED_THRESHOLD times:
+
+  const umbrellasWellTested =
+    umbrellas.length > 0 &&
+    umbrellas.every((u) => (umbrellaTouchCounts[u.id] ?? 0) >= UMBRELLA_WELL_TESTED_THRESHOLD);
+
+  if (umbrellasWellTested || answeredCount >= DEMO_DIAGNOSTIC_MAX_QUESTIONS) {
+    setPhase("done");
+  }
+
+Constants:
+  UMBRELLA_WELL_TESTED_THRESHOLD = 5   (line 83)
+  DEMO_DIAGNOSTIC_MAX_QUESTIONS  = 40  (line 85)
+
+PREREQUISITE INFERENCE (lines 591-606)
+After a correct answer, any prerequisite keyword (from prerequisite_weights)
+whose estimated post-boost strength crosses 0.62 also has its umbrella
+credited one touch via a second call to recordUmbrellaTouches. The estimated
+post-boost is computed with the same EMA step as updateStrengths:
+  estimated = prev + PREREQ_LEARNING_RATE * w * (1 - prev)
+If estimated >= 0.62, that keyword ID is included in a batch call.
+PREREQ_LEARNING_RATE = 0.15.
+
+STRENGTH UPDATE
+updateStrengthsDiagnostic() (practiceAlgorithm.ts lines 209-241) runs an
+aggressive IRT-style update:
+  first-touch correct: s = 0.5 + difficulty * 2.0 * w * correctSignal
+  first-touch wrong:   s = 0.5 - difficulty * 2.0 * w * wrongSignal
+  subsequent correct:  s += difficulty * 1.5 * correctSignal * w * (1 - s)
+  subsequent wrong:    s -= 1.0 * wrongSignal * w * s
+With difficulty=0.5 (medium), correctSignal=0.75, a first correct answer on
+a keyword with weight 1.0 jumps straight to 0.875. Strength convergence
+therefore happens in 2-4 questions per keyword.
+
+POLYNOMIALS UMBRELLA COUNT
+The insert_polynomials.sql seed file defines exactly 10 umbrella keywords:
+  1. polynomial_structure_and_classification
+  2. polynomial_values_and_identities
+  3. polynomial_addition_and_subtraction
+  4. polynomial_multiplication_and_special_products
+  5. gcf_factoring_and_grouping
+  6. quadratic_and_special_form_factoring
+  7. polynomial_division_and_factor_theorems
+  8. polynomial_equations_and_roots
+  9. polynomial_zeros_and_graph_behavior
+  10. polynomial_tables_and_finite_differences
+
+
+2. WHY STRONG STUDENTS ANSWER 35-40 QUESTIONS
+──────────────────────────────────────────────────────────────────────
+
+Minimum touches required to stop:
+  UMBRELLA_WELL_TESTED_THRESHOLD (5) x 10 umbrellas = 50 touches needed
+
+But each problem typically covers 1-3 in-depth keywords across 1-2 umbrella
+areas (most problems are topically focused). Realistically, each answer
+increments 1-2 umbrella touch counts.
+
+Expected questions to reach 50 touches:
+  Optimistic (2 touches/question): 50 / 2 = 25 questions
+  Pessimistic (1.4 touches/question): 50 / 1.4 ≈ 36 questions
+
+The adaptive selector deliberately picks problems probing WEAK areas (using
+scoreProblemByKeyword's weakness + uncertainty terms). For strong students who
+answer correctly from the start, strengths converge upward quickly — but the
+selection continues targeting all umbrellas until each reaches exactly 5
+touches. The problem bank may not have uniform coverage of all 10 umbrellas,
+causing some to accumulate touches slowly.
+
+The prerequisite inference path contributes only marginally: it fires when a
+prereq keyword crosses 0.62, but most prerequisites start at 0.5 and need 1-2
+boosts to cross that threshold, and they must be in a problem that is also
+answered correctly.
+
+Result: Strong students who demonstrate mastery by question 10 still answer
+25-38 more questions waiting for all 10 umbrellas to mechanically accumulate
+5 touch counts. The touch counter is insensitive to strength — it treats a
+correct answer the same as a wrong one for convergence purposes.
+
+
+3. FIX OPTIONS (RANKED)
+──────────────────────────────────────────────────────────────────────
+
+OPTION A — Lower threshold to 3, lower max to 25 (simple tuning)
+  Effort: trivial (2 constant changes)
+  Effect: minimum touches = 3 × 10 = 30 touches
+          at 1.5 touches/q → ~20 questions; at 2 → ~15 questions
+  Tradeoff: still purely mechanical; a student who answers everything wrong
+            still finishes at the same pace as one who answers correctly.
+  Strong-student reduction: 35-40 → ~20-25 questions.
+
+OPTION B — Strength-based mastery gate
+  Add: after each answer, any umbrella whose average in-depth keyword strength
+       exceeds a mastery threshold (e.g. 0.72) is immediately counted as
+       well-tested regardless of explicit touch count.
+  Effort: moderate (new helper function + callback inside setKeywordStrengths)
+  Effect: strong students who demonstrate mastery in 2-3 answers per umbrella
+          (strength rises to ~0.80 within 3 correct answers) skip the remaining
+          touch accumulation for that umbrella.
+  Tradeoff: requires accessing updated state synchronously inside the setState
+            callback to avoid stale closure issues.
+  Strong-student reduction: 35-40 → ~12-18 questions.
+
+OPTION C — Difficulty-weighted touch credit
+  Weight each touch by the problem's normalized difficulty so a hard correct
+  answer counts as 2+ touches and an easy wrong answer counts fractionally.
+  Effort: moderate (pass difficulty into recordUmbrellaTouches, accumulate
+          fractional counts, adjust threshold to a float target)
+  Effect: better calibration — hard problems carry more diagnostic signal.
+  Tradeoff: harder to reason about (non-integer counts), obscures the
+            threshold semantics.
+  Strong-student reduction: 35-40 → ~20-28 questions (less predictable).
+
+OPTION D — Per-umbrella strength threshold only (no touch counting)
+  Replace touch counting entirely with: stop per-umbrella sampling when avg
+  in-depth strength > 0.72 OR wrong streak triggers explicit remediation.
+  Effort: significant refactor — remove umbrellaTouchCounts state, rewrite
+          stop condition.
+  Effect: most efficient possible convergence for strong students.
+  Tradeoff: for students with sparse coverage (few problems touching some
+            umbrellas) the diagnostic might terminate before getting any signal
+            on certain umbrellas; purely strength-based stop needs safeguards.
+
+OPTION E — Umbrella-aware adaptive selection bias
+  Add a "least-touched umbrella" bonus to scoreProblemByKeyword so the
+  selector actively hunts for problems covering under-sampled umbrellas.
+  Effort: small code change in loadNext
+  Effect: faster uniform coverage of all umbrellas, reducing wasted repeats.
+  Tradeoff: this is a selection improvement, not a stop-condition improvement —
+            it speeds convergence but doesn't help strong students who are
+            waiting for slow-accumulating umbrellas near the end.
+
+
+4. RECOMMENDED FIX WITH RATIONALE
+──────────────────────────────────────────────────────────────────────
+
+Combine OPTION A + OPTION B:
+
+  A) UMBRELLA_WELL_TESTED_THRESHOLD: 5 → 3
+  B) DEMO_DIAGNOSTIC_MAX_QUESTIONS:  40 → 25
+  C) Strength-based mastery gate: if avg in-depth strength for an umbrella
+     > 0.72, immediately set that umbrella's touch count to THRESHOLD.
+
+Rationale:
+  - Lowering the threshold alone (A) already cuts the mechanical minimum by
+    40% — from ~35 questions to ~20 questions in the average case.
+  - The mastery gate (C) short-circuits the remaining wait for strong students
+    who demonstrate clear command of an umbrella area within 2-3 correct
+    answers. With the diagnostic update rate (first-touch correct at medium
+    difficulty → 0.875), students answering everything correctly will cross
+    0.72 for most umbrellas after 1-2 problems in that area.
+  - For weak students the mastery gate never fires — they still traverse all
+    umbrellas and accumulate 3 real touch counts each, giving a meaningful
+    sample before showing the report.
+  - The lower max (B) prevents run-on sessions in edge cases (e.g., only a few
+    problems in the bank for some umbrellas).
+  - This is additive — it doesn't change how strengths are computed or how the
+    report is built; it only fast-tracks the "well-tested" flag when score
+    evidence is strong enough.
+
+Expected outcome for a student who answers everything correctly:
+  - Medium difficulty: strength after 1 correct answer ≈ 0.875 (first-touch formula)
+  - 0.875 > 0.72 → mastery gate fires on the first answer covering each umbrella
+  - With 10 umbrellas and 1.5 umbrellas covered per question: ~7-10 questions
+  - Absolute floor: each umbrella still needs at least 1 explicit problem touch
+    before mastery gate fires (the gate checks average in-depth strength, not
+    touch count directly, so it fires after the first correct answer in that area)
+  - Expected range: 10-15 questions for a student answering everything correctly,
+    15-20 for a strong student with occasional wrong answers.
+
+Expected outcome for a weak student:
+  - Strengths stay below 0.72, mastery gate never fires
+  - Falls through to pure touch counting: 3 touches × 10 umbrellas → ~20-22 questions
+  - Hard ceiling at 25 prevents excessive frustration
+
+This gives a much better ~15-20 question diagnostic for strong students while
+preserving quality coverage for students who need more sampling.

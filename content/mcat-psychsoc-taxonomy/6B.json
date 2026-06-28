@@ -1,0 +1,557 @@
+{
+  "category_code": "6B",
+  "umbrellas": [
+    {
+      "slug": "attention",
+      "label": "Attention",
+      "description": "How the mind selects and focuses cognitive resources — the limits and flexibility of attentional capacity.",
+      "intro": {
+        "slug": "attention_intro",
+        "label": "Attention: Selective and Divided",
+        "description": "Attention is the cognitive process of selectively concentrating on one piece of information while ignoring others. Because attentional capacity is limited, the mind must prioritize — it can focus narrowly (selective attention) or attempt to split resources across tasks (divided attention). Understanding attention is foundational to understanding how information enters the cognitive system and where breakdowns in processing occur.",
+        "examples": ["cocktail-party effect: hearing your name in a noisy room", "limited cognitive bandwidth", "spotlight model of attention"]
+      },
+      "in_depth": [
+        {
+          "slug": "selective_attention",
+          "label": "Selective attention",
+          "description": "Identify selective attention as the ability to focus on one stimulus or stream of information while filtering out competing stimuli. Classic demonstrations include the cocktail-party effect and dichotic listening tasks where attention follows one ear. This focuses on single-stream selection, not splitting attention across tasks (divided attention, a separate keyword).",
+          "examples": ["cocktail-party effect: hearing your name across the room", "dichotic listening: shadowing one ear", "inattentional blindness — missing a gorilla while counting passes"]
+        },
+        {
+          "slug": "divided_attention",
+          "label": "Divided attention",
+          "description": "Distinguish divided attention — simultaneously monitoring or processing two or more information streams — from focused single-stream attention. Performance on at least one task typically degrades when attentional resources are split, particularly when tasks compete for the same cognitive modality. This focuses on multi-task resource allocation, not the selection/filtering mechanism of selective attention (a separate keyword).",
+          "examples": ["talking on the phone while driving", "dual-task performance decrement", "texting reduces driving reaction time"]
+        }
+      ]
+    },
+    {
+      "slug": "information_processing",
+      "label": "Information Processing",
+      "description": "The cognitive-science metaphor that treats the mind as a system that encodes, stores, and retrieves information in stages — analogous to a computer.",
+      "intro": {
+        "slug": "information_processing_intro",
+        "label": "Information-Processing Model of Cognition",
+        "description": "The information-processing model compares the human mind to a computer: stimuli are taken in (input), processed through a series of mental stages (encoding, storage, retrieval), and produce behavioral output. This framework organizes much of cognitive psychology — it underlies memory research, problem-solving models, and studies of attention. Knowing the stages and their bottlenecks helps explain where cognition can succeed or fail.",
+        "examples": ["input → processing → output analogy", "sensory → working → long-term memory pipeline", "serial vs parallel processing debate"]
+      },
+      "in_depth": [
+        {
+          "slug": "information_processing_model",
+          "label": "Information-processing model",
+          "description": "Describe the information-processing model as the framework that treats cognition as a sequence of stages — input, encoding, storage, retrieval, and output — each with limited capacity. Researchers use reaction time, error rates, and capacity limits to probe these stages. This focuses on the overarching framework, not the specific memory subsystems detailed in the Memory umbrella.",
+          "examples": ["stimulus → perception → working memory → response", "processing bottleneck at attention stage", "cognitive load limits information throughput"]
+        }
+      ]
+    },
+    {
+      "slug": "cognitive_development",
+      "label": "Cognitive Development",
+      "description": "How thinking, reasoning, and knowledge change across the lifespan — from Piaget's classic stages through influences of culture and heredity, and into late-adulthood changes.",
+      "intro": {
+        "slug": "cognitive_development_intro",
+        "label": "Cognitive Development Across the Lifespan",
+        "description": "Cognitive development studies how mental abilities emerge, mature, and eventually change with age. Piaget's stage theory is the classic framework, but researchers have also examined how culture and heredity shape cognitive growth and how cognition shifts in late adulthood. This umbrella covers the trajectory of intellectual ability from infancy through old age, setting the stage for questions about nature vs. nurture and cultural context.",
+        "examples": ["Piaget's four stages from birth to adolescence", "fluid vs crystallized intelligence in aging", "Vygotsky: culture scaffolds cognitive growth"]
+      },
+      "in_depth": [
+        {
+          "slug": "piaget_sensorimotor",
+          "label": "Piaget's sensorimotor stage",
+          "description": "Identify the sensorimotor stage (birth–2 years) as the period when infants learn through physical interaction with the environment and develop object permanence — the understanding that objects continue to exist even when out of sight. This focuses on the earliest Piagetian stage, not the later preoperational stage (a separate keyword).",
+          "examples": ["peek-a-boo exploits lack of object permanence", "infant reaches for hidden toy after 8 months", "learning by touching, sucking, and grasping"]
+        },
+        {
+          "slug": "piaget_preoperational",
+          "label": "Piaget's preoperational stage",
+          "description": "Identify the preoperational stage (2–7 years) as the period marked by language development, symbolic/pretend play, egocentrism, and inability to perform conservation tasks. Children in this stage cannot mentally reverse operations or take another's perspective. This focuses on the preoperational stage, not the later concrete operational stage (a separate keyword).",
+          "examples": ["three-mountains task: child thinks others see what they see", "child pours tall glass: 'more water!'", "pretend play with blocks as cars"]
+        },
+        {
+          "slug": "piaget_concrete_operational",
+          "label": "Piaget's concrete operational stage",
+          "description": "Identify the concrete operational stage (7–11 years) as the period when children master conservation, classification, and seriation — logical operations applied to concrete, tangible objects. Children overcome egocentrism and can reverse operations but still struggle with abstract hypothetical reasoning. This focuses on the concrete operational stage, not the formal operational stage (a separate keyword).",
+          "examples": ["child knows clay amount unchanged after reshaping", "can sort objects by multiple attributes", "understands that 5 + 3 = 3 + 5 (reversibility)"]
+        },
+        {
+          "slug": "piaget_formal_operational",
+          "label": "Piaget's formal operational stage",
+          "description": "Identify the formal operational stage (12+ years) as the period when individuals develop the capacity for abstract, hypothetical, and deductive reasoning — the ability to reason about possibilities beyond concrete experience. This focuses on the final Piagetian stage, not the earlier concrete or preoperational stages (separate keywords).",
+          "examples": ["'If all As are Bs, and…' syllogism solving", "systematic hypothesis testing in science class", "reasoning about what could be, not just what is"]
+        },
+        {
+          "slug": "piaget_schemas_assimilation_accommodation",
+          "label": "Schemas, assimilation, and accommodation",
+          "description": "Distinguish Piaget's core mechanisms: schemas are mental frameworks for organizing knowledge; assimilation fits new information into an existing schema; accommodation modifies the schema to fit new information. Disequilibrium drives the switch from assimilation to accommodation. This focuses on the change mechanisms, not the stage sequence itself (separate keywords).",
+          "examples": ["child calls all round objects 'ball' (assimilation)", "child learns 'orange' as a distinct category (accommodation)", "disequilibrium: a swan doesn't fit 'duck' schema"]
+        },
+        {
+          "slug": "cognitive_changes_late_adulthood",
+          "label": "Cognitive changes in late adulthood",
+          "description": "Describe how cognition typically shifts in late adulthood: processing speed slows, working memory capacity decreases, and fluid intelligence (novel problem-solving) declines more than crystallized intelligence (accumulated knowledge and vocabulary). Normal aging is distinguished from pathological decline (e.g., dementia). This focuses on normal age-related change, not memory disorders covered in the Memory umbrella.",
+          "examples": ["slower reaction time in older adults", "vocabulary remains stable while mental rotation slows", "fluid vs crystallized intelligence diverge after ~60"]
+        },
+        {
+          "slug": "role_of_culture_cognitive_development",
+          "label": "Role of culture in cognitive development",
+          "description": "Explain how cultural context — tools, language, social practices, and Vygotsky's zone of proximal development (ZPD) and scaffolding — shapes what cognitive skills children develop and when. Different cultures may prioritize different cognitive abilities, affecting what counts as 'intelligent' behavior. This focuses on the cultural/social shaping of development, not hereditary influences (a separate keyword).",
+          "examples": ["Vygotsky: adult scaffolds a child just beyond their current ability", "ZPD: gap between independent and guided performance", "cultures that emphasize collective memory vs individual recall"]
+        },
+        {
+          "slug": "heredity_environment_cognitive_development",
+          "label": "Heredity and environment in cognitive development",
+          "description": "Evaluate the contributions of genetic factors (heritability of cognitive traits) and environmental factors (nutrition, stimulation, schooling) to cognitive development, using evidence from twin studies and adoption studies. High heritability does not mean environment doesn't matter — gene–environment interactions are key. This focuses on the nature–nurture balance in development, not the equivalent question for intelligence (a separate keyword).",
+          "examples": ["identical twins more similar in IQ than fraternal twins", "early enrichment programs raise cognitive test scores", "heritability of cognitive ability increases with age"]
+        },
+        {
+          "slug": "biological_factors_cognition",
+          "label": "Biological factors that affect cognition",
+          "description": "Identify key biological factors — brain development and maturation, the hippocampus's role in memory consolidation, prefrontal cortex maturation (executive function in adolescence), and factors like sleep, nutrition, and hormones — that influence cognitive performance. This focuses on biological substrates of cognition at the intro-psych level, not cellular molecular mechanisms (a separate keyword).",
+          "examples": ["prefrontal cortex not fully myelinated until mid-20s", "hippocampal damage impairs new memory formation", "sleep deprivation reduces working memory capacity"]
+        }
+      ]
+    },
+    {
+      "slug": "problem_solving_decision_making",
+      "label": "Problem-Solving and Decision-Making",
+      "description": "The strategies, obstacles, and cognitive shortcuts people use when tackling problems and making judgments — from systematic algorithms to quick-and-dirty heuristics.",
+      "intro": {
+        "slug": "problem_solving_decision_making_intro",
+        "label": "Problem-Solving Strategies, Barriers, and Biases",
+        "description": "Problem-solving and decision-making encompass the mental processes used to move from a current state to a goal state and to choose among options under uncertainty. People use multiple approaches — step-by-step algorithms, experience-based heuristics, sudden insight — and are systematically derailed by cognitive barriers like functional fixedness and mental set. Decision-making is further distorted by a suite of well-documented heuristics and biases (availability, representativeness, anchoring, etc.). Recognizing which strategy or bias is operating is a core MCAT skill.",
+        "examples": ["algorithm vs heuristic: solving a maze exhaustively vs by 'right-hand rule'", "Aha! insight vs slow analytical reasoning", "availability heuristic: overestimating plane crash risk after news coverage"]
+      },
+      "in_depth": [
+        {
+          "slug": "algorithm_approach",
+          "label": "Algorithm approach to problem-solving",
+          "description": "Define an algorithm as a step-by-step procedure that, if followed correctly, guarantees a solution — exhaustive but sometimes slow. Algorithms leave no room for error but are often impractical for complex real-world problems. This focuses on the systematic-exhaustive approach, not faster but fallible heuristics (a separate keyword).",
+          "examples": ["trying every possible combination to crack a combination lock", "step-by-step math procedure always yields the correct answer", "exhaustive search of a decision tree"]
+        },
+        {
+          "slug": "heuristic_approach",
+          "label": "Heuristic approach to problem-solving",
+          "description": "Define a heuristic as a mental shortcut or rule of thumb that speeds up problem-solving but does not guarantee a correct solution. Heuristics trade accuracy for efficiency. This focuses on the general category of shortcuts used in problem-solving, with specific cognitive biases (availability, representativeness, etc.) treated as separate keywords.",
+          "examples": ["'right-hand rule' for navigating a maze", "working backwards from the goal", "means-end analysis: reduce the gap between current and goal state"]
+        },
+        {
+          "slug": "trial_and_error",
+          "label": "Trial-and-error problem-solving",
+          "description": "Describe trial-and-error as an approach where solutions are attempted randomly or sequentially, with unsuccessful attempts eliminated until one works — no systematic plan guides the search. It is effective for simple problems with few options but inefficient when the solution space is large. This focuses on unsystematic random-search strategy, distinct from planned algorithms or heuristics (separate keywords).",
+          "examples": ["trying every key on a keyring to find the right one", "randomly rearranging puzzle pieces until something fits", "classic rat maze exploration without spatial mapping"]
+        },
+        {
+          "slug": "insight_problem_solving",
+          "label": "Insight in problem-solving",
+          "description": "Identify insight as the sudden, unexpected recognition of a solution — the 'Aha!' moment — that occurs after unconscious processing restructures the problem representation. Insight solutions appear all-at-once rather than incrementally and feel certain. This focuses on sudden restructuring, not gradual algorithmic or heuristic search (separate keywords).",
+          "examples": ["Köhler's chimps suddenly stacking boxes to reach bananas", "'Aha!' moment solving an anagram", "incubation: stepping away → solution appears"]
+        },
+        {
+          "slug": "mental_set_barrier",
+          "label": "Mental set as a barrier to problem-solving",
+          "description": "Explain mental set (Einstellung effect) as the tendency to approach a new problem using a strategy that worked in the past, even when a simpler or more efficient solution exists. Mental set is a barrier because prior success makes it hard to consider alternative approaches. This focuses on past-strategy entrenchment, not object-function fixation (functional fixedness, a separate keyword).",
+          "examples": ["solving new water-jug problems with a memorized formula when direct subtraction works", "using a complex equation for a simple arithmetic problem", "Luchins water-jug experiments demonstrating Einstellung"]
+        },
+        {
+          "slug": "functional_fixedness_barrier",
+          "label": "Functional fixedness",
+          "description": "Define functional fixedness as the inability to see an object's potential use beyond its conventional function, blocking creative problem solutions. It is a specific type of mental set anchored to an object's standard purpose. This focuses on object-function rigidity, not general past-strategy entrenchment (mental set, a separate keyword).",
+          "examples": ["Duncker's candle problem: using tack box as a shelf", "not realizing a coin can serve as a screwdriver", "seeing scissors only as a cutting tool, not a lever"]
+        },
+        {
+          "slug": "confirmation_bias_barrier",
+          "label": "Confirmation bias",
+          "description": "Identify confirmation bias as the tendency to search for, interpret, and recall information in a way that confirms one's existing beliefs while ignoring disconfirming evidence. It is both a barrier to problem-solving and a reasoning bias. This focuses on selective evidence-seeking, not the tendency to over-rely on first-given numeric anchors (anchoring, a separate keyword).",
+          "examples": ["googling only for evidence that supports your opinion", "Wason selection task: people pick confirming cards", "doctor who only orders tests that confirm initial diagnosis"]
+        },
+        {
+          "slug": "availability_heuristic",
+          "label": "Availability heuristic",
+          "description": "Identify the availability heuristic as the tendency to judge the probability or frequency of an event by how easily examples come to mind — vivid or recent events feel more common than they are. This biases risk perception after dramatic media coverage. This focuses on ease-of-retrieval as a frequency cue, not similarity to a prototype (representativeness, a separate keyword).",
+          "examples": ["overestimating plane crash risk after news coverage", "fearing shark attacks more than car accidents", "estimating how often a word appears by how quickly examples come to mind"]
+        },
+        {
+          "slug": "representativeness_heuristic",
+          "label": "Representativeness heuristic",
+          "description": "Identify the representativeness heuristic as the tendency to judge the probability that something belongs to a category by how much it resembles the typical member (prototype), often ignoring base rates. This produces errors like the conjunction fallacy. This focuses on prototype-matching, not ease-of-retrieval (availability, a separate keyword).",
+          "examples": ["'Linda is a bank teller AND feminist activist' judged more likely than 'bank teller' alone", "assuming a quiet bookish person is a librarian despite low base rate", "base-rate neglect: ignoring that most people are not doctors"]
+        },
+        {
+          "slug": "overconfidence_bias",
+          "label": "Overconfidence bias",
+          "description": "Define overconfidence bias as the tendency to overestimate the accuracy of one's knowledge, judgments, or performance — people's confidence ratings reliably exceed their actual accuracy rates. This leads to underestimating task difficulty and overestimating one's expertise. This focuses on miscalibrated confidence, not anchoring on initial values (a separate keyword).",
+          "examples": ["90% confidence intervals that contain the true value only 50% of the time", "students predict they will score higher than they actually do", "investors overestimating their ability to beat the market"]
+        },
+        {
+          "slug": "belief_perseverance",
+          "label": "Belief perseverance",
+          "description": "Define belief perseverance as the tendency to maintain a belief even after the evidence that originally supported it has been discredited or reversed. Once formed, beliefs resist change even when clearly contradicted. This focuses on post-disconfirmation persistence, distinct from confirmation bias's selective information search (a separate keyword).",
+          "examples": ["continuing to believe a debunked news story after a correction", "maintaining a diagnosis after lab results contradict it", "persisting in a business strategy after it is shown to be failing"]
+        },
+        {
+          "slug": "framing_effect",
+          "label": "Framing effect",
+          "description": "Identify the framing effect as the phenomenon in which people respond differently to objectively identical choices depending on whether they are presented in terms of gains or losses. Loss framing typically produces more risk-averse behavior than gain framing. This focuses on presentation-format bias, not numeric anchor dependence (anchoring, a separate keyword).",
+          "examples": ["'90% survival rate' vs '10% mortality rate' same surgery rated differently", "beef labeled '75% lean' preferred over '25% fat'", "Kahneman & Tversky's Asian disease problem"]
+        },
+        {
+          "slug": "anchoring_bias",
+          "label": "Anchoring bias",
+          "description": "Define anchoring as the tendency to rely heavily on the first piece of numerical information encountered (the anchor) when making subsequent estimates, even when the anchor is arbitrary or irrelevant. Adjustments away from the anchor are typically insufficient. This focuses on initial-value dependence, not gain/loss framing (framing effect, a separate keyword).",
+          "examples": ["arbitrary spin of a wheel biases estimates of African countries' UN membership", "first salary offer anchors subsequent negotiation", "high listing price makes any counteroffer feel like a deal"]
+        },
+        {
+          "slug": "types_of_problems",
+          "label": "Types of problems (well-defined vs. ill-defined)",
+          "description": "Classify problems by how clearly their goal state and solution path are specified: well-defined problems have a clear goal, given information, and rules (e.g., a math equation), while ill-defined problems have vague goals or no single correct path (e.g., 'write a good essay'). Problems are further sorted into arrangement (reorder elements, like anagrams), inducing-structure (find a relationship among elements, like analogies), and transformation (apply operations to reach a goal, like Tower of Hanoi) types. This focuses on how problems are classified by structure, not on the strategies used to solve them (algorithm, heuristic, insight, separate keywords).",
+          "examples": ["well-defined: solve 2x + 4 = 10", "ill-defined: 'plan a happy life'", "transformation problem: Tower of Hanoi"]
+        }
+      ]
+    },
+    {
+      "slug": "intelligence",
+      "label": "Intelligence",
+      "description": "Theories of what intelligence is, how it is measured, what shapes it, and how intellectual abilities vary across individuals.",
+      "intro": {
+        "slug": "intelligence_intro",
+        "label": "Intelligence: Theories, Measurement, and Variation",
+        "description": "Intelligence refers to the capacity to reason, solve problems, adapt, and acquire knowledge. Psychologists have debated whether it is a single general ability (Spearman's g), a set of distinct abilities (Gardner, Sternberg), or something else entirely. IQ tests operationalize one conception of intelligence, but heredity, environment, and cultural factors all shape intellectual performance. This umbrella covers major theories, the nature–nurture debate for intelligence, and sources of variation in intellectual ability.",
+        "examples": ["Spearman's g factor — one general intelligence underlies all tasks", "Gardner's multiple intelligences: musical, spatial, bodily-kinesthetic…", "Flynn effect: IQ scores rising over generations"]
+      },
+      "in_depth": [
+        {
+          "slug": "spearman_g_factor",
+          "label": "Spearman's g factor",
+          "description": "Describe Spearman's two-factor theory: a general intelligence factor (g) underlies performance across all cognitive tasks, supplemented by task-specific factors (s). People who do well on one cognitive test tend to do well on others — this shared variance is g. This focuses on the single-factor general intelligence theory, not the multiple-intelligences frameworks (separate keywords).",
+          "examples": ["positive correlation across math, verbal, and spatial tests", "g factor extracted by factor analysis", "g predicts academic and job performance broadly"]
+        },
+        {
+          "slug": "gardners_multiple_intelligences",
+          "label": "Gardner's theory of multiple intelligences",
+          "description": "Identify Gardner's proposal that intelligence is not a single entity but a family of at least eight relatively independent abilities: linguistic, logical-mathematical, spatial, musical, bodily-kinesthetic, interpersonal, intrapersonal, and naturalist. Each has its own developmental trajectory and neural basis. This focuses on the multi-factor independence claim, not Sternberg's triarchic model (a separate keyword).",
+          "examples": ["a child who struggles academically but excels musically", "bodily-kinesthetic intelligence in elite athletes", "interpersonal intelligence: reading social situations accurately"]
+        },
+        {
+          "slug": "sternberg_triarchic_intelligence",
+          "label": "Sternberg's triarchic theory of intelligence",
+          "description": "Describe Sternberg's triarchic model: intelligence has three components — analytical (academic problem-solving), creative (generating novel ideas), and practical (adapting to everyday environments, 'street smarts'). Traditional IQ tests measure mainly the analytical component. This focuses on Sternberg's three-component framework, not Gardner's multiple-intelligences model (a separate keyword).",
+          "examples": ["analytical: solve logic puzzles", "creative: devise an original solution to a new problem", "practical: figure out how to fix something with available tools"]
+        },
+        {
+          "slug": "fluid_vs_crystallized_intelligence",
+          "label": "Fluid vs. crystallized intelligence",
+          "description": "Distinguish fluid intelligence (Gf) — the ability to reason about novel problems without relying on prior knowledge — from crystallized intelligence (Gc) — accumulated knowledge, vocabulary, and expertise. Fluid intelligence peaks in young adulthood and declines with age; crystallized intelligence remains stable or increases into late adulthood. This focuses on the Gf/Gc distinction within intelligence, not the broader theory of developmental change (late adulthood, a separate keyword).",
+          "examples": ["fluid: abstract pattern-completion puzzles", "crystallized: vocabulary tests, general trivia", "fluid declines after 30s; crystallized holds into old age"]
+        },
+        {
+          "slug": "heredity_environment_intelligence",
+          "label": "Heredity and environment in intelligence",
+          "description": "Evaluate the relative contributions of genes and environment to intelligence using evidence from twin studies (identical twins more similar than fraternal), adoption studies, and the Flynn effect (rising IQ across generations — a purely environmental change). High heritability does not preclude large environmental effects. This focuses on the nature–nurture balance for intelligence specifically, not the equivalent question for cognitive development broadly (a separate keyword).",
+          "examples": ["identical twins raised apart show similar IQ", "adoption into high-SES families raises IQ", "Flynn effect: ~3 IQ points per decade — too fast for genetics"]
+        },
+        {
+          "slug": "variations_intellectual_ability",
+          "label": "Variations in intellectual ability",
+          "description": "Recognize the range of intellectual ability: giftedness (high IQ, exceptional talent, early achievement) and intellectual disability (significantly below-average intellectual functioning with limitations in adaptive behavior, onset before 18). The bell-curve distribution of IQ scores means the extremes represent a minority. This focuses on the classification of extreme intellectual variation, not the average developmental trajectory (a separate keyword).",
+          "examples": ["intellectual disability diagnosed when IQ < ~70 + adaptive deficits", "giftedness: IQ > ~130 + advanced creative/academic ability", "bell curve: ~68% of IQ scores fall between 85 and 115"]
+        }
+      ]
+    },
+    {
+      "slug": "consciousness",
+      "label": "Consciousness and Sleep",
+      "description": "The spectrum of waking and altered states of awareness — from normal alertness through sleep stages, hypnosis, and drug-altered states.",
+      "intro": {
+        "slug": "consciousness_intro",
+        "label": "States of Consciousness",
+        "description": "Consciousness refers to our subjective awareness of ourselves and our environment, and it exists on a continuum of arousal and awareness. Psychological research distinguishes multiple states: alert wakefulness, the various stages of sleep, hypnosis, meditation, and states altered by psychoactive substances. Understanding these states matters clinically — sleep disorders and substance use are major health concerns — and theoretically, as consciousness is central to what it means to have a mind.",
+        "examples": ["EEG distinguishes waking alpha waves from sleep slow waves", "REM sleep: dreaming + paradoxical brain activation", "alcohol → GABA agonism → CNS depression"]
+      },
+      "in_depth": [
+        {
+          "slug": "alertness_waking_consciousness",
+          "label": "Alertness and waking consciousness",
+          "description": "Describe normal waking consciousness as characterized by alert, focused awareness, associated with beta wave EEG activity. Alertness fluctuates with circadian rhythms, arousal level, and physiological state. This focuses on the baseline waking state, not the sleep states or altered states that depart from it (separate keywords).",
+          "examples": ["beta waves (>12 Hz) during active, alert thinking", "drowsiness marked by transition to alpha waves", "vigilance declines over long monotonous tasks"]
+        },
+        {
+          "slug": "stages_of_sleep",
+          "label": "Stages of sleep (N1–N3 and REM)",
+          "description": "Identify the four stages of sleep: N1 (light sleep, theta waves, hypnic jerks), N2 (sleep spindles, K-complexes, body temperature drops), N3 (slow-wave deep sleep, delta waves, most restorative), and REM (rapid eye movement, dream-rich, paradoxical muscle atonia with activated brain). A full cycle is ~90 minutes. This focuses on within-night stage characteristics, not the across-night cycling pattern (a separate keyword).",
+          "examples": ["N1: theta waves, easy to awaken", "N3 (slow-wave sleep): hardest to wake, most restorative", "REM: vivid dreams, eyes dart, body paralyzed"]
+        },
+        {
+          "slug": "sleep_cycles_changes",
+          "label": "Sleep cycles and changes across the lifespan",
+          "description": "Describe how sleep architecture changes within a night (REM periods lengthen in later cycles; N3 dominates early) and across the lifespan (newborns spend ~50% in REM; deep sleep decreases with age; older adults experience more fragmented sleep). These changes have implications for memory consolidation and health. This focuses on cyclical and developmental changes in sleep, not single-stage characteristics (a separate keyword).",
+          "examples": ["REM rebound: more REM after REM deprivation", "early night = more slow-wave sleep; late night = more REM", "infants: ~16 hours/day; adults: ~7–9 hours"]
+        },
+        {
+          "slug": "circadian_rhythms",
+          "label": "Circadian rhythms and the sleep–wake cycle",
+          "description": "Explain circadian rhythms as approximately 24-hour biological cycles regulated by the suprachiasmatic nucleus (SCN) in the hypothalamus and entrained by light (via melanopsin in retinal ganglion cells). Melatonin release from the pineal gland promotes sleep onset. Disruptions (jet lag, shift work) cause misalignment between internal and environmental time. This focuses on the biological clock mechanism, not the subjective sleep stages themselves (separate keywords).",
+          "examples": ["SCN lesion → loss of 24-hour activity rhythm", "melatonin rises after dark, signaling sleep onset", "jet lag: internal clock lagged behind new time zone"]
+        },
+        {
+          "slug": "dreaming",
+          "label": "Dreaming",
+          "description": "Describe dreaming as the vivid, story-like mental experience occurring predominantly during REM sleep, associated with brain activation similar to waking. Freud interpreted dreams as wish fulfillment; the activation-synthesis hypothesis proposes that dreams are the cortex's attempt to make sense of random brainstem signals during REM. This focuses on what dreams are and competing explanations, not the broader REM stage characteristics (covered in stages of sleep).",
+          "examples": ["REM sleep = primary stage for vivid narrative dreams", "Freud: manifest vs latent dream content", "activation-synthesis: cortex 'makes a story' from random REM signals"]
+        },
+        {
+          "slug": "sleep_wake_disorders",
+          "label": "Sleep–wake disorders",
+          "description": "Classify common sleep–wake disorders: insomnia (difficulty initiating or maintaining sleep), narcolepsy (sudden REM-like sleep attacks during waking), sleep apnea (breathing pauses fragment sleep), somnambulism (sleepwalking during N3), and night terrors (extreme N3 arousal). Each has a distinct mechanism and stage association. This focuses on disorder classification and mechanism, not normal sleep architecture (separate keywords).",
+          "examples": ["narcolepsy: sudden sleep attacks + cataplexy (muscle weakness)", "sleep apnea: repeated apnea → daytime fatigue", "night terrors occur in N3 (slow-wave), not REM — no dream recall"]
+        },
+        {
+          "slug": "hypnosis_meditation",
+          "label": "Hypnosis and meditation",
+          "description": "Distinguish hypnosis — a state of heightened suggestibility and focused attention induced by a hypnotist, associated with increased alpha waves — from meditation — self-directed practice of focused attention or open monitoring that reduces arousal and stress. Both are altered states but differ in social context and mechanism. This focuses on non-sleep altered states, not drug-induced alterations (a separate keyword).",
+          "examples": ["hypnotic suggestion can reduce pain perception", "mindfulness meditation: focus on breath, note wandering thoughts", "hypnosis is not the same as sleep — subjects remain responsive"]
+        },
+        {
+          "slug": "types_consciousness_altering_drugs",
+          "label": "Types of consciousness-altering drugs and their effects",
+          "description": "Classify psychoactive drugs by their primary action and effect on the nervous system: depressants (alcohol, barbiturates, benzodiazepines — enhance GABA, reduce arousal), stimulants (caffeine, cocaine, amphetamines — block reuptake or stimulate release of dopamine/norepinephrine), opioids (heroin, morphine — mu-receptor agonists, euphoria + analgesia), hallucinogens (LSD, psilocybin — serotonin 5-HT2A agonism, altered perception), and cannabis (THC — CB1 receptor agonism, altered time perception). This focuses on drug categories and mechanisms at the intro level, not the reward pathway (a separate keyword).",
+          "examples": ["alcohol → GABA enhancement → CNS depression", "cocaine blocks dopamine reuptake → intense euphoria", "LSD → serotonin receptor agonism → visual hallucinations"]
+        },
+        {
+          "slug": "drug_addiction_reward_pathway",
+          "label": "Drug addiction and the brain reward pathway",
+          "description": "Explain how addictive drugs hijack the mesolimbic dopamine reward pathway: VTA (ventral tegmental area) → nucleus accumbens dopamine surge reinforces drug-taking behavior. Repeated use causes neuroadaptation (tolerance and withdrawal), and craving becomes conditioned to environmental cues. This focuses on the neural basis of addiction at the intro-psych level, not the pharmacological categories of each drug class (a separate keyword).",
+          "examples": ["nucleus accumbens dopamine surge = reward signal", "tolerance: need more drug for same effect", "conditioned cue: old neighborhood triggers craving years later"]
+        }
+      ]
+    },
+    {
+      "slug": "memory_encoding",
+      "label": "Memory: Encoding",
+      "description": "How information is initially taken into the memory system — the processes and strategies that determine what gets stored.",
+      "intro": {
+        "slug": "memory_encoding_intro",
+        "label": "Memory Encoding: Getting Information In",
+        "description": "Encoding is the first stage of memory — the process by which incoming information is transformed into a format the brain can store. Not all encoding is equal: information processed more deeply, associated with meaning, or rehearsed elaborately is later recalled better. Understanding encoding helps explain why some study strategies work and others fail, and why emotionally significant events are so well remembered.",
+        "examples": ["deep (semantic) processing vs shallow (phonological) processing", "mnemonic devices create memorable encoding cues", "flashbulb memory: vivid encoding during emotional events"]
+      },
+      "in_depth": [
+        {
+          "slug": "encoding_process",
+          "label": "Process of encoding information",
+          "description": "Describe encoding as the conversion of incoming sensory information into a representational form the memory system can store — visual, acoustic, or semantic codes. Automatic encoding (incidental learning) requires no deliberate effort; effortful encoding (intentional study) is more resource-intensive. This focuses on the encoding stage itself, not the storage structures into which encoded information goes (a separate keyword).",
+          "examples": ["automatically encoding where you parked without trying", "deliberately memorizing a phone number by repeating it", "acoustic code: remembering how a word sounds; semantic code: what it means"]
+        },
+        {
+          "slug": "levels_of_processing",
+          "label": "Levels of processing and depth of encoding",
+          "description": "Apply Craik and Lockhart's levels-of-processing framework: encoding that requires deeper semantic analysis (meaning) produces more durable memory traces than shallow structural (appearance) or phonological (sound) processing. Elaborative rehearsal (connecting new info to existing knowledge) produces deeper encoding than maintenance rehearsal (mere repetition). This focuses on depth-of-processing, not the separate question of retrieval strategies (covered in the Retrieval umbrella).",
+          "examples": ["'Does the word FLY describe a living thing?' → better recall than 'Is FLY in capital letters?'", "elaborative rehearsal vs rote repetition", "deeper processing → stronger, longer-lasting memory traces"]
+        },
+        {
+          "slug": "encoding_aids",
+          "label": "Processes that aid memory encoding",
+          "description": "Identify strategies that improve encoding: chunking (grouping items into meaningful units), mnemonic devices (method of loci, acronyms, peg-word), the spacing effect (distributed practice outperforms massed practice), and the testing effect (retrieving information strengthens encoding). These are the applied strategies used to improve initial learning. This focuses on encoding enhancement, not retrieval-stage cuing (a separate keyword).",
+          "examples": ["method of loci: place items along a familiar route", "chunking: 1-4-9-2-0-0-1 → '1492' + '001'", "spacing effect: study sessions spread over days beat one cramming marathon"]
+        }
+      ]
+    },
+    {
+      "slug": "memory_storage",
+      "label": "Memory: Storage",
+      "description": "The structures and systems that hold encoded information over time — from a fraction of a second to a lifetime.",
+      "intro": {
+        "slug": "memory_storage_intro",
+        "label": "Memory Storage Systems",
+        "description": "Memory is not a single warehouse but a set of distinct systems operating on different timescales and holding different types of information. The classic three-stage model distinguishes sensory memory, short-term/working memory, and long-term memory. Within long-term memory, explicit (declarative) and implicit (non-declarative) memories rely on different brain systems. Semantic networks describe how concepts are interconnected in long-term storage.",
+        "examples": ["iconic memory: brief visual afterimage after stimulus disappears", "working memory: holding a phone number while dialing", "long-term memory: riding a bike 20 years later"]
+      },
+      "in_depth": [
+        {
+          "slug": "sensory_memory",
+          "label": "Sensory memory",
+          "description": "Define sensory memory as the brief, high-capacity storage of exact sensory information — iconic memory (visual, ~0.5 seconds) and echoic memory (auditory, ~3–4 seconds) — that holds a 'snapshot' of incoming stimuli before attention selects items for further processing. Without attention, sensory memories decay rapidly. This focuses on the pre-attentional sensory buffer, not working or long-term memory (separate keywords).",
+          "examples": ["iconic memory: Sperling's partial-report experiment", "persistence of a sparkler's trail as you wave it in the dark", "echoic memory: 'What did you just say?' — you already heard it"]
+        },
+        {
+          "slug": "working_memory",
+          "label": "Working memory",
+          "description": "Describe working memory (Baddeley's model) as the limited-capacity system for actively holding and manipulating information during ongoing cognitive tasks. Its components include the phonological loop (verbal/auditory), visuospatial sketchpad (visual/spatial), and central executive (attentional control). Capacity is roughly 7 ± 2 chunks. This focuses on active short-term manipulation, not passive sensory storage or long-term memory (separate keywords).",
+          "examples": ["holding a partial sum in mind while doing mental arithmetic", "phonological loop: rehearsing a grocery list sub-vocally", "dual-task interference: phonological loop busy → can't do second verbal task"]
+        },
+        {
+          "slug": "long_term_memory_types",
+          "label": "Types of long-term memory",
+          "description": "Distinguish the major long-term memory categories: explicit/declarative (consciously recalled) — subdivided into episodic (personal events with time/place context) and semantic (general facts and knowledge) — versus implicit/non-declarative (unconscious) — subdivided into procedural (skills, habits), priming, and classical conditioning. Different brain regions support each type (hippocampus for episodic; basal ganglia/cerebellum for procedural). This focuses on the taxonomy of long-term memory types, not encoding or retrieval processes (separate keywords).",
+          "examples": ["episodic: memory of your 10th birthday party", "semantic: knowing that Paris is the capital of France", "procedural: riding a bicycle without conscious instruction"]
+        },
+        {
+          "slug": "semantic_networks_spreading_activation",
+          "label": "Semantic networks and spreading activation",
+          "description": "Explain semantic networks as mental representations of knowledge as interconnected nodes (concepts) linked by associative pathways. Spreading activation describes how activating one node lowers the threshold for activating related nodes, explaining priming effects (e.g., seeing 'doctor' facilitates 'nurse'). This focuses on the network architecture of long-term semantic memory, not episodic or procedural memory types (separate keywords).",
+          "examples": ["'bread' primes 'butter' — they are nearby nodes in the semantic network", "spreading activation explains why thinking of 'bank' brings up 'money' and 'river'", "fan effect: many associations to a node → slower retrieval"]
+        }
+      ]
+    },
+    {
+      "slug": "memory_retrieval",
+      "label": "Memory: Retrieval",
+      "description": "How stored memories are accessed and brought back to conscious awareness — the cues, processes, and emotional factors that govern what we can retrieve.",
+      "intro": {
+        "slug": "memory_retrieval_intro",
+        "label": "Memory Retrieval: Getting Information Out",
+        "description": "Retrieval is the process of accessing and re-activating stored information. Memory is reconstructive, not reproductive — retrieval is influenced by context, cues, and emotion, so what we 'remember' can differ from what was originally encoded. The same encoded memory may be recalled in some conditions and fail to surface in others, explaining why cuing strategies (like the method of loci) improve exam performance.",
+        "examples": ["tip-of-the-tongue: you know you know it, but can't produce it", "recognition (multiple choice) easier than free recall (essay)", "emotional events recalled with more vivid detail"]
+      },
+      "in_depth": [
+        {
+          "slug": "recall_recognition_relearning",
+          "label": "Recall, recognition, and relearning",
+          "description": "Distinguish three measures of memory retrieval: recall (freely generating previously learned information without cues), recognition (identifying previously encountered items from a set of options), and relearning (the savings in time needed to re-learn previously learned material). Recognition is easiest; free recall is hardest; relearning reveals memory even when recall and recognition fail. This focuses on the three retrieval-measurement methods, not the cues or emotions that aid retrieval (separate keywords).",
+          "examples": ["essay exam = recall; multiple-choice = recognition", "relearning a language forgotten in childhood takes fewer trials than learning it fresh", "tip-of-the-tongue: partial recall but not full word production"]
+        },
+        {
+          "slug": "retrieval_cues",
+          "label": "Retrieval cues and context-dependent memory",
+          "description": "Explain how retrieval cues — internal (mood, physiological state) and external (context, environment) — facilitate memory access through encoding specificity: memory is best when retrieval context matches encoding context. State-dependent memory (better recall in same drug/mood state) and context-dependent memory (same physical environment) are key examples. This focuses on cue-driven retrieval, not the emotional content of memories (a separate keyword).",
+          "examples": ["divers recall words better underwater if they learned them underwater", "being in the same mood during recall as during encoding", "the smell of a perfume triggers a specific autobiographical memory"]
+        },
+        {
+          "slug": "emotion_memory_retrieval",
+          "label": "Role of emotion in memory retrieval",
+          "description": "Explain how emotional arousal enhances memory consolidation and retrieval via amygdala activation, which strengthens hippocampal encoding — producing flashbulb memories (vivid, confident recollections of emotionally significant public events) and mood-congruent memory (better recall of material that matches current mood). High-arousal events are better remembered but not necessarily more accurate. This focuses on the affective enhancement of retrieval, not the mechanics of retrieval cues (a separate keyword).",
+          "examples": ["flashbulb memory: where you were during a major national event", "depressed individuals recall more negative autobiographical events", "amygdala damage → no emotional enhancement of memory"]
+        },
+        {
+          "slug": "retrieval_aids",
+          "label": "Processes that aid retrieval",
+          "description": "Identify strategies and phenomena that facilitate retrieval: the testing effect (retrieval practice itself strengthens memory), the tip-of-the-tongue resolution (partial cues narrow the search), priming (exposure to related stimuli lowers retrieval threshold), and the use of contextual reinstatement (mentally returning to the original encoding environment). This focuses on retrieval-facilitation strategies, not the encoding strategies that create stronger initial traces (covered in the Encoding umbrella).",
+          "examples": ["practice tests improve later recall more than re-reading", "mentally walking back through a room to remember where you put your keys", "priming: 'doctor' → easier retrieval of 'nurse'"]
+        }
+      ]
+    },
+    {
+      "slug": "memory_forgetting",
+      "label": "Memory: Forgetting and Dysfunction",
+      "description": "Why memories fail — the mechanisms of forgetting, the errors and distortions of memory, and clinically significant memory disorders.",
+      "intro": {
+        "slug": "memory_forgetting_intro",
+        "label": "Forgetting, Memory Distortion, and Memory Disorders",
+        "description": "Forgetting is not simply the absence of memory but an active product of decay, interference, motivated processes, and reconstructive errors. Memory is also vulnerable to systematic distortions — source monitoring errors, misinformation, and the creation of false memories. At the extreme, clinical memory disorders (amnesias, dementias) reveal the neural underpinnings of memory systems. Understanding these failures illuminates how normal memory works.",
+        "examples": ["retroactive interference: new info overwrites old", "misinformation effect: leading questions alter eyewitness recall", "anterograde amnesia: HM could not form new explicit memories"]
+      },
+      "in_depth": [
+        {
+          "slug": "decay_theory",
+          "label": "Decay theory of forgetting",
+          "description": "Define decay (trace decay) as the fading of a memory trace over time when it is not rehearsed or reactivated — a passive process of biological degradation. Decay is most relevant for sensory memory and short-term memory but is difficult to test in isolation (it is hard to prevent rehearsal). This focuses on time-based fading, not interference from competing memories (a separate keyword).",
+          "examples": ["sensory memory fades in < 1 second if not attended", "forgotten phone number you only heard once", "Ebbinghaus forgetting curve: rapid initial loss then plateau"]
+        },
+        {
+          "slug": "interference_forgetting",
+          "label": "Interference in forgetting",
+          "description": "Distinguish proactive interference (old memories disrupt recall of new ones) from retroactive interference (new memories disrupt recall of old ones). Interference is strongest when the competing material is similar. This is the dominant explanation for forgetting in long-term memory. This focuses on competition-based forgetting, not time-based decay (a separate keyword).",
+          "examples": ["proactive: old phone number interferes with remembering new one", "retroactive: learning French disrupts recall of previously learned Spanish", "interference greatest when stimuli are highly similar"]
+        },
+        {
+          "slug": "memory_construction_source_monitoring",
+          "label": "Memory construction and source monitoring",
+          "description": "Explain that memory is reconstructive — each retrieval rebuilds the experience from stored fragments, schemas, and post-event information — and that source-monitoring errors (misattributing where or when information was acquired) produce false memories. The misinformation effect (Loftus): misleading post-event information is incorporated into memory reports. This focuses on active reconstruction and attribution errors, not clinical amnesia disorders (a separate keyword).",
+          "examples": ["eyewitness changes memory after hearing leading question", "cryptomnesia: believing an idea is original when it was heard earlier", "imagination inflation: vividly imagining an event increases belief it happened"]
+        },
+        {
+          "slug": "aging_memory",
+          "label": "Aging and memory",
+          "description": "Describe how normal aging differentially affects memory systems: prospective memory, episodic memory, and processing speed decline; semantic memory and procedural memory are relatively spared. Source memory (when/where information was learned) is especially vulnerable. This focuses on normal age-related memory decline, distinct from pathological memory disorders (a separate keyword).",
+          "examples": ["older adults forget names and appointment times more than younger adults", "vocabulary and general knowledge stable into old age", "older adults worse at 'where did I read that?' source memory tasks"]
+        },
+        {
+          "slug": "memory_dysfunctions",
+          "label": "Memory dysfunctions (amnesia, Alzheimer's, Korsakoff's)",
+          "description": "Classify major memory disorders: anterograde amnesia (inability to form new explicit memories — HM; hippocampal damage); retrograde amnesia (loss of pre-injury memories); Alzheimer's disease (progressive dementia with amyloid plaques, neurofibrillary tangles — early episodic loss, late semantic loss); Korsakoff's syndrome (thiamine deficiency from chronic alcohol use → mammillary body/thalamic damage → severe anterograde amnesia + confabulation). Each has a distinct mechanism and clinical profile. This focuses on disorder classification and mechanism, not normal aging (a separate keyword).",
+          "examples": ["HM: removed hippocampus → could not form new episodic memories", "Korsakoff's: patient confabulates — invents plausible but false memories", "Alzheimer's: forgetting recent events first, remote memories last"]
+        }
+      ]
+    },
+    {
+      "slug": "memory_synaptic_basis",
+      "label": "Synaptic Basis of Memory and Learning",
+      "description": "The neural-plasticity mechanisms — long-term potentiation, synaptic strengthening — that underlie how the brain physically stores learned information.",
+      "intro": {
+        "slug": "memory_synaptic_basis_intro",
+        "label": "Neural Plasticity and Long-Term Potentiation",
+        "description": "Learning and memory are not just psychological constructs — they are grounded in physical changes at synapses. Neural plasticity is the brain's ability to reorganize by forming new connections and strengthening or weakening existing ones. Long-term potentiation (LTP) is the best-studied cellular mechanism: repeated stimulation strengthens synaptic transmission, providing a cellular model for memory formation. These concepts are tested at the intro-psych level — understanding the directional principle and the role of key structures like the hippocampus, not the molecular cascade in detail.",
+        "examples": ["LTP: repeated firing → AMPA receptor insertion → stronger synapse", "Hebb's rule: 'neurons that fire together, wire together'", "hippocampus converts short-term to long-term memory (consolidation)"]
+      },
+      "in_depth": [
+        {
+          "slug": "neural_plasticity",
+          "label": "Neural plasticity",
+          "description": "Define neural plasticity as the brain's capacity to change its structure and function in response to experience — including synaptogenesis (forming new synapses), synaptic pruning (eliminating unused connections), and changes in synaptic strength. Plasticity is greatest in early development but persists throughout life. This focuses on the general capacity for structural/functional change, not the specific LTP mechanism (a separate keyword).",
+          "examples": ["taxi drivers develop larger hippocampal gray matter with experience", "synaptic pruning in adolescence refines neural circuits", "recovery of function after stroke via reorganization of surviving tissue"]
+        },
+        {
+          "slug": "long_term_potentiation",
+          "label": "Long-term potentiation (LTP)",
+          "description": "Explain LTP as the long-lasting strengthening of a synapse resulting from repeated, high-frequency stimulation — the leading cellular model of learning and memory. Postsynaptic NMDA receptors detect coincident firing (both cells active simultaneously), leading to increased AMPA receptor insertion and stronger synaptic transmission. Hebb's rule captures the logic: cells that fire together, wire together. This focuses on the LTP mechanism at the intro level, not the full molecular cascade (which is Biology).",
+          "examples": ["high-frequency stimulation of hippocampal CA1 neurons → lasting potentiation", "NMDA receptor as 'coincidence detector'", "Hebb's rule: 'neurons that fire together, wire together'"]
+        },
+        {
+          "slug": "memory_consolidation",
+          "label": "Memory consolidation and the hippocampus",
+          "description": "Explain consolidation as the process by which newly acquired memories are stabilized over time — requiring the hippocampus for explicit memories (especially during sleep, when reactivation transfers memory to neocortex for long-term storage). Retrograde amnesia reveals a consolidation gradient: older memories are more resistant to disruption than recent ones. This focuses on the consolidation process and hippocampal role, not the LTP mechanism at the synaptic level (a separate keyword).",
+          "examples": ["HM: hippocampal removal → anterograde amnesia; remote memories intact", "sleep enhances memory consolidation — don't pull all-nighters", "consolidation gradient: recent memories vulnerable to concussion; old memories spared"]
+        }
+      ]
+    },
+    {
+      "slug": "language",
+      "label": "Language",
+      "description": "How humans acquire language, how language shapes thought, and the brain areas that make language production and comprehension possible.",
+      "intro": {
+        "slug": "language_intro",
+        "label": "Language Development, Cognition, and Brain Areas",
+        "description": "Language is the rule-governed system of symbols that allows communication and shapes thought. Researchers debate how children acquire language so rapidly — through reinforcement (behavioral), innate mechanisms (nativist), or the interplay of biology and social experience (interactionist). Language also influences how we perceive and categorize the world (Sapir-Whorf hypothesis). Brain lesion studies and neuroimaging have identified dedicated language areas — Broca's and Wernicke's — revealing the neural architecture of speaking and understanding.",
+        "examples": ["children acquire language universally by ~5 without explicit instruction", "Broca's aphasia: can understand but struggles to produce fluent speech", "Sapir-Whorf: Inuit snow vocabulary debate"]
+      },
+      "in_depth": [
+        {
+          "slug": "learning_theory_language",
+          "label": "Learning (behaviorist) theory of language development",
+          "description": "Describe Skinner's learning/behaviorist account of language acquisition: children acquire language through operant conditioning — imitation of adult speech, reinforcement of correct utterances, and extinction of errors. Critics (notably Chomsky) argue this cannot explain the rapid acquisition of novel grammatically correct sentences and the poverty of the stimulus. This focuses on the behaviorist explanation, not nativist or interactionist accounts (separate keywords).",
+          "examples": ["child says 'mama' → parent smiles and hugs (positive reinforcement)", "Skinner's 'Verbal Behavior' (1957)", "imitation + reinforcement → gradual shaping of speech"]
+        },
+        {
+          "slug": "nativist_theory_language",
+          "label": "Nativist theory of language development",
+          "description": "Describe Chomsky's nativist theory: humans are born with a language acquisition device (LAD) — innate neural machinery that contains a universal grammar common to all languages. Evidence: all children pass through similar stages universally and quickly; critical period (sensitive period) for language learning exists (cases like Genie). This focuses on the innate-mechanism account, not reinforcement-based or social-interaction accounts (separate keywords).",
+          "examples": ["LAD: innate grammar template allows rapid acquisition", "critical period: Genie, isolated until age 13, never mastered syntax", "universal language milestones across cultures (babbling ~6 mo, words ~1 yr, sentences ~2 yr)"]
+        },
+        {
+          "slug": "interactionist_theory_language",
+          "label": "Interactionist theory of language development",
+          "description": "Describe the interactionist account: language develops from the interaction of innate biological predispositions and environmental/social experience — neither pure reinforcement nor pure LAD suffices. Social input (child-directed speech, joint attention, scaffolding) provides the triggering experience for biologically prepared learning. This focuses on the nature-AND-nurture account, not either standalone explanation (separate keywords).",
+          "examples": ["child-directed speech ('motherese') provides a structured input environment", "joint attention: caregiver and child attend to same object → word-object mapping", "biological preparedness + rich social environment → rapid acquisition"]
+        },
+        {
+          "slug": "language_influence_cognition",
+          "label": "Influence of language on cognition (Sapir-Whorf hypothesis)",
+          "description": "Explain the Sapir-Whorf (linguistic relativity) hypothesis: the language one speaks influences how one perceives and categorizes the world. The strong version (linguistic determinism) — language determines thought — is largely rejected; the weak version (linguistic relativity) — language influences certain cognitive processes like color discrimination — has empirical support. This focuses on language→cognition influence, not the reverse or language acquisition (separate keywords).",
+          "examples": ["Russian speakers distinguish light and dark blue faster due to separate lexical terms", "the Pirahã people lack number words beyond 'one-two-many'", "framing effects partly reflect linguistic relativity"]
+        },
+        {
+          "slug": "brocas_area_language",
+          "label": "Broca's area and language production",
+          "description": "Identify Broca's area (left inferior frontal gyrus) as the brain region critical for language production and speech fluency. Damage produces Broca's aphasia: telegraphic, effortful, non-fluent speech with relatively preserved comprehension. This focuses on Broca's area and production, not Wernicke's area and comprehension (a separate keyword).",
+          "examples": ["Broca's aphasia: 'Walk... dog... park' — understands but cannot produce fluent sentences", "Broca's area in left frontal lobe", "motor speech planning — coordinates articulation"]
+        },
+        {
+          "slug": "wernickes_area_language",
+          "label": "Wernicke's area and language comprehension",
+          "description": "Identify Wernicke's area (left posterior superior temporal gyrus) as the brain region critical for language comprehension and semantic processing. Damage produces Wernicke's aphasia: fluent but meaningless speech (word salad) with severely impaired comprehension. The arcuate fasciculus connects Wernicke's and Broca's areas; damage produces conduction aphasia. This focuses on Wernicke's area and comprehension, not Broca's area and production (a separate keyword).",
+          "examples": ["Wernicke's aphasia: patient speaks fluently but says 'The dog ran the house into the color'", "Wernicke's area in left temporal lobe", "conduction aphasia: intact production and comprehension but impaired repetition (damaged arcuate fasciculus)"]
+        }
+      ]
+    }
+  ]
+}

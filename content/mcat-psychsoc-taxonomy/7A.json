@@ -1,0 +1,672 @@
+{
+  "category_code": "7A",
+  "umbrellas": [
+    {
+      "slug": "neurons_neurotransmission",
+      "label": "Neurons & Neurotransmission in Behavior",
+      "description": "Covers the functional anatomy of neurons, the reflex arc, synaptic transmission, and how each major neurotransmitter shapes behavior.",
+      "intro": {
+        "slug": "neurons_neurotransmission_intro",
+        "label": "Neurons & Neurotransmission: Introduction",
+        "description": "Neurons are the fundamental communication units of the nervous system, converting electrical signals into chemical messages at synapses. The structural components — dendrites, soma, axon, and myelin sheath — each serve a distinct role in receiving, integrating, and transmitting information. Understanding how neurotransmitters bind to receptors and alter postsynaptic activity is central to explaining mood, movement, cognition, and behavior.",
+        "examples": ["dendrite vs. axon terminal function", "reflex arc pathway (receptor to effector)", "acetylcholine at the neuromuscular junction"]
+      },
+      "in_depth": [
+        {
+          "slug": "neuron_structure_function",
+          "label": "Neuron Structure and Functional Components",
+          "description": "Identify the major structural parts of a neuron — dendrites, cell body (soma), axon, axon terminals, myelin sheath, and nodes of Ranvier — and explain the functional role of each, including how myelin speeds conduction (saltatory conduction concept) without detailing ionic mechanics. This focuses on the neuron's parts and their jobs, not the step-by-step events at the synapse (synaptic transmission, a separate keyword).",
+          "examples": ["dendrites receive incoming signals", "myelin sheath speeds signal propagation", "Schwann cells (PNS) vs. oligodendrocytes (CNS) make myelin"]
+        },
+        {
+          "slug": "reflex_arc",
+          "label": "The Reflex Arc",
+          "description": "Trace the pathway of a spinal reflex arc from sensory receptor through sensory neuron, interneuron, motor neuron, to effector muscle, and recognize that reflexes bypass conscious cortical processing; distinguish monosynaptic (patellar) from polysynaptic reflexes. This focuses on the reflex circuit as a behavioral pathway, not the internal anatomy of a single neuron (neuron structure, a separate keyword).",
+          "examples": ["patellar (knee-jerk) reflex as monosynaptic example", "withdrawal reflex to pain as polysynaptic", "reflex testing assesses spinal cord integrity"]
+        },
+        {
+          "slug": "synaptic_transmission",
+          "label": "Synaptic Transmission Process",
+          "description": "Describe the sequence at a chemical synapse: action potential arrives, vesicles release neurotransmitter, diffusion across the cleft, receptor binding, postsynaptic potential (EPSP or IPSP), then reuptake or enzymatic degradation, without detailing ion-channel gating. This focuses on the general signaling sequence at any synapse, not the specific behavioral roles of individual neurotransmitters (the per-transmitter keywords).",
+          "examples": ["reuptake of serotonin by the presynaptic terminal", "EPSP vs. IPSP summing at the axon hillock", "SSRIs block serotonin reuptake"]
+        },
+        {
+          "slug": "dopamine_behavior",
+          "label": "Dopamine and Behavior",
+          "description": "Map dopamine to its behavioral roles — reward, motivation, reinforcement learning, and motor control — and the directional dysregulation linked to it: too little (nigrostriatal) produces Parkinson's motor symptoms, while excess (mesolimbic) is tied to schizophrenia's positive symptoms and addiction. This focuses on dopamine specifically, not serotonin or the other transmitters (separate keywords).",
+          "examples": ["low nigrostriatal dopamine causes Parkinson's tremor", "excess mesolimbic dopamine and schizophrenia positive symptoms", "cocaine floods the reward pathway with dopamine"]
+        },
+        {
+          "slug": "serotonin_behavior",
+          "label": "Serotonin and Behavior",
+          "description": "Map serotonin to its behavioral roles — mood, sleep, appetite, and impulse control — and the directional dysregulation linked to it: low serotonin activity is associated with depression, anxiety, and impulsive aggression, which is why SSRIs raise synaptic serotonin. This focuses on serotonin specifically, not dopamine or norepinephrine (separate keywords).",
+          "examples": ["low serotonin linked to depression and anxiety", "SSRIs raise synaptic serotonin to lift mood", "serotonin helps regulate sleep and appetite"]
+        },
+        {
+          "slug": "norepinephrine_behavior",
+          "label": "Norepinephrine and Behavior",
+          "description": "Map norepinephrine (noradrenaline) to its behavioral roles — alertness, arousal, attention, and the fight-or-flight stress response — and the directional dysregulation linked to it: too little is associated with depressed mood and low energy, while excess is associated with anxiety and hypervigilance. This focuses on norepinephrine specifically, not serotonin or epinephrine in the endocrine system (separate keywords).",
+          "examples": ["norepinephrine drives alertness and arousal", "low norepinephrine linked to depression's low energy", "surges during fight-or-flight increase vigilance"]
+        },
+        {
+          "slug": "acetylcholine_behavior",
+          "label": "Acetylcholine and Behavior",
+          "description": "Map acetylcholine to its behavioral roles — voluntary muscle movement at the neuromuscular junction, attention, arousal, and especially memory and learning — and the directional dysregulation linked to it: loss of cholinergic neurons (acetylcholine deficit) is central to the memory impairment of Alzheimer's disease. This focuses on acetylcholine specifically, not GABA or glutamate (separate keywords).",
+          "examples": ["acetylcholine triggers skeletal muscle contraction", "cholinergic loss and Alzheimer's memory deficits", "supports attention and learning"]
+        },
+        {
+          "slug": "gaba_behavior",
+          "label": "GABA and Behavior",
+          "description": "Map GABA to its behavioral role as the brain's main inhibitory neurotransmitter, reducing neural excitability and dampening anxiety, and the directional dysregulation linked to it: too little GABA activity is associated with anxiety and seizures, which is why anti-anxiety drugs and alcohol enhance GABA. This focuses on GABA (inhibition) specifically, not glutamate (excitation) (a separate keyword).",
+          "examples": ["GABA is the chief inhibitory transmitter", "low GABA activity linked to anxiety and seizures", "benzodiazepines and alcohol enhance GABA"]
+        },
+        {
+          "slug": "glutamate_behavior",
+          "label": "Glutamate and Behavior",
+          "description": "Map glutamate to its behavioral role as the brain's main excitatory neurotransmitter, essential for learning and memory (long-term potentiation), and the directional dysregulation linked to it: excess glutamate causes excitotoxicity (neuron damage), while NMDA-receptor hypofunction is implicated in schizophrenia. This focuses on glutamate (excitation) specifically, not GABA (inhibition) (a separate keyword).",
+          "examples": ["glutamate is the chief excitatory transmitter", "central to learning via long-term potentiation", "excess glutamate causes excitotoxic damage"]
+        },
+        {
+          "slug": "endorphins_behavior",
+          "label": "Endorphins and Behavior",
+          "description": "Map endorphins to their behavioral role as the body's natural opioids that reduce the perception of pain and produce pleasure or euphoria (e.g., 'runner's high'), and the directional dysregulation linked to them: opioid drugs mimic endorphins, and their misuse can downregulate the natural system. This focuses on endorphins (pain relief and reward) specifically, not dopamine's reward signaling (a separate keyword).",
+          "examples": ["endorphins are natural painkillers", "runner's high from endorphin release", "opioid drugs mimic endorphins"]
+        }
+      ]
+    },
+    {
+      "slug": "peripheral_autonomic_ns",
+      "label": "Peripheral & Autonomic Nervous System",
+      "description": "Covers the organization of the PNS into somatic and autonomic divisions, and the sympathetic vs. parasympathetic branches and their behavioral effects.",
+      "intro": {
+        "slug": "peripheral_autonomic_ns_intro",
+        "label": "Peripheral & Autonomic Nervous System: Introduction",
+        "description": "The peripheral nervous system (PNS) links the brain and spinal cord to the body's muscles, sensory receptors, and organs. It is divided into the somatic nervous system (voluntary muscle control and conscious sensation) and the autonomic nervous system (involuntary regulation of internal organs). The autonomic system's two branches — sympathetic and parasympathetic — work in opposition to prepare the body for action or rest, directly influencing emotional and stress-related behaviors.",
+        "examples": ["somatic division controls skeletal muscle movement", "sympathetic fight-or-flight raises heart rate", "parasympathetic rest-and-digest lowers heart rate"]
+      },
+      "in_depth": [
+        {
+          "slug": "somatic_vs_autonomic",
+          "label": "Somatic vs. Autonomic Division",
+          "description": "Distinguish the somatic nervous system (voluntary control of skeletal muscle; carries conscious sensation) from the autonomic nervous system (involuntary control of smooth muscle, cardiac muscle, and glands), noting the somatic uses a single motor neuron to the effector while the autonomic uses a two-neuron chain. This focuses on the somatic vs. autonomic split, not the sympathetic vs. parasympathetic split within the autonomic system (a separate keyword).",
+          "examples": ["lifting a cup is somatic", "heart speeding during stress is autonomic", "sweating is autonomic despite feeling voluntary"]
+        },
+        {
+          "slug": "sympathetic_parasympathetic",
+          "label": "Sympathetic vs. Parasympathetic Branches",
+          "description": "Compare the sympathetic (fight-or-flight) and parasympathetic (rest-and-digest) divisions by their opposing effects on heart rate, digestion, pupil size, and glandular secretion, noting dual innervation and that the sympathetic uses norepinephrine while the parasympathetic uses acetylcholine at effectors. This focuses on the two autonomic branches, not the broader somatic vs. autonomic distinction (a separate keyword).",
+          "examples": ["sympathetic: faster heart, dilated pupils, slowed digestion", "parasympathetic: slower heart, constricted pupils, active digestion", "beta-blockers blunt sympathetic arousal"]
+        },
+        {
+          "slug": "enteric_nervous_system",
+          "label": "Enteric Nervous System Overview",
+          "description": "Recognize the enteric nervous system as the intrinsic neural network of the gastrointestinal tract (the 'second brain') that can operate independently of the CNS but is modulated by the autonomic system, and note its relevance to the gut-brain axis and stress-related GI symptoms. This focuses on the gut's intrinsic network, not the sympathetic/parasympathetic branches that modulate it (a separate keyword).",
+          "examples": ["stress worsening IBS via the gut-brain axis", "enteric neurons drive peristalsis without CNS input", "most serotonin is produced in the gut"]
+        }
+      ]
+    },
+    {
+      "slug": "brain_structure_behavior",
+      "label": "Brain Structure & Behavior",
+      "description": "Maps major brain regions — forebrain, midbrain, hindbrain, the functional limbic network, lateralization, and the spinal cord — to their behavioral and cognitive functions.",
+      "intro": {
+        "slug": "brain_structure_behavior_intro",
+        "label": "Brain Structure & Behavior: Introduction",
+        "description": "The brain is organized into three broad anatomical divisions — forebrain, midbrain, and hindbrain — each encompassing structures with distinct functional roles. Cutting across these divisions, the limbic system is a functional network for emotion and memory. Knowing which structure or network produces which behavioral output is a high-yield MCAT skill.",
+        "examples": ["hippocampus damage causes anterograde amnesia (H.M.)", "amygdala drives fear conditioning", "cerebellum damage causes ataxia"]
+      },
+      "in_depth": [
+        {
+          "slug": "forebrain_structures",
+          "label": "Forebrain: Anatomical Division and Major Structures",
+          "description": "Identify the forebrain as the largest anatomical brain division and name its major structures — the cerebral cortex (with its four lobes), the thalamus (sensory relay), the hypothalamus (homeostatic control), and the basal ganglia (movement) — as the gross-anatomy map of the highest brain region. This focuses on the forebrain as an anatomical division and its component structures, not on the cross-cutting emotion/memory network those structures partly form (the limbic system, a separate keyword).",
+          "examples": ["thalamus relays sensory input to cortex (except smell)", "hypothalamus controls hunger, thirst, and temperature", "basal ganglia coordinate voluntary movement"]
+        },
+        {
+          "slug": "cortical_lobes_function",
+          "label": "Cortical Lobes and Their Functions",
+          "description": "Map each cerebral lobe to its primary function: frontal (executive function, motor control, Broca's area), parietal (somatosensory processing, spatial awareness), temporal (auditory processing, Wernicke's area), and occipital (visual processing), and locate the primary motor and somatosensory cortices. This focuses on the four cortical lobes, not the left/right specialization across hemispheres (lateralization, a separate keyword).",
+          "examples": ["frontal lobe damage changed Phineas Gage's personality", "parietal lobe holds the somatosensory homunculus", "occipital damage causes cortical blindness"]
+        },
+        {
+          "slug": "midbrain_structures",
+          "label": "Midbrain: Relay and Reward Circuits",
+          "description": "Identify the midbrain's key structures — superior and inferior colliculi (visual and auditory reflexes), substantia nigra (dopamine for motor control), and ventral tegmental area (mesolimbic reward) — and note the substantia nigra's relevance to Parkinson's disease. This focuses on the midbrain division, not the forebrain or hindbrain divisions (separate keywords).",
+          "examples": ["superior colliculus orients gaze to a sudden stimulus", "VTA-to-nucleus-accumbens dopamine drives reward", "substantia nigra loss causes Parkinson's"]
+        },
+        {
+          "slug": "hindbrain_structures",
+          "label": "Hindbrain: Vital Functions and Coordination",
+          "description": "Identify the hindbrain components — medulla oblongata (heart rate, respiration, reflexes), pons (sleep, arousal, signal relay), and cerebellum (motor coordination, balance, procedural learning) — and their behavioral significance. This focuses on the hindbrain division, not the midbrain or forebrain divisions (separate keywords).",
+          "examples": ["medulla controls breathing and heart rate", "pons involved in sleep and arousal", "cerebellar damage causes ataxia"]
+        },
+        {
+          "slug": "limbic_system",
+          "label": "Limbic System: Functional Emotion and Memory Network",
+          "description": "Describe the limbic system as a functional network — not a single anatomical region — that links structures (chiefly the amygdala for emotion/fear, the hippocampus for memory formation, and the hypothalamus for drive states) to produce emotion, motivation, and memory, bridging conscious thought with autonomic responses. This focuses on the limbic system as an emotion/memory network, not on the forebrain as an anatomical division that houses these structures (a separate keyword).",
+          "examples": ["amygdala drives fear and emotional memory", "hippocampus forms new explicit memories", "limbic activity links feelings to autonomic responses"]
+        },
+        {
+          "slug": "lateralization_hemispheres",
+          "label": "Lateralization of Cortical Functions",
+          "description": "Recognize that the two hemispheres specialize: the left typically handles language (Broca's and Wernicke's areas) and analytical/sequential processing, while the right handles visuospatial, holistic, and face-recognition tasks, with the corpus callosum connecting them and split-brain studies revealing their independence. This focuses on left/right hemisphere specialization, not the lobe-by-lobe functional map (cortical lobes, a separate keyword).",
+          "examples": ["Broca's aphasia: non-fluent, halting speech", "Wernicke's aphasia: fluent but meaningless speech", "split-brain patients cannot name left-field objects"]
+        },
+        {
+          "slug": "spinal_cord_function",
+          "label": "Spinal Cord: Structure and Function",
+          "description": "Describe the spinal cord as the conduit for ascending sensory and descending motor signals, organized into cervical, thoracic, lumbar, and sacral segments with white matter (tracts) and gray matter (cell bodies), and note how injury level predicts deficits. This focuses on the spinal cord as a relay structure, not the brain divisions above it (separate keywords).",
+          "examples": ["cervical injury causes quadriplegia; lumbar, paraplegia", "dorsal roots are sensory; ventral roots are motor", "gray matter forms an H-shape in cross-section"]
+        }
+      ]
+    },
+    {
+      "slug": "studying_the_brain",
+      "label": "Studying the Brain",
+      "description": "Covers the major research methods used to investigate brain structure and function, including imaging, recording, and lesion/case-study approaches.",
+      "intro": {
+        "slug": "studying_the_brain_intro",
+        "label": "Studying the Brain: Introduction",
+        "description": "Neuroscientists employ a range of tools to link brain activity to behavior, each offering different trade-offs in spatial and temporal resolution. Non-invasive imaging techniques such as fMRI, PET, and EEG allow researchers to observe living brains, while lesion studies and famous clinical cases connect specific brain damage to behavioral deficits. Knowing the strengths and limitations of each method is an MCAT-tested skill.",
+        "examples": ["fMRI: high spatial, low temporal resolution", "EEG: high temporal, low spatial resolution", "Phineas Gage case linked frontal damage to personality"]
+      },
+      "in_depth": [
+        {
+          "slug": "eeg_brain_recording",
+          "label": "EEG: Electroencephalography",
+          "description": "Recognize EEG as a method that records scalp electrical activity with high temporal but poor spatial resolution, used for sleep-stage research, epilepsy diagnosis, and event-related potentials. This focuses on EEG (electrical recording), not the blood-flow imaging methods fMRI and PET (a separate keyword).",
+          "examples": ["alpha waves in relaxed wakefulness", "delta waves in deep sleep", "P300 ERP and cognitive processing"]
+        },
+        {
+          "slug": "fmri_pet_imaging",
+          "label": "fMRI and PET Imaging",
+          "description": "Distinguish fMRI (BOLD blood-oxygenation signal, high spatial resolution, no radiation) from PET (radiotracer uptake showing metabolic/receptor activity, lower spatial resolution, uses radiation), both used to find regions active during tasks. This focuses on functional blood-flow imaging, not scalp electrical recording (EEG, a separate keyword).",
+          "examples": ["fMRI localizes language areas during tasks", "PET dopamine ligands study Parkinson's", "fMRI shows correlation, not causation"]
+        },
+        {
+          "slug": "lesion_case_studies",
+          "label": "Lesion Studies and Clinical Case Studies",
+          "description": "Explain how brain damage (stroke, trauma, or experimental lesions) lets researchers infer a region's function from what is lost, and recognize key cases (Phineas Gage, H.M., split-brain patients). This focuses on inferring function from damage, not on non-damaging imaging or recording methods (separate keywords).",
+          "examples": ["H.M.: hippocampal loss caused anterograde amnesia", "Phineas Gage: frontal damage changed decision-making", "split-brain patients show hemispheric independence"]
+        },
+        {
+          "slug": "other_brain_methods",
+          "label": "Other Brain Research Methods",
+          "description": "Recognize additional tools — TMS (temporarily disrupts/stimulates a cortical area to test causality), CT and structural MRI (anatomy via X-ray or magnetic fields), and single-unit recording — and note that TMS is the only non-invasive method that can establish causal brain-behavior links in humans. This focuses on TMS and structural/single-cell methods, not the functional fMRI/PET or EEG techniques (separate keywords).",
+          "examples": ["TMS to motor cortex moves the contralateral hand", "CT scan locates a stroke or tumor", "structural MRI shows anatomy without radiation"]
+        }
+      ]
+    },
+    {
+      "slug": "endocrine_influences_behavior",
+      "label": "Endocrine Influences on Behavior",
+      "description": "Covers the major endocrine glands and hormones and how they modulate stress responses, mood, development, and motivated behaviors.",
+      "intro": {
+        "slug": "endocrine_influences_behavior_intro",
+        "label": "Endocrine Influences on Behavior: Introduction",
+        "description": "The endocrine system communicates via hormones released into the bloodstream, acting more slowly but more persistently than neural signals. Key glands — including the pituitary, adrenal glands, thyroid, and gonads — regulate stress, growth, metabolism, and reproductive behavior. Hormonal imbalances are directly linked to psychological symptoms, making the endocrine system highly relevant to the MCAT Psych/Soc section.",
+        "examples": ["cortisol from the adrenal cortex impairs hippocampal memory", "low thyroid hormone mimics depression", "testosterone linked to dominance and aggression"]
+      },
+      "in_depth": [
+        {
+          "slug": "endocrine_glands_overview",
+          "label": "Components of the Endocrine System (Glands Overview)",
+          "description": "Name the major behavior-relevant endocrine glands and their broad roles: pituitary ('master gland' directing other glands), pineal (melatonin and circadian/sleep timing), thyroid (metabolic rate, energy, mood), adrenal (stress hormones), pancreas (insulin/glucagon and blood-glucose regulation that influences hunger and alertness), and gonads (sex hormones). This focuses on the roster of glands and what each broadly does, not the detailed pathway of any one axis (the hypothalamus-pituitary axis, a separate keyword).",
+          "examples": ["pituitary directs the thyroid, adrenals, and gonads", "pineal gland releases melatonin for sleep timing", "pancreas regulates blood glucose affecting hunger"]
+        },
+        {
+          "slug": "hypothalamus_pituitary_axis",
+          "label": "Hypothalamus-Pituitary Axis",
+          "description": "Describe the hypothalamus as the link between nervous and endocrine systems via the pituitary: it releases hormones controlling anterior pituitary output (e.g., CRH to ACTH to cortisol), while the posterior pituitary releases ADH and oxytocin directly, with the HPA axis as the core stress-response pathway. This focuses on the hypothalamus-pituitary control pathway, not the simple roster of all endocrine glands (the glands overview, a separate keyword).",
+          "examples": ["HPA axis: stress to CRH to ACTH to cortisol", "oxytocin from posterior pituitary aids bonding", "ADH from posterior pituitary regulates water"]
+        },
+        {
+          "slug": "adrenal_glands_behavior",
+          "label": "Adrenal Glands and Stress Hormones",
+          "description": "Distinguish the adrenal cortex (cortisol, aldosterone — slow, sustained stress response via the HPA axis) from the adrenal medulla (epinephrine, norepinephrine — rapid fight-or-flight via the sympathetic system), and note their behavioral effects on arousal, immunity, and memory. This focuses on the adrenal glands' stress hormones, not the thyroid or gonadal hormones (separate keywords).",
+          "examples": ["adrenaline surge during a scare boosts alertness", "chronic cortisol shrinks the hippocampus", "adrenal cortex vs. medulla timing of response"]
+        },
+        {
+          "slug": "thyroid_behavior",
+          "label": "Thyroid Hormones and Behavioral Effects",
+          "description": "Recognize that thyroid hormones (T3, T4) set metabolic rate and affect mood, energy, and cognition, with hypothyroidism presenting depression-like symptoms and hyperthyroidism anxiety-like symptoms. This focuses on thyroid hormones, not the adrenal stress hormones or sex hormones (separate keywords).",
+          "examples": ["hypothyroidism mimics depression (fatigue, low mood)", "hyperthyroidism mimics anxiety (restlessness)", "thyroid sets overall metabolic rate"]
+        },
+        {
+          "slug": "sex_hormones_behavior",
+          "label": "Sex Hormones and Behavior",
+          "description": "Recognize the roles of estrogen, progesterone, and testosterone in modulating mood, aggression, sexual behavior, and cognition, distinguishing organizational effects (prenatal brain differentiation) from activational effects (adult behavioral modulation). This focuses on gonadal sex hormones, not the adrenal stress hormones or thyroid hormones (separate keywords).",
+          "examples": ["testosterone linked to competitive aggression", "estrogen shifts across the menstrual cycle affect mood", "organizational vs. activational hormone effects"]
+        }
+      ]
+    },
+    {
+      "slug": "behavioral_genetics",
+      "label": "Behavioral Genetics",
+      "description": "Examines how genes, heredity, and gene-environment interactions shape temperament, traits, and behavior, including population-level and regulatory-gene influences.",
+      "intro": {
+        "slug": "behavioral_genetics_intro",
+        "label": "Behavioral Genetics: Introduction",
+        "description": "Behavioral genetics investigates the degree to which genetic differences among individuals account for variation in behavior, personality, and psychological traits. Twin studies, adoption studies, and molecular genetics allow researchers to estimate heritability while also revealing the powerful role of the environment. The nature-nurture debate has given way to understanding that genes and environment interact continuously throughout development.",
+        "examples": ["identical twins more similar in IQ than fraternal twins", "adoption studies separate genes from environment", "heritable yet environmentally shaped traits"]
+      },
+      "in_depth": [
+        {
+          "slug": "heritability_concept",
+          "label": "Heritability: Concept and Measurement",
+          "description": "Define heritability as the proportion of variance in a trait within a population attributable to genetic variation, noting it is a population (not individual) statistic that shifts with environment and does NOT mean a trait is fixed. This focuses on the heritability concept, not the specific twin/adoption designs used to estimate it (a separate keyword).",
+          "examples": ["height heritability is lower in malnourished populations", "IQ heritability rises from childhood to adulthood", "high heritability still allows effective treatment"]
+        },
+        {
+          "slug": "twin_adoption_studies",
+          "label": "Twin and Adoption Studies",
+          "description": "Explain how comparing monozygotic vs. dizygotic twins isolates genetic from shared-environmental influences and how adoption studies separate genetic from rearing-environment effects, with MZ twins reared apart as the gold standard. This focuses on the research designs, not the heritability statistic they produce (a separate keyword).",
+          "examples": ["MZ twins reared apart still highly similar", "adoptees resemble biological over adoptive parents", "DZ twins share about 50% of genes"]
+        },
+        {
+          "slug": "genes_temperament_heredity",
+          "label": "Genes, Temperament, and Heredity",
+          "description": "Recognize temperament as the innate, biologically based style of responding (easy, difficult, slow-to-warm-up) that is observable in infancy and has heritable components predisposing later personality and psychopathology. This focuses on heritable temperament, not the broader gene-environment interaction processes (a separate keyword).",
+          "examples": ["inhibited infant temperament and amygdala reactivity", "difficult temperament predicts later behavior problems", "Thomas and Chess temperament types"]
+        },
+        {
+          "slug": "nature_nurture_interaction",
+          "label": "Heredity-Environment Interaction and Epigenetics",
+          "description": "Explain gene-environment interaction (the same genotype yields different outcomes in different environments), gene-environment correlation, and epigenetics (environment alters gene expression without changing DNA sequence), noting epigenetic changes can be reversible. This focuses on how heredity and environment combine, not on the heritability statistic itself (a separate keyword).",
+          "examples": ["PKU causes disability only without dietary control", "maternal stress alters offspring cortisol via methylation", "enriched environments improve learning in identical rats"]
+        },
+        {
+          "slug": "adaptive_value_behaviors",
+          "label": "Adaptive Value of Traits and Behaviors",
+          "description": "Apply evolutionary logic to explain why certain behaviors persist because they enhanced survival or reproduction, using concepts like inclusive fitness, kin selection, and evolved fear preparedness. This focuses on why traits are adaptive (selection), not on the within-population genetic variation those traits show (a separate keyword).",
+          "examples": ["evolved preparedness for fear of snakes", "kin selection explains altruism toward relatives", "universal facial expressions as evolved signals"]
+        },
+        {
+          "slug": "genotype_behavioral_variation",
+          "label": "Genetically Based Behavioral Variation in Populations",
+          "description": "Recognize that genetic variation within natural populations produces variation in behavioral phenotypes on which selection can act, using prairie-vole monogamy (linked to vasopressin receptor differences from promiscuous meadow voles) as the canonical example. This focuses on population-level behavioral variation tied to genes, not the evolutionary adaptive-value reasoning behind a trait (a separate keyword).",
+          "examples": ["prairie voles monogamous, meadow voles not", "behavioral phenotypes vary genetically in a population", "selection can act on behavior as on morphology"]
+        },
+        {
+          "slug": "regulatory_genes_behavior",
+          "label": "Regulatory Genes and Behavior",
+          "description": "Recognize that regulatory genes shape behavior by altering when, where, and how much other genes are expressed rather than by changing protein structure, using the FoxP2 gene's role in speech and language as the single illustrative example. This focuses on regulation of gene expression affecting behavior, not on population-level variation in behavioral phenotypes (a separate keyword).",
+          "examples": ["regulatory genes control other genes' expression", "FoxP2 and human speech/language", "changing expression, not protein sequence"]
+        }
+      ]
+    },
+    {
+      "slug": "physiological_development",
+      "label": "Human Physiological Development",
+      "description": "Covers prenatal development, motor milestone progression, and the physiological and behavioral changes of adolescence.",
+      "intro": {
+        "slug": "physiological_development_intro",
+        "label": "Human Physiological Development: Introduction",
+        "description": "Human development unfolds through a predictable sequence of physiological changes from conception through adolescence, each stage shaped by genes and environment. Prenatal development is organized into critical periods most vulnerable to teratogens; motor development follows cephalocaudal and proximodistal sequences; and adolescence brings hormonal, brain, and identity changes that shape behavior into adulthood.",
+        "examples": ["teratogen exposure during organogenesis causes defects", "motor milestones in a predictable order", "prefrontal maturation into the mid-20s"]
+      },
+      "in_depth": [
+        {
+          "slug": "prenatal_development",
+          "label": "Prenatal Development: Stages and Teratogens",
+          "description": "Identify the germinal, embryonic (greatest teratogen vulnerability during organogenesis), and fetal stages, and recognize common teratogens (alcohol, drugs, infections, radiation) and their stage-specific effects. This focuses on prenatal stages and teratogens, not the postnatal motor milestones of infancy (a separate keyword).",
+          "examples": ["fetal alcohol syndrome from prenatal alcohol", "rubella in the first trimester causes defects", "folic acid deficiency and neural tube defects"]
+        },
+        {
+          "slug": "motor_development_milestones",
+          "label": "Motor Development and Milestones",
+          "description": "Recognize the cephalocaudal (head-to-toe) and proximodistal (center-to-periphery) principles and the approximate ages of motor milestones (head control, sitting, crawling, walking, pincer grasp). This focuses on infant motor development, not the prenatal stages that precede birth (a separate keyword).",
+          "examples": ["cephalocaudal: head control before walking", "proximodistal: shoulder control before fingers", "walking around 12 months"]
+        },
+        {
+          "slug": "adolescent_development",
+          "label": "Developmental Changes in Adolescence",
+          "description": "Describe adolescence's key changes: puberty onset (GnRH to LH/FSH to sex hormones), primary and secondary sex characteristics, the growth spurt, and ongoing prefrontal maturation, noting that earlier limbic maturation explains adolescent risk-taking. This focuses on adolescent physiological change, not the infant motor milestones (a separate keyword).",
+          "examples": ["GnRH pulse initiates puberty", "menarche and spermarche as milestones", "mature limbic plus immature PFC drives impulsivity"]
+        }
+      ]
+    },
+    {
+      "slug": "personality_theories",
+      "label": "Personality Theories",
+      "description": "Surveys the major theoretical perspectives on personality — psychoanalytic, humanistic, trait, social cognitive, biological, and behaviorist — and the situational critique.",
+      "intro": {
+        "slug": "personality_theories_intro",
+        "label": "Personality Theories: Introduction",
+        "description": "Personality refers to the enduring patterns of thought, emotion, and behavior that distinguish individuals. Six major theoretical traditions — psychoanalytic, humanistic, trait, social cognitive, biological, and behaviorist — each emphasize different causes and mechanisms of personality. A seventh position, the situationist approach, challenges the assumption that internal traits alone drive behavior.",
+        "examples": ["Freud's id/ego/superego structure", "Big Five (OCEAN) trait model", "Bandura's self-efficacy"]
+      },
+      "in_depth": [
+        {
+          "slug": "freud_structural_model",
+          "label": "Freud's Structural Model (Id, Ego, Superego)",
+          "description": "Describe Freud's structural model of personality: the id (unconscious, pleasure principle, instinctual drives), the ego (reality principle, mediating between id and reality), and the superego (internalized moral standards and ideals), and how their conflict shapes behavior. This focuses on the three-part structure of personality, not the defense mechanisms the ego uses to manage conflict (a separate keyword). Freud's psychosexual stages are a separate keyword in 8A.",
+          "examples": ["id seeks immediate gratification", "ego balances desire against reality", "superego enforces conscience and ideals"]
+        },
+        {
+          "slug": "ego_defense_mechanisms",
+          "label": "Ego Defense Mechanisms",
+          "description": "Identify the ego defense mechanisms used to reduce anxiety from internal conflict — repression, denial, projection, rationalization, reaction formation, displacement, regression, and sublimation — and recognize each from a scenario. This focuses on the unconscious defenses, not the id/ego/superego structure they operate within (a separate keyword).",
+          "examples": ["projection: attributing one's own urges to others", "displacement: redirecting anger to a safe target", "sublimation: channeling impulses into productive work"]
+        },
+        {
+          "slug": "humanistic_personality",
+          "label": "Humanistic Perspective on Personality",
+          "description": "Explain the humanistic view (Maslow, Rogers) that people are growth-oriented and develop personality by striving toward self-actualization, including Rogers's self-concept, unconditional positive regard, and real-vs-ideal-self congruence. This focuses on the humanistic perspective, not the psychoanalytic structural model (a separate keyword).",
+          "examples": ["unconditional positive regard fosters a healthy self", "self-actualization as reaching one's potential", "incongruence between real and ideal self breeds anxiety"]
+        },
+        {
+          "slug": "trait_personality",
+          "label": "Trait Perspective on Personality",
+          "description": "Describe the trait approach as identifying stable, measurable dimensions that predict behavior across situations, centered on the Big Five (OCEAN) and Eysenck's earlier model. This focuses on describing personality via traits, not on the situationist critique of trait stability (a separate keyword).",
+          "examples": ["conscientiousness predicts achievement and health", "neuroticism predicts anxiety and depression risk", "Big Five (OCEAN) as the dominant model"]
+        },
+        {
+          "slug": "social_cognitive_personality",
+          "label": "Social Cognitive Perspective on Personality",
+          "description": "Explain the social cognitive approach (Bandura, Mischel) emphasizing reciprocal determinism among personal factors, behavior, and environment, with self-efficacy as a key determinant of effort and persistence. This focuses on the social cognitive perspective, not the behaviorist view that denies internal cognitive variables (a separate keyword).",
+          "examples": ["reciprocal determinism among person, behavior, environment", "high self-efficacy increases persistence", "if-then behavioral signatures (Mischel)"]
+        },
+        {
+          "slug": "biological_personality",
+          "label": "Biological Perspective on Personality",
+          "description": "Recognize the biological approach linking stable traits to heritable differences in nervous-system functioning, including Eysenck's arousal theory and twin-study heritability of the Big Five. This focuses on biological/genetic bases of personality, not the trait taxonomy itself (a separate keyword).",
+          "examples": ["Big Five traits are moderately heritable", "Eysenck: introverts have higher baseline arousal", "temperament rooted in nervous-system differences"]
+        },
+        {
+          "slug": "behaviorist_personality",
+          "label": "Behaviorist Perspective on Personality",
+          "description": "Describe the behaviorist view that personality is a learned repertoire shaped by reinforcement and conditioning, with no need for internal traits (Skinner, Watson). This focuses on the behaviorist account, not the social cognitive perspective that reintroduces cognition (a separate keyword).",
+          "examples": ["consistent behavior reflects consistent reinforcement", "Watson: environment determines personality", "phobias as conditioned responses, not traits"]
+        },
+        {
+          "slug": "situational_approach_personality",
+          "label": "Situational Approach and Person-Situation Debate",
+          "description": "Explain the situationist critique (Mischel) that situations often outweigh stable traits in driving behavior, and the interactionist resolution that person and situation jointly predict behavior. This focuses on the person-situation debate, not the trait perspective it critiques (a separate keyword).",
+          "examples": ["an honest person may cheat under extreme pressure", "Milgram: situations override character", "interactionism: traits matter most in weak situations"]
+        }
+      ]
+    },
+    {
+      "slug": "psych_disorders_concepts",
+      "label": "Psychological Disorders — Concepts",
+      "description": "Covers foundational concepts for understanding psychological disorders: definition, classification systems, biomedical vs. biopsychosocial models, and epidemiological measures.",
+      "intro": {
+        "slug": "psych_disorders_concepts_intro",
+        "label": "Psychological Disorders — Concepts: Introduction",
+        "description": "Before cataloguing specific disorders, the MCAT expects you to understand how psychological disorders are defined (distress, dysfunction, deviance, danger), classified (DSM-5 categorical system), and explained (biomedical vs. biopsychosocial models). Epidemiological concepts — prevalence, incidence, and comorbidity — provide the population-level lens. These foundational concepts frame every clinical vignette on the exam.",
+        "examples": ["the '4 Ds': deviance, distress, dysfunction, danger", "DSM-5 organizes disorders by symptom cluster", "biopsychosocial model: vulnerability plus stress"]
+      },
+      "in_depth": [
+        {
+          "slug": "biomedical_vs_biopsychosocial",
+          "label": "Biomedical vs. Biopsychosocial Models",
+          "description": "Contrast the biomedical model (disorders as biological dysfunction treatable by medication) with the biopsychosocial model (disorders from interacting biological, psychological, and social factors), and note the diathesis-stress framework. This focuses on explanatory models of disorder, not the DSM system that classifies them (a separate keyword).",
+          "examples": ["biomedical: depression as serotonin deficiency", "biopsychosocial: vulnerability plus distortions plus isolation", "diathesis-stress: vulnerability plus stressor"]
+        },
+        {
+          "slug": "dsm_classification",
+          "label": "DSM Classification System",
+          "description": "Describe the DSM-5 as the categorical classification system grouping disorders by symptom pattern with specified criteria, noting it does not specify etiology and contrasts with the ICD. This focuses on the classification system, not the explanatory models of causation (a separate keyword).",
+          "examples": ["DSM criteria specify symptom number and duration", "DSM vs. WHO's ICD system", "categorical vs. dimensional classification"]
+        },
+        {
+          "slug": "prevalence_incidence_disorders",
+          "label": "Rates of Psychological Disorders: Prevalence and Incidence",
+          "description": "Distinguish prevalence (proportion with a disorder at a time) from incidence (rate of new cases), and recognize that anxiety and depressive disorders are most prevalent and comorbidity is common. This focuses on epidemiological rate measures, not how disorders are classified or explained (separate keywords).",
+          "examples": ["lifetime vs. point prevalence", "incidence counts new cases per period", "comorbidity of depression and anxiety"]
+        }
+      ]
+    },
+    {
+      "slug": "types_psych_disorders",
+      "label": "Types of Psychological Disorders",
+      "description": "Surveys the major categories of psychological disorders tested on the MCAT: anxiety, OCD, trauma-related, somatic, bipolar, depressive, schizophrenia, dissociative, and personality disorders.",
+      "intro": {
+        "slug": "types_psych_disorders_intro",
+        "label": "Types of Psychological Disorders: Introduction",
+        "description": "The MCAT requires familiarity with the defining features, key examples, and distinguishing criteria for each major class of psychological disorder. For each type, focus on the hallmark symptoms, the DSM duration/severity thresholds, and the contrast with closely related disorders. Clinical vignettes often test your ability to distinguish between disorders that share some symptoms.",
+        "examples": ["GAD vs. panic disorder", "MDD vs. bipolar II", "OCD obsessions vs. GAD worry"]
+      },
+      "in_depth": [
+        {
+          "slug": "anxiety_disorders",
+          "label": "Anxiety Disorders",
+          "description": "Recognize the major anxiety disorders — generalized anxiety disorder, panic disorder, specific phobia, social anxiety disorder, and agoraphobia — and their distinguishing features as the most prevalent disorder class. This focuses on fear/worry-based anxiety disorders, not OCD's obsessions and compulsions (a separate keyword).",
+          "examples": ["GAD: diffuse worry across many domains", "panic disorder: unexpected panic attacks", "specific phobia: focused fear and avoidance"]
+        },
+        {
+          "slug": "ocd_spectrum",
+          "label": "Obsessive-Compulsive and Related Disorders",
+          "description": "Describe OCD as obsessions (intrusive, ego-dystonic thoughts) plus compulsions (repetitive anxiety-reducing behaviors), and recognize related disorders (body dysmorphic, hoarding, trichotillomania). This focuses on obsessive-compulsive disorders, reclassified out of anxiety in DSM-5, not generalized anxiety (a separate keyword).",
+          "examples": ["contamination obsession then hand-washing compulsion", "ego-dystonic obsessions recognized as irrational", "body dysmorphic preoccupation with appearance"]
+        },
+        {
+          "slug": "trauma_stressor_disorders",
+          "label": "Trauma- and Stressor-Related Disorders",
+          "description": "Distinguish PTSD (over 1 month after exposure), acute stress disorder (3 days to 1 month), and adjustment disorder (distress to an identifiable stressor) by their triggers and durations. This focuses on trauma- and stressor-triggered disorders, not the spontaneous worry of anxiety disorders (a separate keyword).",
+          "examples": ["PTSD: flashbacks, avoidance, hyperarousal", "acute stress disorder resolves within a month", "adjustment disorder follows a life stressor"]
+        },
+        {
+          "slug": "somatic_disorders",
+          "label": "Somatic Symptom and Related Disorders",
+          "description": "Recognize somatic symptom disorder, illness anxiety disorder, conversion (functional neurological) disorder, and factitious disorder, distinguishing them from malingering (feigning for external gain). This focuses on disorders centered on bodily symptoms or health worry, not dissociative disruptions of identity/memory (a separate keyword).",
+          "examples": ["somatic symptom disorder: excessive focus on real symptoms", "conversion disorder: neurological symptoms without lesion", "illness anxiety: health worry with few symptoms"]
+        },
+        {
+          "slug": "bipolar_disorders",
+          "label": "Bipolar and Related Disorders",
+          "description": "Distinguish bipolar I (full mania), bipolar II (hypomania plus major depression), and cyclothymia by the severity and duration of mood elevation. This focuses on disorders with manic/hypomanic poles, not unipolar depressive disorders (a separate keyword).",
+          "examples": ["bipolar I: full manic episode", "bipolar II: hypomania plus depression", "cyclothymia: chronic milder mood swings"]
+        },
+        {
+          "slug": "depressive_disorders",
+          "label": "Depressive Disorders",
+          "description": "Describe major depressive disorder, persistent depressive disorder (dysthymia), seasonal affective disorder, and premenstrual dysphoric disorder by their symptom counts and durations. This focuses on unipolar depression with no manic pole, not bipolar disorders (a separate keyword).",
+          "examples": ["MDD: depressed mood or anhedonia plus symptoms over 2 weeks", "dysthymia: low-grade chronic depression", "seasonal affective disorder in winter"]
+        },
+        {
+          "slug": "schizophrenia_positive_negative",
+          "label": "Positive vs. Negative Symptoms of Schizophrenia",
+          "description": "Classify schizophrenia symptoms as positive (added experiences: hallucinations, delusions, disorganized speech/behavior) versus negative (lost normal functions: flat affect, alogia, avolition, anhedonia, asociality), and recognize each from a vignette. This focuses on the positive-vs-negative symptom distinction, not the neurobiology of schizophrenia (a separate keyword in the biological-bases umbrella).",
+          "examples": ["positive: hallucinations and delusions (added)", "negative: flat affect and avolition (subtracted)", "negative symptoms are harder to treat"]
+        },
+        {
+          "slug": "dissociative_disorders",
+          "label": "Dissociative Disorders",
+          "description": "Recognize dissociative identity disorder, dissociative amnesia (with possible fugue), and depersonalization/derealization disorder as disruptions of consciousness, memory, identity, or perception. This focuses on dissociative disruptions of self/memory, not bodily-symptom somatic disorders (a separate keyword).",
+          "examples": ["DID: distinct identity states with amnesia", "dissociative amnesia for autobiographical memory", "depersonalization: feeling detached from oneself"]
+        },
+        {
+          "slug": "personality_disorder_clusters",
+          "label": "Personality Disorder Clusters (A, B, C)",
+          "description": "Classify the personality disorders into three clusters — A (odd/eccentric: paranoid, schizoid, schizotypal), B (dramatic/erratic: antisocial, borderline, histrionic, narcissistic), and C (anxious/fearful: avoidant, dependent, obsessive-compulsive) — as enduring, inflexible patterns deviating from cultural norms. This focuses on the cluster framework, not the specific features of antisocial or borderline PD (separate keywords).",
+          "examples": ["Cluster A: odd/eccentric (e.g., schizotypal)", "Cluster B: dramatic/erratic (e.g., narcissistic)", "Cluster C: anxious/fearful (e.g., avoidant)"]
+        },
+        {
+          "slug": "antisocial_personality_disorder",
+          "label": "Antisocial Personality Disorder",
+          "description": "Identify antisocial personality disorder (Cluster B) by a persistent pattern of disregard for and violation of others' rights — deceit, impulsivity, aggression, and lack of remorse — requiring age 18+ with a history of conduct disorder. This focuses on antisocial PD specifically, not the broader cluster framework or borderline PD (separate keywords).",
+          "examples": ["disregard for others' rights without remorse", "deceit, impulsivity, and aggression", "requires conduct disorder before age 15"]
+        },
+        {
+          "slug": "borderline_personality_disorder",
+          "label": "Borderline Personality Disorder",
+          "description": "Identify borderline personality disorder (Cluster B) by pervasive instability in relationships, self-image, and affect, with impulsivity, frantic efforts to avoid abandonment, splitting, and recurrent self-harm. This focuses on borderline PD specifically, not antisocial PD or the cluster framework (separate keywords).",
+          "examples": ["fear of abandonment and unstable relationships", "splitting: all-good or all-bad views", "impulsivity and recurrent self-harm"]
+        }
+      ]
+    },
+    {
+      "slug": "biological_bases_disorders",
+      "label": "Biological Bases of Nervous System Disorders",
+      "description": "Covers the neurobiological mechanisms underlying schizophrenia, depression, Alzheimer's disease, Parkinson's disease, and stem cell-based neuronal regeneration.",
+      "intro": {
+        "slug": "biological_bases_disorders_intro",
+        "label": "Biological Bases of Disorders: Introduction",
+        "description": "Several major psychological and neurological disorders have well-characterized biological substrates that are directly tested on the MCAT. Understanding the neurochemical, structural, and genetic underpinnings of schizophrenia, depression, Alzheimer's, and Parkinson's allows students to connect symptoms to mechanisms and to evaluate treatment rationales. Stem cell research represents a frontier approach to replacing lost neurons in the CNS.",
+        "examples": ["dopamine hypothesis of schizophrenia", "cholinergic deficit in Alzheimer's", "substantia nigra loss in Parkinson's"]
+      },
+      "in_depth": [
+        {
+          "slug": "schizophrenia_neurobiology",
+          "label": "Schizophrenia: Neurochemistry and Brain Structure",
+          "description": "Describe the dopamine hypothesis (excess mesolimbic dopamine drives positive symptoms), the glutamate/NMDA hypofunction hypothesis, and structural findings (enlarged ventricles), noting antipsychotics block D2 receptors. This focuses on the biology of schizophrenia, not the clinical positive-vs-negative symptom classification (a separate keyword).",
+          "examples": ["D2-blocking drugs reduce positive symptoms", "ketamine (NMDA antagonist) mimics psychosis", "enlarged ventricles as a structural marker"]
+        },
+        {
+          "slug": "depression_neurobiology",
+          "label": "Depression: Neurochemistry and Brain Structure",
+          "description": "Describe the monoamine hypothesis (deficient serotonin, norepinephrine, dopamine), HPA-axis hyperactivity with hippocampal atrophy, and how SSRIs/SNRIs/MAOIs target monoamines. This focuses on the biology of depression, not the clinical diagnosis of depressive disorders (a separate keyword).",
+          "examples": ["SSRIs raise synaptic serotonin over weeks", "chronic cortisol shrinks the hippocampus", "monoamine deficiency hypothesis"]
+        },
+        {
+          "slug": "alzheimers_disease_bio",
+          "label": "Alzheimer's Disease: Biological Basis",
+          "description": "Identify amyloid-beta plaques and tau neurofibrillary tangles, the cholinergic deficit causing memory loss, and genetic risk (APOE4). This focuses on Alzheimer's pathology, not Parkinson's degeneration (a separate keyword).",
+          "examples": ["amyloid plaques and tau tangles", "cholinergic loss impairs memory", "APOE4 raises late-onset risk"]
+        },
+        {
+          "slug": "parkinsons_disease_bio",
+          "label": "Parkinson's Disease: Biological Basis",
+          "description": "Describe degeneration of substantia nigra dopaminergic neurons causing striatal dopamine depletion and the TRAP motor symptoms, with Lewy bodies as the hallmark and L-DOPA as treatment. This focuses on Parkinson's, a dopamine-loss movement disorder, not Alzheimer's memory pathology (a separate keyword).",
+          "examples": ["substantia nigra dopamine neuron loss", "resting tremor, rigidity, bradykinesia (TRAP)", "L-DOPA replenishes dopamine"]
+        },
+        {
+          "slug": "stem_cell_cns_therapy",
+          "label": "Stem Cell-Based Therapy for CNS Regeneration",
+          "description": "Recognize that stem cells could replace lost CNS neurons in disorders like Parkinson's and spinal cord injury, with the key challenges being proper integration into circuits, immune rejection, and ethical concerns. This focuses on the regenerative-therapy concept and its hurdles, not the disease pathologies it aims to treat (separate keywords).",
+          "examples": ["stem cells could replace lost neurons", "challenges: integration, rejection, ethics", "aimed at Parkinson's and spinal cord injury"]
+        }
+      ]
+    },
+    {
+      "slug": "motivation",
+      "label": "Motivation",
+      "description": "Covers the biological and psychological factors that energize and direct behavior, including instinct, arousal, drives, needs, hunger regulation, sex drive, addiction, and major motivational theories.",
+      "intro": {
+        "slug": "motivation_intro",
+        "label": "Motivation: Introduction",
+        "description": "Motivation refers to the processes that initiate, direct, and sustain goal-directed behavior. Psychologists have proposed biological accounts (instincts, drives, arousal), cognitive accounts (expectancies, intrinsic interest), and humanistic accounts (hierarchy of needs) to explain why organisms behave as they do. High-yield motivators for the MCAT include hunger regulation, the sex drive, and the neurobiology of substance addiction.",
+        "examples": ["drives push behavior to restore homeostasis", "Yerkes-Dodson inverted-U arousal curve", "addiction hijacks the dopamine reward pathway"]
+      },
+      "in_depth": [
+        {
+          "slug": "instinct_theory",
+          "label": "Instinct Theory of Motivation",
+          "description": "Describe instinct theory as proposing that complex, species-specific, unlearned behaviors (fixed action patterns) motivate behavior through evolutionary programming, and note its decline for explaining flexible human behavior. This focuses on instinct-based motivation, not the arousal-optimization account (a separate keyword).",
+          "examples": ["imprinting in ducks (Lorenz)", "infant rooting and sucking reflexes", "critique: labeling instincts is circular"]
+        },
+        {
+          "slug": "arousal_yerkes_dodson",
+          "label": "Arousal Theory and the Yerkes-Dodson Law",
+          "description": "Explain that arousal theory posits an optimal arousal level for performance, formalized by the Yerkes-Dodson inverted-U, with the optimum lower for complex than simple tasks. This focuses on arousal-based motivation, not drive-reduction's homeostatic push (a separate keyword).",
+          "examples": ["inverted-U: moderate arousal is best", "high arousal helps simple but hurts complex tasks", "sensation seekers prefer higher arousal"]
+        },
+        {
+          "slug": "drive_reduction_theory",
+          "label": "Drive Reduction Theory",
+          "description": "Describe Hull's drive reduction theory: needs create drives that motivate behavior to restore homeostasis, distinguishing primary from secondary drives, and note it cannot explain arousal-increasing behaviors. This focuses on drive-reduction (push from internal need), not incentive theory's external pull (a separate keyword).",
+          "examples": ["hunger drive motivates eating to restore balance", "primary vs. secondary (learned) drives", "critique: thrill-seeking increases arousal"]
+        },
+        {
+          "slug": "incentive_theory",
+          "label": "Incentive Theory of Motivation",
+          "description": "Explain incentive theory as a 'pull' account where external rewards attract behavior independent of internal drive states, contrasting with drive theory's internal 'push.' This focuses on external-incentive motivation, not internal drive-reduction (a separate keyword).",
+          "examples": ["the smell of food pulls eating when not hungry", "incentive value shaped by learning and dopamine", "external reward pulls vs. internal drive pushes"]
+        },
+        {
+          "slug": "maslows_hierarchy",
+          "label": "Maslow's Hierarchy of Needs (Need-Based Theory)",
+          "description": "Describe Maslow's five-level need hierarchy — physiological, safety, love/belonging, esteem, self-actualization — as a humanistic need-based theory in which lower deficiency needs are generally met before higher growth needs emerge. This focuses on need-based motivation, not the cognitive/expectancy theories of motivation (a separate keyword).",
+          "examples": ["physiological needs come before esteem", "self-actualization at the top of the pyramid", "deficiency needs vs. growth needs"]
+        },
+        {
+          "slug": "self_determination_theory",
+          "label": "Self-Determination Theory: Intrinsic vs. Extrinsic Motivation",
+          "description": "Explain Deci and Ryan's SDT (innate needs for autonomy, competence, relatedness), distinguish intrinsic from extrinsic motivation, and know the overjustification effect. This focuses on intrinsic-vs-extrinsic, needs-based self-determination, not Maslow's hierarchy (a separate keyword).",
+          "examples": ["needs for autonomy, competence, relatedness", "overjustification: reward can undermine interest", "intrinsic vs. extrinsic motivation"]
+        },
+        {
+          "slug": "cognitive_expectancy_motivation",
+          "label": "Cognitive and Expectancy Theories of Motivation",
+          "description": "Recognize cognitive/expectancy accounts of motivation — Vroom's expectancy theory (effort to performance to valued reward) and goal-setting theory — in which beliefs, goals, and expectancies drive behavior. This focuses on cognitive/expectancy motivation, not Maslow's need-based hierarchy (a separate keyword).",
+          "examples": ["expectancy: effort leads to a valued reward", "goal-setting: specific, challenging goals motivate", "approach vs. avoidance motivation"]
+        },
+        {
+          "slug": "hypothalamic_hunger_centers",
+          "label": "Hypothalamic Hunger and Satiety Centers",
+          "description": "Identify the lateral hypothalamus as the hunger ('start eating') center and the ventromedial hypothalamus as the satiety ('stop eating') center, predicting that LH lesions cause aphagia and VMH lesions cause hyperphagia. This focuses on the brain centers for hunger and satiety, not the circulating hunger/satiety hormones (a separate keyword).",
+          "examples": ["lateral hypothalamus lesion causes aphagia", "ventromedial lesion causes overeating", "LH starts eating; VMH stops eating"]
+        },
+        {
+          "slug": "hunger_satiety_hormones",
+          "label": "Hunger and Satiety Hormones (Ghrelin, Leptin)",
+          "description": "Distinguish ghrelin (stomach-released hunger signal that rises before meals) from leptin (fat-cell-released satiety signal reflecting long-term energy stores), and how they signal the brain to start or stop eating. This focuses on circulating hunger/satiety hormones, not the hypothalamic centers they act on (a separate keyword).",
+          "examples": ["ghrelin rises before meals to drive hunger", "leptin signals fat stores to reduce intake", "leptin resistance and obesity"]
+        },
+        {
+          "slug": "set_point_theory_weight",
+          "label": "Set-Point Theory of Weight Regulation",
+          "description": "Describe set-point theory as the idea that the body defends a genetically influenced 'thermostat' weight by adjusting hunger and metabolism, which helps explain why diets often fail to produce lasting weight loss. This focuses on the homeostatic set-point concept, not the specific hormones or hypothalamic centers that implement it (separate keywords).",
+          "examples": ["body defends a 'thermostat' weight", "metabolism slows to resist weight loss", "explains why diets often rebound"]
+        },
+        {
+          "slug": "sex_drive_motivation",
+          "label": "Sex Drive and Motivated Sexual Behavior",
+          "description": "Recognize the sex drive (libido) as shaped by sex hormones (testosterone in both sexes), the hypothalamus, and reward and social learning, distinct from survival drives, and know Masters and Johnson's four-stage response cycle. This focuses on sexual motivation, not hunger regulation (a separate keyword).",
+          "examples": ["testosterone influences libido in both sexes", "hypothalamus central to sexual motivation", "four-stage sexual response cycle"]
+        },
+        {
+          "slug": "substance_addiction_motivation",
+          "label": "Substance Addiction and the Reward System",
+          "description": "Explain addiction as dysregulation of the mesolimbic dopamine pathway (VTA to nucleus accumbens) producing tolerance, dependence, and compulsive seeking, with incentive-salience splitting 'wanting' from 'liking.' This focuses on addiction's reward-system biology, not the general theories of motivation (separate keywords).",
+          "examples": ["drugs flood the nucleus accumbens with dopamine", "tolerance from receptor downregulation", "wanting vs. liking in addiction"]
+        }
+      ]
+    },
+    {
+      "slug": "attitudes",
+      "label": "Attitudes",
+      "description": "Covers the structure of attitudes (cognitive, affective, behavioral components), how attitudes are formed and changed, and the relationship between attitudes and behavior.",
+      "intro": {
+        "slug": "attitudes_intro",
+        "label": "Attitudes: Introduction",
+        "description": "An attitude is a learned evaluative disposition toward an object, person, or idea that has cognitive (beliefs), affective (feelings), and behavioral (action tendency) components. Attitudes guide behavior, but the relationship is weaker than intuition suggests — situational factors often override attitudes. Social psychologists have mapped how attitudes can be changed by behavior as well as vice versa, with cognitive dissonance being a central mechanism.",
+        "examples": ["cognitive: 'smoking causes cancer'", "affective: disgust at cigarette smoke", "behavioral: avoiding smoky restaurants"]
+      },
+      "in_depth": [
+        {
+          "slug": "attitude_components",
+          "label": "Cognitive, Affective, and Behavioral Components of Attitudes",
+          "description": "Define attitudes as evaluative responses with cognitive (beliefs), affective (feelings), and behavioral (action-tendency) components, which can be explicit or implicit (IAT). This focuses on the structure of an attitude, not whether attitudes actually predict behavior (a separate keyword).",
+          "examples": ["belief, feeling, and action tendency together", "explicit vs. implicit attitudes (IAT)", "components can be inconsistent"]
+        },
+        {
+          "slug": "attitudes_predict_behavior",
+          "label": "How Attitudes Influence Behavior (and Their Limits)",
+          "description": "Recognize the attitude-behavior gap and the conditions (strength, accessibility, specificity, direct experience) under which attitudes better predict behavior. This focuses on attitudes driving behavior, not behavior driving attitudes (a separate keyword).",
+          "examples": ["LaPiere: stated attitudes did not predict action", "strong, experience-based attitudes predict better", "theory of planned behavior"]
+        },
+        {
+          "slug": "behavior_influences_attitudes",
+          "label": "How Behavior Influences Attitudes",
+          "description": "Explain how enacting behavior shifts attitudes via the foot-in-the-door phenomenon and role-playing effects, mediated by dissonance and self-perception. This focuses on behavior changing attitudes, not the reverse direction (a separate keyword).",
+          "examples": ["foot-in-the-door: small request then larger", "role-playing shifts attitudes (Stanford Prison)", "Ben Franklin effect: favor breeds liking"]
+        },
+        {
+          "slug": "cognitive_dissonance",
+          "label": "Cognitive Dissonance Theory",
+          "description": "Explain Festinger's theory that inconsistent cognitions create aversive tension people reduce by changing a cognition, adding justification, or trivializing, using the $1-vs-$20 study. This focuses on dissonance-driven attitude change, not externally driven persuasion (a separate keyword).",
+          "examples": ["$1 vs. $20 insufficient-justification study", "free-choice paradigm boosts the chosen option", "smoker rationalizes instead of quitting"]
+        },
+        {
+          "slug": "attitude_formation_change",
+          "label": "Attitude Formation and Persuasion",
+          "description": "Explain how attitudes form through conditioning, observational learning, and mere exposure, and how the Elaboration Likelihood Model's central vs. peripheral routes change them. This focuses on forming and persuasively changing attitudes, not the internal dissonance mechanism (a separate keyword).",
+          "examples": ["mere exposure increases liking (Zajonc)", "central route: argument-based persuasion", "peripheral route: cues like attractiveness"]
+        }
+      ]
+    }
+  ]
+}

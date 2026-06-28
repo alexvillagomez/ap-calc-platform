@@ -7,8 +7,9 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { SoundToggle } from "@/components/ui/SoundToggle";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { YieldBadge } from "@/components/mcat/YieldBadge";
+import MathText from "@/components/mcat/MathText";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -17,6 +18,7 @@ interface InDepthChild {
   id: string;
   label: string;
   description: string;
+  order_index: number;
   yield_level?: "high" | "medium" | "low" | null;
   score: number | null;
   total_attempts: number;
@@ -63,34 +65,33 @@ function umbrellaAttempts(u: Umbrella): number {
   return u.total_attempts;
 }
 
+// Display topics/subtopics in CURRICULUM order (same order auto mode walks them).
+// The taxonomy API already returns them in order_index order, so preserve it
+// rather than re-sorting by attempts/score (which looked arbitrary to students).
 function sortUmbrellas(umbrellas: Umbrella[]): Umbrella[] {
-  return [...umbrellas].sort((a, b) => {
-    const aAtt = umbrellaAttempts(a) > 0;
-    const bAtt = umbrellaAttempts(b) > 0;
-    if (!aAtt && !bAtt) return 0;
-    if (aAtt && !bAtt) return -1;
-    if (!aAtt && bAtt) return 1;
-    const aScore = umbrellaDisplayScore(a) ?? 100;
-    const bScore = umbrellaDisplayScore(b) ?? 100;
-    return aScore - bScore;
-  });
+  return umbrellas;
 }
 
 function sortChildren(children: InDepthChild[]): InDepthChild[] {
-  return [...children].sort((a, b) => {
-    const aAtt = a.total_attempts > 0;
-    const bAtt = b.total_attempts > 0;
-    if (!aAtt && !bAtt) return 0;
-    if (aAtt && !bAtt) return -1;
-    if (!aAtt && bAtt) return 1;
-    const aScore = a.score ?? 1;
-    const bScore = b.score ?? 1;
-    return aScore - bScore;
-  });
+  return children;
 }
 
-function scoreColor(pct: number): string {
-  return pct >= 80 ? "text-success-500" : pct >= 50 ? "text-amber-600" : "text-error-500";
+// Word-label mastery status (shown instead of a raw percentage). Mirrors the
+// math progress helpers so students see "Strong / Getting there / Needs work"
+// rather than a bare number.
+function progressStatus(
+  attempts: number,
+  pct: number | null
+): { label: string; labelClass: string; sufficient: boolean } {
+  if (attempts === 0 || pct === null) {
+    return { label: "Not started", labelClass: "text-neutral-400", sufficient: false };
+  }
+  if (attempts < 5) {
+    return { label: "Just started", labelClass: "text-neutral-500", sufficient: false };
+  }
+  if (pct >= 80) return { label: "Strong", labelClass: "text-success-700", sufficient: true };
+  if (pct >= 55) return { label: "Getting there", labelClass: "text-amber-700", sufficient: true };
+  return { label: "Needs work", labelClass: "text-error-600", sufficient: true };
 }
 
 function scoreBarColor(pct: number): "brand" | "success" | "error" {
@@ -106,11 +107,24 @@ interface ActionButtonsProps {
   flashcardsHref: string;
   quizHref: string;
   lessonHref?: string;
+  /** "Learn this" = scoped in-order mini-auto (lesson → flashcards → questions). */
+  learnThisHref?: string;
 }
 
-function ActionButtons({ practiceHref, flashcardsHref, quizHref, lessonHref }: ActionButtonsProps) {
+function ActionButtons({ practiceHref, flashcardsHref, quizHref, lessonHref, learnThisHref }: ActionButtonsProps) {
   return (
     <div className="flex gap-1.5 flex-wrap">
+      {learnThisHref && (
+        <Link href={learnThisHref}>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="!border-violet-200 !bg-violet-50 !text-violet-700 hover:!bg-violet-100"
+          >
+            Learn this
+          </Button>
+        </Link>
+      )}
       <Link href={practiceHref}>
         <Button variant="primary" size="sm">Practice</Button>
       </Link>
@@ -143,7 +157,9 @@ function UmbrellaRow({
   const displayScore = umbrellaDisplayScore(umbrella);
   const attempts = umbrellaAttempts(umbrella);
   const hasChildren = umbrella.children.length > 0;
-  const sorted = hasChildren ? sortChildren(umbrella.children) : [];
+  const allSorted = hasChildren ? sortChildren(umbrella.children) : [];
+  const introChildren = allSorted.filter((c) => c.order_index === -1);
+  const sorted = allSorted.filter((c) => c.order_index !== -1);
 
   const encLabel = encodeURIComponent(umbrella.label);
 
@@ -173,7 +189,7 @@ function UmbrellaRow({
             )}
             <div className="min-w-0">
               <span className="inline-flex items-center gap-1.5 flex-wrap">
-                <p className="text-sm font-medium text-neutral-800 leading-snug">{umbrella.label}</p>
+                <p className="text-sm font-medium text-neutral-800 leading-snug"><MathText>{umbrella.label}</MathText></p>
                 <YieldBadge level={umbrella.yield_level} />
               </span>
               {attempts > 0 && (
@@ -185,38 +201,73 @@ function UmbrellaRow({
             )}
           </div>
           <div className="shrink-0 text-right">
-            {displayScore !== null ? (
-              <span className={`text-sm font-medium ${scoreColor(displayScore)}`}>
-                {displayScore}%
-              </span>
-            ) : (
-              <span className="text-xs text-neutral-400">Not started</span>
-            )}
+            {(() => {
+              const st = progressStatus(attempts, displayScore);
+              return <span className={`text-xs font-medium ${st.labelClass}`}>{st.label}</span>;
+            })()}
           </div>
         </div>
 
-        {displayScore !== null && (
+        {displayScore !== null && progressStatus(attempts, displayScore).sufficient && (
           <div className="mb-2">
             <ProgressBar value={displayScore} size="xs" color={scoreBarColor(displayScore)} label={umbrella.label} />
           </div>
         )}
 
+        {/* Umbrellas are containers only — NO umbrella-level Lesson. Lessons live
+            at the in_depth subtopic level (see ChildRow). */}
         <ActionButtons
+          learnThisHref={`/mcat/auto?scope=umbrella&scope_id=${umbrella.id}&label=${encLabel}`}
           practiceHref={`/mcat/${categoryId}/practice?umbrella=${umbrella.id}&label=${encLabel}`}
           flashcardsHref={`/mcat/${categoryId}/flashcards?umbrella=${umbrella.id}&label=${encLabel}`}
           quizHref={`/mcat/${categoryId}/quiz?umbrella=${umbrella.id}&label=${encLabel}`}
-          lessonHref={`/mcat/lesson/${umbrella.id}?label=${encLabel}`}
         />
       </div>
 
       {/* Children — shown when expanded */}
       {hasChildren && expanded && (
-        <div className="pl-5 border-l-2 border-brand-100 ml-2 mb-2 space-y-0">
-          {sorted.map((child) => (
-            <ChildRow key={child.id} child={child} categoryId={categoryId} />
+        <>
+          {introChildren.map((child) => (
+            <IntroRow key={child.id} child={child} categoryId={categoryId} />
           ))}
-        </div>
+          {sorted.length > 0 && (
+            <div className="pl-5 border-l-2 border-brand-100 ml-2 mb-2 space-y-0">
+              {sorted.map((child) => (
+                <ChildRow key={child.id} child={child} categoryId={categoryId} />
+              ))}
+            </div>
+          )}
+        </>
       )}
+    </div>
+  );
+}
+
+// ── Intro row (order_index === -1) ────────────────────────────────────────────
+
+function IntroRow({
+  child,
+  categoryId,
+}: {
+  child: InDepthChild;
+  categoryId: string;
+}) {
+  const encLabel = encodeURIComponent(child.label);
+  const lessonHref = `/mcat/lesson/${child.id}?label=${encLabel}&category=${categoryId}&scope=keyword`;
+
+  return (
+    <div className="py-2 mb-1 flex items-center gap-2 flex-wrap">
+      <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide shrink-0">
+        Intro
+      </span>
+      <span className="text-sm italic text-neutral-500 leading-snug">
+        <MathText>{child.label}</MathText>
+      </span>
+      <div className="ml-auto shrink-0">
+        <Link href={lessonHref}>
+          <Button variant="ghost" size="sm">Lesson</Button>
+        </Link>
+      </div>
     </div>
   );
 }
@@ -237,7 +288,7 @@ function ChildRow({
     <div className="py-2.5 border-t border-neutral-50 first:border-0">
       <div className="flex items-start justify-between gap-2 mb-1">
         <div className="flex items-center gap-1.5 min-w-0 flex-1">
-          <span className="text-sm text-neutral-700 leading-snug truncate">{child.label}</span>
+          <span className="text-sm text-neutral-700 leading-snug"><MathText>{child.label}</MathText></span>
           <YieldBadge level={child.yield_level} />
           {child.state === "mastered" && (
             <span title="Mastered" className="text-success-500 text-xs shrink-0">✓</span>
@@ -249,15 +300,14 @@ function ChildRow({
           )}
         </div>
         <div className="shrink-0 text-right">
-          {pct !== null ? (
-            <span className={`text-sm font-medium ${scoreColor(pct)}`}>{pct}%</span>
-          ) : (
-            <span className="text-xs text-neutral-400">Not started</span>
-          )}
+          {(() => {
+            const st = progressStatus(child.total_attempts, pct);
+            return <span className={`text-xs font-medium ${st.labelClass}`}>{st.label}</span>;
+          })()}
         </div>
       </div>
 
-      {pct !== null && (
+      {pct !== null && progressStatus(child.total_attempts, pct).sufficient && (
         <div className="mb-2">
           <ProgressBar value={pct} size="xs" color={scoreBarColor(pct)} label={child.label} />
         </div>
@@ -270,10 +320,11 @@ function ChildRow({
       )}
 
       <ActionButtons
+        learnThisHref={`/mcat/auto?scope=keyword&scope_id=${child.id}&label=${encLabel}`}
         practiceHref={`/mcat/${categoryId}/practice?keyword=${child.id}&label=${encLabel}`}
         flashcardsHref={`/mcat/${categoryId}/flashcards?keyword=${child.id}&label=${encLabel}`}
         quizHref={`/mcat/${categoryId}/quiz?keyword=${child.id}&label=${encLabel}`}
-        lessonHref={`/mcat/lesson/${child.id}?label=${encLabel}`}
+        lessonHref={`/mcat/lesson/${child.id}?label=${encLabel}&category=${categoryId}&scope=keyword`}
       />
     </div>
   );
@@ -330,15 +381,15 @@ export default function CategoryBrowsePage({
             <Link href="/mcat" className="shrink-0">
               <LoderaLogo size={24} />
             </Link>
-            <span className="text-neutral-300 text-sm shrink-0">|</span>
+            <span className="hidden sm:inline text-neutral-300 text-sm shrink-0">|</span>
             <Link
               href="/mcat"
-              className="text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors"
+              className="hidden sm:inline text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors"
             >
               MCAT
             </Link>
-            <span className="text-neutral-300 text-sm shrink-0">/</span>
-            <h1 className="font-semibold text-neutral-900 text-sm truncate">
+            <span className="hidden sm:inline text-neutral-300 text-sm shrink-0">/</span>
+            <h1 className="font-semibold text-neutral-900 text-sm truncate min-w-0">
               {category?.label ?? "Category"}
             </h1>
           </div>
@@ -350,12 +401,12 @@ export default function CategoryBrowsePage({
               Progress
             </Link>
             <StreakBadge />
-            <SoundToggle />
+            <NavMenu />
           </div>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-6 space-y-4">
+      <main className="max-w-2xl mx-auto px-4 py-6 space-y-4 pb-safe-bottom">
         {/* Loading */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
@@ -392,14 +443,23 @@ export default function CategoryBrowsePage({
                   {category.description}
                 </p>
               )}
-              <div className="flex gap-2">
-                <Link href={`/mcat/${categoryId}/practice`} className="flex-1">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <Link href={`/mcat/auto?scope=category&scope_id=${categoryId}&label=${encodeURIComponent(category.label)}`} className="block">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="w-full !border-violet-200 !bg-violet-50 !text-violet-700 hover:!bg-violet-100"
+                  >
+                    Learn this
+                  </Button>
+                </Link>
+                <Link href={`/mcat/${categoryId}/practice`} className="block">
                   <Button variant="primary" size="sm" className="w-full">Practice</Button>
                 </Link>
-                <Link href={`/mcat/${categoryId}/flashcards`} className="flex-1">
+                <Link href={`/mcat/${categoryId}/flashcards`} className="block">
                   <Button variant="secondary" size="sm" className="w-full">Flashcards</Button>
                 </Link>
-                <Link href={`/mcat/${categoryId}/quiz`} className="flex-1">
+                <Link href={`/mcat/${categoryId}/quiz`} className="block">
                   <Button variant="secondary" size="sm" className="w-full">Quiz</Button>
                 </Link>
               </div>

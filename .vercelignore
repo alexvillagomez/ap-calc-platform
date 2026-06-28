@@ -1,0 +1,38 @@
+# Build artifacts & deps (Vercel installs + builds remotely)
+.git
+node_modules
+**/node_modules
+.next
+**/.next
+out
+**/out
+.turbo
+**/.turbo
+.vercel
+
+# Large local scratch dirs (apps/student/tmp held ~11G of isolated builds)
+tmp
+**/tmp
+*.tsbuildinfo
+
+# Session / QA artifacts — must never be uploaded
+align
+judge-math
+judge-mcat
+test-results
+**/test-results
+playwright-report
+**/playwright-report
+ux-audit-screenshots
+**/screenshots
+*.png
+
+# Local-only tooling
+.claude
+.vscode
+.cursor
+e2e
+
+# Consolidated local artifacts + research notes — never deploy
+audits
+notes

@@ -1,0 +1,318 @@
+{
+  "category_code": "7B",
+  "umbrellas": [
+    {
+      "slug": "presence_of_others",
+      "label": "Presence of Others and Individual Behavior",
+      "description": "How being observed or working alongside others changes individual performance, effort, and self-regulation — covering facilitation, loafing, deindividuation, and the bystander effect.",
+      "intro": {
+        "slug": "presence_of_others_intro",
+        "label": "How Others Shape Individual Behavior",
+        "description": "The mere presence of other people can dramatically alter how we perform and behave. Sometimes others boost performance (social facilitation), sometimes they reduce effort (social loafing), sometimes they erode individual identity (deindividuation), and sometimes their sheer number paradoxically reduces helping (bystander effect). These effects show that individual behavior is never truly independent of the social context.",
+        "examples": ["audience effects on task performance", "diffusion of responsibility in a crowd", "loss of self-awareness in a group"]
+      },
+      "in_depth": [
+        {
+          "slug": "social_facilitation",
+          "label": "Social facilitation",
+          "description": "Identify social facilitation: the presence of others improves performance on well-learned or simple tasks but impairs performance on novel or complex tasks. This focuses on the performance-change due to an audience or co-actors, not on reduced effort when working in a group (social loafing, a separate keyword).",
+          "examples": ["cyclists ride faster with others present", "dominant response strengthened by audience", "Zajonc arousal explanation"]
+        },
+        {
+          "slug": "social_loafing",
+          "label": "Social loafing",
+          "description": "Recognize social loafing: individuals exert less effort on a collective task when their personal contribution cannot be identified than when working alone. This focuses on the diffusion of effort in a group, not on the diffusion of responsibility in an emergency (bystander effect, a separate keyword).",
+          "examples": ["less effort in a group tug-of-war", "contribution drops as group size grows", "identifiability counteracts loafing"]
+        },
+        {
+          "slug": "deindividuation",
+          "label": "Deindividuation",
+          "description": "Define deindividuation: being in a crowd or wearing a uniform reduces self-awareness and personal accountability, leading to impulsive or antisocial behavior. This focuses on loss of individual identity in a group context, not on reduced helping behavior in emergencies (bystander effect, a separate keyword).",
+          "examples": ["anonymity in a crowd → increased aggression", "Zimbardo's Halloween costume study", "rioters' reduced self-consciousness"]
+        },
+        {
+          "slug": "bystander_effect",
+          "label": "Bystander effect",
+          "description": "Explain the bystander effect: the more people who witness an emergency, the less likely any individual is to intervene, driven by diffusion of responsibility and pluralistic ignorance. This focuses on helping in emergencies with multiple observers, not on the general reduction of effort in group work (social loafing, a separate keyword).",
+          "examples": ["Kitty Genovese case", "more bystanders → less helping", "diffusion of responsibility and pluralistic ignorance"]
+        },
+        {
+          "slug": "diffusion_of_responsibility",
+          "label": "Diffusion of responsibility",
+          "description": "Distinguish diffusion of responsibility: each member of a group feels less personally obligated to act because others share the burden, reducing the likelihood of prosocial behavior. This focuses on the psychological mechanism underlying the bystander effect, distinguishable from pluralistic ignorance (the separate misreading of others' inaction as a signal that no emergency exists).",
+          "examples": ["'someone else will call 911'", "responsibility diluted across group", "key mechanism in the bystander effect"]
+        },
+        {
+          "slug": "pluralistic_ignorance",
+          "label": "Pluralistic ignorance",
+          "description": "Identify pluralistic ignorance: each group member privately doubts a situation is an emergency but, seeing others remain calm, incorrectly concludes that it must not be serious. This focuses on the misinterpretation of others' calm behavior as a social cue, not on the diffusion of felt obligation (diffusion of responsibility, a separate keyword).",
+          "examples": ["no one reacts → 'must not be serious'", "group reads smoke alarm as false alarm", "private doubt vs public calm"]
+        }
+      ]
+    },
+    {
+      "slug": "social_influence",
+      "label": "Social Control, Peer Pressure, Conformity, and Obedience",
+      "description": "The mechanisms by which society and other individuals pressure people to align their beliefs or actions with group expectations — ranging from informal peer norms to direct authority commands.",
+      "intro": {
+        "slug": "social_influence_intro",
+        "label": "Social Influence: Control, Conformity, and Obedience",
+        "description": "Humans are powerfully shaped by the people and institutions around them. Social control refers to societal mechanisms that enforce normative behavior; peer pressure represents informal interpersonal influence; conformity is the tendency to match group behavior even without direct requests; and obedience involves complying with explicit authority commands. Classic studies by Asch (conformity) and Milgram (obedience) are foundational benchmarks for understanding how far social influence extends.",
+        "examples": ["Asch line experiment", "Milgram shock study", "social norms enforced through sanctions"]
+      },
+      "in_depth": [
+        {
+          "slug": "social_control",
+          "label": "Social control",
+          "description": "Define social control: the formal and informal mechanisms societies use to encourage conformity to norms and deter deviance, including laws, norms, rewards, and punishments. This focuses on the macro-level societal processes that regulate behavior, not on individual-level interpersonal pressure (peer pressure, a separate keyword).",
+          "examples": ["laws as formal social control", "gossip and shaming as informal control", "sanctions maintain social order"]
+        },
+        {
+          "slug": "peer_pressure",
+          "label": "Peer pressure",
+          "description": "Recognize peer pressure: the informal influence exerted by people of equal social standing that nudges individuals toward group-consistent behaviors, beliefs, or attitudes. This focuses on interpersonal influence among peers, not on compliance with authority figures (obedience, a separate keyword).",
+          "examples": ["adolescent smoking to fit in with friends", "dress codes driven by peer expectations", "normative influence from status equals"]
+        },
+        {
+          "slug": "conformity",
+          "label": "Conformity",
+          "description": "Explain conformity: adjusting one's behavior or beliefs to match the perceived group standard, even without direct pressure to do so, driven by normative influence (wanting acceptance) or informational influence (using the group as a source of information). This focuses on spontaneous alignment with the group, not on compliance with a direct order from an authority (obedience, a separate keyword).",
+          "examples": ["Asch: majority-wrong line judgment", "normative vs informational social influence", "private acceptance vs public compliance"]
+        },
+        {
+          "slug": "asch_conformity_study",
+          "label": "Asch conformity study",
+          "description": "Recall the Asch line-judgment paradigm: confederates gave obviously wrong answers, and naive participants conformed roughly 37% of the time, demonstrating that social pressure can override clear perceptual evidence. This focuses on the classic empirical demonstration of conformity, not on obedience to authority (Milgram study, a separate keyword).",
+          "examples": ["line-length judgment with confederates", "~37% conformity rate to wrong majority", "social pressure overrides clear perception"]
+        },
+        {
+          "slug": "normative_vs_informational_influence",
+          "label": "Normative vs. informational social influence",
+          "description": "Distinguish normative influence (conforming to gain approval or avoid rejection) from informational influence (conforming because you genuinely use the group as a source of evidence). This focuses on the two motivational roots of conformity, not on the obedience-to-authority dynamic (a separate keyword).",
+          "examples": ["normative: afraid to look different", "informational: uncertain, so follows experts", "ambiguous situations favor informational influence"]
+        },
+        {
+          "slug": "obedience",
+          "label": "Obedience to authority",
+          "description": "Define obedience: complying with a direct command from a perceived authority figure, even when the command conflicts with personal values. This focuses on explicit authority-driven compliance, not on spontaneous conformity to group norms (conformity, a separate keyword).",
+          "examples": ["following a doctor's harmful instructions", "soldier following orders", "authority cues trigger compliance"]
+        },
+        {
+          "slug": "milgram_obedience_study",
+          "label": "Milgram obedience study",
+          "description": "Recall the Milgram shock experiment: ~65% of participants delivered apparently dangerous shocks to a confederate when ordered by an authority figure, showing the power of situational authority over individual moral judgment. This focuses on the canonical empirical study of obedience, not on the Asch conformity paradigm (a separate keyword).",
+          "examples": ["65% shocked to maximum voltage", "experimenter as authority figure", "situational factors override personal ethics"]
+        },
+        {
+          "slug": "factors_affecting_obedience",
+          "label": "Factors that affect obedience",
+          "description": "Identify the situational variables that increase or decrease obedience: proximity to the victim, legitimacy and proximity of authority, presence of dissenting peers, and institutional prestige. This focuses on what modulates the degree of obedience, not on the original Milgram finding itself (a separate keyword).",
+          "examples": ["victim in same room → less obedience", "peer dissenter dramatically reduces compliance", "Yale prestige raised initial compliance"]
+        }
+      ]
+    },
+    {
+      "slug": "group_decision_making",
+      "label": "Group Decision-Making",
+      "description": "How group deliberation and composition distort decisions — specifically the polarization of initial positions and the suppression of dissent in cohesive groups.",
+      "intro": {
+        "slug": "group_decision_making_intro",
+        "label": "Group Decision-Making: Polarization and Groupthink",
+        "description": "When individuals deliberate together, group processes can push decisions in predictable and often problematic directions. Group polarization drives group decisions toward more extreme versions of members' initial leanings; groupthink occurs when the desire for harmony silences critical evaluation. Understanding these two phenomena explains why committees, juries, and organizations often make worse decisions than individuals acting alone.",
+        "examples": ["jury deliberation shifts to extreme verdict", "leadership team avoids voicing doubts", "group discussion amplifies initial leanings"]
+      },
+      "in_depth": [
+        {
+          "slug": "group_polarization",
+          "label": "Group polarization",
+          "description": "Explain group polarization: group discussion intensifies members' initial average opinion, producing a more extreme collective position than members held before deliberating. This focuses on the shift-toward-extremity pattern in group deliberation, not on the suppression of dissent in cohesive groups (groupthink, a separate keyword).",
+          "examples": ["risky-shift effect in decision research", "online echo chambers intensify views", "initial pro-X majority → strongly pro-X outcome"]
+        },
+        {
+          "slug": "groupthink",
+          "label": "Groupthink",
+          "description": "Identify groupthink: a mode of thinking in which the desire for cohesion and unanimity in a tight-knit group overrides realistic appraisal of alternatives, leading to flawed decisions. Symptoms include illusions of invulnerability, collective rationalization, and self-censorship. This focuses on cohesion-driven suppression of dissent, not on the directional intensification of pre-existing views (group polarization, a separate keyword).",
+          "examples": ["Bay of Pigs invasion planning", "Challenger shuttle launch decision", "illusion of unanimity silences doubters"]
+        },
+        {
+          "slug": "symptoms_of_groupthink",
+          "label": "Symptoms and prevention of groupthink",
+          "description": "Recognize the classic symptoms of groupthink (illusion of invulnerability, mind-guards, out-group stereotyping, self-censorship) and the structural remedies (devil's advocate, leader withholding opinion, outside experts). This focuses on identifying and preventing groupthink, not on defining its core mechanism (a separate keyword).",
+          "examples": ["illusion of unanimity among members", "mind-guards filter dissenting information", "devil's advocate role reduces groupthink"]
+        }
+      ]
+    },
+    {
+      "slug": "social_norms",
+      "label": "Social Norms",
+      "description": "The shared rules and expectations that define acceptable behavior in society — from informal customs to codified laws — and the sanctions that enforce them.",
+      "intro": {
+        "slug": "social_norms_intro",
+        "label": "Social Norms, Sanctions, and the Architecture of Conformity",
+        "description": "Social norms are the unwritten (and written) rules that tell us what is expected in a given social situation. They vary in strength — from casual folkways to moral mores to absolute taboos — and are enforced through sanctions ranging from a disapproving look to criminal prosecution. Anomie describes what happens when norms break down. Together, these concepts explain how order and predictability are maintained in social life.",
+        "examples": ["greeting norms vary by culture", "violation of a taboo triggers strong sanction", "Durkheim's anomie in rapid social change"]
+      },
+      "in_depth": [
+        {
+          "slug": "social_norms_definition",
+          "label": "Social norms as shared expectations",
+          "description": "Define social norms as the shared expectations — explicit or implicit — that guide behavior within a group or society, distinguishing prescriptive norms (what you should do) from proscriptive norms (what you must not do). This focuses on the concept and typology of norms, not on the specific strength categories of folkways, mores, and taboos (covered in a separate keyword).",
+          "examples": ["holding the door open as a prescriptive norm", "making eye contact in conversation", "norms vary by culture and context"]
+        },
+        {
+          "slug": "sanctions",
+          "label": "Sanctions",
+          "description": "Distinguish positive sanctions (rewards for norm compliance) from negative sanctions (punishments for violations), and formal sanctions (official legal penalties) from informal sanctions (social disapproval, gossip, ostracism). This focuses on how norms are enforced, not on the norms themselves (a separate keyword).",
+          "examples": ["praise for helping a stranger (positive informal)", "a fine for speeding (negative formal)", "social exclusion for norm violation (negative informal)"]
+        },
+        {
+          "slug": "folkways_mores_taboos",
+          "label": "Folkways, mores, and taboos",
+          "description": "Classify norms by their moral weight: folkways are mild conventions whose violation brings mild disapproval (e.g., table manners); mores are stronger norms tied to moral values whose violation brings serious sanctions; taboos are the most extreme prohibitions (e.g., incest, cannibalism) considered utterly wrong in virtually all cultures. This focuses on the three-level strength hierarchy of norms, not on how sanctions are applied (a separate keyword).",
+          "examples": ["chewing with mouth open = folkway violation", "adultery = violation of a more", "incest = universal taboo"]
+        },
+        {
+          "slug": "anomie",
+          "label": "Anomie",
+          "description": "Define anomie (Durkheim): a condition of normlessness in which social norms are weak, absent, or contradictory, often occurring during rapid social change, leaving individuals without clear guidance and increasing deviant behavior and suicide rates. This focuses on the breakdown of norms at the societal level, not on individual motivation to deviate (covered by strain theory, a separate keyword).",
+          "examples": ["Durkheim's anomic suicide during economic upheaval", "normlessness in post-revolution society", "rapid industrialization erodes shared values"]
+        }
+      ]
+    },
+    {
+      "slug": "deviance",
+      "label": "Deviance",
+      "description": "Behavior that violates social norms and the major sociological theories explaining why deviance occurs — differential association, labeling, and strain theory.",
+      "intro": {
+        "slug": "deviance_intro",
+        "label": "Deviance: Definition and Sociological Perspectives",
+        "description": "Deviance refers to any behavior, belief, or condition that departs from social norms and invites social disapproval. Sociologists explain deviance through several competing theoretical lenses: differential association emphasizes learned pro-deviance definitions; labeling theory focuses on how society's reactions create deviant identities; and strain theory argues that blocked access to legitimate goals pushes individuals toward deviant means. Each theory illuminates a different causal pathway.",
+        "examples": ["crime as the most formal type of deviance", "societal reaction as a cause of deviance", "why do conforming people occasionally deviate?"]
+      },
+      "in_depth": [
+        {
+          "slug": "deviance_definition",
+          "label": "Deviance — definition and types",
+          "description": "Define deviance as behavior, beliefs, or characteristics that violate the norms of a group or society and elicit negative social reactions; distinguish formal deviance (crime) from informal deviance (social disapproval without legal consequences). This focuses on the basic concept and classification, not on the theories explaining its causes (separate keywords).",
+          "examples": ["crime as formal deviance", "unconventional dress as informal deviance", "deviance is relative to culture and context"]
+        },
+        {
+          "slug": "differential_association_theory",
+          "label": "Differential association theory",
+          "description": "Explain Sutherland's differential association theory: people learn deviant behavior through close associations with others who hold favorable definitions of deviance — more exposure to pro-deviant attitudes than anti-deviant attitudes increases the likelihood of deviance. This focuses on the social-learning mechanism, not on blocked legitimate pathways to goals (strain theory, a separate keyword).",
+          "examples": ["gang membership transmits pro-crime norms", "frequency and intensity of associations matter", "Sutherland: crime is learned, not inherited"]
+        },
+        {
+          "slug": "labeling_theory",
+          "label": "Labeling theory",
+          "description": "Explain labeling theory (Becker): deviance is not an intrinsic quality of an act but a consequence of society applying the deviant label; being labeled deviant can become a self-fulfilling master status. This focuses on the societal reaction as constitutive of deviance, not on the social transmission of deviant norms (differential association, a separate keyword).",
+          "examples": ["'deviant' label → master status", "Becker's 'Outsiders'", "societal reaction creates the deviant identity"]
+        },
+        {
+          "slug": "primary_vs_secondary_deviance",
+          "label": "Primary vs. secondary deviance",
+          "description": "Distinguish primary deviance (initial norm-violating acts, before a deviant identity is adopted) from secondary deviance (deviant behavior that follows and is shaped by the internalization of a deviant label). This focuses on Lemert's two-stage process within labeling theory, not on the labeling mechanism itself (a separate keyword).",
+          "examples": ["first-time shoplifting = primary deviance", "repeat offending after 'criminal' label = secondary", "label reshapes self-concept → secondary deviance"]
+        },
+        {
+          "slug": "strain_theory",
+          "label": "Strain theory (Merton)",
+          "description": "Explain Merton's strain theory: deviance results from a disjunction between culturally valued goals (e.g., financial success) and the legitimate means to achieve them; individuals blocked from legitimate means may adapt through deviant routes (innovation, ritualism, retreatism, or rebellion). This focuses on structural-goal/means mismatch as the cause of deviance, not on the social-learning mechanism (differential association, a separate keyword).",
+          "examples": ["American Dream + blocked opportunity → crime", "innovation: pursues goals by illegal means", "retreatism: abandons both goals and means"]
+        },
+        {
+          "slug": "strain_theory_adaptations",
+          "label": "Merton's modes of adaptation",
+          "description": "Classify Merton's five adaptations to strain: conformity (accepts goals + means), innovation (accepts goals, rejects means), ritualism (rejects goals, keeps means), retreatism (rejects both), and rebellion (replaces both). This focuses on mapping each adaptation type, not on the overall strain framework (a separate keyword).",
+          "examples": ["conformity: hardworking citizen", "innovation: drug dealer pursues wealth illegally", "retreatism: dropout abandons societal goals"]
+        }
+      ]
+    },
+    {
+      "slug": "collective_behavior",
+      "label": "Collective Behavior",
+      "description": "Spontaneous or emergent group behaviors — fads, mass hysteria, and riots — that arise outside of established social institutions and often spread rapidly through populations.",
+      "intro": {
+        "slug": "collective_behavior_intro",
+        "label": "Collective Behavior: Fads, Hysteria, and Riots",
+        "description": "Collective behavior refers to relatively spontaneous, unstructured action by large numbers of people in response to a shared event or sentiment. Unlike institutionalized behavior, it emerges from a crowd dynamic rather than formal rules. MCAT-relevant examples include fads (fleeting mass enthusiasms), mass hysteria (collective anxiety or belief), and riots (explosive collective aggression). Understanding these phenomena requires considering how social conditions and contagion processes amplify individual responses.",
+        "examples": ["hula-hoop craze as a fad", "Salem witch trials as mass hysteria", "urban riot following a triggering incident"]
+      },
+      "in_depth": [
+        {
+          "slug": "fads_and_crazes",
+          "label": "Fads and crazes",
+          "description": "Define fads as temporary, widespread enthusiasms for a behavior, style, or product that spread quickly and fade; distinguish them from fashions (longer-lasting cycles) and from more intense collective behaviors. This focuses on the short-lived mass-enthusiasm phenomenon, not on more intense collective behaviors like riots or mass hysteria (separate keywords).",
+          "examples": ["fidget spinner craze", "flash mob as social fad", "rapid adoption and abandonment cycle"]
+        },
+        {
+          "slug": "mass_hysteria",
+          "label": "Mass hysteria",
+          "description": "Define mass hysteria (mass psychogenic illness): a collective episode in which anxiety, fear, or physical symptoms spread through a social network in the absence of a genuine organic cause, sustained by suggestion and shared belief. This focuses on the collective spread of psychosomatic response, not on the crowd aggression of riots (a separate keyword).",
+          "examples": ["Salem witch trials", "dancing plague of 1518", "school-wide fainting episodes without medical cause"]
+        },
+        {
+          "slug": "riots",
+          "label": "Riots",
+          "description": "Characterize riots as collective episodes of violence or property destruction involving large numbers of people, often triggered by a precipitating event against a backdrop of social tension, and propagated through crowd contagion. This focuses on collective violence and its social preconditions, not on non-violent collective panics (mass hysteria, a separate keyword).",
+          "examples": ["precipitating event ignites pent-up tension", "crowd contagion spreads aggressive behavior", "social inequality as background condition"]
+        }
+      ]
+    },
+    {
+      "slug": "socialization",
+      "label": "Socialization",
+      "description": "The lifelong process by which individuals learn the values, norms, and behaviors of their society through interaction with key social institutions — family, peers, schools, mass media, and workplace.",
+      "intro": {
+        "slug": "socialization_intro",
+        "label": "Socialization and Its Agents",
+        "description": "Socialization is the process through which people internalize the culture of their society — its values, norms, language, and roles — shaping a social self. It begins at birth (primary socialization within the family) and continues throughout life (secondary socialization in schools, peer groups, workplaces, and mass media). Each agent of socialization contributes differently to the internalization of social expectations, and their relative influence shifts across the life course.",
+        "examples": ["family as the first socializing agent", "peer group influence in adolescence", "media transmitting cultural values broadly"]
+      },
+      "in_depth": [
+        {
+          "slug": "socialization_definition",
+          "label": "Socialization — definition and types",
+          "description": "Define socialization as the process by which individuals learn the norms, values, language, and behaviors of their culture; distinguish primary socialization (early childhood, family) from secondary socialization (later agents including school, peers, workplace). This focuses on the concept and stages, not on the specific agents (separate keywords).",
+          "examples": ["child learns language and gender roles from family", "school teaches societal expectations and discipline", "socialization continues across the lifespan"]
+        },
+        {
+          "slug": "family_as_agent",
+          "label": "Family as agent of socialization",
+          "description": "Identify the family as the primary socialization agent: it conveys core values, language, cultural identity, and initial norms about gender, class, and authority during the most formative developmental period. This focuses on the family's unique first-mover role, not on later agents like peers or mass media (separate keywords).",
+          "examples": ["parents model gender-role behaviors", "family transmits religious and ethnic identity", "socioeconomic position internalized in childhood"]
+        },
+        {
+          "slug": "peer_group_as_agent",
+          "label": "Peer group as agent of socialization",
+          "description": "Explain the peer group as a socialization agent: peers become increasingly influential in adolescence, shaping values, attitudes, identity, and behavioral norms outside parental control, and providing a reference group for social comparison. This focuses on the peer group's role distinct from the family's (a separate keyword).",
+          "examples": ["teen friend groups set fashion and language norms", "peer acceptance shapes identity in adolescence", "peer group as adolescent reference group"]
+        },
+        {
+          "slug": "school_as_agent",
+          "label": "School as agent of socialization",
+          "description": "Describe schools as formal socialization agents that transmit academic knowledge alongside the hidden curriculum — implicit lessons about authority, punctuality, competition, and civic norms. This focuses on schools' dual role in formal and hidden-curriculum socialization, not on peer influence within the school (a separate keyword).",
+          "examples": ["hidden curriculum: learning to follow rules", "school socializes children into civic roles", "tracking and ability grouping reproduce social hierarchy"]
+        },
+        {
+          "slug": "mass_media_as_agent",
+          "label": "Mass media as agent of socialization",
+          "description": "Identify mass media as a pervasive secondary socialization agent that shapes norms, values, and self-concept by broadcasting cultural scripts and representations to large audiences simultaneously. This focuses on media's broad top-down influence, distinguishable from peer (interpersonal) or family (intimate) socialization agents (separate keywords).",
+          "examples": ["TV ads transmit consumer values", "news frames social reality for audiences", "social media reinforces identity and group norms"]
+        },
+        {
+          "slug": "workplace_as_agent",
+          "label": "Workplace as agent of socialization",
+          "description": "Recognize the workplace as a secondary socialization agent that teaches occupational norms, professional identity, hierarchical expectations, and organizational culture through anticipatory socialization and on-the-job experience. This focuses on adult occupational socialization, not on childhood or adolescent agents (separate keywords).",
+          "examples": ["new employee learns unwritten office norms", "professional identity develops during training", "anticipatory socialization before entering a field"]
+        },
+        {
+          "slug": "resocialization",
+          "label": "Resocialization and total institutions",
+          "description": "Define resocialization: the process of discarding old norms and roles to adopt new ones, often occurring in total institutions (Goffman) such as prisons, military boot camps, and psychiatric hospitals that control nearly all aspects of daily life. This focuses on radical norm-replacement in controlled environments, not on ordinary secondary socialization (separate keyword).",
+          "examples": ["military boot camp strips civilian identity", "prison resocializes inmates to institutional norms", "Goffman: total institution controls time and space"]
+        }
+      ]
+    }
+  ]
+}

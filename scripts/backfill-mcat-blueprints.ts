@@ -15,7 +15,7 @@
  *   tsx scripts/backfill-mcat-blueprints.ts --force --dry-run --umbrella <id>   # preview --force scope without writing
  */
 
-import { createClient } from "@supabase/supabase-js";
+import { createServiceClient } from "./lib/serviceClient";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
@@ -96,19 +96,30 @@ async function main() {
     console.error("Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
     process.exit(1);
   }
-  const supabase = createClient(supabaseUrl, serviceKey);
+  const supabase = createServiceClient(supabaseUrl, serviceKey);
 
-  // ── Fetch all keywords (need the full set to compute siblings)
+  // ── Fetch all keywords (need the full set to compute siblings).
+  // Paginate: PostgREST silently caps a single select at 1000 rows, and the
+  // taxonomy now exceeds that — an un-paginated fetch would drop keywords and
+  // leave them permanently without a blueprint.
   console.log("\nFetching all mcat_keywords...");
-  const { data: allKeywordsRaw, error: fetchErr } = await supabase
-    .from("mcat_keywords")
-    .select("id, category_id, label, description, tier, parent_keyword_id, examples, concept_blueprint, yield_level")
-    .order("order_index");
-  if (fetchErr) {
-    console.error("Fetch error:", fetchErr.message);
-    process.exit(1);
+  const PAGE = 1000;
+  const allKeywords: KeywordRow[] = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data: pageRows, error: fetchErr } = await supabase
+      .from("mcat_keywords")
+      .select("id, category_id, label, description, tier, parent_keyword_id, examples, concept_blueprint, yield_level")
+      .order("order_index")
+      .order("id")
+      .range(from, from + PAGE - 1);
+    if (fetchErr) {
+      console.error("Fetch error:", fetchErr.message);
+      process.exit(1);
+    }
+    const rows = (pageRows ?? []) as KeywordRow[];
+    allKeywords.push(...rows);
+    if (rows.length < PAGE) break;
   }
-  const allKeywords = (allKeywordsRaw ?? []) as KeywordRow[];
   console.log(`  Fetched ${allKeywords.length} keywords total.`);
 
   // ── Build sibling lookup: parent_keyword_id → children[]

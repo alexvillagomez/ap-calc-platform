@@ -325,10 +325,11 @@ function SubjectSelector({ onChoose }: { onChoose: (c: "math" | "mcat") => void 
     <div className="space-y-8 text-center">
       <div className="space-y-2">
         <LoderaLogo size={36} className="mx-auto mb-4" />
+        <p className="text-xs font-semibold uppercase tracking-wide text-brand-500">Course Portal</p>
         <h2 className="text-3xl font-bold text-neutral-900 tracking-tight">
           What are you studying?
         </h2>
-        <p className="text-neutral-400 text-sm">Pick one — you can always switch later.</p>
+        <p className="text-neutral-400 text-sm">Pick one — you can always switch later from the menu.</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

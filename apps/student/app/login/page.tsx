@@ -2,14 +2,12 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/lib/cn";
-
-const ACCOUNT_KEY  = "ap_calc_account_id";
-const USERNAME_KEY = "ap_calc_username";
-const SESSION_KEY  = "ap_calc_student_session_id";
+import { supabaseBrowser } from "@/lib/supabaseBrowser";
 
 // ── Inner form — must be wrapped in Suspense for useSearchParams ──────────────
 
@@ -22,53 +20,95 @@ function LoginForm() {
   const [email,    setEmail]    = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error,    setError]    = useState<string | null>(null);
   const [loading,  setLoading]  = useState(false);
 
   const isSignup = mode === "signup";
   const switchMode = (next: "login" | "signup") => { setMode(next); setError(null); };
 
-  // If already authenticated, skip to destination
+  // Where to send the user after auth. Honor an explicit ?next= first; otherwise
+  // fall back to the course they chose during onboarding (lodera_last_center) so a
+  // signup that started from MCAT lands on /mcat, not the default /math. This fixes
+  // the "post-signup redirect to the wrong course" bug.
+  const destination = (): string => {
+    if (nextPath && nextPath.startsWith("/")) return nextPath;
+    if (typeof window !== "undefined") {
+      const last = window.localStorage.getItem("lodera_last_center");
+      if (last === "mcat") return "/mcat";
+      if (last === "math") return "/math";
+    }
+    return "/";
+  };
+
+  // If already authenticated (Supabase session), skip to destination.
   useEffect(() => {
-    fetch("/api/auth/me").then((r) => {
-      if (r.ok) {
-        router.replace(nextPath && nextPath.startsWith("/") ? nextPath : "/");
-      }
-    }).catch(() => {});
+    const supabase = supabaseBrowser();
+    supabase.auth
+      .getUser()
+      .then((res: { data: { user: { id: string } | null } }) => {
+        if (res.data.user) {
+          router.replace(destination());
+        }
+      });
   }, [router, nextPath]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (isSignup && password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
+    const supabase = supabaseBrowser();
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, username: isSignup ? username : undefined, password, mode }),
-      });
-
-      const data = (await res.json()) as {
-        user?: { id: string; email: string; username: string };
-        sessionId?: string;
-        error?: string;
-        code?: string;
-      };
-
-      if (!res.ok || !data.user) {
-        if (data.code === "email_exists") setMode("login");
-        else if (data.code === "no_account") setMode("signup");
-        setError(data.error ?? "Something went wrong. Please try again.");
-        return;
+      if (isSignup) {
+        // Create a PRE-CONFIRMED user server-side (admin API) so signup never
+        // sends a confirmation email (avoids GoTrue's email rate limit) and works
+        // regardless of the project's "Confirm email" setting. Then sign in to
+        // establish the cookie session → instant login.
+        const res = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, username, password }),
+        });
+        const data = (await res.json()) as { error?: string; code?: string };
+        if (!res.ok) {
+          if (data.code === "email_exists") setMode("login");
+          setError(data.error ?? "Could not create account. Please try again.");
+          return;
+        }
+        const { error: signErr } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (signErr) {
+          setError(
+            "Account created — please switch to Log in and sign in."
+          );
+          setMode("login");
+          return;
+        }
+      } else {
+        const { error: signErr } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (signErr) {
+          setError(
+            /invalid login/i.test(signErr.message)
+              ? "Incorrect email or password. If you're new, switch to Sign up."
+              : signErr.message
+          );
+          return;
+        }
       }
 
-      // Sync legacy localStorage keys so old pages keep working
-      localStorage.setItem(ACCOUNT_KEY, data.user.id);
-      localStorage.setItem(USERNAME_KEY, data.user.username);
-      if (data.sessionId) localStorage.setItem(SESSION_KEY, data.sessionId);
-
-      router.push(nextPath && nextPath.startsWith("/") ? nextPath : "/");
+      router.push(destination());
     } catch {
       setError("Network error. Please try again.");
     } finally {
@@ -174,6 +214,28 @@ function LoginForm() {
             />
           </div>
 
+          {isSignup && (
+            <div>
+              <label htmlFor="lp-confirm-password" className="block text-xs font-medium text-neutral-700 mb-1">
+                Confirm password
+              </label>
+              <input
+                id="lp-confirm-password"
+                type="password"
+                autoComplete="new-password"
+                required={isSignup}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={cn(
+                  "w-full px-3 py-2 text-sm rounded-xl border border-neutral-200",
+                  "focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent",
+                  "transition-colors placeholder:text-neutral-300"
+                )}
+                placeholder="Re-enter your password"
+              />
+            </div>
+          )}
+
           {error && (
             <p className="text-xs text-error-600 bg-error-50 border border-error-100 rounded-xl px-3 py-2">
               {error}
@@ -183,6 +245,17 @@ function LoginForm() {
           <Button type="submit" variant="primary" size="lg" loading={loading} className="w-full">
             {isSignup ? "Create account" : "Log in"}
           </Button>
+
+          {!isSignup && (
+            <div className="text-center">
+              <Link
+                href="/forgot-password"
+                className="text-xs font-medium text-neutral-500 hover:text-brand-600 transition-colors"
+              >
+                Forgot password?
+              </Link>
+            </div>
+          )}
         </form>
 
         <p className="mt-4 text-center text-xs text-neutral-500 leading-relaxed">

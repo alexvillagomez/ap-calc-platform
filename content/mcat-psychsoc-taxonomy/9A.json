@@ -1,0 +1,343 @@
+{
+  "category_code": "9A",
+  "umbrellas": [
+    {
+      "slug": "sociological_theory",
+      "label": "Theoretical Approaches in Sociology",
+      "description": "The major theoretical frameworks sociologists use to analyze social life — ranging from macro-level structural views to micro-level interaction perspectives.",
+      "intro": {
+        "slug": "sociological_theory_intro",
+        "label": "Overview of Sociological Theories",
+        "description": "Sociology approaches society through several competing theoretical lenses. Macrosociology focuses on large-scale structures and institutions (e.g., functionalism, conflict theory), while microsociology zooms in on face-to-face interaction (e.g., symbolic interactionism). Each theory highlights different causes and consequences of social patterns, and understanding which level of analysis a theory operates at is itself an MCAT-tested skill.",
+        "examples": ["macro vs micro level of analysis", "functionalism explains crime as a social necessity", "symbolic interactionism studies everyday conversation rituals"]
+      },
+      "in_depth": [
+        {
+          "slug": "micro_vs_macro_sociology",
+          "label": "Microsociology vs. macrosociology",
+          "description": "Distinguish microsociology (small-scale, face-to-face interaction) from macrosociology (large-scale social structures and institutions). This focuses on the level of analysis, not on identifying which specific theory is macro or micro (a separate skill).",
+          "examples": ["macro: how capitalism shapes inequality", "micro: how people greet each other in an elevator", "level of analysis in sociological research"]
+        },
+        {
+          "slug": "functionalism",
+          "label": "Functionalism",
+          "description": "Apply functionalism: society is a system of interdependent parts, each serving a function (manifest or latent) that contributes to social stability; social problems persist because they serve some function. This focuses on consensus, stability, and functional roles, not on conflict or power (conflict theory is a separate keyword).",
+          "examples": ["manifest function of education = job training", "latent function of education = social networking", "Durkheim: crime is functional because it reinforces norms"]
+        },
+        {
+          "slug": "conflict_theory",
+          "label": "Conflict theory",
+          "description": "Apply conflict theory: society is characterized by inequality and struggle between groups competing over scarce resources and power; social institutions perpetuate the dominance of elite groups. This focuses on power, coercion, and inequality, not on stability and consensus (functionalism, a separate keyword).",
+          "examples": ["Marx: capitalism pits bourgeoisie vs proletariat", "schools reproduce class inequality", "elite groups use institutions to maintain power"]
+        },
+        {
+          "slug": "symbolic_interactionism",
+          "label": "Symbolic interactionism",
+          "description": "Apply symbolic interactionism: social reality is constructed through shared symbols (words, gestures, objects) and the meanings people attach to them in face-to-face interaction. This is a micro-level theory focused on meaning-making, not on macro structural forces (separate keywords).",
+          "examples": ["a handshake means professional agreement", "how a school uniform shapes student identity", "Goffman's dramaturgical approach to interaction"]
+        },
+        {
+          "slug": "social_constructionism",
+          "label": "Social constructionism",
+          "description": "Identify social constructionism: social phenomena (race, gender, illness) are not natural facts but are created and maintained through shared social agreement, language, and interaction. This focuses on how meaning is socially produced, not on the interactional mechanics of face-to-face exchange (symbolic interactionism, a separate keyword).",
+          "examples": ["race as a social construct, not a biological category", "the social construction of mental illness (Szasz)", "gender is performed, not innate"]
+        },
+        {
+          "slug": "exchange_rational_choice",
+          "label": "Exchange and rational choice theory",
+          "description": "Apply exchange/rational choice theory: individuals weigh costs and benefits when deciding how to act, and social relationships persist when both parties find the exchange rewarding. This focuses on individual self-interested calculation, not on collective meaning or structural constraints (separate theories).",
+          "examples": ["staying in a friendship because rewards > costs", "rational voter calculates if voting is worth the time", "market exchange as a social model"]
+        },
+        {
+          "slug": "feminist_theory",
+          "label": "Feminist theory",
+          "description": "Apply feminist theory: society is organized around gender-based inequality that disadvantages women; social institutions (family, law, economy) reflect and reproduce patriarchy. This focuses on gender as a structural axis of inequality, not on class (conflict theory) or race alone (separate frameworks).",
+          "examples": ["patriarchy embedded in legal systems", "unpaid domestic labor disproportionately falls on women", "gender wage gap as structural, not individual, outcome"]
+        }
+      ]
+    },
+    {
+      "slug": "education_institution",
+      "label": "Education as a Social Institution",
+      "description": "The institution of education — its formal and hidden functions, the ways teacher expectations shape outcomes, and how education reproduces or challenges social inequality.",
+      "intro": {
+        "slug": "education_institution_intro",
+        "label": "Education: Formal and Hidden Functions",
+        "description": "Education is a primary social institution that transmits knowledge, socializes children into cultural norms, and shapes life opportunities. Beyond its official curriculum, education operates through hidden messages about conformity, authority, and social rank. Sociologists study how schooling can both open and close doors depending on a student's social background.",
+        "examples": ["school socializes children to obey authority", "education as a pathway to social mobility", "credential inflation and credentialism"]
+      },
+      "in_depth": [
+        {
+          "slug": "hidden_curriculum",
+          "label": "Hidden curriculum",
+          "description": "Identify the hidden curriculum: the unstated lessons schools teach alongside academic content — obedience, punctuality, competition, acceptance of hierarchy — that reinforce dominant social values. This focuses on implicit socialization, not the formal academic content taught (explicit curriculum).",
+          "examples": ["students learn to raise hands and wait their turn", "schools teach middle-class norms implicitly", "hidden vs manifest functions of schooling"]
+        },
+        {
+          "slug": "teacher_expectancy",
+          "label": "Teacher expectancy effect",
+          "description": "Apply the teacher expectancy effect (Pygmalion effect): teachers' expectations about a student's ability influence how they treat the student, which in turn affects the student's actual performance — a self-fulfilling prophecy in education. This focuses on the teacher-to-student expectation pathway, not on peer influence or broader school culture.",
+          "examples": ["Rosenthal & Jacobson 'Pygmalion in the Classroom'", "low expectations → less challenging work given to student", "expectancy gap between advantaged and disadvantaged students"]
+        },
+        {
+          "slug": "educational_segregation",
+          "label": "Educational segregation and stratification",
+          "description": "Describe how educational resources, outcomes, and access are unequally distributed by race, class, and geography — producing stratified life chances. This focuses on structural inequalities across schools and tracks, not on what happens inside a single classroom (teacher expectancy, a separate keyword).",
+          "examples": ["between-school funding disparities by property tax base", "tracking / ability grouping placing low-SES students in lower tracks", "racial segregation in schools post-Brown v. Board"]
+        }
+      ]
+    },
+    {
+      "slug": "family_institution",
+      "label": "Family as a Social Institution",
+      "description": "The family as society's most fundamental institution — its varied forms, kinship structures, marriage patterns, and the problem of family violence.",
+      "intro": {
+        "slug": "family_institution_intro",
+        "label": "Family Forms, Kinship, and Marriage",
+        "description": "The family is the primary unit of socialization and reproduction in virtually every society, yet its forms vary enormously across cultures and history. Sociologists study kinship rules (who counts as family), marriage systems (monogamy, polygamy), and contemporary trends like rising divorce rates and diverse household structures. Family is also a site of both care and conflict, including intimate-partner and intergenerational violence.",
+        "examples": ["nuclear vs extended family structures", "rising cohabitation and declining marriage rates", "family as primary socialization agent"]
+      },
+      "in_depth": [
+        {
+          "slug": "forms_of_kinship",
+          "label": "Forms of kinship",
+          "description": "Distinguish major kinship systems: nuclear family (parents + children), extended family (multigenerational), matrilineal vs patrilineal descent, and matrilocal vs patrilocal residence. This focuses on how societies organize biological and social relatedness, not on marriage rules (a separate keyword).",
+          "examples": ["matrilineal descent traces lineage through the mother", "extended family household in many non-Western cultures", "nuclear family as dominant Western norm"]
+        },
+        {
+          "slug": "diversity_family_forms",
+          "label": "Diversity in family forms",
+          "description": "Recognize how contemporary families diverge from the traditional nuclear model — single-parent households, blended families, cohabiting couples, same-sex parent families, and childless couples. This focuses on describing variation, not on explaining divorce or kinship rules (separate keywords).",
+          "examples": ["blended (step) families after remarriage", "single-parent households as the majority in some demographics", "same-sex couples and legal parenthood"]
+        },
+        {
+          "slug": "marriage_and_divorce",
+          "label": "Marriage and divorce",
+          "description": "Describe the social institution of marriage — monogamy, polygamy (polygyny/polyandry), endogamy, exogamy — and sociological explanations for divorce trends (economic independence, shifting norms, no-fault divorce laws). This focuses on the institutional rules and trends, not on specific kinship descent systems (a separate keyword).",
+          "examples": ["endogamy: marrying within one's social group", "polygyny common in some patriarchal societies", "rising divorce rates linked to women's labor-force entry"]
+        },
+        {
+          "slug": "family_violence",
+          "label": "Violence in the family",
+          "description": "Identify forms of family violence — intimate partner violence (spousal abuse), child abuse, and elder abuse — and sociological factors associated with higher rates (economic stress, isolation, power imbalances). This focuses on family violence as a social problem, not on the institution of marriage itself (a separate keyword).",
+          "examples": ["cycle of violence / intergenerational transmission of abuse", "economic dependence trapping victims of spousal abuse", "elder abuse by adult caregivers"]
+        }
+      ]
+    },
+    {
+      "slug": "religion_institution",
+      "label": "Religion as a Social Institution",
+      "description": "Religion as a social institution — how it is organized, measured, and its relationship to social stability and social change.",
+      "intro": {
+        "slug": "religion_institution_intro",
+        "label": "Religion: Organization, Religiosity, and Social Change",
+        "description": "Religion functions simultaneously as a source of moral community (Durkheim), social control, and — at times — a driver of social transformation (Weber). Sociologists distinguish organizational forms (church, denomination, sect, cult), measure religiosity along multiple dimensions, and debate secularization versus religious revival. Understanding Weber's connection between religion and economic behavior is also key.",
+        "examples": ["Durkheim: religion creates social solidarity", "Weber: Protestant ethic and the spirit of capitalism", "secularization thesis vs religious revival"]
+      },
+      "in_depth": [
+        {
+          "slug": "religiosity",
+          "label": "Religiosity",
+          "description": "Define and measure religiosity across multiple dimensions: belief (theological orthodoxy), practice (attendance, ritual), experience (personal sense of the divine), and knowledge (familiarity with doctrine). This focuses on how to operationalize religious involvement, not on organizational types of religion (a separate keyword).",
+          "examples": ["frequency of church attendance as behavioral religiosity", "belief in God vs active practice gap", "high religiosity correlated with lower crime in some studies"]
+        },
+        {
+          "slug": "church_denomination",
+          "label": "Churches and denominations",
+          "description": "Distinguish a church (a large, bureaucratic, state-affiliated religious body with routine ritual) from a denomination (an established, pluralistic branch of a major faith that coexists with others). This focuses on the more mainstream, institutionalized ends of the church–sect continuum, not on sects or cults (separate keywords).",
+          "examples": ["Roman Catholic Church as an ecclesia/church", "Baptist and Methodist denominations in the US", "routinized, institutionalized worship"]
+        },
+        {
+          "slug": "sect",
+          "label": "Sects",
+          "description": "Identify a sect as a smaller, stricter religious group that breaks away from a mainstream church or denomination, demanding greater commitment and often rejecting mainstream society. This focuses on schismatic, high-demand groups, not on entirely new religious movements (cults, a separate keyword).",
+          "examples": ["sect forms when members feel the church has become too worldly", "high commitment requirements (dietary laws, dress codes)", "Jehovah's Witnesses as a classic sect example"]
+        },
+        {
+          "slug": "cult_new_religious_movement",
+          "label": "Cults / new religious movements",
+          "description": "Identify a cult (new religious movement) as a novel, often charismatic-led religious group outside established traditions, characterized by intense devotion, isolation, and sometimes authoritarian leadership. This focuses on entirely new faiths rather than offshoots of existing ones (sects, a separate keyword).",
+          "examples": ["Heaven's Gate as an extreme new religious movement", "charismatic leader as the center of authority", "sociologists prefer 'new religious movement' to avoid stigma"]
+        },
+        {
+          "slug": "religion_social_change",
+          "label": "Religion and social change",
+          "description": "Describe how religion can drive, resist, or accommodate social change — including secularization (declining religious authority in public life), modernization, and fundamentalism (a return to strict interpretation in response to modernity). This focuses on the direction-of-influence question (religion → society), not on religious organization types (separate keywords).",
+          "examples": ["secularization: church attendance declining in Western Europe", "fundamentalism as a reaction against modernization", "liberation theology driving social justice movements"]
+        }
+      ]
+    },
+    {
+      "slug": "government_economy_institution",
+      "label": "Government and Economy as Social Institutions",
+      "description": "Power, authority, political and economic systems, and the social organization of labor — the macro-level institutional forces that structure society's resource distribution and governance.",
+      "intro": {
+        "slug": "government_economy_institution_intro",
+        "label": "Power, Authority, and Economic Systems",
+        "description": "Government and the economy are interlocking institutions that determine who has power, how resources are allocated, and what kinds of work people do. Weber's three types of authority — traditional, charismatic, and rational-legal — explain how different societies legitimate power. Economic systems range from capitalism to socialism, and all produce some form of division of labor that shapes social roles and inequalities.",
+        "examples": ["democratic vs authoritarian political systems", "capitalism vs socialism as economic systems", "Weber's typology of authority explains why people obey"]
+      },
+      "in_depth": [
+        {
+          "slug": "weber_traditional_authority",
+          "label": "Weber's traditional authority",
+          "description": "Identify traditional authority: power legitimated by long-standing custom, heredity, and the belief that 'this is how it has always been done' (e.g., monarchies, tribal chiefs). This focuses on custom-based legitimacy, not on personal charisma or law (separate authority types).",
+          "examples": ["monarchy: king's rule accepted because it's ancestral", "tribal elders obeyed by tradition", "traditional patriarchal household authority"]
+        },
+        {
+          "slug": "weber_charismatic_authority",
+          "label": "Weber's charismatic authority",
+          "description": "Identify charismatic authority: power legitimated by followers' perception of a leader's exceptional personal qualities, divine inspiration, or heroism (e.g., prophets, revolutionary leaders). This focuses on personal magnetism as the source of obedience, not on tradition or formal rules (separate keywords).",
+          "examples": ["Martin Luther King Jr. as charismatic leader", "religious prophet commanding devoted followers", "charismatic authority often unstable without institutionalization"]
+        },
+        {
+          "slug": "weber_rational_legal_authority",
+          "label": "Weber's rational-legal authority",
+          "description": "Identify rational-legal authority: power legitimated by formally enacted rules, laws, and procedures — people obey the office, not the person holding it. This is the dominant form in modern bureaucratic states and is the basis of legal-political legitimacy. This focuses on rule-bound legitimacy, not on tradition or charisma (separate keywords).",
+          "examples": ["elected president's authority comes from the constitution", "police officer obeyed because of legal mandate", "bureaucratic procedures as rational-legal authority in action"]
+        },
+        {
+          "slug": "comparative_economic_systems",
+          "label": "Comparative economic and political systems",
+          "description": "Distinguish major economic systems (capitalism: private ownership + market; socialism: collective/state ownership + planning; mixed economy) and political systems (democracy, authoritarianism, totalitarianism, monarchy). This focuses on comparative typology, not on the authority that legitimates political rule (Weber's types, separate keywords).",
+          "examples": ["capitalism: means of production privately owned", "socialism: government controls key industries", "democratic vs totalitarian political control"]
+        },
+        {
+          "slug": "division_of_labor",
+          "label": "Division of labor",
+          "description": "Describe the division of labor — the specialization of tasks among workers in an economy — and its social consequences, including Durkheim's distinction between mechanical solidarity (simple societies with shared tasks) and organic solidarity (complex societies with interdependence). This focuses on specialization as a social force, not on economic system type (a separate keyword).",
+          "examples": ["factory assembly line as extreme division of labor", "mechanical solidarity: small village where everyone farms", "organic solidarity: modern cities require many specialists"]
+        }
+      ]
+    },
+    {
+      "slug": "health_medicine_institution",
+      "label": "Health and Medicine as a Social Institution",
+      "description": "Health and medicine as social phenomena — how illness is defined, experienced, and managed within institutional and cultural contexts.",
+      "intro": {
+        "slug": "health_medicine_institution_intro",
+        "label": "The Social Construction of Health and Illness",
+        "description": "Medicine is both a biological science and a social institution that defines normality, legitimates illness, and organizes care. Sociologists examine how cultural norms shape illness behavior (the sick role), how medical authority expands (medicalization), who gets sick and why (social epidemiology), and how patients actually experience illness. These topics appear frequently in the MCAT because they highlight social forces in what seems like a purely biological domain.",
+        "examples": ["medicalization of childbirth as a social process", "social determinants of health (poverty → worse outcomes)", "Parsons' sick role legitimates absence from work"]
+      },
+      "in_depth": [
+        {
+          "slug": "medicalization",
+          "label": "Medicalization",
+          "description": "Identify medicalization: the process by which non-medical problems (e.g., sadness, hyperactivity, alcoholism, childbirth) are redefined as medical conditions requiring medical treatment, expanding physician authority. This focuses on the social expansion of medical jurisdiction, not on the sick role or health disparities (separate keywords).",
+          "examples": ["ADHD diagnosis expanding from children to adults", "alcoholism reframed as disease rather than moral failing", "pregnancy and childbirth medically managed in hospital settings"]
+        },
+        {
+          "slug": "sick_role",
+          "label": "The sick role (Parsons)",
+          "description": "Apply Parsons' sick role: a socially legitimated status with two rights (exemption from normal duties; not blamed for illness) and two obligations (must want to get well; must seek and comply with competent medical care). Failure to meet obligations can lead to withdrawal of the sick role. This focuses on Parsons' specific model, not on the experience of chronic illness (a separate keyword).",
+          "examples": ["patient excused from work because they are 'legitimately' ill", "patient must comply with doctor's orders to keep sick-role privileges", "chronic illness challenges the 'get well' obligation"]
+        },
+        {
+          "slug": "illness_experience",
+          "label": "Illness experience",
+          "description": "Describe how patients subjectively experience illness — including stigma, disrupted identity, biographical disruption, and the difference between disease (biomedical) and illness (lived experience). This focuses on the patient's perspective and meaning-making, not on medical authority or epidemiology (separate keywords).",
+          "examples": ["biographical disruption: cancer diagnosis reshapes life narrative", "stigma attached to mental illness shaping patient identity", "disease = pathology; illness = how person experiences it"]
+        },
+        {
+          "slug": "delivery_of_health_care",
+          "label": "Delivery of health care",
+          "description": "Describe how health care is organized and delivered — including the roles of physicians, nurses, and allied health professionals; the shift from solo practice to managed care; and barriers to access (cost, geography, insurance). This focuses on organizational and access dimensions, not on patterns of who gets sick (social epidemiology, a separate keyword).",
+          "examples": ["fee-for-service vs managed care (HMO) models", "rural vs urban access gaps in primary care", "health insurance as a gatekeeping mechanism"]
+        },
+        {
+          "slug": "social_epidemiology",
+          "label": "Social epidemiology",
+          "description": "Apply social epidemiology: the study of how social factors — race, class, gender, neighborhood — are distributed in the population and linked to differential rates of illness, disease, and mortality. This focuses on population-level patterns of who gets sick and why, not on how individuals experience illness (a separate keyword).",
+          "examples": ["lower SES → higher rates of cardiovascular disease", "racial disparities in infant mortality rates", "social determinants of health framework"]
+        }
+      ]
+    },
+    {
+      "slug": "culture_elements",
+      "label": "Elements and Types of Culture",
+      "description": "The building blocks of culture — beliefs, values, norms, symbols, rituals, language — and the distinction between material and symbolic culture.",
+      "intro": {
+        "slug": "culture_elements_intro",
+        "label": "What Culture Is and What It Contains",
+        "description": "Culture is the shared set of beliefs, values, norms, symbols, language, and artifacts that members of a society use to make sense of their world and coordinate action. Sociologists distinguish the material (physical objects) from the symbolic (meanings and ideas) dimensions of culture, and study how culture is transmitted, contested, and changed. Understanding culture's components is foundational for MCAT questions about cross-cultural comparisons and cultural change.",
+        "examples": ["values: freedom and individualism in American culture", "symbols: the flag as a condensed cultural meaning", "norms enforce expected behavior through sanctions"]
+      },
+      "in_depth": [
+        {
+          "slug": "elements_of_culture",
+          "label": "Elements of culture",
+          "description": "Identify the core components of culture: beliefs (ideas about what is true), values (ideas about what is desirable), norms (rules of behavior), symbols (objects/gestures/words with shared meaning), rituals (patterned ceremonial practices), and language. This focuses on naming and distinguishing these components, not on how culture changes over time (separate keywords).",
+          "examples": ["belief: the earth is billions of years old", "value: hard work is virtuous", "norm: shake hands when meeting someone"]
+        },
+        {
+          "slug": "material_vs_symbolic_culture",
+          "label": "Material vs. symbolic culture",
+          "description": "Distinguish material culture (physical, tangible products of a society: tools, buildings, clothing, technology) from symbolic/nonmaterial culture (intangible meanings: language, beliefs, values, norms). This focuses on the material/nonmaterial distinction, not on identifying specific cultural elements (separate keyword).",
+          "examples": ["car = material culture; traffic laws = symbolic/nonmaterial", "smartphone = material; etiquette around phone use = symbolic", "artifacts as windows into a society's values"]
+        }
+      ]
+    },
+    {
+      "slug": "cultural_change",
+      "label": "Cultural Change and Diversity",
+      "description": "How cultures change, how groups relate to unfamiliar cultures, and how subcultures and countercultures form within a larger society.",
+      "intro": {
+        "slug": "cultural_change_intro",
+        "label": "Cultural Dynamics: Lag, Shock, and Pluralism",
+        "description": "Cultures are not static — they change through internal evolution, contact with other cultures, and technological innovation. Key concepts include culture lag (technology outpacing norms), culture shock (disorientation in a foreign culture), and assimilation vs multiculturalism (how immigrants and minorities relate to a dominant culture). Understanding subcultures and countercultures helps explain diversity within a single society.",
+        "examples": ["internet norms lagging behind internet technology (culture lag)", "Peace Corps volunteer experiencing culture shock abroad", "US as a 'melting pot' vs 'salad bowl' debate"]
+      },
+      "in_depth": [
+        {
+          "slug": "culture_lag",
+          "label": "Culture lag",
+          "description": "Apply Ogburn's culture lag: the gap that develops when material culture (technology) changes faster than symbolic culture (norms, values, laws), creating a period of social maladjustment. This focuses on the speed differential between material and normative change, not on the initial distinction between material and symbolic culture (separate keyword).",
+          "examples": ["reproductive technology arrived before legal norms for surrogacy", "social media outpaced norms about privacy and harassment", "Ogburn: technology leads, culture follows"]
+        },
+        {
+          "slug": "culture_shock",
+          "label": "Culture shock",
+          "description": "Define culture shock: the disorientation and distress that occurs when a person encounters an unfamiliar culture whose norms and values differ sharply from their own. This focuses on the psychological response to cultural difference, not on the long-term process of adapting to or adopting a new culture (assimilation, a separate keyword).",
+          "examples": ["international student confused by different classroom norms", "reverse culture shock on returning home from abroad", "phases: honeymoon → frustration → adjustment → adaptation"]
+        },
+        {
+          "slug": "assimilation",
+          "label": "Assimilation",
+          "description": "Define assimilation: the process by which a minority group adopts the culture (language, norms, values) of the dominant group, eventually blending in. Distinguish full assimilation (absorbing the dominant culture) from partial assimilation and segmented assimilation (different outcomes for different immigrant groups). This focuses on incorporation of a minority into a dominant culture, not on multiculturalism (a separate keyword).",
+          "examples": ["second-generation immigrants speaking only English", "cultural assimilation vs structural assimilation (jobs/institutions)", "melting-pot model assumes assimilation is desirable"]
+        },
+        {
+          "slug": "multiculturalism",
+          "label": "Multiculturalism",
+          "description": "Define multiculturalism: the coexistence of multiple cultural groups within a society, with the deliberate valuing and preservation of cultural differences rather than assimilation into a single norm. This focuses on cultural pluralism as a normative stance, not on how minorities actually adapt over generations (assimilation, a separate keyword).",
+          "examples": ["Canada's official multicultural policy", "bilingual education as a multicultural practice", "'salad bowl' metaphor vs 'melting pot'"]
+        },
+        {
+          "slug": "subcultures_countercultures",
+          "label": "Subcultures and countercultures",
+          "description": "Distinguish a subculture (a group within a larger culture that shares some mainstream values but also has distinct practices, norms, and symbols) from a counterculture (a subculture that actively opposes dominant cultural values). This focuses on the degree of opposition to mainstream culture, not on cultural pluralism at the societal level (multiculturalism, a separate keyword).",
+          "examples": ["goth subculture: distinct aesthetics, accepts mainstream jobs", "1960s counterculture rejected mainstream consumerism", "hacker subculture vs hacktivist counterculture"]
+        },
+        {
+          "slug": "mass_media_popular_culture",
+          "label": "Mass media and popular culture",
+          "description": "Describe how mass media (television, internet, film, social media) shape and reflect popular culture — spreading norms, constructing social reality, and homogenizing tastes across large populations. This focuses on media as a cultural institution and agent of socialization, not on culture lag caused by technology (a separate keyword).",
+          "examples": ["TV advertising reinforcing consumer values", "social media creating viral cultural trends", "agenda-setting: media tells people what to think about"]
+        },
+        {
+          "slug": "evolution_human_culture",
+          "label": "Culture as an evolved human capacity",
+          "description": "Explain culture as an evolved adaptive capacity of the human species: traits such as language, tool use, and social learning are themselves products of biological evolution, and together they enable cumulative culture (knowledge that builds across generations) — a capacity that enhanced human survival. This focuses on the species-level claim that the capacity for culture is an evolved adaptation, not on the mechanisms by which specific cultural elements actually spread within or between societies (cultural transmission and diffusion, a separate keyword).",
+          "examples": ["language and social learning as evolved, culture-enabling traits", "cumulative culture: each generation builds on the last", "tool use as an adaptation that supports human culture"]
+        },
+        {
+          "slug": "cultural_transmission_diffusion",
+          "label": "Cultural transmission and diffusion",
+          "description": "Distinguish cultural transmission (passing culture within a society across generations through socialization) from cultural diffusion (spread of cultural elements from one society to another through contact, trade, migration, or media). This focuses on the mechanisms of cultural spread, not on the experience of encountering a foreign culture (culture shock, separate keyword).",
+          "examples": ["diffusion: blue jeans spread globally from the US", "transmission: grandparents teaching language to grandchildren", "globalization accelerates cultural diffusion"]
+        }
+      ]
+    }
+  ]
+}

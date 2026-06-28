@@ -86,13 +86,21 @@
     @apply font-sans;
   }
 
-  /* Preview: make KaTeX math use Times New Roman and scale down ~15% */
-  .preview-times .katex {
-    font-family: "Times New Roman", Times, serif !important;
-    font-size: 0.96em !important;
+  /* Inline math: match container font size exactly */
+  .preview-times .katex-inline .katex {
+    font-size: 1em;
   }
-  .preview-times .katex * {
-    font-family: "Times New Roman", Times, serif !important;
+
+  /*
+   * KaTeX italicizes single-letter variables (KaTeX_Math) by convention, which reads as
+   * a jarring font swap mid-sentence against the upright KaTeX_Main prose around it.
+   * Force inline-math variables upright in KaTeX_Main so they blend with surrounding text.
+   */
+  .preview-times .katex-inline .mathnormal,
+  .preview-times .katex-inline .mathit,
+  .preview-times .katex-inline .mathdefault {
+    font-family: KaTeX_Main, "Times New Roman", serif !important;
+    font-style: normal !important;
   }
 
   /* Ensure KaTeX's accessibility MathML does not show as duplicate text */
@@ -115,6 +123,7 @@
     margin-right: auto !important;
     text-align: left !important;
   }
+
 
   /* Slightly separate rows in aligned / matrix-style tables (cleaner numbered steps) */
   .preview-times .katex-display .mtable .mtr .mtd {

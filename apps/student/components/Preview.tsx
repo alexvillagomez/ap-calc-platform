@@ -126,10 +126,13 @@ export function Preview({ latexContent, className = "" }: PreviewProps) {
     }
     if (seg.type === "functionGraph") {
       const equalScale = seg.equalScale.trim().toLowerCase() !== "false";
-      nodes.push(<FunctionGraph key={k++} equation={seg.equation} rangeX={parseRangePair(seg.rangeX, [-3, 3])} rangeY={parseRangePair(seg.rangeY, [-3, 3])} points={parsePoints(seg.points ?? "")} equalScale={equalScale} />);
+      nodes.push(<FunctionGraph key={k++} equation={seg.equation} rangeX={parseRangePair(seg.rangeX, [-3, 3])} rangeY={parseRangePair(seg.rangeY, [-3, 3])} points={parsePoints(seg.points ?? "")} holes={parsePoints(seg.holes ?? "")} equalScale={equalScale} />);
       continue;
     }
 
+    // parseVizSegments only emits latex/slopeField/functionGraph; narrow for TS
+    // (the richer Molecule/Mermaid/table figures render via MathText, not Preview).
+    if (seg.type !== "latex") continue;
     for (const para of seg.value.split(/\n\s*\n/)) {
       const trimmed = para.trim();
       const segs = mergeAdjacentInlineMath(splitMath(autoWrapBareLatex(para)));

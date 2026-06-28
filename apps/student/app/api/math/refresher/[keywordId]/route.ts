@@ -14,6 +14,7 @@ import {
   generateAndStoreRefresher,
   RefresherGenError,
 } from "@/lib/refresherGenerator";
+import { resolveScopeContract } from "@/lib/scopeContract";
 
 export const runtime = "nodejs";
 
@@ -53,7 +54,7 @@ export async function GET(
   // 2. Load keyword metadata for generation.
   const { data: kw, error: kwError } = await supabase
     .from("math_keywords")
-    .select("id, label, description")
+    .select("id, label, description, examples, concept_blueprint, tier, parent_keyword_id, category_id")
     .eq("id", keywordId)
     .maybeSingle();
 
@@ -68,9 +69,29 @@ export async function GET(
     );
   }
 
+  // Universal scope contract (stored merged with forward fence, or derived) so
+  // the refresher's rule + example never drift into a later/sibling topic.
+  const contract = await resolveScopeContract(supabase, "math_keywords", {
+    id: kw.id as string,
+    label: kw.label as string,
+    description: (kw.description as string) ?? "",
+    tier: (kw.tier as string | null) ?? null,
+    parent_keyword_id: (kw.parent_keyword_id as string | null) ?? null,
+    category_id: (kw.category_id as string | null) ?? null,
+    concept_blueprint: kw.concept_blueprint,
+  });
+
   // 3. Generate + store.
   try {
-    const generated = await generateAndStoreRefresher(supabase, "math", kw);
+    const generated = await generateAndStoreRefresher(supabase, "math", {
+      id: kw.id as string,
+      label: kw.label as string,
+      description: (kw.description as string) ?? null,
+      examples: (kw.examples as string[] | string | null) ?? null,
+      blueprint:
+        (contract as Record<string, unknown> | null) ??
+        ((kw.concept_blueprint as Record<string, unknown> | null) ?? null),
+    });
     if (!generated) {
       return NextResponse.json(
         {

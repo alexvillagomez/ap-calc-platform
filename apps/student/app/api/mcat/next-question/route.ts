@@ -3,14 +3,22 @@ import { createClient } from "@supabase/supabase-js";
 import { fetchTemplateCards } from "@/lib/mcatTemplateCards";
 import { generateMcatQuestions, McatGenError, verifyQuestionsFast } from "@/lib/mcatGenerator";
 import { loadTargetKeywords, embedText, tagByEmbedding } from "@/lib/mcatTagging";
+import { sectionFromId } from "@/lib/mcatSection";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
 import { loadActivePriorities, PRIORITY_BOOST_FACTOR } from "@/lib/priorities";
 import { bestKeywordForQuestion } from "@/lib/bestKeyword";
+import { primaryKeywordId as maxWeightKeyword } from "@/lib/primaryKeyword";
+import { enrichQuestionsInBackground } from "@/lib/questionEnrichment";
 import {
   normalizeStem,
   filterNearDuplicates,
   streakKeyword,
   filterStreakKeyword,
+  streakUmbrellaKeyword,
+  filterStreakUmbrella,
+  parseEmbedding,
+  mmrRerank,
+  type DiversityDims,
 } from "@/lib/questionDiversity";
 
 export const runtime = "nodejs";
@@ -95,7 +103,55 @@ type DbQuestion = {
   difficulty: number;
   parent_question_id: string | null;
   avg_rating: number | null;
+  // Optional embedding columns (populated by async enrichment) used for MMR.
+  problem_description_embedding?: unknown;
+  action_description_embedding?: unknown;
+  representation_description_embedding?: unknown;
+  embedding?: unknown;
 };
+
+/** Build the MMR diversity dimensions for a question row. */
+function dimsOf(q: {
+  problem_description_embedding?: unknown;
+  action_description_embedding?: unknown;
+  representation_description_embedding?: unknown;
+  embedding?: unknown;
+}): DiversityDims {
+  return {
+    action: parseEmbedding(q.action_description_embedding),
+    representation: parseEmbedding(q.representation_description_embedding),
+    problem:
+      parseEmbedding(q.problem_description_embedding) ??
+      parseEmbedding(q.embedding),
+  };
+}
+
+/** Client-facing question shape (served item + every buffered extra). */
+function shapeQuestion(q: DbQuestion, primaryKeywordId: string | null) {
+  return {
+    id: q.id,
+    stem: q.stem,
+    choices: q.choices,
+    correct_index: q.correct_index,
+    explanation: q.explanation,
+    keyword_weights: q.keyword_weights,
+    difficulty: q.difficulty,
+    parent_question_id: q.parent_question_id ?? null,
+    primary_keyword_id: primaryKeywordId,
+  };
+}
+
+// How many ready extras to hand back alongside the served question so the client
+// can serve the next few items with NO round-trip. Buffered extras use the cheap
+// in-code max-weight keyword (no per-item embedding lookup) — only the SERVED item
+// pays for the precise embedding-pinpointed keyword.
+const BUFFER_MAX = 4;
+function bufferItems(pool: DbQuestion[], selectedId: string) {
+  return pool
+    .filter((q) => q.id !== selectedId)
+    .slice(0, BUFFER_MAX)
+    .map((q) => shapeQuestion(q, maxWeightKeyword(q.keyword_weights)));
+}
 
 export async function POST(request: Request) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -121,11 +177,16 @@ export async function POST(request: Request) {
     recent_keyword_ids?: string[];
     /** Normalised stems of questions already seen this session. */
     seen_stems?: string[];
+    /** Question ids of the last N served items — drives embedding-based MMR. */
+    recent_question_ids?: string[];
   };
 
   const { session_id, exclude_ids = [], keyword_id } = body;
   const recentKeywordIds: string[] = Array.isArray(body.recent_keyword_ids)
     ? body.recent_keyword_ids
+    : [];
+  const recentQuestionIds: string[] = Array.isArray(body.recent_question_ids)
+    ? body.recent_question_ids.slice(-10)
     : [];
   const seenStems: string[] = Array.isArray(body.seen_stems)
     ? body.seen_stems
@@ -152,7 +213,8 @@ export async function POST(request: Request) {
   const supabase = createClient(supabaseUrl, key);
 
   // 1. Load keywords via loadTargetKeywords (in_depth preferred)
-  const keywords = await loadTargetKeywords(supabase, categoryIds);
+  // excludeIntros: intro keywords (order_index -1) are framing-only, never questioned.
+  const keywords = await loadTargetKeywords(supabase, categoryIds, { excludeIntros: true });
   if (keywords.length === 0) {
     return NextResponse.json(
       { error: "Unknown category or no keywords seeded for it" },
@@ -249,7 +311,9 @@ export async function POST(request: Request) {
   // Derive tier from effective target (used for generation and in-band boosting)
   const effectiveTier: DifficultyTier = explicitTier ?? numericToTier(effectiveTarget);
 
-  // 4. Load active stored questions, excluding seen
+  // 4. Load active stored questions, excluding seen. LIGHT columns only — the 4
+  //    embedding columns are large and not needed to score; they're fetched in a
+  //    second, tightly-scoped query (step 5b) for just the top-N candidates.
   const questionsQuery = supabase
     .from("mcat_questions")
     .select(
@@ -264,21 +328,55 @@ export async function POST(request: Request) {
     (q) => !seenIds.has(q.id as string)
   ) as DbQuestion[];
 
-  // Filter by scope — precedence: keyword_id (single) > keyword_ids > category
+  // Filter by scope — precedence: keyword_id (single) > keyword_ids > category.
+  //
+  // IN-SCOPE GUARANTEE: a question merely *carrying* the target keyword at a tiny
+  // weight is NOT in scope — its dominant subject is something else, which is how
+  // out-of-scope questions leaked into auto mode. Require the target keyword to be
+  // the question's PRIMARY (argmax) weight, or at least a substantial share, and
+  // fall back to looser tiers only if the strict pool is empty so we never starve.
+  const SCOPE_MIN_WEIGHT = 0.34;
+  const dominantKeyword = (
+    kw: Record<string, number> | null | undefined
+  ): string | null => {
+    if (!kw) return null;
+    let best: string | null = null;
+    let bestW = -Infinity;
+    for (const [id, w] of Object.entries(kw)) {
+      if (w > bestW) {
+        bestW = w;
+        best = id;
+      }
+    }
+    return best;
+  };
+
   if (keyword_id) {
-    // Single-keyword: restrict to questions whose keyword_weights contains it
-    candidates = candidates.filter(
+    const primary = candidates.filter(
+      (q) => dominantKeyword(q.keyword_weights as Record<string, number>) === keyword_id
+    );
+    const substantial = candidates.filter(
+      (q) => ((q.keyword_weights as Record<string, number>)?.[keyword_id] ?? 0) >= SCOPE_MIN_WEIGHT
+    );
+    const present = candidates.filter(
       (q) =>
         q.keyword_weights &&
         Object.prototype.hasOwnProperty.call(q.keyword_weights, keyword_id)
     );
+    candidates = primary.length > 0 ? primary : substantial.length > 0 ? substantial : present;
   } else if (scopedKeywordIds) {
-    // Set scope: restrict to questions that carry at least one id in the set
-    candidates = candidates.filter(
+    // Set scope: prefer questions whose PRIMARY keyword is in scope; fall back to
+    // any in-scope membership only if that's empty.
+    const primary = candidates.filter((q) => {
+      const dom = dominantKeyword(q.keyword_weights as Record<string, number>);
+      return dom != null && scopedKeywordIds.has(dom);
+    });
+    const member = candidates.filter(
       (q) =>
         q.keyword_weights &&
         Object.keys(q.keyword_weights).some((id) => scopedKeywordIds.has(id))
     );
+    candidates = primary.length > 0 ? primary : member;
   }
 
   // 5. Score candidates (with rating nudge + in-band boost when explicit difficulty)
@@ -315,19 +413,72 @@ export async function POST(request: Request) {
     };
   });
 
-  scored.sort((a, b) => b.score - a.score);
+  // 5b. MMR / diversity-aware re-rank: penalise candidates conceptually close
+  //     (action/representation/problem embeddings) to recently-served items, so
+  //     consecutive within-subtopic questions are materially different — not just
+  //     non-duplicate stems. No LLM call; no-op when embeddings/recents absent.
+  //
+  //     Embeddings are NOT loaded for the whole category (step 4 is light). We
+  //     fetch them in ONE targeted query only for the items that can actually reach
+  //     the served pool: the top-N scored candidates + the recently-served items.
+  //     mmrRerank is a per-item rescale (no cross-candidate dependency) and can only
+  //     LOWER a score, so ranking just the top-N is behaviour-equivalent.
+  const MMR_WINDOW = 30;
+  const byScoreDesc = [...scored].sort((a, b) => b.score - a.score);
+  const windowQs = byScoreDesc.slice(0, MMR_WINDOW);
+  const restQs = byScoreDesc.slice(MMR_WINDOW);
 
-  // 5a. Diversity filters (streak + near-dup) applied before final pool selection.
+  const embIds = Array.from(
+    new Set<string>([...windowQs.map((q) => q.id), ...recentQuestionIds])
+  );
+  const dimsById = new Map<string, DiversityDims>();
+  if (embIds.length > 0) {
+    const { data: embRows } = await supabase
+      .from("mcat_questions")
+      .select(
+        "id, problem_description_embedding, action_description_embedding, representation_description_embedding, embedding"
+      )
+      .in("id", embIds);
+    for (const r of (embRows ?? []) as DbQuestion[]) {
+      dimsById.set(r.id, dimsOf(r));
+    }
+  }
+  const recentDims: DiversityDims[] = recentQuestionIds
+    .map((id) => dimsById.get(id))
+    .filter((d): d is DiversityDims => d != null);
+
+  const rankedWindow = mmrRerank(
+    windowQs.map((q) => ({ ...q, dims: dimsById.get(q.id) ?? dimsOf(q) })),
+    recentDims
+  );
+  const ranked = [
+    ...rankedWindow,
+    ...restQs.map((q) => ({ ...q, dims: dimsOf(q) })),
+  ];
+  ranked.sort((a, b) => b.score - a.score);
+
+  // 5a. Diversity filters (streak + umbrella-streak + near-dup) before final pool.
   // Each filter degrades gracefully: if it would remove all candidates it falls
   // back to the unfiltered set and logs a console warning.
-  const blockedKw = streakKeyword(recentKeywordIds);
-  const diverseScored = filterNearDuplicates(
-    filterStreakKeyword(scored, blockedKw).map((q) => ({
-      ...q,
-      stem: normalizeStem(q.stem ?? ""),
-    })),
-    seenStems
+  const kwParentMap: Record<string, string | null> = Object.fromEntries(
+    keywords.map((k) => [k.id, k.parent_keyword_id ?? null])
   );
+  const blockedKw = streakKeyword(recentKeywordIds);
+  const blockedUmbrella = streakUmbrellaKeyword(recentKeywordIds, kwParentMap);
+  // BUG-FIX: filterNearDuplicates compares normalized stems, but the normalized stem
+  // must NOT replace the original — otherwise the display stem sent to the client
+  // shows artifacts like "i to i NUM hydrogen bonds" instead of "i to i+4 hydrogen bonds".
+  // Strategy: normalize stems on copies for filtering, then restore originals by id.
+  const afterStreakFilters = filterStreakUmbrella(
+    filterStreakKeyword(ranked, blockedKw),
+    blockedUmbrella,
+    kwParentMap
+  );
+  const originalStemById = new Map(afterStreakFilters.map((q) => [q.id, q.stem]));
+  const diverseScored = filterNearDuplicates(
+    afterStreakFilters.map((q) => ({ ...q, stem: normalizeStem(q.stem ?? "") })),
+    seenStems
+  ).map((q) => ({ ...q, stem: originalStemById.get(q.id) ?? q.stem }));
 
   const top5 = diverseScored.slice(0, 5);
 
@@ -354,22 +505,46 @@ export async function POST(request: Request) {
       fallbackWeights: selected.keyword_weights,
     });
     return NextResponse.json({
-      question: {
-        id: selected.id,
-        stem: selected.stem,
-        choices: selected.choices,
-        correct_index: selected.correct_index,
-        explanation: selected.explanation,
-        keyword_weights: selected.keyword_weights,
-        difficulty: selected.difficulty,
-        parent_question_id: selected.parent_question_id ?? null,
-        primary_keyword_id: primaryKeywordId,
-      },
+      question: shapeQuestion(selected, primaryKeywordId),
+      // Hand back the next few in-scope, already-filtered candidates so the client
+      // serves the next items instantly — one fetch covers several questions.
+      buffer: bufferItems(top5, selected.id),
       generated: false,
     });
   }
 
-  // 7. Not enough candidates — generate new questions
+  // 7. Generate new questions — BATCH-ON-MISS RECYCLE MODEL (diversity design,
+  //    Phase 2). We generate a deliberate batch, serve ONE now, and persist the
+  //    rest as `active` so they become this user's subsequent questions AND are
+  //    recycled for everyone after — the user never waits on the extras.
+  //
+  //    A per-cell claim/lock (try_claim_gen_lock) + soft global cap stops a cold
+  //    catalog from spawning duplicate/explosive batches: the winner generates a
+  //    full batch; a concurrent miss on the same cell falls back to a single item
+  //    so it is never blocked. "cold" cell (nothing stored yet) → larger
+  //    bootstrap batch; "warm" cell (stored exist but all seen) → small top-up.
+  const coldCell = (allQs?.length ?? 0) === 0;
+  const genBand: string =
+    effectiveTier ??
+    (effectiveTarget < 0.4 ? "easy" : effectiveTarget < 0.65 ? "medium" : "hard");
+  const genCellKey = `mcat:${primaryCategoryId}:${genBand}`;
+  let gotGenLock = false;
+  try {
+    const { data: claimed } = await supabase.rpc("try_claim_gen_lock", {
+      p_cell: genCellKey,
+      p_ttl_seconds: 90,
+      p_max_concurrent: 4,
+    });
+    gotGenLock = claimed === true;
+  } catch {
+    // RPC missing / transient → behave as un-locked (generate a single item).
+    gotGenLock = false;
+  }
+  // Generate a BATCH of distinct questions: serve 1 now, store the rest. 5 is the
+  // standard batch (serve 1 + store 4); a cold cell warms with a bigger buffer.
+  // The dedup pass below keeps the stored items materially different.
+  const batchCount = gotGenLock ? (coldCell ? 6 : 5) : 1;
+
   const { data: kwStatesDetailed } = await supabase
     .from("mcat_student_keyword_states")
     .select("keyword_id, score, total_attempts")
@@ -387,18 +562,15 @@ export async function POST(request: Request) {
   let genKeywords = keywords;
 
   if (keyword_id) {
-    // Single keyword: use that keyword + up to 2 siblings (same parent)
     const targetKw = keywords.find((k) => k.id === keyword_id);
     if (targetKw) {
-      const parentId = targetKw.parent_keyword_id;
-      const siblings = parentId
-        ? keywords
-            .filter(
-              (k) => k.parent_keyword_id === parentId && k.id !== keyword_id
-            )
-            .slice(0, 2)
-        : [];
-      genKeywords = [targetKw, ...siblings];
+      // in_depth keyword → generate for it ONLY (its own scope contract).
+      genKeywords = [targetKw];
+    } else {
+      // keyword_id is an UMBRELLA (not in the in_depth set) → scope generation to
+      // its children so we never widen to the whole category and serve off-topic.
+      const children = keywords.filter((k) => k.parent_keyword_id === keyword_id);
+      if (children.length > 0) genKeywords = children;
     }
   } else if (scopedKeywordIds) {
     // Set scope: restrict generation pool to the scoped set
@@ -448,7 +620,7 @@ export async function POST(request: Request) {
 
   let generated: ScoredQ[] = [];
   try {
-    const genResults = await generateMcatQuestions({
+    let genResults = await generateMcatQuestions({
       keywords:
         weakestKws.length > 0
           ? weakestKws
@@ -459,7 +631,7 @@ export async function POST(request: Request) {
               blueprint: k.concept_blueprint,
             })),
       templateCards,
-      count: 3,
+      count: batchCount,
       targetDifficulty: effectiveTarget,
       difficultyTier: effectiveTier,
       outlineContext,
@@ -474,6 +646,13 @@ export async function POST(request: Request) {
         { status: 502 }
       );
     }
+
+    // DEDUP PASS: drop generated items whose stem near-duplicates an earlier one
+    // in THIS batch (Jaccard ≥ NEAR_DUP_THRESHOLD), so stored items are materially
+    // different. Index-preserving to keep the verify/embed pipeline aligned.
+    genResults = filterNearDuplicates(
+      genResults.map((q, i) => ({ stem: q.stem, idx: i }))
+    ).map((d) => genResults[d.idx]);
 
     // Embed + retag each generated question before insert
     const sourceCardIds = templateCards.map((c) => c.id);
@@ -491,7 +670,7 @@ export async function POST(request: Request) {
               `${q.stem} | ${q.choices[q.correct_index]}`
             );
             const retagged = tagByEmbedding(embedding, keywordsWithEmbed);
-            if (Object.keys(retagged).length > 0) {
+            if (!keyword_id && Object.keys(retagged).length > 0) {
               finalWeights = retagged;
             }
           } catch {
@@ -499,7 +678,7 @@ export async function POST(request: Request) {
           }
 
           return {
-            section: "biology" as string,
+            section: sectionFromId(primaryCategoryId) as string,
             category_id: primaryCategoryId,
             stem: q.stem,
             choices: q.choices,
@@ -544,6 +723,19 @@ export async function POST(request: Request) {
       );
 
     if (inserted && inserted.length > 0) {
+      // Fire-and-forget four-dimension grounding of the new questions.
+      enrichQuestionsInBackground(
+        supabase,
+        "mcat",
+        (inserted as { id: string }[]).map((r) => r.id)
+      );
+
+      // Release the cell lock now that the batch is persisted (best-effort; the
+      // lock also self-expires via TTL on any early-return/error path).
+      if (gotGenLock) {
+        void supabase.rpc("release_gen_lock", { p_cell: genCellKey });
+      }
+
       const insertedScored: ScoredQ[] = (inserted as DbQuestion[]).map((q) => {
         const kw = (q.keyword_weights as Record<string, number>) ?? {};
         let weightedWeakness = 0;
@@ -577,13 +769,16 @@ export async function POST(request: Request) {
   }
 
   // Merge existing + newly generated; apply diversity filters to generated too, pick best
-  const diverseGenerated = filterNearDuplicates(
-    filterStreakKeyword(generated, blockedKw).map((q) => ({
-      ...q,
-      stem: normalizeStem(q.stem ?? ""),
-    })),
-    seenStems
+  const afterStreakFiltersGen = filterStreakUmbrella(
+    filterStreakKeyword(generated, blockedKw),
+    blockedUmbrella,
+    kwParentMap
   );
+  const origStemGenById = new Map(afterStreakFiltersGen.map((q) => [q.id, q.stem]));
+  const diverseGenerated = filterNearDuplicates(
+    afterStreakFiltersGen.map((q) => ({ ...q, stem: normalizeStem(q.stem ?? "") })),
+    seenStems
+  ).map((q) => ({ ...q, stem: origStemGenById.get(q.id) ?? q.stem }));
   const allPool = [...top5, ...diverseGenerated];
   allPool.sort((a, b) => b.score - a.score);
   const finalPool = allPool.slice(0, 5);
@@ -608,17 +803,10 @@ export async function POST(request: Request) {
   });
 
   return NextResponse.json({
-    question: {
-      id: selected.id,
-      stem: selected.stem,
-      choices: selected.choices,
-      correct_index: selected.correct_index,
-      explanation: selected.explanation,
-      keyword_weights: selected.keyword_weights,
-      difficulty: selected.difficulty,
-      parent_question_id: selected.parent_question_id ?? null,
-      primary_keyword_id: primaryKeywordId,
-    },
+    question: shapeQuestion(selected, primaryKeywordId),
+    // Serve 1, hand back the rest of the freshly generated+stored batch (and any
+    // remaining stored candidates) so the next items need NO round-trip.
+    buffer: bufferItems(finalPool, selected.id),
     generated: isNewlyGenerated,
   });
 }

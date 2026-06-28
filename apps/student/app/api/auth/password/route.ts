@@ -1,28 +1,18 @@
 /**
  * PUT /api/auth/password
  *
- * Changes the signed-in user's password.
- * Reads the httpOnly cookie "lodera_uid" to identify the user.
+ * Changes the signed-in user's password via Supabase Auth. The caller is
+ * already authenticated through the GoTrue session cookie, so we update the
+ * password directly with supabase.auth.updateUser({ password }).
  *
- * Body: { currentPassword: string, newPassword: string }
+ * Body: { currentPassword?: string, newPassword: string }
  *
- * - 401 if no cookie / user not found.
- * - 400 if currentPassword is wrong, or newPassword is weaker than 8 chars.
+ * - 401 if not authenticated.
+ * - 400 if newPassword is shorter than 8 chars.
  * - 200 { ok: true } on success.
  */
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { createClient } from "@supabase/supabase-js";
-import { hashPassword, verifyPassword } from "@/lib/password";
-
-const COOKIE_NAME = "lodera_uid";
-
-function supabaseAdmin() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) throw new Error("Supabase not configured");
-  return createClient(url, key);
-}
+import { getAuthUid, supabaseServer } from "@/lib/supabaseServer";
 
 interface PasswordBody {
   currentPassword?: string;
@@ -30,8 +20,7 @@ interface PasswordBody {
 }
 
 export async function PUT(request: Request) {
-  const cookieStore = await cookies();
-  const userId = cookieStore.get(COOKIE_NAME)?.value;
+  const userId = await getAuthUid();
   if (!userId) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
@@ -43,14 +32,9 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const currentPassword = body.currentPassword;
   const newPassword = body.newPassword;
-
-  if (!currentPassword || !newPassword) {
-    return NextResponse.json(
-      { error: "Current and new password are required." },
-      { status: 400 }
-    );
+  if (!newPassword) {
+    return NextResponse.json({ error: "New password is required." }, { status: 400 });
   }
   if (newPassword.length < 8) {
     return NextResponse.json(
@@ -59,38 +43,13 @@ export async function PUT(request: Request) {
     );
   }
 
-  let sb: ReturnType<typeof supabaseAdmin>;
-  try {
-    sb = supabaseAdmin();
-  } catch {
-    return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
-  }
+  const supabase = await supabaseServer();
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
 
-  const { data: user } = await sb
-    .from("app_users")
-    .select("id, password_hash")
-    .eq("id", userId)
-    .maybeSingle();
-
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  }
-
-  const valid = await verifyPassword(currentPassword, user.password_hash as string);
-  if (!valid) {
-    return NextResponse.json({ error: "Current password is incorrect." }, { status: 400 });
-  }
-
-  const newHash = await hashPassword(newPassword);
-  const { error: updateErr } = await sb
-    .from("app_users")
-    .update({ password_hash: newHash })
-    .eq("id", userId);
-
-  if (updateErr) {
+  if (error) {
     return NextResponse.json(
-      { error: updateErr.message ?? "Failed to update password" },
-      { status: 500 }
+      { error: error.message ?? "Failed to update password" },
+      { status: 400 }
     );
   }
 

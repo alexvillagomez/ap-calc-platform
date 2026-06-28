@@ -15,8 +15,8 @@ import QuestionToolbar from "@/components/practice/QuestionToolbar";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { ComboMeter } from "@/components/gamification/ComboMeter";
-import { SoundToggle } from "@/components/ui/SoundToggle";
+import { GrindMeter } from "@/components/gamification/GrindMeter";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
 
@@ -108,8 +108,19 @@ function McatQuizInner({
     return `/mcat/${categoryId}/flashcards${s ? `?${s}` : ""}`;
   })();
 
+  // Same scope, for the "practice this topic" option on the end screen.
+  const practiceHref = (() => {
+    const qs = new URLSearchParams();
+    if (umbrellaId) qs.set("umbrella", umbrellaId);
+    if (keywordScopeId) qs.set("keyword", keywordScopeId);
+    if (scopeLabel) qs.set("label", scopeLabel);
+    const s = qs.toString();
+    return `/mcat/${categoryId}/practice${s ? `?${s}` : ""}`;
+  })();
+
   // ── Gamification ──────────────────────────────────────────────────────────
   const [combo, setCombo] = useState(0);
+  const [sessionStart] = useState(() => Date.now());
   const [usedRefresher, setUsedRefresher] = useState(false);
 
   useStreakTouchOnce();
@@ -280,19 +291,13 @@ function McatQuizInner({
   const currentQ = questions[currentIdx];
   const progress = questions.length > 0 ? currentIdx / questions.length : 0;
 
-  // Derive heading label
-  const headingLabel = isScoped && scopeLabel
-    ? `${scopeLabel} Quiz`
-    : categoryLabel
-    ? `${categoryLabel} Quiz`
-    : "Quiz";
-
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-2.5 flex items-center gap-2 flex-wrap">
-          <div className="flex items-center gap-2 min-w-0 flex-1">
+        <div className="max-w-2xl mx-auto px-4 py-2.5 space-y-1.5">
+          {/* Row 1 — nav controls */}
+          <div className="flex items-center gap-2">
             <Link href={backHref} className="shrink-0">
               <LoderaLogo size={20} />
             </Link>
@@ -302,39 +307,27 @@ function McatQuizInner({
             >
               {isScoped ? "← Back" : "← MCAT"}
             </Link>
-            {isScoped && scopeLabel && (
-              <span className="hidden sm:inline shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
-                {umbrellaId ? "Topic" : "Keyword"}: {scopeLabel}
-              </span>
-            )}
-            <p className="font-semibold text-neutral-900 text-sm truncate min-w-0">
-              {headingLabel}
-            </p>
+            <span className="text-[11px] uppercase tracking-wide text-neutral-400 font-medium">
+              Quiz
+            </span>
+            <div className="ml-auto flex items-center gap-2 shrink-0">
+              {phase === "quiz" && questions.length > 0 && (
+                <p className="text-xs text-neutral-500 tabular-nums shrink-0">
+                  {currentIdx + 1}/{questions.length}
+                </p>
+              )}
+              <StreakBadge />
+              <NavMenu />
+            </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
-            {phase === "quiz" && questions.length > 0 && (
-              <p className="text-xs text-neutral-500 tabular-nums shrink-0">
-                {currentIdx + 1}/{questions.length}
-              </p>
-            )}
-            <StreakBadge />
-            <SoundToggle />
-          </div>
+          {/* Row 2 — topic title gets its own room */}
+          <h1 className="font-semibold text-neutral-900 text-base leading-snug">
+            {isScoped && scopeLabel ? scopeLabel : categoryLabel || "Quiz"}
+          </h1>
         </div>
       </header>
 
-      {/* Progress bar */}
-      {phase === "quiz" && (
-        <ProgressBar
-          value={Math.round(progress * 100)}
-          size="xs"
-          color="brand"
-          label="Quiz progress"
-          className="rounded-none"
-        />
-      )}
-
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4">
+      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4 pb-safe-bottom">
         {/* Loading state */}
         {phase === "loading" && (
           <LoadingPanel
@@ -411,6 +404,11 @@ function McatQuizInner({
         {/* Active quiz question */}
         {phase === "quiz" && currentQ && (
           <>
+            {/* Grind meter */}
+            <div className="pb-2">
+              <GrindMeter mode="quiz" streak={combo} answered={answers.length} startedAt={sessionStart} hidden />
+            </div>
+
             {/* Progress dots */}
             <div className="flex gap-1.5 flex-wrap justify-center">
               {questions.map((_, i) => (
@@ -446,9 +444,6 @@ function McatQuizInner({
               resetSignal={currentQ.id}
               onRefresherUsed={() => setUsedRefresher(true)}
             />
-
-            {/* Combo meter — appears above choices from combo ≥ 2 */}
-            <ComboMeter combo={combo} />
 
             {/* Choices — no immediate feedback */}
             <div className="space-y-2">
@@ -490,10 +485,16 @@ function McatQuizInner({
                 <Button variant="primary" size="md" onClick={() => fetchQuiz(sessionId)}>
                   New quiz
                 </Button>
+                <Link href={practiceHref}>
+                  <Button variant="secondary" size="md">Practice this topic</Button>
+                </Link>
                 <Link href={backHref}>
                   <Button variant="secondary" size="md">
-                    {isScoped ? "Back" : "Back to MCAT"}
+                    {isScoped ? "Back to topic" : "Back to MCAT"}
                   </Button>
+                </Link>
+                <Link href="/mcat">
+                  <Button variant="secondary" size="md">Home</Button>
                 </Link>
               </div>
             </Card>

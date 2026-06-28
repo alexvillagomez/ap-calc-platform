@@ -1,0 +1,322 @@
+{
+  "category_code": "9B",
+  "umbrellas": [
+    {
+      "slug": "age_and_life_course",
+      "label": "Age and the Life Course",
+      "description": "How age functions as a social category — cohort membership, the stages of the life course, and the social significance of growing older.",
+      "intro": {
+        "slug": "age_and_life_course_intro",
+        "label": "Age as a Social Category: Cohorts, Life Course, and Aging",
+        "description": "Age is not merely a biological fact; it is a social category that shapes identity, opportunity, and power. Sociologists study age through cohorts (groups born in the same era who share historical experiences), the life course (the sequence of socially defined stages from birth to death), and the social meanings attached to aging. Together these ideas explain why age structures life chances, role expectations, and social policy.",
+        "examples": ["Baby Boomers vs. Gen Z as distinct cohorts", "retirement as a socially defined life stage", "ageism in the workplace"]
+      },
+      "in_depth": [
+        {
+          "slug": "age_cohorts",
+          "label": "Age cohorts",
+          "description": "Identify an age cohort as a group of people born within the same time period who share formative historical experiences, and explain how cohort membership shapes attitudes, health, and behavior. This focuses on the shared-experience mechanism, not the life-course sequence of stages (a separate keyword).",
+          "examples": ["the Depression-era cohort's savings behavior", "Millennials and digital-native attitudes", "cohort vs. age effect in longitudinal research"]
+        },
+        {
+          "slug": "aging_and_life_course",
+          "label": "Aging and the life course",
+          "description": "Describe the life-course perspective, which views aging as a sequence of socially constructed stages (childhood, adolescence, adulthood, old age) each with expected roles and transitions. This focuses on the staged, role-based model of aging, not the shared birth-year definition of cohorts (a separate keyword).",
+          "examples": ["emerging adulthood as a new life stage", "retirement as a role transition", "life-course trajectory shaped by early events"]
+        },
+        {
+          "slug": "social_significance_of_aging",
+          "label": "Social significance of aging",
+          "description": "Explain how societies attach meaning and status to aging — including ageism (prejudice and discrimination based on age), elder prestige vs. marginalization across cultures, and the policy implications of an aging population. This focuses on the societal evaluation of old age, not cohort membership or the stage sequence (separate keywords).",
+          "examples": ["ageism in hiring: favoring younger applicants", "elder reverence in Confucian societies vs. US youth culture", "Social Security and the politics of an aging electorate"]
+        }
+      ]
+    },
+    {
+      "slug": "gender_as_social_category",
+      "label": "Gender as a Social Category",
+      "description": "How gender is distinguished from biological sex, socially constructed, and enforced through segregation — and what the sociological consequences are.",
+      "intro": {
+        "slug": "gender_as_social_category_intro",
+        "label": "Sex, Gender, and Social Construction",
+        "description": "Sociology distinguishes biological sex (a biological classification) from gender (the social roles, expectations, and identities associated with femininity and masculinity). Gender is not simply read off from biology; it is actively constructed through cultural norms, institutions, and daily interaction. Understanding this distinction opens onto questions of gender socialization, inequality, and the structures that sort people into gendered positions.",
+        "examples": ["boys in blue, girls in pink as socialization", "women entering medicine: changing gender norms", "Judith Butler on gender performance"]
+      },
+      "in_depth": [
+        {
+          "slug": "sex_vs_gender",
+          "label": "Sex vs. gender",
+          "description": "Distinguish biological sex (chromosomal, hormonal, anatomical classification) from gender (the socially constructed roles, behaviors, and identities labeled masculine or feminine). This focuses on the conceptual distinction itself, not the mechanism by which gender norms are built and maintained (a separate keyword).",
+          "examples": ["sex assigned at birth vs. gender identity", "sex as biology, gender as performance", "intersex individuals challenging binary sex categories"]
+        },
+        {
+          "slug": "social_construction_of_gender",
+          "label": "Social construction of gender",
+          "description": "Explain how gender norms, roles, and expectations are created and reinforced through cultural practices, institutions (family, school, media), and social interaction rather than being biologically fixed. This focuses on the constructive process, not the observable outcome of segregated positions (a separate keyword).",
+          "examples": ["gender socialization through toys and media", "changing norms: women in combat roles", "gendered language shaping expectations"]
+        },
+        {
+          "slug": "gender_segregation",
+          "label": "Gender segregation",
+          "description": "Identify occupational and institutional gender segregation — the concentration of men and women in different jobs, educational fields, or organizational roles — and link it to wage gaps and status differences. This focuses on the structural distribution of men and women across positions, not the cultural construction of gender roles (a separate keyword).",
+          "examples": ["nursing as female-dominated; engineering as male-dominated", "gender pay gap linked to job segregation", "women underrepresented in STEM leadership"]
+        }
+      ]
+    },
+    {
+      "slug": "race_and_ethnicity",
+      "label": "Race and Ethnicity",
+      "description": "How race and ethnicity are socially constructed categories — the processes of racialization and racial formation — and their consequences for social life.",
+      "intro": {
+        "slug": "race_and_ethnicity_intro",
+        "label": "Race and Ethnicity as Social Constructs",
+        "description": "Race and ethnicity are sociological concepts, not fixed biological categories. Race refers to socially meaningful groupings based on perceived physical traits, while ethnicity is rooted in shared cultural heritage. Sociology focuses on how these categories are created, maintained, and transformed through social processes (racialization, racial formation), and how they shape inequality, identity, and power.",
+        "examples": ["Irish and Italian immigrants becoming 'white' over time", "the one-drop rule as racial construction", "ethnicity vs. race in the US Census"]
+      },
+      "in_depth": [
+        {
+          "slug": "social_construction_of_race",
+          "label": "Social construction of race",
+          "description": "Explain that racial categories are socially defined rather than biologically determined — that what counts as a racial group, and who belongs to it, varies across societies and historical periods. This focuses on the arbitrary and variable nature of racial classification, not the specific historical process of creating new categories (racialization, a separate keyword).",
+          "examples": ["race categories on US Census changing over time", "same person classified differently in Brazil vs. US", "no biological basis for discrete human races"]
+        },
+        {
+          "slug": "racialization",
+          "label": "Racialization",
+          "description": "Define racialization as the process by which racial meanings are attached to groups, practices, or places that were not previously defined in racial terms. This focuses on the active, ongoing process of assigning racial significance, not the broader claim that race is constructed (a separate keyword) or the macro-historical theory of racial formation (a separate keyword).",
+          "examples": ["Arab-Americans racialized after 9/11", "racialization of crime in media coverage", "immigrant groups acquiring racial labels upon arrival"]
+        },
+        {
+          "slug": "racial_formation",
+          "label": "Racial formation",
+          "description": "Apply Omi and Winant's racial formation theory: racial categories are created, contested, and transformed by sociohistorical processes and state power over time. This focuses on the macro-level historical theory linking race to politics and institutions, not the micro-level process of applying racial labels to specific groups (racialization, a separate keyword).",
+          "examples": ["Jim Crow laws constructing Black/white division", "civil rights movement reshaping racial categories", "state-sponsored racial classification systems"]
+        }
+      ]
+    },
+    {
+      "slug": "immigration_status",
+      "label": "Immigration Status",
+      "description": "Patterns of immigration, the factors driving migration, and the intersections of immigration status with race, ethnicity, and social inequality.",
+      "intro": {
+        "slug": "immigration_status_intro",
+        "label": "Immigration: Patterns, Drivers, and Intersections",
+        "description": "Immigration status is a key axis of social stratification, shaping access to resources, political rights, and social belonging. Sociologists study who moves, why they move, and what happens when they arrive — including how immigration intersects with preexisting racial and ethnic hierarchies and how immigrant communities are incorporated (or excluded) from mainstream society.",
+        "examples": ["undocumented status limiting labor market options", "second-generation immigrants navigating dual identities", "immigration waves shaping US ethnic composition"]
+      },
+      "in_depth": [
+        {
+          "slug": "patterns_of_immigration",
+          "label": "Patterns of immigration",
+          "description": "Describe major historical and contemporary patterns of immigration — waves of arrivals, sending and receiving countries, settlement patterns, and changes in immigrant origins over time. This focuses on the descriptive macro-patterns of who moves and where, not the causal factors driving movement (a separate keyword).",
+          "examples": ["post-1965 immigration shift from Europe to Latin America and Asia", "chain migration creating ethnic enclaves", "US immigration waves in the 19th and 20th centuries"]
+        },
+        {
+          "slug": "immigration_race_ethnicity_intersections",
+          "label": "Immigration and race/ethnicity intersections",
+          "description": "Explain how immigration status intersects with race and ethnicity to shape identity, discrimination, and social mobility — including how immigrant groups are racialized upon arrival and how ethnic identity is negotiated across generations. This focuses on the intersection of immigration with racial/ethnic classification, not patterns of migration flows (a separate keyword).",
+          "examples": ["Latino immigrants racialized as non-white", "assimilation vs. ethnic retention across generations", "skin color affecting immigrant reception"]
+        }
+      ]
+    },
+    {
+      "slug": "sexual_orientation",
+      "label": "Sexual Orientation",
+      "description": "Sexual orientation as a socially meaningful category — definitions, the distinction from gender identity, and its role as an axis of identity and inequality.",
+      "intro": {
+        "slug": "sexual_orientation_intro",
+        "label": "Sexual Orientation as a Social and Psychological Category",
+        "description": "Sexual orientation refers to enduring patterns of emotional, romantic, or sexual attraction to others and is recognized as a distinct dimension of identity, separate from biological sex and gender identity. Sociologists and psychologists study how sexual orientation intersects with stigma, social norms, and inequality, while also attending to the diversity of orientations beyond the heterosexual/homosexual binary.",
+        "examples": ["heterosexual, homosexual, bisexual as orientation categories", "coming out as a social process", "the Kinsey scale showing a continuum"]
+      },
+      "in_depth": [
+        {
+          "slug": "sexual_orientation_identity",
+          "label": "Sexual orientation as identity and social category",
+          "description": "Define sexual orientation (enduring pattern of attraction) and distinguish it from gender identity and biological sex; recognize heterosexual, homosexual, bisexual, and asexual as recognized categories and explain how sexual orientation functions as a basis for identity and group membership. This focuses on the definition and categorization, not the discrimination and stigma that can follow (handled under prejudice/discrimination in other categories).",
+          "examples": ["orientation vs. gender identity: distinct concepts", "LGB identity as a basis for community formation", "bisexuality as a distinct, not 'in-between', category"]
+        }
+      ]
+    },
+    {
+      "slug": "demographic_change_theory",
+      "label": "Theories of Demographic Change",
+      "description": "Classical theories explaining why and how population size and composition change over time — Malthusian theory and the demographic transition model.",
+      "intro": {
+        "slug": "demographic_change_theory_intro",
+        "label": "Malthusian Theory and the Demographic Transition",
+        "description": "Two foundational theories explain population dynamics. Malthus argued that population grows geometrically while food grows arithmetically, making famine and war inevitable checks on growth. The demographic transition model, by contrast, traces how societies move from high birth/death rates (pre-industrial) through falling death rates, then falling birth rates, to a new low-birth/low-death equilibrium as they modernize. These frameworks predict very different futures for population growth.",
+        "examples": ["Malthus: famine as a 'positive check' on population", "demographic transition: Europe's fertility decline with industrialization", "Stage 3 countries: falling birth rates after mortality decline"]
+      },
+      "in_depth": [
+        {
+          "slug": "malthusian_theory",
+          "label": "Malthusian theory",
+          "description": "Apply Malthusian theory: population grows geometrically (exponentially) while food supply grows arithmetically (linearly), so population will always press against subsistence — kept in check by 'positive checks' (famine, disease, war) and 'preventive checks' (delayed marriage, celibacy). This focuses on Malthus's specific food-population arithmetic and his two categories of checks, not the later demographic transition model (a separate keyword).",
+          "examples": ["geometric vs. arithmetic growth rates", "famine and war as Malthusian positive checks", "delayed marriage as a preventive check"]
+        },
+        {
+          "slug": "demographic_transition_model",
+          "label": "Demographic transition model",
+          "description": "Describe the demographic transition model's four stages: Stage 1 (high birth + high death → stable), Stage 2 (death rate falls → population boom), Stage 3 (birth rate falls → growth slows), Stage 4 (low birth + low death → stable again) — and link the transition to industrialization, urbanization, and improved medicine. This focuses on the staged model and its social drivers, not Malthus's simpler arithmetic (a separate keyword).",
+          "examples": ["Stage 2: death rates drop before birth rates in developing countries", "Stage 4: Europe and Japan near-zero population growth", "urbanization reducing the economic value of large families"]
+        }
+      ]
+    },
+    {
+      "slug": "population_dynamics",
+      "label": "Population Growth, Decline, and Structure",
+      "description": "How populations grow or shrink over time, how they are structured by age and sex, and how to read population pyramids.",
+      "intro": {
+        "slug": "population_dynamics_intro",
+        "label": "Population Growth, Projections, and Age-Sex Structure",
+        "description": "Demographers track not just total population size but its internal structure — the distribution of people across age groups and sexes. Population pyramids are the standard tool for visualizing this structure and for forecasting future growth or decline. Understanding the shape of a pyramid — expansive, constrictive, or stationary — tells you whether a population is growing rapidly, stabilizing, or aging.",
+        "examples": ["wide-base pyramid: high birth rate, rapid growth", "narrow-base pyramid: aging population, Japan", "population projection from current age distribution"]
+      },
+      "in_depth": [
+        {
+          "slug": "population_growth_and_decline",
+          "label": "Population growth and decline",
+          "description": "Explain what drives overall population growth or decline — natural increase (births minus deaths) and net migration — and identify factors (economic development, policy, war, disease) that accelerate or reverse growth. This focuses on the net mechanisms of size change, not the structural visualization of who is in the population (population pyramids, a separate keyword).",
+          "examples": ["natural increase = births minus deaths", "China's population decline after one-child policy legacy", "net migration boosting US population growth"]
+        },
+        {
+          "slug": "population_pyramids",
+          "label": "Population pyramids",
+          "description": "Read and interpret a population pyramid (age-sex bar chart): an expansive (wide-base) pyramid signals rapid growth with high fertility; a constrictive (narrow-base) pyramid signals a declining birth rate and aging population; a stationary (uniform) pyramid signals near-replacement. Use the shape to predict future workforce size, dependency ratios, and social policy needs. This focuses on interpreting the graphical structure, not the underlying fertility/mortality rates themselves (a separate keyword).",
+          "examples": ["wide base → high birth rate, many dependents", "Japan's inverted pyramid predicting elder-care demand", "population pyramid shape forecasting future labor force"]
+        }
+      ]
+    },
+    {
+      "slug": "fertility_mortality_migration",
+      "label": "Fertility, Mortality, and Migration",
+      "description": "The three demographic processes — fertility, mortality, and migration — their rate types, patterns, and the push-pull forces driving population movement.",
+      "intro": {
+        "slug": "fertility_mortality_migration_intro",
+        "label": "The Three Demographic Processes: Fertility, Mortality, and Migration",
+        "description": "Every change in population size and composition traces back to three demographic processes: fertility (births), mortality (deaths), and migration (geographic movement). Demographers measure each with multiple rate types — crude, age-specific, and total — to capture different aspects of the process. Recognizing which rate to use for which question, and understanding the push/pull factors behind migration, are core MCAT skills.",
+        "examples": ["crude birth rate vs. total fertility rate", "infant mortality as a development indicator", "push factor: famine forcing emigration"]
+      },
+      "in_depth": [
+        {
+          "slug": "fertility_rates",
+          "label": "Fertility rate types",
+          "description": "Distinguish the three main fertility measures: crude birth rate (births per 1,000 population — simple but confounded by age structure), age-specific fertility rate (births per 1,000 women in a given age group — controls for age), and total fertility rate (TFR — the average number of children a woman would have across her lifetime — the best cross-country comparator). This focuses on measurement distinctions, not the social patterns of fertility (a separate keyword).",
+          "examples": ["TFR below 2.1 = below-replacement fertility", "crude birth rate inflated in young populations", "age-specific rate: fertility peaks in 20s–30s"]
+        },
+        {
+          "slug": "mortality_rates",
+          "label": "Mortality rate types",
+          "description": "Distinguish crude death rate (deaths per 1,000 population — simple but age-confounded), age-specific death rate (deaths per 1,000 in a given age group), and infant mortality rate (deaths of infants under 1 per 1,000 live births — a key development indicator). This focuses on the measurement distinctions among mortality statistics, not fertility or migration rates (separate keywords).",
+          "examples": ["infant mortality rate as a proxy for health system quality", "crude death rate misleading when populations differ in age", "age-specific rates revealing an elderly mortality spike"]
+        },
+        {
+          "slug": "patterns_in_fertility_and_mortality",
+          "label": "Patterns in fertility and mortality",
+          "description": "Describe how fertility and mortality rates vary systematically by development level, gender, race, class, and geography — including the epidemiological transition (shift from infectious to chronic disease as leading cause of death). This focuses on the empirical patterns and sociological explanations, not the definitions of the rate types themselves (a separate keyword).",
+          "examples": ["higher infant mortality in low-income countries", "fertility decline as women's education increases", "epidemiological transition: chronic disease replacing infection"]
+        },
+        {
+          "slug": "push_pull_factors_migration",
+          "label": "Push and pull factors in migration",
+          "description": "Apply the push-pull framework: push factors (conditions in the origin that drive people out — poverty, violence, environmental disaster) versus pull factors (conditions in the destination that attract migrants — economic opportunity, political freedom, family networks). This focuses on the motivational framework for migration decisions, not the aggregate patterns of who migrates where (patterns of immigration, a separate keyword).",
+          "examples": ["drought as a push factor in sub-Saharan migration", "US wage premium as a pull factor for Mexican migrants", "civil war pushing refugee flows"]
+        }
+      ]
+    },
+    {
+      "slug": "social_movements",
+      "label": "Social Movements",
+      "description": "How collective action emerges, how movements are organized, and the strategies and tactics they employ for social change.",
+      "intro": {
+        "slug": "social_movements_intro",
+        "label": "Social Movements: Origins, Organization, and Tactics",
+        "description": "Social movements are sustained, collective efforts by groups of people to bring about (or resist) social change outside of established institutional channels. Sociologists ask why movements emerge (relative deprivation, resource mobilization), how they organize, and what strategies they use. Understanding social movements means seeing how grievance, organization, and opportunity combine to produce collective action.",
+        "examples": ["civil rights movement as organized social change", "relative deprivation sparking protest", "nonviolent direct action as a movement tactic"]
+      },
+      "in_depth": [
+        {
+          "slug": "relative_deprivation",
+          "label": "Relative deprivation",
+          "description": "Apply relative deprivation theory: people mobilize not when they are objectively worst off, but when they perceive a gap between what they have and what they feel entitled to — especially when they compare themselves to a reference group that seems better off. This focuses on the subjective-comparison mechanism of movement emergence, not the organizational or tactical dimensions (separate keywords).",
+          "examples": ["rising expectations → revolution when gains stall (de Tocqueville)", "workers comparing wages to executives rising → strike action", "relative deprivation predicting protest better than absolute poverty"]
+        },
+        {
+          "slug": "organization_of_social_movements",
+          "label": "Organization of social movements",
+          "description": "Describe how social movements are organizationally structured — including resource mobilization theory (movements need money, labor, communication networks), formal social movement organizations (SMOs), and the role of leadership and framing. This focuses on the organizational/resource dimension, not why grievances arise (relative deprivation, a separate keyword) or specific tactics (a separate keyword).",
+          "examples": ["NAACP as a formal SMO with legal resources", "resource mobilization: why some grievances produce movements, others don't", "movement framing: defining an issue as a justice problem"]
+        },
+        {
+          "slug": "movement_strategies_and_tactics",
+          "label": "Movement strategies and tactics",
+          "description": "Distinguish and evaluate movement strategies and tactics: disruptive (strikes, sit-ins, boycotts), institutional (lobbying, litigation, electoral politics), and consciousness-raising. Explain how tactical choices relate to the movement's goals and political opportunity structure. This focuses on the action repertoire, not organizational structure (a separate keyword).",
+          "examples": ["Montgomery Bus Boycott as an economic disruptive tactic", "ACT UP using media disruption for AIDS policy", "lobbying Congress vs. civil disobedience as contrasting tactics"]
+        }
+      ]
+    },
+    {
+      "slug": "globalization",
+      "label": "Globalization",
+      "description": "The processes driving global economic, cultural, and political integration — perspectives on globalization — and the social changes it produces.",
+      "intro": {
+        "slug": "globalization_intro",
+        "label": "Globalization: Drivers, Perspectives, and Social Consequences",
+        "description": "Globalization is the increasing interconnection of economies, cultures, and political systems across national borders. Sociologists examine both what drives this integration (technology, trade, migration) and what it produces — rising living standards for some, growing inequality for others, cultural homogenization and cultural resistance, and new sources of political instability. Multiple theoretical perspectives evaluate globalization's benefits and harms differently.",
+        "examples": ["offshoring manufacturing to lower-wage countries", "spread of American fast food as cultural globalization", "WTO as an institution facilitating economic integration"]
+      },
+      "in_depth": [
+        {
+          "slug": "factors_contributing_to_globalization",
+          "label": "Factors contributing to globalization",
+          "description": "Identify the key drivers of globalization: communication technology (internet, satellite media reducing information costs), transportation advances (containerized shipping cutting trade costs), economic interdependence (global supply chains), and international institutions (WTO, IMF, World Bank). This focuses on the causal drivers of increasing integration, not the theoretical perspectives on whether globalization is good or bad (a separate keyword).",
+          "examples": ["internet enabling instant global communication", "containerized shipping making global supply chains economical", "WTO reducing tariff barriers to trade"]
+        },
+        {
+          "slug": "perspectives_on_globalization",
+          "label": "Perspectives on globalization",
+          "description": "Contrast major theoretical perspectives on globalization: modernization theory (globalization spreads development and lifts living standards), world-systems/dependency theory (globalization reproduces core-periphery inequality, benefiting wealthy nations at the expense of poorer ones), and neoliberal vs. critical views on trade and labor. This focuses on competing evaluative frameworks, not the factual drivers of globalization (a separate keyword).",
+          "examples": ["modernization theory: free trade raises all boats", "dependency theory: multinationals extracting wealth from developing nations", "world-systems core vs. periphery distinction"]
+        },
+        {
+          "slug": "social_changes_in_globalization",
+          "label": "Social changes under globalization",
+          "description": "Describe the major social changes associated with globalization: cultural homogenization (spread of Western consumer culture) vs. cultural hybridization, rising economic inequality within and between countries, civil unrest sparked by displacement and inequality, and the emergence of transnational terrorism and political movements. This focuses on the social outcomes of globalization, not its causes or theoretical interpretations (separate keywords).",
+          "examples": ["McDonaldization as cultural homogenization", "anti-globalization protests at WTO meetings", "global inequality: income gains concentrated in core nations"]
+        }
+      ]
+    },
+    {
+      "slug": "urbanization",
+      "label": "Urbanization",
+      "description": "The processes by which populations concentrate in cities, and the dynamics of urban growth, suburban expansion, and neighborhood renewal.",
+      "intro": {
+        "slug": "urbanization_intro",
+        "label": "Urbanization: Industrial Growth, Suburbanization, and Gentrification",
+        "description": "Urbanization — the movement of people from rural to urban areas — is one of the defining features of modern social life. Sociologists track three sequential processes: initial urban growth driven by industrialization, suburban expansion pulling middle-class residents out of city centers (often linked to urban decline), and more recently gentrification and urban renewal bringing capital and wealthier residents back into inner cities while displacing lower-income residents. Each process reshapes social class, race, and community.",
+        "examples": ["19th-century factory cities drawing rural migrants", "white flight and suburban growth in postwar US", "Brooklyn gentrification pricing out long-term residents"]
+      },
+      "in_depth": [
+        {
+          "slug": "industrialization_and_urban_growth",
+          "label": "Industrialization and urban growth",
+          "description": "Explain how industrialization drove urbanization: factories concentrated in cities created jobs that pulled rural migrants, producing rapid urban population growth, new urban class structures, and problems of density (sanitation, housing, crime). This focuses on the initial industrial-era cause of city growth, not the later suburbanization or gentrification dynamics (separate keywords).",
+          "examples": ["Manchester's population explosion during the Industrial Revolution", "rural-to-urban migration in industrializing China", "urban slums as a product of rapid industrial urbanization"]
+        },
+        {
+          "slug": "suburbanization_and_urban_decline",
+          "label": "Suburbanization and urban decline",
+          "description": "Describe suburbanization — the movement of (often white, middle-class) residents from cities to suburbs, facilitated by the automobile, highway construction, and government housing policy — and its association with inner-city population loss, tax-base erosion, and concentrated poverty. This focuses on the decentralizing suburban process, not the initial urban growth (a separate keyword) or the reinvestment phase (gentrification, a separate keyword).",
+          "examples": ["post-WWII GI Bill mortgages funding suburban homeownership", "white flight leaving urban tax bases depleted", "Interstate Highway System enabling long suburban commutes"]
+        },
+        {
+          "slug": "gentrification_and_urban_renewal",
+          "label": "Gentrification and urban renewal",
+          "description": "Define gentrification as the process by which higher-income residents and investment move into lower-income urban neighborhoods, raising property values and displacing long-term (often minority) residents; distinguish it from top-down urban renewal (government-planned redevelopment, often demolishing 'slum' areas). This focuses on the reinvestment/displacement dynamic, not suburbanization (a separate keyword).",
+          "examples": ["coffee shops and condos replacing affordable housing in Harlem", "urban renewal: Robert Moses demolishing Bronx neighborhoods for highways", "displacement of low-income tenants as a gentrification critique"]
+        }
+      ]
+    }
+  ]
+}

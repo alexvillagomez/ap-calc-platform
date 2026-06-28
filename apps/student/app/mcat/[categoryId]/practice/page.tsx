@@ -16,8 +16,8 @@ import QuestionToolbar from "@/components/practice/QuestionToolbar";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { ComboMeter } from "@/components/gamification/ComboMeter";
-import { SoundToggle } from "@/components/ui/SoundToggle";
+import { GrindMeter } from "@/components/gamification/GrindMeter";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { CorrectPulse } from "@/components/ui/CorrectPulse";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
@@ -80,6 +80,16 @@ interface AttemptResponse {
     { score: number; state: string; needs_lesson: boolean }
   >;
 }
+
+/** A snapshot of a previously-seen question for read-only review navigation. */
+interface HistoryEntry {
+  question: Question;
+  selectedChoice: number | null;
+  revealed: boolean;
+  wasCorrect: boolean | null;
+}
+
+const HISTORY_CAP = 30;
 
 interface Flashcard {
   id: string;
@@ -164,9 +174,19 @@ function McatPracticeInner({
 
   // Exclude-IDs accumulator (cross-session within one queue)
   const excludeIdsRef = useRef<string[]>([]);
+  // Diversity tracking: recent primary keyword ids + normalized seen stems
+  const recentKeywordIdsRef = useRef<string[]>([]);
+  const recentQuestionIdsRef = useRef<string[]>([]);
+  const seenStemsRef = useRef<string[]>([]);
 
   // Question
   const [question, setQuestion] = useState<Question | null>(null);
+  // Movement/review history: previously-seen questions (answered or skipped).
+  const historyRef = useRef<HistoryEntry[]>([]);
+  // null = viewing the LIVE current question; otherwise index into historyRef.
+  const [reviewIndex, setReviewIndex] = useState<number | null>(null);
+  const inReview = reviewIndex !== null;
+  const reviewEntry = inReview ? historyRef.current[reviewIndex] ?? null : null;
   const [isReviewCard, setIsReviewCard] = useState(false);
   // Pending review interleave at the next topic transition
   const [pendingReviewBetweenTopics, setPendingReviewBetweenTopics] =
@@ -198,6 +218,7 @@ function McatPracticeInner({
 
   // ── Gamification ──────────────────────────────────────────────────────────
   const [combo, setCombo] = useState(0);
+  const [sessionStart] = useState(() => Date.now());
   // Last answered correct flag — drives CorrectPulse on the answer area
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
   const [usedRefresher, setUsedRefresher] = useState(false);
@@ -284,6 +305,7 @@ function McatPracticeInner({
     ) => {
       setPhase("generating");
       setQuestion(null);
+      setReviewIndex(null);
       setSelectedChoice(null);
       setShowLessonOffer(false);
       setErrorMsg("");
@@ -312,6 +334,9 @@ function McatPracticeInner({
             category_id: categoryId,
             keyword_id: keywordId,
             exclude_ids: excludeIdsRef.current,
+            recent_keyword_ids: recentKeywordIdsRef.current.slice(-6),
+            recent_question_ids: recentQuestionIdsRef.current.slice(-10),
+            seen_stems: seenStemsRef.current.slice(-30),
           };
           const mode = difficultyModeRef.current;
           if (mode !== "adaptive") {
@@ -336,6 +361,14 @@ function McatPracticeInner({
           ...excludeIdsRef.current,
           data.question.id,
         ];
+        recentQuestionIdsRef.current = [...recentQuestionIdsRef.current, data.question.id].slice(-10);
+        if (data.question.primary_keyword_id) {
+          recentKeywordIdsRef.current = [...recentKeywordIdsRef.current, data.question.primary_keyword_id].slice(-10);
+        }
+        if (data.question.stem) {
+          const norm = data.question.stem.toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+          seenStemsRef.current = [...seenStemsRef.current, norm].slice(-50);
+        }
 
         setIsReviewCard(!!forReview);
         setPhase("practicing");
@@ -493,14 +526,20 @@ function McatPracticeInner({
 
   // ── Handle answer ─────────────────────────────────────────────────────────
 
+  // Push the currently-live question into review history (answered or skipped).
+  const pushHistory = useCallback((entry: HistoryEntry) => {
+    historyRef.current = [...historyRef.current, entry].slice(-HISTORY_CAP);
+  }, []);
+
   const handleChoice = useCallback(
     async (idx: number) => {
-      if (!question || !currentKeyword || phase !== "practicing") return;
+      if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
 
       setSelectedChoice(idx);
       setPhase("revealed");
 
       const correct = idx === question.correct_index;
+      pushHistory({ question, selectedChoice: idx, revealed: true, wasCorrect: correct });
 
       // ── Gamification: sounds + combo ──────────────────────────────────────
       setLastAnswerCorrect(correct);
@@ -549,6 +588,7 @@ function McatPracticeInner({
           const tooManyWrong = consecutiveWrongRef.current >= 2;
 
           if (
+            !correct &&
             (tooManyWrong || needsLessonFromServer) &&
             !lessonedKeywordsRef.current.has(currentKeyword.id)
           ) {
@@ -571,16 +611,17 @@ function McatPracticeInner({
         // Non-fatal
       }
     },
-    [question, currentKeyword, phase, sessionId, isReviewCard, usedRefresher]
+    [question, currentKeyword, phase, sessionId, isReviewCard, usedRefresher, inReview, pushHistory]
   );
 
   // ── Handle "I don't know" ─────────────────────────────────────────────────
 
   const handleDontKnow = useCallback(async () => {
-    if (!question || !currentKeyword || phase !== "practicing") return;
+    if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
 
     setSelectedChoice(null);
     setPhase("revealed");
+    pushHistory({ question, selectedChoice: null, revealed: true, wasCorrect: false });
 
     // ── Gamification: incorrect ───────────────────────────────────────────
     setLastAnswerCorrect(false);
@@ -624,7 +665,32 @@ function McatPracticeInner({
     } catch {
       // Non-fatal
     }
-  }, [question, currentKeyword, phase, sessionId, isReviewCard, usedRefresher]);
+  }, [question, currentKeyword, phase, sessionId, isReviewCard, usedRefresher, inReview, pushHistory]);
+
+  // ── Free movement: Back / Forward / Skip ───────────────────────────────────
+
+  // Step back to an earlier history entry (read-only review).
+  const handleReviewBack = useCallback(() => {
+    const hist = historyRef.current;
+    if (hist.length === 0) return;
+    setReviewIndex((cur) => (cur === null ? hist.length - 1 : Math.max(0, cur - 1)));
+  }, []);
+
+  // Step forward through history; past the last entry returns to the LIVE question.
+  const handleReviewForward = useCallback(() => {
+    setReviewIndex((cur) => {
+      if (cur === null) return null;
+      const next = cur + 1;
+      return next >= historyRef.current.length ? null : next;
+    });
+  }, []);
+
+  // Skip the live question: record NO attempt, no mastery change; load next.
+  const handleSkip = useCallback(() => {
+    if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
+    pushHistory({ question, selectedChoice: null, revealed: false, wasCorrect: null });
+    loadQuestion(sessionId, currentKeyword.id, undefined, false);
+  }, [question, currentKeyword, phase, inReview, pushHistory, loadQuestion, sessionId]);
 
   // ── Handle "Similar question" (explicit button press) ─────────────────────
 
@@ -802,7 +868,6 @@ function McatPracticeInner({
 
   // ─── Render ────────────────────────────────────────────────────────────────
 
-  const diff = question ? diffLabel(question.difficulty) : null;
   const isFlashcardPhase = phase === "flashcard";
   const currentFc = isFlashcardPhase ? (flashcards[fcIndex] ?? null) : null;
 
@@ -837,9 +902,9 @@ function McatPracticeInner({
     <div className="min-h-screen bg-neutral-50">
       {/* Top bar */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-2.5 flex items-center gap-2 flex-wrap">
-          {/* Left: logo + back + title */}
-          <div className="flex items-center gap-2 min-w-0 flex-1">
+        <div className="max-w-2xl mx-auto px-4 py-2.5 space-y-1.5">
+          {/* Row 1 — nav controls */}
+          <div className="flex items-center gap-2">
             <Link href={backHref} className="shrink-0">
               <LoderaLogo size={20} />
             </Link>
@@ -849,40 +914,41 @@ function McatPracticeInner({
             >
               {isScoped ? "← Back" : "← MCAT"}
             </Link>
-            {/* Scope chip — hidden on very small screens */}
-            {isScoped && scopeLabel && (
-              <span className="hidden sm:inline shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
-                {umbrellaId ? "Topic" : "Keyword"}: {scopeLabel}
-              </span>
-            )}
-            {/* Keyword label */}
-            {currentKeyword && phase !== "loading" && phase !== "done" && (
-              <p className="font-semibold text-neutral-900 text-sm truncate min-w-0">
-                {isFlashcardPhase ? "Warm-up · " : ""}{currentKeyword.label}
-              </p>
-            )}
-          </div>
-
-          {/* Right: actions + widgets */}
-          <div className="flex items-center gap-2 shrink-0">
-            {currentKeyword &&
-              (phase === "practicing" || phase === "revealed") &&
-              !isReviewCard && (
-                <button
-                  onClick={handleStartLesson}
-                  className="hidden sm:inline text-xs text-neutral-400 hover:text-brand-600 underline underline-offset-2 transition-colors whitespace-nowrap"
-                >
-                  Learn this
-                </button>
+            <span className="text-[11px] uppercase tracking-wide text-neutral-400 font-medium">
+              Practice
+            </span>
+            <div className="ml-auto flex items-center gap-2 shrink-0">
+              {currentKeyword &&
+                (phase === "practicing" || phase === "revealed") &&
+                !isReviewCard && (
+                  <button
+                    onClick={handleStartLesson}
+                    className="hidden sm:inline text-xs text-neutral-400 hover:text-brand-600 underline underline-offset-2 transition-colors whitespace-nowrap"
+                  >
+                    Learn this
+                  </button>
+                )}
+              {stats.answered > 0 && (
+                <p className="text-xs text-neutral-500 tabular-nums shrink-0">
+                  {stats.correct}/{stats.answered}
+                </p>
               )}
-            {stats.answered > 0 && (
-              <p className="text-xs text-neutral-500 tabular-nums shrink-0">
-                {stats.correct}/{stats.answered}
-              </p>
-            )}
-            <StreakBadge />
-            <SoundToggle />
+              <StreakBadge />
+              <NavMenu />
+            </div>
           </div>
+          {/* Row 2 — topic title gets its own room */}
+          {currentKeyword && phase !== "loading" && phase !== "done" ? (
+            <h1 className="font-semibold text-neutral-900 text-base leading-snug">
+              {isFlashcardPhase ? "Warm-up · " : ""}{currentKeyword.label}
+            </h1>
+          ) : (
+            isScoped && scopeLabel && (
+              <h1 className="font-semibold text-neutral-900 text-base leading-snug">
+                {scopeLabel}
+              </h1>
+            )
+          )}
         </div>
 
         {/* Mastery meter — visible during active question phases on current topic */}
@@ -927,26 +993,9 @@ function McatPracticeInner({
           </div>
         )}
 
-        {/* Queue progress bar */}
-        {queue.length > 0 && phase !== "loading" && phase !== "done" && (
-          <div className="max-w-2xl mx-auto px-4 pb-2">
-            <div className="flex items-center gap-2">
-              <ProgressBar
-                value={Math.round((queueIndex / queue.length) * 100)}
-                size="xs"
-                color="brand"
-                label="Queue progress"
-                className="flex-1"
-              />
-              <span className="text-xs text-neutral-400 shrink-0">
-                {queueIndex + 1} of {queue.length}
-              </span>
-            </div>
-          </div>
-        )}
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4">
+      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4 pb-safe-bottom">
 
         {/* ── Loading ── */}
         {phase === "loading" && (
@@ -1085,13 +1134,13 @@ function McatPracticeInner({
                     onClick={() => gradeFlashcard("missed_it")}
                     className="flex-1 py-3 rounded-xl bg-error-50 border border-error-200 text-error-700 text-sm font-semibold hover:bg-error-100 transition-colors"
                   >
-                    ✗ Missed it
+                    Missed it
                   </button>
                   <button
                     onClick={() => gradeFlashcard("got_it")}
                     className="flex-1 py-3 rounded-xl bg-success-50 border border-success-200 text-success-700 text-sm font-semibold hover:bg-success-100 transition-colors"
                   >
-                    ✓ Got it
+                    Got it
                   </button>
                 </div>
                 <div className="flex justify-center">
@@ -1118,21 +1167,64 @@ function McatPracticeInner({
           />
         )}
 
-        {/* ── Practice / Revealed ── */}
-        {(phase === "practicing" || phase === "revealed") && question && (
+        {/* ── Practice / Revealed / Review ── */}
+        {(phase === "practicing" || phase === "revealed") && (inReview ? reviewEntry : question) && (() => {
+          // When in review, render the historical entry READ-ONLY.
+          const dispQuestion = (inReview ? reviewEntry!.question : question)!;
+          const dispSelected = inReview ? reviewEntry!.selectedChoice : selectedChoice;
+          const dispRevealed = inReview ? reviewEntry!.revealed : phase === "revealed";
+          const hasEarlier = inReview ? reviewIndex! > 0 : historyRef.current.length > 0;
+          const positionLabel = inReview
+            ? `Reviewing earlier question (${reviewIndex! + 1} of ${historyRef.current.length})`
+            : `Question ${historyRef.current.length + 1}`;
+          return (
           <>
+            {/* Grind meter */}
+            <div className="pb-2">
+              <GrindMeter mode="quiz" streak={combo} answered={stats.answered} startedAt={sessionStart} hidden />
+            </div>
+
+            {/* Position + movement controls */}
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <span className="text-xs text-neutral-400">{positionLabel}</span>
+              <div className="flex items-center gap-2">
+                {hasEarlier && (
+                  <button
+                    onClick={handleReviewBack}
+                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  >
+                    ← Back
+                  </button>
+                )}
+                {inReview && (
+                  <button
+                    onClick={handleReviewForward}
+                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  >
+                    {reviewIndex! + 1 >= historyRef.current.length ? "Return to current →" : "Forward →"}
+                  </button>
+                )}
+                {!inReview && phase === "practicing" && (
+                  <button
+                    onClick={handleSkip}
+                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  >
+                    Skip →
+                  </button>
+                )}
+              </div>
+            </div>
+
             {/* Badge row */}
             <div className="flex items-center gap-2 flex-wrap">
-              {isReviewCard && (
+              {isReviewCard && !inReview && (
                 <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-700">
                   Review
                 </span>
               )}
-              {diff && (
-                <span
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${diff.cls}`}
-                >
-                  {diff.label}
+              {inReview && (
+                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-600">
+                  {dispRevealed ? "Read-only" : "Skipped"}
                 </span>
               )}
             </div>
@@ -1140,36 +1232,33 @@ function McatPracticeInner({
             {/* Stem */}
             <Card>
               <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                <MathText>{question.stem}</MathText>
+                <MathText>{dispQuestion.stem}</MathText>
               </p>
             </Card>
 
             <QuestionToolbar
               system="mcat"
               keywordId={
-                question.primary_keyword_id ??
-                primaryKeywordId(question.keyword_weights)
+                dispQuestion.primary_keyword_id ??
+                primaryKeywordId(dispQuestion.keyword_weights)
               }
               sessionId={sessionId}
-              questionId={question.id}
+              questionId={dispQuestion.id}
               contentType="question"
-              resetSignal={question.id}
-              answerSignal={phase}
+              resetSignal={dispQuestion.id}
+              answerSignal={dispRevealed ? "revealed" : phase}
               onRefresherUsed={() => setUsedRefresher(true)}
             />
 
-            {/* Combo meter — appears above choices from combo ≥ 2 */}
-            <ComboMeter combo={combo} />
-
             {/* Choices */}
-            <CorrectPulse trigger={phase === "revealed" && lastAnswerCorrect} className="block w-full">
+            <CorrectPulse trigger={!inReview && phase === "revealed" && lastAnswerCorrect} className="block w-full">
               <div className="space-y-2">
-                {question.choices.map((choice, i) => {
+                {dispQuestion.choices.map((choice, i) => {
                   let state: "default" | "selected" | "correct" | "wrong" | "dimmed" =
                     "default";
-                  if (phase === "revealed") {
-                    if (i === question.correct_index) state = "correct";
-                    else if (i === selectedChoice) state = "wrong";
+                  if (dispRevealed) {
+                    if (i === dispQuestion.correct_index) state = "correct";
+                    else if (i === dispSelected) state = "wrong";
                     else state = "dimmed";
                   }
                   return (
@@ -1178,16 +1267,16 @@ function McatPracticeInner({
                       index={i}
                       text={choice}
                       state={state}
-                      disabled={phase === "revealed"}
-                      onClick={() => handleChoice(i)}
+                      disabled={inReview || dispRevealed}
+                      onClick={() => { if (!inReview) handleChoice(i); }}
                     />
                   );
                 })}
               </div>
             </CorrectPulse>
 
-            {/* I don't know */}
-            {phase === "practicing" && (
+            {/* I don't know — live only */}
+            {!inReview && phase === "practicing" && (
               <div className="flex justify-center">
                 <button
                   onClick={handleDontKnow}
@@ -1199,19 +1288,19 @@ function McatPracticeInner({
             )}
 
             {/* Explanation */}
-            {phase === "revealed" && question.explanation && (
+            {dispRevealed && dispQuestion.explanation && (
               <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
                 <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
                   Explanation
                 </p>
                 <p className="text-sm text-neutral-700 leading-relaxed">
-                  <MathText>{question.explanation}</MathText>
+                  <MathText>{dispQuestion.explanation}</MathText>
                 </p>
               </div>
             )}
 
-            {/* Lesson offer banner — only if struggling and not yet lessoned */}
-            {phase === "revealed" && showLessonOffer && currentKeyword && (
+            {/* Lesson offer banner — live only */}
+            {!inReview && phase === "revealed" && showLessonOffer && currentKeyword && (
               <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 space-y-3">
                 <p className="text-sm font-medium text-amber-800">
                   Struggling with {currentKeyword.label}? Take a quick lesson.
@@ -1224,7 +1313,10 @@ function McatPracticeInner({
                     Start lesson
                   </button>
                   <button
-                    onClick={() => setShowLessonOffer(false)}
+                    onClick={() => {
+                      if (currentKeyword) lessonedKeywordsRef.current.add(currentKeyword.id);
+                      setShowLessonOffer(false);
+                    }}
                     className="flex-1 py-2.5 rounded-xl border border-amber-200 bg-white text-amber-700 text-sm font-medium hover:bg-amber-50 transition-colors"
                   >
                     Keep practicing
@@ -1233,13 +1325,13 @@ function McatPracticeInner({
               </div>
             )}
 
-            {/* Feedback + action buttons */}
-            {phase === "revealed" && (
+            {/* Feedback + action buttons — live only (review is navigated via Back/Forward) */}
+            {!inReview && phase === "revealed" && (
               <>
                 <FeedbackWidget
                   sessionId={sessionId}
                   contentType="question"
-                  contentId={question.id}
+                  contentId={question!.id}
                   className="px-1"
                 />
 
@@ -1266,7 +1358,8 @@ function McatPracticeInner({
               </>
             )}
           </>
-        )}
+          );
+        })()}
 
         {/* ── Done screen ── */}
         {phase === "done" && (

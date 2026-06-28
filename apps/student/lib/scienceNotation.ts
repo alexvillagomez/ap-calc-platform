@@ -71,6 +71,14 @@ export const SCIENCE_REPLACEMENTS: Replacement[] = [
   // H+ — require word start + lookahead end to avoid H+/H- in equations
   [/\bH\+(?=\s|[.,;:!?)'"]|$)/g, "$H^+$"],
 
+  // ── Bond/group notation (chemistry) — before nucleotide abbreviations ──────
+  // N-H, C=O, C-N, C-H as standalone bond tokens (not mid-word).
+  // Match when preceded by space/start and followed by space/punct/end.
+  [/(?<=\s|^)N-H(?=\s|[.,;:!?)'"]|$)/g, "$N{-}H$"],
+  [/(?<=\s|^)C=O(?=\s|[.,;:!?)'"]|$)/g, "$C{=}O$"],
+  [/(?<=\s|^)C-N(?=\s|[.,;:!?)'"]|$)/g, "$C{-}N$"],
+  [/(?<=\s|^)C-H(?=\s|[.,;:!?)'"]|$)/g, "$C{-}H$"],
+
   // ── Nucleotide cofactors — longer tokens first ────────────────────────────
   [/\bNADP\+/g, "$NADP^+$"],
   [/\bNADPH\b/g, "$NADPH$"],

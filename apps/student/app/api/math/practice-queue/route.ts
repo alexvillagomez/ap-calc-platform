@@ -229,6 +229,7 @@ export async function GET(request: Request) {
   const reviewItems: {
     id: string;
     label: string;
+    category_id: string;
     score: number | null;
     spaced_review_due_at: string | null;
   }[] = [];
@@ -247,6 +248,9 @@ export async function GET(request: Request) {
       reviewItems.push({
         id: kw.id,
         label: kw.label,
+        // Carry the keyword's own category so cross-unit spiral review questions
+        // are scoped to the right category (review keywords span earlier units).
+        category_id: kw.category_id,
         score,
         spaced_review_due_at: spacedReviewDueAt,
       });

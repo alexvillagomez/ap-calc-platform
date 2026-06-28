@@ -1,0 +1,273 @@
+{
+  "category_code": "8B",
+  "umbrellas": [
+    {
+      "slug": "dispositional_vs_situational",
+      "label": "Dispositional vs. Situational Attribution",
+      "description": "The foundational distinction in attribution theory — whether we explain behavior by pointing to the person's character or to external circumstances.",
+      "intro": {
+        "slug": "dispositional_vs_situational_intro",
+        "label": "Introduction to Attribution Theory",
+        "description": "Attribution theory asks: when we see someone behave in a particular way, what cause do we assign? The two master categories are dispositional attributions (the cause lives inside the person — their personality, ability, or character) and situational attributions (the cause lives outside the person — the context, pressure, or luck). How observers allocate credit or blame between these two poles shapes prejudice, stereotyping, and social judgment, and is the foundation for all the specific biases covered in this section.",
+        "examples": ["dispositional vs situational cause", "explaining a failing grade as laziness vs hard exam", "internal vs external attribution"]
+      },
+      "in_depth": [
+        {
+          "slug": "dispositional_attribution",
+          "label": "Dispositional attribution",
+          "description": "Identify a dispositional attribution: explaining a person's behavior by appealing to an internal, stable trait (personality, ability, character, or moral character). This focuses on the person as the locus of causation, not on circumstances or context (situational attribution, a separate keyword).",
+          "examples": ["'she failed because she's lazy'", "attributing success to talent", "personality as cause"]
+        },
+        {
+          "slug": "situational_attribution",
+          "label": "Situational attribution",
+          "description": "Identify a situational attribution: explaining a person's behavior by pointing to external factors such as task difficulty, luck, social pressure, or environmental context. This focuses on the environment as cause, not the person's stable traits (dispositional attribution, a separate keyword).",
+          "examples": ["'he failed because the test was unfair'", "blaming traffic for being late", "context as cause of behavior"]
+        }
+      ]
+    },
+    {
+      "slug": "attribution_biases",
+      "label": "Attribution Biases",
+      "description": "Systematic errors people make when attributing causes to behavior — over-relying on dispositional or situational explanations in predictable, patterned ways.",
+      "intro": {
+        "slug": "attribution_biases_intro",
+        "label": "Overview of Attribution Biases",
+        "description": "Observers rarely attribute behavior perfectly rationally — they show systematic biases. The most studied is the fundamental attribution error (overweighting the person, underweighting the situation), but people also show different patterns when judging their own behavior (actor-observer bias) and when protecting their own self-image (self-serving bias). Understanding which bias applies when, and in which direction, is the key MCAT skill in this cluster.",
+        "examples": ["observer vs actor bias direction", "self-serving credit for success", "FAE in everyday social judgment"]
+      },
+      "in_depth": [
+        {
+          "slug": "fundamental_attribution_error",
+          "label": "Fundamental attribution error",
+          "description": "Identify the fundamental attribution error (FAE): the tendency of observers to overweight dispositional (personality) causes and underweight situational causes when explaining other people's behavior. This focuses on observer judgments of others, not on how actors explain their own behavior (actor-observer bias, a separate keyword).",
+          "examples": ["assuming a rude cashier has a bad personality (ignoring a stressful shift)", "FAE in the quiz-master study", "underestimating situational constraints on others"]
+        },
+        {
+          "slug": "actor_observer_bias",
+          "label": "Actor-observer bias",
+          "description": "Recognize the actor-observer bias: actors tend to attribute their own behavior to situational factors, while observers attribute the same behavior to dispositional factors. This focuses on the systematic difference in perspective between the person performing the action and the person watching it, not on the general tendency to blame disposition (FAE, a separate keyword).",
+          "examples": ["'I snapped because I was tired' vs 'she snapped because she's rude'", "actor credits situation; observer credits character", "self vs other attribution asymmetry"]
+        },
+        {
+          "slug": "self_serving_bias",
+          "label": "Self-serving bias",
+          "description": "Apply the self-serving bias: the tendency to attribute successes to internal, dispositional factors (ability, effort) and failures to external, situational factors (bad luck, unfair grading). This focuses on self-protective asymmetry in self-attribution, not on how we attribute others' behavior (FAE or actor-observer bias, separate keywords).",
+          "examples": ["'I aced the exam because I'm smart; I failed because it was unfair'", "athletes crediting ability for wins, luck for losses", "protecting self-esteem through attribution"]
+        }
+      ]
+    },
+    {
+      "slug": "culture_and_attribution",
+      "label": "Cultural Differences in Attribution",
+      "description": "How cultural context — especially individualism vs. collectivism — shapes whether people default to dispositional or situational attributions.",
+      "intro": {
+        "slug": "culture_and_attribution_intro",
+        "label": "Culture, Individualism, and Attributional Style",
+        "description": "Attributional tendencies are not universal — culture moderates how strongly each bias appears. Individualistic cultures (e.g., the United States) show stronger fundamental attribution errors because they emphasize personal agency; collectivistic cultures (e.g., many East Asian societies) weight situational and relational context more heavily. This cultural dimension is the bridge between social psychology and sociology in attribution research.",
+        "examples": ["individualistic cultures overattribute to person", "collectivistic cultures emphasize context", "cross-cultural FAE replication studies"]
+      },
+      "in_depth": [
+        {
+          "slug": "individualism_collectivism_attribution",
+          "label": "Individualism, collectivism, and attribution style",
+          "description": "Distinguish how individualistic vs. collectivistic cultural orientations shift attributional defaults: individualistic cultures favor dispositional explanations; collectivistic cultures favor situational/relational ones, producing a weaker FAE. This focuses on the cultural moderation of attribution patterns, not on any single specific bias (those are separate keywords).",
+          "examples": ["stronger FAE in U.S. than in China or India", "collectivism: group context explains individual behavior", "cultural value of personal agency vs interdependence"]
+        }
+      ]
+    },
+    {
+      "slug": "self_perception_and_others",
+      "label": "Self-Perception Shaping Perception of Others",
+      "description": "How our own self-views, moods, and self-concepts color the attributions and evaluations we make about other people.",
+      "intro": {
+        "slug": "self_perception_and_others_intro",
+        "label": "How Self-Views Influence Social Judgment",
+        "description": "Our perceptions of others are not neutral — they are filtered through our own self-concept, current mood, and sense of identity. Someone with high self-esteem may attribute others' failure more harshly; projection leads people to see their own traits in others; and moods act as information that bleeds into social judgments. This umbrella covers the within-person pathways by which self-perception shapes the perception of others.",
+        "examples": ["projection of own traits onto strangers", "mood congruence in social judgment", "self-concept as lens on others' behavior"]
+      },
+      "in_depth": [
+        {
+          "slug": "projection_in_attribution",
+          "label": "Projection and false-consensus effect",
+          "description": "Recognize defensive projection and the false-consensus effect: the tendency to attribute one's own (often unacceptable or negative) traits to others and to overestimate how many people share one's beliefs and behaviors. This focuses on seeing one's own characteristics in others as a self-protective or consensus-inflating bias, not on the systematic use of the self as an information anchor when estimating others' attitudes (assumed similarity, a separate keyword).",
+          "examples": ["false-consensus: 'everyone would have done what I did'", "projecting one's own anxiety or hostility onto others", "assuming most people share your political views"]
+        },
+        {
+          "slug": "assumed_similarity_projection",
+          "label": "Assumed similarity and social projection",
+          "description": "Explain assumed similarity (social projection): people use their own attitudes, preferences, and traits as a default anchor and infer that others are like them, especially when they lack specific information about the target. This self-anchoring inflates perceived agreement and skews judgments of others toward the self. This focuses on the everyday inferential use of the self as a reference point when reading others, not on defensive projection/false-consensus as a bias (a separate keyword) or on situational context cues (environment keyword).",
+          "examples": ["guessing a stranger's taste in music matches your own", "self-anchoring when predicting others' opinions", "assuming a new coworker values the same things you do"]
+        },
+        {
+          "slug": "environment_perception_of_others",
+          "label": "Environmental context shaping perception of others",
+          "description": "Explain how the perceived environment (context, setting, role, norms) shapes our judgments about other people — we read others differently depending on situational cues around them. This focuses on how external context information changes person perception, not on how our own internal self-views do (projection, a separate keyword).",
+          "examples": ["judging a man differently in a boardroom vs on a street corner", "role cues change perceived competence", "situational context as frame for person perception"]
+        }
+      ]
+    },
+    {
+      "slug": "prejudice_and_bias",
+      "label": "Prejudice and Bias",
+      "description": "The affective and cognitive roots of unjustified negative attitudes toward social groups — how emotion, social structure, and cognition each feed prejudice.",
+      "intro": {
+        "slug": "prejudice_and_bias_intro",
+        "label": "Defining and Explaining Prejudice",
+        "description": "Prejudice is a preformed, typically negative, attitude or evaluation directed at members of an out-group based on their group membership alone. It has cognitive (stereotypes), affective (emotional hostility or fear), and behavioral (discrimination) components — but these three are conceptually distinct and can dissociate. Multiple processes sustain prejudice: structural factors like power and prestige, emotional processes like scapegoating and realistic group conflict, and cognitive shortcuts like categorization and illusory correlation. This umbrella surveys those mechanisms.",
+        "examples": ["anti-immigrant prejudice as attitude vs discrimination as behavior", "prejudice defined: negative attitude toward group membership", "cognitive + emotional + behavioral components"]
+      },
+      "in_depth": [
+        {
+          "slug": "prejudice_definition",
+          "label": "Prejudice defined and its components",
+          "description": "Define prejudice as a negative attitude toward members of a group based solely on group membership, composed of cognitive (beliefs/stereotypes), affective (hostility or fear), and behavioral tendency (discrimination) components. This focuses on the conceptual definition and three-component structure, not on specific mechanisms that sustain it (those are separate keywords).",
+          "examples": ["prejudice = negative attitude toward group", "cognitive-affective-behavioral components of attitude", "prejudice vs stereotype vs discrimination triangle"]
+        },
+        {
+          "slug": "power_prestige_class_prejudice",
+          "label": "Power, prestige, and class in prejudice",
+          "description": "Explain how social structures of power, prestige, and class generate and sustain prejudice: dominant groups benefit materially from negative attitudes toward lower-status groups, and existing status hierarchies legitimize prejudiced views. This focuses on the sociological/structural roots of prejudice, not on individual emotional or cognitive processes (separate keywords).",
+          "examples": ["dominant group reinforces prejudice to protect status", "classism tied to prestige hierarchies", "prejudice as ideological support for inequality"]
+        },
+        {
+          "slug": "emotion_in_prejudice",
+          "label": "The role of emotion in prejudice",
+          "description": "Describe how emotions — especially fear, anger, and intergroup anxiety — fuel and sustain prejudice through processes such as scapegoating (blaming an out-group for unrelated frustrations) and realistic group conflict (competition over real resources raising hostility). This focuses on the affective mechanisms of prejudice, not on cognitive shortcuts like stereotyping (a separate keyword).",
+          "examples": ["scapegoating an out-group during economic anxiety", "realistic group conflict theory: scarce jobs → hostility", "intergroup anxiety amplifying bias"]
+        },
+        {
+          "slug": "cognition_in_prejudice",
+          "label": "The role of cognition in prejudice",
+          "description": "Identify cognitive mechanisms that sustain prejudice: social categorization (us vs. them thinking), illusory correlation (overestimating co-occurrence of minority group membership and negative traits), and in-group favoritism. This focuses on information-processing biases, not on emotional drivers of prejudice (separate keyword).",
+          "examples": ["illusory correlation: overestimating minority-crime link", "in-group bias in resource allocation", "social categorization as foundation of prejudice"]
+        }
+      ]
+    },
+    {
+      "slug": "stereotypes",
+      "label": "Stereotypes",
+      "description": "Cognitive generalizations about the characteristics of social groups — how stereotypes form, persist, and influence behavior.",
+      "intro": {
+        "slug": "stereotypes_intro",
+        "label": "What Stereotypes Are and How They Function",
+        "description": "A stereotype is a cognitive schema — a generalized belief about the attributes, traits, or behaviors shared by members of a social group. Stereotypes are mental shortcuts that aid rapid categorization but sacrifice accuracy; they can be implicit (automatic, below awareness) or explicit (consciously held). Stereotypes are conceptually distinct from prejudice (the affective attitude) and discrimination (the behavioral act). This umbrella covers what stereotypes are, how they form and persist, and their effects on social judgment.",
+        "examples": ["stereotype as cognitive generalization about group", "implicit vs explicit stereotype", "stereotypes → prejudice → discrimination pipeline"]
+      },
+      "in_depth": [
+        {
+          "slug": "stereotype_definition_formation",
+          "label": "Stereotype formation and persistence",
+          "description": "Explain how stereotypes form through categorization, repeated exposure to cultural messages, and cognitive economy, and how they persist through confirmation bias (noticing stereotype-consistent information more than inconsistent information). This focuses on the formation and maintenance of the stereotype itself, not on its downstream effects on targets (stereotype threat, a separate keyword).",
+          "examples": ["confirmation bias sustains 'women are bad at math'", "cultural media reinforcing group stereotypes", "categorization as cognitive shortcut → stereotype"]
+        },
+        {
+          "slug": "implicit_vs_explicit_stereotypes",
+          "label": "Implicit vs. explicit stereotypes",
+          "description": "Distinguish implicit stereotypes (automatic, unconscious associations activated without intention, measured by the IAT) from explicit stereotypes (consciously held, reportable beliefs about groups). This focuses on the awareness dimension of stereotypes, not on prejudice or discrimination (separate keywords).",
+          "examples": ["IAT reveals implicit racial associations", "explicit stereotype: consciously stating a group trait", "implicit bias vs stated belief"]
+        }
+      ]
+    },
+    {
+      "slug": "stigma",
+      "label": "Stigma",
+      "description": "The social process by which individuals are marked as deviant, flawed, or discredited on the basis of a socially defined attribute.",
+      "intro": {
+        "slug": "stigma_intro",
+        "label": "Stigma and Social Identity Spoilage",
+        "description": "Stigma, as theorized by Goffman, is a deeply discrediting attribute that reduces an individual in others' minds from a whole person to a 'spoiled identity.' Stigmatized attributes may be visible (physical disability) or concealable (mental illness, sexual orientation). Stigma operates at the intersection of prejudice and social structure, shaping how stigmatized individuals manage their identity in social interactions. Understanding stigma is distinct from understanding stereotypes — stigma emphasizes the social marking process and its identity consequences.",
+        "examples": ["Goffman's 'spoiled identity'", "HIV/AIDS stigma", "visible vs concealable stigma"]
+      },
+      "in_depth": [
+        {
+          "slug": "stigma_goffman",
+          "label": "Goffman's stigma theory",
+          "description": "Apply Goffman's concept of stigma: a discrediting attribute that reduces a person's social identity from 'whole' to 'spoiled,' and distinguish his three types — abominations of the body (physical), blemishes of character (behavioral/moral), and tribal stigmas (race, ethnicity, religion). This focuses on the conceptual framework, not on stigma's relationship to stereotype threat (a separate keyword).",
+          "examples": ["Goffman's three stigma types", "physical disability as abomination of body", "mental illness as blemish of character"]
+        },
+        {
+          "slug": "stigma_management",
+          "label": "Stigma management strategies",
+          "description": "Describe how stigmatized individuals manage their discredited identity: passing (concealing a stigma), covering (reducing its obtrusiveness), and disclosure decisions. This focuses on individual coping strategies for a concealable or visible stigma, not on the structural origin of stigma (separate keyword).",
+          "examples": ["passing: hiding a mental illness diagnosis", "covering: minimizing a visible disability in conversation", "coming out as a stigma management decision"]
+        }
+      ]
+    },
+    {
+      "slug": "ethnocentrism_cultural_relativism",
+      "label": "Ethnocentrism and Cultural Relativism",
+      "description": "Opposing orientations for evaluating other cultures — judging them by one's own cultural standards vs. understanding them on their own terms.",
+      "intro": {
+        "slug": "ethnocentrism_cultural_relativism_intro",
+        "label": "Evaluating Culture: Ethnocentrism vs. Cultural Relativism",
+        "description": "Ethnocentrism is the tendency to view one's own culture as the natural or superior standard for judging others, while cultural relativism is the methodological and moral stance of understanding a culture's practices within their own context, without external judgment. These are contrasting orientations with real consequences: ethnocentrism reinforces out-group prejudice and justifies discrimination; cultural relativism enables cross-cultural understanding but raises debates about moral absolutism.",
+        "examples": ["ethnocentrism: judging another diet as 'disgusting'", "cultural relativism in anthropological fieldwork", "ethnocentrism vs cultural relativism debate"]
+      },
+      "in_depth": [
+        {
+          "slug": "ethnocentrism",
+          "label": "Ethnocentrism",
+          "description": "Define ethnocentrism as the belief that one's own cultural group is superior and using it as the standard by which to judge other cultures, often producing prejudice and out-group denigration. This focuses on the evaluative/judgmental stance toward other cultures, not on cultural relativism as an alternative (a separate keyword).",
+          "examples": ["viewing another culture's foods as inferior or disgusting", "colonial attitudes of cultural superiority", "ethnocentrism as source of international prejudice"]
+        },
+        {
+          "slug": "cultural_relativism",
+          "label": "Cultural relativism",
+          "description": "Define cultural relativism as the principle that a culture's practices and beliefs should be understood and evaluated within their own cultural context rather than by the standards of another culture. This focuses on the non-judgmental stance, not on the biases produced by its opposite, ethnocentrism (a separate keyword).",
+          "examples": ["anthropologist studying ritual without imposing home-culture norms", "understanding honor cultures on their own terms", "cultural relativism vs moral universalism debate"]
+        }
+      ]
+    },
+    {
+      "slug": "self_fulfilling_prophecy",
+      "label": "Self-Fulfilling Prophecy",
+      "description": "The process by which expectations about a person or group cause behaviors that make those expectations come true.",
+      "intro": {
+        "slug": "self_fulfilling_prophecy_intro",
+        "label": "How Expectations Create the Reality They Predict",
+        "description": "A self-fulfilling prophecy occurs when an initially false belief about a person or group produces behavior — in the believer or in the target — that ultimately confirms the original belief. The prophecy completes a feedback loop: belief → altered behavior toward the target → target's changed response → 'confirmation' of the original belief. This process is distinct from stereotype threat, which focuses on the target's internal cognitive interference from awareness of a negative stereotype, not on the perceivers' behavioral confirmation cycle.",
+        "examples": ["Rosenthal and Jacobson's Pygmalion study", "teacher expects low performance → gives less support → student underperforms", "belief → action → confirmation cycle"]
+      },
+      "in_depth": [
+        {
+          "slug": "self_fulfilling_prophecy_mechanism",
+          "label": "Self-fulfilling prophecy mechanism",
+          "description": "Explain how a self-fulfilling prophecy works: a perceiver holds an expectation about a target → the perceiver treats the target in ways consistent with that expectation → the target's behavior shifts to confirm the expectation → the original (possibly false) belief appears validated. This focuses on the perceiver-driven confirmation cycle, not on the target's cognitive interference from stereotype awareness (stereotype threat, a separate keyword).",
+          "examples": ["Pygmalion effect: teacher expectations raise student IQ scores", "expecting a borrower to default → less support → actual default", "employer bias → limited opportunity → 'confirming' low performance"]
+        },
+        {
+          "slug": "behavioral_confirmation",
+          "label": "Behavioral confirmation (experimental evidence)",
+          "description": "Recognize the experimental/interactional evidence for behavioral confirmation: controlled studies showing that a perceiver's expectation about a target elicits expectation-confirming behavior from that target during interaction — most famously Snyder, Tanke, and Swann's phone-conversation 'attractiveness' study (men who believed a female partner was attractive elicited warmer behavior from her) and interview-behavior demonstrations of interviewer expectations shaping applicant performance. This focuses on the demonstrated interactional finding that perceivers' behavior changes targets' behavior, not on the conceptual belief→action→confirmation loop itself (self-fulfilling prophecy mechanism, a separate keyword).",
+          "examples": ["Snyder, Tanke & Swann phone-call attractiveness study", "interviewer expectations shape applicant interview behavior", "experimental proof that expectancies elicit confirming responses"]
+        }
+      ]
+    },
+    {
+      "slug": "stereotype_threat",
+      "label": "Stereotype Threat",
+      "description": "The psychological mechanism by which awareness of a negative stereotype about one's group impairs the performance of group members in the relevant domain.",
+      "intro": {
+        "slug": "stereotype_threat_intro",
+        "label": "How Stereotype Awareness Can Undermine Performance",
+        "description": "Stereotype threat (Steele & Aronson) is the experience of anxiety or concern in a situation where a person risks confirming a negative stereotype about their social group. This concern consumes cognitive resources — working memory and attention — leading to underperformance on demanding tasks in the stereotyped domain. Stereotype threat is triggered by the target's awareness of the stereotype, not by the perceiver's expectations (self-fulfilling prophecy, a separate keyword), and it can be reduced by identity affirmation, role models, or reframing the test as non-diagnostic.",
+        "examples": ["Black students underperform on tests when race is made salient", "women in math: reminding of gender gap impairs performance", "Steele & Aronson 1995 study"]
+      },
+      "in_depth": [
+        {
+          "slug": "stereotype_threat_mechanism",
+          "label": "Stereotype threat mechanism and effects",
+          "description": "Explain how stereotype threat operates: situational cues make a negative group stereotype salient → the target fears confirming the stereotype → anxiety and cognitive load increase → performance suffers on the stereotyped task. This focuses on the internal, target-side process, not on the perceiver-driven confirmation loop (self-fulfilling prophecy, a separate keyword).",
+          "examples": ["cognitive load from stereotype anxiety impairs working memory", "women primed with gender gap score lower on math", "performance gap attributable to threat, not ability"]
+        },
+        {
+          "slug": "stereotype_threat_reduction",
+          "label": "Reducing stereotype threat",
+          "description": "Identify evidence-based strategies that reduce stereotype threat: framing tests as non-diagnostic, values affirmation, exposure to counter-stereotypic role models, and emphasizing a growth mindset. This focuses on interventions that buffer against threat, not on the mechanism by which the threat impairs performance (a separate keyword).",
+          "examples": ["'this test doesn't measure intelligence' → gap closes", "self-affirmation exercise before a math test", "role model in the stereotyped domain buffers performance"]
+        }
+      ]
+    }
+  ]
+}

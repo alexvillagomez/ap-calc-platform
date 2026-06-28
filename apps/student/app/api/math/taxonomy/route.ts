@@ -104,10 +104,35 @@ export async function GET(request: Request) {
           throw new Error(categoriesRes.error.message);
         }
 
+        let categories = categoriesRes.data ?? [];
+        let keptMemberships = memberships as MembershipRow[];
+        let keywords = keywordRows;
+
+        // The "AP Precalculus" section is hidden from the standalone precalc
+        // course (config-level removal — the taxonomy rows are untouched and the
+        // same categories still appear in calc_ab as foundations). Reversible by
+        // deleting this block.
+        if (course === "precalc") {
+          const hiddenIds = new Set(
+            categories
+              .filter((c) => (c.section as string) === "ap_precalc")
+              .map((c) => c.id as string)
+          );
+          if (hiddenIds.size > 0) {
+            categories = categories.filter((c) => !hiddenIds.has(c.id as string));
+            keptMemberships = keptMemberships.filter(
+              (m) => !hiddenIds.has(m.category_id as string)
+            );
+            keywords = keywords.filter(
+              (k) => !hiddenIds.has(k.category_id as string)
+            );
+          }
+        }
+
         return {
-          memberships: memberships as MembershipRow[],
-          categories: categoriesRes.data ?? [],
-          keywords: keywordRows,
+          memberships: keptMemberships,
+          categories,
+          keywords,
         };
       }
     );
@@ -142,23 +167,39 @@ export async function GET(request: Request) {
   >();
 
   if (sessionId) {
-    const { data: states } = await supabase
-      .from("math_student_keyword_states")
-      .select(
-        "keyword_id, score, total_attempts, correct_attempts, dont_know_count, state"
-      )
-      .eq("session_id", sessionId)
-      .in("keyword_id",
-        (keywordsRes.data ?? []).map((k) => k.id as string)
-      );
+    // Scope by the indexed session_id ONLY, then filter to this course's keywords
+    // in JS via a Set — do NOT `.in("keyword_id", …)`. calc_ab has ~1,756 keywords,
+    // and a `.in()` of that many ids builds an ~80 KB GET URL that PostgREST hangs
+    // on / rejects — the cause of the minute-long "Loading…" spinner. Paginate:
+    // a session can hold one state row per keyword, exceeding PostgREST's 1000 cap.
+    const relevantIds = new Set(
+      (keywordsRes.data ?? []).map((k) => k.id as string)
+    );
+    const states = await fetchAllPages<{
+      keyword_id: string;
+      score: number | null;
+      total_attempts: number | null;
+      correct_attempts: number | null;
+      dont_know_count: number | null;
+      state: string | null;
+    }>((from, to) =>
+      supabase
+        .from("math_student_keyword_states")
+        .select(
+          "keyword_id, score, total_attempts, correct_attempts, dont_know_count, state"
+        )
+        .eq("session_id", sessionId)
+        .range(from, to)
+    );
 
-    for (const s of states ?? []) {
-      stateMap.set(s.keyword_id as string, {
-        score: (s.score as number | null) ?? null,
-        total_attempts: (s.total_attempts as number) ?? 0,
-        correct_attempts: (s.correct_attempts as number) ?? 0,
-        dont_know_count: (s.dont_know_count as number) ?? 0,
-        state: (s.state as string) ?? null,
+    for (const s of states) {
+      if (!relevantIds.has(s.keyword_id)) continue;
+      stateMap.set(s.keyword_id, {
+        score: s.score ?? null,
+        total_attempts: s.total_attempts ?? 0,
+        correct_attempts: s.correct_attempts ?? 0,
+        dont_know_count: s.dont_know_count ?? 0,
+        state: s.state ?? null,
       });
     }
   }

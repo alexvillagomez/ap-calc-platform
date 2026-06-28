@@ -1,0 +1,276 @@
+{
+  "section": "physics",
+  "category_code": "P2",
+  "category_label": "Forces & Newton's Laws",
+  "order_index": 1,
+  "umbrellas": [
+    {
+      "slug": "inertia_newtons_first_law",
+      "label": "Inertia & Newton's First Law",
+      "description": "Newton's first law and the concept of inertia as a body's resistance to changes in motion.",
+      "intro": {
+        "slug": "inertia_newtons_first_law_intro",
+        "label": "Inertia & Newton's First Law Overview",
+        "description": "Newton's first law states that an object at rest stays at rest, and an object in motion continues moving at constant velocity, unless acted on by a net external force. Inertia is the property of matter that quantifies this resistance to change. This law defines what we mean by a 'net force of zero' and sets up the idea of an inertial reference frame.",
+        "examples": ["no net force → no change in velocity", "inertia ∝ mass", "seatbelt: passenger resists sudden stop"]
+      },
+      "in_depth": [
+        {
+          "slug": "newtons_first_law_statement",
+          "label": "Newton's first law of motion",
+          "description": "State and apply Newton's first law: an object with zero net force acting on it maintains its state of rest or constant velocity. This focuses on the zero-net-force condition and uniform motion, not on how net force produces acceleration (Newton's second law, a separate keyword).",
+          "examples": ["$\\sum F = 0 \\Rightarrow$ constant velocity", "object at rest stays at rest", "hockey puck slides at constant $v$ on frictionless ice"]
+        },
+        {
+          "slug": "inertia_and_mass",
+          "label": "Inertia and mass",
+          "description": "Define inertia as a body's resistance to acceleration and identify mass (in kg) as its quantitative measure — a greater mass means greater resistance to any given net force. This focuses on the inertia concept, not on applying $F = ma$ to find acceleration (a separate keyword).",
+          "examples": ["more massive → harder to accelerate", "inertia is NOT a force", "mass is intrinsic; weight depends on $g$"]
+        }
+      ]
+    },
+    {
+      "slug": "newtons_second_law",
+      "label": "Newton's Second Law",
+      "description": "The relationship between net force, mass, and acceleration: $F_{\\text{net}} = ma$.",
+      "intro": {
+        "slug": "newtons_second_law_intro",
+        "label": "Newton's Second Law Overview",
+        "description": "Newton's second law, $\\vec{F}_{\\text{net}} = m\\vec{a}$, is the central quantitative tool of mechanics: the net vector force on an object equals its mass times its acceleration, in the same direction as the net force. On the MCAT it is applied component-by-component (often after drawing a free-body diagram) to solve for unknown forces or accelerations. The keywords in this umbrella build the core $F = ma$ skill.",
+        "examples": ["$F_{\\text{net}} = ma$", "net force sets direction of acceleration", "doubling mass halves acceleration for same net force"]
+      },
+      "in_depth": [
+        {
+          "slug": "newtons_second_law_application",
+          "label": "Newton's second law: $F = ma$",
+          "description": "Apply Newton's second law, $F_{\\text{net}} = ma$, to relate the net force on an object, its mass, and its resulting acceleration; solve for any one given the other two, noting that force and acceleration are vectors in the same direction. This focuses on the $F$–$m$–$a$ relation, not on action–reaction force pairs (Newton's third law, a separate keyword).",
+          "examples": ["$F_{\\text{net}} = ma$; doubling $F$ doubles $a$", "solve for $a$: $a = F_{\\text{net}}/m$", "SI units: $1\\,\\text{N} = 1\\,\\text{kg}\\cdot\\text{m/s}^2$"]
+        },
+        {
+          "slug": "net_force_superposition",
+          "label": "Net force by superposition of vectors",
+          "description": "Find the net force on an object by adding all individual forces as vectors (component-by-component in x and y), then apply $F_{\\text{net}} = ma$ in each direction. This focuses on vector addition to obtain $\\vec{F}_{\\text{net}}$, not on identifying action–reaction pairs or the specifics of normal/friction forces (each a separate keyword).",
+          "examples": ["$F_{\\text{net},x} = \\sum F_x$; $F_{\\text{net},y} = \\sum F_y$", "forces in opposite directions subtract", "resolve all forces into x/y components first"]
+        }
+      ]
+    },
+    {
+      "slug": "newtons_third_law",
+      "label": "Newton's Third Law: Action–Reaction Pairs",
+      "description": "Every force exerted by one object on another is met by an equal-magnitude, opposite-direction force on the first object.",
+      "intro": {
+        "slug": "newtons_third_law_intro",
+        "label": "Newton's Third Law Overview",
+        "description": "Newton's third law states that forces always come in pairs: if object A exerts a force on object B, then B exerts an equal and opposite force on A. These action–reaction pairs act on *different* objects, so they never cancel each other in a free-body diagram of a single object. Understanding the third law is essential for analyzing systems of interacting bodies.",
+        "examples": ["$\\vec{F}_{A\\to B} = -\\vec{F}_{B\\to A}$", "action/reaction act on different objects", "floor pushes up on standing person (equal/opposite to weight)"]
+      },
+      "in_depth": [
+        {
+          "slug": "action_reaction_pairs",
+          "label": "Action–reaction force pairs",
+          "description": "Identify Newton's third law pairs: for every force object A exerts on B, B exerts a force of equal magnitude and opposite direction on A; the two forces act on different objects and are always the same type (both gravitational, both contact, etc.). This focuses on correctly identifying the pair, not on the magnitudes involved in $F = ma$ (a separate keyword).",
+          "examples": ["swimmer pushes wall backward; wall pushes swimmer forward", "Earth pulls moon; moon pulls Earth with same magnitude", "third-law pair: same type, opposite direction, different objects"]
+        },
+        {
+          "slug": "third_law_vs_equilibrium",
+          "label": "Distinguishing third-law pairs from equilibrium pairs",
+          "description": "Distinguish a Newton's-third-law pair (equal/opposite forces on *two different* objects — always exist regardless of motion) from two forces that balance on *one* object at equilibrium (also equal/opposite but not a third-law pair). This focuses on the conceptual distinction, which is a common MCAT wrong-answer trap.",
+          "examples": ["book on table: normal + weight cancel on one object (not a 3rd-law pair)", "third-law pair: book's weight pulls Earth upward", "object accelerating: third-law pairs still exist"]
+        }
+      ]
+    },
+    {
+      "slug": "free_body_diagrams",
+      "label": "Free-Body Diagrams",
+      "description": "Representing all forces on a single object as arrows in a diagram to set up Newton's-law equations.",
+      "intro": {
+        "slug": "free_body_diagrams_intro",
+        "label": "Free-Body Diagrams Overview",
+        "description": "A free-body diagram (FBD) shows a single object in isolation with every external force acting on it represented as a labeled vector arrow. It is the essential problem-setup tool before applying Newton's laws: once all forces are drawn and decomposed into components, $\\sum F_x = ma_x$ and $\\sum F_y = ma_y$ can be written directly. Most MCAT force problems start with an implicit or explicit FBD.",
+        "examples": ["draw object as a dot; arrows for each force", "include weight, normal, friction, tension — nothing else", "FBD → component equations → solve for unknown"]
+      },
+      "in_depth": [
+        {
+          "slug": "drawing_free_body_diagrams",
+          "label": "Drawing a free-body diagram",
+          "description": "Construct a free-body diagram by representing the object as a point mass, drawing one arrow for each distinct external force (weight, normal, friction, tension, applied), labeling each with its symbol, and choosing a convenient coordinate system. This focuses on correctly identifying and drawing forces, not on solving the resulting equations (a separate keyword).",
+          "examples": ["$\\vec{W}$ downward, $\\vec{N}$ perpendicular to surface", "include only forces ON the object, not BY the object", "choose axes along and perpendicular to motion or incline"]
+        },
+        {
+          "slug": "fbd_to_equations",
+          "label": "Translating a free-body diagram to component equations",
+          "description": "Convert a completed free-body diagram into algebraic equations by summing force components along each axis: $\\sum F_x = ma_x$ and $\\sum F_y = ma_y$, then solve for the unknown quantity. This focuses on the translation step from diagram to equations, not on drawing the diagram itself (a separate keyword).",
+          "examples": ["$\\sum F_y = N - mg = 0$ for object on flat surface", "resolve angled forces: $F_x = F\\cos\\theta$", "identify unknowns (e.g. $T$, $a$) and count equations"]
+        }
+      ]
+    },
+    {
+      "slug": "weight_and_normal_force",
+      "label": "Weight & Normal Force",
+      "description": "The gravitational force on a mass near Earth's surface ($W = mg$) and the contact force a surface exerts perpendicular to it.",
+      "intro": {
+        "slug": "weight_and_normal_force_intro",
+        "label": "Weight & Normal Force Overview",
+        "description": "Weight is the gravitational force on an object near Earth's surface, $W = mg$ (directed downward, with $g \\approx 9.8\\,\\text{m/s}^2$). Normal force is the perpendicular contact force a surface exerts on an object resting against it; it adjusts in magnitude to maintain the constraint (no penetration). Together, weight and normal force appear in almost every force-balance or incline problem on the MCAT.",
+        "examples": ["$W = mg$, directed downward", "normal force $\\perp$ surface, not necessarily equal to $mg$", "$N < mg$ on an incline; $N > mg$ in upward acceleration"]
+      },
+      "in_depth": [
+        {
+          "slug": "weight_formula",
+          "label": "Weight: $W = mg$",
+          "description": "Calculate an object's weight using $W = mg$, where $m$ is mass in kg and $g \\approx 9.8\\,\\text{m/s}^2$ is the gravitational field strength near Earth's surface; distinguish weight (a force, in N) from mass (scalar, in kg). This focuses on the weight formula and the mass–weight distinction, not on Newton's third law or universal gravitation (separate keywords).",
+          "examples": ["$W = mg$; 10 kg object weighs $\\approx 98\\,\\text{N}$", "mass is invariant; weight depends on $g$", "weight points toward Earth's center"]
+        },
+        {
+          "slug": "normal_force",
+          "label": "Normal force",
+          "description": "Identify the normal force as the contact force a surface exerts perpendicular to itself on an object; determine its magnitude from Newton's second law in the direction perpendicular to the surface (not always equal to $mg$). This focuses on the normal force specifically, not on frictional force along the surface (a separate keyword).",
+          "examples": ["flat surface, rest: $N = mg$", "incline at angle $\\theta$: $N = mg\\cos\\theta$", "accelerating elevator: $N = m(g + a)$ or $m(g - a)$"]
+        }
+      ]
+    },
+    {
+      "slug": "friction",
+      "label": "Friction: Static & Kinetic",
+      "description": "The contact force opposing relative motion (kinetic) or impending motion (static) between two surfaces.",
+      "intro": {
+        "slug": "friction_intro",
+        "label": "Friction Overview",
+        "description": "Friction is a contact force parallel to the interface between two surfaces, opposing relative or impending motion. Static friction ($f_s \\leq \\mu_s N$) keeps surfaces from sliding and adjusts up to a maximum; kinetic friction ($f_k = \\mu_k N$) acts during sliding and is usually smaller and essentially constant. On the MCAT you are expected to apply both laws and understand that $\\mu_k < \\mu_s$ for typical surfaces.",
+        "examples": ["$f_s^{\\max} = \\mu_s N$; $f_k = \\mu_k N$", "$\\mu_k < \\mu_s$ for the same surface pair", "friction acts parallel to surface, opposing motion"]
+      },
+      "in_depth": [
+        {
+          "slug": "static_friction",
+          "label": "Static friction",
+          "description": "Apply the static friction inequality $f_s \\leq \\mu_s N$ to determine whether an object remains stationary or begins to slide; the static force adjusts from 0 to its maximum $\\mu_s N$ to oppose any applied force up to that limit. This focuses on the static (no-slip) regime, not on the kinetic (sliding) regime (a separate keyword).",
+          "examples": ["$f_s = F_{\\text{applied}}$ while object is still", "$f_s^{\\max} = \\mu_s N$: object slides when exceeded", "rough surface → larger $\\mu_s$ → harder to start sliding"]
+        },
+        {
+          "slug": "kinetic_friction",
+          "label": "Kinetic friction",
+          "description": "Calculate the kinetic friction force using $f_k = \\mu_k N$, which is constant (independent of speed) and acts opposite to the direction of sliding; recognize that $\\mu_k < \\mu_s$ so it is easier to keep an object sliding than to start it sliding. This focuses on the kinetic (sliding) regime, not on static friction (a separate keyword).",
+          "examples": ["$f_k = \\mu_k N$; constant during slide", "$\\mu_k < \\mu_s$ for same surface pair", "kinetic friction decelerates a sliding block"]
+        },
+        {
+          "slug": "coefficient_of_friction",
+          "label": "Coefficient of friction and surface dependence",
+          "description": "Identify $\\mu_s$ and $\\mu_k$ as dimensionless material-pair constants that depend on the two surfaces in contact (not on area of contact or speed); rank different surface pairs by friction strength qualitatively. This focuses on the meaning and variation of $\\mu$, not on applying the friction formula in a force balance (a separate keyword).",
+          "examples": ["$\\mu$ is dimensionless and material-dependent", "rubber on concrete: high $\\mu$; ice on ice: low $\\mu$", "doubling contact area does NOT change $f_k = \\mu_k N$"]
+        }
+      ]
+    },
+    {
+      "slug": "tension",
+      "label": "Tension",
+      "description": "The pulling force transmitted through a string, rope, or cable connecting objects.",
+      "intro": {
+        "slug": "tension_intro",
+        "label": "Tension Overview",
+        "description": "Tension is the magnitude of the force a string or rope exerts on the objects at each of its ends; it pulls both objects toward the rope (never pushes). For a massless, inextensible rope the tension is the same throughout its length. On the MCAT, tension appears in Atwood machines, hanging masses, and incline problems.",
+        "examples": ["rope pulls both ends inward with same $T$", "massless rope: $T$ is constant throughout", "hanging weight: $T = mg$ if in equilibrium"]
+      },
+      "in_depth": [
+        {
+          "slug": "tension_in_ropes",
+          "label": "Tension in ropes and strings",
+          "description": "Determine the tension in a rope connecting two objects by applying Newton's second law to each object separately, recognizing that the rope exerts an inward (pulling) force $T$ on each end and that for a massless rope $T$ is uniform throughout. This focuses on identifying and solving for tension, not on the normal or frictional forces on the individual objects (separate keywords).",
+          "examples": ["block hanging from ceiling: $T = mg$ at rest", "Atwood: $T = \\frac{2m_1 m_2}{m_1+m_2}g$", "accelerating system: $T < Mg$ (doesn't pull the full weight)"]
+        },
+        {
+          "slug": "tension_at_an_angle",
+          "label": "Tension at an angle — component decomposition",
+          "description": "Resolve an angled tension into horizontal and vertical components ($T_x = T\\cos\\theta$, $T_y = T\\sin\\theta$) and use each component in the appropriate $\\sum F = ma$ equation. This focuses on the vector-decomposition of tension, not on the value of $T$ in a straight vertical rope (a separate keyword).",
+          "examples": ["$T_y = T\\sin\\theta$ supports part of weight", "two ropes at angles: $T_1\\cos\\theta_1 + T_2\\cos\\theta_2 = 0$ (horizontal)", "steeper rope carries more of the vertical load"]
+        }
+      ]
+    },
+    {
+      "slug": "universal_gravitation",
+      "label": "Newton's Law of Universal Gravitation",
+      "description": "The gravitational attraction between any two masses at distance $r$: $F = G\\frac{m_1 m_2}{r^2}$.",
+      "intro": {
+        "slug": "universal_gravitation_intro",
+        "label": "Universal Gravitation Overview",
+        "description": "Newton's law of universal gravitation states that every pair of masses attracts each other with a force $F = G\\frac{m_1 m_2}{r^2}$, where $G = 6.67 \\times 10^{-11}\\,\\text{N·m}^2/\\text{kg}^2$ and $r$ is the center-to-center distance. This inverse-square law governs planetary orbits, satellite motion, and the variation of surface gravity with altitude. On the MCAT the key skills are proportional reasoning (e.g., doubling $r$ reduces $F$ by a factor of 4) and relating the law to the local approximation $W = mg$.",
+        "examples": ["$F = G\\frac{m_1 m_2}{r^2}$", "double $r$ → $F$ decreases by $\\times 4$", "mutual: Earth pulls Moon; Moon pulls Earth equally"]
+      },
+      "in_depth": [
+        {
+          "slug": "gravitational_force_formula",
+          "label": "Gravitational force between two masses",
+          "description": "Calculate or compare gravitational forces using $F = G\\frac{m_1 m_2}{r^2}$; apply proportional reasoning to predict how $F$ changes when masses or separation are changed. This focuses on applying the inverse-square force law, not on orbital or circular-motion analysis (a separate keyword).",
+          "examples": ["$F \\propto m_1 m_2 / r^2$", "triple $m_1$: $F$ triples", "halve $r$: $F$ increases by factor of 4"]
+        },
+        {
+          "slug": "gravitational_field_vs_local_g",
+          "label": "Gravitational field and the local approximation $g$",
+          "description": "Relate Newton's universal law to the local gravitational field strength $g = GM_{\\text{Earth}}/R_{\\text{Earth}}^2 \\approx 9.8\\,\\text{m/s}^2$, and recognize that $g$ decreases with altitude; use $W = mg$ as the valid approximation near Earth's surface. This focuses on connecting the universal law to the $g$ approximation, not on the centripetal force needed for circular orbits (a separate keyword).",
+          "examples": ["$g = GM_E/R_E^2 \\approx 9.8\\,\\text{m/s}^2$ at surface", "higher altitude → smaller $g$ (larger $r$)", "$W = mg$ is special case of $F = Gm_1m_2/r^2$"]
+        }
+      ]
+    },
+    {
+      "slug": "uniform_circular_motion",
+      "label": "Uniform Circular Motion & Centripetal Force",
+      "description": "Motion at constant speed around a circular path, requiring a centripetal (center-directed) net force $F_c = mv^2/r$.",
+      "intro": {
+        "slug": "uniform_circular_motion_intro",
+        "label": "Uniform Circular Motion Overview",
+        "description": "An object in uniform circular motion travels at constant speed but constantly changes direction, so it has a centripetal acceleration $a_c = v^2/r$ directed toward the center. The net force providing this acceleration is the centripetal force $F_c = mv^2/r = m\\omega^2 r$; it is NOT a new type of force but is supplied by real forces such as gravity, tension, normal force, or friction. MCAT questions often ask what supplies $F_c$ and what happens when that force is removed.",
+        "examples": ["$F_c = mv^2/r$, directed toward center", "no centripetal force → straight-line motion (tangent)", "tension in a string supplies $F_c$ for a swinging mass"]
+      },
+      "in_depth": [
+        {
+          "slug": "centripetal_acceleration",
+          "label": "Centripetal acceleration",
+          "description": "Identify that an object in uniform circular motion has centripetal acceleration $a_c = v^2/r$ directed toward the center of the circle, even though its speed is constant; recognize that the velocity vector is always tangent to the circle. This focuses on the acceleration concept, not on what force produces it (a separate keyword).",
+          "examples": ["$a_c = v^2/r$, toward center", "speed constant; direction changes → acceleration exists", "faster speed or smaller radius → larger $a_c$"]
+        },
+        {
+          "slug": "centripetal_force",
+          "label": "Centripetal force $F_c = mv^2/r$",
+          "description": "Apply Newton's second law to circular motion: the net inward (centripetal) force equals $F_c = mv^2/r = m\\omega^2 r$, and identify which physical force (tension, gravity, normal, friction) plays the role of $F_c$ in a given scenario. This focuses on finding and applying $F_c$, not on the acceleration description alone (a separate keyword).",
+          "examples": ["$F_c = mv^2/r$; supplied by tension, gravity, friction, or $N$", "satellite orbit: $\\frac{GMm}{r^2} = \\frac{mv^2}{r}$", "car rounding a curve: friction supplies $F_c$"]
+        },
+        {
+          "slug": "circular_motion_scenarios",
+          "label": "Circular motion scenarios: vertical and horizontal circles",
+          "description": "Analyze common circular-motion situations — vertical circle (top and bottom of a loop), horizontal circle (banked or flat turn) — by identifying all forces and setting their net inward component equal to $mv^2/r$, predicting minimum speed or required force at critical points. This focuses on multi-force circular setups, not on the basic $F_c$ definition (a separate keyword).",
+          "examples": ["top of loop: $mg + N = mv^2/r$ (both inward)", "bottom of loop: $N - mg = mv^2/r$; rider feels heavier", "minimum speed at top of loop: $N = 0$, so $v_{\\min} = \\sqrt{gr}$"]
+        }
+      ]
+    },
+    {
+      "slug": "inclined_planes",
+      "label": "Forces on Inclined Planes",
+      "description": "Applying Newton's laws to objects on a ramp by resolving weight into components parallel and perpendicular to the surface.",
+      "intro": {
+        "slug": "inclined_planes_intro",
+        "label": "Inclined Planes Overview",
+        "description": "An inclined plane at angle $\\theta$ requires resolving every force into components along (parallel) and perpendicular (normal) to the ramp. Weight contributes $mg\\sin\\theta$ down the incline and $mg\\cos\\theta$ into the surface; the normal force equals $mg\\cos\\theta$ for a simple ramp. MCAT incline problems commonly involve friction, tension (pulley on ramp), or asking when an object starts to slide.",
+        "examples": ["$W_{\\parallel} = mg\\sin\\theta$ (down ramp)", "$N = mg\\cos\\theta$ (perpendicular, no acceleration off surface)", "add friction up or down the ramp depending on motion"]
+      },
+      "in_depth": [
+        {
+          "slug": "weight_components_on_incline",
+          "label": "Resolving weight components on an incline",
+          "description": "Decompose weight on a surface inclined at angle $\\theta$ into the component along the incline ($mg\\sin\\theta$, directed down the slope) and the component perpendicular to it ($mg\\cos\\theta$, into the surface). This focuses on the geometry of force decomposition on a ramp, not on adding friction or tension (separate keywords).",
+          "examples": ["$W_{\\parallel} = mg\\sin\\theta$ (down slope)", "$W_{\\perp} = mg\\cos\\theta$ (into surface)", "steeper $\\theta$ → more force down slope, less into surface"]
+        },
+        {
+          "slug": "incline_with_friction",
+          "label": "Newton's law on an incline with friction",
+          "description": "Apply $\\sum F_{\\parallel} = ma$ on an inclined plane including static or kinetic friction: write $ma = mg\\sin\\theta - \\mu_k mg\\cos\\theta$ for a sliding object (friction up the slope) or find the critical angle for impending motion $\\tan\\theta_c = \\mu_s$. This focuses on the combined incline-plus-friction setup, not on the weight-decomposition geometry alone (a separate keyword).",
+          "examples": ["sliding: $ma = mg\\sin\\theta - \\mu_k mg\\cos\\theta$", "onset of sliding: $\\tan\\theta_c = \\mu_s$", "friction up the slope when object moves (or tends to move) down"]
+        },
+        {
+          "slug": "incline_with_tension",
+          "label": "Incline problems with tension (Atwood on a ramp)",
+          "description": "Set up Newton's-law equations for a system where a mass on an incline is connected by a rope over a pulley to a hanging mass, applying $\\sum F = ma$ to each object and using the constraint that both accelerate at the same magnitude $a$. This focuses on the two-body ramp-and-pulley system, not on the geometry of force decomposition alone (a separate keyword).",
+          "examples": ["$m_2 g - m_1 g\\sin\\theta = (m_1+m_2)a$", "if $m_2 g > m_1 g\\sin\\theta$, hanging mass falls", "solve for $T$ from one block's equation after finding $a$"]
+        }
+      ]
+    }
+  ]
+}

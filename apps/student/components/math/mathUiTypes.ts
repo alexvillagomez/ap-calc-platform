@@ -66,6 +66,9 @@ export interface MathQueueKeyword {
 export interface MathReviewKeyword {
   id: string;
   label: string;
+  /** The keyword's own category — review keywords can span earlier units, so a
+   *  review question must be scoped to this, not the current frontier category. */
+  category_id?: string;
   score: number | null;
   spaced_review_due_at: string | null;
 }
@@ -124,6 +127,78 @@ export function scoreColor(pct: number): string {
     : pct >= 50
     ? "text-amber-700"
     : "text-error-600";
+}
+
+export function scoreBarColor(pct: number): "brand" | "success" | "error" {
+  if (pct >= 80) return "success";
+  if (pct >= 55) return "brand";
+  return "error";
+}
+
+// ─── Word-label status system ─────────────────────────────────────────────────
+//
+// Data-sufficiency thresholds (documented here — the sole source of truth):
+//   Keyword:   ≥ 5 attempts
+//   Umbrella:  ≥ 5 total attempts (aggregated across children)
+//   Category:  ≥ 5 total attempts AND ≥ min(3, totalKeywords) keywords attempted
+//
+// Status scale (once data-sufficient):
+//   "Not started"   — 0 attempts or no score
+//   "Just started"  — some attempts but below data-sufficiency threshold
+//   "Needs work"    — score < 55%
+//   "Getting there" — score 55–79%
+//   "Strong"        — score ≥ 80%
+
+export interface ProgressStatus {
+  label: string;
+  labelClass: string;
+  sufficient: boolean; // when false, skip progress bar (data not reliable yet)
+}
+
+export function keywordProgressStatus(attempts: number, pct: number | null): ProgressStatus {
+  if (attempts === 0 || pct === null) {
+    return { label: "Not started", labelClass: "text-neutral-400", sufficient: false };
+  }
+  if (attempts < 5) {
+    return { label: "Just started", labelClass: "text-neutral-500", sufficient: false };
+  }
+  if (pct >= 80) return { label: "Strong",        labelClass: "text-success-700", sufficient: true };
+  if (pct >= 55) return { label: "Getting there", labelClass: "text-amber-700",   sufficient: true };
+  return               { label: "Needs work",     labelClass: "text-error-600",   sufficient: true };
+}
+
+export function umbrellaProgressStatus(
+  totalAttempts: number,
+  displayScore: number | null
+): ProgressStatus {
+  if (totalAttempts === 0 || displayScore === null) {
+    return { label: "Not started", labelClass: "text-neutral-400", sufficient: false };
+  }
+  if (totalAttempts < 5) {
+    return { label: "Just started", labelClass: "text-neutral-500", sufficient: false };
+  }
+  if (displayScore >= 80) return { label: "Strong",        labelClass: "text-success-700", sufficient: true };
+  if (displayScore >= 55) return { label: "Getting there", labelClass: "text-amber-700",   sufficient: true };
+  return                  { label: "Needs work",           labelClass: "text-error-600",   sufficient: true };
+}
+
+export function categoryProgressStatus(
+  totalKeywords: number,
+  keywordsAttempted: number,
+  totalAttempts: number,
+  avgScore: number | null
+): ProgressStatus {
+  if (totalAttempts === 0 || avgScore === null) {
+    return { label: "Not started", labelClass: "text-neutral-400", sufficient: false };
+  }
+  const minKeywordsNeeded = Math.min(3, totalKeywords);
+  const sufficient = totalAttempts >= 5 && keywordsAttempted >= minKeywordsNeeded;
+  if (!sufficient) {
+    return { label: "Just started", labelClass: "text-neutral-500", sufficient: false };
+  }
+  if (avgScore >= 80) return { label: "Strong",        labelClass: "text-success-700", sufficient: true };
+  if (avgScore >= 55) return { label: "Getting there", labelClass: "text-amber-700",   sufficient: true };
+  return               { label: "Needs work",          labelClass: "text-error-600",   sufficient: true };
 }
 
 export const COURSE_LABELS: Record<string, string> = {

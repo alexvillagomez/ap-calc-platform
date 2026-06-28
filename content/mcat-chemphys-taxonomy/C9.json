@@ -1,0 +1,213 @@
+{
+  "section": "chemistry",
+  "category_code": "C9",
+  "category_label": "Chemical Equilibrium",
+  "order_index": 8,
+  "umbrellas": [
+    {
+      "slug": "equilibrium_concept",
+      "label": "Equilibrium in Reversible Reactions",
+      "description": "The concept of dynamic equilibrium and the quantitative framework (law of mass action) that describes how concentrations relate to the equilibrium constant.",
+      "intro": {
+        "slug": "equilibrium_concept_intro",
+        "label": "Equilibrium & Law of Mass Action Overview",
+        "description": "When a reversible reaction reaches equilibrium, the forward and reverse rates are equal and macroscopic concentrations no longer change. The law of mass action captures this balance as the equilibrium constant $K$, a ratio of product to reactant concentrations raised to their stoichiometric coefficients. Understanding $K$ and $K_p$ underpins Le Châtelier predictions, solubility calculations, and the thermodynamic connection $\\Delta G^\\circ = -RT\\ln K$.",
+        "examples": ["forward rate = reverse rate at equilibrium", "dynamic, not static balance", "$K$ set by stoichiometric exponents"]
+      },
+      "in_depth": [
+        {
+          "slug": "law_of_mass_action",
+          "label": "Law of mass action",
+          "description": "State the law of mass action: at equilibrium the ratio of product concentrations to reactant concentrations, each raised to its stoichiometric coefficient, equals a constant $K_c = \\frac{[C]^c[D]^d}{[A]^a[B]^b}$ for $aA + bB \\rightleftharpoons cC + dD$. This focuses on the mathematical form of the equilibrium expression, not the experimental prediction of shift direction (see Le Châtelier's principle).",
+          "examples": ["$K_c = \\frac{[\\text{NO}_2]^2}{[\\text{N}_2][\\text{O}_2]}$ for $\\text{N}_2 + \\text{O}_2 \\rightleftharpoons 2\\text{NO}_2$", "products over reactants, stoichiometric exponents", "pure solids and liquids omitted from $K$ expression"]
+        },
+        {
+          "slug": "writing_kc_kp_expressions",
+          "label": "Writing $K_c$ and $K_p$ expressions",
+          "description": "Write the correct $K_c$ (molar concentration) or $K_p$ (partial pressure) expression for a given balanced equation, recalling that pure solids, pure liquids, and the solvent are omitted, and that $K_p = K_c(RT)^{\\Delta n}$ where $\\Delta n$ is the change in moles of gas. This focuses on correctly constructing the expression, not on predicting equilibrium shifts.",
+          "examples": ["omit $[\\text{H}_2\\text{O}]$ when water is solvent", "$K_p = K_c(RT)^{\\Delta n_{\\text{gas}}}$", "$\\text{CaCO}_3(s) \\rightleftharpoons \\text{CaO}(s) + \\text{CO}_2(g)$: $K_p = P_{\\text{CO}_2}$"]
+        },
+        {
+          "slug": "equilibrium_constant_meaning",
+          "label": "Equilibrium constant magnitude and direction",
+          "description": "Interpret the magnitude of $K$: a large $K$ ($K \\gg 1$) means products are favored at equilibrium; a small $K$ ($K \\ll 1$) means reactants are favored; $K \\approx 1$ means comparable amounts of reactants and products. This focuses on qualitative interpretation of $K$, not on Le Châtelier shift predictions (a separate keyword).",
+          "examples": ["$K > 1$: equilibrium lies toward products", "$K < 1$: mostly reactants at equilibrium", "$K$ depends only on temperature, not on initial conditions"]
+        },
+        {
+          "slug": "reaction_quotient_q",
+          "label": "Reaction quotient $Q$ vs. $K$",
+          "description": "Calculate the reaction quotient $Q$ using the same expression as $K$ but with non-equilibrium concentrations, then compare $Q$ to $K$ to predict the direction of net reaction: if $Q < K$ the reaction proceeds forward; if $Q > K$ it proceeds in reverse; if $Q = K$ the system is already at equilibrium. This focuses on using $Q$ to predict shift direction, not on the equilibrium expression itself (a separate keyword).",
+          "examples": ["$Q < K$: forward reaction favored until equilibrium", "$Q > K$: reverse reaction occurs", "$Q = K$: system at equilibrium, no net change"]
+        }
+      ]
+    },
+    {
+      "slug": "le_chatelier",
+      "label": "Le Châtelier's Principle",
+      "description": "Qualitative and semi-quantitative prediction of how an equilibrium system responds to external stresses: concentration changes, pressure/volume changes, and temperature changes.",
+      "intro": {
+        "slug": "le_chatelier_intro",
+        "label": "Le Châtelier's Principle Overview",
+        "description": "Le Châtelier's principle states that when a system at equilibrium is subjected to a stress, it shifts to partially counteract that stress. The principle applies to changes in concentration, pressure (volume), and temperature, and is the primary MCAT tool for predicting which direction an equilibrium shifts without solving algebra. Note that only temperature changes alter the value of $K$ itself.",
+        "examples": ["add reactant → shift forward", "increase pressure → shift toward fewer moles of gas", "raise temperature → shift in endothermic direction"]
+      },
+      "in_depth": [
+        {
+          "slug": "le_chatelier_concentration",
+          "label": "Le Châtelier: concentration changes",
+          "description": "Predict the direction of equilibrium shift when a reactant or product is added or removed: adding a species drives the equilibrium away from that side; removing a species drives it toward that side. This focuses on concentration stresses, not pressure or temperature changes (separate keywords).",
+          "examples": ["add $\\text{H}_2$ to $\\text{N}_2 + 3\\text{H}_2 \\rightleftharpoons 2\\text{NH}_3$ → shifts right", "remove $\\text{NH}_3$ → shifts right to replenish it", "precipitate a product → drives reaction forward"]
+        },
+        {
+          "slug": "le_chatelier_pressure_volume",
+          "label": "Le Châtelier: pressure and volume changes",
+          "description": "Predict how a pressure increase (volume decrease) shifts a gas-phase equilibrium toward the side with fewer moles of gas ($\\Delta n_{\\text{gas}}$), and how a decrease in pressure shifts toward more moles of gas; adding an inert gas at constant volume does not shift the equilibrium. This focuses on pressure/volume stresses, not concentration or temperature changes.",
+          "examples": ["$\\text{N}_2 + 3\\text{H}_2 \\rightleftharpoons 2\\text{NH}_3$: $\\Delta n = -2$, increase $P$ → shifts right", "decrease $V$ (increase $P$) → favor side with fewer moles of gas", "adding inert $\\text{Ar}$ at constant $V$: no shift"]
+        },
+        {
+          "slug": "le_chatelier_temperature",
+          "label": "Le Châtelier: temperature changes",
+          "description": "Predict the effect of temperature on equilibrium: increasing temperature shifts an endothermic reaction forward (larger $K$) and an exothermic reaction in reverse (smaller $K$), because heat can be treated as a reactant or product. This focuses on temperature as the only stress that changes the value of $K$ itself, distinguishing it from concentration/pressure stresses.",
+          "examples": ["treat heat as reactant (endo) or product (exo)", "raise $T$ for exothermic rxn → $K$ decreases", "endothermic: higher $T$ → products favored"]
+        }
+      ]
+    },
+    {
+      "slug": "equilibrium_thermodynamics",
+      "label": "Equilibrium & Thermodynamics: $\\Delta G^\\circ$ and $K$",
+      "description": "The quantitative bridge between equilibrium and thermodynamics via $\\Delta G^\\circ = -RT\\ln K$ and $\\Delta G = \\Delta G^\\circ + RT\\ln Q$.",
+      "intro": {
+        "slug": "equilibrium_thermodynamics_intro",
+        "label": "$\\Delta G^\\circ$–$K$ Connection Overview",
+        "description": "The standard free energy change $\\Delta G^\\circ$ and the equilibrium constant $K$ are linked by $\\Delta G^\\circ = -RT\\ln K$. A negative $\\Delta G^\\circ$ means $K > 1$ (products favored); a positive $\\Delta G^\\circ$ means $K < 1$ (reactants favored). Under non-standard conditions, $\\Delta G = \\Delta G^\\circ + RT\\ln Q$ predicts whether a reaction is spontaneous at those concentrations.",
+        "examples": ["$\\Delta G^\\circ = -RT\\ln K$", "$\\Delta G^\\circ < 0 \\Rightarrow K > 1$", "$\\Delta G = \\Delta G^\\circ + RT\\ln Q$"]
+      },
+      "in_depth": [
+        {
+          "slug": "delta_g_k_relationship",
+          "label": "$\\Delta G^\\circ = -RT\\ln K$ relationship",
+          "description": "Apply the relationship $\\Delta G^\\circ = -RT\\ln K$ to connect the standard free energy change to the equilibrium constant: a large negative $\\Delta G^\\circ$ corresponds to a large $K$ (strongly favors products), while a large positive $\\Delta G^\\circ$ corresponds to a small $K$ (strongly favors reactants). This focuses on the $\\Delta G^\\circ$–$K$ bridge, not the separate calculation of $\\Delta G$ under non-standard conditions.",
+          "examples": ["$\\Delta G^\\circ = -RT\\ln K$", "$\\Delta G^\\circ < 0$: $K > 1$, products favored", "$\\Delta G^\\circ > 0$: $K < 1$, reactants favored"]
+        },
+        {
+          "slug": "delta_g_nonstandard",
+          "label": "$\\Delta G$ under non-standard conditions",
+          "description": "Calculate or predict spontaneity under non-standard concentrations using $\\Delta G = \\Delta G^\\circ + RT\\ln Q$: when $Q < K$, $\\Delta G < 0$ (forward reaction spontaneous); when $Q > K$, $\\Delta G > 0$ (reverse spontaneous); at equilibrium $\\Delta G = 0$. This focuses on applying the non-standard $\\Delta G$ expression, not the standard-state $\\Delta G^\\circ$–$K$ relationship (a separate keyword).",
+          "examples": ["$\\Delta G = \\Delta G^\\circ + RT\\ln Q$", "$\\Delta G = 0$ at equilibrium ($Q = K$)", "$Q < K \\Rightarrow \\Delta G < 0$: forward spontaneous"]
+        }
+      ]
+    },
+    {
+      "slug": "solubility_product",
+      "label": "Solubility Product Constant $K_{sp}$",
+      "description": "The equilibrium expression for sparingly soluble ionic solids, molar solubility calculations, and the relationship between $K_{sp}$ and ionic concentrations.",
+      "intro": {
+        "slug": "solubility_product_intro",
+        "label": "$K_{sp}$ & Molar Solubility Overview",
+        "description": "When a sparingly soluble salt dissolves, the product of the ionic concentrations at equilibrium (raised to their stoichiometric powers) equals the solubility product $K_{sp}$. A small $K_{sp}$ means very little dissolves; from $K_{sp}$ one can calculate molar solubility and predict whether precipitation will occur. This umbrella covers the $K_{sp}$ expression, molar solubility calculations, and the ion product $Q_{sp}$ vs. $K_{sp}$ comparison for precipitation.",
+        "examples": ["$K_{sp} = [\\text{Ca}^{2+}][\\text{F}^-]^2$ for $\\text{CaF}_2$", "small $K_{sp}$ → sparingly soluble", "molar solubility $s$ from $K_{sp}$"]
+      },
+      "in_depth": [
+        {
+          "slug": "ksp_expression",
+          "label": "Writing the $K_{sp}$ expression",
+          "description": "Write the solubility product expression for a sparingly soluble salt from its dissociation equation, omitting the solid: for $M_mX_n(s) \\rightleftharpoons m\\,M^{n+}(aq) + n\\,X^{m-}(aq)$, $K_{sp} = [M^{n+}]^m[X^{m-}]^n$. This focuses on constructing the correct expression, not on calculating molar solubility (a separate keyword).",
+          "examples": ["$\\text{AgCl}: K_{sp} = [\\text{Ag}^+][\\text{Cl}^-]$", "$\\text{PbI}_2: K_{sp} = [\\text{Pb}^{2+}][\\text{I}^-]^2$", "solid omitted from expression"]
+        },
+        {
+          "slug": "molar_solubility_ksp",
+          "label": "Molar solubility ↔ $K_{sp}$ calculations",
+          "description": "Calculate the molar solubility $s$ of a sparingly soluble salt from its $K_{sp}$ by setting up an ICE table — e.g., for $\\text{CaF}_2$: $K_{sp} = (s)(2s)^2 = 4s^3$ — and solving for $s$; conversely, calculate $K_{sp}$ from measured solubility. This focuses on the ICE-table algebra, not the common-ion effect on solubility (a separate keyword).",
+          "examples": ["$K_{sp} = 4s^3$ for $\\text{CaF}_2$, solve for $s$", "ICE: $[\\text{Ca}^{2+}] = s$, $[\\text{F}^-] = 2s$", "given $s$, compute $K_{sp}$"]
+        },
+        {
+          "slug": "ion_product_precipitation",
+          "label": "Ion product $Q_{sp}$ and precipitation prediction",
+          "description": "Calculate the trial ion product $Q_{sp}$ from the actual (non-equilibrium) ionic concentrations and compare it to $K_{sp}$: if $Q_{sp} > K_{sp}$ the solution is supersaturated and precipitation occurs; if $Q_{sp} < K_{sp}$ the solution is unsaturated and no precipitate forms. This focuses on using $Q_{sp}$ to predict precipitation, not on solubility calculations themselves.",
+          "examples": ["$Q_{sp} > K_{sp}$: precipitate forms", "$Q_{sp} < K_{sp}$: all ions remain in solution", "mixing $\\text{AgNO}_3$ and $\\text{NaCl}$: will $\\text{AgCl}$ precipitate?"]
+        }
+      ]
+    },
+    {
+      "slug": "common_ion_effect",
+      "label": "Common-Ion Effect",
+      "description": "How a shared ion from a second dissolved species shifts a solubility or acid-base equilibrium toward less dissolution, and its use in laboratory separations.",
+      "intro": {
+        "slug": "common_ion_effect_intro",
+        "label": "Common-Ion Effect Overview",
+        "description": "The common-ion effect is a direct application of Le Châtelier's principle: adding a soluble salt that shares an ion with a sparingly soluble compound drives the dissolution equilibrium in reverse, reducing solubility. In the lab this is exploited to precipitate one ion selectively while leaving another in solution, enabling gravimetric analysis and qualitative-analysis separations.",
+        "examples": ["add $\\text{NaCl}$ to $\\text{AgCl}$ solution → less $\\text{AgCl}$ dissolves", "common $\\text{Cl}^-$ suppresses $[\\text{Ag}^+]$", "selective precipitation for lab separation"]
+      },
+      "in_depth": [
+        {
+          "slug": "common_ion_solubility_decrease",
+          "label": "Common-ion effect on solubility",
+          "description": "Predict and calculate the decrease in molar solubility of a sparingly soluble salt when a common ion is added from another solute, using an ICE table with the initial common-ion concentration. This focuses on solubility suppression by a common ion, not the effect of pH on solubility (a separate keyword).",
+          "examples": ["$\\text{AgCl}$ in $0.1\\,\\text{M}\\,\\text{NaCl}$: $K_{sp} = (s)(0.1 + s) \\approx 0.1s$", "higher $[\\text{Cl}^-]$ → lower $[\\text{Ag}^+]$ in solution", "solubility reduced vs. pure water"]
+        },
+        {
+          "slug": "lab_separation_common_ion",
+          "label": "Laboratory separations using the common-ion effect",
+          "description": "Explain how selective precipitation exploits differing $K_{sp}$ values: by controlling the concentration of a common ion, one can precipitate a target cation or anion while keeping a second species in solution, then filter and analyze each fraction separately. This focuses on the lab-technique application, not the equilibrium calculation (a separate keyword).",
+          "examples": ["add $\\text{H}_2\\text{S}$ at controlled pH to precipitate sulfides selectively", "controlling $[\\text{SO}_4^{2-}]$ to separate $\\text{Ba}^{2+}$ from $\\text{Sr}^{2+}$", "qualitative analysis group separations"]
+        }
+      ]
+    },
+    {
+      "slug": "complex_ion_solubility",
+      "label": "Complex-Ion Formation & Solubility",
+      "description": "How complex ions (coordination compounds) form in solution and how complex-ion formation dramatically increases the solubility of otherwise sparingly soluble salts.",
+      "intro": {
+        "slug": "complex_ion_solubility_intro",
+        "label": "Complex Ions & Solubility Overview",
+        "description": "Metal ions can act as Lewis acids and bind Lewis-base ligands (e.g., $\\text{NH}_3$, $\\text{CN}^-$, $\\text{OH}^-$) to form soluble complex ions governed by a formation constant $K_f$. When a sparingly soluble salt dissolves into metal ions that are then sequestered as stable complexes, the overall dissolution is driven forward, greatly increasing apparent solubility. The two-step equilibrium (dissolution + complexation) combines multiplicatively.",
+        "examples": ["$\\text{AgCl}(s) + 2\\text{NH}_3 \\rightleftharpoons [\\text{Ag(NH}_3)_2]^+(aq) + \\text{Cl}^-$", "$K_{\\text{overall}} = K_{sp} \\times K_f$", "complexation dissolves otherwise insoluble salts"]
+      },
+      "in_depth": [
+        {
+          "slug": "complex_ion_formation",
+          "label": "Complex ion formation equilibria",
+          "description": "Identify a complex-ion formation reaction in which a metal ion (Lewis acid) coordinates ligands (Lewis bases) to form a coordination complex, characterized by a formation constant $K_f = \\frac{[\\text{ML}_n]}{[\\text{M}][\\text{L}]^n}$; large $K_f$ indicates a highly stable complex. This focuses on the $K_f$ concept and Lewis acid–base nature, not the effect on solubility (a separate keyword).",
+          "examples": ["$\\text{Cu}^{2+} + 4\\text{NH}_3 \\rightleftharpoons [\\text{Cu(NH}_3)_4]^{2+}$, $K_f$ large", "$K_f$ measures complex stability", "ligands: $\\text{NH}_3, \\text{CN}^-, \\text{OH}^-, \\text{Cl}^-$"]
+        },
+        {
+          "slug": "complex_ion_effect_on_solubility",
+          "label": "Complex-ion formation increasing solubility",
+          "description": "Explain why complex-ion formation increases the solubility of a sparingly soluble salt: the overall equilibrium constant is $K_{\\text{overall}} = K_{sp} \\times K_f$, so even when $K_{sp}$ is very small, a large $K_f$ drives net dissolution. This focuses on the coupled equilibrium (dissolution + complexation), not $K_f$ alone.",
+          "examples": ["$K_{\\text{overall}} = K_{sp} \\times K_f$", "$\\text{AgCl}$ dissolves in excess $\\text{NH}_3$", "excess ligand drives dissolution forward"]
+        }
+      ]
+    },
+    {
+      "slug": "solubility_ph",
+      "label": "Solubility and pH",
+      "description": "How pH affects the solubility of metal hydroxides, sparingly soluble salts of weak acids, and amphoteric species through coupled acid-base and solubility equilibria.",
+      "intro": {
+        "slug": "solubility_ph_intro",
+        "label": "pH Effects on Solubility Overview",
+        "description": "The solubility of many ionic compounds depends on pH because H⁺ or OH⁻ participates in a secondary equilibrium that shifts the dissolution reaction. Metal hydroxides dissolve in acid (Le Châtelier: acid consumes $\\text{OH}^-$); salts of weak acids dissolve in acid (H⁺ protonates the anion, removing it from solution); amphoteric hydroxides (e.g., $\\text{Al(OH)}_3$) dissolve in both acid and base. These concepts bridge acid-base chemistry (C6) with solubility equilibria.",
+        "examples": ["$\\text{Mg(OH)}_2$ more soluble at low pH", "$\\text{CaCO}_3$ dissolves in acid: $\\text{CO}_3^{2-} + \\text{H}^+ \\rightarrow \\text{HCO}_3^-$", "amphoteric $\\text{Al(OH)}_3$ dissolves in both acid and base"]
+      },
+      "in_depth": [
+        {
+          "slug": "solubility_acid_hydroxides",
+          "label": "Acid effect on metal hydroxide solubility",
+          "description": "Predict that decreasing pH (adding acid) increases the solubility of metal hydroxides $M(\\text{OH})_n$ because $\\text{H}^+$ consumes $\\text{OH}^-$, shifting dissolution $M(\\text{OH})_n(s) \\rightleftharpoons M^{n+} + n\\,\\text{OH}^-$ to the right by Le Châtelier's principle. This focuses on hydroxide salts, not salts of weak acids (a separate keyword).",
+          "examples": ["$\\text{Mg(OH)}_2$ sparingly soluble at pH 10, dissolves at pH 2", "$\\text{H}^+$ reacts with $\\text{OH}^-$ → removes product", "solubility of $\\text{Fe(OH)}_3$ maximized at low pH"]
+        },
+        {
+          "slug": "solubility_weak_acid_salts",
+          "label": "Acid effect on salts of weak acids",
+          "description": "Predict that decreasing pH increases the solubility of sparingly soluble salts whose anion is the conjugate base of a weak acid (e.g., carbonates, phosphates, sulfides, oxalates), because H⁺ protonates the anion and removes it from the $K_{sp}$ equilibrium. This focuses on weak-acid anion salts, not metal hydroxides (a separate keyword).",
+          "examples": ["$\\text{CaCO}_3$ dissolves in HCl: $\\text{CO}_3^{2-} + \\text{H}^+ \\rightarrow \\text{HCO}_3^-$", "$\\text{Ca}_3(\\text{PO}_4)_2$ more soluble at low pH", "acid converts anion to weak-acid form, pulling dissolution forward"]
+        },
+        {
+          "slug": "amphoteric_hydroxide_solubility",
+          "label": "Amphoteric metal hydroxide solubility",
+          "description": "Identify amphoteric metal hydroxides (e.g., $\\text{Al(OH)}_3$, $\\text{Zn(OH)}_2$) that dissolve in both excess acid (to give hydrated metal cation) and excess base (to give a hydroxo-complex anion such as $[\\text{Al(OH)}_4]^-$), with minimum solubility near neutral pH. This focuses on amphoteric behavior, distinguishing it from simple acid dissolution of non-amphoteric hydroxides.",
+          "examples": ["$\\text{Al(OH)}_3 + \\text{H}^+ \\rightarrow \\text{Al}^{3+} + \\text{H}_2\\text{O}$ (acid side)", "$\\text{Al(OH)}_3 + \\text{OH}^- \\rightarrow [\\text{Al(OH)}_4]^-$ (base side)", "minimum solubility at intermediate pH"]
+        }
+      ]
+    }
+  ]
+}

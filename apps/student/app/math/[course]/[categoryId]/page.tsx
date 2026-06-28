@@ -5,6 +5,8 @@ import Link from "next/link";
 import { LoginGate } from "@/components/auth/LoginGate";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { YieldBadge } from "@/components/ui/Badge";
+import { NavMenu } from "@/components/nav/NavMenu";
+import MathText from "@/components/mcat/MathText";
 import { getOrCreateMathSession } from "@/lib/mathSession";
 import {
   MathCategory,
@@ -13,7 +15,8 @@ import {
   MathTaxonomyResponse,
   umbrellaDisplayScore,
   umbrellaAttempts,
-  scoreColor,
+  keywordProgressStatus,
+  umbrellaProgressStatus,
   COURSE_LABELS,
 } from "@/components/math/mathUiTypes";
 
@@ -24,14 +27,27 @@ function ActionButtons({
   quizHref,
   lessonHref,
   flashcardsHref,
+  learnThisHref,
 }: {
   practiceHref: string;
   quizHref: string;
   lessonHref?: string;
   flashcardsHref?: string;
+  /** "Learn this" = an in-order mini-auto (lesson → flashcards → questions) scoped
+   *  to this object, with spaced review of earlier topics. */
+  learnThisHref?: string;
 }) {
   return (
     <div className="flex flex-wrap items-center gap-1.5">
+      {learnThisHref && (
+        <Link
+          href={learnThisHref}
+          className="px-2.5 py-1 rounded-lg border border-violet-200 bg-violet-50 text-violet-700 text-xs font-semibold hover:bg-violet-100 transition-colors"
+          title="Guided in-order learning: lesson → flashcards → questions"
+        >
+          Learn this
+        </Link>
+      )}
       <Link
         href={practiceHref}
         className="px-2.5 py-1 rounded-lg bg-brand-500 text-white text-xs font-semibold hover:bg-brand-600 transition-colors"
@@ -85,7 +101,7 @@ function ChildRow({
       <div className="flex items-start justify-between gap-2 mb-1.5">
         <div className="flex items-center gap-1.5 min-w-0 flex-1 flex-wrap">
           <span className="text-sm text-neutral-700 leading-snug">
-            {child.label}
+            <MathText>{child.label}</MathText>
           </span>
           {showYield && child.yield_score !== null && (
             <YieldBadge value={child.yield_score} />
@@ -102,17 +118,14 @@ function ChildRow({
           )}
         </div>
         <div className="shrink-0 text-right">
-          {pct !== null ? (
-            <span className={`text-sm font-medium ${scoreColor(pct)}`}>
-              {pct}%
-            </span>
-          ) : (
-            <span className="text-xs text-neutral-400">Not started</span>
-          )}
+          {(() => {
+            const st = keywordProgressStatus(child.total_attempts, pct);
+            return <span className={`text-xs font-medium ${st.labelClass}`}>{st.label}</span>;
+          })()}
         </div>
       </div>
 
-      {pct !== null && (
+      {pct !== null && keywordProgressStatus(child.total_attempts, pct).sufficient && (
         <div className="mb-2">
           <ProgressBar value={pct} size="xs" label={child.label} />
         </div>
@@ -125,9 +138,10 @@ function ChildRow({
       )}
 
       <ActionButtons
+        learnThisHref={`/math/${course}/auto?scope=keyword&scope_id=${child.id}&label=${enc}`}
         practiceHref={`/math/${course}/${categoryId}/practice?keyword=${child.id}&label=${enc}`}
         quizHref={`/math/${course}/${categoryId}/quiz?keyword=${child.id}&label=${enc}`}
-        lessonHref={`/math/lesson/${child.id}?label=${enc}`}
+        lessonHref={`/math/lesson/${child.id}?label=${enc}&course=${course}&category=${categoryId}&scope=keyword`}
         flashcardsHref={`/math/${course}/${categoryId}/flashcards?keyword=${child.id}&label=${enc}`}
       />
     </div>
@@ -184,7 +198,7 @@ function UmbrellaRow({
             <div className="min-w-0 flex-1">
               <span className="inline-flex items-center gap-1.5 flex-wrap">
                 <p className="text-sm font-medium text-neutral-800 leading-snug">
-                  {umbrella.label}
+                  <MathText>{umbrella.label}</MathText>
                 </p>
                 {showYield && umbrella.yield_score !== null && (
                   <YieldBadge value={umbrella.yield_score} />
@@ -203,26 +217,26 @@ function UmbrellaRow({
             )}
           </div>
           <div className="shrink-0 text-right">
-            {displayScore !== null ? (
-              <span className={`text-sm font-medium ${scoreColor(displayScore)}`}>
-                {displayScore}%
-              </span>
-            ) : (
-              <span className="text-xs text-neutral-400">Not started</span>
-            )}
+            {(() => {
+              const st = umbrellaProgressStatus(attempts, displayScore);
+              return <span className={`text-xs font-medium ${st.labelClass}`}>{st.label}</span>;
+            })()}
           </div>
         </div>
 
-        {displayScore !== null && (
+        {displayScore !== null && umbrellaProgressStatus(attempts, displayScore).sufficient && (
           <div className="mb-2">
             <ProgressBar value={displayScore} size="xs" label={umbrella.label} />
           </div>
         )}
 
+        {/* Umbrellas are containers only — NO umbrella-level Lesson. Lessons live
+            at the in_depth subtopic level (see ChildRow). Practice/Quiz aggregate
+            across all of the umbrella's subtopics; Flashcards warm up the topic. */}
         <ActionButtons
+          learnThisHref={`/math/${course}/auto?scope=umbrella&scope_id=${umbrella.id}&label=${enc}`}
           practiceHref={`/math/${course}/${categoryId}/practice?umbrella=${umbrella.id}&label=${enc}`}
           quizHref={`/math/${course}/${categoryId}/quiz?umbrella=${umbrella.id}&label=${enc}`}
-          lessonHref={`/math/lesson/${umbrella.id}?label=${enc}`}
           flashcardsHref={`/math/${course}/${categoryId}/flashcards?umbrella=${umbrella.id}&label=${enc}`}
         />
       </div>
@@ -253,7 +267,8 @@ function CategoryBrowseInner({
 }) {
   const { course, categoryId } = use(params);
   const courseLabel = COURSE_LABELS[course] ?? course;
-  const showYield = course !== "calc_ab";
+  // Math hides yield entirely (no decimals, no badges) for every course.
+  const showYield = false;
 
   const [category, setCategory] = useState<MathCategory | null>(null);
   const [loading, setLoading] = useState(true);
@@ -294,22 +309,25 @@ function CategoryBrowseInner({
               href={`/math/${course}`}
               className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0"
             >
-              ← {courseLabel}
+              ←<span className="hidden sm:inline"> {courseLabel}</span>
             </Link>
-            <h1 className="font-semibold text-neutral-900 text-sm truncate">
-              {category?.label ?? "Category"}
+            <h1 className="font-semibold text-neutral-900 text-sm truncate min-w-0">
+              <MathText>{category?.label ?? "Category"}</MathText>
             </h1>
           </div>
-          <Link
-            href={`/math/${course}/progress`}
-            className="px-3 py-1.5 rounded-lg border border-neutral-200 text-xs font-medium hover:bg-neutral-50 transition-colors shrink-0"
-          >
-            My Progress
-          </Link>
+          <div className="flex items-center gap-2 shrink-0">
+            <Link
+              href={`/math/${course}/progress`}
+              className="px-3 py-1.5 rounded-lg border border-neutral-200 text-xs font-medium hover:bg-neutral-50 transition-colors shrink-0"
+            >
+              My Progress
+            </Link>
+            <NavMenu />
+          </div>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-6 space-y-4">
+      <main className="max-w-2xl mx-auto px-4 py-6 space-y-4 pb-safe-bottom">
         {/* Loading */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
@@ -341,7 +359,7 @@ function CategoryBrowseInner({
                 </span>
               </div>
               <h2 className="font-semibold text-neutral-900 text-sm mb-1">
-                {category.label}
+                <MathText>{category.label}</MathText>
               </h2>
               {category.description && (
                 <p className="text-xs text-neutral-500 line-clamp-2 mb-3">
@@ -356,16 +374,23 @@ function CategoryBrowseInner({
                   <YieldBadge value={category.yield_score} />
                 </div>
               )}
-              <div className="flex gap-2">
+              <div className="grid grid-cols-3 gap-2">
+                <Link
+                  href={`/math/${course}/auto?scope=category&scope_id=${categoryId}&label=${encodeURIComponent(category.label)}`}
+                  className="text-center py-2 rounded-xl border border-violet-200 bg-violet-50 text-violet-700 text-xs font-semibold hover:bg-violet-100 transition-colors"
+                  title="Guided in-order learning: lesson → flashcards → questions"
+                >
+                  Learn this
+                </Link>
                 <Link
                   href={`/math/${course}/${categoryId}/practice`}
-                  className="flex-1 text-center py-2 rounded-xl bg-brand-500 text-white text-xs font-semibold hover:bg-brand-600 transition-colors"
+                  className="text-center py-2 rounded-xl bg-brand-500 text-white text-xs font-semibold hover:bg-brand-600 transition-colors"
                 >
                   Practice
                 </Link>
                 <Link
                   href={`/math/${course}/${categoryId}/quiz`}
-                  className="flex-1 text-center py-2 rounded-xl border border-neutral-200 text-xs font-medium hover:bg-neutral-50 transition-colors"
+                  className="text-center py-2 rounded-xl border border-neutral-200 text-xs font-medium hover:bg-neutral-50 transition-colors"
                 >
                   Quiz
                 </Link>

@@ -148,6 +148,120 @@ function KeywordCard({
   );
 }
 
+// ─── Embed unembedded button ──────────────────────────────────────────────────
+
+const EMBED_BATCH_SIZE = 100;
+
+function EmbedUnembeddedButton() {
+  const [running, setRunning] = useState(false);
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+  const [result, setResult] = useState<string | null>(null);
+
+  async function run() {
+    setRunning(true);
+    setResult(null);
+    setProgress(null);
+    try {
+      const res = await fetch("/api/learn/keywords/unembedded");
+      const data = await res.json() as { ids?: string[]; error?: string };
+      if (!res.ok || !data.ids) {
+        toast.error(data.error ?? "Failed to fetch unembedded keywords");
+        return;
+      }
+      if (data.ids.length === 0) {
+        toast.success("All keywords already embedded");
+        setResult("All embedded");
+        return;
+      }
+
+      const allIds = data.ids;
+      const total = allIds.length;
+      let totalEmbedded = 0;
+      setProgress({ done: 0, total });
+
+      for (let i = 0; i < allIds.length; i += EMBED_BATCH_SIZE) {
+        const batch = allIds.slice(i, i + EMBED_BATCH_SIZE);
+        const embedRes = await fetch("/api/learn/embed-keywords", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids: batch }),
+        });
+        const embedData = await embedRes.json() as { embedded?: number; error?: string };
+        if (!embedRes.ok) {
+          toast.error(embedData.error ?? "Embedding failed");
+          return;
+        }
+        totalEmbedded += embedData.embedded ?? 0;
+        setProgress({ done: Math.min(i + batch.length, total), total });
+      }
+
+      const msg = `Embedded ${totalEmbedded} / ${total} keywords`;
+      toast.success(msg);
+      setResult(msg);
+    } catch {
+      toast.error("Embed request failed");
+    } finally {
+      setRunning(false);
+      setProgress(null);
+    }
+  }
+
+  return (
+    <div className="space-y-1">
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={run}
+        disabled={running}
+        className="w-full h-7 text-xs"
+      >
+        {running ? (
+          <><Loader2Icon className="h-3 w-3 animate-spin mr-1" />
+            {progress ? `Embedding… ${progress.done} / ${progress.total}` : "Embedding…"}
+          </>
+        ) : (
+          "Embed unembedded keywords"
+        )}
+      </Button>
+      {running && progress && (
+        <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-blue-500 rounded-full transition-all"
+            style={{ width: `${(progress.done / progress.total) * 100}%` }}
+          />
+        </div>
+      )}
+      {result && !running && <span className="text-[10px] text-green-600">{result}</span>}
+    </div>
+  );
+}
+
+// ─── Seed representations button ─────────────────────────────────────────────
+
+function SeedRepresentationsButton() {
+  const [running, setRunning] = useState(false);
+
+  async function run() {
+    setRunning(true);
+    try {
+      const res = await fetch("/api/learn/seed-representations", { method: "POST" });
+      const data = await res.json() as { seeded?: number; error?: string };
+      if (!res.ok) { toast.error(data.error ?? "Seed failed"); return; }
+      toast.success(`Seeded ${data.seeded} representation keywords`);
+    } catch {
+      toast.error("Request failed");
+    } finally {
+      setRunning(false);
+    }
+  }
+
+  return (
+    <Button size="sm" variant="outline" onClick={run} disabled={running} className="w-full h-7 text-xs">
+      {running ? <><Loader2Icon className="h-3 w-3 animate-spin mr-1" />Seeding…</> : "Seed representation keywords"}
+    </Button>
+  );
+}
+
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function KeywordsPage() {
@@ -564,6 +678,12 @@ export default function KeywordsPage() {
               </div>
             )}
           </div>
+
+          {/* Embed unembedded */}
+          <EmbedUnembeddedButton />
+
+          {/* Seed representation keywords */}
+          <SeedRepresentationsButton />
 
           {/* Autocomplete button */}
           {categories.filter((c) => c.approved_count === 0).length > 0 && (

@@ -69,8 +69,6 @@ export default function TryPage() {
 
   const isCorrect = selectedIndex !== null && selectedIndex === question?.correct_index;
 
-  const diff = question ? difficultyLabel(question.difficulty) : null;
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-brand-50/30 to-white flex flex-col">
       {/* Header */}
@@ -131,15 +129,6 @@ export default function TryPage() {
         {/* ── Question ── */}
         {(phase === "question" || phase === "answered") && question && (
           <div className="w-full space-y-4">
-            {/* Difficulty badge */}
-            {diff && (
-              <div className="flex">
-                <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium", diff.cls)}>
-                  {diff.label}
-                </span>
-              </div>
-            )}
-
             {/* Stem */}
             <Card className="p-5">
               <p className="text-sm font-medium text-neutral-900 leading-relaxed">

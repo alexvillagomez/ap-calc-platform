@@ -17,22 +17,30 @@ export async function POST(request: Request) {
 
   let embedded = 0;
 
-  // Embed keywords
+  // Embed keywords — batch OpenAI call for the whole batch, then write rows
   if (ids && ids.length > 0) {
     const { data: keywords } = await supabase
       .from("learn_keywords")
-      .select("id, name, description")
+      .select("id, name, description, examples")
       .in("id", ids);
 
-    for (const kw of keywords ?? []) {
-      const text = `${kw.name}: ${kw.description}`;
+    const kws = keywords ?? [];
+    if (kws.length > 0) {
+      const texts = kws.map((kw) => {
+        const exampleStr = Array.isArray(kw.examples) && kw.examples.length > 0
+          ? ` Examples: ${(kw.examples as string[]).join('; ')}`
+          : '';
+        return `${kw.name}: ${kw.description}${exampleStr}`;
+      });
       try {
-        const res = await openai.embeddings.create({ model: "text-embedding-3-small", input: text });
-        const embedding = res.data[0]?.embedding ?? [];
-        await supabase.from("learn_keywords").update({ embedding }).eq("id", kw.id);
-        embedded++;
+        const res = await openai.embeddings.create({ model: "text-embedding-3-small", input: texts });
+        for (let i = 0; i < kws.length; i++) {
+          const embedding = res.data[i]?.embedding ?? [];
+          await supabase.from("learn_keywords").update({ embedding }).eq("id", kws[i]!.id);
+          embedded++;
+        }
       } catch (err) {
-        console.error(`embed-keywords: failed for ${kw.id}`, err);
+        console.error("embed-keywords: batch failed", err);
       }
     }
   }

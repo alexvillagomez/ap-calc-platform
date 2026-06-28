@@ -1,0 +1,216 @@
+{
+  "section": "physics",
+  "category_code": "P3",
+  "category_label": "Equilibrium, Torque & Center of Mass",
+  "order_index": 2,
+  "umbrellas": [
+    {
+      "slug": "translational_equilibrium",
+      "label": "Translational Equilibrium & Force Balance",
+      "description": "Vector analysis of forces on a point object to determine whether net force is zero and the object is in translational equilibrium.",
+      "intro": {
+        "slug": "translational_equilibrium_intro",
+        "label": "Translational Equilibrium Overview",
+        "description": "Translational equilibrium means a point object has zero net force acting on it ($\\sum F = 0$), so it neither accelerates nor decelerates. Achieving this requires resolving all forces into x- and y-components and setting each direction's sum to zero. This umbrella covers force-vector decomposition and the first condition of equilibrium — not torques, which require the second condition (a separate umbrella).",
+        "examples": [
+          "$\\sum F_x = 0$ and $\\sum F_y = 0$",
+          "resolve angled rope tension into components",
+          "first condition of equilibrium"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "force_vector_components",
+          "label": "Resolving forces into x- and y-components",
+          "description": "Decompose each force vector into its rectangular components using $F_x = F\\cos\\theta$ and $F_y = F\\sin\\theta$, where $\\theta$ is measured from the positive x-axis. This focuses on the trigonometric decomposition step, not on applying the equilibrium condition (a separate keyword).",
+          "examples": [
+            "$F_x = F\\cos\\theta$, $F_y = F\\sin\\theta$",
+            "angled tension: split into horizontal and vertical",
+            "choose a coordinate system, then decompose all forces"
+          ]
+        },
+        {
+          "slug": "first_condition_equilibrium",
+          "label": "First condition of equilibrium ($\\sum F = 0$)",
+          "description": "Apply the first condition of equilibrium: the vector sum of all forces on a point object must equal zero ($\\sum F_x = 0$ and $\\sum F_y = 0$), guaranteeing no translational acceleration. This focuses on the force-balance equations, not the rotational condition $\\sum \\tau = 0$ (a separate keyword).",
+          "examples": [
+            "$\\sum F_x = 0$ and $\\sum F_y = 0$",
+            "three concurrent forces on a hanging sign",
+            "solve for unknown force magnitude or direction"
+          ]
+        },
+        {
+          "slug": "vector_addition_equilibrium",
+          "label": "Vector addition and the net-force resultant",
+          "description": "Add force vectors graphically (tip-to-tail) or algebraically (summing components) to find the net resultant; if the resultant is zero, the object is in translational equilibrium. This focuses on vector addition methods, not decomposition into components (a separate keyword).",
+          "examples": [
+            "tip-to-tail vector addition closes on zero",
+            "resultant = $\\sqrt{(\\sum F_x)^2 + (\\sum F_y)^2}$",
+            "equilibrant is equal and opposite to the resultant"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "torque_rotational_equilibrium",
+      "label": "Torque & Rotational Equilibrium",
+      "description": "How torques are produced by forces acting at a distance from a pivot and what conditions eliminate net rotation.",
+      "intro": {
+        "slug": "torque_rotational_equilibrium_intro",
+        "label": "Torque & Rotational Equilibrium Overview",
+        "description": "A torque is the rotational effect of a force applied at a lever-arm distance from a pivot point, calculated as $\\tau = rF\\sin\\theta$. Rotational equilibrium requires that the sum of all clockwise and counterclockwise torques cancel: $\\sum \\tau = 0$. Together with translational equilibrium ($\\sum F = 0$), these two conditions fully characterize static equilibrium of an extended object.",
+        "examples": [
+          "$\\tau = rF\\sin\\theta$",
+          "$\\sum \\tau_{\\text{cw}} = \\sum \\tau_{\\text{ccw}}$",
+          "choose pivot to eliminate unknown force"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "torque_definition",
+          "label": "Torque definition: $\\tau = rF\\sin\\theta$",
+          "description": "Calculate the torque produced by a force using $\\tau = rF\\sin\\theta$, where $r$ is the distance from the pivot to the force's point of application, $F$ is the force magnitude, and $\\theta$ is the angle between the force vector and the position vector (the lever arm). This focuses on computing torque magnitude and sign (cw vs. ccw), not on applying the rotational equilibrium condition (a separate keyword).",
+          "examples": [
+            "$\\tau = rF\\sin\\theta$; perpendicular force gives maximum torque",
+            "parallel force ($\\theta = 0°$) gives zero torque",
+            "sign convention: counterclockwise positive"
+          ]
+        },
+        {
+          "slug": "lever_arm",
+          "label": "Lever arm (perpendicular distance)",
+          "description": "Identify the lever arm as the perpendicular distance from the pivot axis to the line of action of the force, so that torque simplifies to $\\tau = F \\cdot d_{\\perp}$, where $d_{\\perp} = r\\sin\\theta$. This focuses on extracting the lever-arm distance geometrically, not on the full $rF\\sin\\theta$ formula derivation (a separate keyword).",
+          "examples": [
+            "lever arm = perpendicular distance to line of action",
+            "$\\tau = F \\cdot d_{\\perp}$",
+            "extend the force line to find $d_{\\perp}$"
+          ]
+        },
+        {
+          "slug": "second_condition_equilibrium",
+          "label": "Second condition of equilibrium ($\\sum \\tau = 0$)",
+          "description": "Apply the second condition of equilibrium: the net torque about any chosen pivot must be zero ($\\sum \\tau = 0$), ensuring no angular acceleration. Strategically choose the pivot at an unknown force's location to simplify algebra. This focuses on the rotational balance equation, not the force-balance equation $\\sum F = 0$ (a separate keyword).",
+          "examples": [
+            "$\\sum \\tau = 0$ about any pivot",
+            "choose pivot at unknown force to cancel it",
+            "seesaw: $F_1 r_1 = F_2 r_2$ (balanced torques)"
+          ]
+        },
+        {
+          "slug": "combined_equilibrium_conditions",
+          "label": "Applying both equilibrium conditions simultaneously",
+          "description": "Solve static-equilibrium problems by applying BOTH $\\sum F = 0$ (first condition, translational) and $\\sum \\tau = 0$ (second condition, rotational) together as a system of equations to find multiple unknowns. This focuses on the combined two-condition strategy, not on each condition in isolation (separate keywords).",
+          "examples": [
+            "ladder against wall: use $\\sum F = 0$ + $\\sum \\tau = 0$",
+            "beam with two supports: two unknowns, two equations",
+            "always write both conditions before solving"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "stable_unstable_equilibrium",
+      "label": "Types of Equilibrium: Stable, Unstable & Neutral",
+      "description": "How the nature of an equilibrium point determines whether a displaced object returns to, moves away from, or remains at rest in a new position.",
+      "intro": {
+        "slug": "stable_unstable_equilibrium_intro",
+        "label": "Types of Equilibrium Overview",
+        "description": "Static equilibrium can be stable (object returns after small displacement), unstable (object continues to move away), or neutral (object stays in new position). The key factor is whether a displacement raises or lowers the center of mass and therefore creates a restoring or destabilizing torque. Recognizing equilibrium type is a conceptual MCAT skill paired with the force and torque conditions.",
+        "examples": [
+          "stable: ball in a bowl; restoring force after displacement",
+          "unstable: ball on a hill; displacement grows",
+          "neutral: ball on a flat surface"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "stable_equilibrium",
+          "label": "Stable equilibrium",
+          "description": "Identify stable equilibrium as the configuration in which a small displacement produces a net restoring force or torque that returns the object to its original position, corresponding to a potential-energy minimum (center of mass at its lowest accessible point). This focuses on recognizing and explaining stable configurations, not unstable or neutral cases (separate keywords).",
+          "examples": [
+            "ball at bottom of bowl: restoring force pulls it back",
+            "center of mass at PE minimum → stable",
+            "pendulum at rest: stable (hangs below pivot)"
+          ]
+        },
+        {
+          "slug": "unstable_equilibrium",
+          "label": "Unstable equilibrium",
+          "description": "Identify unstable equilibrium as the configuration in which a small displacement produces a net force or torque that drives the object further from its original position, corresponding to a potential-energy maximum (center of mass at its highest accessible point). This focuses on unstable configurations, not stable or neutral cases (separate keywords).",
+          "examples": [
+            "ball balanced on top of a hill: tips further on displacement",
+            "center of mass at PE maximum → unstable",
+            "pencil balanced on its tip"
+          ]
+        },
+        {
+          "slug": "neutral_equilibrium",
+          "label": "Neutral equilibrium",
+          "description": "Identify neutral equilibrium as the configuration in which displacement neither restores nor destabilizes the object — the potential energy and center-of-mass height are unchanged — so the object remains in any displaced position. This focuses on the neutral case, not stable or unstable equilibrium (separate keywords).",
+          "examples": [
+            "ball on a flat horizontal surface",
+            "PE unchanged after displacement → neutral",
+            "rolling cylinder on a level floor"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "center_of_mass",
+      "label": "Center of Mass & Center of Gravity",
+      "description": "Locating the single point at which the total mass of a system can be treated as concentrated, and its relationship to the gravitational torque and stability.",
+      "intro": {
+        "slug": "center_of_mass_intro",
+        "label": "Center of Mass & Center of Gravity Overview",
+        "description": "The center of mass (CM) is the mass-weighted average position of all particles in a system, given by $x_{cm} = \\frac{\\sum m_i x_i}{\\sum m_i}$ (and analogously for y). In a uniform gravitational field, the center of gravity coincides with the CM. Locating the CM determines how the system responds to net forces and torques, and governs stability — an object tips when its CM moves outside its support base.",
+        "examples": [
+          "$x_{cm} = \\frac{\\sum m_i x_i}{M}$",
+          "uniform object: CM at geometric center",
+          "CM outside support base → tips over"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "cm_discrete_particles",
+          "label": "Locating center of mass of discrete-particle systems",
+          "description": "Calculate the center of mass of a system of point masses using $x_{cm} = \\frac{\\sum m_i x_i}{M}$ (and $y_{cm} = \\frac{\\sum m_i y_i}{M}$), where $M = \\sum m_i$ is the total mass. This focuses on the arithmetic weighted-average calculation for discrete masses, not for uniform extended objects (a separate keyword).",
+          "examples": [
+            "$x_{cm} = \\frac{m_1 x_1 + m_2 x_2}{m_1 + m_2}$",
+            "two masses on a rod: CM closer to heavier mass",
+            "dumbbell: CM at midpoint if equal masses"
+          ]
+        },
+        {
+          "slug": "cm_uniform_extended_objects",
+          "label": "Center of mass of uniform extended objects",
+          "description": "Locate the center of mass of a uniform extended object at its geometric centroid (center of a uniform rod, disk, or rectangle) and use symmetry arguments to identify the CM without calculation. This focuses on uniform-density objects and symmetry, not multi-mass discrete systems (a separate keyword).",
+          "examples": [
+            "uniform rod: CM at midpoint",
+            "uniform disk/sphere: CM at geometric center",
+            "use symmetry axis to pinpoint CM"
+          ]
+        },
+        {
+          "slug": "center_of_gravity",
+          "label": "Center of gravity and its coincidence with CM",
+          "description": "Distinguish the center of gravity (the point at which gravity acts with no net torque) from the center of mass, and recognize that in a uniform gravitational field they coincide. Apply this to determine the pivot point at which an object will balance. This focuses on the gravitational torque interpretation of the CM, not the mass-weighted calculation (a separate keyword).",
+          "examples": [
+            "uniform $g$: center of gravity = center of mass",
+            "balance point of an irregular object",
+            "gravity acts at CM → no gravitational torque about CM"
+          ]
+        },
+        {
+          "slug": "cm_stability_tipping",
+          "label": "Stability and tipping: CM over support base",
+          "description": "Predict whether an object will tip by checking whether its center of mass lies within (stable) or outside (tips) the support base, and explain how lowering the CM or widening the base increases stability. This focuses on the practical tipping/stability criterion, not on formally classifying stable vs. unstable equilibrium types (a separate keyword).",
+          "examples": [
+            "CM outside base of support → object tips",
+            "wide base + low CM = high stability",
+            "leaning tower: tips when CM crosses base edge"
+          ]
+        }
+      ]
+    }
+  ]
+}

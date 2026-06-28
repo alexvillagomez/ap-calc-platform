@@ -17,6 +17,8 @@ import {
   MathGenError,
 } from "@/lib/mathGenerator";
 import { outlineContextForCategory } from "@/lib/mathContentOutline";
+import { resolveScopeContract } from "@/lib/scopeContract";
+import { loadLessonNeighbors } from "@/lib/lessonNeighbors";
 import type { ConceptBlueprint } from "@/lib/mathTypes";
 
 export const runtime = "nodejs";
@@ -70,7 +72,7 @@ export async function GET(
   // 2. Not in DB — fetch keyword metadata
   const { data: kwRow, error: kwError } = await supabase
     .from("math_keywords")
-    .select("id, label, description, category_id, concept_blueprint")
+    .select("id, label, description, examples, category_id, concept_blueprint, tier, parent_keyword_id")
     .eq("id", keywordId)
     .maybeSingle();
 
@@ -84,18 +86,50 @@ export async function GET(
     );
   }
 
+  const examplesText = Array.isArray(kwRow.examples)
+    ? (kwRow.examples as string[]).filter(Boolean).join("; ")
+    : ((kwRow.examples as string | null) ?? undefined);
+
   // 3. Generate
   const outlineContext = outlineContextForCategory(kwRow.category_id as string);
+  // Scope contract: use the stored blueprint, or — for umbrellas / intro keywords
+  // that have none — derive one from the taxonomy so the lesson (esp. its EXAMPLE
+  // and FIGURE) stays inside this topic and never drifts into another topic's
+  // content (e.g. a removable-discontinuity hole in an intro-to-limit-notation lesson).
+  const storedBlueprint = (kwRow.concept_blueprint as ConceptBlueprint | null) ?? null;
+  // Universal scope contract: stored blueprint merged with a derived forward
+  // fence, or a fully-derived contract when none is stored. Never null.
+  const contract = await resolveScopeContract(supabase, "math_keywords", {
+    id: kwRow.id as string,
+    label: kwRow.label as string,
+    description: (kwRow.description as string) ?? "",
+    tier: (kwRow.tier as string | null) ?? null,
+    parent_keyword_id: (kwRow.parent_keyword_id as string | null) ?? null,
+    category_id: kwRow.category_id as string,
+    concept_blueprint: storedBlueprint,
+  });
   const kwMeta = {
     id: kwRow.id as string,
     label: kwRow.label as string,
     description: (kwRow.description as string) ?? "",
-    blueprint: (kwRow.concept_blueprint as ConceptBlueprint | null) ?? null,
+    examples: examplesText,
+    blueprint: (contract as ConceptBlueprint | null) ?? storedBlueprint,
+    // Umbrella (topic) keywords get a BRIEF overview lesson, not a re-teach of
+    // their sub-skills (each in_depth child has its own teaching lesson).
+    tier: (kwRow.tier as string | null) ?? null,
   };
+
+  // Light-B scope context: adjacent siblings so the lesson can reference (not teach)
+  // neighbors and avoid drifting forward into later topics.
+  const neighbors = await loadLessonNeighbors(supabase, "math_keywords", {
+    id: kwRow.id as string,
+    category_id: kwRow.category_id as string,
+    parent_keyword_id: (kwRow.parent_keyword_id as string | null) ?? null,
+  });
 
   let generated;
   try {
-    generated = await generateMathLesson(kwMeta, outlineContext);
+    generated = await generateMathLesson(kwMeta, outlineContext, undefined, { neighbors });
   } catch (err) {
     const detail = err instanceof Error ? err.message : "Unknown error";
     console.error(`Math lesson generation failed for ${keywordId}:`, detail);
@@ -123,7 +157,7 @@ export async function GET(
   if (firstFailCount > 0) {
     let retryLesson: GeneratedLesson | null = null;
     try {
-      retryLesson = await generateMathLesson(kwMeta, outlineContext);
+      retryLesson = await generateMathLesson(kwMeta, outlineContext, undefined, { neighbors });
     } catch {
       // swallow — keep original
     }

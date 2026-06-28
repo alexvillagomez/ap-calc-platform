@@ -1,0 +1,256 @@
+{
+  "section": "physics",
+  "category_code": "P1",
+  "category_label": "Kinematics & Translational Motion",
+  "order_index": 0,
+  "umbrellas": [
+    {
+      "slug": "units_and_dimensions",
+      "label": "Units & Dimensional Analysis",
+      "description": "SI units, dimensional analysis, and the distinction between scalars and vectors as the language of kinematics.",
+      "intro": {
+        "slug": "units_and_dimensions_intro",
+        "label": "Units & Dimensions Overview",
+        "description": "Physics quantities are expressed in SI units (meters, kilograms, seconds, etc.), and every valid equation must be dimensionally consistent. Scalar quantities have magnitude only; vector quantities carry both magnitude and direction. Mastering units and the scalar/vector distinction is the foundation for all kinematic calculations.",
+        "examples": ["SI base units: m, kg, s, A, K", "dimensional analysis: $[v] = \\text{m/s}$", "scalar (speed) vs. vector (velocity)"]
+      },
+      "in_depth": [
+        {
+          "slug": "si_units_and_metric_prefixes",
+          "label": "SI units and metric prefixes",
+          "description": "Identify the SI base units (meter, kilogram, second, etc.) and apply common metric prefixes (nano-, micro-, milli-, kilo-, mega-) to convert between scales. This focuses on unit identification and prefix conversion, not dimensional-analysis checking of equations (a separate keyword).",
+          "examples": ["1 km = $10^3$ m; 1 ms = $10^{-3}$ s", "speed in m/s; acceleration in m/s²", "convert 5.0 km/h to m/s"]
+        },
+        {
+          "slug": "dimensional_analysis",
+          "label": "Dimensional analysis",
+          "description": "Use dimensional analysis to check the validity of a physical equation and to derive unknown unit relationships by ensuring both sides share the same dimensions. This focuses on unit-consistency checking, not converting between metric prefixes (a separate keyword).",
+          "examples": ["$[F] = \\text{kg}\\cdot\\text{m/s}^2 = \\text{N}$", "check $v^2 = v_0^2 + 2ax$: $[v^2] = \\text{m}^2/\\text{s}^2$", "derive units of spring constant from $F = kx$"]
+        },
+        {
+          "slug": "scalars_vs_vectors",
+          "label": "Scalars vs. vectors",
+          "description": "Distinguish scalar quantities (magnitude only: speed, distance, time, mass, energy) from vector quantities (magnitude + direction: velocity, displacement, acceleration, force), and recognize that only vector quantities require directional bookkeeping. This focuses on classification, not vector arithmetic (a separate keyword).",
+          "examples": ["speed = scalar; velocity = vector", "temperature is scalar; force is vector", "mass is scalar; weight is a vector (downward)"]
+        }
+      ]
+    },
+    {
+      "slug": "vector_math",
+      "label": "Vectors: Components & Addition",
+      "description": "How to decompose vectors into perpendicular components and add or subtract them to find a resultant.",
+      "intro": {
+        "slug": "vector_math_intro",
+        "label": "Vectors Overview",
+        "description": "Any 2-D vector can be resolved into orthogonal x- and y-components using trigonometry ($v_x = v\\cos\\theta$, $v_y = v\\sin\\theta$). Adding vectors by components—rather than head-to-tail drawing—is the standard technique in kinematics. Magnitude and direction of a resultant follow from the Pythagorean theorem and the inverse tangent.",
+        "examples": ["resolve $\\vec{v}$ into $v_x = v\\cos\\theta$, $v_y = v\\sin\\theta$", "add components: $R_x = A_x + B_x$", "resultant magnitude: $R = \\sqrt{R_x^2 + R_y^2}$"]
+      },
+      "in_depth": [
+        {
+          "slug": "vector_components",
+          "label": "Vector components",
+          "description": "Decompose a 2-D vector into its x- and y-components using $v_x = v\\cos\\theta$ and $v_y = v\\sin\\theta$, where $\\theta$ is measured from the positive x-axis. This focuses on resolving a single vector into components, not reconstructing a resultant from components (a separate keyword).",
+          "examples": ["$v_x = v\\cos\\theta$; $v_y = v\\sin\\theta$", "30° above horizontal: $v_y = v\\sin 30°$", "identify angle reference (from +x-axis)"]
+        },
+        {
+          "slug": "vector_addition_resultant",
+          "label": "Vector addition and resultant",
+          "description": "Add two or more vectors by summing their respective components ($R_x = \\sum A_{ix}$, $R_y = \\sum A_{iy}$) and find the resultant's magnitude $R = \\sqrt{R_x^2 + R_y^2}$ and direction $\\theta = \\arctan(R_y/R_x)$. This focuses on component-wise addition and reconstruction, not decomposing a single vector into components (a separate keyword).",
+          "examples": ["$\\vec{R} = \\vec{A} + \\vec{B}$ via components", "$R = \\sqrt{(A_x+B_x)^2 + (A_y+B_y)^2}$", "head-to-tail vs. component-sum equivalence"]
+        }
+      ]
+    },
+    {
+      "slug": "displacement_distance_speed_velocity",
+      "label": "Displacement, Distance, Speed & Velocity",
+      "description": "The four primary kinematic descriptors of motion and how they relate to position and time.",
+      "intro": {
+        "slug": "displacement_distance_speed_velocity_intro",
+        "label": "Displacement & Velocity Overview",
+        "description": "Distance is the total path length (scalar); displacement is the straight-line change in position $\\Delta x = x_f - x_i$ (vector). Speed is distance ÷ time (scalar); velocity is displacement ÷ time (vector). Average and instantaneous versions of each appear on the MCAT, and the sign of displacement or velocity encodes direction.",
+        "examples": ["displacement $\\Delta x = x_f - x_i$ (vector)", "average velocity: $\\bar{v} = \\Delta x / \\Delta t$", "speed ≠ velocity when path curves"]
+      },
+      "in_depth": [
+        {
+          "slug": "displacement_vs_distance",
+          "label": "Displacement vs. distance",
+          "description": "Distinguish displacement $\\Delta x = x_f - x_i$ (a signed/vector change in position) from total distance traveled (the scalar sum of path lengths), recognizing they are equal only for straight, unidirectional motion. This focuses on the definition and sign convention, not average velocity calculations (a separate keyword).",
+          "examples": ["run 4 m east then 4 m west: distance = 8 m, displacement = 0", "displacement can be negative (leftward or downward)", "$\\Delta x = x_f - x_i$; direction matters"]
+        },
+        {
+          "slug": "average_velocity",
+          "label": "Average velocity",
+          "description": "Calculate average velocity as $\\bar{v} = \\Delta x / \\Delta t$: total displacement divided by total time elapsed, noting that average velocity can be zero even when total distance is nonzero. This focuses on the displacement-over-time ratio, not instantaneous velocity from a position-time graph (a separate keyword).",
+          "examples": ["$\\bar{v} = \\Delta x / \\Delta t$", "round trip: avg velocity = 0; avg speed > 0", "sign of $\\bar{v}$ encodes direction"]
+        },
+        {
+          "slug": "instantaneous_velocity",
+          "label": "Instantaneous velocity",
+          "description": "Identify instantaneous velocity as the limit of average velocity as $\\Delta t \\to 0$, equal to the slope of the position–time graph at a point ($v = dx/dt$). This focuses on reading slope from a position–time curve, not average velocity over a finite interval (a separate keyword).",
+          "examples": ["slope of $x$-$t$ graph = instantaneous $v$", "steeper slope → greater speed", "flat $x$-$t$ segment → $v = 0$"]
+        },
+        {
+          "slug": "average_speed",
+          "label": "Average speed",
+          "description": "Calculate average speed as total distance traveled divided by total time ($\\text{speed} = d / \\Delta t$), recognizing it is always ≥ |average velocity| because it uses path length, not displacement. This focuses on average speed as a scalar, not velocity (a separate keyword).",
+          "examples": ["avg speed = total distance / $\\Delta t$", "always non-negative; no direction", "avg speed > |avg velocity| when path reverses"]
+        }
+      ]
+    },
+    {
+      "slug": "acceleration",
+      "label": "Acceleration",
+      "description": "The rate of change of velocity — both average and instantaneous — and its physical interpretation.",
+      "intro": {
+        "slug": "acceleration_intro",
+        "label": "Acceleration Overview",
+        "description": "Acceleration is the rate of change of velocity: $a = \\Delta v / \\Delta t$ (average) or the slope of a velocity–time graph (instantaneous). An object can accelerate while at constant speed (direction change), and deceleration means acceleration opposite to velocity. On the MCAT, $g \\approx 9.8\\,\\text{m/s}^2$ downward is the standard free-fall acceleration.",
+        "examples": ["$\\bar{a} = \\Delta v / \\Delta t$", "slope of $v$-$t$ graph = acceleration", "$g \\approx 9.8\\,\\text{m/s}^2$ downward"]
+      },
+      "in_depth": [
+        {
+          "slug": "average_acceleration",
+          "label": "Average acceleration",
+          "description": "Calculate average acceleration as $\\bar{a} = \\Delta v / \\Delta t = (v_f - v_i) / \\Delta t$, paying attention to sign (direction) to distinguish speeding up from slowing down. This focuses on the finite-interval rate of change of velocity, not reading instantaneous acceleration from a graph (a separate keyword).",
+          "examples": ["$\\bar{a} = (v_f - v_i) / \\Delta t$", "negative $a$ while moving right = decelerating", "units: m/s²"]
+        },
+        {
+          "slug": "instantaneous_acceleration",
+          "label": "Instantaneous acceleration",
+          "description": "Identify instantaneous acceleration as the slope of the velocity–time graph at a single point ($a = dv/dt$), and read it qualitatively: a steep positive slope means large acceleration, a flat segment means constant velocity. This focuses on graphical reading of acceleration, not computing average acceleration from velocity values (a separate keyword).",
+          "examples": ["slope of $v$-$t$ curve = $a$ at that instant", "flat $v$-$t$ segment → $a = 0$", "curved $v$-$t$ → non-constant $a$"]
+        }
+      ]
+    },
+    {
+      "slug": "kinematic_equations",
+      "label": "Constant-Acceleration Kinematic Equations",
+      "description": "The four equations relating displacement, velocity, acceleration, and time under constant (uniform) acceleration.",
+      "intro": {
+        "slug": "kinematic_equations_intro",
+        "label": "Kinematic Equations Overview",
+        "description": "When acceleration is constant, four algebraic equations relate displacement ($x$), initial velocity ($v_0$), final velocity ($v$), acceleration ($a$), and time ($t$). Choosing the equation that omits the unknown you don't need is the standard MCAT strategy. Sign conventions (usually: rightward/upward positive) must be set before substituting.",
+        "examples": ["$v = v_0 + at$", "$x = v_0 t + \\tfrac{1}{2}at^2$", "$v^2 = v_0^2 + 2ax$"]
+      },
+      "in_depth": [
+        {
+          "slug": "kinematics_eq_v_v0_at",
+          "label": "First kinematic equation: $v = v_0 + at$",
+          "description": "Apply $v = v_0 + at$ to find final velocity (or time) when initial velocity, acceleration, and time (or desired velocity) are known, under constant acceleration. This equation omits displacement and is the go-to when distance is not given or sought.",
+          "examples": ["$v = v_0 + at$: no displacement term", "find $v$ after 3 s of constant $a$", "solve for $t$ when $v = 0$ (object stops)"]
+        },
+        {
+          "slug": "kinematics_eq_x_v0t_half_at2",
+          "label": "Second kinematic equation: $x = v_0 t + \\tfrac{1}{2}at^2$",
+          "description": "Apply $x = v_0 t + \\tfrac{1}{2}at^2$ to find displacement (or time) given initial velocity, acceleration, and time, under constant acceleration. This equation omits final velocity and is useful when $v$ is not known or needed.",
+          "examples": ["$x = v_0 t + \\tfrac{1}{2}at^2$: no $v_f$ term", "dropped ball: $x = \\tfrac{1}{2}gt^2$ (if $v_0=0$)", "quadratic in $t$: may yield two roots"]
+        },
+        {
+          "slug": "kinematics_eq_v2_v02_2ax",
+          "label": "Third kinematic equation: $v^2 = v_0^2 + 2ax$",
+          "description": "Apply $v^2 = v_0^2 + 2ax$ to relate final velocity, initial velocity, acceleration, and displacement without needing time, under constant acceleration. This is the preferred equation when time is not given or asked for.",
+          "examples": ["$v^2 = v_0^2 + 2ax$: no time term", "max height: set $v = 0$, solve for $x$", "stopping distance from $v_0$ on ice"]
+        },
+        {
+          "slug": "kinematics_eq_avg_velocity_displacement",
+          "label": "Displacement via average velocity: $x = \\tfrac{1}{2}(v_0 + v)t$",
+          "description": "Apply $x = \\tfrac{1}{2}(v_0 + v)t$ to find displacement as the product of average velocity and time when both initial and final velocities are known, under constant acceleration. This equation omits acceleration and is the fastest path when $a$ is not needed.",
+          "examples": ["$x = \\tfrac{1}{2}(v_0 + v)t$: no acceleration term", "area of trapezoid under $v$-$t$ graph", "average $v$ = midpoint of linear $v$-$t$ segment"]
+        },
+        {
+          "slug": "kinematics_sign_convention",
+          "label": "Sign conventions in kinematics",
+          "description": "Establish a consistent positive-direction convention before solving a kinematics problem, recognizing that quantities (displacement, velocity, acceleration) can be negative when directed opposite to the chosen positive sense. This focuses on sign bookkeeping rather than the algebraic form of a specific equation.",
+          "examples": ["set upward = positive: $a = -9.8\\,\\text{m/s}^2$", "negative displacement = moved leftward/downward", "sign of $v$ and $a$ opposite → decelerating"]
+        }
+      ]
+    },
+    {
+      "slug": "free_fall",
+      "label": "Free Fall & Gravity",
+      "description": "Motion under gravity alone — vertically or at any angle — with the universal downward acceleration $g \\approx 9.8\\,\\text{m/s}^2$.",
+      "intro": {
+        "slug": "free_fall_intro",
+        "label": "Free Fall Overview",
+        "description": "An object in free fall accelerates downward at $g \\approx 9.8\\,\\text{m/s}^2$ regardless of its mass, as long as air resistance is neglected. The kinematic equations apply with $a = -g$ (upward positive convention). At the highest point of a thrown object, $v = 0$ but $a = g$ (non-zero). Symmetry simplifies problems: time up equals time down; speed at launch equals speed on return.",
+        "examples": ["$a = g \\approx 9.8\\,\\text{m/s}^2$ downward", "at max height: $v = 0$, $a = g$ still acts", "time up = time down (symmetric trajectory)"]
+      },
+      "in_depth": [
+        {
+          "slug": "free_fall_vertical",
+          "label": "Vertical free fall",
+          "description": "Apply kinematic equations with constant downward acceleration $g \\approx 9.8\\,\\text{m/s}^2$ to an object moving vertically (dropped, thrown up, or thrown down), and correctly identify the velocity and acceleration at the apex. This focuses on purely vertical motion, not the combined horizontal + vertical case of projectile motion (a separate keyword).",
+          "examples": ["dropped ball: $v = gt$, $y = \\tfrac{1}{2}gt^2$", "at apex: $v_y = 0$; $a = 9.8\\,\\text{m/s}^2$ still", "throw-up symmetry: same speed when returning to launch height"]
+        },
+        {
+          "slug": "free_fall_time_and_height",
+          "label": "Free-fall time and height calculations",
+          "description": "Calculate the time an object takes to fall a given height using $h = \\tfrac{1}{2}gt^2$ (from rest) or the maximum height reached using $v^2 = v_0^2 - 2gh$, correctly substituting $g \\approx 9.8\\,\\text{m/s}^2$. This focuses on numeric/algebraic calculation, not the conceptual symmetry of free-fall trajectories (a separate keyword).",
+          "examples": ["$t = \\sqrt{2h/g}$ for fall from rest", "max height: $h = v_0^2 / (2g)$", "fall 45 m: $t \\approx 3$ s (using $g \\approx 10$)"]
+        }
+      ]
+    },
+    {
+      "slug": "projectile_motion",
+      "label": "Projectile Motion",
+      "description": "2-D motion with constant horizontal velocity and constant downward gravitational acceleration — the two independent components analyzed separately.",
+      "intro": {
+        "slug": "projectile_motion_intro",
+        "label": "Projectile Motion Overview",
+        "description": "A projectile moves with constant horizontal velocity ($a_x = 0$) and constant downward acceleration ($a_y = -g$). Because the x- and y-motions are independent, you analyze each with its own kinematic equation and link them only through the shared time. The shape of the trajectory is a parabola.",
+        "examples": ["$x$-direction: $v_x = v_0\\cos\\theta$ (constant)", "$y$-direction: $v_y = v_0\\sin\\theta - gt$", "range $R = v_0^2\\sin 2\\theta / g$ (level ground)"]
+      },
+      "in_depth": [
+        {
+          "slug": "projectile_independence_of_components",
+          "label": "Independence of horizontal and vertical motion",
+          "description": "Recognize that in projectile motion the horizontal component ($a_x = 0$, $v_x = \\text{const}$) and the vertical component ($a_y = -g$) are independent: horizontal speed is unchanged throughout the flight, while vertical speed changes due to gravity. This focuses on the conceptual principle of independence, not specific range/height calculations (separate keywords).",
+          "examples": ["$v_x$ constant throughout flight", "vertical and horizontal analyzed separately", "bullet fired horizontally hits ground same time as dropped bullet"]
+        },
+        {
+          "slug": "projectile_launch_angle_range",
+          "label": "Projectile range and launch angle",
+          "description": "Apply the range formula $R = v_0^2 \\sin 2\\theta / g$ (level ground) or use component kinematics to find the horizontal range, and recognize that 45° maximizes range while complementary angles (e.g., 30° and 60°) give equal range. This focuses on range optimization, not time-of-flight or peak height (separate keywords).",
+          "examples": ["$R = v_0^2\\sin 2\\theta / g$; max at $\\theta = 45°$", "30° and 60° give identical range", "doubling $v_0$ quadruples $R$"]
+        },
+        {
+          "slug": "projectile_time_of_flight_and_height",
+          "label": "Projectile time of flight and maximum height",
+          "description": "Calculate the time of flight ($T = 2v_0\\sin\\theta / g$) and maximum height ($H = v_0^2\\sin^2\\theta / (2g)$) of a projectile by applying vertical kinematic equations at the apex ($v_y = 0$). This focuses on the vertical portion of the analysis, not the horizontal range (a separate keyword).",
+          "examples": ["set $v_y = 0$ at peak: $t_{up} = v_0\\sin\\theta / g$", "total air time $T = 2t_{up}$", "$H = v_0^2\\sin^2\\theta / (2g)$"]
+        },
+        {
+          "slug": "projectile_velocity_components_in_flight",
+          "label": "Velocity components at any point in flight",
+          "description": "Determine the horizontal and vertical velocity components at any moment during projectile flight using $v_x = v_0\\cos\\theta$ and $v_y = v_0\\sin\\theta - gt$, and find the resultant speed $v = \\sqrt{v_x^2 + v_y^2}$. This focuses on velocity at an intermediate point, not the overall range or time (separate keywords).",
+          "examples": ["$v_x = v_0\\cos\\theta$ (constant)", "$v_y = v_0\\sin\\theta - gt$ (decreases then reverses)", "speed at any $t$: $v = \\sqrt{v_x^2 + v_y^2}$"]
+        }
+      ]
+    },
+    {
+      "slug": "motion_graphs",
+      "label": "Position–Time & Velocity–Time Graphs",
+      "description": "Graphical representations of motion and how to extract kinematic quantities from the slope or area of each graph type.",
+      "intro": {
+        "slug": "motion_graphs_intro",
+        "label": "Motion Graphs Overview",
+        "description": "A position–time ($x$-$t$) graph has slope equal to velocity; a velocity–time ($v$-$t$) graph has slope equal to acceleration and area equal to displacement. Reading these graphs is a core MCAT skill — you can extract all kinematic quantities without equations when the graph is piecewise linear. Curved segments indicate changing velocity or acceleration.",
+        "examples": ["slope of $x$-$t$ graph = velocity", "slope of $v$-$t$ graph = acceleration", "area under $v$-$t$ graph = displacement"]
+      },
+      "in_depth": [
+        {
+          "slug": "position_time_graph_slope",
+          "label": "Reading velocity from a position–time graph",
+          "description": "Extract instantaneous velocity as the slope of a position–time graph, and distinguish positive (moving in +direction), negative (moving in −direction), and zero slopes (at rest), recognizing that a curved $x$-$t$ graph indicates non-constant velocity. This focuses on slope reading, not area or velocity–time graphs (separate keywords).",
+          "examples": ["positive slope → moving right/up", "negative slope → moving left/down", "zero slope → momentarily at rest"]
+        },
+        {
+          "slug": "velocity_time_graph_slope_area",
+          "label": "Reading acceleration and displacement from a velocity–time graph",
+          "description": "Extract acceleration as the slope of a velocity–time graph and displacement as the area under the $v$-$t$ curve (summing positive areas above the axis and negative areas below), for both constant- and variable-acceleration segments. This focuses on both slope and area of $v$-$t$ graphs, not the position–time graph (a separate keyword).",
+          "examples": ["slope of $v$-$t$ = acceleration", "area of trapezoid/triangle = displacement", "area below $t$-axis = negative displacement"]
+        }
+      ]
+    }
+  ]
+}

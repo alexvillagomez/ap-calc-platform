@@ -1,0 +1,253 @@
+{
+  "section": "chemistry",
+  "category_code": "C8",
+  "category_label": "Chemical Kinetics",
+  "order_index": 7,
+  "umbrellas": [
+    {
+      "slug": "reaction_rate_fundamentals",
+      "label": "Reaction Rate & Concentration Dependence",
+      "description": "The quantitative definition of reaction rate and how the rate depends on reactant concentrations through the rate law.",
+      "intro": {
+        "slug": "reaction_rate_fundamentals_intro",
+        "label": "Reaction Rate & Rate Law Overview",
+        "description": "Reaction rate measures how quickly reactants are consumed or products are formed over time. The rate law, determined experimentally, expresses the rate as $\\text{rate} = k[A]^m[B]^n$ where the exponents are the reaction orders and $k$ is the rate constant. Understanding the rate law lets you predict how changing concentration affects the speed of a reaction.",
+        "examples": [
+          "$\\text{rate} = k[A]^m[B]^n$",
+          "doubling [A] quadruples rate if second order in A",
+          "rate constant $k$ units depend on overall order"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "reaction_rate_definition",
+          "label": "Reaction rate definition",
+          "description": "Define reaction rate as the change in concentration of a reactant or product per unit time, $\\text{rate} = -\\frac{\\Delta[\\text{reactant}]}{\\Delta t} = +\\frac{\\Delta[\\text{product}]}{\\Delta t}$, accounting for stoichiometric coefficients when needed. This focuses on the quantitative meaning of rate, not the factors that change it (separate keywords).",
+          "examples": [
+            "$\\text{rate} = -\\frac{\\Delta[A]}{\\Delta t}$",
+            "units of rate: M/s (mol L⁻¹ s⁻¹)",
+            "stoichiometric coefficients scale individual species rates"
+          ]
+        },
+        {
+          "slug": "rate_law_expression",
+          "label": "Rate law and rate constant",
+          "description": "Write the experimental rate law $\\text{rate} = k[A]^m[B]^n$ and identify the role of each term: $k$ is the rate constant (temperature-dependent, concentration-independent), and the exponents $m$ and $n$ are the reaction orders in each reactant. This focuses on the form and meaning of the rate law, not determining orders from data (a separate keyword).",
+          "examples": [
+            "$\\text{rate} = k[A]^1[B]^2$ — first order in A, second in B",
+            "rate constant $k$ has units that depend on overall order",
+            "$k$ changes with temperature; concentration does not affect $k$"
+          ]
+        },
+        {
+          "slug": "reaction_order",
+          "label": "Reaction order",
+          "description": "Classify a reaction as zero-, first-, or second-order in a reactant based on the exponent in the rate law, and state the overall order as the sum of individual orders. Recognize characteristic behaviors: zero-order rate is independent of concentration; first-order rate halves when [A] halves; second-order rate quadruples when [A] doubles. This focuses on what order means, not deriving it experimentally (a separate keyword).",
+          "examples": [
+            "zero order: rate = $k$ (flat concentration dependence)",
+            "first order: rate $\\propto [A]$; half-life is constant",
+            "second order: rate $\\propto [A]^2$; doubling [A] quadruples rate"
+          ]
+        },
+        {
+          "slug": "rate_law_from_data",
+          "label": "Determining rate law and order from experimental data",
+          "description": "Use the method of initial rates — comparing experiments where one concentration is changed while others are held constant — to determine each reactant's order and the rate constant $k$. Identify the exponent $m$ by the ratio $\\frac{\\text{rate}_2}{\\text{rate}_1} = \\left(\\frac{[A]_2}{[A]_1}\\right)^m$. This focuses on extracting the rate law from a data table, not on the algebra of integrated rate laws.",
+          "examples": [
+            "double [A], rate doubles → first order in A",
+            "$\\frac{r_2}{r_1} = \\left(\\frac{[A]_2}{[A]_1}\\right)^m$; solve for $m$",
+            "calculate $k$ from rate = $k[A]^m[B]^n$ once orders known"
+          ]
+        },
+        {
+          "slug": "half_life_first_order",
+          "label": "Half-life for first-order reactions",
+          "description": "Apply the first-order half-life expression $t_{1/2} = \\frac{\\ln 2}{k} = \\frac{0.693}{k}$, noting that it is constant (independent of concentration). Use it to estimate how long it takes a reactant to decrease by half. This focuses on the constant half-life property of first-order kinetics, not the half-life formulas for other orders.",
+          "examples": [
+            "$t_{1/2} = \\frac{0.693}{k}$ — independent of initial concentration",
+            "after two half-lives, 25% of reactant remains",
+            "radioactive decay and many drug clearances are first-order"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "reaction_mechanisms",
+      "label": "Reaction Mechanisms & Rate-Determining Step",
+      "description": "How a multistep reaction sequence (mechanism) breaks into elementary steps, and how the slowest step controls the overall rate.",
+      "intro": {
+        "slug": "reaction_mechanisms_intro",
+        "label": "Reaction Mechanisms Overview",
+        "description": "A reaction mechanism is a proposed sequence of elementary steps — each with its own rate — that add up to the net balanced equation. The slowest elementary step, the rate-determining step, controls the overall rate and the form of the experimentally observed rate law. Intermediates appear in one step and are consumed in a later step, so they do not appear in the net equation.",
+        "examples": [
+          "elementary step rate law written directly from stoichiometry",
+          "rate-determining step sets the observed rate law",
+          "intermediate: produced in one step, consumed in another"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "elementary_steps",
+          "label": "Elementary steps and molecularity",
+          "description": "Classify an elementary step by its molecularity — unimolecular (one reactant, rate $= k[A]$), bimolecular (two reactants, rate $= k[A][B]$), or termolecular (rare) — and write its rate law directly from the stoichiometric coefficients (only valid for elementary steps, not overall reactions). This focuses on the meaning of molecularity, not on identifying the rate-determining step (a separate keyword).",
+          "examples": [
+            "unimolecular: $A \\to$ products, rate $= k[A]$",
+            "bimolecular: $A + B \\to$ products, rate $= k[A][B]$",
+            "rate law for elementary step = coefficients as exponents"
+          ]
+        },
+        {
+          "slug": "intermediates",
+          "label": "Reaction intermediates",
+          "description": "Identify a reaction intermediate as a species produced in an early elementary step and consumed in a later step, and therefore absent from the overall net equation (unlike a catalyst, which is regenerated). Distinguish intermediates from transition states, which are transient activated complexes that appear at energy maxima and are never isolable. This focuses on the identity and role of intermediates, not catalysts (a separate keyword).",
+          "examples": [
+            "intermediate: formed then consumed; not in net equation",
+            "appears as a product in one step and reactant in the next",
+            "distinct from transition state: intermediate is a local energy minimum"
+          ]
+        },
+        {
+          "slug": "rate_determining_step",
+          "label": "Rate-determining step",
+          "description": "Identify the rate-determining step as the slowest step in a mechanism, and explain why the rate law of the overall reaction reflects only the species involved in and before this step. If a fast pre-equilibrium precedes the slow step, substitute the equilibrium expression to eliminate an intermediate from the rate law. This focuses on how the slow step dictates the rate law, not on elementary-step molecularity (a separate keyword).",
+          "examples": [
+            "slowest step controls overall rate",
+            "rate law of overall reaction matches rate law of slow step",
+            "fast pre-equilibrium → substitute $K_{eq}$ to eliminate intermediate"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "temperature_and_activation_energy",
+      "label": "Temperature Dependence & Activation Energy",
+      "description": "How temperature affects reaction rate through the activation energy and the Arrhenius equation, and the role of the activated complex.",
+      "intro": {
+        "slug": "temperature_and_activation_energy_intro",
+        "label": "Temperature & Activation Energy Overview",
+        "description": "Reactions require a minimum energy input — the activation energy $E_a$ — for reactants to reach the transition state (activated complex) and form products. Increasing temperature increases the fraction of molecules with enough energy to surmount this barrier, raising the rate constant $k$ exponentially as captured by the Arrhenius equation $k = Ae^{-E_a/RT}$. The energy profile diagram displays $E_a$, $\\Delta H$, and transition states visually.",
+        "examples": [
+          "$k = Ae^{-E_a/RT}$ — rate constant grows exponentially with $T$",
+          "activation energy $E_a$: energy barrier reactants must overcome",
+          "activated complex at the peak of the energy profile"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "activation_energy_concept",
+          "label": "Activation energy",
+          "description": "Define activation energy $E_a$ as the minimum energy required for reactants to transform into products, and use it to explain why not all collisions with correct orientation lead to reaction. Recognize that a higher $E_a$ means a slower reaction at a given temperature. This focuses on the concept and its effect on rate, not the Arrhenius equation calculation (a separate keyword).",
+          "examples": [
+            "$E_a$ = minimum energy needed for successful collision",
+            "higher $E_a$ → exponentially slower rate at same $T$",
+            "only collisions with $E \\geq E_a$ lead to reaction"
+          ]
+        },
+        {
+          "slug": "activated_complex_transition_state",
+          "label": "Activated complex and transition state",
+          "description": "Describe the activated complex (transition state) as the high-energy, unstable arrangement of atoms at the top of the energy barrier, corresponding to the energy maximum on a reaction-coordinate diagram. It cannot be isolated and is distinct from a reaction intermediate (which occupies a local energy minimum). This focuses on the nature of the transition state, not the energy profile diagram as a whole (a separate keyword).",
+          "examples": [
+            "transition state = peak of energy profile; cannot be isolated",
+            "bonds partially broken and formed simultaneously",
+            "distinct from intermediate (a local minimum)"
+          ]
+        },
+        {
+          "slug": "energy_profile_diagram",
+          "label": "Reading a reaction-coordinate (energy profile) diagram",
+          "description": "Extract from a reaction-coordinate diagram the activation energy ($E_a$ = peak minus reactant level), the enthalpy change ($\\Delta H$ = product level minus reactant level), and the number of transition states and intermediates (local minima between peaks). Distinguish exothermic ($\\Delta H < 0$, products lower) from endothermic ($\\Delta H > 0$, products higher) profiles, and recognize that $\\Delta H$ and $E_a$ are independent of each other. This focuses on diagram reading, not the Arrhenius equation or thermodynamic interpretation of $\\Delta H$ (separate keywords).",
+          "examples": [
+            "$E_a$ = height from reactant baseline to peak",
+            "$\\Delta H$ = height difference between reactants and products",
+            "local minimum between two peaks signals an intermediate"
+          ]
+        },
+        {
+          "slug": "arrhenius_equation",
+          "label": "Arrhenius equation",
+          "description": "Apply the Arrhenius equation $k = Ae^{-E_a/RT}$ (or its linearized form $\\ln k = \\ln A - \\frac{E_a}{R} \\cdot \\frac{1}{T}$) to predict how the rate constant changes with temperature or to calculate $E_a$ from two rate constants at two temperatures via $\\ln\\frac{k_2}{k_1} = -\\frac{E_a}{R}\\left(\\frac{1}{T_2} - \\frac{1}{T_1}\\right)$. This focuses on the quantitative Arrhenius relationship, not the qualitative concept of activation energy (a separate keyword).",
+          "examples": [
+            "$k = Ae^{-E_a/RT}$; $A$ = frequency/pre-exponential factor",
+            "$\\ln k$ vs $1/T$ gives a straight line with slope $-E_a/R$",
+            "increasing $T$ increases $k$ exponentially"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "catalysis",
+      "label": "Catalysts",
+      "description": "How catalysts accelerate reactions by providing a lower-energy pathway, without altering the thermodynamic outcome.",
+      "intro": {
+        "slug": "catalysis_intro",
+        "label": "Catalysts Overview",
+        "description": "A catalyst speeds up a reaction by providing an alternative pathway with a lower activation energy $E_a$, making the rate constant $k$ larger at any given temperature. Crucially, the catalyst is regenerated at the end of the mechanism, so it does not appear in the net equation and does not change the overall $\\Delta G$, $\\Delta H$, or equilibrium constant. Understanding catalysis is central to kinetics and is applied widely in chemistry and industry.",
+        "examples": [
+          "catalyst lowers $E_a$; does not change $\\Delta G$ or $K_{eq}$",
+          "catalyst appears in mechanism but not in net equation",
+          "both forward and reverse rates increase equally"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "catalyst_lowers_ea",
+          "label": "How a catalyst lowers $E_a$ without changing $\\Delta G$",
+          "description": "Explain that a catalyst lowers the activation energy $E_a$ by providing an alternative reaction pathway (shown as a lower energy peak on the coordinate diagram), increasing the rate constant $k$ and thus the rate of both forward and reverse reactions equally, without changing the reactant or product energy levels or the thermodynamic driving force $\\Delta G$. This focuses on the mechanistic effect of a catalyst, not the definition of catalytic types (a separate keyword).",
+          "examples": [
+            "catalyst gives alternative pathway with lower peak",
+            "$\\Delta G$ and $K_{eq}$ unchanged; only rate increases",
+            "both forward and reverse $E_a$ lower by the same amount"
+          ]
+        },
+        {
+          "slug": "homogeneous_heterogeneous_catalysis",
+          "label": "Homogeneous vs. heterogeneous catalysis",
+          "description": "Distinguish homogeneous catalysis (catalyst in same phase as reactants, e.g., an acid catalyst in aqueous solution) from heterogeneous catalysis (catalyst in a different phase, e.g., a solid metal surface with gaseous reactants), and recognize that both lower $E_a$ by the same principle. This focuses on the phase-classification distinction, not the energy profile effect (a separate keyword).",
+          "examples": [
+            "homogeneous: $\\text{H}^+$ catalyst in aqueous acid-catalyzed ester hydrolysis",
+            "heterogeneous: Pt or Pd solid catalyst for $\\text{H}_2$ hydrogenation",
+            "both types regenerated; do not appear in net equation"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "kinetic_vs_thermodynamic_control",
+      "label": "Kinetic vs. Thermodynamic Control",
+      "description": "How the conditions of a reaction can favor the faster-forming (kinetic) product or the more stable (thermodynamic) product.",
+      "intro": {
+        "slug": "kinetic_vs_thermodynamic_control_intro",
+        "label": "Kinetic vs. Thermodynamic Control Overview",
+        "description": "When a reaction can produce two or more products, the outcome depends on conditions. Kinetic control (low temperature, short reaction time, irreversible conditions) favors the product formed fastest — the one with the lower activation energy. Thermodynamic control (high temperature, longer time, reversible conditions) favors the product with the lowest free energy (most stable product), regardless of how quickly it forms. This distinction matters especially in organic chemistry and when reading energy diagrams with competing pathways.",
+        "examples": [
+          "kinetic product: lower $E_a$, forms faster",
+          "thermodynamic product: lower $\\Delta G$, more stable",
+          "low $T$ and irreversible → kinetic; high $T$ and reversible → thermodynamic"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "kinetic_product",
+          "label": "Kinetic product (kinetic control)",
+          "description": "Identify the kinetic product as the one formed fastest under low-temperature, short-time, or irreversible conditions — corresponding to the pathway with the lower activation energy, not necessarily the lower-energy product. Recognize that reversing or annealing conditions can shift the mixture toward the thermodynamic product. This focuses on the kinetically controlled outcome, not the thermodynamically controlled one (a separate keyword).",
+          "examples": [
+            "kinetic product: pathway with lowest $E_a$, not lowest energy",
+            "favored at low temperature or short reaction times",
+            "may be less stable than thermodynamic product"
+          ]
+        },
+        {
+          "slug": "thermodynamic_product",
+          "label": "Thermodynamic product (thermodynamic control)",
+          "description": "Identify the thermodynamic product as the most stable (lowest free energy) product, favored under high-temperature, long-time, or reversible conditions that allow the system to equilibrate. Recognize that the thermodynamic product has the lower $\\Delta G$ of formation from reactants but may have a higher activation energy than the kinetic product. This focuses on the thermodynamically controlled outcome, not the kinetic one (a separate keyword).",
+          "examples": [
+            "thermodynamic product: lowest $\\Delta G$, most stable",
+            "favored at high temperature or long reaction times (reversible)",
+            "higher $E_a$ than kinetic product but lower final energy"
+          ]
+        }
+      ]
+    }
+  ]
+}

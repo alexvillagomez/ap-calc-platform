@@ -1,0 +1,236 @@
+{
+  "section": "chemistry",
+  "category_code": "C4",
+  "category_label": "Stoichiometry & Reaction Types",
+  "order_index": 3,
+  "umbrellas": [
+    {
+      "slug": "mass_and_formula",
+      "label": "Molecular Weight, Formulas & Percent Composition",
+      "description": "Relationships between a substance's formula, its molecular weight, and the mass fraction of each element.",
+      "intro": {
+        "slug": "mass_and_formula_intro",
+        "label": "Molecular Weight & Formulas Overview",
+        "description": "Every chemical species can be characterized by its molecular (or formula) weight — the sum of atomic masses of all atoms in the formula unit — and by how that weight is distributed among its constituent elements (percent composition). The empirical formula captures the simplest whole-number atom ratio, while the molecular formula gives the actual count. Together these ideas are the entry point for all stoichiometric reasoning.",
+        "examples": ["molecular weight = sum of atomic masses in one formula unit", "empirical formula: simplest whole-number ratio", "percent mass = (mass of element / molar mass) × 100"]
+      },
+      "in_depth": [
+        {
+          "slug": "molecular_weight_calculation",
+          "label": "Molecular weight calculation",
+          "description": "Calculate the molecular (formula) weight of a compound by summing the atomic masses of all atoms in the formula unit, using the periodic table. This focuses on computing molar mass from a given formula, not on using that mass in mole conversions (a separate keyword).",
+          "examples": ["$M(\\text{H}_2\\text{O}) = 2(1) + 16 = 18 \\text{ g/mol}$", "$M(\\text{NaCl}) = 23 + 35.5 = 58.5 \\text{ g/mol}$", "sum atomic masses × subscripts across the formula"]
+        },
+        {
+          "slug": "empirical_vs_molecular_formula",
+          "label": "Empirical vs. molecular formula",
+          "description": "Distinguish the empirical formula (simplest whole-number atom ratio, e.g., $\\text{CH}_2\\text{O}$) from the molecular formula (actual atom count, e.g., $\\text{C}_6\\text{H}_{12}\\text{O}_6$), and convert between them using the ratio $n = M_{\\text{molecular}}/M_{\\text{empirical}}$. This focuses on the formula relationship, not on determining empirical formulas from percent-composition data (a separate keyword).",
+          "examples": ["$\\text{CH}_2\\text{O}$ (empirical) vs. $\\text{C}_6\\text{H}_{12}\\text{O}_6$ (molecular)", "$n = M_{\\text{mol}}/M_{\\text{emp}}$ gives the multiplier", "glucose and fructose share the same empirical formula"]
+        },
+        {
+          "slug": "percent_mass_composition",
+          "label": "Percent mass composition",
+          "description": "Calculate the percent by mass of each element in a compound using $\\%\\text{A} = \\frac{n_A \\cdot M_A}{M_{\\text{compound}}} \\times 100$, and use percent-mass data to derive the empirical formula (divide by atomic masses → divide by smallest → round to whole-number ratio). This focuses on the mass-fraction skill, not on molecular weight calculation alone (a separate keyword).",
+          "examples": ["$\\% \\text{O}$ in $\\text{H}_2\\text{O} = 16/18 \\times 100 = 88.9\\%$", "empirical formula from percents: assume 100 g sample → grams = percents", "divide by atomic masses, then by smallest mole value"]
+        }
+      ]
+    },
+    {
+      "slug": "mole_concept_and_conversions",
+      "label": "Mole Concept, Avogadro's Number & Metric Units",
+      "description": "The mole as the chemist's counting unit, Avogadro's number as the bridge to particles, and the SI/metric units used throughout chemistry.",
+      "intro": {
+        "slug": "mole_concept_and_conversions_intro",
+        "label": "Mole Concept Overview",
+        "description": "The mole ($n$) is the SI unit for amount of substance: $1 \\text{ mol} = 6.02 \\times 10^{23}$ entities (Avogadro's number $N_A$). It connects the macroscopic mass you can weigh ($m = nM$) to the microscopic particle count ($N = n \\cdot N_A$). Fluency with metric prefixes and SI units for mass, volume, and concentration is required for every quantitative chemistry calculation.",
+        "examples": ["$1 \\text{ mol} = 6.02 \\times 10^{23}$ particles ($N_A$)", "$n = m / M$ links mass to moles", "SI prefixes: milli- ($10^{-3}$), micro- ($10^{-6}$), nano- ($10^{-9}$)"]
+      },
+      "in_depth": [
+        {
+          "slug": "avogadro_number_and_mole_definition",
+          "label": "Avogadro's number and the mole definition",
+          "description": "State that one mole contains $N_A = 6.02 \\times 10^{23}$ representative particles (atoms, molecules, ions, or formula units) and use this to convert between amount in moles and particle count via $N = n \\cdot N_A$. This focuses on the mole-particle relationship, not the mole-mass relationship (a separate keyword).",
+          "examples": ["$N_A = 6.02 \\times 10^{23}$ particles/mol", "$N = n \\cdot N_A$: 2 mol $\\text{O}_2$ → $1.20 \\times 10^{24}$ molecules", "mole defined for atoms, molecules, ions equally"]
+        },
+        {
+          "slug": "mole_mass_conversions",
+          "label": "Mole–mass conversions",
+          "description": "Convert between mass (g) and moles (mol) using the molar mass $M$ via $n = m/M$ and $m = n \\cdot M$. This focuses on gram ↔ mole interconversion, not on particle counting ($N = n N_A$, a separate keyword) or stoichiometric ratio calculations (a separate keyword).",
+          "examples": ["$n = m/M$: 36 g $\\text{H}_2\\text{O}$ → 2 mol", "$m = n \\cdot M$: 0.5 mol $\\text{NaCl}$ → 29.25 g", "molar mass of substance is the conversion factor"]
+        },
+        {
+          "slug": "metric_units_in_chemistry",
+          "label": "Metric units in chemistry",
+          "description": "Apply SI base units and metric prefixes commonly used in chemistry (mass: g, kg, mg; volume: L, mL; amount: mol; pressure: Pa, atm, mmHg; energy: J, kJ; concentration: mol/L) and convert between them. This focuses on unit fluency, not on the physical laws that relate these quantities (addressed in their respective keywords).",
+          "examples": ["1 L = 1000 mL; 1 kg = 1000 g; 1 kJ = 1000 J", "1 atm = 760 mmHg = 101.3 kPa", "metric prefixes: milli ($10^{-3}$), centi ($10^{-2}$), kilo ($10^3$)"]
+        },
+        {
+          "slug": "density_definition_and_use",
+          "label": "Density: definition and use",
+          "description": "Define density as $d = m/V$ (mass per unit volume, SI unit kg/m³ or g/mL for liquids), and use it to interconvert mass, volume, and density for pure substances and solutions. This focuses on the density relation, not on buoyancy or fluid pressure (Fluids, P5).",
+          "examples": ["$d = m/V$; units g/mL or g/cm³ for liquids", "density of water ≈ 1.00 g/mL at 25 °C", "rearrange: $m = d \\cdot V$, $V = m/d$"]
+        }
+      ]
+    },
+    {
+      "slug": "chemical_equations_and_balancing",
+      "label": "Chemical Equations & Balancing",
+      "description": "Writing, interpreting, and balancing chemical equations, including conventions, conservation of atoms and charge, and balancing by inspection or the half-reaction method for redox.",
+      "intro": {
+        "slug": "chemical_equations_and_balancing_intro",
+        "label": "Chemical Equations Overview",
+        "description": "A balanced chemical equation is a quantitative statement of the law of conservation of mass: atoms of each element and (for ionic/redox reactions) net charge must be equal on both sides. The coefficients are mole ratios that directly drive stoichiometric calculations. Redox equations require an additional step — equalizing electron transfer — handled by the half-reaction (ion-electron) method.",
+        "examples": ["coefficients = mole ratios (stoichiometric factors)", "atoms and charge must balance on both sides", "half-reaction method: balance each half, multiply to equalize $e^-$"]
+      },
+      "in_depth": [
+        {
+          "slug": "conventions_for_chemical_equations",
+          "label": "Conventions for writing chemical equations",
+          "description": "Apply standard conventions: reactants left / products right with an arrow ($\\rightarrow$); state symbols (s), (l), (g), (aq); double arrow ($\\rightleftharpoons$) for reversible reactions; $\\Delta$ or temperature/catalyst conditions above the arrow. This focuses on notation, not on the mathematics of balancing (a separate keyword).",
+          "examples": ["$\\text{HCl}(aq) + \\text{NaOH}(aq) \\rightarrow \\text{NaCl}(aq) + \\text{H}_2\\text{O}(l)$", "state symbols: (s), (l), (g), (aq)", "catalyst or $\\Delta$ written above or below the arrow"]
+        },
+        {
+          "slug": "balancing_equations_by_inspection",
+          "label": "Balancing equations by inspection",
+          "description": "Balance non-redox chemical equations by adjusting stoichiometric coefficients so that the number of atoms of each element is equal on both sides; never change subscripts. This focuses on atom-balance for non-redox equations; redox balancing uses the half-reaction method (a separate keyword).",
+          "examples": ["balance $\\text{N}_2 + \\text{H}_2 \\rightarrow \\text{NH}_3$: $\\text{N}_2 + 3\\text{H}_2 \\rightarrow 2\\text{NH}_3$", "balance O last (usually present in many species)", "check: tally atoms on each side after placing coefficients"]
+        },
+        {
+          "slug": "balancing_redox_equations_half_reaction",
+          "label": "Balancing redox equations: half-reaction method",
+          "description": "Balance redox equations using the half-reaction (ion-electron) method: write separate oxidation and reduction half-reactions, balance atoms (balance O with $\\text{H}_2\\text{O}$, H with $\\text{H}^+$ in acidic medium or $\\text{OH}^-$ in basic), balance charge by adding electrons, then multiply and combine so electrons cancel. This focuses on redox balance mechanics, not on cell potentials or electrolytic cells (C10).",
+          "examples": ["in acid: add $\\text{H}_2\\text{O}$ to balance O, then $\\text{H}^+$ to balance H, then $e^-$ to balance charge", "multiply half-reactions so $e^-$ donated = $e^-$ gained", "$\\text{MnO}_4^- + \\text{Fe}^{2+} \\rightarrow \\text{Mn}^{2+} + \\text{Fe}^{3+}$ (acidic)"]
+        }
+      ]
+    },
+    {
+      "slug": "oxidation_numbers_and_redox",
+      "label": "Oxidation Numbers & Redox Classification",
+      "description": "Assigning oxidation states by rule, identifying oxidizing and reducing agents, and recognizing disproportionation reactions.",
+      "intro": {
+        "slug": "oxidation_numbers_and_redox_intro",
+        "label": "Oxidation Numbers Overview",
+        "description": "Oxidation number (oxidation state) is a bookkeeping tool that tracks electron loss and gain in chemical reactions. In a redox reaction, the species that loses electrons (increases in oxidation number) is oxidized and acts as the reducing agent; the one that gains electrons (decreases) is reduced and acts as the oxidizing agent. Recognizing common oxidizing and reducing agents, and spotting the special case of disproportionation, is an MCAT-tested skill.",
+        "examples": ["oxidized = loses $e^-$ = oxidation number increases = reducing agent", "OIL RIG: Oxidation Is Loss; Reduction Is Gain", "disproportionation: one species simultaneously oxidized and reduced"]
+      },
+      "in_depth": [
+        {
+          "slug": "assigning_oxidation_states",
+          "label": "Assigning oxidation states (rules)",
+          "description": "Assign oxidation states using the standard rules: pure element = 0; monatomic ion = charge; F always −1; O usually −2 (except peroxides −1); H usually +1 (except metal hydrides −1); sum = 0 for neutral compounds, sum = ion charge for polyatomic ions. This focuses on the assignment rules, not on using oxidation states to identify redox or balance equations (separate keywords).",
+          "examples": ["O in $\\text{H}_2\\text{O}$ = −2; in $\\text{H}_2\\text{O}_2$ = −1", "Cr in $\\text{Cr}_2\\text{O}_7^{2-}$: $2x + 7(-2) = -2 \\Rightarrow x = +6$", "pure $\\text{Fe}^0 = 0$; $\\text{Fe}^{3+}$ ion = +3"]
+        },
+        {
+          "slug": "identifying_oxidizing_reducing_agents",
+          "label": "Identifying oxidizing and reducing agents",
+          "description": "Identify the oxidizing agent (species reduced; gains $e^-$; oxidation state decreases) and the reducing agent (species oxidized; loses $e^-$; oxidation state increases) in a given redox equation by comparing oxidation states of reactants and products. This focuses on the identification step, not on assigning oxidation states (a separate keyword) or balancing the equation (a separate keyword).",
+          "examples": ["$\\text{Zn} + \\text{CuSO}_4 \\rightarrow \\text{ZnSO}_4 + \\text{Cu}$: Zn = reducing agent; $\\text{Cu}^{2+}$ = oxidizing agent", "common oxidizers: $\\text{MnO}_4^-$, $\\text{Cr}_2\\text{O}_7^{2-}$, $\\text{H}_2\\text{O}_2$, $\\text{O}_2$, halogens", "common reducers: metals (Zn, Fe, Na), $\\text{H}_2$, $\\text{SO}_2$, $\\text{I}^-$"]
+        },
+        {
+          "slug": "disproportionation_reactions",
+          "label": "Disproportionation reactions",
+          "description": "Recognize a disproportionation reaction as one in which a single element in one oxidation state is simultaneously oxidized to a higher state and reduced to a lower state within the same reaction, with no external oxidizing or reducing agent needed. This focuses on the self-redox concept, not on general redox agent identification (a separate keyword).",
+          "examples": ["$2\\text{H}_2\\text{O}_2 \\rightarrow 2\\text{H}_2\\text{O} + \\text{O}_2$: O(−1) → O(−2) and O(0)", "$\\text{Cl}_2 + 2\\text{OH}^- \\rightarrow \\text{Cl}^- + \\text{ClO}^- + \\text{H}_2\\text{O}$ (disproportionation)", "one species, two different product oxidation states"]
+        }
+      ]
+    },
+    {
+      "slug": "stoichiometric_calculations",
+      "label": "Stoichiometric Calculations: Mole Ratios, Limiting Reactants & Yield",
+      "description": "Using balanced equation coefficients as mole ratios to calculate masses/moles of products and reactants, identify the limiting reactant, and compute theoretical and percent yield.",
+      "intro": {
+        "slug": "stoichiometric_calculations_intro",
+        "label": "Stoichiometric Calculations Overview",
+        "description": "Once an equation is balanced, the coefficients define exact mole ratios between every reactant and product. The general workflow — convert given mass to moles, apply the mole ratio, convert back to mass — solves virtually every stoichiometry problem. When multiple reactants are present, the limiting reactant (the one that runs out first) caps how much product can form; percent yield then compares the actual experimental outcome to the theoretical maximum.",
+        "examples": ["mole ratio from coefficients: $2\\text{H}_2 + \\text{O}_2 \\rightarrow 2\\text{H}_2\\text{O}$ → 2 mol $\\text{H}_2$ : 1 mol $\\text{O}_2$", "limiting reactant: divide moles of each reactant by its coefficient; smallest result limits", "$\\%\\text{ yield} = (\\text{actual}/\\text{theoretical}) \\times 100$"]
+      },
+      "in_depth": [
+        {
+          "slug": "stoichiometric_mole_ratio_calculations",
+          "label": "Stoichiometric mole-ratio calculations",
+          "description": "Use the coefficients of a balanced equation as mole ratios (stoichiometric factors) to convert between moles (or mass) of any reactant and any product via the map: mass A → mol A → (mole ratio) → mol B → mass B. This focuses on the mole-ratio conversion step, not on limiting reactant identification (a separate keyword).",
+          "examples": ["$\\text{N}_2 + 3\\text{H}_2 \\rightarrow 2\\text{NH}_3$: 1 mol $\\text{N}_2$ produces 2 mol $\\text{NH}_3$", "mass $\\rightarrow$ mol: divide by $M$; mol $\\rightarrow$ mass: multiply by $M$", "stoichiometric factor = coefficient ratio from balanced equation"]
+        },
+        {
+          "slug": "limiting_reactant_identification",
+          "label": "Limiting reactant identification",
+          "description": "Identify the limiting reactant by converting all given reactant amounts to moles, dividing each by its stoichiometric coefficient, and selecting the smallest quotient as the limiting reactant; the other reactants are in excess. This focuses on determining which reactant controls the product amount, not on computing the theoretical yield from that limiting amount (a separate keyword).",
+          "examples": ["compare $n/\\text{coeff}$ for each reactant; smallest → limiting", "excess reactant: moles remaining = moles supplied − moles consumed", "the limiting reactant is fully consumed; excess remains"]
+        },
+        {
+          "slug": "theoretical_yield_calculation",
+          "label": "Theoretical yield calculation",
+          "description": "Calculate the theoretical yield of a product — the maximum mass obtainable assuming 100% conversion — by applying the stoichiometric mole ratio to the moles of the limiting reactant and converting to grams. This focuses on computing the calculated maximum, not on measuring the actual (experimental) yield or computing percent yield (a separate keyword).",
+          "examples": ["theoretical yield: mol limiting reactant × mole ratio × $M_{\\text{product}}$", "if 2 mol $\\text{H}_2$ limits in $2\\text{H}_2 + \\text{O}_2 \\rightarrow 2\\text{H}_2\\text{O}$, theoretical = 2 mol $\\text{H}_2\\text{O}$ = 36 g", "theoretical yield = upper bound; actual yield ≤ theoretical"]
+        },
+        {
+          "slug": "percent_yield",
+          "label": "Percent yield",
+          "description": "Calculate percent yield using $\\%\\text{ yield} = \\dfrac{\\text{actual yield}}{\\text{theoretical yield}} \\times 100$, and interpret why it is ≤ 100% (side reactions, incomplete reaction, product loss during isolation). This focuses on the yield ratio, not on computing theoretical yield from limiting reactants (a separate keyword).",
+          "examples": ["$\\%\\text{ yield} = (\\text{actual}/\\text{theoretical}) \\times 100$", "actual yield < theoretical → losses to side reactions or handling", "a 78% yield means 22% product was lost or not formed"]
+        }
+      ]
+    },
+    {
+      "slug": "reaction_type_classification",
+      "label": "Reaction-Type Classification",
+      "description": "Categorizing chemical reactions by their structural pattern (combination, decomposition, single/double displacement, combustion, neutralization, precipitation, redox) to predict products and recognize reaction context.",
+      "intro": {
+        "slug": "reaction_type_classification_intro",
+        "label": "Reaction Types Overview",
+        "description": "Chemists sort reactions into a small number of structural archetypes that predict how reactants rearrange into products. The major categories tested on the MCAT — combination, decomposition, single-displacement, double-displacement (including precipitation and neutralization), combustion, and redox — overlap in some cases (combustion is always redox; neutralization is a double-displacement). Recognizing the type from a written equation guides how to balance it, predict products, and identify conditions.",
+        "examples": ["combination: A + B → AB", "double-displacement: AB + CD → AD + CB", "combustion: hydrocarbon + $\\text{O}_2$ → $\\text{CO}_2$ + $\\text{H}_2\\text{O}$"]
+      },
+      "in_depth": [
+        {
+          "slug": "combination_synthesis_reactions",
+          "label": "Combination (synthesis) reactions",
+          "description": "Identify a combination (synthesis) reaction as one in which two or more reactants combine to form a single product ($A + B \\rightarrow AB$), and predict the product from element/oxide combinations (e.g., metal + oxygen → metal oxide). This focuses on the combination pattern, not on the reverse decomposition type (a separate keyword).",
+          "examples": ["$2\\text{Mg} + \\text{O}_2 \\rightarrow 2\\text{MgO}$", "$\\text{SO}_3 + \\text{H}_2\\text{O} \\rightarrow \\text{H}_2\\text{SO}_4$", "two reactants → one product"]
+        },
+        {
+          "slug": "decomposition_reactions",
+          "label": "Decomposition reactions",
+          "description": "Identify a decomposition reaction as one in which a single compound breaks down into two or more simpler substances ($AB \\rightarrow A + B$), often triggered by heat, light, or electricity. This focuses on the one-reactant→multiple-products pattern, not on the reverse combination type (a separate keyword).",
+          "examples": ["$2\\text{H}_2\\text{O}_2 \\rightarrow 2\\text{H}_2\\text{O} + \\text{O}_2$ (also a disproportionation)", "$2\\text{KClO}_3 \\xrightarrow{\\Delta} 2\\text{KCl} + 3\\text{O}_2$", "one reactant → two or more products"]
+        },
+        {
+          "slug": "single_displacement_reactions",
+          "label": "Single-displacement reactions",
+          "description": "Identify a single-displacement (single-replacement) reaction as one in which a more reactive free element displaces a less reactive element from a compound ($A + BC \\rightarrow AC + B$), and use an activity series to predict whether displacement will occur. This focuses on the single-substitution pattern, not on double-displacement (a separate keyword).",
+          "examples": ["$\\text{Zn} + \\text{CuSO}_4 \\rightarrow \\text{ZnSO}_4 + \\text{Cu}$ (Zn displaces Cu)", "more active metal displaces less active from solution", "activity series: Li > K > Na > Mg > Al > Zn > Fe > Cu > Au"]
+        },
+        {
+          "slug": "double_displacement_reactions",
+          "label": "Double-displacement reactions",
+          "description": "Identify a double-displacement (metathesis) reaction as one in which two ionic compounds exchange cation–anion partners ($AB + CD \\rightarrow AD + CB$), and recognize that the driving force is formation of a precipitate, gas, or weak electrolyte (water). This focuses on the general ion-exchange pattern; precipitation and neutralization as specific subtypes are in separate keywords.",
+          "examples": ["$\\text{Na}_2\\text{SO}_4 + \\text{BaCl}_2 \\rightarrow \\text{BaSO}_4 \\downarrow + 2\\text{NaCl}$", "cations and anions switch partners", "driving force: precipitate ↓, gas ↑, or water"]
+        },
+        {
+          "slug": "precipitation_reactions",
+          "label": "Precipitation reactions",
+          "description": "Predict whether a precipitate forms when two aqueous ionic solutions are mixed by applying solubility rules (e.g., most nitrates are soluble; most carbonates and sulfides are insoluble), and write the net ionic equation showing only the ions that combine. This focuses on the precipitation outcome of double-displacement; solubility-product equilibrium ($K_{sp}$) is in C9.",
+          "examples": ["$\\text{Pb}^{2+}(aq) + 2\\text{I}^-(aq) \\rightarrow \\text{PbI}_2(s)$", "solubility rules: nitrates soluble; $\\text{BaSO}_4$, $\\text{AgCl}$ insoluble", "net ionic equation omits spectator ions"]
+        },
+        {
+          "slug": "combustion_reactions",
+          "label": "Combustion reactions",
+          "description": "Identify a combustion reaction as one in which a fuel (hydrocarbon or organic compound) reacts with $\\text{O}_2$ to produce $\\text{CO}_2$ and $\\text{H}_2\\text{O}$ (complete combustion) or $\\text{CO}$ and $\\text{H}_2\\text{O}$ (incomplete), and balance the equation. Combustion is always a redox reaction. This focuses on the combustion pattern, not on thermochemistry ($\\Delta H_{comb}$, which is in C7).",
+          "examples": ["$\\text{CH}_4 + 2\\text{O}_2 \\rightarrow \\text{CO}_2 + 2\\text{H}_2\\text{O}$ (complete combustion)", "balance C first, then H, then O last", "incomplete combustion: $2\\text{C}_8\\text{H}_{18} + 17\\text{O}_2 \\rightarrow 16\\text{CO} + 18\\text{H}_2\\text{O}$"]
+        },
+        {
+          "slug": "neutralization_reactions",
+          "label": "Neutralization reactions",
+          "description": "Identify a neutralization reaction as the combination of an acid and a base to produce a salt and water ($\\text{acid} + \\text{base} \\rightarrow \\text{salt} + \\text{H}_2\\text{O}$), and write the net ionic equation ($\\text{H}^+ + \\text{OH}^- \\rightarrow \\text{H}_2\\text{O}$) for strong acid–strong base pairs. This focuses on the reaction-type recognition; pH calculations and buffer behavior are in C6.",
+          "examples": ["$\\text{HCl} + \\text{NaOH} \\rightarrow \\text{NaCl} + \\text{H}_2\\text{O}$", "net ionic: $\\text{H}^+(aq) + \\text{OH}^-(aq) \\rightarrow \\text{H}_2\\text{O}(l)$", "neutralization produces a salt (ionic compound) and water"]
+        },
+        {
+          "slug": "redox_reaction_classification",
+          "label": "Classifying reactions as redox vs. non-redox",
+          "description": "Determine whether a reaction is a redox reaction by checking whether any element's oxidation state changes between reactants and products; if none change, the reaction is non-redox (e.g., double-displacement/neutralization). All combustion, single-displacement, and combination involving elements are redox; many double-displacements are not. This focuses on the classification test, not on balancing redox equations (a separate keyword).",
+          "examples": ["oxidation state changes → redox; no change → non-redox", "$\\text{Zn} + \\text{H}_2\\text{SO}_4 \\rightarrow \\text{ZnSO}_4 + \\text{H}_2$: Zn $0 \\rightarrow +2$; H $+1 \\rightarrow 0$ → redox", "$\\text{NaOH} + \\text{HCl} \\rightarrow \\text{NaCl} + \\text{H}_2\\text{O}$: no oxidation-state change → non-redox"]
+        }
+      ]
+    }
+  ]
+}

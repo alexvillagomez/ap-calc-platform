@@ -4,6 +4,8 @@ import { use, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { LoginGate } from "@/components/auth/LoginGate";
 import { MathLessonView, type LessonData } from "@/components/math/MathLessonView";
+import PrereqSeeAlso from "@/components/practice/PrereqSeeAlso";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { getOrCreateMathSession } from "@/lib/mathSession";
@@ -19,8 +21,25 @@ function MathLessonPageInner({
   const { keywordId } = use(params);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const returnTo = searchParams.get("return") ?? "/math";
   const label = searchParams.get("label") ?? undefined;
+  // Topic context (passed by the category page) so the end screen can route
+  // "practice more of this topic" and "back to topic" correctly.
+  const course = searchParams.get("course");
+  const category = searchParams.get("category");
+  const scope = searchParams.get("scope"); // "keyword" | "umbrella"
+  const enc = label ? `&label=${encodeURIComponent(label)}` : "";
+
+  // Where "back to topic" goes: explicit return → the topic/category page → math home.
+  const backToTopicHref =
+    searchParams.get("return") ??
+    (course && category ? `/math/${course}/${category}` : "/math");
+  // Where "practice more of this topic" goes (only when we know the topic).
+  const practiceMoreHref =
+    course && category
+      ? `/math/${course}/${category}/practice?${scope === "umbrella" ? "umbrella" : "keyword"}=${encodeURIComponent(keywordId)}${enc}`
+      : null;
+
+  const returnTo = backToTopicHref;
   const [sessionId, setSessionId] = useState("");
 
   // Page owns the lesson fetch so it can render a friendly error state on
@@ -69,10 +88,19 @@ function MathLessonPageInner({
           <h1 className="font-semibold text-neutral-900 text-sm truncate">
             {label ? `Lesson: ${label}` : "Lesson"}
           </h1>
+          <NavMenu className="ml-auto" />
         </div>
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-8">
+        {!loading && !loadError && lesson && (
+          <PrereqSeeAlso
+            system="math"
+            course={course ?? undefined}
+            keywordId={keywordId}
+            className="mb-4"
+          />
+        )}
         {loading ? (
           <div className="flex items-center justify-center py-32">
             <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin" />
@@ -113,6 +141,24 @@ function MathLessonPageInner({
             initialLesson={lesson}
             onComplete={() => router.push(returnTo)}
             onSkip={() => router.push(returnTo)}
+            completionActions={[
+              ...(practiceMoreHref
+                ? [
+                    {
+                      label: "Practice this topic",
+                      sublabel: "Try questions on what you just learned",
+                      href: practiceMoreHref,
+                      primary: true,
+                    },
+                  ]
+                : []),
+              {
+                label: label ? `Back to ${label}` : "Back to topic",
+                href: backToTopicHref,
+                primary: !practiceMoreHref,
+              },
+              { label: "Math Center home", href: "/math" },
+            ]}
           />
         )}
       </main>

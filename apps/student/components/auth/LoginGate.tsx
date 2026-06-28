@@ -3,28 +3,20 @@
 /**
  * LoginGate — wraps any page that requires a Lodera account.
  *
- * If the user is not logged in (no "lodera_uid" httpOnly cookie — detected via
- * GET /api/auth/me), shows the unified login/auto-signup form inline instead
- * of the page content. On success the user sees the wrapped content immediately.
+ * If the user is not logged in (no Supabase Auth session — detected via
+ * supabaseBrowser().auth.getUser()), shows the unified login/auto-signup form
+ * inline instead of the page content. On success the user sees the wrapped
+ * content immediately.
  *
  * For hard redirects, use the /login?next= page directly.
  */
 
 import { useState, useEffect, useCallback } from "react";
+import { supabaseBrowser } from "@/lib/supabaseBrowser";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/lib/cn";
-
-const ACCOUNT_KEY   = "ap_calc_account_id";
-const USERNAME_KEY  = "ap_calc_username";
-const SESSION_KEY   = "ap_calc_student_session_id";
-
-interface User {
-  id: string;
-  email: string;
-  username: string;
-}
 
 interface LoginGateProps {
   children: React.ReactNode;
@@ -35,26 +27,20 @@ interface LoginGateProps {
 export function LoginGate({ children, prompt }: LoginGateProps) {
   const [status, setStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading");
 
-  // Check cookie-backed session on mount
+  // Check Supabase Auth session on mount.
   useEffect(() => {
-    fetch("/api/auth/me")
-      .then((r) => {
-        if (r.ok) return r.json() as Promise<{ user: User }>;
-        throw new Error("unauthenticated");
+    let active = true;
+    supabaseBrowser()
+      .auth.getUser()
+      .then((res: { data: { user: unknown } }) => {
+        if (!active) return;
+        setStatus(res.data.user ? "authenticated" : "unauthenticated");
       })
-      .then(({ user: u }) => {
-        // Keep localStorage in sync for legacy pages
-        localStorage.setItem(ACCOUNT_KEY, u.id);
-        localStorage.setItem(USERNAME_KEY, u.username);
-        setStatus("authenticated");
-      })
-      .catch(() => setStatus("unauthenticated"));
+      .catch(() => { if (active) setStatus("unauthenticated"); });
+    return () => { active = false; };
   }, []);
 
-  const handleLogin = useCallback((u: User, sessionId: string) => {
-    localStorage.setItem(ACCOUNT_KEY, u.id);
-    localStorage.setItem(USERNAME_KEY, u.username);
-    localStorage.setItem(SESSION_KEY, sessionId);
+  const handleLogin = useCallback(() => {
     setStatus("authenticated");
   }, []);
 
@@ -78,7 +64,7 @@ export function LoginGate({ children, prompt }: LoginGateProps) {
 
 interface LoginScreenProps {
   prompt?: string;
-  onLogin: (user: User, sessionId: string) => void;
+  onLogin: () => void;
 }
 
 function LoginScreen({ prompt, onLogin }: LoginScreenProps) {
@@ -101,25 +87,27 @@ function LoginScreen({ prompt, onLogin }: LoginScreenProps) {
     setError(null);
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, username: isSignup ? username : undefined, password, mode }),
-      });
-      const data = (await res.json()) as {
-        user?: User;
-        sessionId?: string;
-        error?: string;
-        code?: string;
-      };
-      if (!res.ok || !data.user) {
-        // Guide the user across modes when the mismatch is the mode itself.
-        if (data.code === "email_exists") setMode("login");
-        else if (data.code === "no_account") setMode("signup");
-        setError(data.error ?? "Something went wrong. Try again.");
-        return;
+      const supabase = supabaseBrowser();
+      if (isSignup) {
+        const { error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { data: { username } },
+        });
+        if (signUpError) {
+          // If the account already exists, nudge the user to log in.
+          if (/registered|exists/i.test(signUpError.message)) setMode("login");
+          setError(signUpError.message ?? "Something went wrong. Try again.");
+          return;
+        }
+      } else {
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInError) {
+          setError(signInError.message ?? "Something went wrong. Try again.");
+          return;
+        }
       }
-      onLogin(data.user, data.sessionId ?? "");
+      onLogin();
     } catch {
       setError("Network error. Please try again.");
     } finally {

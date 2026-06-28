@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { SoundToggle } from "@/components/ui/SoundToggle";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
@@ -41,6 +42,7 @@ interface TaxonomyCategory {
   id: string;
   label: string;
   description: string;
+  section?: string;
   umbrellas?: TaxonomyUmbrella[];
 }
 
@@ -418,9 +420,12 @@ function CategoryRow({
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 
-export default function McatPracticePage() {
+function McatPracticePageInner() {
+  const searchParams = useSearchParams();
+  const sectionParam = searchParams.get("section") ?? null;
+
   const [sessionId, setSessionId] = useState("");
-  const [categories, setCategories] = useState<TaxonomyCategory[]>([]);
+  const [allCategories, setAllCategories] = useState<TaxonomyCategory[]>([]);
   const [loadingCats, setLoadingCats] = useState(true);
   const [catsError, setCatsError] = useState<string | null>(null);
 
@@ -472,13 +477,18 @@ export default function McatPracticePage() {
       const res = await fetch(`/api/mcat/taxonomy?session_id=${sid}`);
       if (!res.ok) throw new Error(await res.text().catch(() => "Unknown error"));
       const data = (await res.json()) as { categories: TaxonomyCategory[] };
-      setCategories(data.categories ?? []);
+      setAllCategories(data.categories ?? []);
     } catch (e) {
       setCatsError((e as Error).message ?? "Failed to load categories");
     } finally {
       setLoadingCats(false);
     }
   };
+
+  // Filter categories by section when a section param is present; otherwise show all.
+  const categories = sectionParam
+    ? allCategories.filter((cat) => cat.section === sectionParam)
+    : allCategories;
 
   // ── Selection helpers ─────────────────────────────────────────────────────
 
@@ -850,7 +860,7 @@ export default function McatPracticePage() {
               </button>
             )}
             <StreakBadge />
-            <SoundToggle />
+            <NavMenu />
           </div>
         </div>
       </header>
@@ -1157,5 +1167,13 @@ export default function McatPracticePage() {
         )}
       </main>
     </div>
+  );
+}
+
+export default function McatPracticePage() {
+  return (
+    <Suspense>
+      <McatPracticePageInner />
+    </Suspense>
   );
 }

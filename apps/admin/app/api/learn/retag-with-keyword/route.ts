@@ -123,7 +123,7 @@ ${problem.solution_latex}`;
     let applies = false, weight = 0, reasoning = "";
     try {
       const completion = await openai.chat.completions.create({
-        model: "gemini-3.5-flash",
+        model: "gpt-5.4-mini",
         messages: [
           { role: "system", content: RETAG_SYSTEM },
           { role: "user", content: userMsg },

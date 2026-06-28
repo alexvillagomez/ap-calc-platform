@@ -18,6 +18,7 @@ import {
 } from "@/lib/mathGenerator";
 import { loadTargetKeywords, embedText, tagByEmbedding } from "@/lib/mathTagging";
 import { outlineContextForCategory } from "@/lib/mathContentOutline";
+import { resolveScopeContract } from "@/lib/scopeContract";
 import type { ConceptBlueprint } from "@/lib/mathTypes";
 
 export const runtime = "nodejs";
@@ -69,32 +70,42 @@ export async function POST(request: Request) {
   const { data: kwMeta } = kwIds.length > 0
     ? await supabase
         .from("math_keywords")
-        .select("id, label, description, concept_blueprint")
+        .select("id, label, description, concept_blueprint, tier, parent_keyword_id, category_id")
         .in("id", kwIds)
     : { data: [] };
 
-  const keywords = (kwMeta ?? []).map((k) => ({
+  // Resolve an always-present scope contract for each source keyword (stored
+  // blueprint merged with a forward fence, or fully derived) so a "similar"
+  // question can never drift past the original keyword's scope.
+  const resolveKw = async (k: Record<string, unknown>) => ({
     id: k.id as string,
     label: k.label as string,
     description: (k.description as string) ?? "",
-    blueprint: (k.concept_blueprint as ConceptBlueprint | null) ?? null,
-  }));
+    blueprint:
+      ((await resolveScopeContract(supabase, "math_keywords", {
+        id: k.id as string,
+        label: k.label as string,
+        description: (k.description as string) ?? "",
+        tier: (k.tier as string | null) ?? null,
+        parent_keyword_id: (k.parent_keyword_id as string | null) ?? null,
+        category_id: (k.category_id as string | null) ?? null,
+        concept_blueprint: k.concept_blueprint,
+      })) as ConceptBlueprint | null) ??
+      ((k.concept_blueprint as ConceptBlueprint | null) ?? null),
+  });
+
+  const keywords = await Promise.all((kwMeta ?? []).map(resolveKw));
 
   // Fallback: category keywords
   let finalKeywords = keywords;
   if (finalKeywords.length === 0) {
     const { data: catKws } = await supabase
       .from("math_keywords")
-      .select("id, label, description, concept_blueprint")
+      .select("id, label, description, concept_blueprint, tier, parent_keyword_id, category_id")
       .eq("category_id", sourceQ.category_id as string)
       .eq("status", "approved")
       .limit(5);
-    finalKeywords = (catKws ?? []).map((k) => ({
-      id: k.id as string,
-      label: k.label as string,
-      description: (k.description as string) ?? "",
-      blueprint: (k.concept_blueprint as ConceptBlueprint | null) ?? null,
-    }));
+    finalKeywords = await Promise.all((catKws ?? []).map(resolveKw));
   }
 
   if (finalKeywords.length === 0) {

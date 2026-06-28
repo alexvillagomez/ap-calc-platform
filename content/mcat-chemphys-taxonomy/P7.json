@@ -1,0 +1,237 @@
+{
+  "section": "physics",
+  "category_code": "P7",
+  "category_label": "Periodic Motion, Waves & Sound",
+  "order_index": 6,
+  "umbrellas": [
+    {
+      "slug": "simple_harmonic_motion",
+      "label": "Simple Harmonic Motion",
+      "description": "Oscillatory motion where the restoring force is proportional to displacement, covering mass-spring and pendulum systems.",
+      "intro": {
+        "slug": "simple_harmonic_motion_intro",
+        "label": "Simple Harmonic Motion Overview",
+        "description": "Simple harmonic motion (SHM) occurs when a restoring force is proportional to displacement, causing sinusoidal oscillations. The two canonical systems are the mass-spring oscillator and the simple pendulum, each with a characteristic period formula. Understanding amplitude, period, and energy in SHM sets the foundation for all wave phenomena.",
+        "examples": ["restoring force $F = -kx$", "mass-spring period $T = 2\\pi\\sqrt{m/k}$", "pendulum period $T = 2\\pi\\sqrt{L/g}$"]
+      },
+      "in_depth": [
+        {
+          "slug": "shm_amplitude_frequency_phase",
+          "label": "Amplitude, frequency, and phase in SHM",
+          "description": "Identify amplitude as the maximum displacement, frequency $f$ as oscillations per second (Hz), and phase as the initial position in the cycle; relate period and frequency by $T = 1/f$. This focuses on the descriptive parameters of oscillation, not on calculating the period from system properties (a separate keyword).",
+          "examples": ["amplitude = max displacement from equilibrium", "$f = 1/T$; $\\omega = 2\\pi f$", "phase shift determines $x(0)$ and $v(0)$"]
+        },
+        {
+          "slug": "mass_spring_period",
+          "label": "Mass-spring period and frequency",
+          "description": "Calculate the period of a mass-spring oscillator using $T = 2\\pi\\sqrt{m/k}$, noting that period is independent of amplitude and depends only on mass and spring constant. This focuses on the mass-spring system, not the simple pendulum (a separate keyword).",
+          "examples": ["$T = 2\\pi\\sqrt{m/k}$", "heavier mass → longer period", "stiffer spring ($k$ larger) → shorter period"]
+        },
+        {
+          "slug": "simple_pendulum_period",
+          "label": "Simple pendulum period and frequency",
+          "description": "Calculate the period of a simple pendulum using $T = 2\\pi\\sqrt{L/g}$, noting it is independent of mass and amplitude (for small angles). This focuses on the pendulum, not the mass-spring system (a separate keyword).",
+          "examples": ["$T = 2\\pi\\sqrt{L/g}$", "longer pendulum → longer period", "period independent of bob mass"]
+        },
+        {
+          "slug": "shm_energy",
+          "label": "Energy in simple harmonic motion",
+          "description": "Describe the interchange between kinetic energy ($\\frac{1}{2}mv^2$) and elastic potential energy ($\\frac{1}{2}kx^2$) in SHM, with total mechanical energy $E = \\frac{1}{2}kA^2$ constant (no damping). This focuses on SHM energy conservation, not the spring PE formula in isolation (which lives in P4).",
+          "examples": ["$E_{total} = \\frac{1}{2}kA^2$ = constant", "max KE at equilibrium; max PE at amplitude", "KE + PE = constant throughout cycle"]
+        }
+      ]
+    },
+    {
+      "slug": "wave_properties",
+      "label": "Wave Properties & Classification",
+      "description": "Fundamental properties shared by all mechanical waves — wave types, the wave relation, and superposition.",
+      "intro": {
+        "slug": "wave_properties_intro",
+        "label": "Wave Properties Overview",
+        "description": "Waves transfer energy through a medium without net transport of matter. They are classified as transverse (displacement perpendicular to propagation) or longitudinal (displacement parallel to propagation). The universal wave relation $v = f\\lambda$ connects propagation speed, frequency, and wavelength; superposition governs what happens when waves overlap.",
+        "examples": ["transverse vs. longitudinal wave", "$v = f\\lambda$", "superposition: add displacements algebraically"]
+      },
+      "in_depth": [
+        {
+          "slug": "transverse_vs_longitudinal",
+          "label": "Transverse and longitudinal waves",
+          "description": "Classify a wave as transverse (particle displacement perpendicular to propagation direction, e.g., a plucked string) or longitudinal (particle displacement parallel to propagation direction, e.g., sound). This focuses on wave type classification, not on wave speed or frequency (separate keywords).",
+          "examples": ["transverse: string wave — displacement ⊥ travel", "longitudinal: sound wave — compressions & rarefactions", "light = transverse EM wave (→ P8)"]
+        },
+        {
+          "slug": "wavelength_propagation_speed",
+          "label": "Wavelength and propagation speed",
+          "description": "Define wavelength $\\lambda$ as the spatial repeat distance of a wave and apply the wave relation $v = f\\lambda$ to relate propagation speed, frequency, and wavelength. This focuses on the $v = f\\lambda$ relation, not on what determines the speed in a given medium (a separate keyword).",
+          "examples": ["$v = f\\lambda$", "higher frequency → shorter wavelength at fixed speed", "$\\lambda$ = distance between adjacent crests"]
+        },
+        {
+          "slug": "superposition_interference",
+          "label": "Superposition and interference",
+          "description": "Apply the principle of superposition — the net displacement at any point equals the algebraic sum of individual wave displacements — and distinguish constructive interference (amplitudes add) from destructive interference (amplitudes cancel). This focuses on the superposition principle, not on standing waves as a specific interference pattern (a separate keyword).",
+          "examples": ["constructive: waves in phase → amplitude doubles", "destructive: waves 180° out of phase → cancel", "net displacement = sum of individual displacements"]
+        }
+      ]
+    },
+    {
+      "slug": "sound_production_speed",
+      "label": "Sound Production & Speed",
+      "description": "How sound is produced as a mechanical longitudinal wave and how its propagation speed varies with medium.",
+      "intro": {
+        "slug": "sound_production_speed_intro",
+        "label": "Sound Production & Speed Overview",
+        "description": "Sound is a mechanical longitudinal pressure wave that requires a medium — it cannot travel through a vacuum. It is produced by vibrating objects that create periodic compressions and rarefactions. The speed of sound depends on the medium's stiffness and density, making it fastest in solids and slowest in gases.",
+        "examples": ["sound = longitudinal pressure wave", "vibrating source → compressions + rarefactions", "speed: solids > liquids > gases"]
+      },
+      "in_depth": [
+        {
+          "slug": "production_of_sound",
+          "label": "Production of sound",
+          "description": "Describe how a vibrating object (string, membrane, vocal cord) creates alternating compressions and rarefactions in the surrounding medium, generating a longitudinal sound wave. This focuses on the mechanical origin of sound, not on its speed or intensity (separate keywords).",
+          "examples": ["vibrating tuning fork compresses + rarifies air", "sound needs a medium — no vacuum propagation", "frequency of source = frequency of sound produced"]
+        },
+        {
+          "slug": "speed_of_sound_in_media",
+          "label": "Relative speed of sound in solids, liquids, and gases",
+          "description": "Rank the speed of sound as greatest in solids, intermediate in liquids, and lowest in gases, because speed increases with greater stiffness (bulk/Young's modulus) and decreases with greater density. This focuses on the relative ranking across phases, not on the precise numerical values (which are problem-specific stems).",
+          "examples": ["$v_{solid} > v_{liquid} > v_{gas}$", "steel ≫ water ≫ air", "greater stiffness of medium → higher sound speed"]
+        }
+      ]
+    },
+    {
+      "slug": "sound_intensity_decibels",
+      "label": "Sound Intensity & Decibels",
+      "description": "Quantitative treatment of sound intensity and the logarithmic decibel scale.",
+      "intro": {
+        "slug": "sound_intensity_decibels_intro",
+        "label": "Sound Intensity & Decibels Overview",
+        "description": "Sound intensity is the power per unit area carried by a sound wave; it falls off with distance and is measured on a logarithmic decibel scale because the human ear spans a vast dynamic range. The log scale means that a 10 dB increase corresponds to a tenfold increase in intensity. Attenuation describes how intensity decreases as sound travels through a real medium.",
+        "examples": ["$\\beta = 10\\log_{10}(I/I_0)$", "10 dB increase = ×10 intensity", "$I_0 = 10^{-12}$ W/m² (threshold of hearing)"]
+      },
+      "in_depth": [
+        {
+          "slug": "sound_intensity",
+          "label": "Sound intensity",
+          "description": "Define sound intensity $I$ as power per unit area (W/m²) and recognize that it decreases with the square of distance from a point source ($I \\propto 1/r^2$). This focuses on the physical quantity of intensity, not on the decibel conversion (a separate keyword).",
+          "examples": ["$I = P / A$ (W/m²)", "doubling distance → intensity drops by factor of 4", "$I \\propto A^2$ (amplitude squared)"]
+        },
+        {
+          "slug": "decibel_scale",
+          "label": "Decibel scale and logarithmic sound level",
+          "description": "Calculate sound level in decibels using $\\beta = 10\\log_{10}(I / I_0)$ where $I_0 = 10^{-12}$ W/m², and interpret a 10 dB change as a tenfold change in intensity. This focuses on the log-scale conversion, not on what intensity represents physically (a separate keyword).",
+          "examples": ["$\\beta = 10\\log_{10}(I/I_0)$, $I_0 = 10^{-12}$ W/m²", "+10 dB ↔ ×10 intensity", "0 dB = threshold of hearing; 120 dB = pain threshold"]
+        },
+        {
+          "slug": "attenuation_damping",
+          "label": "Attenuation and damping of sound",
+          "description": "Describe attenuation as the decrease in sound intensity with distance due to absorption by the medium and geometric spreading, and damping as the decay of oscillation amplitude over time due to energy dissipation. This focuses on energy loss mechanisms, not on the decibel scale (a separate keyword).",
+          "examples": ["absorption converts acoustic energy to heat", "damping: amplitude decays exponentially over time", "soft materials attenuate sound more than rigid ones"]
+        }
+      ]
+    },
+    {
+      "slug": "doppler_effect",
+      "label": "Doppler Effect",
+      "description": "The observed shift in frequency when source and/or observer are in relative motion.",
+      "intro": {
+        "slug": "doppler_effect_intro",
+        "label": "Doppler Effect Overview",
+        "description": "The Doppler effect is the change in observed frequency (and pitch) when a sound source and an observer move relative to each other. Approach compresses wavefronts (higher observed frequency); recession stretches them (lower observed frequency). The same physics explains sonar reflection from moving objects, which gives a double Doppler shift.",
+        "examples": ["approaching source → higher $f_{obs}$", "$f_{obs} = f_s \\frac{v \\pm v_o}{v \\mp v_s}$", "reflection from moving object: double Doppler shift"]
+      },
+      "in_depth": [
+        {
+          "slug": "doppler_moving_source",
+          "label": "Doppler effect — moving source",
+          "description": "Predict the observed frequency when a sound source moves toward or away from a stationary observer using $f_{obs} = f_s \\frac{v}{v \\mp v_s}$ (minus for approach, plus for recession), noting that wavefronts are compressed ahead of the source and stretched behind it. This focuses on a moving source, not a moving observer (a separate keyword).",
+          "examples": ["source approaching: $f_{obs} = f_s\\frac{v}{v - v_s}$ (higher)", "source receding: $f_{obs} = f_s\\frac{v}{v + v_s}$ (lower)", "ambulance siren pitch drops as it passes"]
+        },
+        {
+          "slug": "doppler_moving_observer",
+          "label": "Doppler effect — moving observer",
+          "description": "Predict the observed frequency when an observer moves toward or away from a stationary source using $f_{obs} = f_s \\frac{v \\pm v_o}{v}$ (plus for approach, minus for recession). This focuses on observer motion, not source motion (a separate keyword).",
+          "examples": ["observer approaching: $f_{obs} = f_s(v + v_o)/v$ (higher)", "observer receding: $f_{obs} = f_s(v - v_o)/v$ (lower)", "observer motion changes encounter rate with wavefronts"]
+        },
+        {
+          "slug": "doppler_reflection_moving_object",
+          "label": "Doppler effect from reflection off a moving object",
+          "description": "Analyze the double Doppler shift when sound reflects from a moving object: the object acts first as a moving observer (receiving a shifted frequency) and then as a moving source (re-emitting at that shifted frequency), yielding a larger net frequency shift used in Doppler ultrasound and radar. This focuses on the reflection case, not on direct source/observer motion (covered in separate keywords).",
+          "examples": ["double Doppler: object = moving observer then moving source", "basis of Doppler ultrasound (blood-flow imaging)", "net shift larger than single-motion case"]
+        },
+        {
+          "slug": "pitch_and_frequency",
+          "label": "Pitch and frequency",
+          "description": "Relate pitch (the perceptual attribute of highness or lowness of a sound) to the physical frequency of the sound wave: higher frequency → higher pitch. This focuses on the pitch-frequency connection, not on the mechanisms that shift frequency such as the Doppler effect (covered elsewhere).",
+          "examples": ["pitch ↑ as frequency ↑", "humans hear ~20 Hz to 20 kHz", "musical notes correspond to specific frequencies (e.g., A4 = 440 Hz)"]
+        }
+      ]
+    },
+    {
+      "slug": "standing_waves_resonance",
+      "label": "Standing Waves, Resonance & Harmonics",
+      "description": "Standing wave patterns in strings and pipes, resonant frequencies, and the harmonic series.",
+      "intro": {
+        "slug": "standing_waves_resonance_intro",
+        "label": "Standing Waves & Resonance Overview",
+        "description": "Standing waves form when two identical waves traveling in opposite directions interfere, producing nodes (zero displacement) and antinodes (maximum displacement). Resonance occurs at specific frequencies — the natural frequencies — where the boundary conditions of the system (string fixed at both ends; pipe open or closed) are satisfied. Each resonant frequency is a harmonic of the fundamental.",
+        "examples": ["nodes = zero displacement; antinodes = max displacement", "string both ends fixed: $f_n = n\\frac{v}{2L}$", "open pipe: all harmonics; closed pipe: odd harmonics only"]
+      },
+      "in_depth": [
+        {
+          "slug": "standing_waves_nodes_antinodes",
+          "label": "Standing waves — nodes and antinodes",
+          "description": "Identify nodes (points of permanent zero displacement) and antinodes (points of maximum displacement amplitude) in a standing wave, and explain that they arise from the superposition of two waves of equal frequency traveling in opposite directions. This focuses on identifying the pattern, not on the resonant frequencies of specific systems (separate keywords).",
+          "examples": ["adjacent node-to-node distance = $\\lambda/2$", "fixed end → node; open end → antinode", "two oppositely-traveling waves of same $f$ and $A$ interfere"]
+        },
+        {
+          "slug": "resonance_strings",
+          "label": "Resonance in strings — harmonic series",
+          "description": "Calculate the resonant (harmonic) frequencies of a string fixed at both ends using $f_n = n\\frac{v}{2L}$ ($n = 1, 2, 3, \\ldots$), where $v$ is the wave speed on the string and $L$ is the string length; all harmonics (odd and even) are present. This focuses on fixed-fixed strings, not on open or closed pipes (separate keywords).",
+          "examples": ["$f_n = n\\frac{v}{2L}$, $n=1,2,3,\\ldots$", "fundamental ($n=1$): $f_1 = v/(2L)$", "all harmonics present in fixed-fixed string"]
+        },
+        {
+          "slug": "resonance_open_pipe",
+          "label": "Resonance in open pipes — harmonic series",
+          "description": "Calculate the resonant frequencies of an open cylindrical pipe (open at both ends) using $f_n = n\\frac{v}{2L}$ ($n = 1, 2, 3, \\ldots$), where antinodes form at both open ends; all harmonics are present. This focuses on the open-pipe case, not the closed-pipe case (a separate keyword).",
+          "examples": ["open pipe: $f_n = n\\frac{v}{2L}$, all harmonics", "antinodes at both open ends", "flute is approximately an open pipe"]
+        },
+        {
+          "slug": "resonance_closed_pipe",
+          "label": "Resonance in closed pipes — odd harmonics only",
+          "description": "Calculate the resonant frequencies of a pipe closed at one end using $f_n = n\\frac{v}{4L}$ ($n = 1, 3, 5, \\ldots$, odd integers only), where a node forms at the closed end and an antinode at the open end; only odd harmonics are present. This focuses on the closed-pipe case, not the open-pipe case (a separate keyword).",
+          "examples": ["closed pipe: $f_n = n\\frac{v}{4L}$, $n$ = 1, 3, 5, …", "node at closed end; antinode at open end", "clarinet (conical closed) supports odd harmonics predominantly"]
+        },
+        {
+          "slug": "beats",
+          "label": "Beats",
+          "description": "Predict the beat frequency heard when two sound waves of slightly different frequencies $f_1$ and $f_2$ superpose: $f_{beat} = |f_1 - f_2|$, producing periodic variations in loudness. This focuses on the beat phenomenon, not on standing-wave harmonics (separate keywords).",
+          "examples": ["$f_{beat} = |f_1 - f_2|$", "two forks at 440 Hz and 443 Hz → 3 beats/s", "beats used to tune instruments"]
+        }
+      ]
+    },
+    {
+      "slug": "ultrasound_shock_waves",
+      "label": "Ultrasound & Shock Waves",
+      "description": "High-frequency sound applications and the physics of supersonic shock waves.",
+      "intro": {
+        "slug": "ultrasound_shock_waves_intro",
+        "label": "Ultrasound & Shock Waves Overview",
+        "description": "Ultrasound uses frequencies above 20 kHz for medical imaging and therapy, exploiting reflection at tissue interfaces (acoustic impedance mismatch). Shock waves arise when a source exceeds the speed of sound, creating a cone-shaped pressure front (Mach cone) with destructive pressure discontinuities. Both phenomena are medically and physiologically relevant on the MCAT.",
+        "examples": ["ultrasound: $f > 20$ kHz, reflects at tissue interfaces", "Mach number $= v_{source}/v_{sound}$", "shock wave: conical wave front from supersonic source"]
+      },
+      "in_depth": [
+        {
+          "slug": "ultrasound_physics",
+          "label": "Ultrasound — principles and medical use",
+          "description": "Describe ultrasound as sound with frequency above 20 kHz that reflects at boundaries between tissues of different acoustic impedance ($Z = \\rho v$), enabling echo-based imaging; Doppler ultrasound uses frequency shifts to measure blood-flow velocity. This focuses on ultrasound physics, not on general Doppler theory (a separate keyword).",
+          "examples": ["$f > 20$ kHz; reflects at tissue acoustic-impedance boundaries", "impedance mismatch → stronger echo", "Doppler ultrasound measures blood-flow velocity via frequency shift"]
+        },
+        {
+          "slug": "shock_waves",
+          "label": "Shock waves and the Mach cone",
+          "description": "Explain that a shock wave forms when a source travels at or above the speed of sound ($v_{source} \\geq v_{sound}$), creating a conical Mach cone whose half-angle satisfies $\\sin\\theta = v_{sound}/v_{source}$; the resulting pressure discontinuity carries large amounts of energy. This focuses on supersonic shock waves, not the standard Doppler effect for subsonic motion (a separate keyword).",
+          "examples": ["$\\text{Mach number} = v_s/v_{sound} \\geq 1$", "$\\sin\\theta = v_{sound}/v_{source}$ (Mach cone angle)", "sonic boom = shock wave reaching an observer"]
+        }
+      ]
+    }
+  ]
+}

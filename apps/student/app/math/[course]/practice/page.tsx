@@ -11,8 +11,8 @@ import QuestionToolbar from "@/components/practice/QuestionToolbar";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { ComboMeter } from "@/components/gamification/ComboMeter";
-import { SoundToggle } from "@/components/ui/SoundToggle";
+import { GrindMeter } from "@/components/gamification/GrindMeter";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { CorrectPulse } from "@/components/ui/CorrectPulse";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
@@ -24,7 +24,6 @@ import {
   MathUmbrella,
   MathInDepthChild,
   umbrellaDisplayScore,
-  diffLabel,
   scoreColor,
   COURSE_LABELS,
 } from "@/components/math/mathUiTypes";
@@ -331,6 +330,7 @@ function MathGeneralPracticeInner({
   const [showHint, setShowHint] = useState(false);
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
   const [combo, setCombo] = useState(0);
+  const [sessionStart] = useState(() => Date.now());
   const [stats, setStats] = useState({ answered: 0, correct: 0 });
   const [excludeIds, setExcludeIds] = useState<string[]>([]);
 
@@ -521,7 +521,6 @@ function MathGeneralPracticeInner({
     fetchNextQuestion(sessionId, categoryIds, [...selected], excludeIds);
   };
 
-  const diff = question ? diffLabel(question.difficulty) : null;
 
   if (pagePhase === "select") {
     const totalSelected = selected.size;
@@ -541,7 +540,7 @@ function MathGeneralPracticeInner({
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <StreakBadge />
-              <SoundToggle />
+              <NavMenu />
             </div>
           </div>
         </header>
@@ -644,7 +643,7 @@ function MathGeneralPracticeInner({
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <StreakBadge />
-            <SoundToggle />
+            <NavMenu />
           </div>
         </div>
       </header>
@@ -683,14 +682,9 @@ function MathGeneralPracticeInner({
         {/* Question */}
         {(questionPhase === "answering" || questionPhase === "revealed") && question && (
           <>
-            {diff && (
-              <div className="flex">
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${diff.cls}`}>
-                  {diff.label}
-                </span>
-              </div>
-            )}
-
+            <div className="pb-2">
+              <GrindMeter mode="quiz" streak={combo} answered={stats.answered} startedAt={sessionStart} hidden />
+            </div>
             <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
               <p className="text-sm font-medium text-neutral-900 leading-relaxed">
                 <MathText>{question.stem_latex}</MathText>
@@ -731,8 +725,6 @@ function MathGeneralPracticeInner({
                 )}
               </div>
             )}
-
-            <ComboMeter combo={combo} />
 
             <CorrectPulse
               trigger={questionPhase === "revealed" && lastAnswerCorrect}

@@ -17,49 +17,129 @@ function cosineSim(a: number[], b: number[]): number {
   return d === 0 ? 0 : dot / d;
 }
 
-type KwRow = { id: string; name: string | null; label?: string | null; description: string | null; embedding: number[] };
+type KwRow = {
+  id: string;
+  name: string | null;
+  label?: string | null;
+  description: string | null;
+  embedding: number[];
+  category_id?: string | null;
+};
 
-function topN(embedding: number[], rows: KwRow[], n: number): { id: string; label: string; description: string; score: number }[] {
-  return rows
+type Candidate = { id: string; label: string; description: string; score: number };
+
+// ─── Cached keyword-row fetch ─────────────────────────────────────────────────
+// Concurrent autoTagKeywords calls (e.g. bulk generation) each re-fetch the same
+// ~700-row embedding payload, which overwhelms Postgres and times out. Cache the
+// result (and dedupe in-flight fetches) for a short TTL — learn_keywords changes
+// infrequently relative to this window.
+const KW_ROWS_TTL_MS = 5 * 60 * 1000;
+let kwRowsCache: { topicRows: KwRow[]; actionRows: KwRow[]; reprRows: KwRow[]; fetchedAt: number } | null = null;
+let kwRowsInFlight: Promise<{ topicRows: KwRow[]; actionRows: KwRow[]; reprRows: KwRow[] }> | null = null;
+
+async function fetchKeywordRows(supabase: SupabaseClient): Promise<{ topicRows: KwRow[]; actionRows: KwRow[]; reprRows: KwRow[] }> {
+  if (kwRowsCache && Date.now() - kwRowsCache.fetchedAt < KW_ROWS_TTL_MS) {
+    return kwRowsCache;
+  }
+  if (kwRowsInFlight) return kwRowsInFlight;
+
+  kwRowsInFlight = (async () => {
+    const { data: topicKwRows, error: topicKwErr } = await supabase
+      .from("learn_keywords")
+      .select("id, name, label, description, embedding, category_id")
+      .eq("tier", "in_depth")
+      .eq("status", "approved")
+      .not("embedding", "is", null)
+      .not("category_id", "in", "(action_items,representations)");
+    if (topicKwErr) console.error("[autoTagKeywords] topicKwRows query failed:", topicKwErr);
+
+    const { data: specialKwRows, error: specialKwErr } = await supabase
+      .from("learn_keywords")
+      .select("id, name, label, description, embedding, category_id")
+      .in("category_id", ["action_items", "representations"])
+      .eq("status", "approved")
+      .not("embedding", "is", null);
+    if (specialKwErr) console.error("[autoTagKeywords] specialKwRows query failed:", specialKwErr);
+
+    const allRows = [...(topicKwRows ?? []), ...(specialKwRows ?? [])] as KwRow[];
+    const result = {
+      topicRows: allRows.filter((r) => r.category_id !== "action_items" && r.category_id !== "representations"),
+      actionRows: allRows.filter((r) => r.category_id === "action_items"),
+      reprRows: allRows.filter((r) => r.category_id === "representations"),
+    };
+
+    // Only cache a successful, non-empty fetch — don't lock in a transient timeout.
+    if (result.topicRows.length > 0) {
+      kwRowsCache = { ...result, fetchedAt: Date.now() };
+    }
+    return result;
+  })();
+
+  try {
+    return await kwRowsInFlight;
+  } finally {
+    kwRowsInFlight = null;
+  }
+}
+
+// Mean-centered top-N: subtracts the average cosine score so values span ~[-0.5, 0.5].
+// Keywords above the mean have positive scores; irrelevant ones go negative.
+function topNCentered(embedding: number[], rows: KwRow[], n: number): Candidate[] {
+  const all = rows
     .filter((r) => Array.isArray(r.embedding) && r.embedding.length > 0)
     .map((r) => ({
       id: r.id,
       label: r.name ?? r.label ?? r.id,
       description: r.description ?? "",
-      score: cosineSim(embedding, r.embedding),
-    }))
+      raw: cosineSim(embedding, r.embedding),
+    }));
+
+  if (all.length === 0) return [];
+
+  const mean = all.reduce((s, r) => s + r.raw, 0) / all.length;
+
+  return all
+    .map((r) => ({ id: r.id, label: r.label, description: r.description, score: r.raw - mean }))
     .sort((a, b) => b.score - a.score)
     .slice(0, n);
 }
 
-// ─── LLM reranker ─────────────────────────────────────────────────────────────
+// ─── Unified LLM reranker ─────────────────────────────────────────────────────
+
+type Dimension = "topic" | "action" | "representation" | "prerequisite";
+
+const DIMENSION_CONFIG: Record<Dimension, { maxSelect: number; context: string }> = {
+  topic:          { maxSelect: 6, context: "topic skill — what mathematical concept or technique the problem tests" },
+  action:         { maxSelect: 3, context: "action/verb — what cognitive operation the student performs (e.g., solve, evaluate, justify)" },
+  representation: { maxSelect: 2, context: "representation — the format or medium in which the problem is presented (e.g., symbolic, verbal, contextual, graphical, tabular, diagram, exact form, approximate form)" },
+  prerequisite:   { maxSelect: 4, context: "prerequisite knowledge — what prior skills or knowledge are required to solve the problem" },
+};
 
 const RERANK_SYSTEM = `You are a math taxonomy tagger for an adaptive learning platform.
 
 RULES:
-1. Only select from the candidate list provided — do NOT invent labels.
-2. Assign weight 0.0–1.0 per label reflecting how central it is to this specific problem.
-3. Omit labels where weight < 0.25.
-4. For KEYWORDS: select at most 6 in-depth skill keywords. Do NOT select near-duplicates — if two keywords describe essentially the same skill, pick only the more specific one.
-5. For TAGS: select at most 4 format/action/style tags.
-6. Return only valid JSON: {"keywords":[{"id":"...","weight":0.0}],"tags":[{"id":"...","weight":0.0}]}`;
+1. Only select from the candidate list provided — do NOT invent IDs.
+2. Assign weight 0.0–1.0 reflecting how central each label is to the input.
+3. Omit any label where weight < 0.2.
+4. Do NOT select near-duplicates — if two labels describe essentially the same thing, pick only the most specific one.
+5. Return only valid JSON: {"keywords":[{"id":"...","weight":0.0}]}`;
 
-async function rerank(
+async function rerankDimension(
   openai: OpenAI,
-  problemText: string,
-  kwCandidates: ReturnType<typeof topN>,
-  tagCandidates: ReturnType<typeof topN>,
-): Promise<{ keyword_weights: Record<string, number>; tag_weights: Record<string, number> }> {
-  const kwBlock = kwCandidates.map((c, i) =>
-    `  [${i + 1}] id="${c.id}" | ${c.label} | ${c.description}`
-  ).join("\n");
-  const tagBlock = tagCandidates.map((c, i) =>
+  queryText: string,
+  candidates: Candidate[],
+  dimension: Dimension,
+): Promise<Record<string, number>> {
+  if (candidates.length === 0) return {};
+
+  const { maxSelect, context } = DIMENSION_CONFIG[dimension];
+  const block = candidates.map((c, i) =>
     `  [${i + 1}] id="${c.id}" | ${c.label} | ${c.description}`
   ).join("\n");
 
-  const userMsg = `PROBLEM:\n${problemText}\n\nKEYWORD CANDIDATES (in-depth skills, pick ≤6, no near-duplicates):\n${kwBlock}\n\nTAG CANDIDATES (format/action/style, pick ≤4):\n${tagBlock}`;
+  const userMsg = `DIMENSION: ${context}\nSELECT AT MOST: ${maxSelect}\n\nINPUT:\n${queryText}\n\nCANDIDATES:\n${block}`;
 
-  let parsed: { keywords?: { id: string; weight: number }[]; tags?: { id: string; weight: number }[] } = {};
+  let parsed: { keywords?: { id: string; weight: number }[] } = {};
   try {
     const completion = await openai.chat.completions.create({
       model: GEN_MODEL,
@@ -68,25 +148,17 @@ async function rerank(
       temperature: 0.1,
     });
     parsed = JSON.parse(completion.choices[0]?.message?.content ?? "{}") as typeof parsed;
-  } catch { /* fall through to empty result */ }
+  } catch (e) {
+    console.error(`[autoTagKeywords] rerankDimension(${dimension}) failed:`, e);
+  }
 
-  const kwValidIds = new Set(kwCandidates.map((c) => c.id));
-  const tagValidIds = new Set(tagCandidates.map((c) => c.id));
-
-  const keyword_weights: Record<string, number> = {};
+  const validIds = new Set(candidates.map((c) => c.id));
+  const weights: Record<string, number> = {};
   for (const { id, weight } of parsed.keywords ?? []) {
-    if (kwValidIds.has(id) && weight >= 0.25) keyword_weights[id] = weight;
+    if (validIds.has(id) && weight >= 0.2) weights[id] = weight;
   }
 
-  const tag_weights: Record<string, number> = {};
-  for (const { id, weight } of parsed.tags ?? []) {
-    if (tagValidIds.has(id) && weight >= 0.25) tag_weights[id] = weight;
-  }
-
-  return {
-    keyword_weights: Object.keys(keyword_weights).length > 0 ? normalizeWeightsMap(keyword_weights) : {},
-    tag_weights: Object.keys(tag_weights).length > 0 ? normalizeWeightsMap(tag_weights) : {},
-  };
+  return Object.keys(weights).length > 0 ? normalizeWeightsMap(weights) : {};
 }
 
 // ─── Wrong-answer data shape ──────────────────────────────────────────────────
@@ -107,24 +179,41 @@ export async function autoTagKeywords(
   problemDescription?: string,
   wrongAnswerDescriptions?: (string | null)[],
   correctIndex?: number,
+  topicDescription?: string,
+  actionDescription?: string,
+  representationDescription?: string,
+  prerequisiteDescription?: string,
 ): Promise<{
   keyword_weights: Record<string, number>;
-  tag_weights: Record<string, number>;
+  action_weights: Record<string, number>;
+  representation_weights: Record<string, number>;
+  prerequisite_weights: Record<string, number>;
   wrong_answer_data: WrongAnswerEntry[];
 }> {
-  const empty = { keyword_weights: {}, tag_weights: {}, wrong_answer_data: [] };
+  const empty = { keyword_weights: {}, action_weights: {}, representation_weights: {}, prerequisite_weights: {}, wrong_answer_data: [] };
   if (!supabase) return empty;
 
   const problemText = [latexContent, solutionLatex, problemDescription].filter(Boolean).join("\n\n");
 
-  // Build list of wrong-answer texts to embed (null for correct index)
+  // Wrong-answer texts to embed (null at correct index)
   const waTexts: (string | null)[] = wrongAnswerDescriptions?.length
     ? wrongAnswerDescriptions.map((d, i) => (i === correctIndex ? null : (d ?? null)))
     : [];
+  const waTextsNonNull = waTexts.filter((t): t is string => t !== null);
 
-  const textsToEmbed = [problemText, ...waTexts.filter((t): t is string => t !== null)];
+  // Build batch embed list with tracked indices
+  const textsToEmbed: string[] = [problemText];
+  let topicIdx = -1, actionIdx = -1, reprIdx = -1, prereqIdx = -1;
 
-  // 1. Batch embed problem + all wrong-answer descriptions
+  if (topicDescription?.trim())          { topicIdx  = textsToEmbed.length; textsToEmbed.push([topicDescription, latexContent, solutionLatex].filter(Boolean).join("\n\n")); }
+  if (actionDescription?.trim())         { actionIdx  = textsToEmbed.length; textsToEmbed.push(actionDescription); }
+  if (representationDescription?.trim()) { reprIdx    = textsToEmbed.length; textsToEmbed.push(representationDescription); }
+  if (prerequisiteDescription?.trim())   { prereqIdx  = textsToEmbed.length; textsToEmbed.push(prerequisiteDescription); }
+
+  const waEmbStart = textsToEmbed.length;
+  textsToEmbed.push(...waTextsNonNull);
+
+  // Batch embed everything in one call
   let embeddings: number[][];
   try {
     const embRes = await openai.embeddings.create({ model: "text-embedding-3-small", input: textsToEmbed });
@@ -134,47 +223,64 @@ export async function autoTagKeywords(
   }
 
   const problemEmbedding = embeddings[0]!;
-  let waEmbIdx = 1;
+  const topicEmbedding   = topicIdx  >= 0 ? (embeddings[topicIdx]  ?? problemEmbedding) : problemEmbedding;
+  const actionEmbedding  = actionIdx >= 0 ? (embeddings[actionIdx] ?? null) : null;
+  const reprEmbedding    = reprIdx   >= 0 ? (embeddings[reprIdx]   ?? null) : null;
+  const prereqEmbedding  = prereqIdx >= 0 ? (embeddings[prereqIdx] ?? null) : null;
+
+  let waEmbIdx = waEmbStart;
   const waEmbeddings: (number[] | null)[] = waTexts.map((t) =>
     t === null ? null : (embeddings[waEmbIdx++] ?? null)
   );
 
-  // 2. Fetch in_depth keywords + tag keywords (approved, with embeddings)
-  const [{ data: kwRows }, { data: tagRows }] = await Promise.all([
-    supabase.from("learn_keywords").select("id, name, label, description, embedding")
-      .eq("tier", "in_depth").eq("status", "approved").not("embedding", "is", null),
-    supabase.from("learn_keywords").select("id, name, label, description, embedding")
-      .eq("tier", "tag").eq("status", "approved").not("embedding", "is", null),
+  const { topicRows, actionRows, reprRows } = await fetchKeywordRows(supabase);
+
+  if (!topicRows.length && !actionRows.length && !reprRows.length) return empty;
+
+  // Mean-centered top-N candidates per dimension
+  // For small catalogs (action=10, repr=8) pass all rows so LLM sees every option
+  const kwCandidates     = topNCentered(topicEmbedding,  topicRows,  20);
+  const actionCandidates = actionEmbedding  ? topNCentered(actionEmbedding,  actionRows,  actionRows.length)  : [];
+  const reprCandidates   = reprEmbedding    ? topNCentered(reprEmbedding,    reprRows,    reprRows.length)    : [];
+  const prereqCandidates = prereqEmbedding  ? topNCentered(prereqEmbedding,  topicRows,  15)                  : [];
+
+  // LLM rerank all four dimensions in parallel
+  const topicText  = topicDescription?.trim()          || problemText;
+  const actionText = actionDescription?.trim()         || problemText;
+  const reprText   = representationDescription?.trim() || problemText;
+  const prereqText = prerequisiteDescription?.trim()   || problemText;
+
+  const [keyword_weights, action_weights, representation_weights, prerequisite_weights] = await Promise.all([
+    kwCandidates.length     > 0 ? rerankDimension(openai, topicText,  kwCandidates,     "topic")          : Promise.resolve({}),
+    actionCandidates.length > 0 ? rerankDimension(openai, actionText, actionCandidates, "action")         : Promise.resolve({}),
+    reprCandidates.length   > 0 ? rerankDimension(openai, reprText,   reprCandidates,   "representation") : Promise.resolve({}),
+    prereqCandidates.length > 0 ? rerankDimension(openai, prereqText, prereqCandidates, "prerequisite")   : Promise.resolve({}),
   ]);
 
-  if (!kwRows?.length && !tagRows?.length) return empty;
-
-  const kwRows_ = (kwRows ?? []) as KwRow[];
-  const tagRows_ = (tagRows ?? []) as KwRow[];
-
-  // 3. Tag the problem
-  const kwCandidates  = topN(problemEmbedding, kwRows_,  20);
-  const tagCandidates = topN(problemEmbedding, tagRows_, 10);
-  const { keyword_weights, tag_weights } = await rerank(openai, problemText, kwCandidates, tagCandidates);
-
-  // 4. Tag each wrong answer (keyword_weights only — no action tags for individual errors)
+  // Tag wrong answers: mean-centered cosine-only against topic pool (cost-sensitive)
   const wrong_answer_data: WrongAnswerEntry[] = await Promise.all(
     waTexts.map(async (text, i): Promise<WrongAnswerEntry> => {
       if (text === null || waEmbeddings[i] === null) {
         return { description: null, embedding: null, keyword_weights: {} };
       }
       const waEmb = waEmbeddings[i]!;
-      const waCandidates = topN(waEmb, kwRows_, 15);
-      // Lightweight rerank: cosine similarity only (no LLM call per WA to keep cost down)
-      // Take top 4 candidates above threshold, normalize
+      const waCandidates = topNCentered(waEmb, topicRows, 15);
+      // Take top 4 with positive centered score (above average similarity)
       const waKw: Record<string, number> = {};
       for (const c of waCandidates.slice(0, 4)) {
-        if (c.score >= 0.35) waKw[c.id] = c.score;
+        if (c.score > 0) waKw[c.id] = c.score;
       }
-      const normalized = Object.keys(waKw).length > 0 ? normalizeWeightsMap(waKw) : {};
-      return { description: text, embedding: waEmb, keyword_weights: normalized };
+      return {
+        description: text,
+        embedding: waEmb,
+        keyword_weights: Object.keys(waKw).length > 0 ? normalizeWeightsMap(waKw) : {},
+      };
     })
   );
 
-  return { keyword_weights, tag_weights, wrong_answer_data };
+  return { keyword_weights, action_weights, representation_weights, prerequisite_weights, wrong_answer_data };
 }
+
+// ─── Exported helpers for the keyword-suggest API route ──────────────────────
+
+export { topNCentered, rerankDimension, type Candidate, type Dimension, type KwRow };

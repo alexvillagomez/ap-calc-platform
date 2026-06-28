@@ -67,23 +67,21 @@ export async function bestKeywordForQuestion(
     if (!args.categoryId) return fallback;
 
     // 1. Resolve the question embedding (passed in, or read one row).
-    //    Prefer the question's `description_embedding` (a natural-language
-    //    description of what the problem tests — better for pinpointing) when
-    //    present, else fall back to `embedding` (the raw stem). Fail-soft: a
-    //    missing column just yields no rows and we fall back to the stem vector.
+    //    Prefer the question's `problem_description_embedding` (a natural-language
+    //    description of what the problem tests — better for keyword pinpointing
+    //    than the raw stem; see migration 20260618000001). Fall back to the raw
+    //    stem `embedding` when the description hasn't been generated yet. Fail-soft:
+    //    a missing column just errors and we retry reading the stem vector alone.
     let embedding = args.embeddingVec ?? null;
     if (!Array.isArray(embedding) && args.questionId) {
-      // Try description_embedding + embedding together; if the
-      // description_embedding column doesn't exist yet (migration unapplied)
-      // the select errors, so retry reading just the stem `embedding`.
       type EmbRow = {
-        description_embedding?: unknown;
+        problem_description_embedding?: unknown;
         embedding?: unknown;
       } | null;
       let row: EmbRow = null;
       const withDesc = await supabase
         .from(args.table)
-        .select("description_embedding, embedding")
+        .select("problem_description_embedding, embedding")
         .eq("id", args.questionId)
         .maybeSingle();
       if (!withDesc.error) {
@@ -96,7 +94,7 @@ export async function bestKeywordForQuestion(
           .maybeSingle();
         row = stemOnly.data as EmbRow;
       }
-      const desc = row?.description_embedding;
+      const desc = row?.problem_description_embedding;
       const stem = row?.embedding;
       if (Array.isArray(desc) && desc.length > 0) {
         embedding = desc as number[];

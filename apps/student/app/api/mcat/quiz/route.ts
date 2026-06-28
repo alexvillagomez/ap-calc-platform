@@ -3,8 +3,10 @@ import { createClient } from "@supabase/supabase-js";
 import { fetchTemplateCards } from "@/lib/mcatTemplateCards";
 import { generateMcatQuestions, McatGenError, verifyQuestionsFast } from "@/lib/mcatGenerator";
 import { loadTargetKeywords } from "@/lib/mcatTagging";
+import { sectionFromId } from "@/lib/mcatSection";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
 import { normalizeStem, jaccardSimilarity, NEAR_DUP_THRESHOLD } from "@/lib/questionDiversity";
+import { enrichQuestionsInBackground } from "@/lib/questionEnrichment";
 
 export const runtime = "nodejs";
 
@@ -79,7 +81,7 @@ export async function POST(request: Request) {
 
   // Load keywords via loadTargetKeywords (in_depth preferred) + student states + seen
   const [allKeywords, statesRes, attemptsRes] = await Promise.all([
-    loadTargetKeywords(supabase, [category_id]),
+    loadTargetKeywords(supabase, [category_id], { excludeIntros: true }),
     supabase
       .from("mcat_student_keyword_states")
       .select("keyword_id, score, total_attempts")
@@ -97,12 +99,22 @@ export async function POST(request: Request) {
     );
   }
 
-  // Resolve keyword_ids scope — filter to ids that exist in this category
+  // Resolve keyword_ids scope. Umbrella scope = ALL of its subtopics: if a passed
+  // id is an umbrella (not in the in_depth target set), expand it to its in_depth
+  // children so an umbrella quiz aggregates every child subtopic's question pool.
   const categoryKeywordIdSet = new Set(allKeywords.map((k) => k.id));
   const rawKeywordIds = Array.isArray(body.keyword_ids) ? body.keyword_ids : [];
-  const filteredKeywordIds = rawKeywordIds.filter((id) =>
-    categoryKeywordIdSet.has(id)
-  );
+  const expandedKeywordIds = new Set<string>();
+  for (const id of rawKeywordIds) {
+    if (categoryKeywordIdSet.has(id)) {
+      expandedKeywordIds.add(id);
+    } else {
+      for (const child of allKeywords.filter((k) => k.parent_keyword_id === id)) {
+        expandedKeywordIds.add(child.id);
+      }
+    }
+  }
+  const filteredKeywordIds = [...expandedKeywordIds];
   // When the filtered set is non-empty, use it; otherwise fall back to all keywords
   const keywords =
     filteredKeywordIds.length > 0
@@ -192,6 +204,22 @@ export async function POST(request: Request) {
     return d >= bandMin && d <= bandMax ? 2.0 : 1.0;
   }
 
+  // SCOPE GATE (mirrors next-question): only use a stored question for a keyword
+  // when that keyword is the question's PRIMARY (argmax) tag or holds a
+  // substantial share — a tiny incidental weight does NOT put it in scope.
+  const SCOPE_MIN_WEIGHT = 0.34;
+  const dominantKeyword = (
+    kw: Record<string, number> | null | undefined
+  ): string | null => {
+    if (!kw) return null;
+    let best: string | null = null;
+    let bestW = -Infinity;
+    for (const [id, w] of Object.entries(kw)) {
+      if (w > bestW) { bestW = w; best = id; }
+    }
+    return best;
+  };
+
   // Gather questions covering weakest keywords (≤2 per keyword)
   // Apply rating nudge + in-band boost when ranking.
   // Also track normalised stems to avoid near-duplicates within this quiz batch.
@@ -220,8 +248,9 @@ export async function POST(request: Request) {
       .filter(
         (q) =>
           !selectedIds.has(q.id) &&
-          q.keyword_weights &&
-          Object.prototype.hasOwnProperty.call(q.keyword_weights, kwId)
+          !!q.keyword_weights &&
+          (dominantKeyword(q.keyword_weights as Record<string, number>) === kwId ||
+            ((q.keyword_weights as Record<string, number>)?.[kwId] ?? 0) >= SCOPE_MIN_WEIGHT)
       )
       .map((q) => {
         const kw2 = (q.keyword_weights as Record<string, number>) ?? {};
@@ -319,7 +348,7 @@ export async function POST(request: Request) {
         if (genResults.length === 0) return [];
         const sourceCardIds = templateCards.map((c) => c.id);
         const allRows = genResults.map((q) => ({
-          section: "biology",
+          section: sectionFromId(category_id),
           category_id,
           stem: q.stem,
           choices: q.choices,
@@ -355,6 +384,14 @@ export async function POST(request: Request) {
           .select(
             "id, stem, choices, correct_index, explanation, keyword_weights, difficulty, parent_question_id, avg_rating"
           );
+        if (inserted && inserted.length > 0) {
+          // Fire-and-forget four-dimension grounding of the new questions.
+          enrichQuestionsInBackground(
+            supabase,
+            "mcat",
+            (inserted as { id: string }[]).map((r) => r.id)
+          );
+        }
         return (inserted ?? []) as DbQuestion[];
       }
 

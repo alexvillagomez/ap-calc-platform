@@ -188,11 +188,10 @@ function PracticePageInner() {
             <span className="text-xs bg-blue-100 text-blue-700 font-medium px-2 py-1 rounded-full">
               Practice
             </span>
-            <span className="text-xs text-gray-400">{problem.difficulty < 0.3 ? "Easy" : problem.difficulty < 0.5 ? "Medium-Easy" : problem.difficulty < 0.7 ? "Medium" : problem.difficulty < 0.9 ? "Medium-Hard" : "Hard"}</span>
           </div>
           <div className="flex items-center gap-3">
             {consecutiveCorrect > 0 && (
-              <span className="text-xs text-green-600 font-medium">🔥 {consecutiveCorrect} in a row</span>
+              <span className="text-xs text-green-600 font-medium">{consecutiveCorrect} in a row</span>
             )}
             <button onClick={() => router.back()} className="text-xs text-gray-400 hover:text-gray-600">
               ← Back
@@ -233,7 +232,7 @@ function PracticePageInner() {
                     isRevealed && isSelected && !isCorrect && "bg-red-500 text-white",
                     isRevealed && !isSelected && !isCorrect && "bg-gray-200 text-gray-400",
                   )}>
-                    {isRevealed && isCorrect ? "✓" : isRevealed && isSelected && !isCorrect ? "✗" : LABELS[i]}
+                    {LABELS[i]}
                   </span>
                   <span className="ap-calc-preview flex-1 min-w-0">
                     <Preview latexContent={choice} />

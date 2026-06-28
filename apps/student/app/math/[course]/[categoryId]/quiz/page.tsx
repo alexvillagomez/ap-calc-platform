@@ -10,12 +10,12 @@ import MathFeedbackWidget from "@/components/math/MathFeedbackWidget";
 import QuestionToolbar from "@/components/practice/QuestionToolbar";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { ComboMeter } from "@/components/gamification/ComboMeter";
-import { SoundToggle } from "@/components/ui/SoundToggle";
+import { GrindMeter } from "@/components/gamification/GrindMeter";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
 import { getOrCreateMathSession } from "@/lib/mathSession";
-import { MathQuestion, diffLabel, COURSE_LABELS } from "@/components/math/mathUiTypes";
+import { MathQuestion, COURSE_LABELS } from "@/components/math/mathUiTypes";
 import type { MathCourse } from "@/lib/mathTypes";
 
 const QUIZ_COUNT = 8;
@@ -59,6 +59,7 @@ function MathCategoryQuizInner({
   const [phase, setPhase] = useState<Phase>("loading");
   const [errorMsg, setErrorMsg] = useState("");
   const [combo, setCombo] = useState(0);
+  const [sessionStart] = useState(() => Date.now());
   const [usedRefresher, setUsedRefresher] = useState(false);
 
   useStreakTouchOnce();
@@ -179,53 +180,38 @@ function MathCategoryQuizInner({
     answers.length > 0 ? Math.round((correctCount / answers.length) * 100) : 0;
 
   const currentQ = questions[currentIdx];
-  const progress = questions.length > 0 ? currentIdx / questions.length : 0;
-
-  const headingLabel = isScoped && scopeLabel
-    ? `${scopeLabel} Quiz`
-    : `${courseLabel} Quiz`;
 
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="w-full px-4 sm:px-6 py-2.5 flex items-center gap-2 flex-wrap">
-          <div className="flex items-center gap-2 min-w-0 flex-1">
+        <div className="w-full px-4 sm:px-6 py-2.5 space-y-1.5">
+          {/* Row 1 — nav controls */}
+          <div className="flex items-center gap-2">
             <Link href={backHref} className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0 whitespace-nowrap">
               {isScoped ? "← Back" : `← ${courseLabel}`}
             </Link>
-            {isScoped && scopeLabel && (
-              <span className="hidden sm:inline shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
-                {umbrellaId ? "Topic" : "Keyword"}: {scopeLabel}
-              </span>
-            )}
-            <p className="font-semibold text-neutral-900 text-sm truncate min-w-0">
-              {headingLabel}
-            </p>
+            <span className="text-[11px] uppercase tracking-wide text-neutral-400 font-medium">
+              Quiz
+            </span>
+            <div className="ml-auto flex items-center gap-2 shrink-0">
+              {phase === "quiz" && questions.length > 0 && (
+                <p className="text-xs text-neutral-500 tabular-nums shrink-0">
+                  {currentIdx + 1}/{questions.length}
+                </p>
+              )}
+              <StreakBadge />
+              <NavMenu />
+            </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
-            {phase === "quiz" && questions.length > 0 && (
-              <p className="text-xs text-neutral-500 tabular-nums shrink-0">
-                {currentIdx + 1}/{questions.length}
-              </p>
-            )}
-            <StreakBadge />
-            <SoundToggle />
-          </div>
+          {/* Row 2 — topic title gets its own room */}
+          <h1 className="font-semibold text-neutral-900 text-base leading-snug">
+            {isScoped && scopeLabel ? scopeLabel : courseLabel}
+          </h1>
         </div>
       </header>
 
-      {/* Progress bar */}
-      {phase === "quiz" && (
-        <div className="h-1 bg-neutral-200">
-          <div
-            className="h-full bg-brand-500 transition-all duration-300"
-            style={{ width: `${Math.round(progress * 100)}%` }}
-          />
-        </div>
-      )}
-
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4">
+      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4 pb-safe-bottom">
         {/* Loading */}
         {phase === "loading" && (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
@@ -259,6 +245,11 @@ function MathCategoryQuizInner({
         {/* Active quiz question */}
         {phase === "quiz" && currentQ && (
           <>
+            {/* Grind meter */}
+            <div className="pb-2">
+              <GrindMeter mode="quiz" streak={combo} answered={answers.length} startedAt={sessionStart} hidden />
+            </div>
+
             {/* Progress dots */}
             <div className="flex gap-1.5 flex-wrap justify-center">
               {questions.map((_, i) => (
@@ -274,18 +265,6 @@ function MathCategoryQuizInner({
                 />
               ))}
             </div>
-
-            {/* Difficulty chip */}
-            {(() => {
-              const diff = diffLabel(currentQ.difficulty);
-              return diff ? (
-                <div className="flex">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${diff.cls}`}>
-                    {diff.label}
-                  </span>
-                </div>
-              ) : null;
-            })()}
 
             {/* Stem */}
             <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
@@ -307,9 +286,6 @@ function MathCategoryQuizInner({
               resetSignal={currentQ.id}
               onRefresherUsed={() => setUsedRefresher(true)}
             />
-
-            {/* Combo meter */}
-            <ComboMeter combo={combo} />
 
             {/* Choices — deferred feedback */}
             <div className="space-y-2">
@@ -362,7 +338,13 @@ function MathCategoryQuizInner({
                   href={backHref}
                   className="px-5 py-2.5 rounded-xl border border-neutral-200 text-sm font-semibold hover:bg-neutral-50 transition-colors"
                 >
-                  {isScoped ? "Back" : `Back to ${courseLabel}`}
+                  {isScoped ? "Back to topic" : `Back to ${courseLabel}`}
+                </Link>
+                <Link
+                  href="/math"
+                  className="px-5 py-2.5 rounded-xl border border-neutral-200 text-sm font-semibold hover:bg-neutral-50 transition-colors"
+                >
+                  Home
                 </Link>
               </div>
             </div>

@@ -1,0 +1,279 @@
+{
+  "section": "chemistry",
+  "category_code": "C1",
+  "category_label": "Atomic Structure & Periodic Trends",
+  "order_index": 0,
+  "umbrellas": [
+    {
+      "slug": "quantum_numbers",
+      "label": "Quantum Numbers & Orbital Theory",
+      "description": "The set of four quantum numbers that specify the state of every electron in an atom, and the rules governing how many electrons each orbital can hold.",
+      "intro": {
+        "slug": "quantum_numbers_intro",
+        "label": "Quantum Numbers Overview",
+        "description": "Each electron in an atom is uniquely described by four quantum numbers: principal ($n$), angular momentum ($\\ell$), magnetic ($m_\\ell$), and spin ($m_s$). Together they encode the electron's energy level, sublevel shape, orbital orientation, and spin direction. These numbers are the foundation for electron configurations and the Pauli Exclusion Principle.",
+        "examples": ["four quantum numbers identify each electron", "$n=2, \\ell=1, m_\\ell=0, m_s=+\\tfrac{1}{2}$", "no two electrons share all four quantum numbers"]
+      },
+      "in_depth": [
+        {
+          "slug": "principal_quantum_number",
+          "label": "Principal quantum number $n$",
+          "description": "Identify the principal quantum number $n$ (positive integer 1, 2, 3, …) as the primary determinant of electron energy and distance from the nucleus; each shell $n$ holds a maximum of $2n^2$ electrons. This focuses on $n$ and shell capacity, not on sublevel shapes or orbital orientation (separate keywords).",
+          "examples": ["$n=1$ shell holds max 2 electrons ($2\\times 1^2$)", "$n=3$ shell holds max 18 electrons", "larger $n$ → higher energy, farther from nucleus"]
+        },
+        {
+          "slug": "angular_momentum_quantum_number",
+          "label": "Angular momentum quantum number $\\ell$",
+          "description": "Identify $\\ell$ (ranges 0 to $n-1$) as defining the sublevel (s, p, d, f) and the shape of the orbital; each sublevel $\\ell$ contains $2\\ell+1$ orbitals. This focuses on $\\ell$ values and sublevel identity, not on orbital orientation ($m_\\ell$) or spin ($m_s$).",
+          "examples": ["$\\ell=0$ → s sublevel (1 orbital)", "$\\ell=1$ → p sublevel (3 orbitals)", "$\\ell=2$ → d sublevel (5 orbitals)"]
+        },
+        {
+          "slug": "magnetic_quantum_number",
+          "label": "Magnetic quantum number $m_\\ell$",
+          "description": "Identify $m_\\ell$ (ranges $-\\ell$ to $+\\ell$) as specifying the spatial orientation of a particular orbital within a sublevel; each allowed $m_\\ell$ value corresponds to one orbital holding up to 2 electrons. This focuses on orientation, not on the spin quantum number $m_s$ (a separate keyword).",
+          "examples": ["p sublevel: $m_\\ell = -1, 0, +1$ → three p orbitals", "orientation of orbital in space", "number of $m_\\ell$ values = number of orbitals in sublevel"]
+        },
+        {
+          "slug": "spin_quantum_number",
+          "label": "Spin quantum number $m_s$",
+          "description": "Identify $m_s$ as having only two values ($+\\tfrac{1}{2}$ or $-\\tfrac{1}{2}$), representing the two possible spin states of an electron; each orbital holds exactly 2 electrons with opposite spins. This focuses on spin identity, not on spatial quantum numbers $n$, $\\ell$, $m_\\ell$.",
+          "examples": ["$m_s = +\\tfrac{1}{2}$ (spin-up) or $-\\tfrac{1}{2}$ (spin-down)", "one orbital → max 2 electrons, opposite spins", "spin is intrinsic angular momentum of the electron"]
+        },
+        {
+          "slug": "pauli_exclusion_principle",
+          "label": "Pauli Exclusion Principle",
+          "description": "Apply the Pauli Exclusion Principle: no two electrons in the same atom can have an identical set of all four quantum numbers, so each orbital holds at most two electrons with opposite spins. This focuses on the uniqueness rule, not on the order in which orbitals fill (Aufbau, a separate keyword).",
+          "examples": ["no two electrons share all four quantum numbers", "orbital capacity = 2 (opposite spins)", "two electrons in 1s: $(n,\\ell,m_\\ell,m_s)=(1,0,0,+\\tfrac{1}{2})$ and $(1,0,0,-\\tfrac{1}{2})$"]
+        }
+      ]
+    },
+    {
+      "slug": "orbital_shapes",
+      "label": "Orbital Shapes & Hydrogen Atom Structure",
+      "description": "The three-dimensional shapes of s, p, and d orbitals and the orbital structure of the hydrogen atom as the foundation of quantum atomic theory.",
+      "intro": {
+        "slug": "orbital_shapes_intro",
+        "label": "Orbital Shapes Overview",
+        "description": "Atomic orbitals are regions of space defined by quantum numbers where electrons are most likely to be found. The shape of an orbital is determined by $\\ell$: s orbitals are spherical, p orbitals are dumbbell-shaped, and d orbitals are more complex. Understanding these shapes explains bonding geometry and spectral properties.",
+        "examples": ["s: spherical; p: dumbbell; d: cloverleaf", "hydrogen atom is the one-electron reference case", "orbital = region of high electron probability"]
+      },
+      "in_depth": [
+        {
+          "slug": "s_orbital_shape",
+          "label": "s orbital shape",
+          "description": "Describe the s orbital ($\\ell=0$) as spherically symmetric around the nucleus, with one orbital per shell and increasing size with $n$; the 1s orbital is the innermost and lowest-energy orbital in any atom. This focuses on the spherical shape of s orbitals, not p or d orbital shapes (separate keywords).",
+          "examples": ["spherically symmetric about nucleus", "1s is smallest and lowest energy", "one s orbital per principal level"]
+        },
+        {
+          "slug": "p_orbital_shape",
+          "label": "p orbital shape",
+          "description": "Describe the p orbitals ($\\ell=1$) as dumbbell-shaped with two lobes on opposite sides of the nucleus, three orbitals per sublevel ($p_x, p_y, p_z$) oriented along perpendicular axes, and a nodal plane through the nucleus. This focuses on p orbital geometry, not s or d orbital shapes (separate keywords).",
+          "examples": ["dumbbell with two lobes", "$p_x, p_y, p_z$ along x, y, z axes", "nodal plane passes through nucleus"]
+        },
+        {
+          "slug": "d_orbital_shape",
+          "label": "d orbital shape",
+          "description": "Recognize the d orbitals ($\\ell=2$) as five orbitals per sublevel with cloverleaf or dumbbell-plus-ring shapes; the $d_{z^2}$ has two lobes along the z-axis plus a toroidal ring, while the other four ($d_{xy}, d_{xz}, d_{yz}, d_{x^2-y^2}$) are four-lobed cloverleaves. This focuses on d orbital recognition, not s or p shapes.",
+          "examples": ["5 d orbitals per sublevel", "$d_{z^2}$: two lobes + torus", "cloverleaf pattern for $d_{xy}$ etc."]
+        },
+        {
+          "slug": "hydrogen_atom_orbital_structure",
+          "label": "Orbital structure of the hydrogen atom",
+          "description": "Describe the hydrogen atom as the simplest one-electron system in which orbital energies depend only on $n$ (sublevels within the same shell are degenerate); the electron occupies the 1s orbital in the ground state and can be excited to higher $n$ levels. This focuses on the H-atom orbital framework, not multi-electron atoms where sublevels split in energy (a separate context).",
+          "examples": ["H atom: one proton + one electron", "ground state: 1s orbital", "in H, all sublevels with same $n$ are degenerate"]
+        }
+      ]
+    },
+    {
+      "slug": "electron_configuration",
+      "label": "Electron Configuration & Filling Rules",
+      "description": "The rules governing how electrons fill atomic orbitals and how to write conventional electron-configuration notation.",
+      "intro": {
+        "slug": "electron_configuration_intro",
+        "label": "Electron Configuration Overview",
+        "description": "Electron configuration describes how electrons are distributed among an atom's orbitals using the Aufbau principle (fill lowest energy first), the Pauli Exclusion Principle (max 2 electrons per orbital), and Hund's rule (maximize unpaired spins in degenerate orbitals). The result, written in standard notation (e.g., $1s^2 2s^2 2p^6$), directly determines an element's chemical behavior and periodic group.",
+        "examples": ["$1s^2 2s^2 2p^6 3s^2 3p^6 4s^2 3d^{10}$", "Aufbau + Pauli + Hund's rule", "configuration reveals valence electrons and group"]
+      },
+      "in_depth": [
+        {
+          "slug": "aufbau_principle",
+          "label": "Aufbau principle",
+          "description": "Apply the Aufbau principle: electrons fill orbitals in order of increasing energy, following the diagonal rule ($1s \\to 2s \\to 2p \\to 3s \\to 3p \\to 4s \\to 3d \\to \\ldots$), so lower-energy orbitals are occupied before higher-energy ones. This focuses on orbital filling order, not on the rule against same-spin pairing (Hund's rule, a separate keyword).",
+          "examples": ["4s fills before 3d", "diagonal mnemonic: 1s 2s 2p 3s 3p 4s 3d 4p …", "lowest energy first"]
+        },
+        {
+          "slug": "hunds_rule",
+          "label": "Hund's rule",
+          "description": "Apply Hund's rule: when filling degenerate orbitals (same sublevel), electrons occupy separate orbitals with parallel (same) spin before any orbital is doubly occupied, maximizing total spin multiplicity. This focuses on spin maximization within a sublevel, not on the energy ordering of sublevels (Aufbau, a separate keyword).",
+          "examples": ["N ($2p^3$): three singly-occupied p orbitals, all spin-up", "O ($2p^4$): one doubly-occupied + two singly-occupied", "maximizes unpaired spins → lower energy"]
+        },
+        {
+          "slug": "conventional_electron_config_notation",
+          "label": "Conventional electron-configuration notation",
+          "description": "Write an element's electron configuration in standard notation ($n\\ell^x$, e.g., $1s^2 2s^2 2p^3$) and in noble-gas shorthand (e.g., $[\\text{Ne}]3s^2 3p^3$); read off the number of valence electrons, the period, and the group directly from the notation. This focuses on writing and interpreting notation, not on the filling rules themselves (Aufbau/Hund, separate keywords).",
+          "examples": ["$\\text{P}: 1s^2 2s^2 2p^6 3s^2 3p^3$ or $[\\text{Ne}]3s^2 3p^3$", "valence electrons = outermost shell electrons", "noble-gas core shorthand"]
+        },
+        {
+          "slug": "electron_config_of_ions",
+          "label": "Electron configurations of ions",
+          "description": "Write the electron configuration of a cation or anion by removing or adding electrons from the highest-energy subshell (for transition-metal cations, remove 4s electrons before 3d electrons); use the resulting configuration to predict properties. This focuses on how ionization changes configuration, not on the ionization-energy trend (a separate keyword).",
+          "examples": ["$\\text{Fe}^{2+}$: remove 2 electrons from 4s → $[\\text{Ar}]3d^6$", "anion $\\text{Cl}^-$: add 1 electron → $[\\text{Ar}]$", "transition metals: remove 4s before 3d"]
+        }
+      ]
+    },
+    {
+      "slug": "paramagnetism_diamagnetism",
+      "label": "Paramagnetism & Diamagnetism",
+      "description": "How the presence or absence of unpaired electrons in an atom or ion determines its magnetic behavior.",
+      "intro": {
+        "slug": "paramagnetism_diamagnetism_intro",
+        "label": "Paramagnetism & Diamagnetism Overview",
+        "description": "A species with one or more unpaired electrons is paramagnetic and is attracted into a magnetic field; a species with all electrons paired is diamagnetic and is weakly repelled. Determining magnetic behavior requires counting unpaired electrons from the electron configuration. This skill directly tests Hund's rule and electron configuration.",
+        "examples": ["paramagnetic: ≥1 unpaired electron", "diamagnetic: all electrons paired", "$\\text{O}_2$ is paramagnetic (2 unpaired); $\\text{Ne}$ is diamagnetic"]
+      },
+      "in_depth": [
+        {
+          "slug": "predicting_paramagnetism",
+          "label": "Predicting paramagnetism vs. diamagnetism",
+          "description": "Determine whether an atom or ion is paramagnetic (attracted to a magnetic field, ≥1 unpaired electron) or diamagnetic (repelled, all electrons paired) by writing the electron configuration and counting unpaired electrons using Hund's rule. This focuses on using the configuration to predict magnetic behavior, not on measuring magnetic susceptibility experimentally.",
+          "examples": ["$\\text{Fe}^{3+}$: $[\\text{Ar}]3d^5$ → 5 unpaired → strongly paramagnetic", "$\\text{Zn}^{2+}$: $[\\text{Ar}]3d^{10}$ → all paired → diamagnetic", "$\\text{Cu}$ ($[\\text{Ar}]3d^{10}4s^1$) → 1 unpaired → paramagnetic"]
+        }
+      ]
+    },
+    {
+      "slug": "effective_nuclear_charge",
+      "label": "Effective Nuclear Charge & Shielding",
+      "description": "The net nuclear attraction experienced by a valence electron after accounting for the shielding effect of inner electrons.",
+      "intro": {
+        "slug": "effective_nuclear_charge_intro",
+        "label": "Effective Nuclear Charge Overview",
+        "description": "The effective nuclear charge ($Z_{\\text{eff}}$) is the net positive charge felt by an outer electron after inner (core) electrons partially cancel the full nuclear charge $Z$ through shielding: $Z_{\\text{eff}} \\approx Z - \\sigma$. Higher $Z_{\\text{eff}}$ means the nucleus pulls valence electrons in more tightly, driving trends in atomic size, ionization energy, and electronegativity across a period.",
+        "examples": ["$Z_{\\text{eff}} \\approx Z - \\sigma$", "core electrons shield; valence electrons shield each other less", "F has higher $Z_{\\text{eff}}$ than Na (same period, more protons)"]
+      },
+      "in_depth": [
+        {
+          "slug": "zeff_shielding_concept",
+          "label": "Effective nuclear charge and shielding",
+          "description": "Predict relative $Z_{\\text{eff}}$ for atoms or ions by recognizing that core electrons shield valence electrons from the full nuclear charge ($Z_{\\text{eff}} \\approx Z - \\sigma$, where $\\sigma$ is the shielding constant), and that $Z_{\\text{eff}}$ increases left-to-right across a period (more protons, same core) and stays roughly constant down a group (new shell added). This focuses on the qualitative shielding model, not on the quantitative Slater rules calculation.",
+          "examples": ["across period: $Z$ increases, core $\\sigma$ constant → $Z_{\\text{eff}}$ rises", "down group: new shell added → $Z_{\\text{eff}}$ roughly constant", "$Z_{\\text{eff}}$(F) > $Z_{\\text{eff}}$(O) → F pulls electrons more tightly"]
+        }
+      ]
+    },
+    {
+      "slug": "periodic_table_groups",
+      "label": "Periodic Table Group Classification",
+      "description": "The classification of elements into named groups based on their valence electron configuration and shared chemical characteristics.",
+      "intro": {
+        "slug": "periodic_table_groups_intro",
+        "label": "Periodic Table Groups Overview",
+        "description": "Elements in the same group (vertical column) share the same valence-electron configuration, which produces similar chemical and physical properties. Key named groups tested on the MCAT include alkali metals, alkaline earth metals, halogens, noble gases, transition metals, representative elements, and the oxygen group (chalcogens); metals and nonmetals are also distinguished by position and behavior. Knowing which group an element belongs to lets you predict reactivity without memorizing specific values.",
+        "examples": ["Group IA (alkali metals): one valence electron", "Group VIIA (halogens): seven valence electrons", "transition metals fill d sublevels"]
+      },
+      "in_depth": [
+        {
+          "slug": "alkali_metals",
+          "label": "Alkali metals (Group IA)",
+          "description": "Recognize alkali metals (Li, Na, K, Rb, Cs, Fr) as Group IA elements with the valence configuration $ns^1$, which makes them highly reactive, readily losing one electron to form $+1$ cations, and reacting vigorously with water to produce hydrogen gas and a base. This focuses on alkali metal character, not alkaline earth metals (a separate keyword).",
+          "examples": ["$ns^1$ valence configuration", "easily form $M^+$ cations (lose 1 electron)", "$2\\text{Na} + 2\\text{H}_2\\text{O} \\to 2\\text{NaOH} + \\text{H}_2$"]
+        },
+        {
+          "slug": "alkaline_earth_metals",
+          "label": "Alkaline earth metals (Group IIA)",
+          "description": "Recognize alkaline earth metals (Be, Mg, Ca, Sr, Ba, Ra) as Group IIA elements with the valence configuration $ns^2$, which makes them reactive (though less so than alkali metals), readily forming $+2$ cations by losing both valence electrons. This focuses on alkaline earth character, not alkali metals or transition metals.",
+          "examples": ["$ns^2$ valence configuration", "form $M^{2+}$ cations", "$\\text{Ca} + 2\\text{H}_2\\text{O} \\to \\text{Ca(OH)}_2 + \\text{H}_2$"]
+        },
+        {
+          "slug": "halogens",
+          "label": "Halogens (Group VIIA)",
+          "description": "Recognize halogens (F, Cl, Br, I, At) as Group VIIA elements with the valence configuration $ns^2 np^5$ (seven valence electrons), making them highly electronegative nonmetals that readily gain one electron to form $-1$ anions or form one covalent bond; reactivity decreases down the group. This focuses on halogen chemistry, not noble gases (the adjacent group).",
+          "examples": ["$ns^2 np^5$: one electron short of noble-gas config", "form $X^-$ anions or single covalent bond", "F$_2$ most reactive halogen; reactivity decreases F → I"]
+        },
+        {
+          "slug": "noble_gases",
+          "label": "Noble gases (Group VIIIA)",
+          "description": "Recognize noble gases (He, Ne, Ar, Kr, Xe, Rn) as Group VIIIA elements with a full valence shell ($ns^2 np^6$, except He $1s^2$), giving them very low reactivity, existing as monoatomic gases, and serving as the reference 'inert' configuration toward which other elements react. This focuses on noble-gas properties, not halogen reactivity.",
+          "examples": ["full valence shell → nearly chemically inert", "monoatomic gas at room temperature", "noble-gas core shorthand in electron configs"]
+        },
+        {
+          "slug": "transition_metals",
+          "label": "Transition metals",
+          "description": "Recognize transition metals (Groups IIIB–IIB, filling $3d$–$5d$ sublevels) as elements whose $d$ orbitals are partially filled, allowing variable oxidation states, colored compounds, and catalytic activity; their valence configuration is generally $(n-1)d^{1-10}ns^{0-2}$. This focuses on transition-metal defining characteristics, not main-group or representative elements.",
+          "examples": ["partially filled d sublevel", "variable oxidation states (e.g., Fe$^{2+}$/Fe$^{3+}$)", "colored complexes and catalytic behavior"]
+        },
+        {
+          "slug": "representative_elements",
+          "label": "Representative elements (main-group)",
+          "description": "Identify representative (main-group) elements as those in Groups IA–VIIIA (s- and p-block) whose properties are governed by their outermost s and p electrons; they show predictable, regular periodic trends because their valence shell is being filled in a straightforward way. This focuses on the broad main-group category, not on specific named groups (alkali metals, halogens, etc., each a separate keyword).",
+          "examples": ["Groups IA–VIIIA: s- and p-block elements", "valence electrons = group number", "predictable trends in ionization energy, electronegativity, radius"]
+        },
+        {
+          "slug": "metals_vs_nonmetals",
+          "label": "Metals vs. nonmetals",
+          "description": "Distinguish metals (left/center of periodic table: lustrous, malleable, conductive, tend to lose electrons) from nonmetals (upper right: brittle in solid form, poor conductors, tend to gain electrons), with metalloids (B, Si, Ge, As, Sb, Te) on the staircase boundary showing intermediate properties. This focuses on the metal/nonmetal distinction, not on specific group names.",
+          "examples": ["metals: left and center → lose electrons, form cations", "nonmetals: upper right → gain electrons, form anions", "metalloids on staircase boundary have intermediate properties"]
+        },
+        {
+          "slug": "oxygen_group",
+          "label": "Oxygen group / chalcogens (Group VIA)",
+          "description": "Recognize the chalcogens (O, S, Se, Te, Po) as Group VIA elements with the valence configuration $ns^2 np^4$ (six valence electrons), which drives their tendency to form $-2$ anions or two covalent bonds; oxygen is the most electronegative and reactive member. This focuses on oxygen-group/chalcogen identity, not on halogens or other groups.",
+          "examples": ["$ns^2 np^4$: two electrons short of noble gas", "commonly form $-2$ oxidation state (O$^{2-}$, S$^{2-}$)", "O most electronegative chalcogen; reactivity decreases down group"]
+        }
+      ]
+    },
+    {
+      "slug": "periodic_trends",
+      "label": "Periodic Trends",
+      "description": "The systematic variation of atomic and chemical properties (valence electrons, ionization energy, electron affinity, electronegativity, atomic radius, ionic radius) as a function of position in the periodic table.",
+      "intro": {
+        "slug": "periodic_trends_intro",
+        "label": "Periodic Trends Overview",
+        "description": "Periodic trends arise because the number of protons ($Z$) and the shielding by core electrons change predictably across periods (left to right) and down groups. The key trends tested on the MCAT are ionization energy, electron affinity, electronegativity, atomic radius, and ionic radius — each explained by how $Z_{\\text{eff}}$ and electron-shell distance change. The periodic table is provided on the exam, so the MCAT tests your ability to predict and compare trends, not to recall specific values.",
+        "examples": ["across period: $Z_{\\text{eff}}$ ↑ → smaller, more electronegative", "down group: new shell → larger, lower IE", "trends: IE, EA, EN, atomic radius, ionic radius"]
+      },
+      "in_depth": [
+        {
+          "slug": "valence_electrons",
+          "label": "Valence electrons and group number",
+          "description": "Determine the number of valence electrons from an element's group number (for main-group elements, valence electrons = group number in the IA–VIIIA convention) and use this to predict reactivity, bonding behavior, and oxidation states. This focuses on counting and using valence electrons, not on the full electron configuration notation (a separate keyword).",
+          "examples": ["Group IA → 1 valence electron", "Group VIA → 6 valence electrons", "valence electrons drive bonding and reactivity"]
+        },
+        {
+          "slug": "first_ionization_energy",
+          "label": "First ionization energy",
+          "description": "Predict and compare first ionization energies ($IE_1$, the energy to remove the first electron from a neutral gaseous atom): $IE_1$ increases left to right across a period (higher $Z_{\\text{eff}}$) and decreases down a group (electron farther from nucleus); note the small dips at Group IIA→IIIA (removing from a p vs. s sublevel) and Group VA→VIA (removing a paired electron). This focuses on first ionization, not second ionization (a separate keyword).",
+          "examples": ["$IE_1$: left→right ↑; top→bottom ↓", "noble gases have highest $IE_1$ in their period", "dip at Be→B and N→O: exceptions to smooth trend"]
+        },
+        {
+          "slug": "second_ionization_energy",
+          "label": "Second ionization energy",
+          "description": "Predict the second ionization energy ($IE_2$, the energy to remove an electron from the +1 cation): $IE_2 > IE_1$ for every element; a dramatically larger $IE_2$ relative to $IE_1$ occurs when the second electron must come from a full inner shell (e.g., Group IA elements), signaling the typical oxidation state. This focuses on $IE_2$ and the jump pattern, not first ionization ($IE_1$, a separate keyword).",
+          "examples": ["$IE_2$ always > $IE_1$", "Na: $IE_2 \\gg IE_1$ (removing from $1s^2 2s^2 2p^6$ core)", "large IE jump reveals typical oxidation state"]
+        },
+        {
+          "slug": "electron_affinity",
+          "label": "Electron affinity",
+          "description": "Predict relative electron affinities (the energy change when a neutral gaseous atom gains one electron): electron affinity generally becomes more negative (more exothermic) across a period and up a group, with halogens having the most exothermic values; note that Group IIA and VA have near-zero or positive EA due to full or half-full subshells. This focuses on electron affinity, not electronegativity (a related but distinct property, a separate keyword).",
+          "examples": ["halogens: most negative EA (strongly attract one electron)", "Noble gases: EA ≈ 0 (full shell, no gain)", "Group IIA/VA: anomalously low EA"]
+        },
+        {
+          "slug": "electronegativity",
+          "label": "Electronegativity",
+          "description": "Predict relative electronegativities (an atom's ability to attract bonding electrons in a covalent bond) using the periodic trend: increases left to right across a period and bottom to top within a group, with F the most electronegative element; use electronegativity differences to classify bonds as nonpolar covalent, polar covalent, or ionic. This focuses on the trend and qualitative use, not electron affinity or ionization energy (separate keywords).",
+          "examples": ["F most electronegative; Fr least", "across period: ↑; down group: ↓", "$\\Delta EN > 1.7$ → ionic; $0.5$–$1.7$ → polar covalent; $< 0.5$ → nonpolar covalent"]
+        },
+        {
+          "slug": "atomic_radius",
+          "label": "Atomic radius trend",
+          "description": "Predict relative atomic radii from the periodic trend: atomic radius decreases left to right across a period (increasing $Z_{\\text{eff}}$ pulls electrons closer) and increases going down a group (each new period adds a larger electron shell farther from the nucleus). This focuses on atomic (neutral atom) size, not ionic radius (a separate keyword).",
+          "examples": ["across period: radius ↓ (higher $Z_{\\text{eff}}$)", "down group: radius ↑ (new electron shell)", "F smallest among halogens; I largest"]
+        },
+        {
+          "slug": "ionic_radius",
+          "label": "Ionic radius trend",
+          "description": "Compare ionic radii to the parent atom and to isoelectronic ions: cations are smaller than the neutral atom (fewer electrons, same or more protons → higher $Z_{\\text{eff}}$ per electron); anions are larger (more electrons, same protons → lower $Z_{\\text{eff}}$ per electron); in an isoelectronic series, the ion with the most protons is smallest. This focuses on ionic size, not neutral atomic radius (a separate keyword).",
+          "examples": ["$\\text{Na}^+ < \\text{Na}$ (cation smaller than atom)", "$\\text{Cl}^- > \\text{Cl}$ (anion larger than atom)", "isoelectronic: $\\text{O}^{2-} > \\text{F}^- > \\text{Ne} > \\text{Na}^+ > \\text{Mg}^{2+}$"]
+        }
+      ]
+    }
+  ]
+}

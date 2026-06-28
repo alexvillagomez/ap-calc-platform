@@ -18,7 +18,7 @@ import { normalizeRichMathSource } from "@/lib/latexRichMathNormalize";
 export const runtime = "nodejs";
 export const maxDuration = 600;
 
-const GENERATION_MODEL = "gemini-3.5-flash";
+const GENERATION_MODEL = "gpt-5.4-mini";
 const RAG_SYSTEM_SUFFIX =
   "\n\nIMPORTANT: This is a gold-star RAG seed example. AP Exam authenticity, LaTeX correctness, and zero rendering issues take priority above all else.";
 
@@ -244,7 +244,6 @@ export async function POST(request: Request): Promise<Response> {
         const { data: insertedRow, error: insertError } = await supabase
           .from("rag_examples")
           .insert({
-            topic_id: null,
             keyword_weights: {},
             latex_content: parsed.latex_content,
             solution_latex: parsed.solution_latex,

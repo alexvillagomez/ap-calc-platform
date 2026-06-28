@@ -10,7 +10,12 @@
  */
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { updateStrengths } from "@/lib/practiceAlgorithm";
+import {
+  updateMasteryMap,
+  isMastered,
+  MASTERY_START,
+} from "@/lib/courseEngine/adaptive";
+import { nextSrsState, type FlashcardResult } from "@/lib/flashcardSrs";
 import type { MathCourse } from "@/lib/mathTypes";
 
 export const runtime = "nodejs";
@@ -75,6 +80,49 @@ export async function POST(request: Request) {
     result,
   });
 
+  // ── Spaced-repetition (Leitner) update — UNIVERSAL per-card SRS ──────────────
+  // Mirrors MCAT: shared across every math study surface (auto / category
+  // flashcards / stream / practice). Fail-soft on write errors.
+  const { data: srsPrev } = await supabase
+    .from("math_flashcard_srs")
+    .select("box, reps, lapses, learned")
+    .eq("session_id", session_id)
+    .eq("flashcard_id", flashcard_id)
+    .maybeSingle();
+
+  const transition = nextSrsState(
+    srsPrev
+      ? {
+          box: (srsPrev.box as number) ?? 1,
+          reps: (srsPrev.reps as number) ?? 0,
+          lapses: (srsPrev.lapses as number) ?? 0,
+          learned: (srsPrev.learned as boolean) ?? false,
+        }
+      : null,
+    result as FlashcardResult
+  );
+
+  const nowIso = new Date().toISOString();
+  const { error: srsError } = await supabase.from("math_flashcard_srs").upsert(
+    {
+      session_id,
+      flashcard_id,
+      category_id: flashcard.category_id as string,
+      box: transition.box,
+      due_at: transition.due_at,
+      reps: transition.reps,
+      lapses: transition.lapses,
+      learned: transition.learned,
+      last_result: result,
+      last_reviewed_at: nowIso,
+      updated_at: nowIso,
+    },
+    { onConflict: "session_id,flashcard_id" }
+  );
+  if (srsError) {
+    console.error("math/flashcard-attempt: failed to upsert SRS state", srsError.message);
+  }
+
   const keywordWeights =
     (flashcard.keyword_weights as Record<string, number>) ?? {};
   const kwIds = Object.keys(keywordWeights);
@@ -118,12 +166,20 @@ export async function POST(request: Request) {
   const currentStrengths: Record<string, number> = Object.fromEntries(
     Object.keys(filteredWeights).map((id) => [
       id,
-      (existingMap.get(id)?.score as number) ?? 0.5,
+      (existingMap.get(id)?.score as number) ?? MASTERY_START,
     ])
   );
 
-  // EMA update — got_it = correct; missed_it and dont_know = incorrect
-  const newStrengths = updateStrengths(currentStrengths, filteredWeights, correct);
+  // Logarithmic mastery update (lib/courseEngine/adaptive.ts). Source = flashcard
+  // (worth LESS than a question toward mastery — same universal state). got_it →
+  // correct; dont_know → small downgrade; missed_it → wrong. Difficulty is neutral
+  // (recall): the source weight carries the flashcard-vs-question relationship.
+  const newStrengths = updateMasteryMap(currentStrengths, filteredWeights, {
+    correct,
+    dontKnow: isDontKnow,
+    difficulty: "medium",
+    source: "flashcard",
+  });
 
   const now = new Date().toISOString();
   const upserts = Object.keys(filteredWeights).map((kwId) => {
@@ -138,9 +194,10 @@ export async function POST(request: Request) {
     const consecutiveCorrect = correct ? prevConsecutive + 1 : 0;
     const dontKnowCount = prevDontKnow + (isDontKnow ? 1 : 0);
 
-    const score = Math.min(1, Math.max(0, newStrengths[kwId] ?? 0.5));
+    const score = Math.min(1, Math.max(0, newStrengths[kwId] ?? MASTERY_START));
+    // Threshold-based mastery — no consecutive-correct gate.
     const state: "mastered" | "in_progress" =
-      score >= 0.8 && consecutiveCorrect >= 4 ? "mastered" : "in_progress";
+      isMastered(score) ? "mastered" : "in_progress";
 
     return {
       session_id,
@@ -174,5 +231,13 @@ export async function POST(request: Request) {
       upserts.map((u) => [u.keyword_id, { score: u.score, state: u.state }])
     );
 
-  return NextResponse.json({ keyword_states });
+  return NextResponse.json({
+    keyword_states,
+    srs: {
+      box: transition.box,
+      due_at: transition.due_at,
+      learned: transition.learned,
+      lapses: transition.lapses,
+    },
+  });
 }

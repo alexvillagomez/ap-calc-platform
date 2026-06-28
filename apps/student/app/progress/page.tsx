@@ -63,11 +63,11 @@ function getStateConfig(state: string): StateConfig {
   return STATE_CONFIG[state] ?? STATE_CONFIG["not_started"]!;
 }
 
-function LowSampleBadge({ show, totalAttempts }: { show: boolean; totalAttempts: number }) {
+function LowSampleBadge({ show }: { show: boolean; totalAttempts?: number }) {
   if (!show) return null;
   return (
-    <span className="text-[10px] text-amber-600 italic ml-1.5 whitespace-nowrap">
-      low sample (n={totalAttempts})
+    <span className="text-[10px] text-neutral-400 ml-1.5 whitespace-nowrap">
+      Not enough data yet
     </span>
   );
 }

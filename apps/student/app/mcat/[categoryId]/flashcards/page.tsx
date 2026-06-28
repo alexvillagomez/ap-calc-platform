@@ -1,505 +1,40 @@
 "use client";
 
-import { useState, useEffect, useRef, use, Suspense } from "react";
-import Link from "next/link";
+/**
+ * /mcat/[categoryId]/flashcards — scoped flashcard walk.
+ *
+ * Walks the in_depth keyword decks of this scope IN CURRICULUM ORDER via the
+ * shared CourseCardsMode engine:
+ *   - no scope params  → the whole category's keyword decks, first keyword first.
+ *   - ?umbrella=<id>   → that umbrella's keyword decks, in order.
+ *   - ?keyword=<id>    → just that keyword's deck.
+ * Mastered decks (known from auto / prior study, via shared keyword state) are
+ * glossed over; per-card SRS spacing interleaves; once everything is introduced it
+ * shifts to weakness-weighted random.
+ */
+
+import { use, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { LoderaLogo } from "@/components/brand/LoderaLogo";
-import { Button } from "@/components/ui/Button";
-import { ProgressBar } from "@/components/ui/ProgressBar";
-import { LoadingPanel } from "@/components/mcat/LoadingPanel";
-import FeedbackWidget from "@/components/mcat/FeedbackWidget";
-import MathText from "@/components/mcat/MathText";
-import QuestionToolbar from "@/components/practice/QuestionToolbar";
-import { primaryKeywordId } from "@/lib/primaryKeyword";
-import { getOrCreateMcatSession } from "@/lib/mcatSession";
-import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { ComboMeter } from "@/components/gamification/ComboMeter";
-import { SoundToggle } from "@/components/ui/SoundToggle";
-import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
-import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
-import { nextSrsState, MEMORIZED_BOX, type SrsState } from "@/lib/flashcardSrs";
+import CourseCardsMode from "@/components/cards/CourseCardsMode";
 
-const CARD_COUNT = 12;
-// How many cards ahead a missed card is re-queued (so it returns this session).
-const RECIRCULATE_GAP = 3;
-
-interface Flashcard {
-  id: string;
-  front: string;
-  back: string;
-  keyword_weights: Record<string, number>;
-  /** Leitner box at load time (0 = brand-new, never seen). */
-  box?: number;
-}
-
-type Result = "got_it" | "missed_it" | "dont_know";
-type CardPhase = "front" | "back";
-type PagePhase = "loading" | "study" | "done" | "error";
-
-interface CardRecord {
-  flashcard: Flashcard;
-  result: Result;
-}
-
-interface TaxonomyChild {
-  id: string;
-}
-
-interface TaxonomyUmbrella {
-  id: string;
-  children: TaxonomyChild[];
-}
-
-interface TaxonomyCategory {
-  id: string;
-  label: string;
-  umbrellas?: TaxonomyUmbrella[];
-}
-
-function McatFlashcardsInner({
-  params,
-}: {
-  params: Promise<{ categoryId: string }>;
-}) {
-  const { categoryId } = use(params);
-
-  // Scope params
+function McatScopedFlashcards({ categoryId }: { categoryId: string }) {
   const searchParams = useSearchParams();
-  const umbrellaId = searchParams.get("umbrella");
-  const keywordScopeId = searchParams.get("keyword");
-  const scopeLabel = searchParams.get("label");
-  const isScoped = !!(umbrellaId || keywordScopeId);
-  const backHref = isScoped ? `/mcat/${categoryId}` : "/mcat";
+  const umbrellaId = searchParams.get("umbrella") ?? undefined;
+  const keywordId = searchParams.get("keyword") ?? undefined;
+  const label = searchParams.get("label") ?? undefined;
+  const isScoped = !!(umbrellaId || keywordId);
 
-  const [sessionId, setSessionId] = useState("");
-  const [categoryLabel, setCategoryLabel] = useState("");
-  // Distinct cards loaded this session (for the total / progress denominator).
-  const [cards, setCards] = useState<Flashcard[]>([]);
-  // Active queue — index 0 is the current card. Missed cards are re-inserted a
-  // few positions later so they recirculate within the session until memorized.
-  const [queue, setQueue] = useState<Flashcard[]>([]);
-  // Cards that graduated (reached MEMORIZED_BOX) this session.
-  const [graduated, setGraduated] = useState<Set<string>>(new Set());
-  // Live in-session Leitner state per card id (mirrors the server SRS).
-  const localSrs = useRef<Map<string, SrsState>>(new Map());
-  const [cardPhase, setCardPhase] = useState<CardPhase>("front");
-  const [pagePhase, setPagePhase] = useState<PagePhase>("loading");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [history, setHistory] = useState<CardRecord[]>([]);
-  const [flipping, setFlipping] = useState(false);
-  // Track whether back has been seen at least once for the current card
-  const [seenBack, setSeenBack] = useState(false);
-
-  // ── Gamification ──────────────────────────────────────────────────────────
-  const [combo, setCombo] = useState(0);
-  const [usedRefresher, setUsedRefresher] = useState(false);
-
-  useStreakTouchOnce();
-
-  // Resolve umbrella → children ids via taxonomy
-  const resolveKeywordIds = async (
-    sid: string
-  ): Promise<{ keyword_id?: string; keyword_ids?: string[] }> => {
-    if (keywordScopeId) return { keyword_id: keywordScopeId };
-    if (!umbrellaId) return {};
-
-    try {
-      const r = await fetch(`/api/mcat/taxonomy?session_id=${sid}`);
-      if (!r.ok) return {};
-      const d = await r.json() as { categories: TaxonomyCategory[] };
-      const cat = (d.categories ?? []).find((c) => c.id === categoryId);
-      if (!cat?.umbrellas) return {};
-      const umb = cat.umbrellas.find((u) => u.id === umbrellaId);
-      if (!umb || umb.children.length === 0) return {};
-      return { keyword_ids: umb.children.map((c) => c.id) };
-    } catch {
-      return {};
-    }
-  };
-
-  const fetchCards = async (sid: string) => {
-    setPagePhase("loading");
-    setCards([]);
-    setQueue([]);
-    setGraduated(new Set());
-    localSrs.current = new Map();
-    setCardPhase("front");
-    setSeenBack(false);
-    setHistory([]);
-    setErrorMsg("");
-
-    try {
-      const scopeBody = await resolveKeywordIds(sid);
-
-      const res = await fetch("/api/mcat/flashcards", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          session_id: sid,
-          category_id: categoryId,
-          count: CARD_COUNT,
-          ...scopeBody,
-        }),
-      });
-      if (!res.ok) {
-        // Surface a friendly message, not the raw JSON body. The most common
-        // case here is an umbrella/section category with no drillable keywords.
-        const raw = await res.text().catch(() => "");
-        let friendly = "We couldn't load flashcards for this topic yet.";
-        try {
-          const parsed = JSON.parse(raw) as { error?: string };
-          if (parsed?.error && /no keywords|unknown category/i.test(parsed.error)) {
-            friendly = "No flashcards here yet — pick a specific topic to study.";
-          } else if (parsed?.error) {
-            friendly = parsed.error;
-          }
-        } catch {
-          /* non-JSON body → keep the generic friendly message */
-        }
-        throw new Error(friendly);
-      }
-      const data = await res.json() as { flashcards: Flashcard[] };
-      const loaded = data.flashcards ?? [];
-
-      // Seed local SRS from each card's loaded box so review cards advance from
-      // where they left off (and brand-new box-0 cards start fresh).
-      const srs = new Map<string, SrsState>();
-      for (const c of loaded) {
-        if (c.box && c.box > 0) {
-          srs.set(c.id, { box: c.box, reps: 0, lapses: 0, learned: c.box >= 5 });
-        }
-      }
-      localSrs.current = srs;
-
-      setCards(loaded);
-      setQueue(loaded);
-      setPagePhase(loaded.length > 0 ? "study" : "done");
-    } catch (e) {
-      setErrorMsg((e as Error).message ?? "Failed to load flashcards");
-      setPagePhase("error");
-    }
-  };
-
-  useEffect(() => {
-    (async () => {
-      const sid = await getOrCreateMcatSession();
-      setSessionId(sid);
-
-      try {
-        const r = await fetch(`/api/mcat/taxonomy?session_id=${sid}`);
-        if (r.ok) {
-          const d = await r.json() as { categories: TaxonomyCategory[] };
-          const cat = (d.categories ?? []).find((c) => c.id === categoryId);
-          if (cat) setCategoryLabel(cat.label);
-        }
-      } catch {
-        // Non-fatal
-      }
-
-      await fetchCards(sid);
-    })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const flipCard = () => {
-    setFlipping(true);
-    setTimeout(() => {
-      setCardPhase((prev) => {
-        const next = prev === "front" ? "back" : "front";
-        if (next === "back") setSeenBack(true);
-        return next;
-      });
-      setFlipping(false);
-    }, 150);
-  };
-
-  const gradeCard = async (result: Result) => {
-    const card = queue[0];
-    if (!card) return;
-
-    setHistory((h) => [...h, { flashcard: card, result }]);
-
-    // ── Gamification: got_it = correct, others = incorrect ────────────────
-    if (result === "got_it") {
-      setCombo((prev) => {
-        const next = comboReducer({ count: prev }, "correct").count;
-        onCorrectAnswer(next);
-        return next;
-      });
-    } else {
-      setCombo((prev) => comboReducer({ count: prev }, "incorrect").count);
-      onIncorrectAnswer();
-    }
-
-    // ── In-session spaced repetition ──────────────────────────────────────
-    // Advance the local Leitner state. A card graduates (leaves the session)
-    // once it reaches MEMORIZED_BOX; otherwise it recirculates a few cards
-    // later so missed items keep coming back until memorized.
-    const prev = localSrs.current.get(card.id) ?? null;
-    const t = nextSrsState(prev, result);
-    localSrs.current.set(card.id, {
-      box: t.box,
-      reps: t.reps,
-      lapses: t.lapses,
-      learned: t.learned,
-    });
-    const didGraduate = t.box >= MEMORIZED_BOX;
-
-    // Record attempt server-side (fire and forget — server persists SRS too)
-    fetch("/api/mcat/flashcard-attempt", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        session_id: sessionId,
-        flashcard_id: card.id,
-        result,
-        // Best-effort: server ignores unknown fields if unsupported.
-        usedRefresher,
-      }),
-    }).catch(() => {});
-
-    setUsedRefresher(false);
-
-    // Rebuild the queue.
-    const [, ...rest] = queue;
-    let nextQueue: Flashcard[];
-    if (didGraduate) {
-      setGraduated((g) => {
-        const s = new Set(g);
-        s.add(card.id);
-        return s;
-      });
-      nextQueue = rest;
-    } else {
-      const at = Math.min(rest.length, RECIRCULATE_GAP);
-      nextQueue = [...rest.slice(0, at), card, ...rest.slice(at)];
-    }
-
-    setQueue(nextQueue);
-    if (nextQueue.length === 0) {
-      setPagePhase("done");
-    } else {
-      setCardPhase("front");
-      setSeenBack(false);
-    }
-  };
-
-  const current = queue[0];
-  const gotItCount = history.filter((h) => h.result === "got_it").length;
-  const missedCount = history.filter((h) => h.result === "missed_it").length;
-  const memorizedCount = graduated.size;
-
-  // Derive heading label
-  const headingLabel = isScoped && scopeLabel
-    ? `${scopeLabel} Flashcards`
-    : categoryLabel
-    ? `${categoryLabel} Flashcards`
-    : "Flashcards";
+  const homeHref = isScoped ? `/mcat/${categoryId}` : "/mcat";
+  const courseLabel =
+    label ?? categoryId.replace(/^mcat_biology_/, "").replace(/_/g, " ");
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      {/* Header */}
-      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-2.5 flex items-center gap-2 flex-wrap">
-          <div className="flex items-center gap-2 min-w-0 flex-1">
-            <Link href={backHref} className="shrink-0">
-              <LoderaLogo size={20} />
-            </Link>
-            <Link
-              href={backHref}
-              className="text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors whitespace-nowrap"
-            >
-              {isScoped ? "← Back" : "← MCAT"}
-            </Link>
-            {isScoped && scopeLabel && (
-              <span className="hidden sm:inline shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
-                {umbrellaId ? "Topic" : "Keyword"}: {scopeLabel}
-              </span>
-            )}
-            <p className="font-semibold text-neutral-900 text-sm truncate min-w-0">
-              {headingLabel}
-            </p>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            {pagePhase === "study" && cards.length > 0 && (
-              <p className="text-xs text-neutral-500 tabular-nums shrink-0">
-                {memorizedCount}/{cards.length}
-              </p>
-            )}
-            <StreakBadge />
-            <SoundToggle />
-          </div>
-        </div>
-      </header>
-
-      {/* Progress bar */}
-      {pagePhase === "study" && cards.length > 0 && (
-        <ProgressBar
-          value={Math.round((memorizedCount / cards.length) * 100)}
-          size="xs"
-          color="brand"
-          label="Flashcard progress"
-          className="rounded-none"
-        />
-      )}
-
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4">
-        {/* Loading */}
-        {pagePhase === "loading" && (
-          <LoadingPanel
-            message="Preparing your flashcards…"
-            sub="This can take 5–30 seconds"
-          />
-        )}
-
-        {/* Error */}
-        {pagePhase === "error" && (
-          <div className="rounded-xl border border-error-200 bg-error-50 p-6 text-center">
-            <p className="text-sm text-error-600 mb-3">
-              {errorMsg || "Failed to load flashcards"}
-            </p>
-            <Button variant="primary" size="sm" onClick={() => fetchCards(sessionId)}>
-              Try again
-            </Button>
-          </div>
-        )}
-
-        {/* Study phase */}
-        {pagePhase === "study" && current && (
-          <>
-            {/* Card — click anywhere to flip */}
-            <button
-              type="button"
-              onClick={flipCard}
-              className={`w-full text-left bg-white rounded-2xl border-2 shadow-brand-sm p-6 min-h-[180px] flex flex-col justify-between transition-opacity duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 ${
-                flipping ? "opacity-0" : "opacity-100"
-              } ${cardPhase === "front" ? "border-neutral-200" : "border-brand-300"}`}
-            >
-              {cardPhase === "front" ? (
-                <div>
-                  <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-3">
-                    Front
-                  </p>
-                  <p className="text-base font-medium text-neutral-900 leading-relaxed">
-                    <MathText>{current.front}</MathText>
-                  </p>
-                </div>
-              ) : (
-                <div>
-                  <p className="text-xs font-semibold text-brand-500 uppercase tracking-wide mb-3">
-                    Back
-                  </p>
-                  <p className="text-base text-neutral-800 leading-relaxed">
-                    <MathText>{current.back}</MathText>
-                  </p>
-                </div>
-              )}
-              <p className="text-xs text-neutral-300 mt-4 text-right select-none">
-                {cardPhase === "back" ? "tap to flip back" : "tap to flip"}
-              </p>
-            </button>
-
-            <QuestionToolbar
-              system="mcat"
-              keywordId={primaryKeywordId(current.keyword_weights)}
-              sessionId={sessionId}
-              questionId={current.id}
-              contentType="flashcard"
-              resetSignal={current.id}
-              onRefresherUsed={() => setUsedRefresher(true)}
-            />
-
-            {/* Show answer button — only on front when not yet seen back */}
-            {cardPhase === "front" && !seenBack && (
-              <Button variant="primary" size="lg" className="w-full" onClick={flipCard}>
-                Show answer
-              </Button>
-            )}
-
-            {/* Grade buttons — only after back has been seen at least once */}
-            {seenBack && (
-              <>
-                {/* Combo meter */}
-                <ComboMeter combo={combo} />
-
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => gradeCard("missed_it")}
-                    className="flex-1 py-3 rounded-xl bg-error-50 border border-error-200 text-error-700 text-sm font-semibold hover:bg-error-100 transition-colors"
-                  >
-                    ✗ Missed it
-                  </button>
-                  <button
-                    onClick={() => gradeCard("got_it")}
-                    className="flex-1 py-3 rounded-xl bg-success-50 border border-success-200 text-success-700 text-sm font-semibold hover:bg-success-100 transition-colors"
-                  >
-                    ✓ Got it
-                  </button>
-                </div>
-                <div className="flex justify-center">
-                  <button
-                    onClick={() => gradeCard("dont_know")}
-                    className="text-xs text-neutral-400 hover:text-neutral-600 underline"
-                  >
-                    I didn&apos;t know this
-                  </button>
-                </div>
-                <FeedbackWidget
-                  sessionId={sessionId}
-                  contentType="flashcard"
-                  contentId={current.id}
-                  className="px-1"
-                />
-              </>
-            )}
-          </>
-        )}
-
-        {/* Completion screen */}
-        {pagePhase === "done" && (
-          <div className="text-center py-8 space-y-5">
-            <div className="bg-white rounded-2xl border border-neutral-200 shadow-brand-sm p-6">
-              <p className="text-3xl mb-2">🎉</p>
-              <p className="text-xl font-bold text-neutral-900 mb-1">
-                {memorizedCount > 0
-                  ? `${memorizedCount} card${memorizedCount !== 1 ? "s" : ""} memorized!`
-                  : "Session complete!"}
-              </p>
-              <p className="text-xs text-neutral-500 mb-2">
-                Memorized cards return in a day or two; missed ones come back sooner.
-              </p>
-              <div className="flex justify-center gap-6 mt-4">
-                <div className="text-center">
-                  <p className="text-xl font-bold text-success-500">{memorizedCount}</p>
-                  <p className="text-xs text-neutral-500">Memorized</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xl font-bold text-success-400">{gotItCount}</p>
-                  <p className="text-xs text-neutral-500">Got it</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xl font-bold text-error-500">
-                    {missedCount + history.filter((h) => h.result === "dont_know").length}
-                  </p>
-                  <p className="text-xs text-neutral-500">Missed</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2 sm:flex-row justify-center">
-              <Button variant="primary" size="lg" onClick={() => fetchCards(sessionId)}>
-                More cards
-              </Button>
-              <Link href={backHref}>
-                <Button variant="secondary" size="lg">
-                  {isScoped ? "Back" : "Back to MCAT"}
-                </Button>
-              </Link>
-            </div>
-          </div>
-        )}
-      </main>
-    </div>
+    <CourseCardsMode
+      system="mcat"
+      courseLabel={courseLabel}
+      homeHref={homeHref}
+      scope={{ categoryId, umbrellaId, keywordId, label }}
+    />
   );
 }
 
@@ -508,16 +43,19 @@ export default function McatFlashcardsPage({
 }: {
   params: Promise<{ categoryId: string }>;
 }) {
+  const { categoryId } = use(params);
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="relative w-10 h-10">
-          <div className="w-10 h-10 rounded-full border-4 border-brand-100" />
-          <div className="absolute inset-0 rounded-full border-4 border-brand-500 border-t-transparent animate-spin" />
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+          <div className="relative w-10 h-10">
+            <div className="w-10 h-10 rounded-full border-4 border-brand-100" />
+            <div className="absolute inset-0 rounded-full border-4 border-brand-500 border-t-transparent animate-spin" />
+          </div>
         </div>
-      </div>
-    }>
-      <McatFlashcardsInner params={params} />
+      }
+    >
+      <McatScopedFlashcards categoryId={categoryId} />
     </Suspense>
   );
 }

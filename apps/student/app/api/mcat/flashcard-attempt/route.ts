@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { updateStrengths } from "@/lib/practiceAlgorithm";
+import {
+  updateMasteryMap,
+  isMastered,
+  MASTERY_START,
+} from "@/lib/courseEngine/adaptive";
 import { nextSrsState, type FlashcardResult } from "@/lib/flashcardSrs";
 
 export const runtime = "nodejs";
@@ -159,16 +163,19 @@ export async function POST(request: Request) {
   const currentStrengths: Record<string, number> = Object.fromEntries(
     Object.keys(filteredWeights).map((id) => [
       id,
-      (existingMap.get(id)?.score as number) ?? 0.5,
+      (existingMap.get(id)?.score as number) ?? MASTERY_START,
     ])
   );
 
-  // EMA update — got_it = correct; missed_it and dont_know = incorrect
-  const newStrengths = updateStrengths(
-    currentStrengths,
-    filteredWeights,
-    correct
-  );
+  // Logarithmic mastery update (lib/courseEngine/adaptive.ts). Source = flashcard
+  // (worth less than a question; same universal state). got_it → correct;
+  // dont_know → small downgrade; missed_it → wrong. Neutral difficulty.
+  const newStrengths = updateMasteryMap(currentStrengths, filteredWeights, {
+    correct,
+    dontKnow: isDontKnow,
+    difficulty: "medium",
+    source: "flashcard",
+  });
 
   const now = new Date().toISOString();
   const upserts = Object.keys(filteredWeights).map((kwId) => {
@@ -183,9 +190,10 @@ export async function POST(request: Request) {
     const consecutiveCorrect = correct ? prevConsecutive + 1 : 0;
     const dontKnowCount = prevDontKnow + (isDontKnow ? 1 : 0);
 
-    const score = Math.min(1, Math.max(0, newStrengths[kwId] ?? 0.5));
+    const score = Math.min(1, Math.max(0, newStrengths[kwId] ?? MASTERY_START));
+    // Threshold-based mastery — no consecutive-correct gate.
     const state: "mastered" | "in_progress" =
-      score >= 0.8 && consecutiveCorrect >= 4 ? "mastered" : "in_progress";
+      isMastered(score) ? "mastered" : "in_progress";
 
     return {
       session_id,

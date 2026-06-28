@@ -133,6 +133,7 @@ export function Preview({
       const rangeX = parseRangePair(seg.rangeX, [-3, 3]);
       const rangeY = parseRangePair(seg.rangeY, [-3, 3]);
       const pts = parsePoints(seg.points ?? "");
+      const equalScale = seg.equalScale.trim().toLowerCase() !== "false";
       nodes.push(
         <FunctionGraph
           key={`preview-${keyIndex++}`}
@@ -140,6 +141,7 @@ export function Preview({
           rangeX={rangeX}
           rangeY={rangeY}
           points={pts}
+          equalScale={equalScale}
         />
       );
       continue;
@@ -252,7 +254,7 @@ export function Preview({
       style={
         useProblemTypography
           ? {
-              fontFamily: "'Times New Roman', Times, serif",
+              fontFamily: "KaTeX_Main, 'Times New Roman', serif",
               fontSize: "18px",
               lineHeight: "1.5",
             }

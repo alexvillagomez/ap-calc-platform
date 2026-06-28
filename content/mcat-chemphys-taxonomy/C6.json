@@ -1,0 +1,317 @@
+{
+  "section": "chemistry",
+  "category_code": "C6",
+  "category_label": "Acids & Bases",
+  "order_index": 5,
+  "umbrellas": [
+    {
+      "slug": "bronsted_lowry_definitions",
+      "label": "Brønsted–Lowry Definitions & Conjugate Pairs",
+      "description": "The Brønsted–Lowry framework defines acids and bases by proton transfer and introduces conjugate acid–base pairs.",
+      "intro": {
+        "slug": "bronsted_lowry_definitions_intro",
+        "label": "Brønsted–Lowry Definitions Overview",
+        "description": "In the Brønsted–Lowry model, an acid donates a proton ($\\text{H}^+$) and a base accepts one — every acid–base reaction transfers a proton from donor to acceptor. Every acid has a conjugate base (it minus $\\text{H}^+$), and every base has a conjugate acid (it plus $\\text{H}^+$). This proton-transfer framework underlies pH, $K_a$/$K_b$, buffers, and titration.",
+        "examples": ["acid = proton donor; base = proton acceptor", "$\\text{NH}_3 + \\text{H}_2\\text{O} \\rightleftharpoons \\text{NH}_4^+ + \\text{OH}^-$", "conjugate pair differs by one $\\text{H}^+$"]
+      },
+      "in_depth": [
+        {
+          "slug": "bronsted_lowry_acid_base",
+          "label": "Brønsted–Lowry acid and base definition",
+          "description": "Identify a Brønsted–Lowry acid as a proton ($\\text{H}^+$) donor and a Brønsted–Lowry base as a proton acceptor in any aqueous or non-aqueous reaction. This focuses on the proton-transfer definition, not the electron-pair Lewis definition (built in C2).",
+          "examples": ["$\\text{HCl}$ donates $\\text{H}^+$ to water — Brønsted acid", "$\\text{NH}_3$ accepts $\\text{H}^+$ — Brønsted base", "proton transfer identifies acid/base roles"]
+        },
+        {
+          "slug": "conjugate_acid_base_pairs",
+          "label": "Conjugate acid–base pairs",
+          "description": "Identify conjugate acid–base pairs in a proton-transfer equilibrium: the conjugate base of an acid is the acid minus one proton, and the conjugate acid of a base is the base plus one proton. This focuses on recognizing and labeling the two conjugate pairs in a reaction, not on calculating their $K_a$/$K_b$ values (separate keywords).",
+          "examples": ["$\\text{NH}_4^+$/$\\text{NH}_3$ is a conjugate pair", "conjugate base = acid $-$ $\\text{H}^+$", "two conjugate pairs in every proton-transfer equation"]
+        }
+      ]
+    },
+    {
+      "slug": "water_ionization_ph",
+      "label": "Ionization of Water & pH Scale",
+      "description": "Water self-ionizes to give $K_w = [\\text{H}^+][\\text{OH}^-] = 10^{-14}$ at 25°C, establishing the pH and pOH scales and setting the neutral point at pH 7.",
+      "intro": {
+        "slug": "water_ionization_ph_intro",
+        "label": "Water Ionization and pH Overview",
+        "description": "Pure water autoionizes: $\\text{H}_2\\text{O} \\rightleftharpoons \\text{H}^+ + \\text{OH}^-$, with $K_w = [\\text{H}^+][\\text{OH}^-] = 10^{-14}$ at 25°C. pH is defined as $-\\log[\\text{H}^+]$ and pOH as $-\\log[\\text{OH}^-]$, and they always sum to 14. These relationships let you convert between $[\\text{H}^+]$, $[\\text{OH}^-]$, pH, and pOH for any aqueous solution.",
+        "examples": ["$K_w = 10^{-14}$ at 25°C", "$\\text{pH} = -\\log[\\text{H}^+]$", "neutral water: $\\text{pH} = 7$"]
+      },
+      "in_depth": [
+        {
+          "slug": "kw_water_autoionization",
+          "label": "Water autoionization and $K_w$",
+          "description": "Apply the water-ionization equilibrium $K_w = [\\text{H}^+][\\text{OH}^-] = 10^{-14}$ at 25°C to relate $[\\text{H}^+]$ and $[\\text{OH}^-]$ in any aqueous solution. This focuses on $K_w$ as a constant linking $[\\text{H}^+]$ and $[\\text{OH}^-]$, not on the pH formula itself (a separate keyword).",
+          "examples": ["$K_w = 10^{-14}$ at 25 °C, 1 atm", "if $[\\text{H}^+] = 10^{-3}$ M then $[\\text{OH}^-] = 10^{-11}$ M", "acidic: $[\\text{H}^+] > 10^{-7}$ M"]
+        },
+        {
+          "slug": "ph_definition_scale",
+          "label": "Definition of pH and the pH scale",
+          "description": "Define $\\text{pH} = -\\log[\\text{H}^+]$ and use the scale (0–14 in aqueous solution at 25°C) to classify solutions as acidic ($\\text{pH} < 7$), neutral ($\\text{pH} = 7$), or basic ($\\text{pH} > 7$). This focuses on the definition and scale, not on calculating pH from specific acid/base concentrations (separate keywords).",
+          "examples": ["$\\text{pH} = -\\log[\\text{H}^+]$", "pH 7 = neutral; pH < 7 = acidic; pH > 7 = basic", "each pH unit = 10× change in $[\\text{H}^+]$"]
+        },
+        {
+          "slug": "ph_poh_relationship",
+          "label": "$\\text{pH} + \\text{pOH} = 14$",
+          "description": "Use the relation $\\text{pH} + \\text{pOH} = 14$ (derived from $-\\log K_w$ at 25°C) to convert between pH and pOH when one is known. This focuses on the complementary relationship between pH and pOH, not on $K_w$ itself (a separate keyword).",
+          "examples": ["$\\text{pH} + \\text{pOH} = 14$ at 25°C", "pOH of a solution at pH 11 is 3", "$\\text{pOH} = -\\log[\\text{OH}^-]$"]
+        }
+      ]
+    },
+    {
+      "slug": "strong_acids_bases",
+      "label": "Strong Acids & Bases",
+      "description": "Strong acids and bases dissociate completely in water; pH is calculated directly from their molarity without an equilibrium expression.",
+      "intro": {
+        "slug": "strong_acids_bases_intro",
+        "label": "Strong Acids and Bases Overview",
+        "description": "A strong acid or base dissociates essentially 100% in dilute aqueous solution, so $[\\text{H}^+]$ (or $[\\text{OH}^-]$) equals the initial concentration. Common strong acids include $\\text{HCl}$, $\\text{HBr}$, $\\text{HI}$, $\\text{H}_2\\text{SO}_4$, $\\text{HNO}_3$, and $\\text{HClO}_4$; strong bases include group-1 hydroxides ($\\text{NaOH}$, $\\text{KOH}$) and barium hydroxide. Because dissociation is complete, no equilibrium constant is needed — just molarity → pH.",
+        "examples": ["HCl, HBr, HI, $\\text{HNO}_3$, $\\text{H}_2\\text{SO}_4$, $\\text{HClO}_4$ = six strong acids", "NaOH, KOH fully dissociate", "$\\text{pH} = -\\log(C_{\\text{acid}})$ for strong monoprotic acid"]
+      },
+      "in_depth": [
+        {
+          "slug": "strong_acid_identification",
+          "label": "Identifying strong acids",
+          "description": "Recognize the six common strong acids ($\\text{HCl}$, $\\text{HBr}$, $\\text{HI}$, $\\text{H}_2\\text{SO}_4$, $\\text{HNO}_3$, $\\text{HClO}_4$) and predict complete dissociation in dilute aqueous solution. This focuses on classification (which acids are strong), not on pH calculation from their concentrations (a separate keyword).",
+          "examples": ["6 strong acids: HCl HBr HI $\\text{HNO}_3$ $\\text{H}_2\\text{SO}_4$ $\\text{HClO}_4$", "strong acid → 100% dissociation", "no $K_a$ expression needed for strong acids"]
+        },
+        {
+          "slug": "strong_base_identification",
+          "label": "Identifying strong bases",
+          "description": "Recognize common strong bases (group-1 metal hydroxides: $\\text{LiOH}$, $\\text{NaOH}$, $\\text{KOH}$, $\\text{RbOH}$, $\\text{CsOH}$; also $\\text{Ba(OH)_2}$ and $\\text{Sr(OH)_2}$) and predict complete dissociation. This focuses on classification, not on pH/pOH calculation (a separate keyword).",
+          "examples": ["NaOH, KOH, LiOH: group-1 hydroxides", "$\\text{Ba(OH)_2}$ → 2 $\\text{OH}^-$ per formula unit", "strong base → 100% dissociation"]
+        },
+        {
+          "slug": "ph_strong_acid_base_calc",
+          "label": "pH calculation for strong acids and bases",
+          "description": "Calculate the pH of a strong acid solution from its molarity using $\\text{pH} = -\\log[\\text{H}^+]$ (where $[\\text{H}^+] = C_{\\text{acid}}$), and calculate pH of a strong base using $[\\text{OH}^-] = C_{\\text{base}}$ then $\\text{pH} = 14 - \\text{pOH}$. This focuses on strong-acid/base pH (complete dissociation, no equilibrium), not weak-acid/base pH from $K_a$/$K_b$ (separate keywords).",
+          "examples": ["0.01 M HCl → $\\text{pH} = 2$", "0.1 M NaOH → pOH = 1 → pH = 13", "diprotic $\\text{H}_2\\text{SO}_4$: both protons at MCAT depth"]
+        }
+      ]
+    },
+    {
+      "slug": "weak_acids_bases_equilibria",
+      "label": "Weak Acids & Bases — Equilibria",
+      "description": "Weak acids and bases partially dissociate in water; their equilibrium is quantified by $K_a$, $K_b$, $\\text{p}K_a$, $\\text{p}K_b$, and the pH is found using an equilibrium ICE-table approach.",
+      "intro": {
+        "slug": "weak_acids_bases_equilibria_intro",
+        "label": "Weak Acid/Base Equilibria Overview",
+        "description": "A weak acid ($\\text{HA}$) or weak base ($\\text{B}$) establishes a partial-dissociation equilibrium in water, described by $K_a$ or $K_b$. The logarithmic forms $\\text{p}K_a = -\\log K_a$ and $\\text{p}K_b = -\\log K_b$ rank acid/base strength: smaller $\\text{p}K_a$ (larger $K_a$) = stronger acid. pH calculations use an ICE table or the small-$x$ approximation when $K_a \\ll C$.",
+        "examples": ["$K_a = \\frac{[\\text{H}^+][\\text{A}^-]}{[\\text{HA}]}$", "smaller $\\text{p}K_a$ → stronger weak acid", "ICE table or small-$x$ approx for pH"]
+      },
+      "in_depth": [
+        {
+          "slug": "ka_definition_expression",
+          "label": "Acid dissociation constant $K_a$",
+          "description": "Write the $K_a$ expression for a weak acid dissociation $\\text{HA} \\rightleftharpoons \\text{H}^+ + \\text{A}^-$ as $K_a = \\frac{[\\text{H}^+][\\text{A}^-]}{[\\text{HA}]}$, and use $K_a$ magnitude to rank relative acid strength. This focuses on the definition and expression for $K_a$, not on calculating pH from it (a separate keyword).",
+          "examples": ["$K_a = \\frac{[\\text{H}^+][\\text{A}^-]}{[\\text{HA}]}$", "larger $K_a$ → stronger weak acid", "acetic acid: $K_a \\approx 1.8 \\times 10^{-5}$"]
+        },
+        {
+          "slug": "kb_definition_expression",
+          "label": "Base dissociation constant $K_b$",
+          "description": "Write the $K_b$ expression for a weak base $\\text{B} + \\text{H}_2\\text{O} \\rightleftharpoons \\text{BH}^+ + \\text{OH}^-$ as $K_b = \\frac{[\\text{BH}^+][\\text{OH}^-]}{[\\text{B}]}$, and use the conjugate relationship $K_a \\cdot K_b = K_w = 10^{-14}$ to interconvert. This focuses on $K_b$ and the conjugate relationship, not on calculating $\\text{pH}$ from it (a separate keyword).",
+          "examples": ["$K_b = \\frac{[\\text{BH}^+][\\text{OH}^-]}{[\\text{B}]}$", "$K_a \\cdot K_b = K_w = 10^{-14}$", "stronger base → larger $K_b$, smaller $K_a$ of conjugate acid"]
+        },
+        {
+          "slug": "pka_pkb_definitions",
+          "label": "$\\text{p}K_a$ and $\\text{p}K_b$",
+          "description": "Convert between $K_a$ and $\\text{p}K_a = -\\log K_a$ (and $K_b$ and $\\text{p}K_b = -\\log K_b$), and use the relation $\\text{p}K_a + \\text{p}K_b = 14$ to interconvert a conjugate pair. This focuses on the logarithmic form and conjugate relationship, not on the Henderson–Hasselbalch application (a separate keyword).",
+          "examples": ["$\\text{p}K_a = -\\log K_a$", "$\\text{p}K_a + \\text{p}K_b = 14$ for a conjugate pair", "lower $\\text{p}K_a$ = stronger acid"]
+        },
+        {
+          "slug": "weak_acid_ph_calculation",
+          "label": "pH of a weak acid solution",
+          "description": "Calculate the pH of a weak acid solution using an ICE table or the small-$x$ approximation: $[\\text{H}^+] \\approx \\sqrt{K_a \\cdot C}$ when $K_a \\ll C$. This focuses on pH from weak acid dissociation only, not from a weak base or salt solution (separate keywords).",
+          "examples": ["$[\\text{H}^+] \\approx \\sqrt{K_a \\cdot C}$ (small-$x$ approx)", "ICE table: HA → H$^+$ + A$^-$", "check approximation: $x/C < 5\\%$"]
+        },
+        {
+          "slug": "weak_base_ph_calculation",
+          "label": "pH of a weak base solution",
+          "description": "Calculate the pH of a weak base solution using $[\\text{OH}^-] \\approx \\sqrt{K_b \\cdot C}$, then convert to pH via $\\text{pOH} = -\\log[\\text{OH}^-]$ and $\\text{pH} = 14 - \\text{pOH}$. This focuses on weak-base pH, not weak-acid or salt solution pH (separate keywords).",
+          "examples": ["$[\\text{OH}^-] \\approx \\sqrt{K_b \\cdot C}$", "ammonia 0.1 M → find pOH → pH", "$\\text{pH} = 14 - \\text{pOH}$"]
+        },
+        {
+          "slug": "weak_acid_with_salt",
+          "label": "Dissociation of weak acid with added salt",
+          "description": "Predict the effect of adding the conjugate base salt on a weak acid equilibrium (common-ion effect): added $\\text{A}^-$ suppresses $[\\text{H}^+]$ and raises pH. This focuses on the common-ion suppression of weak-acid dissociation, not on the buffer capacity formula (Henderson–Hasselbalch, a separate keyword).",
+          "examples": ["adding $\\text{NaA}$ to $\\text{HA}$ → less dissociation", "common-ion effect raises pH of weak acid", "$[\\text{H}^+]$ reduced when $[\\text{A}^-]_0 \\gg 0$"]
+        },
+        {
+          "slug": "polyprotic_acids",
+          "label": "Polyprotic acids",
+          "description": "Analyze stepwise dissociation of polyprotic acids (e.g., $\\text{H}_2\\text{CO}_3$, $\\text{H}_3\\text{PO}_4$): each step has its own $K_{a1} > K_{a2} > K_{a3}$ because removing successive protons from an increasingly negative ion is harder. This focuses on sequential dissociation and the ordering of $K_a$ values, not on single-proton weak acid pH (a separate keyword).",
+          "examples": ["$K_{a1} \\gg K_{a2}$ for diprotic/triprotic acids", "$\\text{H}_2\\text{CO}_3 \\rightarrow \\text{HCO}_3^- \\rightarrow \\text{CO}_3^{2-}$", "pH determined mainly by first dissociation"]
+        }
+      ]
+    },
+    {
+      "slug": "salt_hydrolysis",
+      "label": "Salt Hydrolysis & pH of Salt Solutions",
+      "description": "Salts of weak acids or weak bases undergo hydrolysis in water, making the solution acidic or basic; predicting the pH direction requires identifying which ion reacts with water.",
+      "intro": {
+        "slug": "salt_hydrolysis_intro",
+        "label": "Salt Hydrolysis Overview",
+        "description": "When a salt dissolves, its ions may react with water (hydrolyze): the conjugate base of a weak acid ($\\text{A}^-$) accepts a proton to make OH⁻ (basic solution), and the conjugate acid of a weak base ($\\text{BH}^+$) donates a proton to make H⁺ (acidic solution). Salts of strong acid + strong base give neutral solutions. The pH of a salt solution is calculated from the $K_a$ or $K_b$ of the hydrolyzing ion.",
+        "examples": ["$\\text{CH}_3\\text{COO}^-$ hydrolyzes → basic solution", "$\\text{NH}_4^+$ hydrolyzes → acidic solution", "NaCl: neither ion hydrolyzes → pH 7"]
+      },
+      "in_depth": [
+        {
+          "slug": "hydrolysis_weak_acid_salt",
+          "label": "Hydrolysis of the salt of a weak acid",
+          "description": "Predict that dissolving the salt of a weak acid (e.g., sodium acetate) gives a basic solution because the anion $\\text{A}^-$ acts as a Brønsted base ($\\text{A}^- + \\text{H}_2\\text{O} \\rightleftharpoons \\text{HA} + \\text{OH}^-$), and calculate pH using $K_b = K_w/K_a$. This focuses on anionic hydrolysis to give OH⁻, not cationic hydrolysis (a separate keyword).",
+          "examples": ["$\\text{NaCH}_3\\text{COO}$ solution is basic", "$K_b(\\text{A}^-) = K_w/K_a(\\text{HA})$", "$[\\text{OH}^-] \\approx \\sqrt{K_b \\cdot C}$"]
+        },
+        {
+          "slug": "hydrolysis_weak_base_salt",
+          "label": "Hydrolysis of the salt of a weak base",
+          "description": "Predict that dissolving the salt of a weak base (e.g., ammonium chloride) gives an acidic solution because the cation $\\text{BH}^+$ donates a proton ($\\text{BH}^+ \\rightleftharpoons \\text{B} + \\text{H}^+$), and calculate pH using $K_a = K_w/K_b$. This focuses on cationic hydrolysis to give H⁺, not anionic hydrolysis (a separate keyword).",
+          "examples": ["$\\text{NH}_4\\text{Cl}$ solution is acidic", "$K_a(\\text{BH}^+) = K_w/K_b(\\text{B})$", "$[\\text{H}^+] \\approx \\sqrt{K_a \\cdot C}$"]
+        },
+        {
+          "slug": "salt_solution_ph_prediction",
+          "label": "Predicting the pH direction of salt solutions",
+          "description": "Classify any salt as acidic, basic, or neutral by identifying which ion (if any) hydrolyzes: strong acid + strong base → neutral; weak acid + strong base → basic; strong acid + weak base → acidic; weak acid + weak base → compare $K_a$ vs $K_b$ of hydrolysis. This focuses on qualitative pH direction, not quantitative calculation (separate keywords).",
+          "examples": ["NaCl → neutral; $\\text{NaCH}_3\\text{COO}$ → basic", "$\\text{NH}_4\\text{Cl}$ → acidic", "weak–weak salt: compare $K_a$ vs $K_b$ to determine direction"]
+        }
+      ]
+    },
+    {
+      "slug": "henderson_hasselbalch_buffers",
+      "label": "Buffers & Henderson–Hasselbalch",
+      "description": "A buffer resists pH change by containing a weak acid and its conjugate base in comparable amounts; the pH is calculated with the Henderson–Hasselbalch equation.",
+      "intro": {
+        "slug": "henderson_hasselbalch_buffers_intro",
+        "label": "Buffers and Henderson–Hasselbalch Overview",
+        "description": "A buffer solution contains a weak acid (HA) and its conjugate base (A⁻) at concentrations that are large and comparable, so the solution resists pH change when small amounts of strong acid or base are added. The pH is given by the Henderson–Hasselbalch equation: $\\text{pH} = \\text{p}K_a + \\log\\frac{[\\text{A}^-]}{[\\text{HA}]}$. Common biological buffers include the carbonate ($\\text{H}_2\\text{CO}_3/\\text{HCO}_3^-$) and phosphate ($\\text{H}_2\\text{PO}_4^-/\\text{HPO}_4^{2-}$) systems.",
+        "examples": ["$\\text{pH} = \\text{p}K_a + \\log\\frac{[\\text{A}^-]}{[\\text{HA}]}$", "buffer works best when $[\\text{A}^-]/[\\text{HA}] \\approx 1$", "carbonate and phosphate: common biological buffers"]
+      },
+      "in_depth": [
+        {
+          "slug": "buffer_definition_mechanism",
+          "label": "Buffer definition and resistance to pH change",
+          "description": "Define a buffer as a solution of a weak acid and its conjugate base (or weak base and its conjugate acid) that resists pH change by neutralizing added $\\text{H}^+$ (conjugate base reacts) or added $\\text{OH}^-$ (weak acid reacts). This focuses on the mechanism of buffering, not on the Henderson–Hasselbalch calculation (a separate keyword).",
+          "examples": ["add $\\text{H}^+$: $\\text{A}^- + \\text{H}^+ \\rightarrow \\text{HA}$ (pH barely changes)", "add $\\text{OH}^-$: $\\text{HA} + \\text{OH}^- \\rightarrow \\text{A}^- + \\text{H}_2\\text{O}$", "effective range: $\\text{p}K_a \\pm 1$ pH unit"]
+        },
+        {
+          "slug": "henderson_hasselbalch_equation",
+          "label": "Henderson–Hasselbalch equation",
+          "description": "Apply the Henderson–Hasselbalch equation $\\text{pH} = \\text{p}K_a + \\log\\frac{[\\text{A}^-]}{[\\text{HA}]}$ to calculate the pH of a buffer or determine the ratio $[\\text{A}^-]/[\\text{HA}]$ needed for a target pH. This focuses on the H–H calculation, not on the mechanism of buffering (a separate keyword).",
+          "examples": ["$\\text{pH} = \\text{p}K_a + \\log\\frac{[\\text{A}^-]}{[\\text{HA}]}$", "equal moles of HA and A⁻ → $\\text{pH} = \\text{p}K_a$", "10:1 ratio $[\\text{A}^-]/[\\text{HA}]$ → $\\text{pH} = \\text{p}K_a + 1$"]
+        },
+        {
+          "slug": "common_buffer_systems",
+          "label": "Common buffer systems",
+          "description": "Identify the carbonate ($\\text{H}_2\\text{CO}_3/\\text{HCO}_3^-$, blood pH ~7.4), phosphate ($\\text{H}_2\\text{PO}_4^-/\\text{HPO}_4^{2-}$, intracellular), and acetate ($\\text{CH}_3\\text{COOH}/\\text{CH}_3\\text{COO}^-$, laboratory) buffer systems and explain why each is suited to its pH range. This focuses on recognizing common systems, not on deriving the H–H equation (a separate keyword).",
+          "examples": ["blood: carbonate buffer at pH ~7.4", "intracellular: phosphate buffer", "lab: acetate buffer, $\\text{p}K_a \\approx 4.75$"]
+        },
+        {
+          "slug": "buffer_capacity_limits",
+          "label": "Buffer capacity and effective range",
+          "description": "Predict that buffer capacity is greatest when $[\\text{HA}] \\approx [\\text{A}^-]$ (i.e., pH = $\\text{p}K_a$) and effective within $\\text{p}K_a \\pm 1$ pH unit; explain why excess strong acid or base overwhelms a buffer. This focuses on the capacity and range concept, not on the H–H calculation (a separate keyword).",
+          "examples": ["max capacity at $[\\text{A}^-]/[\\text{HA}] = 1$", "effective range: $\\text{p}K_a \\pm 1$", "adding excess strong acid exhausts $[\\text{A}^-]$, breaks buffer"]
+        }
+      ]
+    },
+    {
+      "slug": "titration_curves",
+      "label": "Titration — Curves & Equivalence Points",
+      "description": "A titration neutralizes an acid with a base (or vice versa); the titration curve tracks pH vs. volume added and reveals the equivalence point and, for weak-acid/base titrations, the half-equivalence point where $\\text{pH} = \\text{p}K_a$.",
+      "intro": {
+        "slug": "titration_curves_intro",
+        "label": "Titration Curves Overview",
+        "description": "In an acid–base titration, a known concentration of base (or acid) is added from a burette to a solution of acid (or base) until stoichiometric equivalence is reached (the equivalence point). A plot of pH vs. volume of titrant is the titration curve; its shape reveals whether strong or weak acids/bases are involved. For weak acid–strong base titrations, the half-equivalence point occurs halfway to equivalence where exactly half the acid is neutralized and $\\text{pH} = \\text{p}K_a$.",
+        "examples": ["equivalence point: moles $\\text{H}^+$ = moles $\\text{OH}^-$", "strong–strong titration: equivalence at pH 7", "weak acid–strong base: equivalence at pH > 7"]
+      },
+      "in_depth": [
+        {
+          "slug": "neutralization_reaction",
+          "label": "Neutralization reaction",
+          "description": "Write the net ionic equation for neutralization ($\\text{H}^+ + \\text{OH}^- \\rightarrow \\text{H}_2\\text{O}$), calculate the moles of acid and base, and determine which reactant is limiting. This focuses on the stoichiometry of neutralization, not on reading the shape of a titration curve (a separate keyword).",
+          "examples": ["$\\text{H}^+ + \\text{OH}^- \\rightarrow \\text{H}_2\\text{O}$", "mol acid = mol base at equivalence", "limiting-reagent calculation for partial neutralization"]
+        },
+        {
+          "slug": "strong_strong_titration_curve",
+          "label": "Strong acid–strong base titration curve",
+          "description": "Interpret the titration curve for a strong acid titrated with a strong base: the pH rises slowly at first, then sharply at the equivalence point (pH = 7 at 25°C), then levels off. This focuses on the strong–strong curve shape and equivalence point pH, not on curves involving weak acids or bases (separate keywords).",
+          "examples": ["equivalence point at pH 7 (25°C) for strong–strong", "steep S-shaped jump at equivalence", "before equivalence: pH set by excess strong acid"]
+        },
+        {
+          "slug": "weak_acid_strong_base_curve",
+          "label": "Weak acid–strong base titration curve",
+          "description": "Interpret the titration curve for a weak acid titrated with a strong base: the initial pH is higher than a strong acid of equal concentration; a buffer region exists before equivalence; the equivalence point is at pH > 7 (salt hydrolysis); and a sharp inflection occurs at equivalence. This focuses on the weak-acid curve shape, not on the strong–strong curve (a separate keyword).",
+          "examples": ["equivalence pH > 7 (conjugate base hydrolyzes)", "buffer region: gradual slope before equivalence", "start pH higher than strong acid of same molarity"]
+        },
+        {
+          "slug": "equivalence_half_equivalence_point",
+          "label": "Equivalence point vs. half-equivalence point",
+          "description": "Identify the equivalence point (all acid neutralized; moles titrant added = moles analyte) and the half-equivalence point (half the acid is neutralized; $[\\text{HA}] = [\\text{A}^-]$ so $\\text{pH} = \\text{p}K_a$). This focuses on locating and interpreting both key points on a titration curve, not on calculating the pH at intermediate volumes (handled by H–H keyword).",
+          "examples": ["at half-equivalence: $\\text{pH} = \\text{p}K_a$", "equivalence: all moles of acid reacted", "half-equivalence = $V_{eq}/2$ added"]
+        },
+        {
+          "slug": "buffer_region_titration",
+          "label": "Buffer region on a titration curve",
+          "description": "Identify the buffer region on a weak-acid titration curve (between the start and equivalence point) as the region of gradual slope where the H–H equation applies, and explain that maximum buffer capacity occurs at the half-equivalence point. This focuses on recognizing the buffer region within the titration context, connecting to the H–H and buffer keywords.",
+          "examples": ["buffer region: flat slope between start and equivalence", "max buffering capacity at half-equivalence ($V_{eq}/2$)", "steep inflection at equivalence marks end of buffer region"]
+        },
+        {
+          "slug": "polyprotic_titration_curve",
+          "label": "Polyprotic acid titration curve",
+          "description": "Interpret a titration curve for a polyprotic acid (e.g., $\\text{H}_2\\text{CO}_3$, $\\text{H}_3\\text{PO}_4$): multiple equivalence points appear, one for each ionizable proton, each with its own half-equivalence point where $\\text{pH} = \\text{p}K_{an}$. This focuses on multi-equivalence-point curves, not on single-proton titrations (separate keywords).",
+          "examples": ["two equivalence points for a diprotic acid", "half-equivalence 1: $\\text{pH} = \\text{p}K_{a1}$; half-equiv 2: $\\text{pH} = \\text{p}K_{a2}$", "carbonate titration: two distinct inflections"]
+        }
+      ]
+    },
+    {
+      "slug": "titration_indicators",
+      "label": "Titration Indicators",
+      "description": "Indicators are weak acids whose acid and conjugate-base forms have different colors; the correct indicator is chosen so its $\\text{p}K_{in}$ is close to the titration's equivalence-point pH.",
+      "intro": {
+        "slug": "titration_indicators_intro",
+        "label": "Titration Indicators Overview",
+        "description": "An acid–base indicator is a weak acid ($\\text{HIn}$) that has one color in its acid form and a different color as its conjugate base ($\\text{In}^-$); the color change spans roughly $\\text{p}K_{in} \\pm 1$ pH unit. Choosing the right indicator means matching its transition range to the pH at the titration's equivalence point so the color change is sharp and unmistakable.",
+        "examples": ["phenolphthalein: colorless (acid) → pink (base), range ~8.2–10", "indicator works as $\\text{HIn} \\rightleftharpoons \\text{H}^+ + \\text{In}^-$", "endpoint = visible color change ≈ equivalence point"]
+      },
+      "in_depth": [
+        {
+          "slug": "indicator_mechanism",
+          "label": "How acid–base indicators work",
+          "description": "Explain that an indicator is itself a weak acid equilibrium ($\\text{HIn} \\rightleftharpoons \\text{H}^+ + \\text{In}^-$) in which the acid and conjugate-base forms differ in color; the color shifts when pH crosses $\\text{p}K_{in}$. This focuses on the indicator equilibrium mechanism, not on choosing which indicator to use for a specific titration (a separate keyword).",
+          "examples": ["$\\text{HIn} \\rightleftharpoons \\text{H}^+ + \\text{In}^-$ (two colors)", "transition midpoint at $\\text{pH} = \\text{p}K_{in}$", "visible transition range: $\\text{p}K_{in} \\pm 1$"]
+        },
+        {
+          "slug": "indicator_selection",
+          "label": "Choosing the correct indicator",
+          "description": "Select an appropriate indicator for a titration by matching its transition pH range to the equivalence-point pH: strong–strong (~7) → bromothymol blue; weak acid–strong base (>7) → phenolphthalein; strong acid–weak base (<7) → methyl orange. This focuses on indicator selection criteria, not on the indicator mechanism (a separate keyword).",
+          "examples": ["strong–strong: use bromothymol blue (range 6–7.6)", "weak acid–strong base: phenolphthalein (range ~8.2–10)", "match indicator range to equivalence pH"]
+        }
+      ]
+    },
+    {
+      "slug": "redox_titration",
+      "label": "Redox Titration",
+      "description": "A redox titration uses a standardized oxidizing or reducing agent to quantify a reducing or oxidizing analyte; the equivalence point is detected by color change or a potential jump, and stoichiometry is based on electron equivalents.",
+      "intro": {
+        "slug": "redox_titration_intro",
+        "label": "Redox Titration Overview",
+        "description": "In a redox titration, the analyte is titrated with a standardized redox reagent (e.g., $\\text{KMnO}_4$ or $\\text{K}_2\\text{Cr}_2\\text{O}_7$) rather than an acid or base. The endpoint is detected by a color change of the titrant itself (self-indicating for $\\text{KMnO}_4$) or an external indicator/potentiometer. Stoichiometry at equivalence uses electron equivalents (moles × electrons transferred), not merely mole ratios. The underlying redox bookkeeping (oxidation states, half-reactions, balancing) is handled by C4/C10; this keyword covers the titration technique and curve.",
+        "examples": ["$\\text{KMnO}_4$: self-indicating (purple → colorless at endpoint)", "equivalence: moles e⁻ donated = moles e⁻ accepted", "redox titration curve plots potential vs. volume, not pH"]
+      },
+      "in_depth": [
+        {
+          "slug": "redox_titration_technique",
+          "label": "Redox titration technique and endpoint detection",
+          "description": "Describe how a redox titration works: a standardized oxidizing agent (e.g., $\\text{KMnO}_4$) is added to the reducing analyte until all analyte is oxidized (equivalence point), detected by the permanent color of excess titrant (or an indicator). This focuses on the technique and endpoint detection, not on balancing the underlying half-reactions (C4/C10).",
+          "examples": ["$\\text{KMnO}_4$ turns permanently pink/purple at equivalence (self-indicator)", "starch–iodine as external redox indicator", "endpoint = first permanent color that persists"]
+        },
+        {
+          "slug": "redox_titration_stoichiometry",
+          "label": "Redox titration stoichiometry",
+          "description": "Calculate the amount (moles) of analyte from a redox titration using electron-transfer stoichiometry: moles of oxidant × electrons per mole = moles of reductant × electrons per mole. This focuses on the quantitative calculation at equivalence, not on balancing the redox equation itself (C4).",
+          "examples": ["$n_{\\text{oxidant}} \\times e_{\\text{ox}} = n_{\\text{reductant}} \\times e_{\\text{red}}$ at equivalence", "1 mol $\\text{KMnO}_4$ (5e⁻) ≡ 5 mol Fe²⁺ (1e⁻ each)", "determine unknown concentration from volume × molarity of titrant"]
+        }
+      ]
+    }
+  ]
+}

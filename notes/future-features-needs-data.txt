@@ -1,0 +1,72 @@
+FUTURE FEATURES — REQUIRE HISTORICAL STUDENT DATA
+==================================================
+These approaches were researched (see knowledge-inference-research.txt) but cannot
+be implemented meaningfully until the platform has sufficient student usage data.
+Revisit each when the threshold noted below is reached.
+
+---
+
+FEATURE 1: Co-occurrence / Prerequisite Graph
+Threshold: ~50+ student sessions with 100+ attempts each
+
+What it does:
+  Mine learn_student_keyword_states across all sessions to find which pairs of
+  keywords tend to be mastered together. Build a directed co-occurrence graph:
+  prerequisite_score(A → B) = P(B mastered | A mastered, given B was tested).
+
+Implementation sketch:
+  - Weekly SQL job:
+      SELECT a.keyword_id AS skill_a, b.keyword_id AS skill_b,
+        AVG(CASE WHEN b.in_depth_score > 0.7 THEN 1.0 ELSE 0.0 END) AS p_b_given_a
+      FROM learn_student_keyword_states a
+      JOIN learn_student_keyword_states b ON b.session_id = a.session_id
+      WHERE a.in_depth_score > 0.7 AND a.keyword_id != b.keyword_id
+      GROUP BY a.keyword_id, b.keyword_id
+      HAVING COUNT(*) > 10;
+  - Store in a new keyword_correlations table.
+  - At inference time: when keyword A reaches strength > 0.7, look up correlations
+    with p_b_given_a > 0.80 and nudge correlated B keywords upward by ~0.08.
+  - Wire into: apps/student/app/api/learn/practice/next/route.ts
+
+Benefit: infers knowledge of untested skills from what was actually tested.
+
+---
+
+FEATURE 2: IRT / MIRT Calibration (Item Response Theory)
+Threshold: ~500+ students, 1000+ attempts each
+
+What it does:
+  Puts student ability (θ) and problem difficulty (β) on the same latent scale.
+  Multi-dimensional IRT (MIRT) with 4 latent traits matching the four-dimensional
+  keyword tagger (topic, action, representation, prerequisite).
+  P(correct | θ, β) = 1 / (1 + exp(-(θ·a - β)))
+
+Implementation sketch:
+  - Offline: fit MIRT model using R `mirt` package or Python `py-irt` on all
+    attempt data from learn_student_keyword_states + student_problem_attempts.
+  - Each problem gets calibrated β_j and discrimination vector a_j.
+  - Each student gets estimated θ_i per dimension, updated via MLE after each attempt.
+  - Serve θ_i estimates via a new API endpoint; use to replace computeTargetDifficulty.
+  - Switch next-problem selection to: pick problem where (θ_i · a_j) ≈ β_j.
+  - Also use for estimated_difficulty calibration (currently naive average in record-attempt).
+
+Benefit: principled difficulty calibration and multi-dimensional skill estimation.
+         Provides the most accurate "expected P(correct)" before the student answers.
+
+---
+
+FEATURE 3: Spaced Repetition Tuning Per-Student
+Threshold: ~100 students with repeated mastery sessions over 30+ days
+
+What it does:
+  The current REVIEW_INTERVALS = [1, 3, 7, 14, 30, 60] are fixed for all students.
+  With enough longitudinal data, compute per-student forgetting curves (SM-2 or
+  Leitner-style) and personalize review intervals.
+
+Implementation sketch:
+  - Track forgetting events: when a "mastered" skill drops below 0.65 on a later attempt.
+  - Fit a forgetting rate per student per skill category (e.g., polynomial vs. trig).
+  - Shorten review intervals for fast-forgetting students, lengthen for slow-forgetting ones.
+  - Wire into: computeNextReviewDate() in apps/student/lib/practiceAlgorithm.ts
+
+Benefit: reduces wasted review time for strong students; catches at-risk forgetting early.

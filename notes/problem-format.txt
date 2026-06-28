@@ -1,0 +1,213 @@
+=============================================
+  PROBLEM GENERATION FORMAT
+=============================================
+
+FORMATTING RULES:
+  - Plain text for prose — no $ needed
+  - $...$ for inline math (variables, expressions, integrals)
+  - $$...$$ for standalone equations (own line, display size)
+  - NEVER use \text{} or \displaystyle
+  - Inline integrals: $\int_0^2 f(x)\,dx$
+  - Standalone integrals: $$\int_0^2 f(x)\,dx$$
+
+=============================================
+  WORKFLOW
+=============================================
+
+  STEP 1 — CREATION
+  Write the problem with all four keyword descriptions.
+  Leave the weight fields out — they are auto-populated.
+
+  STEP 2 — AUTO-TAGGING (on DB insert)
+  When the problem enters the DB (via RAG Examples or rag-agent),
+  each description is embedded and matched against the keyword catalog
+  using cosine similarity:
+    topic_description       → keyword_weights   (LLM rerank, top-20 candidates)
+    action_description      → action_weights    (cosine-only, top-4 above 0.35)
+    representation_description → representation_weights (cosine-only, top-3)
+    prerequisite_description → prerequisite_weights (cosine-only, top-5)
+
+  STEP 3 — MANUAL REVIEW (optional, in Preview JSON)
+  Use the four keyword tabs to inspect or override the auto-tagged weights.
+
+=============================================
+  MCQ — CREATION TEMPLATE
+=============================================
+
+{
+  "problem_description": "Tests whether a student can find intervals where a particle moves in the negative direction by analyzing the sign of the velocity function.",
+
+  "latex_content": "A particle moves along the x-axis. Its position at time $t$ is $x(t) = t^3 - 6t^2 + 9t + 2$. At what time $t$ in the interval $[0, 5]$ is the particle moving in the negative direction?",
+
+  "choices": [
+    "$0 < t < 1$",
+    "$1 < t < 3$",
+    "$3 < t < 5$",
+    "$t > 3$"
+  ],
+
+  "correct_index": 1,
+
+  "wrong_answer_data": [
+    { "index": 0, "description": "Found where position $x(t) < 0$ instead of where velocity $v(t) < 0$." },
+    { "index": 2, "description": "Found where $v(t) > 0$ — confused positive and negative direction." },
+    { "index": 3, "description": "Only found the critical point $t = 3$ and missed $t = 1$ due to a factoring error." }
+  ],
+
+  "solution_latex": "Find velocity: $v(t) = x'(t) = 3t^2 - 12t + 9 = 3(t-1)(t-3)$.\n\nThe particle moves in the negative direction when $v(t) < 0$, which occurs between the roots: $1 < t < 3$.",
+
+  "difficulty": 2,
+
+  "topic_description": "Tests differentiating a polynomial position function to find velocity, then analyzing the sign of velocity over an interval to determine direction of motion.",
+  "action_description": "Students must differentiate, then analyze sign behavior of the resulting polynomial over a closed interval.",
+  "representation_description": "The position function is given as an algebraic equation in explicit function notation.",
+  "prerequisite_description": "Requires polynomial differentiation (power rule) and finding zeros of a quadratic by factoring."
+}
+
+=============================================
+  MCQ — FULLY TAGGED TEMPLATE (after auto-tagging)
+=============================================
+
+{
+  "problem_description": "Tests whether a student can find intervals where a particle moves in the negative direction by analyzing the sign of the velocity function.",
+
+  "latex_content": "A particle moves along the x-axis. Its position at time $t$ is $x(t) = t^3 - 6t^2 + 9t + 2$. At what time $t$ in the interval $[0, 5]$ is the particle moving in the negative direction?",
+
+  "choices": [
+    "$0 < t < 1$",
+    "$1 < t < 3$",
+    "$3 < t < 5$",
+    "$t > 3$"
+  ],
+
+  "correct_index": 1,
+
+  "wrong_answer_data": [
+    { "index": 0, "description": "Found where position $x(t) < 0$ instead of where velocity $v(t) < 0$." },
+    { "index": 2, "description": "Found where $v(t) > 0$ — confused positive and negative direction." },
+    { "index": 3, "description": "Only found the critical point $t = 3$ and missed $t = 1$ due to a factoring error." }
+  ],
+
+  "solution_latex": "Find velocity: $v(t) = x'(t) = 3t^2 - 12t + 9 = 3(t-1)(t-3)$.\n\nThe particle moves in the negative direction when $v(t) < 0$, which occurs between the roots: $1 < t < 3$.",
+
+  "difficulty": 2,
+
+  "topic_description": "Tests differentiating a polynomial position function to find velocity, then analyzing the sign of velocity over an interval.",
+  "keyword_weights": {
+    "motion_velocity_acceleration": 0.7,
+    "derivative_polynomial": 0.3
+  },
+
+  "action_description": "Students must differentiate and analyze sign behavior over an interval.",
+  "action_weights": {
+    "analyze_behavior": 0.6,
+    "evaluate": 0.4
+  },
+
+  "representation_description": "The position function is given as an algebraic equation.",
+  "representation_weights": {},
+
+  "prerequisite_description": "Requires basic polynomial differentiation and factoring.",
+  "prerequisite_weights": {
+    "derivative_polynomial": 0.5,
+    "factor": 0.5
+  }
+}
+
+=============================================
+  FRQ — CREATION TEMPLATE
+=============================================
+
+{
+  "problem_description": "Multi-part FRQ covering linearization, FTC Part 2, and IVT applied to the derivative using a table of values.",
+
+  "latex_content": "Let $f$ be a differentiable function. Values of $f$ and $f'$ are given for selected values of $x$.\n\n$$\\begin{array}{|c|c|c|}\\hline x & f(x) & f'(x) \\\\ \\hline 0 & 3 & -2 \\\\ 2 & 7 & 4 \\\\ 4 & 1 & -1 \\\\ \\hline \\end{array}$$\n\n(a) Estimate $f(3)$ using the tangent line to the graph of $f$ at $x = 2$.\n\n(b) Evaluate $\\int_0^4 f'(x)\\,dx$.\n\n(c) Is there a value $c$ in $(0, 4)$ such that $f'(c) = 0$? Justify your answer.",
+
+  "solution_latex": "(a) Tangent line at $x = 2$: $y = 7 + 4(x - 2)$. At $x = 3$: $y = 11$. So $f(3) \\approx 11$.\n\n(b) By FTC Part 2:\n\n$$\\int_0^4 f'(x)\\,dx = f(4) - f(0) = 1 - 3 = -2$$\n\n(c) Yes. Since $f'(0) = -2 < 0$ and $f'(2) = 4 > 0$, the IVT guarantees a $c \\in (0, 2)$ where $f'(c) = 0$.",
+
+  "rubric": "Part (a): 1 point — correct tangent line equation. 1 point — correct evaluation at $x = 3$.\nPart (b): 1 point — correct FTC setup. 1 point — correct answer $-2$.\nPart (c): 1 point — correct conclusion YES. 1 point — IVT with explicit sign change of $f'$.",
+
+  "difficulty": 3,
+
+  "topic_description": "Tests linearization (tangent line approximation), FTC Part 2 applied to a derivative, and IVT applied to show existence of a zero of the derivative.",
+  "action_description": "Students must estimate using a tangent line, evaluate a definite integral using FTC, and justify existence using the IVT.",
+  "representation_description": "Function values are given in a table; students work from tabular data without an explicit formula.",
+  "prerequisite_description": "Requires tangent line equations, the Fundamental Theorem of Calculus Part 2, and the Intermediate Value Theorem."
+}
+
+=============================================
+  FIELDS
+=============================================
+
+  problem_description        What skill(s) this problem tests. 1–2 sentences, no LaTeX.
+
+  latex_content              Problem stem. Prose as plain text, math in $...$.
+
+  choices                    MCQ only. Exactly 4 strings, each wrapped in $...$.
+
+  correct_index              MCQ only. Integer 0–3.
+
+  wrong_answer_data          MCQ only. One entry per wrong choice:
+                               { "index": <int>, "description": "<student error>" }
+                             Describe the specific mistake, not just "wrong answer."
+
+  solution_latex             Full worked solution. Same formatting as latex_content.
+                             Use $$\begin{aligned}...\end{aligned}$$ for step-by-step work.
+
+  rubric                     FRQ only. One line per point, plain text + $math$.
+
+  difficulty                 Integer 1–5.
+                               1 = single step, direct formula
+                               2 = two or three steps, clean arithmetic
+                               3 = standard AP level, moderate chaining
+                               4 = challenging, requires insight or multi-concept chain
+                               5 = very hard, non-obvious or dense multi-step
+
+  ── KEYWORD DESCRIPTION FIELDS (written at creation time) ───────────────────
+
+  topic_description          1–2 sentences: what topic/skill this problem tests.
+                             Embedded and matched against learn_keywords → keyword_weights.
+
+  action_description         1–2 sentences: what the student must do (the cognitive verb).
+                             Embedded and matched against action_items keywords → action_weights.
+                             e.g. "Students must differentiate and analyze sign behavior."
+
+  representation_description 1–2 sentences: how the problem is presented (format/medium).
+                             Embedded and matched against representations keywords → representation_weights.
+                             e.g. "The function is given as an algebraic equation."
+
+  prerequisite_description   1–2 sentences: prior knowledge required to solve this.
+                             Embedded and matched against topic keywords → prerequisite_weights.
+                             e.g. "Requires the power rule and factoring quadratics."
+
+  ── KEYWORD WEIGHT FIELDS (auto-populated on DB insert, editable in Preview JSON) ──
+
+  keyword_weights            Cosine + LLM rerank of topic_description against learn_keywords.
+  action_weights             Cosine match of action_description against action_items keywords.
+  representation_weights     Cosine match of representation_description against representations.
+  prerequisite_weights       Cosine match of prerequisite_description against topic keywords.
+
+=============================================
+  MATH PATTERNS
+=============================================
+
+Inline:      at time $t$  |  $f(x) = x^2 + 1$  |  $\frac{dy}{dx}$
+             $\int_0^2 v(t)\,dt$  |  $\lim_{x \to 0} \frac{\sin x}{x}$
+
+Display:     $$f(x) = \frac{x^2 - 1}{x + 1}$$
+
+Aligned:     $$\begin{aligned}
+               f'(x) &= 3x^2 - 6x \\
+                     &= 3x(x - 2)
+             \end{aligned}$$
+
+Table:       $$\begin{array}{|c|c|c|}
+               \hline x & f(x) & f'(x) \\ \hline
+               0 & 1 & 2 \\ \hline
+             \end{array}$$
+
+Slope field (own line):
+  <SlopeField equation="y + x" rangeX="-3,3" rangeY="-3,3" />
+
+Graph (own line):
+  <FunctionGraph equation="x^2 - 4" rangeX="-3,3" rangeY="-5,5

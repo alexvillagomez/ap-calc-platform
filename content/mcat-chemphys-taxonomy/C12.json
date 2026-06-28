@@ -1,0 +1,516 @@
+{
+  "section": "chemistry",
+  "category_code": "C12",
+  "category_label": "Organic Chemistry — Reactions & Mechanisms",
+  "order_index": 11,
+  "umbrellas": [
+    {
+      "slug": "amino_acid_synthesis",
+      "label": "Amino Acid Synthesis",
+      "description": "Reactions that build amino acids from simple precursors via carbon–nitrogen bond formation.",
+      "intro": {
+        "slug": "amino_acid_synthesis_intro",
+        "label": "Amino Acid Synthesis Overview",
+        "description": "Two classic routes build α-amino acids in the laboratory: Strecker synthesis (reductive amination of an aldehyde-derived cyanohydrin) and Gabriel synthesis (alkylation of phthalimide followed by hydrolysis). Both install the amino group at the α-carbon and yield a racemic product. These reactions illustrate nucleophilic addition and substitution applied to amino-acid construction.",
+        "examples": ["Strecker: aldehyde + $\\text{NH}_3$ + HCN → α-amino acid", "Gabriel: phthalimide alkylation → hydrolysis", "both give racemic α-amino acid"]
+      },
+      "in_depth": [
+        {
+          "slug": "strecker_synthesis",
+          "label": "Strecker synthesis of amino acids",
+          "description": "Apply the Strecker synthesis: an aldehyde reacts with ammonia and HCN to give an α-aminonitrile, which is hydrolyzed to an α-amino acid ($\\text{RCHO} + \\text{NH}_3 + \\text{HCN} \\rightarrow \\text{RCH(NH}_2)\\text{CN} \\rightarrow \\text{RCH(NH}_2)\\text{COOH}$). This focuses on the nucleophilic addition/nitrile-hydrolysis route, not the Gabriel synthesis (a separate keyword).",
+          "examples": ["aldehyde + $\\text{NH}_3$ + HCN → α-aminonitrile → hydrolysis → amino acid", "cyanohydrin intermediate", "racemic product"]
+        },
+        {
+          "slug": "gabriel_synthesis",
+          "label": "Gabriel synthesis of amino acids",
+          "description": "Apply the Gabriel synthesis: the phthalimide anion (a nitrogen nucleophile) is alkylated at an α-haloester; subsequent base hydrolysis releases the free α-amino acid. This focuses on SN2 alkylation of phthalimide, not cyanohydrin-based Strecker (a separate keyword).",
+          "examples": ["phthalimide $\\text{N}^-$ + α-halo ester → SN2 alkylation", "base hydrolysis removes phthalyl group", "yields primary amine (amino acid)"]
+        }
+      ]
+    },
+    {
+      "slug": "peptide_protein_reactions",
+      "label": "Peptide & Protein Reactions",
+      "description": "Organic reactions at the backbone and side chains of peptides: bond formation, hydrolysis, and disulfide oxidation.",
+      "intro": {
+        "slug": "peptide_protein_reactions_intro",
+        "label": "Peptide & Protein Reactions Overview",
+        "description": "Peptide bonds are amide linkages formed by condensation between the carboxyl group of one amino acid and the amino group of the next, with loss of water. These bonds are hydrolyzed under acidic or basic aqueous conditions. The cysteine side chain undergoes oxidative coupling to form disulfide bridges, which stabilize protein tertiary structure. These reactions are the organic-chemistry foundation of protein structure—the biology belongs in the Biology section.",
+        "examples": ["amide (peptide) bond: $\\text{R-COOH} + \\text{H}_2\\text{N-R'} \\rightarrow \\text{R-CO-NH-R'} + \\text{H}_2\\text{O}$", "acid/base hydrolysis cleaves peptide bond", "2 Cys-SH → Cys-S-S-Cys + 2H"]
+      },
+      "in_depth": [
+        {
+          "slug": "peptide_bond_formation",
+          "label": "Peptide bond (amide) formation",
+          "description": "Recognize that a peptide bond is an amide linkage formed by nucleophilic acyl substitution: the amine nitrogen attacks the carbonyl carbon of an activated carboxylic acid, expelling water ($\\text{R-COOH} + \\text{H}_2\\text{N-R'} \\rightarrow \\text{R-CO-NH-R'} + \\text{H}_2\\text{O}$). This focuses on the condensation mechanism, not the hydrolysis of peptide bonds (a separate keyword).",
+          "examples": ["nucleophilic acyl substitution at carbonyl", "loss of $\\text{H}_2\\text{O}$ gives amide linkage", "N-terminus and C-terminus defined by direction"]
+        },
+        {
+          "slug": "peptide_bond_hydrolysis",
+          "label": "Hydrolysis of peptide bonds",
+          "description": "Predict that peptide (amide) bonds are cleaved by water under acidic (e.g., 6 M HCl, reflux) or basic aqueous conditions, regenerating the constituent amino acids. This focuses on the hydrolytic cleavage reaction, not the condensation that forms the bond (a separate keyword).",
+          "examples": ["acid hydrolysis: 6 M HCl, 110°C, 24 h", "base hydrolysis also cleaves amide", "enzymatic hydrolysis: serine proteases (mechanism in Biology)"]
+        },
+        {
+          "slug": "disulfide_bond_cysteine",
+          "label": "Disulfide bond formation and reduction (cysteine → cystine)",
+          "description": "Explain that two cysteine thiol groups ($\\text{-SH}$) are oxidized to a disulfide ($\\text{-S-S-}$) in cystine: $2\\,\\text{Cys-SH} + [O] \\rightarrow \\text{Cys-S-S-Cys} + \\text{H}_2\\text{O}$; the bond is reduced back to free thiols by agents such as DTT or $\\beta$-mercaptoethanol. This focuses on thiol oxidation/reduction, not backbone amide hydrolysis (a separate keyword).",
+          "examples": ["$2\\,\\text{R-SH} \\xrightarrow{\\text{oxidation}} \\text{R-S-S-R}$", "DTT/BME reduces disulfide back to thiol", "cross-link stabilizes tertiary structure"]
+        }
+      ]
+    },
+    {
+      "slug": "carbohydrate_reactions",
+      "label": "Carbohydrate Reactions",
+      "description": "Organic reactions of sugars: glycoside hydrolysis, keto-enol tautomerism, and the linkage chemistry of di- and polysaccharides.",
+      "intro": {
+        "slug": "carbohydrate_reactions_intro",
+        "label": "Carbohydrate Reactions Overview",
+        "description": "Monosaccharides participate in several organic reaction types: their anomeric hydroxyl reacts with alcohols to form glycosides (acetals), which are hydrolyzed under aqueous acid; the open-chain aldehyde/ketone tautomerizes with its enol form; and the same acetal chemistry links monosaccharides into di- and polysaccharides. Recognizing these reaction patterns on the MCAT requires connecting carbohydrate structure to acetal and enol-tautomerism chemistry.",
+        "examples": ["glycoside = acetal of the anomeric OH", "acid hydrolysis cleaves glycosidic bond", "open-chain aldose ⇌ enol via keto-enol tautomerism"]
+      },
+      "in_depth": [
+        {
+          "slug": "glycoside_hydrolysis",
+          "label": "Hydrolysis of the glycosidic linkage",
+          "description": "Predict that a glycoside (acetal at the anomeric carbon) is hydrolyzed under aqueous acid to release the free hemiacetal sugar and alcohol: $\\text{glycoside} + \\text{H}_2\\text{O} \\xrightarrow{\\text{H}^+} \\text{reducing sugar} + \\text{R-OH}$. This focuses on acid-catalyzed acetal hydrolysis at the anomeric center, not keto-enol tautomerism of open-chain sugars (a separate keyword).",
+          "examples": ["glycoside (acetal) + $\\text{H}_2\\text{O} \\xrightarrow{\\text{H}^+}$ hemiacetal + alcohol", "anomeric carbon regains hemiacetal → mutarotation", "sucrose non-reducing; glucose/galactose glycosides hydrolyze to reducing sugars"]
+        },
+        {
+          "slug": "keto_enol_tautomerism_monosaccharides",
+          "label": "Keto-enol tautomerism of monosaccharides",
+          "description": "Explain how the open-chain carbonyl (aldehyde or ketone) of a monosaccharide is in equilibrium with its enol form via proton transfer at the α-carbon, an interconversion called keto-enol tautomerism that can interconvert aldoses and ketoses (epimerization pathway). This focuses on the sugar-specific context of keto-enol tautomerism, not the general aldehyde/ketone enolate chemistry at carbonyl groups (a separate keyword).",
+          "examples": ["aldose $\\rightleftharpoons$ enol $\\rightleftharpoons$ ketose interconversion", "α-carbon proton lability drives tautomerism", "base-catalyzed epimerization via enediol intermediate"]
+        },
+        {
+          "slug": "disaccharide_polysaccharide_linkage",
+          "label": "Glycosidic linkage in di- and polysaccharides",
+          "description": "Classify the glycosidic bonds that join monosaccharides into disaccharides and polysaccharides by position and anomeric configuration (e.g., $\\alpha$-1,4 vs. $\\beta$-1,4), and recognize that each linkage is an acetal formed from two hydroxyl groups that is cleaved by acid hydrolysis or glycosidase enzymes. This focuses on linkage identity and acetal chemistry, not biological function of polysaccharides (Biology).",
+          "examples": ["$\\alpha$-1,4 glycosidic bond (starch, glycogen) vs. $\\beta$-1,4 (cellulose)", "acetal formed from anomeric-OH + C4-OH", "acid hydrolysis → monosaccharide units"]
+        }
+      ]
+    },
+    {
+      "slug": "lipid_reactions",
+      "label": "Lipid Reactions — Saponification",
+      "description": "The base-catalyzed hydrolysis (saponification) of ester bonds in triacylglycerols and fatty acid esters.",
+      "intro": {
+        "slug": "lipid_reactions_intro",
+        "label": "Lipid Reactions Overview",
+        "description": "The key reaction of lipids tested on the MCAT is saponification: treatment of a fatty-acid ester or triacylglycerol with aqueous base (e.g., NaOH) cleaves the ester bond to yield the carboxylate salt (soap) and glycerol. This is an irreversible base-promoted ester hydrolysis, mechanistically an example of nucleophilic acyl substitution. Biological lipid roles belong in Biology; here the focus is on the organic-chemistry mechanism.",
+        "examples": ["triacylglycerol + NaOH → fatty-acid carboxylate salts (soap) + glycerol", "base-promoted ester hydrolysis (irreversible)", "ester C=O attacked by $\\text{OH}^-$: nucleophilic acyl substitution"]
+      },
+      "in_depth": [
+        {
+          "slug": "saponification",
+          "label": "Saponification of fatty acid esters",
+          "description": "Apply the saponification reaction: a fatty-acid ester or triacylglycerol is hydrolyzed by aqueous base ($\\text{OH}^-$) via nucleophilic acyl substitution, generating the carboxylate anion (soap) and glycerol; the reaction is irreversible because the carboxylate product is resonance-stabilized and does not re-esterify. This focuses on base-promoted ester hydrolysis, not acid-catalyzed transesterification (a separate keyword).",
+          "examples": ["$\\text{R-COOR'} + \\text{NaOH} \\rightarrow \\text{R-COO}^-\\text{Na}^+ + \\text{R'OH}$", "fatty-acid salts are soaps (amphiphilic)", "irreversible: carboxylate too stable to re-esterify"]
+        }
+      ]
+    },
+    {
+      "slug": "nucleophilic_addition_carbonyl",
+      "label": "Nucleophilic Addition at Aldehydes & Ketones",
+      "description": "Reactions in which nucleophiles add across the C=O bond of aldehydes and ketones to give hemiacetals, acetals, imines, enamines, and cyanohydrins.",
+      "intro": {
+        "slug": "nucleophilic_addition_carbonyl_intro",
+        "label": "Nucleophilic Addition to C=O Overview",
+        "description": "The carbonyl carbon of an aldehyde or ketone is electrophilic; nucleophiles attack it in a 1,2-addition to give a tetrahedral alkoxide intermediate, which is then protonated. The identity of the nucleophile determines the product: an alcohol gives hemiacetal/acetal; a primary amine gives imine; a secondary amine gives enamine; cyanide gives cyanohydrin; hydride reagents ($\\text{NaBH}_4$, $\\text{LiAlH}_4$) give alcohols. These reactions share one mechanism but differ in nucleophile and conditions.",
+        "examples": ["nucleophile attacks electrophilic carbonyl C", "$\\text{R}_2\\text{C=O} + \\text{Nu}^- \\rightarrow \\text{R}_2\\text{C(Nu)(O}^-)$", "aldehyde more reactive than ketone"]
+      },
+      "in_depth": [
+        {
+          "slug": "hemiacetal_acetal_formation",
+          "label": "Hemiacetal and acetal formation",
+          "description": "Explain that an aldehyde or ketone reacts with one equivalent of alcohol under acid catalysis to give a hemiacetal, and with a second equivalent to give an acetal (a protecting group for the carbonyl): $\\text{R-CHO} + \\text{R'OH} \\rightleftharpoons \\text{R-CH(OH)(OR')} \\xrightarrow{\\text{R'OH}} \\text{R-CH(OR')}_2 + \\text{H}_2\\text{O}$. This focuses on the oxygen-nucleophile pathway, not the nitrogen-nucleophile imine/enamine route (separate keywords).",
+          "examples": ["hemiacetal: 1 equiv ROH + acid catalyst", "acetal: 2 equiv ROH, acid cat., $\\text{H}_2\\text{O}$ removed", "acetal is stable to base; hydrolyzed by acid"]
+        },
+        {
+          "slug": "imine_formation",
+          "label": "Imine (Schiff base) formation",
+          "description": "Predict that a primary amine ($\\text{R-NH}_2$) condenses with an aldehyde or ketone to form an imine (Schiff base, $\\text{C=N}$) with loss of water: $\\text{R}_2\\text{C=O} + \\text{H}_2\\text{N-R'} \\rightarrow \\text{R}_2\\text{C=N-R'} + \\text{H}_2\\text{O}$, optimal at mildly acidic pH. This focuses on the primary-amine pathway, not secondary amines that form enamines (a separate keyword).",
+          "examples": ["$\\text{R}_2\\text{C=O} + \\text{H}_2\\text{N-R'} \\rightarrow \\text{imine} + \\text{H}_2\\text{O}$", "optimal pH ~4–5 (protonates OH, activates leaving group)", "imine = $\\text{C=N}$ linkage (Schiff base)"]
+        },
+        {
+          "slug": "enamine_formation",
+          "label": "Enamine formation",
+          "description": "Predict that a secondary amine ($\\text{R}_2\\text{NH}$) condenses with an aldehyde or ketone bearing an α-hydrogen to give an enamine ($\\text{C=C-N}$) rather than an imine, because the nitrogen cannot form a further C=N with the secondary-amine nitrogen: the carbinolamine intermediate loses water with the α-H instead. This focuses on secondary-amine products, not the primary-amine imine route (a separate keyword).",
+          "examples": ["secondary amine + ketone → enamine (not imine)", "enamine: $\\alpha$-H eliminated instead of OH", "enamines are synthetic equivalents of enolates"]
+        },
+        {
+          "slug": "cyanohydrin_formation",
+          "label": "Cyanohydrin formation",
+          "description": "Recognize that $\\text{HCN}$ (or $\\text{CN}^-$) adds to aldehydes and ketones to give cyanohydrins ($\\alpha$-hydroxy nitriles): $\\text{R}_2\\text{C=O} + \\text{HCN} \\rightarrow \\text{R}_2\\text{C(OH)(CN)}$; aldehydes react faster than ketones due to steric and electronic effects. This focuses on the cyanide nucleophile, not hydride reductions (a separate keyword).",
+          "examples": ["$\\text{HCN} + \\text{R}_2\\text{C=O} \\rightarrow \\alpha$-hydroxy nitrile (cyanohydrin)", "CN⁻ is the actual nucleophile; HCN re-protonates", "nitrile is hydrolyzable to carboxylic acid"]
+        },
+        {
+          "slug": "hydride_reduction_carbonyl",
+          "label": "Hydride reduction of aldehydes and ketones ($\\text{NaBH}_4$ vs. $\\text{LiAlH}_4$)",
+          "description": "Distinguish the two common hydride reducing agents: $\\text{NaBH}_4$ (mild, protic-solvent compatible, reduces aldehydes/ketones but NOT esters or carboxylic acids) vs. $\\text{LiAlH}_4$ (strong, requires anhydrous conditions, reduces all carbonyl classes including esters, acids, and amides to the alcohol or amine). Both deliver $\\text{H}^-$ to the carbonyl carbon. This focuses on reduction selectivity, not addition of carbon nucleophiles (a separate keyword).",
+          "examples": ["$\\text{NaBH}_4$: aldehyde/ketone → alcohol; esters unreacted", "$\\text{LiAlH}_4$: ester → 2 alcohols; amide → amine", "both: $\\text{H}^-$ attacks carbonyl C → alkoxide → protonation"]
+        }
+      ]
+    },
+    {
+      "slug": "aldehyde_oxidation",
+      "label": "Oxidation of Aldehydes",
+      "description": "The oxidation of aldehydes to carboxylic acids and the reagents and tests used to distinguish aldehydes from ketones.",
+      "intro": {
+        "slug": "aldehyde_oxidation_intro",
+        "label": "Aldehyde Oxidation Overview",
+        "description": "Aldehydes are easily oxidized to carboxylic acids because their carbonyl carbon still bears a hydrogen; ketones require harsher conditions (C–C cleavage) to oxidize. Common oxidants include $\\text{KMnO}_4$, $\\text{K}_2\\text{Cr}_2\\text{O}_7$, Tollens' reagent (silver mirror test), and Benedict's reagent. These reactions underlie the definition of 'reducing sugar' and the functional distinction between aldehydes and ketones.",
+        "examples": ["aldehyde + $[O]$ → carboxylic acid", "Tollens' silver-mirror: aldehydes only", "ketones resistant to mild oxidants"]
+      },
+      "in_depth": [
+        {
+          "slug": "aldehyde_oxidation_reagents",
+          "label": "Oxidation of aldehydes to carboxylic acids",
+          "description": "Predict that aldehydes are oxidized to carboxylic acids by mild oxidants ($\\text{KMnO}_4$, $\\text{K}_2\\text{Cr}_2\\text{O}_7$, Tollens' $\\text{Ag}^+$/$\\text{NH}_3$, Benedict's $\\text{Cu}^{2+}$) while ketones are not, because the aldehyde C–H is oxidizable but the ketone carbon bears no H. This focuses on aldehyde vs. ketone reactivity differences, not reduction of carbonyls (a separate keyword).",
+          "examples": ["$\\text{RCHO} + \\text{KMnO}_4 \\rightarrow \\text{RCOOH}$", "Tollens' test: $\\text{Ag}^+$ → silver mirror (aldehyde only)", "ketones require C–C cleavage by strong oxidant"]
+        }
+      ]
+    },
+    {
+      "slug": "enolate_chemistry",
+      "label": "Enolate Chemistry & Aldol Reactions",
+      "description": "The acidity of the α-hydrogen, keto-enol tautomerism of carbonyl compounds, enolate formation, aldol condensation, retro-aldol, and kinetic vs. thermodynamic enolate control.",
+      "intro": {
+        "slug": "enolate_chemistry_intro",
+        "label": "Enolate Chemistry Overview",
+        "description": "The α-hydrogens adjacent to a carbonyl are weakly acidic ($\\text{p}K_a \\approx 20$ for ketone) because the resulting carbanion (enolate) is resonance-stabilized by delocalization into the C=O. Base deprotonation gives a nucleophilic enolate that can react at the α-carbon with electrophiles; self-condensation gives the aldol product. Kinetic conditions (strong base, low T) favor the less-substituted enolate; thermodynamic conditions (weak base, equilibrating) favor the more-substituted enolate.",
+        "examples": ["$\\alpha$-H $\\text{p}K_a \\approx 20$ (ketone)", "enolate: resonance between O and C forms", "aldol: enolate attacks second carbonyl → β-hydroxy carbonyl"]
+      },
+      "in_depth": [
+        {
+          "slug": "keto_enol_tautomerism",
+          "label": "Keto-enol tautomerism of carbonyl compounds",
+          "description": "Explain keto-enol tautomerism: the α-H of a carbonyl compound migrates to oxygen (acid or base catalysis) to give the enol form, which is in equilibrium with the keto form; for simple aldehydes/ketones the keto form predominates, but conjugated or intramolecularly H-bonded enols can be stabilized. This focuses on the equilibrium interconversion, not enolate reactions with electrophiles (a separate keyword).",
+          "examples": ["keto (C=O) $\\rightleftharpoons$ enol (C=C-OH) via α-H migration", "keto form ≫ enol for simple ketones (e.g., $<0.1\\%$ enol in acetone)", "1,3-dicarbonyl compounds: enol stabilized by conjugation → higher enol content"]
+        },
+        {
+          "slug": "alpha_racemization",
+          "label": "α-Racemization via enolate",
+          "description": "Predict that a chiral center at the α-carbon of a carbonyl compound is lost (racemized) under acidic or basic conditions because the planar enol/enolate intermediate can be re-protonated from either face. This focuses on stereochemical consequences of enolization, not the aldol reaction itself (a separate keyword).",
+          "examples": ["chiral α-center + base → achiral enolate → racemic mixture on protonation", "both enantiomers formed with equal probability", "racemization accelerated by acids/bases that catalyze enolization"]
+        },
+        {
+          "slug": "aldol_condensation",
+          "label": "Aldol condensation and retro-aldol",
+          "description": "Apply the aldol reaction: an enolate (or enol) attacks the carbonyl of a second aldehyde/ketone to give a β-hydroxy carbonyl (aldol addition), which dehydrates under acidic/basic conditions to the α,β-unsaturated carbonyl (aldol condensation product). Retro-aldol is the reverse: a β-hydroxy carbonyl fragments into enolate + aldehyde/ketone. This focuses on C–C bond formation via enolate nucleophilicity, not enolate racemization (a separate keyword).",
+          "examples": ["aldol addition: enolate + C=O → β-hydroxy carbonyl", "dehydration → $\\alpha,\\beta$-unsaturated carbonyl (conjugated)", "retro-aldol: β-hydroxy carbonyl → 2 carbonyls (C–C cleavage)"]
+        },
+        {
+          "slug": "kinetic_thermodynamic_enolate",
+          "label": "Kinetic vs. thermodynamic enolate",
+          "description": "Distinguish kinetic enolate (formed with strong, bulky base at low temperature — removes the more accessible α-H, giving the less-substituted enolate) from thermodynamic enolate (formed under equilibrating conditions with weak base — gives the more-substituted, more stable enolate). This focuses on regioselectivity of deprotonation, not the reactions the enolate subsequently undergoes (other keywords).",
+          "examples": ["kinetic: LDA, −78°C → less-substituted enolate (faster proton removal)", "thermodynamic: $\\text{Et}_3\\text{N}$, equilibrate → more-substituted enolate", "2-methylcyclohexanone: different enolates under kinetic vs. thermodynamic conditions"]
+        },
+        {
+          "slug": "acidity_alpha_hydrogen",
+          "label": "Acidity of α-hydrogens and carbanion stabilization",
+          "description": "Rank the acidity of α-hydrogens by comparing $\\text{p}K_a$ values: α-H of a ketone ($\\text{p}K_a \\approx 20$) is more acidic than a typical C–H ($\\text{p}K_a \\approx 50$) but less acidic than a 1,3-dicarbonyl compound ($\\text{p}K_a \\approx 11$); stabilization is by resonance delocalization of the carbanion charge into the carbonyl oxygen. This focuses on the source of α-H acidity, not the tautomeric enol form itself (a separate keyword).",
+          "examples": ["ketone α-H $\\text{p}K_a \\approx 20$ vs. alkane $\\text{p}K_a \\approx 50$", "1,3-dicarbonyl (malonate, acetylacetone) $\\text{p}K_a \\approx 11$: two flanking C=O groups", "resonance: carbanion charge delocalized to O"]
+        }
+      ]
+    },
+    {
+      "slug": "carbonyl_reactivity_principles",
+      "label": "General Principles of Carbonyl Reactivity",
+      "description": "Substituent and steric effects on electrophilicity of the carbonyl carbon, and why aldehydes are more reactive than ketones.",
+      "intro": {
+        "slug": "carbonyl_reactivity_principles_intro",
+        "label": "Carbonyl Reactivity Principles Overview",
+        "description": "The electrophilicity of a carbonyl carbon is modulated by electronic and steric factors: electron-withdrawing substituents increase it; electron-donating groups (alkyl, alkoxy, amino) decrease it. Aldehydes are more reactive than ketones toward nucleophilic addition because they bear only one alkyl group (less electron-donation, less steric shielding). These principles govern the relative reactivity across all the nucleophilic-addition and acyl-substitution reactions in this category.",
+        "examples": ["aldehyde > ketone reactivity toward nucleophiles", "EWG on C=O increases electrophilicity", "steric hindrance slows nucleophilic attack"]
+      },
+      "in_depth": [
+        {
+          "slug": "substituent_effects_carbonyl",
+          "label": "Substituent effects on C=O electrophilicity",
+          "description": "Predict how substituents alter carbonyl reactivity: electron-withdrawing groups (halogens, acyl, nitro) increase the electrophilicity of the carbonyl carbon and accelerate nucleophilic attack; electron-donating groups (alkyl, $-\\text{OR}$, $-\\text{NR}_2$) decrease it via resonance donation. This focuses on electronic modulation of the carbonyl, not steric effects (a separate keyword).",
+          "examples": ["halogen α to C=O: EWG → more reactive", "amide C=O least reactive (lone pair donation from N)", "trifluoroacetaldehyde far more electrophilic than acetaldehyde"]
+        },
+        {
+          "slug": "steric_hindrance_carbonyl",
+          "label": "Steric hindrance and carbonyl reactivity",
+          "description": "Explain that bulky substituents adjacent to the carbonyl carbon slow nucleophilic attack by blocking approach to the trigonal planar carbonyl: di-substituted ketones are less reactive than aldehydes, and tri-substituted carbonyl substrates (e.g., pivaloyl) are highly hindered. This focuses on size/geometry effects, not electronic effects (a separate keyword).",
+          "examples": ["aldehyde (H) > ketone (alkyl) > ester (OR) steric accessibility to nucleophile", "bulky Nu prefers less-hindered carbonyl", "t-butyl ketone resists attack by large nucleophiles"]
+        }
+      ]
+    },
+    {
+      "slug": "alcohol_reactions",
+      "label": "Alcohol Reactions",
+      "description": "Physical properties and chemical reactions of alcohols: oxidation, SN1/SN2 substitution, protection, and mesylate/tosylate formation.",
+      "intro": {
+        "slug": "alcohol_reactions_intro",
+        "label": "Alcohol Reactions Overview",
+        "description": "Alcohols are both nucleophiles (via the oxygen lone pair) and weak acids ($\\text{p}K_a \\approx 16$); their O–H hydrogen bonding makes them higher boiling than analogous ethers. Chemically, alcohols can be oxidized to aldehydes, ketones, or carboxylic acids; converted to alkyl halides or sulfonates (mesylates/tosylates) for substitution reactions; or protected as ethers or acetals. Primary and secondary alcohols differ in their preferred substitution pathway (SN2 vs. SN1).",
+        "examples": ["$\\text{p}K_a$ of alcohol ≈ 16; H-bonding raises BP", "oxidation: 1° alcohol → aldehyde → carboxylic acid", "tosylate converts OH into a good leaving group"]
+      },
+      "in_depth": [
+        {
+          "slug": "alcohol_acidity_hbonding",
+          "label": "Acidity and hydrogen bonding of alcohols",
+          "description": "Rank the acidity of alcohols ($\\text{p}K_a \\approx 16$) relative to water ($\\text{p}K_a = 15.7$) and carboxylic acids ($\\text{p}K_a \\approx 5$), noting that alkyl groups destabilize the alkoxide and lower acidity; hydrogen bonding via the O–H gives alcohols anomalously high boiling points relative to their molecular weight. This focuses on physical/acid properties, not oxidation or substitution (separate keywords).",
+          "examples": ["alcohol $\\text{p}K_a \\approx 16$; more acidic than alkanes ($\\approx 50$), less than water ($15.7$)", "H-bonding: alcohol BP >> ether of same MW", "EWG (e.g., CF₃CH₂OH) lowers $\\text{p}K_a$; alkyl groups raise it"]
+        },
+        {
+          "slug": "alcohol_oxidation",
+          "label": "Oxidation of alcohols",
+          "description": "Predict the oxidation products of alcohols: primary alcohols ($1°$) are oxidized to aldehydes by PCC/Swern (stops at aldehyde) or to carboxylic acids by $\\text{KMnO}_4$/chromic acid; secondary alcohols ($2°$) give ketones; tertiary alcohols ($3°$) resist oxidation. This focuses on oxidation-state changes, not substitution reactions (a separate keyword).",
+          "examples": ["1° alcohol + PCC → aldehyde (not carboxylic acid)", "1° alcohol + $\\text{KMnO}_4$ → carboxylic acid", "2° alcohol + $\\text{Cr}_2\\text{O}_7^{2-}$ → ketone; 3° resists"]
+        },
+        {
+          "slug": "alcohol_sn1_sn2",
+          "label": "$\\text{S}_\\text{N}1$ vs. $\\text{S}_\\text{N}2$ substitution of alcohols",
+          "description": "Classify alcohol substitution reactions: converting $-\\text{OH}$ to a leaving group first (e.g., by protonation with HX or by tosylation) is necessary before substitution; primary alcohols favor SN2 (backside attack, inversion, rate = $k[\\text{substrate}][\\text{Nu}]$), while tertiary alcohols form carbocations and react via SN1 (first-order, racemization). This focuses on the substitution pathway at the carbon bearing OH, not protection of alcohols (a separate keyword).",
+          "examples": ["$\\text{CH}_3\\text{OH} + \\text{HBr} \\rightarrow \\text{CH}_3\\text{Br}$ (SN2, 1° substrate)", "$3°$ alcohol + $\\text{HCl}$ → carbocation → $3°$ alkyl chloride (SN1)", "inversion (SN2) vs. racemization (SN1)"]
+        },
+        {
+          "slug": "alcohol_protection",
+          "label": "Protection of alcohols",
+          "description": "Explain that free hydroxyl groups are protected as silyl ethers (TMS, TBS) or acetals during multi-step synthesis so they do not interfere with other reactions; the protecting group is later removed under mild conditions. This focuses on the strategy of temporarily masking –OH reactivity, not substitution to give a permanent alkyl halide (a separate keyword).",
+          "examples": ["TMS ether: $\\text{R-OH} + \\text{TMSCl} \\rightarrow \\text{R-OTMS}$ (stable to bases)", "acetal (THP) protection: stable to base/organolithium", "deprotection: TMS with $\\text{F}^-$ (TBAF) or dilute acid"]
+        },
+        {
+          "slug": "mesylate_tosylate",
+          "label": "Mesylates and tosylates as activated alcohol derivatives",
+          "description": "Explain that treatment of an alcohol with methanesulfonyl chloride ($\\text{MsCl}$) or tosyl chloride ($\\text{TsCl}$) converts the poor leaving group $-\\text{OH}$ into a good leaving group ($-\\text{OMs}$ or $-\\text{OTs}$) without changing the carbon framework; the resulting sulfonate undergoes SN2 with retention of carbon configuration at the reacting center (inversion at C by the incoming nucleophile). This focuses on converting OH to a leaving group, not the subsequent substitution mechanism (a separate keyword).",
+          "examples": ["$\\text{R-OH} + \\text{TsCl/pyridine} \\rightarrow \\text{R-OTs}$ (retention of C config in sulfonylation)", "OTs is an excellent leaving group (pKa of TsOH ≈ −1)", "SN2 on tosylate: net inversion at C"]
+        }
+      ]
+    },
+    {
+      "slug": "sn1_sn2_mechanism",
+      "label": "$\\text{S}_\\text{N}1$ vs. $\\text{S}_\\text{N}2$ Mechanisms",
+      "description": "The two nucleophilic substitution pathways: mechanism, rate law, substrate/nucleophile preferences, solvent effects, and stereochemical outcomes.",
+      "intro": {
+        "slug": "sn1_sn2_mechanism_intro",
+        "label": "SN1 vs. SN2 Overview",
+        "description": "Nucleophilic substitution at $sp^3$ carbon proceeds by two limiting mechanisms. SN2 is a concerted, bimolecular backside attack with second-order kinetics and inversion of configuration, favored by primary substrates, strong nucleophiles, and polar aprotic solvents. SN1 is a stepwise ionization through a planar carbocation intermediate with first-order kinetics and racemization, favored by tertiary/allylic/benzylic substrates and polar protic solvents. Predicting which pathway operates requires analyzing all four factors together.",
+        "examples": ["SN2: rate = $k[\\text{RX}][\\text{Nu}]$; inversion", "SN1: rate = $k[\\text{RX}]$; carbocation; racemization", "1° → SN2; 3° → SN1 (typically)"]
+      },
+      "in_depth": [
+        {
+          "slug": "sn2_mechanism",
+          "label": "SN2 reaction mechanism and stereochemistry",
+          "description": "Classify an SN2 reaction: a one-step concerted backside attack by the nucleophile on the electrophilic carbon bearing the leaving group, with second-order kinetics (rate = $k[\\text{substrate}][\\text{Nu}^-]$) and Walden inversion (the three remaining substituents flip through a trigonal-bipyramidal transition state). Favored by $1°$ substrates, strong/unhindered nucleophiles, and polar aprotic solvents (DMSO, acetone). This focuses on the SN2 pathway, not the carbocation SN1 (a separate keyword).",
+          "examples": ["concerted: bond-making = bond-breaking in one step", "rate = $k[\\text{RX}][\\text{Nu}]$; second-order", "Walden inversion: backside attack flips stereochemistry"]
+        },
+        {
+          "slug": "sn1_mechanism",
+          "label": "SN1 reaction mechanism and stereochemistry",
+          "description": "Classify an SN1 reaction: a two-step process — rate-determining ionization of the leaving group to give a planar carbocation, followed by fast nucleophilic addition from either face — giving first-order kinetics (rate = $k[\\text{substrate}]$) and racemization. Favored by $3°$/allylic/benzylic substrates and polar protic solvents ($\\text{H}_2\\text{O}$, ROH) that stabilize the cation by solvation. This focuses on the carbocation pathway, not the concerted SN2 (a separate keyword).",
+          "examples": ["rate = $k[\\text{RX}]$; Nu concentration irrelevant", "planar carbocation → equal attack from both faces → racemic product", "stability: $3°$ > $2°$ > $1°$ carbocation"]
+        },
+        {
+          "slug": "sn1_sn2_substrate_nucleophile_solvent",
+          "label": "Substrate, nucleophile, and solvent effects on SN1/SN2",
+          "description": "Predict which substitution pathway dominates by analyzing three variables: (1) substrate — $1°$ favors SN2, $3°$ favors SN1, $2°$ is intermediate; (2) nucleophile strength — strong nucleophile (CN⁻, RS⁻, I⁻) pushes SN2, weak nucleophile allows SN1; (3) solvent polarity/proticity — polar aprotic (DMSO, DMF) favors SN2; polar protic ($\\text{H}_2\\text{O}$, ROH) stabilizes carbocation → SN1. This focuses on the interplay of all three factors, not individual factors in isolation.",
+          "examples": ["$1°$ substrate + strong Nu + DMSO → SN2", "$3°$ substrate + $\\text{H}_2\\text{O}$ solvolysis → SN1", "allylic/benzylic $2°$: either pathway possible"]
+        }
+      ]
+    },
+    {
+      "slug": "elimination_reactions",
+      "label": "E1 and E2 Elimination Reactions",
+      "description": "Base-promoted and ionization-initiated elimination from alkyl substrates, Zaitsev's rule, and the competition between elimination and substitution.",
+      "intro": {
+        "slug": "elimination_reactions_intro",
+        "label": "E1 & E2 Overview",
+        "description": "Elimination competes with substitution when a base/nucleophile attacks an alkyl substrate. E2 is concerted (anti-periplanar H and LG, second-order, requires a strong base), while E1 is stepwise through a carbocation (first-order, same conditions as SN1). Both give alkenes preferentially at the more-substituted carbon (Zaitsev's rule), except when a bulky base steers to the less-substituted (Hofmann) alkene. The dominant pathway depends on substrate, base strength, and temperature.",
+        "examples": ["E2: anti-periplanar geometry; rate = $k[\\text{RX}][\\text{base}]$", "E1: carbocation intermediate (same first step as SN1)", "Zaitsev: more-substituted (stable) alkene preferred"]
+      },
+      "in_depth": [
+        {
+          "slug": "e2_elimination",
+          "label": "E2 elimination mechanism and anti-periplanar requirement",
+          "description": "Apply the E2 mechanism: a strong base abstracts the β-hydrogen anti-periplanar to the leaving group in a single concerted step, giving the alkene with second-order kinetics (rate = $k[\\text{RX}][\\text{Base}]$) and a syn/anti stereospecific outcome (the anti-periplanar geometry requirement determines which diastereomeric alkene forms). This focuses on the concerted E2 pathway, not the stepwise E1 (a separate keyword).",
+          "examples": ["anti-periplanar H and LG → concerted syn elimination", "rate = $k[\\text{RX}][\\text{B}]$; strong base (KOtBu) required", "trans alkene preferred from anti-elimination of erythro substrate"]
+        },
+        {
+          "slug": "e1_elimination",
+          "label": "E1 elimination mechanism",
+          "description": "Explain that E1 proceeds through the same carbocation intermediate as SN1; after ionization (the rate-determining step), a proton is lost from the β-carbon to give the alkene with first-order kinetics (rate = $k[\\text{RX}]$). E1 is favored by tertiary substrates, weak bases, and polar protic solvents — the same conditions as SN1, with which it competes. This focuses on the two-step E1, not the concerted E2 (a separate keyword).",
+          "examples": ["E1 rate = $k[\\text{RX}]$; carbocation intermediate (same as SN1)", "tertiary substrate + weak base (EtOH, $\\text{H}_2\\text{O}$) → E1 + SN1 mixture", "more-substituted alkene (Zaitsev) via most stable carbocation"]
+        },
+        {
+          "slug": "zaitsev_hofmann_rule",
+          "label": "Zaitsev's rule and Hofmann elimination",
+          "description": "Apply Zaitsev's rule (the major alkene product of elimination is the more-substituted, more-stable alkene) for normal E1/E2 conditions; predict Hofmann product (less-substituted alkene) when a bulky base (e.g., KOtBu) is used or in Hofmann elimination (quaternary ammonium, E2). This focuses on regiochemistry of elimination, not mechanism (separate keywords).",
+          "examples": ["Zaitsev: 2-bromobutane + KOH → 2-butene (major), 1-butene (minor)", "bulky base KOtBu → Hofmann (less-substituted) alkene", "thermodynamic stability: internal alkene > terminal alkene"]
+        }
+      ]
+    },
+    {
+      "slug": "carboxylic_acid_reactions",
+      "label": "Carboxylic Acid Reactions",
+      "description": "Reactions at the carboxyl group: derivative formation, reduction, decarboxylation, and substitution at the 2-position.",
+      "intro": {
+        "slug": "carboxylic_acid_reactions_intro",
+        "label": "Carboxylic Acid Reactions Overview",
+        "description": "Carboxylic acids ($\\text{p}K_a \\approx 5$) are the parent of the acid-derivative family. Their carbonyl is less reactive than an aldehyde toward nucleophilic addition but more so than an ester or amide, because the $-\\text{OH}$ is a better leaving group than $-\\text{OR}$ or $-\\text{NR}_2$. Key reactions include esterification, amide formation, anhydride formation, reduction to an alcohol, decarboxylation of β-keto acids, and substitution at the α (2-position).",
+        "examples": ["$\\text{p}K_a \\approx 5$: stronger acid than alcohol or phenol in typical aliphatics", "activation → ester/amide/anhydride via nucleophilic acyl substitution", "decarboxylation: β-keto acid → ketone + $\\text{CO}_2$"]
+      },
+      "in_depth": [
+        {
+          "slug": "carboxylic_acid_acidity",
+          "label": "Acidity of carboxylic acids",
+          "description": "Rank the acidity of carboxylic acids ($\\text{p}K_a \\approx 5$) relative to alcohols ($\\approx 16$) and explain it by the resonance stabilization of the carboxylate anion; predict how electron-withdrawing (lowers $\\text{p}K_a$, stronger acid) and electron-donating (raises $\\text{p}K_a$) substituents alter acidity. This focuses on acid strength and substituent effects, not derivative formation (separate keywords).",
+          "examples": ["carboxylate anion resonance: two equal C–O bonds", "EWG at α-C: trifluoroacetic acid $\\text{p}K_a \\approx 0$", "EDG raises $\\text{p}K_a$: longer chain alkyl → very slightly weaker acid"]
+        },
+        {
+          "slug": "carboxylic_acid_derivative_formation",
+          "label": "Formation of esters, amides, and anhydrides from carboxylic acids",
+          "description": "Predict that carboxylic acids react with alcohols (acid catalyst, Fischer esterification), amines, or acyl chlorides/anhydrides to give esters, amides, and anhydrides, respectively, via nucleophilic acyl substitution (add + eliminate mechanism). This focuses on the carboxylic acid as the electrophilic partner, not the reactions of the derivatives themselves (separate keywords).",
+          "examples": ["Fischer: $\\text{RCOOH} + \\text{R'OH} \\xrightarrow{\\text{H}^+}$ ester + $\\text{H}_2\\text{O}$ (reversible)", "$\\text{RCOOH} + \\text{SOCl}_2 \\rightarrow$ acyl chloride → reacts with $\\text{NH}_2\\text{R'}$ → amide", "anhydride: 2 RCOOH → dehydration"]
+        },
+        {
+          "slug": "carboxylic_acid_reduction",
+          "label": "Reduction of carboxylic acids to primary alcohols",
+          "description": "Predict that carboxylic acids are reduced to primary alcohols only by strong reducing agents ($\\text{LiAlH}_4$); $\\text{NaBH}_4$ does not reduce carboxylic acids under normal conditions. This focuses on the reduction of the –COOH group to –$\\text{CH}_2\\text{OH}$, not reduction of aldehydes or ketones (separate keywords).",
+          "examples": ["$\\text{RCOOH} + \\text{LiAlH}_4 \\rightarrow \\text{RCH}_2\\text{OH}$ (1° alcohol)", "$\\text{NaBH}_4$ does NOT reduce –COOH", "two equivalents of hydride are delivered to the carbonyl"]
+        },
+        {
+          "slug": "decarboxylation",
+          "label": "Decarboxylation of β-keto and malonic acids",
+          "description": "Predict that β-keto acids (oxoacid with a ketone β to –COOH) and malonic acid derivatives readily decarboxylate on heating via a six-membered cyclic transition state, releasing $\\text{CO}_2$ and giving the corresponding ketone or acetic-acid derivative: $\\text{R-CO-CH}_2\\text{-COOH} \\xrightarrow{\\Delta} \\text{R-CO-CH}_3 + \\text{CO}_2$. This focuses on the cyclic-enol mechanism for decarboxylation, not amide or ester hydrolysis (separate keywords).",
+          "examples": ["β-keto acid → enol → ketone + $\\text{CO}_2$ on heating", "malonic acid (pKa effect) → acetic acid + $\\text{CO}_2$", "cyclic 6-membered TS: proton transfer concerted with $\\text{CO}_2$ loss"]
+        },
+        {
+          "slug": "alpha_substitution_carboxylic",
+          "label": "Substitution at the α (2-position) of carboxylic acids",
+          "description": "Apply the Hell–Volhard–Zelinskii (HVZ) reaction (or equivalent α-halogenation): a carboxylic acid is treated with $\\text{Br}_2$/$\\text{P}$ to give the α-bromo acid, which can be substituted with other nucleophiles (e.g., $\\text{NH}_3$ → α-amino acid). This focuses on functionalization at the carbon α to the carboxyl, not decarboxylation (a separate keyword).",
+          "examples": ["HVZ: $\\text{RCOOH} + \\text{Br}_2/\\text{P} \\rightarrow \\text{RCHBrCOOH}$", "α-bromo acid + $\\text{NH}_3$ → α-amino acid (racemic)", "activated as acyl bromide in situ before α-halogenation"]
+        }
+      ]
+    },
+    {
+      "slug": "acid_derivatives_reactions",
+      "label": "Reactions of Acid Derivatives (Anhydrides, Esters, Amides)",
+      "description": "Nucleophilic acyl substitution reactions of carboxylic acid derivatives, relative reactivity order, and special cases including transesterification, amide hydrolysis, and β-lactam strain.",
+      "intro": {
+        "slug": "acid_derivatives_reactions_intro",
+        "label": "Acid Derivative Reactions Overview",
+        "description": "Acid derivatives (anhydrides, acyl chlorides, esters, amides) all react by nucleophilic acyl substitution — nucleophile addition at the carbonyl followed by elimination of a leaving group — but their reactivity decreases in the order acyl chloride > anhydride > ester > amide, paralleling leaving-group ability. Steric bulk around the carbonyl slows attack; resonance donation from heteroatom substituents stabilizes the ground state and raises the barrier. β-Lactam antibiotics are strained cyclic amides with enhanced reactivity at the amide carbonyl.",
+        "examples": ["reactivity: acyl Cl > anhydride > ester > amide", "mechanism: Nu attacks C=O → tetrahedral intermediate → LG expelled", "β-lactam: 4-membered ring strain → reactive amide"]
+      },
+      "in_depth": [
+        {
+          "slug": "nucleophilic_acyl_substitution_mechanism",
+          "label": "Nucleophilic acyl substitution mechanism",
+          "description": "Explain the two-step mechanism of nucleophilic acyl substitution: (1) nucleophile attacks the electrophilic carbonyl carbon to give a tetrahedral alkoxide intermediate; (2) the leaving group (X⁻) departs to re-form the carbonyl — net substitution at acyl carbon. Driving force: reformation of the stable C=O. This focuses on the shared add-then-eliminate mechanism, not the comparison of which derivative is more reactive (a separate keyword).",
+          "examples": ["Nu: + C=O → tetrahedral intermediate → C=O reformed + LG$^-$", "leaving group: Cl⁻ > RCOO⁻ > RO⁻ > R₂N⁻", "acid catalysis protonates LG; base catalysis activates Nu"]
+        },
+        {
+          "slug": "relative_reactivity_acid_derivatives",
+          "label": "Relative reactivity of acid derivatives",
+          "description": "Rank acid derivatives toward nucleophilic acyl substitution: acyl chloride > anhydride > ester > amide, based on the leaving-group ability ($\\text{p}K_a$ of the conjugate acid of the leaving group — better leaving group = more reactive) and the degree of nitrogen/oxygen lone-pair donation that stabilizes the C=O. This focuses on relative electrophilicity, not the detailed mechanism (a separate keyword).",
+          "examples": ["LG p$K_a$: HCl (−7) < RCOOH (5) < ROH (16) < R₂NH (35)", "amide least reactive: lone pair on N into C=O", "order: acyl Cl > anhydride > ester ≫ amide"]
+        },
+        {
+          "slug": "transesterification",
+          "label": "Transesterification",
+          "description": "Predict that an ester can be converted to a different ester by treatment with an alcohol (acid or base catalysis), in a reversible reaction driven by excess alcohol or product removal (Le Châtelier): $\\text{R-COOR'} + \\text{R''OH} \\rightleftharpoons \\text{R-COOR''} + \\text{R'OH}$. This focuses on ester-to-ester interconversion, not ester hydrolysis to the acid (a separate keyword).",
+          "examples": ["biodiesel: vegetable-oil esters + methanol → methyl esters (transesterification)", "reversible: drive by excess alcohol or remove product", "mechanism: acid/base-catalyzed nucleophilic acyl substitution"]
+        },
+        {
+          "slug": "amide_hydrolysis",
+          "label": "Hydrolysis of amides",
+          "description": "Predict that amides (the least reactive acid derivative) hydrolyze under forcing aqueous acid or base conditions — acid hydrolysis gives the carboxylic acid + ammonium ion; base hydrolysis (saponification) gives the carboxylate salt + amine — and that the reaction is irreversible under basic conditions due to carboxylate stability. This focuses on the hydrolysis of amide bonds specifically, not the formation of amides (a separate keyword).",
+          "examples": ["acid hydrolysis: amide + $\\text{H}_3\\text{O}^+/\\Delta \\rightarrow \\text{RCOOH} + \\text{R'NH}_3^+$", "base hydrolysis: amide + $\\text{OH}^-/\\Delta \\rightarrow \\text{RCOO}^- + \\text{R'NH}_2$", "forcing conditions required: amide $\\text{C=O}$ is stabilized by N lone-pair"]
+        },
+        {
+          "slug": "beta_lactam_strain",
+          "label": "β-Lactam strain and reactivity",
+          "description": "Explain that β-lactams (4-membered cyclic amides) are far more reactive than typical amides toward ring-opening nucleophilic acyl substitution because ring strain destabilizes the ground state and the nitrogen lone pair cannot donate effectively into the carbonyl in the strained geometry. Penicillins exploit this strained reactivity by acylating an enzyme active-site nucleophile. This focuses on strain-enhanced amide reactivity, not relative reactivity of non-strained acid derivatives (a separate keyword).",
+          "examples": ["4-membered ring strain destabilizes the β-lactam", "N lone pair mis-aligned: reduced resonance stabilization of C=O", "strained β-lactam undergoes rapid nucleophilic acyl substitution"]
+        },
+        {
+          "slug": "steric_electronic_acyl",
+          "label": "Steric and electronic effects in nucleophilic acyl substitution",
+          "description": "Predict that bulky substituents α to the acyl carbonyl slow nucleophilic attack (steric), while electron-withdrawing groups on the acyl carbon increase electrophilicity and accelerate substitution, and electron-donating groups (especially nitrogen lone pairs in amides) decrease reactivity by donating into the π* of C=O. This focuses on fine-tuning reactivity within a single derivative class, not comparing across classes (a separate keyword).",
+          "examples": ["pivaloyl chloride (bulky t-Bu) reacts slower than acetyl chloride", "EWG: trifluoroacetyl ester hydrolyzes faster than acetyl ester", "amide N lone pair: IR C=O of amide at ~1660 cm⁻¹ (lower than ester ~1735)"]
+        }
+      ]
+    },
+    {
+      "slug": "phenol_redox",
+      "label": "Phenol Oxidation-Reduction (Quinones & Ubiquinones)",
+      "description": "The two-electron redox interconversion of hydroquinones and quinones as reversible biological electron-transfer carriers.",
+      "intro": {
+        "slug": "phenol_redox_intro",
+        "label": "Phenol Redox Overview",
+        "description": "Phenols (aromatic –OH) can be oxidized to quinones (cyclic 1,4-diketones) via a reversible two-electron redox: hydroquinone ($\\text{QH}_2$) loses $2\\text{H}^+$ and $2e^-$ to give the quinone (Q), which regains them on reduction. Ubiquinone (Coenzyme Q) operates on this principle as a mobile electron carrier in the mitochondrial electron transport chain. The organic-chemistry angle here is the 2e⁻ oxidation/reduction at phenol; the biology belongs in Biology.",
+        "examples": ["$\\text{QH}_2 \\rightleftharpoons \\text{Q} + 2\\text{H}^+ + 2e^-$", "hydroquinone (catechol form) → benzoquinone (C=O)", "Coenzyme Q: transfers 2e⁻ in ETC (mechanism in Biology)"]
+      },
+      "in_depth": [
+        {
+          "slug": "hydroquinone_quinone_redox",
+          "label": "Hydroquinone–quinone 2-electron redox",
+          "description": "Explain the hydroquinone–quinone interconversion as a reversible $2\\text{H}^+$/2e⁻ oxidation-reduction: hydroquinone (1,4-dihydroxybenzene) loses two protons and two electrons to give 1,4-benzoquinone; reduction restores the hydroquinone. Ubiquinones (coenzyme Q) function as biological $2e^-$ shuttle carriers using this chemistry. This focuses on the organic redox couple, not the biological ETC context (Biology).",
+          "examples": ["$\\text{C}_6\\text{H}_4(\\text{OH})_2 \\rightleftharpoons \\text{C}_6\\text{H}_4\\text{O}_2 + 2\\text{H}^+ + 2e^-$", "quinone (C=O at 1,4 positions) vs. hydroquinone (C–OH)", "two-electron, two-proton process: $2\\text{H}^+$ + $2e^-$ coupled"]
+        }
+      ]
+    },
+    {
+      "slug": "aromatic_heterocycle_reactivity",
+      "label": "Reactivity of Aromatic Heterocycles",
+      "description": "Conceptual electrophilic and nucleophilic reactivity patterns of biologically important aromatic heterocycles (pyridine, pyrimidine, imidazole, pyrrole, furan, thiophene, indole, purine).",
+      "intro": {
+        "slug": "aromatic_heterocycle_reactivity_intro",
+        "label": "Aromatic Heterocycle Reactivity Overview",
+        "description": "Aromatic heterocycles appear throughout biology (nucleobases, histidine, heme, NAD⁺) and differ in reactivity from benzene based on whether the heteroatom donates or withdraws electrons from the ring. Pyrrole-type nitrogen (lone pair in π system) activates the ring toward electrophilic aromatic substitution (EAS); pyridine-type nitrogen (lone pair in plane, not in π system) deactivates toward EAS but activates toward nucleophilic aromatic substitution (NAS) and makes the ring a Lewis base at N. MCAT level = conceptual recognition of electron-rich vs. electron-poor heterocycles.",
+        "examples": ["pyrrole N: lone pair in π → electron-rich ring (EAS favored)", "pyridine N: lone pair orthogonal → electron-poor ring (nucleophilic attack at C2/C4)", "imidazole: one pyrrole-N + one pyridine-N → amphoteric (His side chain)"]
+      },
+      "in_depth": [
+        {
+          "slug": "electron_rich_heterocycles",
+          "label": "Electron-rich heterocycles (pyrrole, furan, thiophene, indole)",
+          "description": "Classify pyrrole, furan, thiophene, and indole as electron-rich aromatic heterocycles: the heteroatom's lone pair is part of the aromatic $\\pi$ system (donated into the ring), activating the ring toward electrophilic aromatic substitution (EAS) at C2/C3. This focuses on heteroatom-donation-rich reactivity, not electron-poor pyridinium-type heterocycles (a separate keyword).",
+          "examples": ["pyrrole: N lone pair in π; 6-electron aromatic ring", "EAS: electrophile attacks C2 (α position) preferentially", "furan and thiophene: O/S lone pairs in π → electron-rich aromatic"]
+        },
+        {
+          "slug": "electron_poor_heterocycles",
+          "label": "Electron-poor heterocycles (pyridine, pyrimidine, purine)",
+          "description": "Classify pyridine, pyrimidine, and purine as electron-poor aromatic heterocycles: the ring nitrogen lone pair is in the plane of the ring (not donated to π), so the electronegative N withdraws electron density from the ring, deactivating EAS and instead favoring nucleophilic aromatic substitution (NAS) at C2/C4/C6. The ring nitrogen is also a Lewis-base site for protonation and coordination. This focuses on the electron-withdrawing N, not the electron-donating pyrrole-type N (a separate keyword).",
+          "examples": ["pyridine N: lone pair in $sp^2$ orbital, perpendicular to π", "EAS at pyridine ring extremely slow; NAS at C2/C4 possible with activating LG", "pyrimidine: two ring N atoms → two Lewis-base sites; DNA base pairing"]
+        },
+        {
+          "slug": "imidazole_amphoteric",
+          "label": "Imidazole reactivity and amphoteric character",
+          "description": "Explain that imidazole contains one pyrrole-type N (lone pair in π, not a Brønsted base) and one pyridine-type N (lone pair in the plane, basic, $\\text{p}K_a$ of conjugate acid $\\approx 7$), making it amphoteric; the histidine side chain (imidazole ring, $\\text{p}K_a \\approx 6$) is the biological acid–base shuttle in many enzyme active sites. This focuses on imidazole's unique dual-nitrogen reactivity; enzyme mechanism details are Biology.",
+          "examples": ["imidazole: one N donates to π (pyrrole-type), one N lone pair in plane (basic)", "$\\text{p}K_a$ of imidazolium ≈ 7 → near physiological pH → active proton shuttle", "histidine: imidazole side chain as general acid/base (Biology for full mechanism)"]
+        }
+      ]
+    },
+    {
+      "slug": "reaction_energy_diagrams",
+      "label": "Organic Reaction-Energy Diagrams",
+      "description": "Reading and interpreting free-energy reaction-coordinate diagrams for one-step and multi-step organic reactions.",
+      "intro": {
+        "slug": "reaction_energy_diagrams_intro",
+        "label": "Reaction-Energy Diagrams Overview",
+        "description": "A reaction-energy (free-energy) diagram plots energy vs. reaction coordinate for a transformation. Each hump is a transition state (highest energy point on the path); each valley after the first is an intermediate (a local minimum). The height of the first hump gives the activation energy ($E_a$); the overall $\\Delta G$ is the energy difference between starting materials and products. For multi-step mechanisms (SN1, E1) the rate-determining step has the highest transition state.",
+        "examples": ["height of TS = $E_a$ (determines rate)", "$\\Delta G = $ energy of products minus reactants", "two-step reaction: two humps, one intermediate valley"]
+      },
+      "in_depth": [
+        {
+          "slug": "reading_energy_diagrams",
+          "label": "Reading organic reaction-energy (coordinate) diagrams",
+          "description": "Identify on a free-energy diagram: reactants, products, transition states (energy maxima), intermediates (energy minima between maxima), the activation energy ($\\Delta G^\\ddagger$) for each step, the overall $\\Delta G_{rxn}$, and the rate-determining step (the step with the highest-energy transition state). Distinguish exergonic ($\\Delta G < 0$, products lower) from endergonic ($\\Delta G > 0$, products higher). This focuses on diagram interpretation, not the thermodynamic equations themselves (taught in C7).",
+          "examples": ["rate-determining step: highest TS on coordinate diagram", "intermediate = local minimum (e.g., carbocation in SN1/E1)", "$E_a$ of reverse reaction = $\\Delta G^\\ddagger_{\\text{fwd}} - \\Delta G_{rxn}$"]
+        },
+        {
+          "slug": "kinetic_vs_thermodynamic_control",
+          "label": "Kinetic vs. thermodynamic control in organic reactions",
+          "description": "Apply kinetic vs. thermodynamic control to the classic ORGANIC cases — enolate regioselectivity (kinetic vs. thermodynamic enolate) and 1,2- vs. 1,4-addition to conjugated dienes — where low temperature/short time gives the faster (lower-$E_a$) product and reversible/equilibrating conditions give the most stable product. This focuses on these organic illustrations; the general kinetic-vs-thermodynamic-control principle is taught in Chemical Kinetics (C8).",
+          "examples": ["kinetic: lower $E_a$ product → forms first at low T", "thermodynamic: reversible conditions → most stable product accumulates", "butadiene + HBr: 1,2-adduct (kinetic, −78°C) vs. 1,4-adduct (thermodynamic, 40°C)"]
+        }
+      ]
+    }
+  ]
+}

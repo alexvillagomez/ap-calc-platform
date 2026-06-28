@@ -23,8 +23,12 @@
     "math:blueprints": "tsx scripts/backfill-math-blueprints.ts",
     "math:import": "tsx scripts/import-math-problems.ts",
     "math:yield-writeback": "tsx scripts/writeback-learn-yield.ts",
+    "check:emphasis": "tsx scripts/check-emphasis.ts",
     "questions:embed": "tsx scripts/embed-missing-questions.ts",
-    "questions:content": "tsx scripts/backfill-question-content.ts"
+    "questions:content": "tsx scripts/backfill-question-content.ts",
+    "questions:distractors": "tsx scripts/backfill-distractor-data.ts",
+    "questions:descriptions": "tsx scripts/enrich-question-descriptions.ts",
+    "umbrella:centroids": "tsx scripts/recompute-umbrella-embeddings.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",

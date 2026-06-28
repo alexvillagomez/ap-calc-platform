@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { YieldBadge } from "@/components/ui/Badge";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { SoundToggle } from "@/components/ui/SoundToggle";
-import { getOrCreateMathSession } from "@/lib/mathSession";
+import { NavMenu } from "@/components/nav/NavMenu";
+import { getOrCreateMathSession, setLastMathCourse } from "@/lib/mathSession";
 import {
   MathCategory,
   MathTaxonomyResponse,
@@ -57,7 +57,8 @@ function CategoryCard({
     0
   );
 
-  const showYield = course !== "calc_ab";
+  // Math hides yield entirely (no decimals, no badges) for every course.
+  const showYield = false;
 
   if (collapsed && !open) {
     return (
@@ -319,31 +320,105 @@ function MathCourseLandingInner({
               My Progress
             </Link>
             <StreakBadge />
-            <SoundToggle />
+            <NavMenu />
           </div>
         </div>
 
-        {/* Top action row */}
-        <div className="w-full px-6 pb-3 flex flex-wrap gap-2">
-          <Link href={`/math/${course}/auto`}>
-            <Button variant="primary" size="sm">
-              Continue
-            </Button>
-          </Link>
-          <Link href={`/math/${course}/diagnostic`}>
-            <Button variant="secondary" size="sm">
-              Take placement diagnostic
-            </Button>
-          </Link>
-          <Link href={`/math/${course}/practice`}>
-            <Button variant="ghost" size="sm">
-              General Practice
-            </Button>
-          </Link>
-        </div>
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
+        {/* ─── Automatic mode hero — the primary, recommended way to learn ─── */}
+        <section>
+          <Link href={`/math/${course}/auto`} className="group block">
+            <div className="relative overflow-hidden rounded-2xl border border-brand-300 bg-gradient-to-br from-brand-500 to-brand-700 p-5 shadow-brand-md transition-all group-hover:shadow-brand-lg group-hover:border-brand-400">
+              <div className="flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-brand-700 bg-white rounded-full px-2 py-0.5">
+                    ★ Recommended
+                  </span>
+                  <h2 className="text-xl font-bold text-white leading-tight mt-2">
+                    Automatic Mode
+                  </h2>
+                  <p className="text-sm text-brand-50/80 mt-1">
+                    Your guided path through {courseLabel} — we pick what&apos;s next.
+                  </p>
+                </div>
+                <span className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-brand-700 shadow-sm transition-transform group-hover:scale-[1.02] shrink-0">
+                  Start
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth={2}>
+                    <path d="M6 3l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </Link>
+
+          {/* Flashcards-only mode — Anki-style spaced repetition, alongside auto. */}
+          <Link href={`/math/${course}/cards`} className="group block mt-3">
+            <div className="rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50 p-5 transition-all group-hover:shadow-brand-sm group-hover:border-orange-300">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl shrink-0">🔥</span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-bold text-neutral-900">Flashcards</p>
+                  <p className="text-xs text-neutral-500 mt-0.5">
+                    Memorize the whole course.
+                  </p>
+                </div>
+                <span className="shrink-0 text-orange-600 font-semibold text-sm inline-flex items-center gap-1">
+                  Start
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth={2}>
+                    <path d="M6 3l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </Link>
+
+          {/* Secondary modes — kept available, visually subordinate */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-3 px-1">
+            <span className="text-xs text-neutral-400">Prefer to choose your own path?</span>
+            <Link
+              href={`/math/${course}/diagnostic`}
+              className="text-xs font-medium text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+            >
+              Take placement diagnostic
+            </Link>
+            <Link
+              href={`/math/${course}/practice`}
+              className="text-xs font-medium text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+            >
+              General practice
+            </Link>
+          </div>
+
+          {/* Backtrack into Precalc — only on the calc course, to shore up prerequisites */}
+          {isCalcAb && (
+            <Link
+              href="/math/precalc/auto"
+              onClick={() => setLastMathCourse("precalc")}
+              className="group mt-3 flex items-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 hover:border-brand-200 hover:bg-brand-50 transition-all"
+            >
+              <div className="w-9 h-9 rounded-lg bg-brand-100 flex items-center justify-center shrink-0 text-brand-600">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth={2}>
+                  <path d="M10 13L5 8l5-5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-neutral-800">
+                  New to calculus, or shaky on the basics?
+                </p>
+                <p className="text-xs text-neutral-500">
+                  Back up into the guided <span className="font-medium text-brand-600">Precalculus</span> path
+                  to shore up prerequisites — your calc progress is saved and waiting.
+                </p>
+              </div>
+              <span className="text-xs font-medium text-brand-600 group-hover:text-brand-700 shrink-0 whitespace-nowrap">
+                Go to Precalc →
+              </span>
+            </Link>
+          )}
+        </section>
+
         {/* Topic search */}
         <section className="space-y-2">
           <h3 className="text-sm font-semibold text-neutral-800">

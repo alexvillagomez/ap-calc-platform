@@ -26,6 +26,10 @@ export async function POST(request: Request): Promise<Response> {
     course?: "ap_calc" | "precalc";
     problem_description?: string;
     wrong_answer_descriptions?: (string | null)[];
+    topic_description?: string;
+    action_description?: string;
+    representation_description?: string;
+    prerequisite_description?: string;
     generation_thinking?: string;
     distractor_thinking?: string;
     distractor_pool?: { id: string; misconception: string; wrong_answer_plain: string }[] | null;
@@ -37,7 +41,6 @@ export async function POST(request: Request): Promise<Response> {
   const { data: inserted, error: insertError } = await supabase
     .from("rag_examples")
     .insert({
-      topic_id: null,
       keyword_weights: {},
       latex_content: body.latex_content,
       solution_latex: body.solution_latex,
@@ -67,13 +70,11 @@ export async function POST(request: Request): Promise<Response> {
         const problemText = `${body.latex_content}\n\n${body.solution_latex}`;
         const wadForTagging = Array.isArray(body.wrong_answer_descriptions) ? body.wrong_answer_descriptions : [];
         const [taggingResult, embRes] = await Promise.all([
-          autoTagKeywords(openai, body.latex_content, body.solution_latex, supabase, body.problem_description, wadForTagging as (string | null)[], body.correct_index),
+          autoTagKeywords(openai, body.latex_content, body.solution_latex, supabase, body.problem_description, wadForTagging as (string | null)[], body.correct_index, body.topic_description, body.action_description, body.representation_description, body.prerequisite_description),
           openai.embeddings.create({ model: "text-embedding-3-small", input: problemText }),
         ]);
         const embedding = embRes.data[0]?.embedding ?? null;
-        const normalizedKw = taggingResult.keyword_weights;
-        const normalizedTags = taggingResult.tag_weights;
-        const wrong_answer_data = taggingResult.wrong_answer_data;
+        const { keyword_weights: normalizedKw, action_weights, representation_weights, prerequisite_weights, wrong_answer_data } = taggingResult;
 
         // Generate descriptions (fallback for problems missing problem_description)
         let problem_description: string | null = body.problem_description ?? null;
@@ -98,7 +99,9 @@ export async function POST(request: Request): Promise<Response> {
 
         await supabase.from("rag_examples").update({
           keyword_weights: normalizedKw,
-          tag_weights: normalizedTags,
+          ...(Object.keys(action_weights).length > 0 ? { action_weights } : {}),
+          ...(Object.keys(representation_weights).length > 0 ? { representation_weights } : {}),
+          ...(Object.keys(prerequisite_weights).length > 0 ? { prerequisite_weights } : {}),
           ...(wrong_answer_data.length > 0 ? { wrong_answer_data } : {}),
           ...(embedding ? { embedding } : {}),
           ...(problem_description ? { problem_description } : {}),

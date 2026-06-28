@@ -1,0 +1,341 @@
+{
+  "section": "chemistry",
+  "category_code": "C13",
+  "category_label": "Separations, Purification & Spectroscopy",
+  "order_index": 12,
+  "umbrellas": [
+    {
+      "slug": "extraction",
+      "label": "Extraction & Solute Distribution",
+      "description": "How a solute distributes between two immiscible solvents and how that distribution is exploited to isolate a compound.",
+      "intro": {
+        "slug": "extraction_intro",
+        "label": "Extraction Overview",
+        "description": "Extraction separates compounds by exploiting differences in their solubility in two immiscible liquid phases (typically aqueous and organic). The partition coefficient $K_D = [\\text{solute}]_{\\text{org}} / [\\text{solute}]_{\\text{aq}}$ determines how efficiently a solute moves into the organic layer. Acid–base manipulation (protonating or deprotonating a compound) controls which layer it prefers and enables selective extraction.",
+        "examples": ["partition coefficient $K_D = [\\text{solute}]_{\\text{org}} / [\\text{solute}]_{\\text{aq}}$", "organic layer vs. aqueous layer", "acid–base extraction to isolate an amine"]
+      },
+      "in_depth": [
+        {
+          "slug": "partition_coefficient",
+          "label": "Partition coefficient and solute distribution",
+          "description": "Apply the partition coefficient $K_D = [\\text{solute}]_{\\text{org}} / [\\text{solute}]_{\\text{aq}}$ to predict how a solute distributes between two immiscible solvents; a higher $K_D$ means greater affinity for the organic phase. This focuses on quantitative distribution between phases, not on how pH manipulation shifts the equilibrium (a separate keyword).",
+          "examples": ["$K_D > 1$: solute favors organic phase", "multiple small extractions more efficient than one large", "\"like dissolves like\" drives layer preference"]
+        },
+        {
+          "slug": "acid_base_extraction",
+          "label": "Acid–base manipulation in extraction",
+          "description": "Predict which layer a compound occupies after pH adjustment: acids convert to their (charged, water-soluble) conjugate base with base, and amines become (charged, water-soluble) ammonium salts with acid, allowing selective extraction. This focuses on pH-driven layer switching, not on the partition coefficient itself (a separate keyword).",
+          "examples": ["carboxylic acid → carboxylate with NaOH → moves to aqueous", "amine + HCl → ammonium salt → aqueous layer", "back-extraction to recover neutral compound"]
+        }
+      ]
+    },
+    {
+      "slug": "distillation",
+      "label": "Distillation",
+      "description": "Separation of liquid mixtures based on differences in boiling points, including simple, fractional, and steam distillation.",
+      "intro": {
+        "slug": "distillation_intro",
+        "label": "Distillation Overview",
+        "description": "Distillation separates liquids by vaporizing the mixture and condensing the vapor; the component with the lower boiling point enriches the vapor phase. Simple distillation works well when boiling points differ by >25 °C; fractional distillation (with a column) achieves better separation of closer-boiling mixtures by providing multiple theoretical plates. Steam distillation allows isolation of high-boiling, water-immiscible compounds at below 100 °C.",
+        "examples": ["simple distillation: boiling-point difference >25 °C", "fractional distillation: theoretical plates", "steam distillation: water-immiscible compounds"]
+      },
+      "in_depth": [
+        {
+          "slug": "simple_distillation_principle",
+          "label": "Simple distillation principle",
+          "description": "Explain how simple distillation separates two miscible liquids: the component with the lower boiling point concentrates in the vapor and is collected first as the condensate. This focuses on single-stage vaporization/condensation, not on the multi-equilibrium separation achieved by fractional distillation (a separate keyword).",
+          "examples": ["lower-bp component vaporizes first", "thermometer at side-arm reads vapor temperature", "effective when $\\Delta T_b > 25\\,^\\circ\\text{C}$"]
+        },
+        {
+          "slug": "fractional_distillation_principle",
+          "label": "Fractional distillation and theoretical plates",
+          "description": "Explain how a fractionating column increases separation efficiency by providing multiple vapor–liquid equilibria (theoretical plates), allowing closely boiling liquids to be resolved. This focuses on multi-plate enhancement, not on simple single-stage distillation (a separate keyword).",
+          "examples": ["column packing = multiple equilibrium stages", "effective when $\\Delta T_b < 25\\,^\\circ\\text{C}$", "more theoretical plates → better separation"]
+        },
+        {
+          "slug": "steam_distillation",
+          "label": "Steam distillation",
+          "description": "Explain steam distillation: a water-immiscible, high-boiling compound co-distills with water at a temperature below 100 °C because the total vapor pressure equals the sum of the individual vapor pressures ($P_{\\text{total}} = P_{\\text{water}} + P_{\\text{compound}}$). This focuses on the two-component immiscible system, not on miscible fractional distillation (a separate keyword).",
+          "examples": ["$P_{\\text{total}} = P_{\\text{water}} + P_{\\text{compound}}$", "isolate fragrant oils or high-boiling organics below 100 °C", "water-immiscible requirement"]
+        }
+      ]
+    },
+    {
+      "slug": "chromatography_basics",
+      "label": "Chromatography — Basic Principles",
+      "description": "The fundamental stationary/mobile-phase equilibrium that drives all chromatographic separations, including column, GC, HPLC, paper, and TLC.",
+      "intro": {
+        "slug": "chromatography_basics_intro",
+        "label": "Chromatography Principles Overview",
+        "description": "All chromatographic methods separate compounds by partitioning them between a stationary phase and a mobile phase: components that interact more strongly with the stationary phase travel more slowly and elute later. The ratio of distance traveled by a spot to distance traveled by the solvent front is the $R_f$ value (used in TLC/paper). This core equilibrium concept applies to column, gas, liquid, paper, and thin-layer chromatography.",
+        "examples": ["stationary phase retains; mobile phase carries", "$R_f = \\text{distance solute} / \\text{distance solvent}$", "stronger affinity for stationary phase → slower migration"]
+      },
+      "in_depth": [
+        {
+          "slug": "stationary_mobile_phase_equilibrium",
+          "label": "Stationary vs. mobile phase equilibrium",
+          "description": "Predict relative elution order by comparing each compound's affinity for the stationary phase vs. the mobile phase: greater stationary-phase affinity → smaller $R_f$ and later elution; greater mobile-phase affinity → larger $R_f$ and earlier elution. This focuses on the general partition principle, not on the specific technique mechanics (separate keywords).",
+          "examples": ["more polar compound retained longer on silica (polar stationary phase)", "$R_f = \\text{distance spot} / \\text{distance solvent front}$", "changing solvent polarity shifts $R_f$"]
+        },
+        {
+          "slug": "column_chromatography",
+          "label": "Column chromatography",
+          "description": "Describe column chromatography: a mixture is loaded atop a packed stationary-phase column (e.g., silica), and compounds are eluted with solvent (mobile phase) in order of increasing stationary-phase affinity; fractions are collected sequentially. This focuses on the column technique, not on the high-pressure or gas-phase variants (separate keywords).",
+          "examples": ["silica column: polar compounds elute last", "gradient elution: increasing solvent polarity", "collect fractions and check by TLC"]
+        },
+        {
+          "slug": "gas_chromatography",
+          "label": "Gas–liquid chromatography (GC)",
+          "description": "Explain GC: a vaporized sample is carried through a capillary column by an inert carrier gas; compounds partition between the gas mobile phase and a liquid stationary phase and are detected after separation. Separation depends on boiling point and stationary-phase affinity. This focuses on gas-phase mobile-phase systems, not on liquid-phase HPLC (a separate keyword).",
+          "examples": ["carrier gas (He/N₂) is the mobile phase", "volatile compounds required; high-temperature oven", "retention time identifies compound; peak area quantifies"]
+        },
+        {
+          "slug": "hplc",
+          "label": "High-performance liquid chromatography (HPLC)",
+          "description": "Explain HPLC: high pressure forces a liquid mobile phase through a tightly packed stationary-phase column, enabling rapid, high-resolution separation of nonvolatile or thermally sensitive compounds. This focuses on the high-pressure liquid system, not on GC's gas mobile phase (a separate keyword).",
+          "examples": ["high pressure → fine particle size → high resolution", "nonvolatile or thermolabile compounds separated", "UV/Vis detector common; retention time identifies analyte"]
+        },
+        {
+          "slug": "paper_chromatography",
+          "label": "Paper chromatography",
+          "description": "Describe paper chromatography: aqueous solvent wicks up a paper strip, carrying dissolved compounds; polar compounds interact more with the cellulose stationary phase and travel less far, giving a smaller $R_f$. This focuses on the paper technique, not on TLC's solid adsorbent plate (a separate keyword).",
+          "examples": ["cellulose paper = polar stationary phase", "more polar compound → lower $R_f$", "used for water-soluble compounds (amino acids, inks)"]
+        },
+        {
+          "slug": "tlc",
+          "label": "Thin-layer chromatography (TLC)",
+          "description": "Describe TLC: compounds migrate up a silica- or alumina-coated plate as solvent ascends; spots are visualized by UV light or staining, and $R_f$ values are calculated. More polar compounds are retained longer on silica. This focuses on TLC's adsorbent plate, not on paper chromatography's cellulose (a separate keyword).",
+          "examples": ["silica plate: polar compound → smaller $R_f$", "$R_f = \\text{distance spot}/\\text{distance solvent}$", "UV lamp or iodine chamber for visualization"]
+        }
+      ]
+    },
+    {
+      "slug": "protein_purification",
+      "label": "Peptide & Protein Separation and Purification",
+      "description": "Techniques used to separate, purify, and analyze peptides and proteins: gel electrophoresis, size-exclusion, ion-exchange, and affinity chromatography.",
+      "intro": {
+        "slug": "protein_purification_intro",
+        "label": "Protein Purification Overview",
+        "description": "Proteins are separated by exploiting differences in size, charge, or binding specificity. Gel electrophoresis separates by size (and charge in native gels); size-exclusion chromatography separates by molecular weight; ion-exchange chromatography separates by surface charge; affinity chromatography exploits specific binding interactions. Quantitative analysis (Bradford or BCA assays) measures protein concentration throughout purification.",
+        "examples": ["size: gel filtration / SDS-PAGE", "charge: ion-exchange chromatography", "binding specificity: affinity chromatography"]
+      },
+      "in_depth": [
+        {
+          "slug": "gel_electrophoresis",
+          "label": "Gel electrophoresis of proteins",
+          "description": "Explain gel electrophoresis: proteins (typically denatured by SDS, which gives uniform negative charge proportional to mass) migrate through a polyacrylamide gel in an electric field; smaller proteins migrate faster and travel farther. This focuses on size-based migration in a gel, not on solution-phase chromatographic separations (separate keywords).",
+          "examples": ["SDS gives uniform charge-to-mass; separates by size", "smaller protein → faster migration, farther band", "molecular weight determined by ladder comparison"]
+        },
+        {
+          "slug": "protein_quantitative_analysis",
+          "label": "Quantitative protein analysis",
+          "description": "Describe colorimetric protein assays (e.g., Bradford/Coomassie or BCA) that measure protein concentration in a sample by absorbance at a characteristic wavelength, compared against a standard curve. This focuses on concentration measurement, not on the separation techniques used to purify the protein (separate keywords).",
+          "examples": ["Bradford assay: Coomassie dye binds protein → absorbance at 595 nm", "standard curve: known concentrations of BSA", "Beer–Lambert law: $A = \\varepsilon l c$"]
+        },
+        {
+          "slug": "size_exclusion_chromatography",
+          "label": "Size-exclusion chromatography (gel filtration)",
+          "description": "Explain size-exclusion (gel filtration) chromatography: proteins are passed through porous beads; small proteins enter the pores and elute last, while large proteins are excluded and elute first. This focuses on separation by molecular size via pore exclusion, not on charge- or affinity-based column methods (separate keywords).",
+          "examples": ["large proteins excluded from pores → elute first", "small proteins enter pores → elute last", "separates by molecular weight without denaturing"]
+        },
+        {
+          "slug": "ion_exchange_chromatography",
+          "label": "Ion-exchange chromatography",
+          "description": "Explain ion-exchange chromatography: charged proteins bind to an oppositely charged resin (cation-exchange resin is negatively charged; anion-exchange is positively charged) and are eluted by increasing salt concentration. This focuses on charge-based separation, not on size or affinity (separate keywords).",
+          "examples": ["cation-exchange (negatively charged resin) retains positively charged proteins", "increasing salt gradient displaces bound proteins", "pH controls protein net charge and binding"]
+        },
+        {
+          "slug": "affinity_chromatography",
+          "label": "Affinity chromatography",
+          "description": "Explain affinity chromatography: a specific ligand (e.g., antibody, substrate analog, His-tag resin) is immobilized on beads; the protein of interest binds selectively and is eluted under mild competing conditions. This focuses on biospecific binding, not on generic size or charge separation (separate keywords).",
+          "examples": ["His-tag protein binds Ni²⁺ resin; eluted with imidazole", "antibody-antigen affinity column", "highest specificity of all protein purification methods"]
+        }
+      ]
+    },
+    {
+      "slug": "enantiomer_separation",
+      "label": "Racemic Mixtures & Separation of Enantiomers",
+      "description": "The definition of a racemic mixture and the strategies for resolving enantiomers, including chiral resolution and chiral chromatography.",
+      "intro": {
+        "slug": "enantiomer_separation_intro",
+        "label": "Enantiomer Separation Overview",
+        "description": "A racemic mixture contains equal amounts of two enantiomers and is optically inactive overall. Because enantiomers have identical physical properties in achiral environments, resolution requires introducing a chiral environment: reacting with a chiral acid/base to form diastereomeric salts (which differ in physical properties and can be separated by crystallization or chromatography), or using a chiral stationary phase in HPLC. Biological systems act on one enantiomer exclusively.",
+        "examples": ["racemic mixture: 1:1 R:S, net $[\\alpha] = 0$", "diastereomeric salt resolution with chiral acid/base", "chiral HPLC column separates enantiomers"]
+      },
+      "in_depth": [
+        {
+          "slug": "racemic_mixture_definition",
+          "label": "Racemic mixture definition and optical inactivity",
+          "description": "Define a racemic mixture as a 1:1 mixture of enantiomers with zero net optical rotation ($[\\alpha]_{\\text{obs}} = 0$) because the equal and opposite rotations cancel. This focuses on the definition and optical properties of a racemate, not on the methods for separating them (a separate keyword).",
+          "examples": ["50% R + 50% S → $[\\alpha] = 0$", "individual enantiomers identical in physical properties except optical rotation", "racemate forms when no chiral influence during synthesis"]
+        },
+        {
+          "slug": "diastereomeric_salt_resolution",
+          "label": "Resolution via diastereomeric salt formation",
+          "description": "Explain chiral resolution: reacting a racemate with an enantiomerically pure chiral reagent converts the two enantiomers into diastereomers (salts), which have different physical properties (melting point, solubility) and can be separated by crystallization; the pure enantiomers are then regenerated. This focuses on diastereomeric-salt resolution, not on chiral-column methods (a separate keyword).",
+          "examples": ["(±)-acid + chiral amine → two diastereomeric salts", "diastereomers differ in melting point / solubility", "chiral resolving agent recovered after separation"]
+        },
+        {
+          "slug": "chiral_chromatography",
+          "label": "Chiral stationary phase chromatography",
+          "description": "Describe how a chiral stationary phase (e.g., chiral HPLC column) interacts differently with the two enantiomers of a racemate, enabling their separation without chemical modification. This focuses on direct chromatographic resolution, not on derivatization to diastereomers (a separate keyword).",
+          "examples": ["chiral HPLC column: one enantiomer retained longer", "no chemical modification of sample needed", "used in pharmaceutical quality control"]
+        }
+      ]
+    },
+    {
+      "slug": "infrared_spectroscopy",
+      "label": "Infrared (IR) Spectroscopy",
+      "description": "Molecular vibrations and rotations that absorb IR radiation, and the use of characteristic absorption bands to identify functional groups.",
+      "intro": {
+        "slug": "infrared_spectroscopy_intro",
+        "label": "IR Spectroscopy Overview",
+        "description": "IR spectroscopy identifies functional groups by measuring which IR frequencies (wavenumbers, $\\tilde{\\nu}$, in cm$^{-1}$) are absorbed as bond stretching and bending vibrations. The diagnostic region (4000–1500 cm$^{-1}$) contains characteristic absorptions for O–H, N–H, C=O, C≡C, C≡N, and other groups; the fingerprint region (< 1500 cm$^{-1}$) is unique to a specific compound and used for identity confirmation. Stronger, more polar bonds and lighter atoms absorb at higher wavenumbers.",
+        "examples": ["$\\tilde{\\nu}$ in cm$^{-1}$: higher = higher energy vibration", "diagnostic region 1500–4000 cm$^{-1}$", "fingerprint region < 1500 cm$^{-1}$"]
+      },
+      "in_depth": [
+        {
+          "slug": "ir_vibrations_rotations",
+          "label": "Molecular vibrations and IR absorption basis",
+          "description": "Explain that IR absorption results from intramolecular bond stretching and bending vibrations that change the bond's dipole moment; a photon is absorbed when its frequency matches a vibrational frequency. Homonuclear diatomics (e.g., N$_2$) are IR-inactive because they have no dipole change. This focuses on the physical basis of IR absorption, not on the specific wavenumbers of functional groups (a separate keyword).",
+          "examples": ["bond must have changing dipole to absorb IR", "stretching vs. bending vibrations", "symmetric stretch of CO₂ is IR-inactive; asymmetric stretch is IR-active"]
+        },
+        {
+          "slug": "ir_carbonyl_absorption",
+          "label": "Carbonyl group IR absorption",
+          "description": "Identify the carbonyl (C=O) stretch as a strong, characteristic absorption near 1700–1750 cm$^{-1}$, and predict shifts: conjugation lowers $\\tilde{\\nu}$ (toward 1680 cm$^{-1}$); strain (β-lactams) raises $\\tilde{\\nu}$; esters, aldehydes, ketones, carboxylic acids, and amides each occupy a slightly different range. This focuses on C=O absorptions, not on O–H or N–H bands (separate keywords).",
+          "examples": ["ketone C=O: ~1715 cm$^{-1}$", "ester C=O: ~1735 cm$^{-1}$", "conjugated carbonyl (enone): ~1680 cm$^{-1}$"]
+        },
+        {
+          "slug": "ir_oh_nh_absorption",
+          "label": "O–H and N–H IR absorptions",
+          "description": "Identify broad O–H stretches (alcohols ~3200–3550 cm$^{-1}$; carboxylic acids ~2500–3300 cm$^{-1}$, very broad) and N–H stretches (~3300–3500 cm$^{-1}$, one peak for secondary amine, two for primary). The breadth of O–H signals reflects hydrogen bonding. This focuses on O–H and N–H stretches, not on C=O absorptions (a separate keyword).",
+          "examples": ["alcohol O–H: broad 3200–3550 cm$^{-1}$", "carboxylic acid: very broad O–H 2500–3300 cm$^{-1}$", "primary amine: two N–H peaks ~3300 cm$^{-1}$"]
+        },
+        {
+          "slug": "ir_fingerprint_region",
+          "label": "Fingerprint region identification",
+          "description": "Explain the fingerprint region (< 1500 cm$^{-1}$): its complex, compound-specific pattern of C–H bends, C–C stretches, and C–O stretches cannot be systematically interpreted peak-by-peak but serves as a molecular identity card by comparison against reference spectra. This focuses on the role and interpretation of the fingerprint region, not on the diagnostic functional-group bands above 1500 cm$^{-1}$ (separate keywords).",
+          "examples": ["<1500 cm$^{-1}$: unique to each compound", "compare unknown vs. reference fingerprint", "used to confirm identity, not structural elucidation"]
+        },
+        {
+          "slug": "ir_triple_bonds",
+          "label": "C≡C and C≡N IR absorptions",
+          "description": "Identify alkyne C≡C stretches (~2100–2260 cm$^{-1}$) and nitrile C≡N stretches (~2200–2260 cm$^{-1}$) in the distinct triple-bond region; terminal alkynes also show a sharp C–H stretch near 3300 cm$^{-1}$. This focuses on the triple-bond absorption region, not on C=O or O–H bands (separate keywords).",
+          "examples": ["C≡C: ~2100–2260 cm$^{-1}$", "terminal alkyne C–H: sharp peak ~3300 cm$^{-1}$", "C≡N nitrile: ~2200–2260 cm$^{-1}$"]
+        }
+      ]
+    },
+    {
+      "slug": "visible_spectroscopy",
+      "label": "Visible (Vis) Spectroscopy & Color",
+      "description": "Absorption of visible light by conjugated chromophores and the relationship between absorbed wavelength and perceived color.",
+      "intro": {
+        "slug": "visible_spectroscopy_intro",
+        "label": "Visible Spectroscopy Overview",
+        "description": "A compound appears the complementary color to the wavelength it absorbs in the visible range (~400–700 nm). Extended conjugation lowers the HOMO–LUMO energy gap and red-shifts the absorption to longer wavelengths. The Beer–Lambert law ($A = \\varepsilon l c$) quantitatively relates absorbance to concentration. Structural changes (more conjugation, pH-induced tautomerism in indicators) shift absorption and change color.",
+        "examples": ["complementary color wheel: absorb violet → appear yellow", "$A = \\varepsilon l c$ (Beer–Lambert)", "carotene: long conjugation → absorbs blue/green, appears orange"]
+      },
+      "in_depth": [
+        {
+          "slug": "complementary_color",
+          "label": "Complementary color and absorbed wavelength",
+          "description": "Predict a compound's color from the wavelength it absorbs: the observed color is the complement on the color wheel (e.g., absorbing at ~450 nm/blue → appearing orange; carotene absorbs blue-green and appears orange-red). This focuses on the color-wheel complementarity, not on the molecular reason for the shift (a separate keyword).",
+          "examples": ["absorb violet (~400 nm) → appear yellow-green", "carotene absorbs blue-green → orange color", "absorb red → appear blue-green (complementary)"]
+        },
+        {
+          "slug": "conjugation_red_shift",
+          "label": "Effect of conjugation on visible/UV absorption",
+          "description": "Explain that increasing conjugation extends the $\\pi$ system, narrows the HOMO–LUMO gap, and shifts $\\lambda_{\\text{max}}$ to longer (red-shifted) wavelengths; each additional double bond in conjugation lowers the transition energy. This focuses on how structural extent of conjugation shifts $\\lambda_{\\text{max}}$, not on the pH-indicator effect (a separate keyword).",
+          "examples": ["more conjugated double bonds → red-shifted $\\lambda_{\\text{max}}$", "lycopene (13 conjugated bonds) more red-shifted than β-carotene (11)", "longer conjugation → absorbed color moves toward red"]
+        },
+        {
+          "slug": "indicator_structural_change",
+          "label": "pH indicators and structural-change absorption shifts",
+          "description": "Explain how acid–base indicators (e.g., phenolphthalein, litmus) change color because a pH-driven structural or tautomeric change alters the conjugation length and thereby shifts $\\lambda_{\\text{max}}$ into a different region of the visible spectrum. This focuses on pH-driven structural change → color change, not on the general complementary-color principle (a separate keyword).",
+          "examples": ["phenolphthalein: colorless (acid) → pink (base)", "resonance structure change extends conjugation → new color", "transition range straddles pKa of indicator"]
+        },
+        {
+          "slug": "beer_lambert_law",
+          "label": "Beer–Lambert law and quantitative Vis analysis",
+          "description": "Apply the Beer–Lambert law $A = \\varepsilon l c$ (absorbance = molar absorptivity × path length × concentration) to quantify solute concentration from measured absorbance at $\\lambda_{\\text{max}}$. This focuses on quantitative concentration determination, not on wavelength-selection or color-perception (separate keywords).",
+          "examples": ["$A = \\varepsilon l c$; $A$ is unitless", "standard curve: known concentrations → A values", "$\\varepsilon$ has units L mol$^{-1}$ cm$^{-1}$"]
+        }
+      ]
+    },
+    {
+      "slug": "uv_spectroscopy",
+      "label": "Ultraviolet (UV) Spectroscopy",
+      "description": "UV absorption from $\\pi \\to \\pi^*$ and $n \\to \\pi^*$ electronic transitions, and how conjugation and heteroatom lone pairs determine $\\lambda_{\\text{max}}$.",
+      "intro": {
+        "slug": "uv_spectroscopy_intro",
+        "label": "UV Spectroscopy Overview",
+        "description": "UV spectroscopy (~200–400 nm) detects electronic transitions: $\\pi \\to \\pi^*$ transitions occur in conjugated $\\pi$ systems (lower energy, longer $\\lambda_{\\text{max}}$ with more conjugation), while $n \\to \\pi^*$ transitions involve lone pairs on heteroatoms (C=O, C=N) and appear at longer wavelengths but with weak absorbance. UV is the primary tool for characterizing conjugation length and detecting aromatic and carbonyl-containing chromophores.",
+        "examples": ["$\\pi \\to \\pi^*$: conjugated alkenes/aromatics, intense", "$n \\to \\pi^*$: carbonyl lone pair, weak/longer $\\lambda$", "more conjugation → red-shifted $\\lambda_{\\text{max}}$"]
+      },
+      "in_depth": [
+        {
+          "slug": "pi_pi_star_transition",
+          "label": "$\\pi \\to \\pi^*$ electronic transition",
+          "description": "Identify a $\\pi \\to \\pi^*$ transition as the promotion of an electron from a bonding $\\pi$ orbital to an antibonding $\\pi^*$ orbital in a conjugated system; it produces an intense UV absorption ($\\varepsilon$ typically > 10,000 L mol$^{-1}$ cm$^{-1}$) that red-shifts with extended conjugation. This focuses on the $\\pi \\to \\pi^*$ transition, not on the $n \\to \\pi^*$ lone-pair transition (a separate keyword).",
+          "examples": ["conjugated diene: $\\lambda_{\\text{max}} \\approx 217$ nm (intense)", "benzene $\\pi \\to \\pi^*$: ~254 nm", "high molar absorptivity $\\varepsilon > 10^4$"]
+        },
+        {
+          "slug": "n_pi_star_transition",
+          "label": "$n \\to \\pi^*$ electronic transition",
+          "description": "Identify an $n \\to \\pi^*$ transition as the promotion of a nonbonding (lone-pair) electron on a heteroatom (e.g., carbonyl oxygen) into a $\\pi^*$ orbital; it appears at longer wavelength (~270–350 nm for simple carbonyls) with weak absorbance ($\\varepsilon < 100$). This focuses on the nonbonding transition, not on the $\\pi \\to \\pi^*$ transition (a separate keyword).",
+          "examples": ["acetone $n \\to \\pi^*$: ~270 nm, $\\varepsilon \\approx 15$", "weak absorption; sometimes called the 'forbidden' band", "lone pairs on O, N, S allow this transition"]
+        },
+        {
+          "slug": "conjugation_uv_shift",
+          "label": "Effect of conjugation on UV $\\lambda_{\\text{max}}$",
+          "description": "Predict that each additional conjugated double bond lowers the HOMO–LUMO gap and red-shifts (bathochromic shift) the $\\lambda_{\\text{max}}$ of the $\\pi \\to \\pi^*$ band; sufficiently extended conjugation can shift absorption into the visible range. This focuses on the quantitative/qualitative conjugation effect on UV position, not on the identification of transition types (separate keywords).",
+          "examples": ["ethylene: ~165 nm; butadiene: ~217 nm; hexatriene: ~258 nm", "each extra conjugated bond: ~30–36 nm red shift", "lycopene: conjugation so extended it absorbs in visible"]
+        }
+      ]
+    },
+    {
+      "slug": "nmr_spectroscopy",
+      "label": "NMR Spectroscopy",
+      "description": "Proton NMR principles — chemical shift, equivalent protons, and spin-spin splitting — used to determine molecular structure.",
+      "intro": {
+        "slug": "nmr_spectroscopy_intro",
+        "label": "NMR Spectroscopy Overview",
+        "description": "$^1$H NMR spectroscopy places a molecule in a strong magnetic field; the radiofrequency energy required to flip each proton's spin depends on its chemical environment (chemical shift, $\\delta$, in ppm). Equivalent protons give one signal; non-equivalent neighboring protons couple and split the signal by the $n+1$ rule. The pattern of shifts and splitting multiplicities identifies the connectivity and hydrogen environments in a molecule.",
+        "examples": ["chemical shift $\\delta$ (ppm) reflects electron density", "$n + 1$ rule: $n$ neighboring H → $n+1$ peaks (splitting)", "equivalent protons give one NMR signal"]
+      },
+      "in_depth": [
+        {
+          "slug": "nmr_proton_magnetic_field",
+          "label": "Proton alignment in a magnetic field",
+          "description": "Explain that protons (spin-½ nuclei) align with or against an external magnetic field $B_0$; radiofrequency radiation at the Larmor frequency causes spin-flip (resonance), and the energy of that transition depends on the local electronic environment. This focuses on the physical basis of NMR resonance, not on the chemical-shift or splitting interpretation (separate keywords).",
+          "examples": ["spin-½ nucleus: two states ($\\alpha$ and $\\beta$) in $B_0$", "RF energy absorbed at Larmor frequency = resonance", "shielded proton resonates at lower frequency (upfield)"]
+        },
+        {
+          "slug": "chemical_shift",
+          "label": "Chemical shift ($\\delta$) and electron shielding",
+          "description": "Predict the approximate chemical shift of a proton from its electronic environment: electron-withdrawing groups deshield protons (increase $\\delta$, downfield), while electron-donating groups shield protons (decrease $\\delta$, upfield); characteristic ranges include TMS = 0 ppm, alkyl C–H ~0.5–2.5 ppm, vinyl/aromatic ~5–8 ppm, aldehyde ~9–10 ppm, carboxylic acid ~10–12 ppm. This focuses on chemical shift trends, not on spin-spin splitting (a separate keyword).",
+          "examples": ["CH₃ next to C=O: $\\delta \\approx 2$ ppm (deshielded)", "aromatic H: $\\delta \\approx 7$ ppm (ring current deshielding)", "aldehyde H: $\\delta \\approx 9.5$ ppm"]
+        },
+        {
+          "slug": "equivalent_protons",
+          "label": "Equivalent protons and NMR signal count",
+          "description": "Determine which protons in a molecule are equivalent (homotopic — related by rotation or symmetry) and therefore give one NMR signal; non-equivalent protons give separate signals at different $\\delta$ values. Integration of each peak reflects the relative number of equivalent protons. This focuses on chemical equivalence and signal count, not on the splitting of signals by coupling (a separate keyword).",
+          "examples": ["CH₃ group: 3 equivalent H → 1 signal", "ethanol: OH, CH₂, CH₃ give 3 signals", "para-disubstituted benzene: 2 sets of 2 equivalent H → 2 signals"]
+        },
+        {
+          "slug": "spin_spin_splitting",
+          "label": "Spin-spin splitting and the $n+1$ rule",
+          "description": "Apply the $n+1$ rule: a proton with $n$ non-equivalent neighboring protons is split into $n+1$ peaks (doublet, triplet, quartet, etc.) with relative intensities following Pascal's triangle. Equivalent protons do not split each other. This focuses on the multiplicity pattern from neighboring H, not on chemical-shift assignment (a separate keyword).",
+          "examples": ["1 neighbor → doublet; 2 → triplet; 3 → quartet", "–CH₂–CH₃: CH₂ is quartet, CH₃ is triplet", "equivalent CH₃ protons do not split each other"]
+        },
+        {
+          "slug": "nmr_integration_structure",
+          "label": "Integration and structural determination from NMR",
+          "description": "Interpret a $^1$H NMR spectrum holistically by combining chemical shifts (what environment), integration (how many H), and splitting patterns (how many neighbors) to assign connectivity and deduce molecular structure. This focuses on integrating all three types of NMR information together, not on any single piece in isolation (separate keywords).",
+          "examples": ["triplet at $\\delta 1.2$ (3H) + quartet at $\\delta 2.3$ (2H) → ethyl group", "integration ratio 3:2:1 → relative proton counts", "combine $\\delta$, splitting, integration to deduce structure"]
+        }
+      ]
+    }
+  ]
+}

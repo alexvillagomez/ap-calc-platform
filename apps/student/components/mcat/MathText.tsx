@@ -1,11 +1,23 @@
 "use client";
 
 import katex from "katex";
+// Side-effect import: registers the `\ce{...}` chemistry macro on KaTeX so
+// reaction equations (`$\ce{H2SO4 + 2NaOH -> Na2SO4 + 2H2O}$`) typeset inline.
+import "katex/contrib/mhchem";
 import { stripControlChars } from "@/lib/parseModelJson";
 import { normalizeScienceNotation } from "@/lib/scienceNotation";
-import { parseVizSegments, parseRangePair, parsePoints } from "@/lib/parseVizSegments";
+import { restoreBareGreekMath } from "@/lib/latexRichMathNormalize";
+import {
+  parseFigureSegments,
+  hasFigureContent,
+  parseRangePair,
+  parsePoints,
+} from "@/lib/parseVizSegments";
 import { FunctionGraph } from "@/components/FunctionGraph";
 import { SlopeField } from "@/components/SlopeField";
+import { MoleculeStructure } from "@/components/figures/MoleculeStructure";
+import { MermaidDiagram } from "@/components/figures/MermaidDiagram";
+import { DataTable } from "@/components/figures/DataTable";
 
 /**
  * Lightweight inline math renderer for MCAT content. Generated questions,
@@ -93,34 +105,141 @@ function render(latex: string, display: boolean): string {
   }
 }
 
-/** Detect if content contains a viz tag — only incur parse cost when needed. */
-const VIZ_TAG_RE = /<(FunctionGraph|SlopeField)\s/i;
+/**
+ * Apply the full LaTeX-corruption-repair + science-notation pipeline to a string.
+ * Extracted so it can run on the WHOLE string (text-only content) OR per-latex
+ * segment in the figure path — figure payloads (SMILES, Mermaid DSL, table cells)
+ * must NOT pass through here, since backslashes/`\n` in a SMILES or DSL string
+ * would be mangled by the LaTeX repairs.
+ */
+function prepareText(input: string): string {
+  // Repair LaTeX-command corruption from JSON single-escaping: a model that
+  // emitted `\frac`/`\theta`/`\tan` with ONE backslash inside a JSON string has
+  // its `\f`/`\t`/`\b`/`\r` parsed into the literal control chars FF/TAB/BS/CR,
+  // dropping the backslash (e.g. `\frac` → `<FF>rac` → renders as "rac"). Map
+  // those control chars back to `\f`/`\t`/`\b`/`\r` so the command renders.
+  // Newlines (\n) are legitimate (step breaks) and left intact.
+  const repaired = input
+    .replace(/\x08/g, "\\b")
+    .replace(/\t/g, "\\t")
+    .replace(/\f/g, "\\f")
+    .replace(/\r/g, "\\r")
+    // Repair MISSING-BACKSLASH fraction commands the model sometimes emits as
+    // literal text (`dfrac{`/`frac{` with no leading `\`, which render as the
+    // word "dfrac"). Only fix when not already preceded by a backslash so a
+    // correct `\frac`/`\dfrac` is left untouched.
+    .replace(/(^|[^\\])\b(d?frac)\{/g, "$1\\$2{")
+    // Repair LEAKED LITERAL ESCAPE SEQUENCES: the model sometimes writes the two
+    // characters backslash-n/t/r in prose (e.g. "...1 hour.\nIts rate...") where a
+    // real line break was intended; without this they render as raw "\n" text and
+    // run words together. Convert to real whitespace, but NEVER touch genuine
+    // LaTeX commands (\nu \neq \nabla \ne \nmid \theta \times \tan \text \to \tau …)
+    // — only convert when NOT followed by a lowercase letter.
+    .replace(/\\n(?![a-z])/g, "\n")
+    .replace(/\\t(?![a-z])/g, " ")
+    .replace(/\\r(?![a-z])/g, "")
+    // Repair operator-name corruption from JSON escaping: `\lim` → newline+"lim"
+    // when the model emitted a single-backslash inside a JSON string. Only fix when
+    // the operator is immediately followed by a subscript/bound char to avoid touching prose.
+    .replace(/(?:\n|\\n)(lim|sin|cos|tan|cot|sec|csc|log|ln|max|min|sup|inf|exp|det|deg|arg|gcd)(?=[_^{(])/g, "\\$1")
+    // Repair bare (backslash-stripped) math operators the model emits in $...$ (e.g. `lim_{`→`\lim_{`, `pprox`→`\approx`).
+    .replace(/(^|[^\\A-Za-z])(lim|log|ln|exp|max|min|sup|inf|det|deg|arg|gcd)(?=[_^{(])/g, "$1\\$2")
+    .replace(/(^|[^\\A-Za-z])(sin|cos|tan|cot|sec|csc|sinh|cosh|tanh)(?=[(^])/g, "$1\\$2")
+    .replace(/\bpprox\b/g, "\\approx")
+    .replace(/(^|[^\\A-Za-z])infty\b/g, "$1\\infty");
 
-/** Render a single latex-only text string (no viz tags). */
-function renderLatexString(text: string, className: string) {
-  const segs = split(text);
-  return (
-    <span className={`whitespace-pre-line ${className}`}>
-      {segs.map((s, i) => {
-        if (s.type === "text") {
-          if (BARE_LATEX_RE.test(s.value)) {
-            return (
-              <span
-                key={i}
-                className="katex-inline"
-                dangerouslySetInnerHTML={{ __html: render(s.value, false) }}
-              />
-            );
-          }
-          return <span key={i}>{s.value}</span>;
-        }
+  // Harden against legacy rows stored with ANSI/ESC corruption (→ box glyphs).
+  // Also restore bare Greek math tokens ($alpha$ → $\alpha$) the model emits,
+  // which otherwise render as the italic product a·l·p·h·a instead of α.
+  const stripped = restoreBareGreekMath(stripControlChars(repaired));
+
+  // Render-side safety net for stored ASCII science notation.
+  // Only runs when there are no existing delimiters/LaTeX — avoids double-processing
+  // properly-formatted content.
+  return !stripped.includes("$") && !BARE_LATEX_RE.test(stripped)
+    ? normalizeScienceNotation(stripped)
+    : stripped;
+}
+
+/** Render an already-prepared latex segment as inline React. */
+function renderPreparedLatexSegment(value: string, key: number) {
+  // Apply prepareText to prose/latex segments only (figures handled separately).
+  const latexText = prepareText(value);
+  if (!latexText.includes("$") && !BARE_LATEX_RE.test(latexText)) {
+    // No math — still honor markdown **bold** (e.g. emphasized table-cell labels).
+    return <span key={key}>{renderInlineText(latexText, key)}</span>;
+  }
+  return <span key={key}>{renderLatexString(latexText, "")}</span>;
+}
+
+/**
+ * Render a plain-text run (NO math), turning markdown **bold** into <strong>.
+ * Used only on segments with no $...$ math (the component fast path / figure prose).
+ */
+function renderInlineText(text: string, keyBase: number | string) {
+  if (!text.includes("**")) return text;
+  return text.split(/(\*\*[^*\n]+\*\*)/g).map((part, i) =>
+    /^\*\*[^*\n]+\*\*$/.test(part) ? (
+      <strong key={`${keyBase}-${i}`} className="font-semibold">
+        {part.slice(2, -2)}
+      </strong>
+    ) : (
+      part
+    )
+  );
+}
+
+/** Split a string into math/text segments and render each to React nodes. */
+function renderSegmentNodes(text: string, keyPrefix: string) {
+  return split(text).map((s, i) => {
+    if (s.type === "text") {
+      if (BARE_LATEX_RE.test(s.value)) {
         return (
           <span
-            key={i}
-            className={s.type === "display" ? "katex-display-inline" : "katex-inline"}
-            dangerouslySetInnerHTML={{ __html: render(s.value, s.type === "display") }}
+            key={`${keyPrefix}-${i}`}
+            className="katex-inline"
+            dangerouslySetInnerHTML={{ __html: render(s.value, false) }}
           />
         );
+      }
+      return <span key={`${keyPrefix}-${i}`}>{s.value}</span>;
+    }
+    return (
+      <span
+        key={`${keyPrefix}-${i}`}
+        className={s.type === "display" ? "katex-display-inline" : "katex-inline"}
+        dangerouslySetInnerHTML={{ __html: render(s.value, s.type === "display") }}
+      />
+    );
+  });
+}
+
+/**
+ * Render a single latex-only text string (no viz tags). Markdown **bold** is split
+ * FIRST (a bold run may wrap inline $...$ math, e.g. "**$f'(a)$ is the slope.**"),
+ * then each run is rendered through the math pipeline and wrapped in <strong>.
+ */
+function renderLatexString(text: string, className: string) {
+  if (!text.includes("**")) {
+    return (
+      <span className={`whitespace-pre-line ${className}`}>{renderSegmentNodes(text, "s")}</span>
+    );
+  }
+  // Non-greedy so each **…** pairs with its own closing markers; [\s\S] lets a bold
+  // run contain math/newlines.
+  const runs = text.split(/(\*\*[\s\S]+?\*\*)/g);
+  return (
+    <span className={`whitespace-pre-line ${className}`}>
+      {runs.map((run, i) => {
+        const m = /^\*\*([\s\S]+?)\*\*$/.exec(run);
+        if (m) {
+          return (
+            <strong key={`b-${i}`} className="font-semibold">
+              {renderSegmentNodes(m[1], `b-${i}`)}
+            </strong>
+          );
+        }
+        return <span key={`r-${i}`}>{renderSegmentNodes(run, `r-${i}`)}</span>;
       })}
     </span>
   );
@@ -133,80 +252,50 @@ export default function MathText({
   children: string | null | undefined;
   className?: string;
 }) {
-  // Repair LaTeX-command corruption from JSON single-escaping: a model that
-  // emitted `\frac`/`\theta`/`\tan` with ONE backslash inside a JSON string has
-  // its `\f`/`\t`/`\b`/`\r` parsed into the literal control chars FF/TAB/BS/CR,
-  // dropping the backslash (e.g. `\frac` → `<FF>rac` → renders as "rac"). Map
-  // those control chars back to `\f`/`\t`/`\b`/`\r` so the command renders.
-  // Newlines (\n) are legitimate (step breaks) and left intact.
-  const repaired = (children ?? "")
-    .replace(/\x08/g, "\\b")
-    .replace(/\t/g, "\\t")
-    .replace(/\f/g, "\\f")
-    .replace(/\r/g, "\\r");
+  const raw = children ?? "";
 
-  // Harden against legacy rows stored with ANSI/ESC corruption (→ box glyphs).
-  const stripped = stripControlChars(repaired);
-
-  // Render-side safety net for stored ASCII science notation.
-  // Only runs when there are no existing delimiters/LaTeX — avoids double-processing
-  // properly-formatted content.
-  const text =
-    !stripped.includes("$") && !BARE_LATEX_RE.test(stripped)
-      ? normalizeScienceNotation(stripped)
-      : stripped;
-
-  // ── Viz-segment branch: content contains <FunctionGraph .../> or <SlopeField .../>
-  if (VIZ_TAG_RE.test(text)) {
-    const vizSegs = parseVizSegments(text);
+  // ── Figure-aware branch: content contains a viz tag (FunctionGraph, SlopeField,
+  // Molecule, Mermaid) or a markdown pipe table. Figure payloads are kept RAW
+  // (not passed through prepareText, which would mangle SMILES/Mermaid/table text);
+  // only the prose/latex segments get the repair + science-notation pipeline.
+  if (hasFigureContent(raw)) {
+    const segs = parseFigureSegments(raw);
     return (
-      <span className={`whitespace-pre-line ${className}`}>
-        {vizSegs.map((seg, i) => {
+      <div className={`whitespace-pre-line ${className}`}>
+        {segs.map((seg, i) => {
           if (seg.type === "latex") {
-            // Render the latex portion using the normal split/render path.
-            const latexText = !seg.value.includes("$") && !BARE_LATEX_RE.test(seg.value)
-              ? normalizeScienceNotation(seg.value)
-              : seg.value;
-            if (!latexText.includes("$") && !BARE_LATEX_RE.test(latexText)) {
-              return <span key={i}>{latexText}</span>;
-            }
-            return <span key={i}>{renderLatexString(latexText, "")}</span>;
+            return renderPreparedLatexSegment(seg.value, i);
           }
           if (seg.type === "functionGraph") {
             try {
-              const rangeX = parseRangePair(seg.rangeX, [-5, 5]);
-              const rangeY = parseRangePair(seg.rangeY, [-5, 5]);
-              const pts = parsePoints(seg.points);
               const eq = (seg.equation ?? "").trim();
               if (!eq) return null;
               return (
                 <span key={i} className="block">
                   <FunctionGraph
                     equation={eq}
-                    rangeX={rangeX}
-                    rangeY={rangeY}
-                    points={pts}
+                    rangeX={parseRangePair(seg.rangeX, [-5, 5])}
+                    rangeY={parseRangePair(seg.rangeY, [-5, 5])}
+                    points={parsePoints(seg.points)}
+                    holes={parsePoints(seg.holes)}
                     equalScale={seg.equalScale !== "false"}
                   />
                 </span>
               );
             } catch {
-              // Defensive: invalid expression → skip graph
               return null;
             }
           }
           if (seg.type === "slopeField") {
             try {
-              const rangeX = parseRangePair(seg.rangeX, [-3, 3]);
-              const rangeY = parseRangePair(seg.rangeY, [-3, 3]);
               const eq = (seg.equation ?? "").trim();
               if (!eq) return null;
               return (
                 <span key={i} className="block">
                   <SlopeField
                     equation={eq}
-                    rangeX={rangeX}
-                    rangeY={rangeY}
+                    rangeX={parseRangePair(seg.rangeX, [-3, 3])}
+                    rangeY={parseRangePair(seg.rangeY, [-3, 3])}
                   />
                 </span>
               );
@@ -214,17 +303,40 @@ export default function MathText({
               return null;
             }
           }
+          if (seg.type === "molecule") {
+            const smiles = (seg.smiles ?? "").trim();
+            if (!smiles) return null;
+            return <MoleculeStructure key={i} smiles={smiles} caption={seg.caption?.trim() || undefined} />;
+          }
+          if (seg.type === "mermaid") {
+            const diagram = (seg.diagram ?? "").trim();
+            if (!diagram) return null;
+            return <MermaidDiagram key={i} diagram={diagram} />;
+          }
+          if (seg.type === "table") {
+            if (!seg.rows.length) return null;
+            return (
+              <DataTable
+                key={i}
+                rows={seg.rows}
+                hasHeader={seg.hasHeader}
+                renderCell={(cell) => renderPreparedLatexSegment(cell, 0)}
+              />
+            );
+          }
           return null;
         })}
-      </span>
+      </div>
     );
   }
+
+  const text = prepareText(raw);
 
   // Fast path: no math delimiters AND no bare LaTeX → plain text, keeping newlines.
   // (Bare-LaTeX-without-$ must NOT short-circuit here, or split()'s bare-LaTeX
   //  branch is never reached and raw commands leak into the page.)
   if (!text.includes("$") && !BARE_LATEX_RE.test(text)) {
-    return <span className={`whitespace-pre-line ${className}`}>{text}</span>;
+    return <span className={`whitespace-pre-line ${className}`}>{renderInlineText(text, "ft")}</span>;
   }
 
   return renderLatexString(text, className);

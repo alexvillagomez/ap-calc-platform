@@ -49,31 +49,10 @@ export default function PrecalcPortal() {
 
   async function handleAuth(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      const endpoint = tab === "signin" ? "/api/auth/login" : "/api/auth/register";
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: username.trim(), password }),
-      });
-      const data = await res.json() as { accountId?: string; username?: string; sessionId?: string; error?: string };
-      if (!res.ok || !data.sessionId) {
-        setError(data.error ?? "Something went wrong. Try again.");
-        return;
-      }
-      localStorage.setItem(SESSION_KEY, data.sessionId);
-      localStorage.setItem(ACCOUNT_KEY, data.accountId ?? "");
-      localStorage.setItem(USERNAME_KEY, data.username ?? username.trim());
-      setStoredUsername(data.username ?? username.trim());
-      setPhase("topics");
-      loadTopics();
-    } catch {
-      setError("Network error. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    // Auth is now centralized on Supabase Auth via the /login page. This legacy
+    // username form simply forwards there (the old custom /api/auth/login &
+    // /api/auth/register routes were removed in the Supabase Auth cutover).
+    window.location.href = "/login?next=/precalc";
   }
 
   function handleSignOut() {

@@ -114,7 +114,7 @@ Return exactly one valid JSON object. No markdown code fences. No prose outside 
 
 Required keys: latex_content, solution_latex, choices (exactly four strings), correct_index (integer 0–3).
 
-LaTeX: Put every English word, label, or sentence in \\\\text{...}. Only math (symbols, expressions, derivatives, fractions) may sit outside \\\\text{}. Plain prose in math mode is invalid.
+LaTeX: Write ALL prose as plain text outside dollar signs. Wrap only math (variables, symbols, expressions, derivatives, fractions, integrals) in $...$. Never use \\\\text{} or \\\\displaystyle.
 
 If latex_content or any choice embeds <FunctionGraph /> or <SlopeField />, treat each equation= attribute as the ground truth for what is drawn. solution_latex and correct_index must match it: sample the expression at test x-values in each interval relevant to the question (e.g. midpoints between intercepts); do not claim f' > 0 where the expression is negative there (and vice versa). If the stem says the graph is f or f', keep that distinction consistent with the equation.
 
@@ -139,10 +139,10 @@ Return exactly one valid JSON object. No markdown fences.
 WORKFLOW (strict order):
 1. Follow the **requested TYPE** and archetype instructions in the user message (TYPE A–G). Match part structure: (a)–(d) with 9 points total, except TYPE G uses three parts (a)–(c) with points 2+4+3.
 2. Context — one shared mathematical object (function, ODE, table, graph, or region) across all parts; concrete scenario; **force units** on rates and interpretations when applicable.
-3. Stem — latex_content: \\\\begin{aligned}...\\\\end{aligned} with &\\\\text{...} rows; parts \\\\text{(a)}, \\\\text{(b)}, ... Use \\\\( ... \\\\) only inside aligned rows where needed. No \\\\begin{itemize}. Close every \\\\text{ before \\\\\\\\.
-4. Visuals — <SlopeField .../> and <FunctionGraph .../> only AFTER \\\\end{aligned}, on their own line. equation uses expr-eval syntax (* for multiply). Points on graphs must lie on the function.
-5. solution_latex — full solution for every part; steps with \\\\text{(1)}, \\\\text{(2)}, ... per part.
-6. rubric — exactly **9** points: \\\\text{P1:} … \\\\text{P9:} in one aligned env. Earlier points reward correct **application of concepts** and justification; later points reward **correct computation** and **units** where applicable. Use College Board–style wording (setup, justification, units, interpretation, eligibility, banking when helpful). **Do not** reference calculator or decimal approximations.
+3. Stem — latex_content: plain text paragraphs separated by blank lines. Parts (a), (b), (c), (d) as their own plain-text paragraphs. Math in $...$ (inline) or $$...$$ (display, own line). No \\\\begin{aligned} in the stem. No \\\\text{} anywhere.
+4. Visuals — <SlopeField .../> and <FunctionGraph .../> on their own line, after the prose paragraph that introduces them. equation uses expr-eval syntax (* for multiply). Points on graphs must lie on the function.
+5. solution_latex — plain text sentences for each part's explanation. Use $$\\\\begin{aligned}...\\\\end{aligned}$$ for multi-step math work. Parts labeled "(a)", "(b)", etc. as plain text.
+6. rubric — exactly **9** points written as plain text: "P1: ...", "P2: ...", etc., each on its own line. Earlier points reward correct **application of concepts** and justification; later points reward **correct computation** and **units** where applicable. Use College Board–style wording. **Do not** reference calculator or decimal approximations.
 
 TYPE SUMMARY (no calculator — adapt numbers for exact work)
 - TYPE A: tabular / rate / accumulation / Riemann + interpretation (typical 3+2+2+2).
@@ -153,7 +153,7 @@ TYPE SUMMARY (no calculator — adapt numbers for exact work)
 - TYPE F: implicit curve; tangents; related rates (2+2+3+2).
 - TYPE G: area + volume cross-sections + washer setup (2+4+3), three parts only.
 
-LaTeX: prose in \\\\text{...}; every backslash in a JSON string value must be doubled (a single LaTeX \\ becomes \\\\ in JSON, a LaTeX line break \\\\ becomes \\\\\\\\ in JSON); rubric and solution use \\\\\\\\ for row breaks in JSON strings.
+LaTeX: prose is plain text outside $...$; never use \\\\text{}; every backslash inside $...$ or $$...$$ in a JSON string must be doubled (\\\\int, \\\\frac, etc.); line breaks inside \\\\begin{aligned} use \\\\\\\\ in JSON.
 
 Required keys: latex_content, solution_latex, rubric
 `.trim();
@@ -219,84 +219,43 @@ const MCQ_API_OUTPUT_NOTE = `API requirement: Your response must be exactly one 
 /** MCQ user message — verbatim wording (LaTeX shown with double backslashes as required in JSON). */
 const MCQ_FORMAT_FOR_ALL_PARTS = `Format for ALL parts:
 
-CRITICAL JSON ESCAPING RULE: This output is a JSON string. Every LaTeX backslash MUST be doubled.
-- \\\\text{} in JSON  →  renders as \\text{} in LaTeX  (CORRECT)
-- \\text{} in JSON   →  invalid JSON / broken LaTeX    (WRONG)
-- Never use a single backslash anywhere in the JSON string values.
+CRITICAL JSON ESCAPING: Every LaTeX backslash must be doubled in JSON string values.
+- \\\\int in JSON → \\int in LaTeX (CORRECT)
+- \\int in JSON  → invalid JSON  (WRONG)
 
-Wrap ALL NARRATIVE (text that is not math) in \\\\text{...} with exactly TWO backslashes and include spaces within text{}
-Leave all math fragments outside of text{}
-Use \\\\ for line breaks
-Integrals written as \\\\int_a^b\\\\!\\\\!
-Slope Fields written as:
+PROSE vs MATH — the only rule:
+- Write ALL prose/narrative as plain text outside dollar signs. No \\\\text{}, ever.
+- Wrap math (variables, symbols, expressions, fractions, integrals, derivatives) in $...$ (inline).
+- Use $$...$$ for equations that should appear on their own line (display).
+- NEVER use \\\\text{} or \\\\displaystyle.
+
+Good: "A particle moves at velocity $v(t) = 3t^2 - 4$. Find $v'(t)$."
+Bad:  "$\\\\text{A particle moves at velocity }v(t) = 3t^2 - 4\\\\text{. Find }v'(t)$"
+
+Inline integrals: $\\\\int_0^2 f(x)\\\\,dx$ (limits to the right — do not use \\\\limits)
+Display integrals: $$\\\\int_0^2 f(x)\\\\,dx$$
+
+Slope Fields:
 <SlopeField equation="f(x,y)" rangeX="a,b" rangeY="c,d" />
-exactly as it is subsituting the equation and ranges
-Graphs written as:
-<FunctionGraph equation="f(x)" rangeX="a,b" rangeY="c,d" points="(0,1,(0,1));(1,-1,(2,1))" />
-FunctionGraph / SlopeField formatting rules:
 
-- <FunctionGraph ... /> and <SlopeField ... /> must use normal double quotes " in the actual tag. If the output is inside JSON, those quotes will appear escaped as \". That is correct.
-- equation must be expr-eval only: an expression in x, such as x^2-4, x^3-3*x, sin(x), exp(x), or sqrt(x+1).
-- Do NOT include f(x)=, y=, f'(x)=, dy/dx=, or any equals sign inside equation.
-- Do NOT use LaTeX inside equation.
-- Use * for multiplication.
-- Allowed syntax: numbers, x, +, -, *, /, ^, parentheses, sin, cos, tan, sqrt, exp, ln.
-- points must be formatted exactly as (x,y,label);(x,y,label);...
-- The label must be short text only, with no commas and no parentheses. Good labels: A, B, max, min, root1.
-- Every listed point must lie on the graphed expression.
-- If graphing the derivative, indicate that only in the surrounding narrative, not inside equation. Example: \\\\text{The graph shown is } f'(x). Then use <FunctionGraph equation="x^2-4" ... />
+Graphs:
+<FunctionGraph equation="f(x)" rangeX="a,b" rangeY="c,d" points="(x,y,label);..." />
 
-FunctionGraph points rules (STRICT):
+FunctionGraph / SlopeField rules:
+- equation: expr-eval syntax only (x^2-4, x^3-3*x, sin(x), exp(x), sqrt(x+1)). Use * for multiplication.
+- Do NOT include f(x)=, y=, or any equals sign inside equation. No LaTeX inside equation.
+- points is OPTIONAL. Only include verified exact points (x,y must satisfy the equation numerically).
+- Allowed labels: min, max, root only. No numbers, commas, or parentheses in labels.
+- If any point fails exact verification → remove ALL points.
+- If graphing the derivative, say so in surrounding prose: "The graph below shows $f'(x)$." then use <FunctionGraph equation="..." />.
+- Slope field and graph tags always go on their own line, after any prose.
 
-- points is OPTIONAL. Do NOT include points unless they are explicitly useful (e.g., extrema or intercepts that are clearly intended to be shown).
+latex_content: Plain prose with $...$ for math. Keep stems concise.
+Simple computation stems can be pure math: $\\\\int x\\\\,dx =$ or $\\\\frac{d}{dx}(x^3) =$
 
-- If points are included, they must be EXACT and VERIFIED:
-  • Every point (x,y,label) must satisfy the equation numerically.
-  • The y-value must match the equation evaluated at x.
+solution_latex: Start with a plain-text overview sentence. Show steps using $$\\\\begin{aligned}...\\\\end{aligned}$$ for multi-step work. Separate explanation sentences as plain text between math blocks.
 
-- Allowed point types ONLY:
-  • local minimum → label "min"
-  • local maximum → label "max"
-  • x-intercept → label "root"
-
-- DO NOT use labels like "root1", "root2", "(0,0)", or anything with numbers, commas, or parentheses.
-  Only use: min, max, or root.
-
-- DO NOT include approximate or guessed points.
-  If exact values are not simple integers, DO NOT include points at all.
-
-- If unsure whether a point is correct → DO NOT include it.
-
-- Never include decorative or redundant points.
-
-Point validation requirement (MANDATORY):
-
-Before outputting <FunctionGraph>, you MUST verify each point:
-
-- Plug the x-value into the equation
-- Compute the exact y-value
-- Only include the point if it EXACTLY matches
-
-If any point fails this check → REMOVE ALL points
-Slope field and function should always be a function of x after the entire question
-Examples:
-\\\\text{Example } y=x.
-
-
-latex_content:
-Prefer one line, no line breaks; keep the stem short.
-Simple solving stems often look like:
-\\\\int\\\\!\\\\!x\\\\ dx=
-\\\\frac{\\\\ d}{dx}(x^3)=
-Slope field and function should always be a function of x and on their own line
-
-solution_latex:
-Start with a sentence overview of how problem should be solved. Then create a solution for correct answer with steps separated by double line breaks (4 backslashes)
-
-
-choices: Every choice MUST be wrapped in $...$ (e.g. $12x^3 - 10x^2 + 7$). Never use raw caret/underscore outside $...$; they will not render. Do not wrap in \\\\text{}. correct_index must be the only choice consistent with the stem and solution_latex; other choices close but incorrect.
-
-latex_content math rule: Every math expression inside prose MUST be wrapped in $...$ (inline) or $$...$$ (display). Never write bare LaTeX like x^2 or \\\\frac outside delimiters — it will render as plain text.
+choices: Every choice MUST be wrapped in $...$ (e.g. $12x^3 - 10x^2 + 7$). Never use raw caret/underscore outside $...$. Never use \\\\text{} inside choices. correct_index must be the only choice consistent with the stem and solution_latex.
 
 Leave correct_index as is`;
 

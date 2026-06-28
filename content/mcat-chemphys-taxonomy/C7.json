@@ -1,0 +1,207 @@
+{
+  "section": "chemistry",
+  "category_code": "C7",
+  "category_label": "Chemical Thermodynamics",
+  "order_index": 6,
+  "umbrellas": [
+    {
+      "slug": "endothermic_exothermic",
+      "label": "Endothermic & Exothermic Reactions",
+      "description": "Classification of chemical reactions by the sign of their enthalpy change and the direction of heat flow between system and surroundings.",
+      "intro": {
+        "slug": "endothermic_exothermic_intro",
+        "label": "Endothermic & Exothermic Reactions Overview",
+        "description": "Every chemical reaction either releases or absorbs energy as heat, depending on whether forming products requires more or less energy than breaking reactant bonds. The sign of $\\Delta H$ — negative for exothermic, positive for endothermic — tells you the direction of heat flow between the reaction system and its surroundings. These concepts are the foundation for enthalpy calculations, Hess's law, and ultimately free-energy spontaneity.",
+        "examples": ["exothermic: $\\Delta H < 0$, heat flows to surroundings", "endothermic: $\\Delta H > 0$, heat absorbed from surroundings", "combustion releases heat; dissolving $\\text{NH}_4\\text{NO}_3$ absorbs heat"]
+      },
+      "in_depth": [
+        {
+          "slug": "exothermic_reaction_sign",
+          "label": "Exothermic reactions and negative $\\Delta H$",
+          "description": "Identify an exothermic reaction as one in which energy is released to the surroundings, giving $\\Delta H < 0$, and recognize that products are at a lower enthalpy than reactants. This focuses on the sign convention and heat-flow direction, not on calculating the numerical value of $\\Delta H$ (a separate keyword).",
+          "examples": ["$\\Delta H < 0$: products lower energy than reactants", "combustion of methane releases heat", "heat flows from system to surroundings"]
+        },
+        {
+          "slug": "endothermic_reaction_sign",
+          "label": "Endothermic reactions and positive $\\Delta H$",
+          "description": "Identify an endothermic reaction as one in which energy is absorbed from the surroundings, giving $\\Delta H > 0$, and recognize that products lie at a higher enthalpy than reactants. This focuses on heat absorption and sign convention, not on spontaneity (which also depends on $\\Delta S$, a separate umbrella).",
+          "examples": ["$\\Delta H > 0$: products higher energy than reactants", "dissolving $\\text{NH}_4\\text{NO}_3$ feels cold", "heat flows from surroundings into system"]
+        }
+      ]
+    },
+    {
+      "slug": "enthalpy_heats",
+      "label": "Enthalpy, Standard Heats of Reaction & Formation",
+      "description": "Quantitative treatment of the heat content of reactions using the standard enthalpy of reaction $\\Delta H^\\circ_{rxn}$ and the standard enthalpies of formation $\\Delta H^\\circ_f$.",
+      "intro": {
+        "slug": "enthalpy_heats_intro",
+        "label": "Enthalpy & Standard Heats Overview",
+        "description": "Enthalpy $H$ is a state function that captures the heat exchanged at constant pressure. The standard enthalpy of reaction $\\Delta H^\\circ_{rxn}$ is calculated from tabulated standard enthalpies of formation $\\Delta H^\\circ_f$, where $\\Delta H^\\circ_f$ of any pure element in its standard state equals zero by definition. These quantities make it possible to compare reaction energetics without running every reaction in a calorimeter.",
+        "examples": ["$\\Delta H^\\circ_{rxn} = \\sum \\Delta H^\\circ_f(\\text{products}) - \\sum \\Delta H^\\circ_f(\\text{reactants})$", "standard state: pure element at 25°C, 1 atm has $\\Delta H^\\circ_f = 0$", "enthalpy is a state function (path-independent)"]
+      },
+      "in_depth": [
+        {
+          "slug": "standard_enthalpy_formation",
+          "label": "Standard enthalpy of formation $\\Delta H^\\circ_f$",
+          "description": "Define the standard enthalpy of formation as the enthalpy change for forming 1 mol of a compound from its constituent elements in their standard states, and apply the rule that $\\Delta H^\\circ_f = 0$ for any pure element in its standard state. This focuses on the definition of $\\Delta H^\\circ_f$ and the reference baseline, not on using it to calculate $\\Delta H^\\circ_{rxn}$ (a separate keyword).",
+          "examples": ["$\\Delta H^\\circ_f[\\text{H}_2\\text{O}(l)] = -285.8\\,\\text{kJ/mol}$", "$\\Delta H^\\circ_f[\\text{O}_2(g)] = 0$ (element, standard state)", "formation = combining pure elements into 1 mol product"]
+        },
+        {
+          "slug": "standard_enthalpy_reaction",
+          "label": "Standard enthalpy of reaction from $\\Delta H^\\circ_f$",
+          "description": "Calculate $\\Delta H^\\circ_{rxn}$ using $\\Delta H^\\circ_{rxn} = \\sum n\\,\\Delta H^\\circ_f(\\text{products}) - \\sum n\\,\\Delta H^\\circ_f(\\text{reactants})$, accounting for stoichiometric coefficients. This focuses on the calculation from formation enthalpies, not on Hess's law path-summation (a separate keyword).",
+          "examples": ["$\\Delta H^\\circ_{rxn} = \\sum n\\,\\Delta H^\\circ_f(\\text{prod}) - \\sum n\\,\\Delta H^\\circ_f(\\text{react})$", "multiply $\\Delta H^\\circ_f$ by molar coefficient", "sign: negative = exothermic; positive = endothermic"]
+        },
+        {
+          "slug": "enthalpy_state_function",
+          "label": "Enthalpy as a state function",
+          "description": "Explain that enthalpy $H$ is a state function whose change $\\Delta H$ depends only on initial and final states, not on the reaction pathway, and recognize that reversing a reaction changes the sign of $\\Delta H$ while multiplying by a scalar multiplies $\\Delta H$ by that scalar. This focuses on path-independence and algebraic manipulation, not on Hess's law multi-step summation (a separate keyword).",
+          "examples": ["$\\Delta H$ path-independent: same start/end → same $\\Delta H$", "reverse reaction: $\\Delta H$ changes sign", "double moles → double $\\Delta H$"]
+        }
+      ]
+    },
+    {
+      "slug": "hess_law",
+      "label": "Hess's Law of Heat Summation",
+      "description": "Using the additivity of enthalpy changes to calculate $\\Delta H$ for a target reaction by algebraically combining known reactions.",
+      "intro": {
+        "slug": "hess_law_intro",
+        "label": "Hess's Law Overview",
+        "description": "Because enthalpy is a state function, the total enthalpy change of a reaction equals the sum of enthalpy changes for any series of steps connecting the same reactants to the same products. Hess's law lets you combine known $\\Delta H$ values — by reversing reactions, scaling by stoichiometry, and adding — to find $\\Delta H$ for reactions that are hard to measure directly.",
+        "examples": ["$\\Delta H_{\\text{overall}} = \\Delta H_1 + \\Delta H_2 + \\ldots$", "reverse a step → change sign of its $\\Delta H$", "scale a step → scale its $\\Delta H$"]
+      },
+      "in_depth": [
+        {
+          "slug": "hess_law_application",
+          "label": "Applying Hess's law to calculate $\\Delta H$",
+          "description": "Apply Hess's law by manipulating a set of known reactions (reversing and/or scaling steps) so that they sum to the target reaction, then add their $\\Delta H$ values to obtain $\\Delta H_{\\text{target}}$. This focuses on the multi-step algebraic combination, not on the direct $\\Delta H^\\circ_{rxn} = \\sum \\Delta H^\\circ_f$ formula (a separate keyword).",
+          "examples": ["cancel intermediates by pairing same species on opposite sides", "reverse reaction: flip sign; multiply by $n$: multiply $\\Delta H$ by $n$", "target: $\\text{C(s)} + \\text{O}_2\\text{(g)} \\rightarrow \\text{CO}_2\\text{(g)}$ assembled from two steps"]
+        }
+      ]
+    },
+    {
+      "slug": "bond_dissociation_enthalpy",
+      "label": "Bond Dissociation Energy & Heats of Reaction",
+      "description": "Estimating $\\Delta H_{rxn}$ by summing bond energies broken minus bond energies formed, and relating bond strength to formation enthalpies.",
+      "intro": {
+        "slug": "bond_dissociation_enthalpy_intro",
+        "label": "Bond Dissociation Energy Overview",
+        "description": "Bond dissociation energy (BDE) is the energy required to break 1 mol of a bond homolytically in the gas phase. Because breaking bonds requires energy (endothermic) and forming bonds releases energy (exothermic), $\\Delta H_{rxn}$ can be estimated as $\\sum\\text{BDE}(\\text{broken}) - \\sum\\text{BDE}(\\text{formed})$. This provides an independent route to enthalpy and explains why some bonds (triple > double > single) store more energy.",
+        "examples": ["$\\Delta H_{rxn} \\approx \\sum \\text{BDE}_{\\text{broken}} - \\sum \\text{BDE}_{\\text{formed}}$", "breaking bonds: endothermic; forming bonds: exothermic", "stronger bond → higher BDE → more stable product"]
+      },
+      "in_depth": [
+        {
+          "slug": "bde_definition",
+          "label": "Bond dissociation energy definition & trend",
+          "description": "Define bond dissociation energy as the energy required to break one mole of a specific bond homolytically in the gas phase, and predict relative BDE trends (triple > double > single bonds; shorter bond → stronger bond → higher BDE). This focuses on the definition and qualitative trends, not on the $\\Delta H$ estimation calculation (a separate keyword).",
+          "examples": ["BDE: energy to break 1 mol bonds homolytically (gas phase)", "$\\text{C}\\equiv\\text{N}$ BDE > $\\text{C}=\\text{N}$ BDE > $\\text{C}-\\text{N}$ BDE", "shorter bond = stronger bond = higher BDE"]
+        },
+        {
+          "slug": "bde_estimate_delta_h",
+          "label": "Estimating $\\Delta H_{rxn}$ from bond energies",
+          "description": "Estimate $\\Delta H_{rxn}$ using $\\Delta H \\approx \\sum \\text{BDE}_{\\text{bonds broken}} - \\sum \\text{BDE}_{\\text{bonds formed}}$, recognizing that this method uses average bond energies and gives approximate values. This focuses on the bond-energy arithmetic, not on $\\Delta H^\\circ_f$-based calculation or Hess's law (separate keywords).",
+          "examples": ["identify all bonds broken (reactants) and formed (products)", "$\\Delta H \\approx \\sum \\text{BDE}_{\\text{broken}} - \\sum \\text{BDE}_{\\text{formed}}$", "negative result → more energy released than absorbed → exothermic"]
+        }
+      ]
+    },
+    {
+      "slug": "entropy_reactions",
+      "label": "Entropy & the Second Law Applied to Reactions",
+      "description": "Predicting the sign of the entropy change $\\Delta S$ for a chemical reaction and understanding how the Second Law directs spontaneous change toward greater total entropy.",
+      "intro": {
+        "slug": "entropy_reactions_intro",
+        "label": "Entropy in Chemical Reactions Overview",
+        "description": "Entropy $S$ measures the dispersal of energy and matter — the more ways a system can arrange itself, the higher its entropy. For a chemical reaction, $\\Delta S_{rxn}$ is driven by changes in the number of moles of gas, the complexity of molecules, and phase transitions. The Second Law of thermodynamics states that the total entropy of the universe always increases for a spontaneous process, which introduces the concept of free energy when combined with enthalpy.",
+        "examples": ["gas phase has far higher entropy than liquid or solid", "more moles of gas on product side → $\\Delta S > 0$", "Second Law: $\\Delta S_{\\text{universe}} \\geq 0$ for spontaneous processes"]
+      },
+      "in_depth": [
+        {
+          "slug": "entropy_definition_trend",
+          "label": "Entropy definition and state/complexity trends",
+          "description": "Define entropy $S$ as a measure of the disorder or dispersal of energy/matter in a system, and rank states of matter by entropy ($S_{\\text{gas}} \\gg S_{\\text{liquid}} > S_{\\text{solid}}$) and molecules by complexity (more atoms/bonds → higher entropy). This focuses on qualitative ranking, not on calculating $\\Delta S_{rxn}$ from stoichiometry (a separate keyword).",
+          "examples": ["$S_{\\text{gas}} \\gg S_{\\text{liquid}} > S_{\\text{solid}}$", "more complex molecule has higher entropy than simpler one", "entropy = dispersal of energy and matter"]
+        },
+        {
+          "slug": "delta_s_rxn_prediction",
+          "label": "Predicting the sign of $\\Delta S_{rxn}$",
+          "description": "Predict whether $\\Delta S_{rxn}$ is positive or negative by examining changes in moles of gas, phase of products vs. reactants, and molecular complexity; $\\Delta S_{rxn} = \\sum S^\\circ(\\text{products}) - \\sum S^\\circ(\\text{reactants})$ conceptually. This focuses on sign prediction from stoichiometry/phase, not on entropy's role in spontaneity (handled in the free-energy umbrella).",
+          "examples": ["gas moles increase → $\\Delta S > 0$ (e.g., $\\text{CaCO}_3 \\rightarrow \\text{CaO} + \\text{CO}_2$)", "liquid → gas: $\\Delta S \\gg 0$; gas → solid: $\\Delta S \\ll 0$", "more product molecules of similar phase → $\\Delta S > 0$"]
+        },
+        {
+          "slug": "standard_entropy_formation",
+          "label": "Standard molar entropy and $S^\\circ$ of formation",
+          "description": "Explain that unlike enthalpy, absolute entropy values $S^\\circ$ exist (Third Law: $S=0$ for a perfect crystal at 0 K), so $\\Delta S^\\circ_{rxn} = \\sum n\\,S^\\circ(\\text{products}) - \\sum n\\,S^\\circ(\\text{reactants})$ uses absolute (not formation-relative) values. This focuses on the Third Law baseline and the calculation setup, not on qualitative sign prediction (a separate keyword).",
+          "examples": ["Third Law: $S = 0$ at 0 K for a perfect crystal", "$\\Delta S^\\circ_{rxn} = \\sum nS^\\circ(\\text{prod}) - \\sum nS^\\circ(\\text{react})$", "absolute $S^\\circ$ values are always positive"]
+        }
+      ]
+    },
+    {
+      "slug": "gibbs_free_energy",
+      "label": "Gibbs Free Energy & Spontaneity",
+      "description": "Using the Gibbs free energy relation $\\Delta G = \\Delta H - T\\Delta S$ to predict the spontaneity of a reaction under given conditions.",
+      "intro": {
+        "slug": "gibbs_free_energy_intro",
+        "label": "Gibbs Free Energy Overview",
+        "description": "Gibbs free energy $G$ combines enthalpy and entropy into a single criterion for spontaneity at constant temperature and pressure: a reaction is spontaneous when $\\Delta G < 0$. The fundamental relation $\\Delta G = \\Delta H - T\\Delta S$ shows that temperature determines which term dominates, explaining why some reactions are spontaneous at high temperature but not low, or vice versa. Under standard conditions, $\\Delta G^\\circ$ also connects to the equilibrium constant via $\\Delta G^\\circ = -RT\\ln K$.",
+        "examples": ["$\\Delta G = \\Delta H - T\\Delta S$", "spontaneous: $\\Delta G < 0$; non-spontaneous: $\\Delta G > 0$; equilibrium: $\\Delta G = 0$", "$\\Delta G^\\circ = -RT\\ln K$ (links thermo to equilibrium)"]
+      },
+      "in_depth": [
+        {
+          "slug": "gibbs_equation",
+          "label": "The Gibbs free energy equation $\\Delta G = \\Delta H - T\\Delta S$",
+          "description": "Apply $\\Delta G = \\Delta H - T\\Delta S$ to calculate or estimate $\\Delta G$ from enthalpy and entropy changes at a given absolute temperature $T$ (in Kelvin). This focuses on the equation and its arithmetic, not on using $\\Delta G$ to judge spontaneity (a separate keyword).",
+          "examples": ["$\\Delta G = \\Delta H - T\\Delta S$; $T$ must be in Kelvin", "units: $\\Delta H$ in kJ, $T\\Delta S$ in kJ (watch kJ vs J)", "large negative $\\Delta H$ and positive $\\Delta S$ both drive $\\Delta G$ negative"]
+        },
+        {
+          "slug": "spontaneity_sign_delta_g",
+          "label": "Predicting spontaneity from the sign of $\\Delta G$",
+          "description": "Predict reaction spontaneity: $\\Delta G < 0$ → spontaneous (product-favored); $\\Delta G > 0$ → non-spontaneous (requires input of work); $\\Delta G = 0$ → at equilibrium. This focuses on interpreting the sign of $\\Delta G$, not on computing it from $\\Delta H$ and $T\\Delta S$ (a separate keyword).",
+          "examples": ["$\\Delta G < 0$: spontaneous as written", "$\\Delta G > 0$: non-spontaneous; reverse is spontaneous", "$\\Delta G = 0$: system is at equilibrium"]
+        },
+        {
+          "slug": "four_cases_spontaneity",
+          "label": "Four sign combinations for $\\Delta H$ and $\\Delta S$",
+          "description": "Classify the four $\\pm\\Delta H / \\pm\\Delta S$ sign combinations: (++) non-spontaneous at low $T$, spontaneous at high $T$; (--) spontaneous at low $T$, non-spontaneous at high $T$; (-+) always spontaneous; (+-) never spontaneous. This focuses on qualitative temperature-driven switching, not on the quantitative equation (a separate keyword).",
+          "examples": ["$\\Delta H < 0$, $\\Delta S > 0$: spontaneous at all $T$", "$\\Delta H > 0$, $\\Delta S < 0$: never spontaneous", "$\\Delta H > 0$, $\\Delta S > 0$: spontaneous only above crossover $T$"]
+        },
+        {
+          "slug": "temperature_crossover_spontaneity",
+          "label": "Temperature dependence of spontaneity & crossover point",
+          "description": "Identify the crossover temperature $T = \\Delta H / \\Delta S$ at which $\\Delta G$ changes sign (reaction switches between spontaneous and non-spontaneous), and predict whether raising temperature favors or disfavors a reaction based on the sign of $\\Delta S$. This focuses on the quantitative crossover and temperature trend, not on classifying the four sign-combination cases (a separate keyword).",
+          "examples": ["crossover: $T^* = \\Delta H / \\Delta S$ (where $\\Delta G = 0$)", "positive $\\Delta S$: higher $T$ makes $-T\\Delta S$ more negative → more spontaneous", "endothermic reaction: spontaneous only above $T^*$"]
+        },
+        {
+          "slug": "standard_free_energy_formation",
+          "label": "Standard free energy of formation $\\Delta G^\\circ_f$",
+          "description": "Define the standard Gibbs free energy of formation $\\Delta G^\\circ_f$ (free energy to form 1 mol from standard-state elements; zero for pure elements) and calculate $\\Delta G^\\circ_{rxn} = \\sum n\\,\\Delta G^\\circ_f(\\text{products}) - \\sum n\\,\\Delta G^\\circ_f(\\text{reactants})$. This focuses on the formation-values route to $\\Delta G^\\circ_{rxn}$, not on using $\\Delta G = \\Delta H - T\\Delta S$ directly (a separate keyword).",
+          "examples": ["$\\Delta G^\\circ_{rxn} = \\sum n\\,\\Delta G^\\circ_f(\\text{prod}) - \\sum n\\,\\Delta G^\\circ_f(\\text{react})$", "$\\Delta G^\\circ_f = 0$ for any element in its standard state", "analogous to Hess's law but for free energy"]
+        }
+      ]
+    },
+    {
+      "slug": "standard_delta_g_equilibrium",
+      "label": "$\\Delta G^\\circ$ and the Equilibrium Constant",
+      "description": "Connecting standard Gibbs free energy to the equilibrium constant via $\\Delta G^\\circ = -RT\\ln K$ and interpreting the sign of $\\Delta G^\\circ$ in terms of whether products or reactants are favored at equilibrium.",
+      "intro": {
+        "slug": "standard_delta_g_equilibrium_intro",
+        "label": "$\\Delta G^\\circ$ and Equilibrium Overview",
+        "description": "The standard free energy change $\\Delta G^\\circ$ and the equilibrium constant $K$ are related by $\\Delta G^\\circ = -RT\\ln K$. A large negative $\\Delta G^\\circ$ means $K \\gg 1$ (products strongly favored); a large positive $\\Delta G^\\circ$ means $K \\ll 1$ (reactants favored). This relation is the key bridge between chemical thermodynamics (this category) and equilibrium (C9).",
+        "examples": ["$\\Delta G^\\circ = -RT\\ln K$", "$\\Delta G^\\circ < 0 \\Leftrightarrow K > 1$ (product-favored at equilibrium)", "$R = 8.314\\,\\text{J/(mol·K)}$; $T$ in Kelvin"]
+      },
+      "in_depth": [
+        {
+          "slug": "delta_g_standard_vs_nonstandard",
+          "label": "Standard $\\Delta G^\\circ$ vs. $\\Delta G$ under non-standard conditions",
+          "description": "Distinguish $\\Delta G^\\circ$ (the free energy change when all species are in their standard states, 1 M or 1 atm) from $\\Delta G$ (the actual free energy change at arbitrary concentrations/pressures), related by $\\Delta G = \\Delta G^\\circ + RT\\ln Q$. This focuses on the distinction between $\\Delta G^\\circ$ and $\\Delta G$, not on the $K$-relationship alone (a separate keyword).",
+          "examples": ["$\\Delta G = \\Delta G^\\circ + RT\\ln Q$", "at equilibrium: $\\Delta G = 0$ and $Q = K$", "$\\Delta G^\\circ$: standard conditions (1 M, 1 atm, 25°C); $\\Delta G$: actual conditions"]
+        },
+        {
+          "slug": "delta_g_k_relationship",
+          "label": "$\\Delta G^\\circ = -RT\\ln K$: interpreting the link",
+          "description": "Apply the relationship $\\Delta G^\\circ = -RT\\ln K$ to qualitatively predict $K$ from $\\Delta G^\\circ$ (or vice versa): negative $\\Delta G^\\circ$ → $K > 1$ (products favored); positive $\\Delta G^\\circ$ → $K < 1$ (reactants favored); $\\Delta G^\\circ = 0$ → $K = 1$. This focuses on the sign-based interpretation and qualitative magnitude, not on precise numerical calculation (a separate keyword).",
+          "examples": ["$\\Delta G^\\circ = -RT\\ln K$; $\\Delta G^\\circ < 0 \\Rightarrow K > 1$", "$\\Delta G^\\circ = 0 \\Rightarrow K = 1$ (equal products/reactants)", "very negative $\\Delta G^\\circ$ → very large $K$ (essentially complete reaction)"]
+        }
+      ]
+    }
+  ]
+}

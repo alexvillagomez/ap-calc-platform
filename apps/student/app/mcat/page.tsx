@@ -7,8 +7,7 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { SoundToggle } from "@/components/ui/SoundToggle";
-import AuthButtons from "@/components/mcat/AuthButtons";
+import { NavMenu } from "@/components/nav/NavMenu";
 import McatOnboarding from "@/components/mcat/McatOnboarding";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { LoginGate } from "@/components/auth/LoginGate";
@@ -29,11 +28,22 @@ interface Keyword {
 
 interface Category {
   id: string;
+  section: string;
   label: string;
   description: string;
   order_index: number;
   keywords: Keyword[];
 }
+
+// Section tabs. Biology, Psych/Soc, Chemistry, and Physics are all live.
+type SectionKey = "biology" | "psych_soc" | "chemistry" | "physics";
+const LIVE_SECTIONS: { key: SectionKey; label: string }[] = [
+  { key: "biology", label: "Biology" },
+  { key: "psych_soc", label: "Psych/Soc" },
+  { key: "chemistry", label: "Chemistry" },
+  { key: "physics", label: "Physics" },
+];
+const SOON_SECTIONS: string[] = [];
 
 function categoryMastery(keywords: Keyword[]): { pct: number; attempted: number } {
   const attempted = keywords.filter((k) => k.total_attempts > 0);
@@ -60,6 +70,7 @@ function McatLandingPageInner() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<SectionKey>("biology");
 
   useEffect(() => {
     (async () => {
@@ -79,6 +90,21 @@ function McatLandingPageInner() {
     })();
   }, []);
 
+  // "Continue vs Start" is SERVER-AUTHORITATIVE: a student has progress only if
+  // their per-user keyword states (loaded for this session, never cached) show a
+  // recorded attempt. This must NOT key off mere session existence — that made a
+  // brand-new account in a browser with prior local state show "Continue".
+  // Categories are filtered by the active section tab; the auto/cards/practice
+  // links carry the section so those global modes scope to it (default biology).
+  const visibleCategories = categories.filter(
+    (c) => (c.section ?? "biology") === activeSection
+  );
+  const sectionQuery = activeSection === "biology" ? "" : `?section=${activeSection}`;
+
+  const hasProgress = visibleCategories.some((c) =>
+    c.keywords.some((k) => k.total_attempts > 0)
+  );
+
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* First-visit quick onboarding */}
@@ -88,7 +114,9 @@ function McatLandingPageInner() {
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
         <div className="w-full px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <LoderaLogo size={28} withWordmark />
+            <Link href="/" aria-label="Lodera home" className="shrink-0">
+              <LoderaLogo size={28} withWordmark />
+            </Link>
             <span className="text-neutral-300 text-sm">|</span>
             <h1 className="text-sm font-semibold text-neutral-800">MCAT Practice</h1>
           </div>
@@ -100,8 +128,7 @@ function McatLandingPageInner() {
               My Progress
             </Link>
             <StreakBadge />
-            <SoundToggle />
-            <AuthButtons />
+            <NavMenu />
           </div>
         </div>
       </header>
@@ -117,10 +144,20 @@ function McatLandingPageInner() {
 
         {/* Section tabs */}
         <div className="flex gap-2 mb-8 flex-wrap">
-          <span className="px-4 py-2 rounded-full bg-brand-500 text-white text-sm font-medium shadow-brand-sm">
-            Biology
-          </span>
-          {["Chemistry", "Physics", "Psych/Soc"].map((s) => (
+          {LIVE_SECTIONS.map((s) => (
+            <button
+              key={s.key}
+              onClick={() => setActiveSection(s.key)}
+              className={
+                activeSection === s.key
+                  ? "px-4 py-2 rounded-full bg-brand-500 text-white text-sm font-medium shadow-brand-sm"
+                  : "px-4 py-2 rounded-full border border-neutral-200 text-sm text-neutral-600 hover:border-brand-300 hover:text-brand-600 transition-colors"
+              }
+            >
+              {s.label}
+            </button>
+          ))}
+          {SOON_SECTIONS.map((s) => (
             <span
               key={s}
               className="px-4 py-2 rounded-full border border-neutral-200 text-sm text-neutral-400 cursor-not-allowed flex items-center gap-1.5"
@@ -166,62 +203,71 @@ function McatLandingPageInner() {
           </div>
         )}
 
+        {/* ─── Automatic mode hero — the primary, recommended way to learn ─── */}
+        {!loading && !error && (
+          <section className="mb-8">
+            <Link href={`/mcat/auto${sectionQuery}`} className="group block">
+              <div className="relative overflow-hidden rounded-2xl border border-brand-300 bg-gradient-to-br from-brand-500 to-brand-700 p-5 shadow-brand-md transition-all group-hover:shadow-brand-lg group-hover:border-brand-400">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-brand-700 bg-white rounded-full px-2 py-0.5">
+                      ★ Recommended
+                    </span>
+                    <h2 className="text-xl font-bold text-white leading-tight mt-2">
+                      Automatic Mode
+                    </h2>
+                    <p className="text-sm text-brand-50/80 mt-1">
+                      Your guided path — we pick what to study next.
+                    </p>
+                  </div>
+                  <span className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-brand-700 shadow-sm transition-transform group-hover:scale-[1.02] shrink-0">
+                    {hasProgress ? "Continue" : "Start"}
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth={2}>
+                      <path d="M6 3l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </Link>
+
+            {/* Flashcards-only mode — MCAT is flashcards-first; offered alongside auto. */}
+            <Link href={`/mcat/cards${sectionQuery}`} className="group block mt-3">
+              <div className="rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50 p-5 transition-all group-hover:shadow-brand-sm group-hover:border-orange-300">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl shrink-0">🔥</span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-bold text-neutral-900">Flashcards</p>
+                    <p className="text-xs text-neutral-500 mt-0.5">
+                      Memorize the whole course.
+                    </p>
+                  </div>
+                  <span className="shrink-0 text-orange-600 font-semibold text-sm inline-flex items-center gap-1">
+                    Start
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth={2}>
+                      <path d="M6 3l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </Link>
+
+            {/* Secondary mode — kept available, visually subordinate */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-3 px-1">
+              <span className="text-xs text-neutral-400">Prefer to choose your own topics?</span>
+              <Link
+                href={`/mcat/practice${sectionQuery}`}
+                className="text-xs font-medium text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+              >
+                General practice
+              </Link>
+            </div>
+          </section>
+        )}
+
         {/* Category grid */}
         {!loading && !error && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Auto mode card — primary CTA */}
-            <div className="col-span-1 sm:col-span-2">
-              <Card
-                className="border-brand-400 bg-gradient-to-r from-brand-500 to-indigo-600"
-                noPadding
-              >
-                <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-semibold text-brand-100 uppercase tracking-wide mb-1">
-                      Auto Mode · Recommended
-                    </p>
-                    <h2 className="font-bold text-white text-base leading-snug mb-1">
-                      Guided path through all MCAT Biology
-                    </h2>
-                    <p className="text-xs text-brand-100">
-                      Flashcard warm-ups, weakness-first questions, push-lessons when you&apos;re stuck, and category checkpoint quizzes — all in one continuous path.
-                    </p>
-                  </div>
-                  <Link href="/mcat/auto" className="shrink-0">
-                    <Button size="md" className="whitespace-nowrap bg-white text-brand-700 hover:bg-brand-50">
-                      {sessionId ? "Continue" : "Start learning"}
-                    </Button>
-                  </Link>
-                </div>
-              </Card>
-            </div>
-
-            {/* General Practice card */}
-            <div className="col-span-1 sm:col-span-2">
-              <Card
-                className="border-brand-200 bg-gradient-to-r from-brand-50 to-indigo-50"
-                noPadding
-              >
-                <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-semibold text-brand-600 uppercase tracking-wide mb-1">
-                      General Practice
-                    </p>
-                    <h2 className="font-bold text-neutral-900 text-base leading-snug mb-1">
-                      Mix questions across any topics you choose
-                    </h2>
-                    <p className="text-xs text-neutral-500">
-                      Select multiple categories, practice at your own pace, and get similar questions on demand.
-                    </p>
-                  </div>
-                  <Link href="/mcat/practice" className="shrink-0">
-                    <Button size="md" className="whitespace-nowrap">Start Practice</Button>
-                  </Link>
-                </div>
-              </Card>
-            </div>
-
-            {categories.map((cat) => {
+            {visibleCategories.map((cat) => {
               const { pct, attempted } = categoryMastery(cat.keywords);
               return (
                 <Card key={cat.id} hover noPadding>
@@ -277,7 +323,7 @@ function McatLandingPageInner() {
               );
             })}
 
-            {categories.length === 0 && (
+            {visibleCategories.length === 0 && (
               <div className="col-span-2 text-center py-12 text-neutral-400 text-sm">
                 No categories available yet.
               </div>

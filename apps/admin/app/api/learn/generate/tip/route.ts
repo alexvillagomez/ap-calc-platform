@@ -56,7 +56,7 @@ export async function POST(request: Request) {
   let parsed: { tip_latex: string };
   try {
     const completion = await openai.chat.completions.create({
-      model: "gemini-3.5-flash",
+      model: "gpt-5.4-mini",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userPrompt },
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
   const { data: inserted, error: insertErr } = await supabase
     .from("learn_tips")
     .upsert(
-      { keyword_id, tip_latex: parsed.tip_latex, model: "gemini-3.5-flash" },
+      { keyword_id, tip_latex: parsed.tip_latex, model: "gpt-5.4-mini" },
       { onConflict: "keyword_id" }
     )
     .select("id")

@@ -627,7 +627,7 @@ function DemoStep({
                 selected === correctIdx ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"
               )}>
                 {selected === correctIdx
-                  ? "Strength increased! 🎉"
+                  ? "Strength increased!"
                   : "Adjusted down slightly — practice focuses here next."}
               </div>
             )}

@@ -1,0 +1,269 @@
+{
+  "section": "physics",
+  "category_code": "P11",
+  "category_label": "Atomic & Nuclear Phenomena",
+  "order_index": 10,
+  "umbrellas": [
+    {
+      "slug": "atomic_composition",
+      "label": "Atomic Composition — Atomic Number, Mass & Isotopes",
+      "description": "The fundamental quantities that define an atom: proton count, neutron count, and mass — and how isotopes vary.",
+      "intro": {
+        "slug": "atomic_composition_intro",
+        "label": "Atomic Composition Overview",
+        "description": "Every atom is defined by its atomic number ($Z$, proton count) and mass number ($A$, protons + neutrons); the number of electrons equals $Z$ in a neutral atom. Isotopes of the same element share $Z$ but differ in neutron count, giving different atomic masses. Atomic weight on the periodic table is the weighted average of all naturally occurring isotopes.",
+        "examples": ["$Z$ = proton count; $A$ = proton + neutron count", "isotopes: same $Z$, different $A$", "atomic weight = weighted average of isotope masses"]
+      },
+      "in_depth": [
+        {
+          "slug": "atomic_number_definition",
+          "label": "Atomic number ($Z$) and proton count",
+          "description": "Identify the atomic number $Z$ as the number of protons in the nucleus, which uniquely determines the element; a neutral atom has $Z$ electrons. This focuses on $Z$ as the element-defining quantity, not on the neutron count or mass number (separate keywords).",
+          "examples": ["$Z = 6$ → carbon, regardless of neutron count", "neutral atom: electrons = $Z$", "$Z$ determines chemical identity"]
+        },
+        {
+          "slug": "mass_number_neutrons",
+          "label": "Mass number, neutrons, and atomic weight",
+          "description": "Calculate the number of neutrons as $N = A - Z$ where $A$ is the mass number (total nucleons), and distinguish $A$ from atomic weight, which is the periodic-table weighted average of all naturally occurring isotopes. This focuses on nucleon counting, not on isotope stability or radioactive decay (separate keywords).",
+          "examples": ["$N = A - Z$; e.g. $^{12}\\text{C}$: 6 protons, 6 neutrons", "mass number $A$ = integer; atomic weight = decimal average", "atomic weight reflects natural isotope abundances"]
+        },
+        {
+          "slug": "isotopes",
+          "label": "Isotopes — same element, different neutron number",
+          "description": "Define isotopes as atoms of the same element ($Z$ identical) that differ in neutron number ($N$), giving different mass numbers $A$ and different atomic masses; recognize isotope notation $^A_Z\\text{X}$. This focuses on what defines an isotope, not on nuclear stability or which isotopes are radioactive (separate keywords).",
+          "examples": ["$^{1}\\text{H}$, $^{2}\\text{H}$ (deuterium), $^{3}\\text{H}$ (tritium) — same $Z=1$", "$^{35}\\text{Cl}$ and $^{37}\\text{Cl}$ account for chlorine's 35.5 amu average", "isotope notation: $^A_Z\\text{X}$"]
+        }
+      ]
+    },
+    {
+      "slug": "nuclear_forces_binding_energy",
+      "label": "Nuclear Forces & Binding Energy",
+      "description": "The strong nuclear force that holds nuclei together and the energy cost of assembling or disassembling a nucleus.",
+      "intro": {
+        "slug": "nuclear_forces_binding_energy_intro",
+        "label": "Nuclear Forces & Binding Energy Overview",
+        "description": "The strong nuclear force is a short-range attractive force between nucleons that overcomes the electrostatic repulsion between protons, holding the nucleus together. The binding energy is the energy equivalent of the mass defect — the difference between the total mass of free nucleons and the actual nuclear mass ($E = mc^2$, with $c = 3.0 \\times 10^8\\,\\text{m/s}$). Greater binding energy per nucleon means a more stable nucleus.",
+        "examples": ["strong force: short-range, overcomes Coulomb repulsion", "binding energy $= \\Delta m c^2$; $\\Delta m$ = mass defect", "binding energy per nucleon peaks near iron-56"]
+      },
+      "in_depth": [
+        {
+          "slug": "strong_nuclear_force",
+          "label": "Strong nuclear force and nuclear stability",
+          "description": "Describe the strong nuclear force as a short-range ($\\sim 10^{-15}\\,\\text{m}$) attractive force between all nucleons that overcomes the electrostatic repulsion between protons; identify the neutron-to-proton ratio as a key factor in nuclear stability. This focuses on the force that binds nucleons, not on binding energy quantification (a separate keyword).",
+          "examples": ["strong force range: $\\sim 1\\,\\text{fm}$ ($10^{-15}\\,\\text{m}$)", "acts on protons AND neutrons", "high $Z$ nuclei need extra neutrons to offset proton–proton repulsion"]
+        },
+        {
+          "slug": "mass_defect_binding_energy",
+          "label": "Mass defect and nuclear binding energy",
+          "description": "Calculate (conceptually) the nuclear binding energy from the mass defect $\\Delta m$ using $E = \\Delta m c^2$, where $\\Delta m$ = (sum of free-nucleon masses) $-$ (actual nuclear mass) and $c = 3.0 \\times 10^8\\,\\text{m/s}$; interpret binding energy per nucleon as the measure of nuclear stability. This focuses on the mass–energy equivalence applied to nuclei, not on the strong-force mechanism (a separate keyword).",
+          "examples": ["$E_b = \\Delta m c^2$; $\\Delta m > 0$ always", "higher $E_b$/nucleon → more stable nucleus", "iron-56 has the highest binding energy per nucleon"]
+        }
+      ]
+    },
+    {
+      "slug": "radioactive_decay_types",
+      "label": "Radioactive Decay — Types & Nuclear Equations",
+      "description": "The three main decay modes (α, β, γ) and how to write and balance nuclear equations for each.",
+      "intro": {
+        "slug": "radioactive_decay_types_intro",
+        "label": "Radioactive Decay Types Overview",
+        "description": "Unstable nuclei lower their energy by emitting particles or photons. Alpha decay emits a helium-4 nucleus ($^4_2\\text{He}$), reducing $Z$ by 2 and $A$ by 4. Beta decay converts a neutron to a proton (or vice versa), emitting an electron/positron and changing $Z$ by $\\pm 1$ without changing $A$. Gamma decay releases a high-energy photon from an excited nucleus with no change in $Z$ or $A$. In every decay, both mass number and atomic number are conserved.",
+        "examples": ["α: $A$ drops 4, $Z$ drops 2", "β⁻: neutron → proton; $Z$ increases 1", "γ: no nucleon change; nucleus sheds energy"]
+      },
+      "in_depth": [
+        {
+          "slug": "alpha_decay",
+          "label": "Alpha ($\\alpha$) decay",
+          "description": "Write and balance an alpha-decay equation: the parent nucleus emits $^4_2\\text{He}$, so $A$ decreases by 4 and $Z$ decreases by 2; identify that alpha particles are the least penetrating but most ionizing radiation. This focuses on alpha emission, not beta or gamma (separate keywords).",
+          "examples": ["$^{238}_{92}\\text{U} \\rightarrow ^{234}_{90}\\text{Th} + ^4_2\\text{He}$", "$A \\to A-4$, $Z \\to Z-2$", "stopped by a sheet of paper; high ionizing power"]
+        },
+        {
+          "slug": "beta_decay",
+          "label": "Beta ($\\beta$) decay (β⁻ and β⁺)",
+          "description": "Distinguish β⁻ decay (neutron → proton + electron + antineutrino; $Z$ increases by 1, $A$ unchanged) from β⁺ decay (proton → neutron + positron + neutrino; $Z$ decreases by 1, $A$ unchanged); write balanced nuclear equations for each. This focuses on beta emission, not alpha or gamma (separate keywords).",
+          "examples": ["β⁻: $n \\rightarrow p^+ + e^- + \\bar{\\nu}_e$; $Z+1$, $A$ same", "β⁺ (positron emission): $p^+ \\rightarrow n + e^+ + \\nu_e$; $Z-1$", "penetrates paper but stopped by thin aluminum"]
+        },
+        {
+          "slug": "gamma_decay",
+          "label": "Gamma ($\\gamma$) decay",
+          "description": "Describe gamma decay as the emission of a high-energy photon ($\\gamma$) from a nucleus in an excited state transitioning to its ground state; recognize that $Z$ and $A$ are unchanged, so no transmutation occurs. This focuses on gamma emission, not alpha or beta decay (separate keywords).",
+          "examples": ["nucleus in excited state → ground state + $\\gamma$ photon", "$Z$ and $A$ unchanged; no element change", "most penetrating; stopped only by thick lead or concrete"]
+        },
+        {
+          "slug": "nuclear_equation_balancing",
+          "label": "Balancing nuclear equations",
+          "description": "Apply conservation of mass number ($A$) and atomic number ($Z$) to identify unknown daughter nuclei or emitted particles in any nuclear reaction. This focuses on the bookkeeping rules for nuclear equations, not on the specific decay mechanism of each type (separate keywords).",
+          "examples": ["$A$ and $Z$ both conserved across the arrow", "identify missing nuclide from $A$ and $Z$ balance", "e.g. $^{14}_7\\text{N} + ^4_2\\text{He} \\rightarrow ^{17}_8\\text{O} + ^1_1\\text{p}$"]
+        }
+      ]
+    },
+    {
+      "slug": "radioactive_decay_kinetics",
+      "label": "Radioactive Decay Kinetics — Half-Life & Exponential Decay",
+      "description": "The mathematics of how a radioactive sample decays over time: exponential decay law, half-life, and semi-log analysis.",
+      "intro": {
+        "slug": "radioactive_decay_kinetics_intro",
+        "label": "Radioactive Decay Kinetics Overview",
+        "description": "Radioactive decay is a first-order process: the number of undecayed nuclei falls exponentially with time according to $N = N_0 e^{-\\lambda t}$, where $\\lambda$ is the decay constant. The half-life $t_{1/2} = \\ln 2 / \\lambda$ is the time for half the nuclei to decay. Plotting $\\ln N$ vs. $t$ (a semi-log plot) gives a straight line whose slope is $-\\lambda$, allowing graphical extraction of the decay constant.",
+        "examples": ["$N = N_0 e^{-\\lambda t}$; first-order decay", "$t_{1/2} = \\ln 2 / \\lambda \\approx 0.693 / \\lambda$", "semi-log plot: $\\ln N$ vs $t$ is linear with slope $-\\lambda$"]
+      },
+      "in_depth": [
+        {
+          "slug": "exponential_decay_law",
+          "label": "Exponential decay law $N = N_0 e^{-\\lambda t}$",
+          "description": "Use the exponential decay equation $N = N_0 e^{-\\lambda t}$ to find the number of remaining nuclei (or activity $A = \\lambda N$) at any time $t$, given initial amount $N_0$ and decay constant $\\lambda$. This focuses on applying the decay equation, not on the half-life relationship (a separate keyword).",
+          "examples": ["$N(t) = N_0 e^{-\\lambda t}$; activity $A = \\lambda N$", "after time $t$: fraction remaining = $e^{-\\lambda t}$", "$\\lambda$ units: $\\text{s}^{-1}$ (or per any time unit)"]
+        },
+        {
+          "slug": "half_life",
+          "label": "Half-life $t_{1/2}$ and the decay constant",
+          "description": "Apply the half-life relation $t_{1/2} = \\ln 2 / \\lambda \\approx 0.693 / \\lambda$ to convert between half-life and decay constant, and calculate remaining amount after an integer or fractional number of half-lives using $N = N_0 (\\tfrac{1}{2})^{t/t_{1/2}}$. This focuses on the half-life concept and its link to $\\lambda$, not on semi-log graphical analysis (a separate keyword).",
+          "examples": ["$t_{1/2} = 0.693/\\lambda$", "after $n$ half-lives: $N = N_0 / 2^n$", "after 3 half-lives: $N = N_0/8$"]
+        },
+        {
+          "slug": "semi_log_decay_plot",
+          "label": "Semi-log plot of radioactive decay",
+          "description": "Interpret (and sketch) a semi-log decay plot by recognizing that $\\ln N = \\ln N_0 - \\lambda t$ is linear with slope $-\\lambda$ and intercept $\\ln N_0$; extract half-life graphically as the time interval over which $N$ drops by half on the log scale. This focuses on reading/constructing the semi-log representation, not on the underlying exponential equation (a separate keyword).",
+          "examples": ["$\\ln N$ vs $t$: straight line, slope $= -\\lambda$", "read $t_{1/2}$ as the time for one 'half-step' on the log axis", "log-scale plot straightens an exponential curve"]
+        }
+      ]
+    },
+    {
+      "slug": "mass_spectrometry",
+      "label": "Mass Spectrometer & Mass Spectroscopy",
+      "description": "How a mass spectrometer separates ions by mass-to-charge ratio and what the resulting spectrum reveals.",
+      "intro": {
+        "slug": "mass_spectrometry_intro",
+        "label": "Mass Spectrometry Overview",
+        "description": "A mass spectrometer ionizes a sample, accelerates the ions through an electric potential, and deflects them in a magnetic field; ions with different mass-to-charge ratios ($m/z$) follow different curved paths and strike the detector at different positions. The resulting mass spectrum plots relative abundance vs. $m/z$, revealing isotope patterns (for atomic/nuclear purposes) or molecular fragmentation patterns (organic MS, which is C13). The instrument principle follows directly from the Lorentz force and conservation of energy.",
+        "examples": ["ions deflected by $B$: heavier → less curved", "$m/z$ separates isotopes and fragments", "circle radius: $r = mv/(qB)$"]
+      },
+      "in_depth": [
+        {
+          "slug": "mass_spectrometer_principle",
+          "label": "Mass spectrometer — instrument principle",
+          "description": "Trace an ion through the mass spectrometer: ionization → acceleration through potential $V$ (gaining kinetic energy $qV = \\tfrac{1}{2}mv^2$) → deflection in magnetic field $B$ (circular path radius $r = mv/(qB)$) → detection at a position that encodes $m/q$. This focuses on the physics of ion separation, not on interpreting spectral fragmentation patterns (a separate keyword).",
+          "examples": ["$qV = \\tfrac{1}{2}mv^2$ → $v = \\sqrt{2qV/m}$", "magnetic deflection: $r = mv/(qB)$; heavier ions → larger $r$", "ion trajectory curved by perpendicular $B$ field"]
+        },
+        {
+          "slug": "mass_spectrum_interpretation",
+          "label": "Reading a mass spectrum — $m/z$ peaks and isotope patterns",
+          "description": "Interpret a mass spectrum by identifying the $m/z$ value (ratio of atomic mass units to charge number) of each peak and recognizing that isotope patterns (relative peak heights at integer $m/z$) reflect natural isotope abundances. This focuses on reading $m/z$ peaks for atomic/nuclear identity, not on organic fragmentation (C13).",
+          "examples": ["base peak at $m/z = M$ (singly charged parent)", "Cl isotope pattern: $M$ and $M+2$ in ~3:1 ratio", "$m/z$: numerical ratio (dimensionless; 1 charge → $m/z = A$)"]
+        }
+      ]
+    },
+    {
+      "slug": "electronic_structure_quantum",
+      "label": "Ground & Excited States — Energy Levels",
+      "description": "The quantized energy-level structure of atoms, transitions between levels, and the Bohr model.",
+      "intro": {
+        "slug": "electronic_structure_quantum_intro",
+        "label": "Ground & Excited States Overview",
+        "description": "Atoms have discrete, quantized energy levels. The ground state is the lowest-energy configuration; excited states are higher-energy configurations reached by absorbing a photon or by collision. When an electron transitions between levels, the energy difference $\\Delta E = hf$ ($h = 6.626 \\times 10^{-34}\\,\\text{J·s}$) is absorbed or emitted as a photon of specific frequency $f$. The Bohr model gives a quantitative picture for hydrogen: $E_n = -13.6\\,\\text{eV}/n^2$.",
+        "examples": ["ground state: lowest energy; excited state: higher energy", "$\\Delta E = hf = hc/\\lambda$ for each transition", "Bohr: $E_n = -13.6\\,\\text{eV}/n^2$ for hydrogen"]
+      },
+      "in_depth": [
+        {
+          "slug": "ground_vs_excited_states",
+          "label": "Ground state vs. excited states",
+          "description": "Distinguish the ground state (lowest-energy electron configuration) from excited states (electrons promoted to higher energy levels after absorbing a photon or energy); recognize that excited-state atoms spontaneously return to the ground state by emitting photons. This focuses on the concept of energy levels and transitions, not on the specific Bohr formula (a separate keyword).",
+          "examples": ["ground state: most stable, lowest energy", "excited atom → photon emitted on relaxation", "energy absorbed = energy of the exciting photon"]
+        },
+        {
+          "slug": "bohr_model_hydrogen",
+          "label": "Bohr model of the hydrogen atom",
+          "description": "Apply the Bohr model energy formula $E_n = -13.6\\,\\text{eV}/n^2$ to calculate photon energies for electron transitions in hydrogen; predict that larger $n \\to$ smaller $n$ transitions emit photons of higher energy (shorter wavelength). This focuses on the Bohr quantitative model for hydrogen, not on electron configurations or orbitals (C1, a separate category).",
+          "examples": ["$E_n = -13.6\\,\\text{eV}/n^2$; $n = 1$ is ground state", "$\\Delta E = E_{n_f} - E_{n_i}$ determines photon energy/wavelength", "larger $\\Delta n$ → higher-energy, shorter-wavelength photon"]
+        }
+      ]
+    },
+    {
+      "slug": "line_spectra",
+      "label": "Absorption & Emission Line Spectra",
+      "description": "How atomic line spectra arise from quantized electron transitions and what they reveal about atomic energy levels.",
+      "intro": {
+        "slug": "line_spectra_intro",
+        "label": "Absorption & Emission Spectra Overview",
+        "description": "Because atomic energy levels are quantized, atoms absorb and emit only photons whose energies match the differences between levels — producing discrete line spectra rather than continuous spectra. An emission spectrum shows bright lines at the wavelengths emitted when electrons drop to lower levels; an absorption spectrum shows dark lines at those same wavelengths, where photons are removed from a background continuum. The pattern of lines is unique to each element, enabling spectroscopic identification.",
+        "examples": ["emission: bright lines on dark background", "absorption: dark lines on continuous spectrum — same $\\lambda$ as emission", "line positions = $\\Delta E$ fingerprint of each element"]
+      },
+      "in_depth": [
+        {
+          "slug": "emission_line_spectrum",
+          "label": "Emission line spectrum — origin and appearance",
+          "description": "Explain that an emission line spectrum arises when excited atoms relax: each downward transition emits a photon of energy $\\Delta E = hf = hc/\\lambda$, producing a bright line at a characteristic wavelength; the full set of lines forms the element's unique spectral fingerprint. This focuses on emission, not on the absorption process (a separate keyword).",
+          "examples": ["electron drops from $n_i$ to $n_f$ → photon emitted at $\\lambda = hc/\\Delta E$", "hydrogen Balmer series: visible emission lines", "each element's emission lines are unique"]
+        },
+        {
+          "slug": "absorption_line_spectrum",
+          "label": "Absorption line spectrum — origin and appearance",
+          "description": "Explain that an absorption line spectrum arises when ground-state atoms in a cool gas absorb photons from a background continuum, removing light at wavelengths matching their transition energies; the missing wavelengths appear as dark lines, at the same positions as the element's emission lines. This focuses on absorption, not emission (a separate keyword).",
+          "examples": ["cool gas in front of hot source → dark lines", "Fraunhofer lines in solar spectrum identify solar-atmosphere elements", "same $\\lambda$ absorbed as emitted"]
+        },
+        {
+          "slug": "photon_energy_wavelength",
+          "label": "Photon energy–frequency–wavelength relation",
+          "description": "Use $E = hf = hc/\\lambda$ ($h = 6.626 \\times 10^{-34}\\,\\text{J·s}$; $c = 3.0 \\times 10^8\\,\\text{m/s}$) to convert between photon energy, frequency, and wavelength; predict that shorter wavelength (higher frequency) corresponds to greater photon energy. This focuses on the photon energy relation, not on the specific Bohr energy levels (a separate keyword).",
+          "examples": ["$E = hf$; $f = c/\\lambda$; so $E = hc/\\lambda$", "UV photon: higher $E$ than visible; IR: lower $E$", "doubling $\\lambda$ halves photon energy"]
+        }
+      ]
+    },
+    {
+      "slug": "photoelectric_effect",
+      "label": "Photoelectric Effect",
+      "description": "Einstein's explanation of how photons eject electrons from a metal surface, establishing the particle nature of light.",
+      "intro": {
+        "slug": "photoelectric_effect_intro",
+        "label": "Photoelectric Effect Overview",
+        "description": "When light strikes a metal surface, electrons are ejected only if the photon energy $E = hf$ exceeds the work function $\\phi$ (the minimum energy needed to free an electron). The maximum kinetic energy of the ejected electron is $KE_{max} = hf - \\phi$; increasing light intensity increases the number of ejected electrons but not their kinetic energy — a result that proved light comes in quanta (photons). This experiment established wave–particle duality and supported Einstein's quantum model.",
+        "examples": ["no ejection if $hf < \\phi$, regardless of intensity", "$KE_{max} = hf - \\phi$; threshold frequency $f_0 = \\phi/h$", "intensity → more electrons (not faster ones)"]
+      },
+      "in_depth": [
+        {
+          "slug": "photoelectric_threshold_frequency",
+          "label": "Threshold frequency and the work function",
+          "description": "Identify the threshold (cutoff) frequency $f_0 = \\phi/h$ as the minimum photon frequency needed to eject an electron from a metal with work function $\\phi$; recognize that photons with $f < f_0$ never eject electrons regardless of intensity. This focuses on the threshold condition, not on calculating kinetic energy of ejected electrons (a separate keyword).",
+          "examples": ["$f_0 = \\phi/h$; below $f_0$: no ejection", "different metals → different $\\phi$ → different $f_0$", "work function $\\phi$ is a property of the metal surface"]
+        },
+        {
+          "slug": "photoelectric_kinetic_energy",
+          "label": "Kinetic energy of photoelectrons",
+          "description": "Calculate the maximum kinetic energy of an ejected photoelectron using $KE_{max} = hf - \\phi$; explain why increasing light intensity (more photons per second) increases photocurrent but not $KE_{max}$, while increasing frequency increases $KE_{max}$. This focuses on energy of ejected electrons, not on the threshold frequency concept (a separate keyword).",
+          "examples": ["$KE_{max} = hf - \\phi$; linear in $f$", "doubling intensity → twice the current, same $KE_{max}$", "higher $f$ → faster electrons, same $\\phi$"]
+        },
+        {
+          "slug": "wave_particle_duality_photon",
+          "label": "Wave–particle duality and the photon model",
+          "description": "Explain that the photoelectric effect establishes the photon (particle) model of light: energy is delivered in discrete quanta $E = hf$, not spread continuously as a wave; contrast with wave phenomena (interference, diffraction — P8). This focuses on the quantum/particle nature of light demonstrated by the photoelectric effect, not on the wave optics phenomena (P8, separate category).",
+          "examples": ["wave model predicts: bright enough light ejects electrons — WRONG", "photon model: each quantum either has enough energy or it doesn't", "photoelectric effect → $E = hf$ proof; wave behavior → interference (P8)"]
+        }
+      ]
+    },
+    {
+      "slug": "heisenberg_uncertainty",
+      "label": "Heisenberg Uncertainty Principle",
+      "description": "The fundamental quantum limit on simultaneously knowing position and momentum (or energy and time) of a particle.",
+      "intro": {
+        "slug": "heisenberg_uncertainty_intro",
+        "label": "Heisenberg Uncertainty Principle Overview",
+        "description": "The Heisenberg Uncertainty Principle states that the position and momentum of a particle cannot both be known with arbitrary precision simultaneously: $\\Delta x \\cdot \\Delta p \\geq \\hbar/2$ (where $\\hbar = h/2\\pi$). This is not a measurement artifact but a fundamental property of quantum systems. A related form governs energy and time: $\\Delta E \\cdot \\Delta t \\geq \\hbar/2$. The principle explains why electrons cannot be localized at a fixed orbit (as in a classical picture) and underpins atomic orbital concepts.",
+        "examples": ["$\\Delta x \\cdot \\Delta p \\geq \\hbar/2$", "smaller $\\Delta x$ → larger $\\Delta p$, and vice versa", "principle is fundamental, not a measurement-disturbance artifact"]
+      },
+      "in_depth": [
+        {
+          "slug": "uncertainty_principle_position_momentum",
+          "label": "Uncertainty principle — position and momentum",
+          "description": "State and apply the Heisenberg Uncertainty Principle $\\Delta x \\cdot \\Delta p \\geq \\hbar/2$: precisely localizing a particle ($\\Delta x$ small) forces a large spread in momentum ($\\Delta p$ large), and vice versa; explain the qualitative implication that electrons cannot simultaneously have well-defined position and velocity. This focuses on the position–momentum form of the uncertainty principle, not on the energy–time form (a separate keyword).",
+          "examples": ["$\\Delta x \\cdot \\Delta p \\geq \\hbar/2 \\approx 5.3 \\times 10^{-35}\\,\\text{J·s}$", "pinpointing $x$ → momentum completely uncertain", "explains why electrons occupy probability clouds, not fixed orbits"]
+        },
+        {
+          "slug": "uncertainty_principle_energy_time",
+          "label": "Uncertainty principle — energy and time",
+          "description": "State the energy–time form of the uncertainty principle $\\Delta E \\cdot \\Delta t \\geq \\hbar/2$: a short-lived excited state ($\\Delta t$ small) has an inherently uncertain energy ($\\Delta E$ large), causing spectral line broadening. This focuses on the energy–time form, not on the position–momentum form (a separate keyword).",
+          "examples": ["$\\Delta E \\cdot \\Delta t \\geq \\hbar/2$", "short-lived state → broad spectral line (natural linewidth)", "long lifetime → very sharp (narrow) energy level"]
+        }
+      ]
+    }
+  ]
+}

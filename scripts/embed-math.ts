@@ -18,11 +18,11 @@
  * Supabase: nnkpvezsyumryhnulyvt (service-role key)
  */
 
-import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
+import { createServiceClient } from "./lib/serviceClient";
 
 // ─── Env loading ──────────────────────────────────────────────────────────────
 dotenv.config({ path: path.resolve(__dirname, "../.env.local") });
@@ -70,7 +70,7 @@ async function main() {
     console.error("Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
     process.exit(1);
   }
-  const supabase = createClient(supabaseUrl, serviceKey);
+  const supabase = createServiceClient(supabaseUrl, serviceKey);
 
   // Fetch all math_keywords missing an embedding (paginated)
   console.log("\nFetching math_keywords with NULL embedding...");
@@ -82,6 +82,10 @@ async function main() {
       .from("math_keywords")
       .select("id, label, description")
       .is("embedding", null)
+      // Only in_depth keywords are embedded from their own label+description.
+      // Umbrellas are containers — their embedding is the CENTROID of their
+      // children (see scripts/recompute-umbrella-embeddings.ts), never independent.
+      .eq("tier", "in_depth")
       .order("id")
       .range(page * PAGE, (page + 1) * PAGE - 1);
     if (error) { console.error("Fetch error:", error.message); process.exit(1); }

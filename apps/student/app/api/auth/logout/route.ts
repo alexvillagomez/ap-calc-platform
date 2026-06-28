@@ -1,21 +1,15 @@
 /**
  * POST /api/auth/logout
  *
- * Clears the "lodera_uid" httpOnly cookie.
+ * Signs the user out of Supabase Auth (clears the GoTrue session cookie).
+ * The client also calls supabase.auth.signOut() directly; this keeps the
+ * server-side route working too.
  */
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-
-const COOKIE_NAME = "lodera_uid";
+import { supabaseServer } from "@/lib/supabaseServer";
 
 export async function POST() {
-  const cookieStore = await cookies();
-  cookieStore.set(COOKIE_NAME, "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 0,
-  });
+  const supabase = await supabaseServer();
+  await supabase.auth.signOut();
   return NextResponse.json({ ok: true });
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getReadClient } from "@/lib/supabaseRead";
 import { cached } from "@/lib/serverCache";
+import { fetchAllPages } from "@/lib/mathPagedQuery";
 
 export const runtime = "nodejs";
 
@@ -35,18 +36,24 @@ export async function GET(request: Request) {
   let base: TaxonomyBase;
   try {
     base = await cached<TaxonomyBase>("mcat:taxonomy", TAXONOMY_TTL_MS, async () => {
-      const [categoriesRes, keywordsRes] = await Promise.all([
+      const [categoriesRes, keywordRows] = await Promise.all([
         supabase
           .from("mcat_categories")
           .select("id, section, label, description, order_index")
           .order("order_index"),
-        supabase
-          .from("mcat_keywords")
-          .select(
-            "id, category_id, label, description, tier, parent_keyword_id, order_index, yield_level"
-          )
-          .eq("status", "approved")
-          .order("order_index"),
+        // Paginate: the taxonomy exceeds PostgREST's 1000-row cap, so a single
+        // select would silently drop keywords from the browse/progress tree.
+        fetchAllPages<Record<string, unknown>>((from, to) =>
+          supabase
+            .from("mcat_keywords")
+            .select(
+              "id, category_id, label, description, tier, parent_keyword_id, order_index, yield_level"
+            )
+            .eq("status", "approved")
+            .order("order_index")
+            .order("id")
+            .range(from, to)
+        ),
       ]);
 
       if (categoriesRes.error) {
@@ -55,7 +62,7 @@ export async function GET(request: Request) {
 
       return {
         categories: categoriesRes.data ?? [],
-        keywords: keywordsRes.data ?? [],
+        keywords: keywordRows,
       };
     });
   } catch (err) {
@@ -176,6 +183,7 @@ export async function GET(request: Request) {
           id: kw.id,
           label: kw.label,
           description: kw.description,
+          order_index: (kw.order_index as number) ?? 0,
           yield_level: (kw.yield_level as "high" | "medium" | "low" | null) ?? null,
           score,
           total_attempts: st?.total_attempts ?? 0,
@@ -223,6 +231,7 @@ export async function GET(request: Request) {
 
     return {
       id: cat.id,
+      section: cat.section,
       label: cat.label,
       description: cat.description,
       order_index: cat.order_index,

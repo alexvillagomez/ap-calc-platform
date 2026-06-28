@@ -1,27 +1,26 @@
 /**
  * PUT /api/auth/user
  *
- * Updates the signed-in user's profile.
- * Reads the httpOnly cookie "lodera_uid" to identify the user.
+ * Updates the signed-in user's profile. Identity comes from Supabase Auth
+ * via getAuthUid() (401 if not signed in).
  *
  * Body (all optional except validation rules below):
  *   { first_name, last_name, display_name, grade_level, target_exam_date,
  *     username, email }
  *
- * - Validates email format + uniqueness (no collision with another user).
- * - Requires non-empty username.
- * - FAIL-SOFT: if updating the newer columns errors (e.g. the migration
- *   adding first_name/last_name/display_name/grade_level/target_exam_date/
- *   updated_at hasn't been applied to the live DB), falls back to updating
- *   only the guaranteed columns (username/email) and still succeeds.
+ * - Validates email format + uniqueness (against `profiles`, no collision with
+ *   another user).
+ * - Requires non-empty username when provided.
+ * - Updates the `profiles` row (service-role).
+ * - On email change, also calls supabase.auth.updateUser({ email }) best-effort
+ *   (fail-soft) so Supabase Auth proper reflects the new address.
  *
- * Returns { user } with the refreshed row. 401 if no cookie.
+ * Returns { user } with the refreshed profile fields (email from auth). 401 if
+ * not authenticated.
  */
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
-
-const COOKIE_NAME = "lodera_uid";
+import { getAuthUid, supabaseServer } from "@/lib/supabaseServer";
 
 function supabaseAdmin() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -42,17 +41,8 @@ interface UserBody {
   email?: string;
 }
 
-/** Detect Postgres "column does not exist" style errors so we can fail-soft. */
-function isMissingColumnError(err: { code?: string; message?: string } | null): boolean {
-  if (!err) return false;
-  if (err.code === "42703") return true; // undefined_column
-  const msg = (err.message ?? "").toLowerCase();
-  return msg.includes("column") && (msg.includes("does not exist") || msg.includes("could not find"));
-}
-
 export async function PUT(request: Request) {
-  const cookieStore = await cookies();
-  const userId = cookieStore.get(COOKIE_NAME)?.value;
+  const userId = await getAuthUid();
   if (!userId) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
@@ -81,9 +71,9 @@ export async function PUT(request: Request) {
     if (!email || !EMAIL_RE.test(email)) {
       return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
     }
-    // Uniqueness — reject collision with a different user
+    // Uniqueness — reject collision with a different user (against profiles).
     const { data: clash } = await sb
-      .from("app_users")
+      .from("profiles")
       .select("id")
       .eq("email", email)
       .neq("id", userId)
@@ -96,65 +86,42 @@ export async function PUT(request: Request) {
     }
   }
 
-  // Guaranteed columns always safe to write.
-  const safeUpdate: Record<string, unknown> = {};
-  if (username !== undefined) safeUpdate.username = username;
-  if (email !== undefined) safeUpdate.email = email;
+  const update: Record<string, unknown> = {};
+  if (username !== undefined) update.username = username;
+  if (email !== undefined) update.email = email;
+  if (body.first_name !== undefined) update.first_name = body.first_name || null;
+  if (body.last_name !== undefined) update.last_name = body.last_name || null;
+  if (body.display_name !== undefined) update.display_name = body.display_name || null;
+  if (body.grade_level !== undefined) update.grade_level = body.grade_level || null;
+  if (body.target_exam_date !== undefined) update.target_exam_date = body.target_exam_date || null;
+  update.updated_at = new Date().toISOString();
 
-  // Newer columns (may not exist yet on the live DB).
-  const extendedUpdate: Record<string, unknown> = { ...safeUpdate };
-  if (body.first_name !== undefined) extendedUpdate.first_name = body.first_name || null;
-  if (body.last_name !== undefined) extendedUpdate.last_name = body.last_name || null;
-  if (body.display_name !== undefined) extendedUpdate.display_name = body.display_name || null;
-  if (body.grade_level !== undefined) extendedUpdate.grade_level = body.grade_level || null;
-  if (body.target_exam_date !== undefined)
-    extendedUpdate.target_exam_date = body.target_exam_date || null;
-  extendedUpdate.updated_at = new Date().toISOString();
-
-  const fullSelect =
+  const select =
     "id, email, username, created_at, first_name, last_name, display_name, grade_level, target_exam_date, updated_at";
-  const safeSelect = "id, email, username, created_at";
 
-  // Try the full update first.
-  const attempt = await sb
-    .from("app_users")
-    .update(extendedUpdate)
+  const { data: updated, error } = await sb
+    .from("profiles")
+    .update(update)
     .eq("id", userId)
-    .select(fullSelect)
+    .select(select)
     .maybeSingle();
 
-  if (!attempt.error && attempt.data) {
-    return NextResponse.json({ user: attempt.data });
-  }
-
-  // FAIL-SOFT: missing columns → retry with only guaranteed columns.
-  if (isMissingColumnError(attempt.error)) {
-    if (Object.keys(safeUpdate).length === 0) {
-      // Nothing guaranteed to write — just return the current row.
-      const { data: current } = await sb
-        .from("app_users")
-        .select(safeSelect)
-        .eq("id", userId)
-        .maybeSingle();
-      return NextResponse.json({ user: current });
-    }
-    const fallback = await sb
-      .from("app_users")
-      .update(safeUpdate)
-      .eq("id", userId)
-      .select(safeSelect)
-      .maybeSingle();
-    if (!fallback.error && fallback.data) {
-      return NextResponse.json({ user: fallback.data });
-    }
+  if (error) {
     return NextResponse.json(
-      { error: fallback.error?.message ?? "Failed to update profile" },
+      { error: error.message ?? "Failed to update profile" },
       { status: 500 }
     );
   }
 
-  return NextResponse.json(
-    { error: attempt.error?.message ?? "Failed to update profile" },
-    { status: 500 }
-  );
+  // Best-effort: propagate email change to Supabase Auth proper.
+  if (email !== undefined) {
+    try {
+      const supabase = await supabaseServer();
+      await supabase.auth.updateUser({ email });
+    } catch {
+      // fail-soft — profile is updated; auth email sync is non-blocking.
+    }
+  }
+
+  return NextResponse.json({ user: updated });
 }

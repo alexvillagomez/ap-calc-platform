@@ -7,6 +7,8 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { generateMcatLesson, McatGenError, verifyQuestionsFast } from "@/lib/mcatGenerator";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
+import { resolveScopeContract } from "@/lib/scopeContract";
+import { loadLessonNeighbors } from "@/lib/lessonNeighbors";
 import { ConceptBlueprint } from "@/lib/mcatBlueprint";
 
 export const runtime = "nodejs";
@@ -61,7 +63,7 @@ export async function GET(
   // 2. Not in DB — fetch keyword metadata
   const { data: kwRow, error: kwError } = await supabase
     .from("mcat_keywords")
-    .select("id, label, description, category_id, concept_blueprint")
+    .select("id, label, description, examples, category_id, concept_blueprint, tier, parent_keyword_id, order_index")
     .eq("id", keywordId)
     .maybeSingle();
 
@@ -75,8 +77,33 @@ export async function GET(
     );
   }
 
+  const examplesText = Array.isArray(kwRow.examples)
+    ? (kwRow.examples as string[]).filter(Boolean).join("; ")
+    : ((kwRow.examples as string | null) ?? undefined);
+
   // 3. Generate
   const outlineContext = outlineContextForCategory(kwRow.category_id as string);
+  // Scope contract: stored blueprint, or — for umbrellas / intro keywords with
+  // none — derive one from the taxonomy so the lesson (esp. EXAMPLE + FIGURE)
+  // stays inside this topic and never drifts into another keyword's content.
+  const storedBlueprint = (kwRow.concept_blueprint as ConceptBlueprint | null) ?? null;
+  const contract = await resolveScopeContract(supabase, "mcat_keywords", {
+    id: kwRow.id as string,
+    label: kwRow.label as string,
+    description: (kwRow.description as string) ?? "",
+    tier: (kwRow.tier as string | null) ?? null,
+    parent_keyword_id: (kwRow.parent_keyword_id as string | null) ?? null,
+    category_id: kwRow.category_id as string,
+    concept_blueprint: storedBlueprint,
+  });
+  // Light-B scope context: adjacent siblings so the lesson can reference (not teach)
+  // neighbors and avoid drifting forward into later topics.
+  const neighbors = await loadLessonNeighbors(supabase, "mcat_keywords", {
+    id: kwRow.id as string,
+    category_id: kwRow.category_id as string,
+    parent_keyword_id: (kwRow.parent_keyword_id as string | null) ?? null,
+  });
+
   let generated;
   try {
     generated = await generateMcatLesson(
@@ -84,9 +111,11 @@ export async function GET(
         id: kwRow.id as string,
         label: kwRow.label as string,
         description: (kwRow.description as string) ?? "",
-        blueprint: (kwRow.concept_blueprint as ConceptBlueprint | null) ?? null,
+        examples: examplesText,
+        blueprint: (contract as ConceptBlueprint | null) ?? storedBlueprint,
       },
-      outlineContext
+      outlineContext,
+      { neighbors, isIntro: (kwRow.order_index as number | null) === -1 }
     );
   } catch (err) {
     const detail = err instanceof Error ? err.message : "Unknown error";
@@ -103,6 +132,7 @@ export async function GET(
     id: kwRow.id as string,
     label: kwRow.label as string,
     description: (kwRow.description as string) ?? "",
+    examples: examplesText,
     blueprint: (kwRow.concept_blueprint as ConceptBlueprint | null) ?? null,
   };
 
@@ -122,7 +152,7 @@ export async function GET(
     // Regenerate once and compare failure counts
     let retryLesson: typeof generated | null = null;
     try {
-      retryLesson = await generateMcatLesson(kwMeta, outlineContext);
+      retryLesson = await generateMcatLesson(kwMeta, outlineContext, { neighbors, isIntro: (kwRow.order_index as number | null) === -1 });
     } catch {
       // swallow — keep original
     }

@@ -261,22 +261,6 @@ export default function LookupPage() {
         {/* Problem card */}
         {problem && (phase === "answering" || phase === "revealed") && (
           <div className="space-y-4">
-            {/* Difficulty badge */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span
-                className={cn(
-                  "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-                  problem.difficulty < 0.5
-                    ? "bg-green-100 text-green-800"
-                    : problem.difficulty < 0.7
-                    ? "bg-yellow-100 text-yellow-800"
-                    : "bg-red-100 text-red-800"
-                )}
-              >
-                {difficultyLabel(problem.difficulty)}
-              </span>
-            </div>
-
             {/* Problem stem */}
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
               <Preview latexContent={problem.latex_content} />

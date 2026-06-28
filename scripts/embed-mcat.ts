@@ -17,6 +17,7 @@ import OpenAI from "openai";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
+import { createServiceClient } from "./lib/serviceClient";
 
 // Load root .env.local first, then override OPENAI_API_KEY from apps/student/.env.local
 // because the root key is stale / invalid.
@@ -104,7 +105,10 @@ async function embedKeywords(
   const { data, error } = await supabase
     .from("mcat_keywords")
     .select("id, category_id, label, description, tier, embedding")
-    .is("embedding", null);
+    .is("embedding", null)
+    // Only in_depth keywords are embedded from their own label+description.
+    // Umbrellas are centroids of their children (recompute-umbrella-embeddings.ts).
+    .eq("tier", "in_depth");
 
   if (error) {
     console.error("Fetch error:", error.message);
@@ -165,18 +169,28 @@ async function embedKeywords(
 async function fetchKeywordsByCategory(
   supabase: ReturnType<typeof createClient>
 ): Promise<{ kwByCategory: Map<string, KeywordRow[]>; total: number } | null> {
-  const { data: kwData, error: kwErr } = await supabase
-    .from("mcat_keywords")
-    .select("id, category_id, embedding")
-    .eq("tier", "in_depth")
-    .not("embedding", "is", null);
+  // Paginate: in_depth keywords across both sections now exceed PostgREST's
+  // 1000-row cap (Biology + Psych/Soc), so an un-paginated select would
+  // silently truncate the retag reference set.
+  const inDepthKeywords: KeywordRow[] = [];
+  const PAGE = 1000;
+  for (let from = 0; ; from += PAGE) {
+    const { data: kwData, error: kwErr } = await supabase
+      .from("mcat_keywords")
+      .select("id, category_id, embedding")
+      .eq("tier", "in_depth")
+      .not("embedding", "is", null)
+      .order("id")
+      .range(from, from + PAGE - 1);
 
-  if (kwErr) {
-    console.error("  Keyword fetch error:", kwErr.message);
-    return null;
+    if (kwErr) {
+      console.error("  Keyword fetch error:", kwErr.message);
+      return null;
+    }
+    const rows = (kwData ?? []) as KeywordRow[];
+    inDepthKeywords.push(...rows);
+    if (rows.length < PAGE) break;
   }
-
-  const inDepthKeywords = (kwData ?? []) as KeywordRow[];
   const kwByCategory = new Map<string, KeywordRow[]>();
   for (const kw of inDepthKeywords) {
     const list = kwByCategory.get(kw.category_id) ?? [];
@@ -436,7 +450,7 @@ async function main() {
     console.error("Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
     process.exit(1);
   }
-  const supabase = createClient(supabaseUrl, serviceKey);
+  const supabase = createServiceClient(supabaseUrl, serviceKey);
 
   // ── OpenAI client (only needed for live runs)
   let openai!: OpenAI;

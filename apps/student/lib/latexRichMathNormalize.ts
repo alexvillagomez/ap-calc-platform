@@ -17,6 +17,25 @@ export function sanitizeKatexUnsafeMacros(tex: string): string {
   return s;
 }
 
+/** Greek-letter names KaTeX expects with a leading backslash. */
+const GREEK_NAMES =
+  "alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|pi|rho|sigma|tau|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Phi|Psi|Omega";
+
+/**
+ * Models (esp. gpt-5.4-mini) frequently write a Greek letter as a bare word
+ * inside math — "$alpha$ carbon" — which KaTeX renders as the italic product
+ * a·l·p·h·a instead of α. Restore the backslash on a whole-token `$greek$`
+ * (and `$greek<sub/super>$` like `$pK_a$`-style is left alone since that is not
+ * a bare greek token). Only touches a `$`-delimited token that is EXACTLY a
+ * greek name, so prose like "the alpha carbon" is never affected.
+ */
+export function restoreBareGreekMath(src: string): string {
+  return src.replace(
+    new RegExp(`\\$\\s*(${GREEK_NAMES})\\s*\\$`, "g"),
+    (_m, name) => `$\\${name}$`,
+  );
+}
+
 export function removeStrayClosingBraces(latex: string): string {
   let depth = 0;
   let result = "";
@@ -47,6 +66,7 @@ export function normalizeRichMathSource(src: string): string {
   let s = normalizeEmbeddedVizTags(src);
   s = convertItemizeToAligned(s);
   s = sanitizeKatexUnsafeMacros(s);
+  s = restoreBareGreekMath(s);
   s = removeStrayClosingBraces(s);
   return s;
 }

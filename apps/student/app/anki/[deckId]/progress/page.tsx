@@ -26,8 +26,8 @@ function ScoreBar({ score, label, attempts }: { score: number; label: string; at
         <span className="text-sm text-gray-800">{label}</span>
         <div className="flex items-center gap-2">
           {attempts < 5 && (
-            <span className="text-xs text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">
-              low sample (n={attempts})
+            <span className="text-xs text-neutral-400">
+              Not enough data yet
             </span>
           )}
           <span className="text-sm font-medium text-gray-700">{pct}%</span>

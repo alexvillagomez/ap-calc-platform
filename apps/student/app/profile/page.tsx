@@ -16,17 +16,16 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { supabaseBrowser } from "@/lib/supabaseBrowser";
 import { LoginGate } from "@/components/auth/LoginGate";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { cn } from "@/lib/cn";
 
-const ACCOUNT_KEY = "ap_calc_account_id";
 const USERNAME_KEY = "ap_calc_username";
-const SESSION_KEY = "ap_calc_student_session_id";
-const DIAG_DONE_KEY = "ap_calc_diagnostic_done";
 
 interface MeUser {
   id: string;
@@ -93,6 +92,14 @@ function ProfileContent() {
   const [savingPassword, setSavingPassword] = useState(false);
 
   const [loggingOut, setLoggingOut] = useState(false);
+
+  // Delete-account (danger zone)
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  // Reset-progress (danger zone)
+  const [confirmingReset, setConfirmingReset] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   const hydrate = useCallback((u: MeUser) => {
     setMe(u);
@@ -201,19 +208,75 @@ function ProfileContent() {
   const handleLogout = async () => {
     setLoggingOut(true);
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
+      await supabaseBrowser().auth.signOut();
     } catch {
       /* clear local state regardless */
     }
+    router.push("/login");
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
     try {
-      localStorage.removeItem(ACCOUNT_KEY);
-      localStorage.removeItem(USERNAME_KEY);
-      localStorage.removeItem(SESSION_KEY);
-      localStorage.removeItem(DIAG_DONE_KEY);
+      const res = await fetch("/api/auth/delete-account", { method: "POST" });
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (!res.ok || !data.ok) {
+        toast.error(data.error ?? "Could not delete account.");
+        setDeleting(false);
+        return;
+      }
+      try {
+        await supabaseBrowser().auth.signOut();
+      } catch {
+        /* ignore */
+      }
+      router.push("/login");
     } catch {
-      /* ignore */
+      toast.error("Network error. Please try again.");
+      setDeleting(false);
     }
-    router.push("/");
+  };
+
+  const handleResetProgress = async () => {
+    setResetting(true);
+    try {
+      const res = await fetch("/api/auth/reset-progress", { method: "POST" });
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (!res.ok || !data.ok) {
+        toast.error(data.error ?? "Could not reset progress.");
+        setResetting(false);
+        return;
+      }
+      // Clear client-side progress hints (intro-seen flags, deck cursors, streak cache).
+      try {
+        const keys: string[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (
+            k &&
+            (k.startsWith("lodera_auto_intro_") ||
+              k.startsWith("lodera_streak") ||
+              k.startsWith("lodera_grind") ||
+              k.includes("curriculum_order") ||
+              k.includes("deck_cursor"))
+          ) {
+            keys.push(k);
+          }
+        }
+        keys.forEach((k) => localStorage.removeItem(k));
+        sessionStorage.clear();
+      } catch {
+        /* ignore */
+      }
+      toast.success("Progress reset. Starting fresh!");
+      // Full reload so every page re-reads a clean state from the server.
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 600);
+    } catch {
+      toast.error("Network error. Please try again.");
+      setResetting(false);
+    }
   };
 
   const headerName = me?.display_name?.trim() || me?.username || "Your account";
@@ -230,20 +293,25 @@ function ProfileContent() {
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
         <div className="w-full px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <LoderaLogo size={28} withWordmark />
+            <Link href="/" aria-label="Lodera home" className="shrink-0">
+              <LoderaLogo size={28} withWordmark />
+            </Link>
             <span className="text-neutral-300 text-sm">|</span>
             <h1 className="text-sm font-semibold text-neutral-800">Account</h1>
           </div>
-          <Link
-            href="/"
-            className="text-xs font-medium text-neutral-600 hover:text-brand-600 transition-colors px-2 py-1"
-          >
-            Home
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/"
+              className="text-xs font-medium text-neutral-600 hover:text-brand-600 transition-colors px-2 py-1"
+            >
+              Home
+            </Link>
+            <NavMenu />
+          </div>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+      <main className="max-w-2xl mx-auto px-4 py-8 space-y-6 pb-safe-bottom">
         {/* Account header card */}
         <Card>
           <div className="flex items-center gap-4">
@@ -479,6 +547,101 @@ function ProfileContent() {
               Manage subscription (coming soon)
             </Button>
           </div>
+        </Card>
+
+        {/* Reset progress */}
+        <Card className="border-amber-200">
+          <div className="mb-4">
+            <h2 className="text-sm font-semibold text-amber-700">Reset progress</h2>
+            <p className="text-xs text-neutral-500">
+              Erase all of your learning progress and start over from the beginning. Your account,
+              email, and password stay exactly as they are.
+            </p>
+          </div>
+          {!confirmingReset ? (
+            <button
+              type="button"
+              onClick={() => setConfirmingReset(true)}
+              className="px-4 py-2 text-sm font-semibold rounded-xl border border-amber-300 text-amber-700 hover:bg-amber-50 transition-colors"
+            >
+              Reset progress
+            </button>
+          ) : (
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+              <p className="text-sm font-medium text-amber-900">
+                This permanently erases all your learning progress and cannot be undone. Are you
+                sure?
+              </p>
+              <p className="mt-1 text-xs text-amber-700">
+                Mastery, flashcard reviews, quiz/question history, diagnostics, and your streak will
+                all reset to zero. You&apos;ll start fresh from the beginning.
+              </p>
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleResetProgress}
+                  disabled={resetting}
+                  className="px-4 py-2 text-sm font-semibold rounded-xl bg-amber-600 text-white hover:bg-amber-700 transition-colors disabled:opacity-60"
+                >
+                  {resetting ? "Resetting…" : "Yes, reset my progress"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmingReset(false)}
+                  disabled={resetting}
+                  className="px-4 py-2 text-sm font-medium rounded-xl text-neutral-700 hover:bg-neutral-100 transition-colors disabled:opacity-60"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+        </Card>
+
+        {/* Danger zone */}
+        <Card className="border-error-200">
+          <div className="mb-4">
+            <h2 className="text-sm font-semibold text-error-700">Danger zone</h2>
+            <p className="text-xs text-neutral-500">
+              Permanently delete your account and all of your progress. This cannot be undone.
+            </p>
+          </div>
+          {!confirmingDelete ? (
+            <button
+              type="button"
+              onClick={() => setConfirmingDelete(true)}
+              className="px-4 py-2 text-sm font-semibold rounded-xl border border-error-300 text-error-700 hover:bg-error-50 transition-colors"
+            >
+              Delete account
+            </button>
+          ) : (
+            <div className="rounded-xl border border-error-200 bg-error-50 p-4">
+              <p className="text-sm font-medium text-error-800">
+                Are you sure? This is permanent.
+              </p>
+              <p className="mt-1 text-xs text-error-600">
+                All your courses, progress, and account data will be erased.
+              </p>
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleDeleteAccount}
+                  disabled={deleting}
+                  className="px-4 py-2 text-sm font-semibold rounded-xl bg-error-600 text-white hover:bg-error-700 transition-colors disabled:opacity-60"
+                >
+                  {deleting ? "Deleting…" : "Yes, delete my account"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmingDelete(false)}
+                  disabled={deleting}
+                  className="px-4 py-2 text-sm font-medium rounded-xl text-neutral-700 hover:bg-neutral-100 transition-colors disabled:opacity-60"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </Card>
 
         {/* Log out */}

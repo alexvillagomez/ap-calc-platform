@@ -17,6 +17,7 @@ type ProblemType = "multiple_choice" | "free_response";
 type CorrectIndex = 0 | 1 | 2 | 3;
 type InputMode = "fields" | "json";
 type PageMode = "input" | "reviewing";
+type CardStatus = "pending" | "saving" | "approved" | "skipped";
 
 interface PreviewState {
   latex_content: string;
@@ -33,6 +34,16 @@ interface ParsedProblem {
   choices: [string, string, string, string];
   correct_index: CorrectIndex;
   difficulty: number;
+  problem_description?: string;
+  wrong_answer_descriptions?: (string | null)[];
+  topic_description?: string;
+  keyword_weights?: Record<string, number>;
+  action_description?: string;
+  action_weights?: Record<string, number>;
+  representation_description?: string;
+  representation_weights?: Record<string, number>;
+  prerequisite_description?: string;
+  prerequisite_weights?: Record<string, number>;
 }
 
 const CHOICE_LABELS = ["A", "B", "C", "D"] as const;
@@ -55,7 +66,28 @@ function parseOneProblem(obj: Record<string, unknown>): { ok: true } & ParsedPro
   const correct_index = (Math.min(Math.max(Math.floor(ci), 0), 3)) as CorrectIndex;
   const rawDiff = typeof obj.difficulty === "number" ? obj.difficulty : 3;
   const difficulty = Math.min(Math.max(Math.round(rawDiff), 1), 5);
-  return { ok: true, latex_content: obj.latex_content, solution_latex: obj.solution_latex, type, choices, correct_index, difficulty };
+
+  const problem_description = typeof obj.problem_description === "string" && obj.problem_description.trim()
+    ? obj.problem_description.trim()
+    : undefined;
+
+  const wrong_answer_descriptions = Array.isArray(obj.wrong_answer_descriptions)
+    ? (obj.wrong_answer_descriptions as unknown[]).map((v) =>
+        v === null || v === undefined ? null : String(v)
+      )
+    : undefined;
+
+  const topic_description = typeof obj.topic_description === "string" && obj.topic_description.trim() ? obj.topic_description.trim() : undefined;
+  const action_description = typeof obj.action_description === "string" && obj.action_description.trim() ? obj.action_description.trim() : undefined;
+  const representation_description = typeof obj.representation_description === "string" && obj.representation_description.trim() ? obj.representation_description.trim() : undefined;
+  const prerequisite_description = typeof obj.prerequisite_description === "string" && obj.prerequisite_description.trim() ? obj.prerequisite_description.trim() : undefined;
+
+  const keyword_weights = obj.keyword_weights && typeof obj.keyword_weights === "object" && !Array.isArray(obj.keyword_weights) ? obj.keyword_weights as Record<string, number> : undefined;
+  const action_weights = obj.action_weights && typeof obj.action_weights === "object" && !Array.isArray(obj.action_weights) ? obj.action_weights as Record<string, number> : undefined;
+  const representation_weights = obj.representation_weights && typeof obj.representation_weights === "object" && !Array.isArray(obj.representation_weights) ? obj.representation_weights as Record<string, number> : undefined;
+  const prerequisite_weights = obj.prerequisite_weights && typeof obj.prerequisite_weights === "object" && !Array.isArray(obj.prerequisite_weights) ? obj.prerequisite_weights as Record<string, number> : undefined;
+
+  return { ok: true, latex_content: obj.latex_content, solution_latex: obj.solution_latex, type, choices, correct_index, difficulty, problem_description, wrong_answer_descriptions, topic_description, keyword_weights, action_description, action_weights, representation_description, representation_weights, prerequisite_description, prerequisite_weights };
 }
 
 function parseJsonIntoFields(text: string): ({ ok: true } & ParsedProblem) | { ok: false; message: string } {
@@ -68,12 +100,10 @@ function parseJsonIntoFields(text: string): ({ ok: true } & ParsedProblem) | { o
   return parseOneProblem(obj);
 }
 
-/** Parse comma-separated JSON objects or a JSON array into multiple problems. */
 function parseMultipleJsons(text: string): ({ ok: true } & ParsedProblem)[] {
   const trimmed = text.trim();
   if (!trimmed) return [];
 
-  // Try as a JSON array first
   try {
     const arr = JSON.parse(trimmed);
     if (Array.isArray(arr)) {
@@ -83,7 +113,6 @@ function parseMultipleJsons(text: string): ({ ok: true } & ParsedProblem)[] {
     }
   } catch { /* fall through */ }
 
-  // Try wrapping in [] to handle comma-separated objects
   try {
     const wrapped = `[${trimmed}]`;
     const arr = JSON.parse(wrapped);
@@ -94,11 +123,149 @@ function parseMultipleJsons(text: string): ({ ok: true } & ParsedProblem)[] {
     }
   } catch { /* fall through */ }
 
-  // Fallback: try as single object
   const single = parseOneProblem((() => { try { return JSON.parse(trimmed) as Record<string, unknown>; } catch { return {}; } })());
   return single.ok ? [single] : [];
 }
 
+// ── Review card ────────────────────────────────────────────────────────────
+function ReviewCard({
+  problem,
+  index,
+  status,
+  course,
+  onApprove,
+  onSkip,
+}: {
+  problem: ParsedProblem;
+  index: number;
+  status: CardStatus;
+  course: "ap_calc" | "precalc";
+  onApprove: () => void;
+  onSkip: () => void;
+}) {
+  const [notesLocal, setNotesLocal] = useState("");
+  const [expanded, setExpanded] = useState(true);
+
+  const overlay =
+    status === "approved"
+      ? "border-green-500 bg-green-50/60 dark:bg-green-950/20"
+      : status === "skipped"
+      ? "opacity-40"
+      : "";
+
+  return (
+    <Card className={cn("relative transition-all", overlay)}>
+      {/* Status ribbon */}
+      {status === "approved" && (
+        <div className="absolute top-3 right-3 z-10">
+          <Badge className="bg-green-600 text-white">✓ Added</Badge>
+        </div>
+      )}
+      {status === "skipped" && (
+        <div className="absolute top-3 right-3 z-10">
+          <Badge variant="outline">Skipped</Badge>
+        </div>
+      )}
+
+      <CardHeader className="pb-2 cursor-pointer select-none" onClick={() => setExpanded((v) => !v)}>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-sm font-semibold text-muted-foreground">#{index + 1}</span>
+          <Badge variant="outline">Difficulty {problem.difficulty}</Badge>
+          <Badge variant="secondary">{problem.type === "multiple_choice" ? "MCQ" : "FRQ"}</Badge>
+          <Badge variant={course === "precalc" ? "default" : "outline"}>
+            {course === "precalc" ? "Pre-Calculus" : "AP Calculus"}
+          </Badge>
+          <span className="ml-auto text-xs text-muted-foreground">{expanded ? "▲ collapse" : "▼ expand"}</span>
+        </div>
+        {problem.problem_description && (
+          <p className="text-sm text-muted-foreground mt-1 italic">"{problem.problem_description}"</p>
+        )}
+      </CardHeader>
+
+      {expanded && (
+        <CardContent className="space-y-4 pt-0">
+          {/* Problem stem */}
+          <div>
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Problem</p>
+            <div className="ap-calc-preview min-w-0 max-w-full overflow-x-auto">
+              <Preview latexContent={problem.latex_content} useProblemTypography={false} />
+            </div>
+          </div>
+
+          {/* Choices */}
+          {problem.type === "multiple_choice" && (
+            <div>
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Choices</p>
+              <div className="space-y-1.5">
+                {problem.choices.map((choice, i) => {
+                  const wrongDesc = problem.wrong_answer_descriptions?.[i];
+                  const isCorrect = i === problem.correct_index;
+                  return (
+                    <div
+                      key={i}
+                      className={cn(
+                        "rounded border px-3 py-2",
+                        isCorrect ? "border-primary bg-primary/5" : "border-border"
+                      )}
+                    >
+                      <div className="flex items-start gap-2">
+                        <span className="text-sm text-muted-foreground w-4 shrink-0 pt-0.5">{CHOICE_LABELS[i]}.</span>
+                        <div className="flex-1 min-w-0">
+                          <Preview latexContent={normalizeMcqChoiceLatex(choice)} useProblemTypography={false} />
+                        </div>
+                        {isCorrect && <Badge variant="default" className="shrink-0 text-xs">Correct</Badge>}
+                      </div>
+                      {!isCorrect && wrongDesc && (
+                        <p className="text-xs text-muted-foreground mt-1 ml-6 italic">{wrongDesc}</p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Solution */}
+          <div>
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Solution</p>
+            <div className="ap-calc-preview min-w-0 max-w-full overflow-x-auto">
+              <Preview latexContent={problem.solution_latex} useProblemTypography={false} />
+            </div>
+          </div>
+
+          {/* Actions */}
+          {status === "pending" && (
+            <div className="flex items-center gap-2 pt-1">
+              <Input
+                value={notesLocal}
+                onChange={(e) => setNotesLocal(e.target.value)}
+                placeholder="Notes (optional)"
+                className="text-sm max-w-xs h-8"
+              />
+              <button
+                onClick={() => onApprove()}
+                className="px-4 py-1.5 rounded bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition-colors"
+              >
+                ✓ Add to RAG pool
+              </button>
+              <button
+                onClick={onSkip}
+                className="px-4 py-1.5 rounded border text-sm text-muted-foreground hover:bg-muted transition-colors"
+              >
+                Skip
+              </button>
+            </div>
+          )}
+          {status === "saving" && (
+            <p className="text-sm text-muted-foreground">Saving…</p>
+          )}
+        </CardContent>
+      )}
+    </Card>
+  );
+}
+
+// ── Main page ──────────────────────────────────────────────────────────────
 export default function RagExamplesPage() {
   const [pageMode, setPageMode] = useState<PageMode>("input");
   const [inputMode, setInputMode] = useState<InputMode>("json");
@@ -114,6 +281,10 @@ export default function RagExamplesPage() {
   const [choices, setChoices] = useState<[string, string, string, string]>(["", "", "", ""]);
   const [correctIndex, setCorrectIndex] = useState<CorrectIndex>(0);
   const [notes, setNotes] = useState("");
+  const [topicDescription, setTopicDescription] = useState("");
+  const [actionDescription, setActionDescription] = useState("");
+  const [representationDescription, setRepresentationDescription] = useState("");
+  const [prerequisiteDescription, setPrerequisiteDescription] = useState("");
   const [previewed, setPreviewed] = useState<PreviewState | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -121,11 +292,8 @@ export default function RagExamplesPage() {
 
   // Batch review state
   const [reviewQueue, setReviewQueue] = useState<ParsedProblem[]>([]);
-  const [reviewIndex, setReviewIndex] = useState(0);
-  const [reviewNotes, setReviewNotes] = useState("");
-  const [reviewApproved, setReviewApproved] = useState(0);
-  const [reviewSkipped, setReviewSkipped] = useState(0);
-  const [reviewSaving, setReviewSaving] = useState(false);
+  const [reviewStatuses, setReviewStatuses] = useState<CardStatus[]>([]);
+  const [reviewNotes, setReviewNotes] = useState<string[]>([]);
 
   const handleChoiceChange = useCallback((i: number, value: string) => {
     setChoices((prev) => {
@@ -156,16 +324,13 @@ export default function RagExamplesPage() {
     toast.success("Loaded and previewed");
   }, [jsonText]);
 
-  /** Parse all JSONs and enter batch review mode. */
   const handleLoadAndReview = useCallback(() => {
     if (!jsonText.trim()) { toast.error("Paste JSON first"); return; }
     const problems = parseMultipleJsons(jsonText);
     if (problems.length === 0) { toast.error("No valid problems found in the pasted text"); return; }
     setReviewQueue(problems);
-    setReviewIndex(0);
-    setReviewNotes("");
-    setReviewApproved(0);
-    setReviewSkipped(0);
+    setReviewStatuses(problems.map(() => "pending"));
+    setReviewNotes(problems.map(() => ""));
     setPageMode("reviewing");
   }, [jsonText]);
 
@@ -218,23 +383,27 @@ export default function RagExamplesPage() {
       const body: Record<string, unknown> = { latex_content: latexContent.trim(), solution_latex: solutionLatex.trim(), difficulty, course };
       if (type === "multiple_choice") { body.choices = choices; body.correct_index = correctIndex; }
       if (notes.trim()) body.notes = notes.trim();
+      if (topicDescription.trim()) body.topic_description = topicDescription.trim();
+      if (actionDescription.trim()) body.action_description = actionDescription.trim();
+      if (representationDescription.trim()) body.representation_description = representationDescription.trim();
+      if (prerequisiteDescription.trim()) body.prerequisite_description = prerequisiteDescription.trim();
       const res = await fetch("/api/rag-examples", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       if (!res.ok) { const err = (await res.json()) as { error?: string }; throw new Error(err.error ?? "Save failed"); }
       toast.success("Saved to RAG pool");
       setSaved(true);
-      setLatexContent(""); setSolutionLatex(""); setChoices(["", "", "", ""]); setCorrectIndex(0); setDifficulty(3); setNotes(""); setJsonText(""); setPreviewed(null);
+      setLatexContent(""); setSolutionLatex(""); setChoices(["", "", "", ""]); setCorrectIndex(0); setDifficulty(3); setNotes(""); setTopicDescription(""); setActionDescription(""); setRepresentationDescription(""); setPrerequisiteDescription(""); setJsonText(""); setPreviewed(null);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Save failed");
     } finally {
       setSaving(false);
     }
-  }, [latexContent, solutionLatex, difficulty, type, choices, correctIndex, notes]);
+  }, [latexContent, solutionLatex, difficulty, type, choices, correctIndex, notes, course]);
 
-  // ── Batch review helpers ───────────────────────────────────
-  async function handleReviewApprove() {
-    const problem = reviewQueue[reviewIndex];
+  async function handleApprove(index: number) {
+    const problem = reviewQueue[index];
+    const noteText = reviewNotes[index] ?? "";
     if (!problem) return;
-    setReviewSaving(true);
+    setReviewStatuses((prev) => { const n = [...prev]; n[index] = "saving"; return n; });
     try {
       const body: Record<string, unknown> = {
         latex_content: problem.latex_content,
@@ -243,135 +412,87 @@ export default function RagExamplesPage() {
         course,
       };
       if (problem.type === "multiple_choice") { body.choices = problem.choices; body.correct_index = problem.correct_index; }
-      if (reviewNotes.trim()) body.notes = reviewNotes.trim();
+      if (noteText.trim()) body.notes = noteText.trim();
+      if (problem.problem_description) body.problem_description = problem.problem_description;
+      if (problem.wrong_answer_descriptions) body.wrong_answer_descriptions = problem.wrong_answer_descriptions;
+      if (problem.topic_description) body.topic_description = problem.topic_description;
+      if (problem.keyword_weights && Object.keys(problem.keyword_weights).length > 0) body.keyword_weights = problem.keyword_weights;
+      if (problem.action_description) body.action_description = problem.action_description;
+      if (problem.action_weights && Object.keys(problem.action_weights).length > 0) body.action_weights = problem.action_weights;
+      if (problem.representation_description) body.representation_description = problem.representation_description;
+      if (problem.representation_weights && Object.keys(problem.representation_weights).length > 0) body.representation_weights = problem.representation_weights;
+      if (problem.prerequisite_description) body.prerequisite_description = problem.prerequisite_description;
+      if (problem.prerequisite_weights && Object.keys(problem.prerequisite_weights).length > 0) body.prerequisite_weights = problem.prerequisite_weights;
       const res = await fetch("/api/rag-examples", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       if (!res.ok) { const err = (await res.json()) as { error?: string }; throw new Error(err.error ?? "Save failed"); }
-      setReviewApproved((c) => c + 1);
-      advanceReview();
+      setReviewStatuses((prev) => { const n = [...prev]; n[index] = "approved"; return n; });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Save failed");
-    } finally {
-      setReviewSaving(false);
+      setReviewStatuses((prev) => { const n = [...prev]; n[index] = "pending"; return n; });
     }
   }
 
-  function handleReviewSkip() {
-    setReviewSkipped((c) => c + 1);
-    advanceReview();
+  function handleSkip(index: number) {
+    setReviewStatuses((prev) => { const n = [...prev]; n[index] = "skipped"; return n; });
   }
 
-  function advanceReview() {
-    const next = reviewIndex + 1;
-    setReviewNotes("");
-    if (next >= reviewQueue.length) {
-      setPageMode("input");
-      toast.success(`Done — ${reviewApproved + 1} added, ${reviewSkipped} skipped`);
-      return;
-    }
-    setReviewIndex(next);
-  }
-
-  // ── Reviewing mode ─────────────────────────────────────────
+  // ── Reviewing mode ─────────────────────────────────────────────────────
   if (pageMode === "reviewing") {
-    const problem = reviewQueue[reviewIndex];
+    const approved = reviewStatuses.filter((s) => s === "approved").length;
+    const skipped = reviewStatuses.filter((s) => s === "skipped").length;
+    const pending = reviewStatuses.filter((s) => s === "pending" || s === "saving").length;
     const total = reviewQueue.length;
-    if (!problem) return null;
 
     return (
-      <div className="min-h-screen p-6 max-w-4xl mx-auto space-y-5">
-        <header className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Review Queue</h1>
+      <div className="min-h-screen p-6 max-w-3xl mx-auto space-y-5">
+        <header className="flex items-center justify-between gap-4 sticky top-0 bg-background z-20 py-2 border-b">
+          <div className="flex items-center gap-3">
+            <h1 className="text-xl font-bold">Review Queue</h1>
+            <span className="text-sm text-muted-foreground">{approved} added · {skipped} skipped · {pending} left</span>
+          </div>
+          <div className="flex items-center gap-2">
+            {/* Course toggle visible during review */}
+            <button
+              onClick={() => setCourse("ap_calc")}
+              className={cn("text-xs px-2.5 py-1 rounded border font-medium transition-colors",
+                course === "ap_calc" ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:text-foreground")}
+            >AP Calc</button>
+            <button
+              onClick={() => setCourse("precalc")}
+              className={cn("text-xs px-2.5 py-1 rounded border font-medium transition-colors",
+                course === "precalc" ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:text-foreground")}
+            >Pre-Calculus</button>
+            <button onClick={() => setPageMode("input")} className="text-sm text-muted-foreground hover:underline ml-2">
+              ← Back
+            </button>
+          </div>
+        </header>
+
+        <div className="space-y-6">
+          {reviewQueue.map((problem, i) => (
+            <ReviewCard
+              key={i}
+              problem={problem}
+              index={i}
+              status={reviewStatuses[i] ?? "pending"}
+              course={course}
+              onApprove={() => handleApprove(i)}
+              onSkip={() => handleSkip(i)}
+            />
+          ))}
+        </div>
+
+        <div className="sticky bottom-0 bg-background border-t py-3 flex items-center justify-between">
+          <span className="text-sm text-muted-foreground">{total} problems · {approved} added · {skipped} skipped · {pending} pending</span>
           <button onClick={() => setPageMode("input")} className="text-sm text-muted-foreground hover:underline">
             ← Back to input
           </button>
-        </header>
-
-        {/* Progress */}
-        <div className="flex items-center gap-3 text-sm">
-          <span className="font-medium">{reviewIndex + 1} / {total}</span>
-          <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
-            <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${((reviewIndex) / total) * 100}%` }} />
-          </div>
-          <span className="text-muted-foreground text-xs">{reviewApproved} added · {reviewSkipped} skipped</span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Badge variant="outline">Difficulty {problem.difficulty}</Badge>
-          <Badge variant="secondary">{problem.type === "multiple_choice" ? "MCQ" : "FRQ"}</Badge>
-          <Badge variant={course === "precalc" ? "default" : "outline"}>{course === "precalc" ? "Pre-Calculus" : "AP Calculus"}</Badge>
-        </div>
-
-        {/* Problem */}
-        <Card>
-          <CardHeader className="border-b py-3"><CardTitle className="text-sm">Problem</CardTitle></CardHeader>
-          <CardContent className="pt-4 min-w-0 overflow-x-auto">
-            <div className="ap-calc-preview min-w-0 max-w-full">
-              <Preview latexContent={problem.latex_content} useProblemTypography={false} />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Choices */}
-        {problem.type === "multiple_choice" && (
-          <Card>
-            <CardHeader className="py-3"><CardTitle className="text-sm">Choices</CardTitle></CardHeader>
-            <CardContent className="space-y-2 pt-0">
-              {problem.choices.map((choice, i) => (
-                <div key={i} className={cn(
-                  "flex items-start gap-2 rounded border p-2",
-                  i === problem.correct_index ? "border-primary bg-primary/5" : "border-border"
-                )}>
-                  <span className="text-sm text-muted-foreground w-4 shrink-0">{CHOICE_LABELS[i]}.</span>
-                  <div className="flex-1 min-w-0">
-                    <Preview latexContent={normalizeMcqChoiceLatex(choice)} useProblemTypography={false} />
-                  </div>
-                  {i === problem.correct_index && <Badge variant="default" className="shrink-0 text-xs">Correct</Badge>}
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Solution */}
-        <Card>
-          <CardHeader className="py-3"><CardTitle className="text-sm">Solution</CardTitle></CardHeader>
-          <CardContent className="pt-0 min-w-0 overflow-x-auto">
-            <div className="ap-calc-preview min-w-0 max-w-full">
-              <Preview latexContent={problem.solution_latex} useProblemTypography={false} />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Notes + actions */}
-        <div className="space-y-3">
-          <Input
-            value={reviewNotes}
-            onChange={(e) => setReviewNotes(e.target.value)}
-            placeholder="Notes (optional)"
-            className="text-sm max-w-md"
-          />
-          <div className="flex gap-2">
-            <button
-              onClick={handleReviewApprove}
-              disabled={reviewSaving}
-              className="px-5 py-2 rounded bg-green-600 text-white text-sm font-medium hover:bg-green-700 disabled:opacity-50 transition-colors"
-            >
-              {reviewSaving ? "Saving…" : "✓ Add to RAG pool"}
-            </button>
-            <button
-              onClick={handleReviewSkip}
-              disabled={reviewSaving}
-              className="px-5 py-2 rounded border text-sm text-muted-foreground hover:bg-muted disabled:opacity-50 transition-colors"
-            >
-              Skip
-            </button>
-          </div>
         </div>
       </div>
     );
   }
 
-  // ── Normal input mode ──────────────────────────────────────
+  // ── Normal input mode ──────────────────────────────────────────────────
   return (
     <div className="min-h-screen p-6 flex flex-col gap-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
@@ -408,9 +529,11 @@ export default function RagExamplesPage() {
             <p className="text-xs text-muted-foreground">
               Paste a single JSON object, multiple comma-separated objects, or a JSON array{" "}
               <code className="bg-muted px-1 rounded">[{"{"}...{"}"}, {"{"}...{"}"}]</code>.
+              Optional fields: <code className="bg-muted px-1 rounded">problem_description</code>,{" "}
+              <code className="bg-muted px-1 rounded">wrong_answer_descriptions</code>.
             </p>
             <Textarea
-              placeholder={'{ "latex_content": "...", "solution_latex": "...", "choices": ["...","...","...","..."], "correct_index": 0 },\n{ "latex_content": "...", ... }'}
+              placeholder={'{ "latex_content": "...", "solution_latex": "...", "choices": ["...","...","...","..."], "correct_index": 0, "problem_description": "...", "wrong_answer_descriptions": [null,"...","...","..."] },\n{ "latex_content": "...", ... }'}
               value={jsonText}
               onChange={(e) => { setJsonText(e.target.value); setJsonError(null); }}
               rows={14}
@@ -521,6 +644,27 @@ export default function RagExamplesPage() {
               <CardContent>
                 <Textarea placeholder="e.g. Classic chain rule setup with trig. Good FRQ seed." value={notes}
                   onChange={(e) => { setNotes(e.target.value); setSaved(false); }} rows={2} className="text-sm" />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">Keyword descriptions <span className="text-muted-foreground font-normal text-sm">(optional — add keywords later in Preview JSON)</span></CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {[
+                  { label: "Topic", value: topicDescription, setter: setTopicDescription, placeholder: "What topic/skill does this problem test?" },
+                  { label: "Action", value: actionDescription, setter: setActionDescription, placeholder: "What action does the student perform? (solve, factor, evaluate…)" },
+                  { label: "Representation", value: representationDescription, setter: setRepresentationDescription, placeholder: "How is the problem presented? (equation, graph, table…)" },
+                  { label: "Prerequisite", value: prerequisiteDescription, setter: setPrerequisiteDescription, placeholder: "What prior knowledge does this require?" },
+                ].map(({ label, value, setter, placeholder }) => (
+                  <div key={label} className="space-y-1">
+                    <p className="text-xs font-medium text-muted-foreground">{label}</p>
+                    <Textarea placeholder={placeholder} value={value}
+                      onChange={(e) => { setter(e.target.value); setSaved(false); }}
+                      rows={2} className="text-sm resize-none" />
+                  </div>
+                ))}
               </CardContent>
             </Card>
 

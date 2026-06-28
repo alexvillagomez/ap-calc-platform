@@ -116,7 +116,12 @@ export interface MathLessonCheckQuestion {
 
 export interface MathMicroStep {
   step_index: number;
-  has_check: true;
+  /**
+   * Whether this page carries an understanding-check. Checks are OPTIONAL per page
+   * (a simple comprehension check on what was just read) — when false, `check_question`
+   * is present but blank and renderers skip the quiz UI for this page.
+   */
+  has_check: boolean;
   explanation_latex: string;
   example_latex: string;
   check_question: MathLessonCheckQuestion;
@@ -143,6 +148,8 @@ export interface GeneratedMathQuestion {
   hint_latex: string;
   keyword_weights: Record<string, number>;
   difficulty: number;
+  /** Misconception descriptions aligned to the 3 distractor VALUES (pre-shuffle), if generated. */
+  wrong_answer_descriptions?: string[];
 }
 
 export interface GeneratedMathFlashcard {

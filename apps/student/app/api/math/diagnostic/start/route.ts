@@ -197,12 +197,15 @@ export async function POST(request: Request) {
 
   const diagnosticId = diagSession.id as string;
 
-  // Get the first question for the start category
+  // Get the first question for the start category. storedOnly: never block
+  // placement on OpenAI generation (cold-pool generation could spin ~20s and then
+  // fail) — fast-fail to the 404/"unavailable" screen instead.
   const questionResult = await getQuestionForCategory(
     supabase,
     startCategoryId,
     course,
-    []
+    [],
+    { storedOnly: true }
   );
 
   if (!questionResult) {
@@ -272,7 +275,8 @@ async function getQuestionForCategory(
   supabase: SupabaseClient,
   categoryId: string,
   course: MathCourse,
-  excludeIds: string[]
+  excludeIds: string[],
+  opts?: { storedOnly?: boolean }
 ): Promise<QuestionRow | null> {
   // Try stored mid-difficulty questions
   const { data: storedQs } = await supabase
@@ -315,6 +319,9 @@ async function getQuestionForCategory(
     );
     return sorted[0] as QuestionRow;
   }
+
+  // storedOnly: skip the slow generation path so the caller can fast-fail.
+  if (opts?.storedOnly) return null;
 
   // Generate one (fail-open)
   try {

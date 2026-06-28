@@ -5,6 +5,7 @@ import Link from "next/link";
 import { LoginGate } from "@/components/auth/LoginGate";
 import { YieldBadge } from "@/components/ui/Badge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { getOrCreateMathSession } from "@/lib/mathSession";
 import {
   MathCategory,
@@ -13,35 +14,26 @@ import {
   MathInDepthChild,
   umbrellaDisplayScore,
   umbrellaAttempts,
-  scoreColor,
+  scoreBarColor,
+  keywordProgressStatus,
+  umbrellaProgressStatus,
+  categoryProgressStatus,
   COURSE_LABELS,
   SECTION_LABELS,
 } from "@/components/math/mathUiTypes";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+// Topics/subtopics are displayed in CURRICULUM order (the same order auto mode
+// walks them). The taxonomy API already returns umbrellas and their children in
+// order_index order, so we preserve that order rather than re-sorting by
+// attempts/score (which made the list look arbitrary/alphabetical to students).
 function sortUmbrellas(umbrellas: MathUmbrella[]): MathUmbrella[] {
-  return [...umbrellas].sort((a, b) => {
-    const aAtt = umbrellaAttempts(a) > 0;
-    const bAtt = umbrellaAttempts(b) > 0;
-    if (!aAtt && !bAtt) return 0;
-    if (aAtt && !bAtt) return -1;
-    if (!aAtt && bAtt) return 1;
-    const aScore = umbrellaDisplayScore(a) ?? 100;
-    const bScore = umbrellaDisplayScore(b) ?? 100;
-    return aScore - bScore;
-  });
+  return umbrellas;
 }
 
 function sortChildren(children: MathInDepthChild[]): MathInDepthChild[] {
-  return [...children].sort((a, b) => {
-    const aAtt = a.total_attempts > 0;
-    const bAtt = b.total_attempts > 0;
-    if (!aAtt && !bAtt) return 0;
-    if (aAtt && !bAtt) return -1;
-    if (!aAtt && bAtt) return 1;
-    return (a.score ?? 1) - (b.score ?? 1);
-  });
+  return children;
 }
 
 function categoryAvgPct(cat: MathCategory): number | null {
@@ -52,39 +44,29 @@ function categoryAvgPct(cat: MathCategory): number | null {
   return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
 }
 
-interface OverallStats {
-  totalKeywords: number;
-  practicedKeywords: number;
-  totalAttempts: number;
-  totalCorrect: number;
-}
-
-function computeOverallStats(categories: MathCategory[]): OverallStats {
-  let totalKeywords = 0, practicedKeywords = 0, totalAttempts = 0, totalCorrect = 0;
-  for (const cat of categories) {
-    for (const u of cat.umbrellas) {
-      if (u.children.length > 0) {
-        for (const c of u.children) {
-          totalKeywords++;
-          if (c.total_attempts > 0) practicedKeywords++;
-          totalAttempts += c.total_attempts;
-          totalCorrect += c.correct_attempts;
-        }
-      } else {
+function categoryKeywordStats(cat: MathCategory): { totalKeywords: number; keywordsAttempted: number; totalAttempts: number } {
+  let totalKeywords = 0, keywordsAttempted = 0, totalAttempts = 0;
+  for (const u of cat.umbrellas) {
+    if (u.children.length > 0) {
+      for (const c of u.children) {
         totalKeywords++;
-        if (u.total_attempts > 0) practicedKeywords++;
-        totalAttempts += u.total_attempts;
-        totalCorrect += u.correct_attempts;
+        if (c.total_attempts > 0) keywordsAttempted++;
+        totalAttempts += c.total_attempts;
       }
+    } else {
+      totalKeywords++;
+      if (u.total_attempts > 0) keywordsAttempted++;
+      totalAttempts += u.total_attempts;
     }
   }
-  return { totalKeywords, practicedKeywords, totalAttempts, totalCorrect };
+  return { totalKeywords, keywordsAttempted, totalAttempts };
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function ChildRow({ child, showYield }: { child: MathInDepthChild; showYield: boolean }) {
   const pct = child.score !== null ? Math.round(child.score * 100) : null;
+  const status = keywordProgressStatus(child.total_attempts, pct);
   return (
     <div className="py-2.5 border-t border-neutral-50 first:border-0">
       <div className="flex items-start justify-between gap-2 mb-1">
@@ -102,13 +84,9 @@ function ChildRow({ child, showYield }: { child: MathInDepthChild; showYield: bo
             </span>
           )}
         </div>
-        {pct !== null ? (
-          <span className={`text-sm font-medium shrink-0 ${scoreColor(pct)}`}>{pct}%</span>
-        ) : (
-          <span className="text-xs text-neutral-400 shrink-0">Not started</span>
-        )}
+        <span className={`text-xs font-medium shrink-0 ${status.labelClass}`}>{status.label}</span>
       </div>
-      {pct !== null && <ProgressBar value={pct} size="xs" color={pct >= 80 ? "success" : "brand"} />}
+      {status.sufficient && pct !== null && <ProgressBar value={pct} size="xs" color={scoreBarColor(pct)} />}
     </div>
   );
 }
@@ -130,6 +108,7 @@ function UmbrellaRow({
     : umbrella.children.reduce((s, c) => s + c.dont_know_count, 0);
   const hasChildren = umbrella.children.length > 0;
   const sorted = hasChildren ? sortChildren(umbrella.children) : [];
+  const status = umbrellaProgressStatus(attempts, displayScore);
 
   return (
     <div>
@@ -165,26 +144,13 @@ function UmbrellaRow({
               </span>
             )}
           </div>
-          <div className="flex items-center gap-1.5 shrink-0">
-            {attempts > 0 && attempts < 5 && (
-              <span className="text-xs text-amber-600 bg-amber-50 border border-amber-100 px-1.5 py-0.5 rounded">
-                low sample (n={attempts})
-              </span>
-            )}
-            {displayScore !== null ? (
-              <span className={`text-sm font-medium ${scoreColor(displayScore)}`}>
-                {displayScore}%
-              </span>
-            ) : (
-              <span className="text-xs text-neutral-400">Not started</span>
-            )}
-          </div>
+          <span className={`text-xs font-medium shrink-0 ${status.labelClass}`}>{status.label}</span>
         </div>
-        {displayScore !== null && (
+        {status.sufficient && displayScore !== null && (
           <ProgressBar
             value={displayScore}
             size="xs"
-            color={displayScore >= 80 ? "success" : "brand"}
+            color={scoreBarColor(displayScore)}
           />
         )}
       </div>
@@ -212,6 +178,8 @@ function CategorySection({
   const [open, setOpen] = useState(true);
   const avg = categoryAvgPct(cat);
   const sorted = sortUmbrellas(cat.umbrellas);
+  const kwStats = categoryKeywordStats(cat);
+  const catStatus = categoryProgressStatus(kwStats.totalKeywords, kwStats.keywordsAttempted, kwStats.totalAttempts, avg);
 
   return (
     <div className="bg-white rounded-xl border border-neutral-200 shadow-brand-xs overflow-hidden">
@@ -237,11 +205,7 @@ function CategorySection({
           {showYield && cat.yield_score !== null && <YieldBadge value={cat.yield_score} />}
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          {avg !== null ? (
-            <span className={`text-sm font-medium ${scoreColor(avg)}`}>{avg}%</span>
-          ) : (
-            <span className="text-xs text-neutral-400">Not started</span>
-          )}
+          <span className={`text-xs font-medium ${catStatus.labelClass}`}>{catStatus.label}</span>
           <Link
             href={`/math/${course}/${cat.id}/practice`}
             onClick={(e) => e.stopPropagation()}
@@ -287,10 +251,6 @@ function MathProgressInner({
   const [error, setError] = useState<string | null>(null);
   const [categories, setCategories] = useState<MathCategory[]>([]);
   const [sectionFilter, setSectionFilter] = useState<string | null>(null);
-  // Honest per-question counts from the attempt log (see /api/math/taxonomy).
-  // NOT the summed-per-keyword totals, which over-count multi-tagged questions.
-  const [questionsAnswered, setQuestionsAnswered] = useState(0);
-  const [correctAnswers, setCorrectAnswers] = useState(0);
 
   const load = async () => {
     setLoading(true);
@@ -301,13 +261,8 @@ function MathProgressInner({
         `/api/math/taxonomy?session_id=${encodeURIComponent(sid)}&course=${encodeURIComponent(course)}`
       );
       if (!r.ok) throw new Error(await r.text().catch(() => "Unknown error"));
-      const d = (await r.json()) as MathTaxonomyResponse & {
-        questions_answered?: number;
-        correct_answers?: number;
-      };
+      const d = (await r.json()) as MathTaxonomyResponse;
       setCategories(d.categories ?? []);
-      setQuestionsAnswered(d.questions_answered ?? 0);
-      setCorrectAnswers(d.correct_answers ?? 0);
     } catch (e) {
       setError((e as Error).message ?? "Failed to load progress");
     } finally {
@@ -319,12 +274,6 @@ function MathProgressInner({
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [course]);
-
-  const stats = computeOverallStats(categories);
-  const overallPct =
-    questionsAnswered > 0
-      ? Math.round((correctAnswers / questionsAnswered) * 100)
-      : null;
 
   // Section filter
   const sections = [...new Set(categories.map((c) => c.section))];
@@ -345,17 +294,18 @@ function MathProgressInner({
               My Progress
             </h1>
           </div>
-          <div className="shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             <Link href={`/math/${course}/practice`}>
               <span className="px-3 py-1.5 rounded-lg bg-brand-500 text-white text-xs font-semibold hover:bg-brand-600 transition-colors">
                 Practice now
               </span>
             </Link>
+            <NavMenu />
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-4xl mx-auto px-4 py-6 space-y-6 pb-safe-bottom">
         {loading && (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
             <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin" />
@@ -377,47 +327,6 @@ function MathProgressInner({
 
         {!loading && !error && (
           <>
-            {/* Overall stats card */}
-            <div className="bg-white rounded-xl border border-neutral-200 shadow-brand-xs p-5">
-              <h2 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-4">
-                Overview — {courseLabel}
-              </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div>
-                  <p className="text-2xl font-bold text-neutral-900">
-                    {stats.practicedKeywords}
-                    <span className="text-sm text-neutral-400 font-normal">
-                      /{stats.totalKeywords}
-                    </span>
-                  </p>
-                  <p className="text-xs text-neutral-500 mt-0.5">Keywords practiced</p>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-neutral-900">{questionsAnswered}</p>
-                  <p className="text-xs text-neutral-500 mt-0.5">Questions answered</p>
-                </div>
-                <div>
-                  <p className={`text-2xl font-bold ${overallPct !== null ? scoreColor(overallPct) : "text-neutral-900"}`}>
-                    {overallPct !== null ? `${overallPct}%` : "—"}
-                  </p>
-                  <p className="text-xs text-neutral-500 mt-0.5">Overall accuracy</p>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-neutral-900">{correctAnswers}</p>
-                  <p className="text-xs text-neutral-500 mt-0.5">Correct answers</p>
-                </div>
-              </div>
-              {overallPct !== null && (
-                <div className="mt-4">
-                  <ProgressBar
-                    value={overallPct}
-                    size="sm"
-                    color={overallPct >= 80 ? "success" : "brand"}
-                  />
-                </div>
-              )}
-            </div>
-
             {/* Section filter tabs */}
             {sections.length > 1 && (
               <div className="flex gap-2 flex-wrap">
@@ -457,7 +366,7 @@ function MathProgressInner({
             ) : (
               <div className="space-y-3">
                 {visibleCats.map((cat) => (
-                  <CategorySection key={cat.id} cat={cat} course={course} showYield={course !== "calc_ab"} />
+                  <CategorySection key={cat.id} cat={cat} course={course} showYield={false} />
                 ))}
               </div>
             )}

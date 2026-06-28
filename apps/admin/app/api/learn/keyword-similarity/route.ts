@@ -43,6 +43,8 @@ export async function POST(request: Request) {
       .from("learn_keywords")
       .select("id, name, label, description, category_id, tier, embedding")
       .eq("status", "approved")
+      .neq("tier", "umbrella")
+      .neq("keyword_type", "umbrella")
       .not("embedding", "is", null),
   ]);
 

@@ -1,0 +1,293 @@
+{
+  "section": "chemistry",
+  "category_code": "C2",
+  "category_label": "Bonding & Molecular Structure",
+  "order_index": 1,
+  "umbrellas": [
+    {
+      "slug": "bonding_types",
+      "label": "Types of Chemical Bonds",
+      "description": "The three primary bond types — ionic, covalent, and metallic — and what drives formation of each.",
+      "intro": {
+        "slug": "bonding_types_intro",
+        "label": "Types of Chemical Bonds Overview",
+        "description": "Atoms bond by sharing or transferring electrons, or via a sea of delocalized electrons in metals. The character of a bond — ionic, covalent, or metallic — is determined by the electronegativity difference between atoms and their positions in the periodic table. Understanding these categories sets the stage for Lewis structures, dipole moments, and molecular geometry.",
+        "examples": ["ionic: full electron transfer (Na⁺Cl⁻)", "covalent: shared electron pair", "metallic: electron sea in metals"]
+      },
+      "in_depth": [
+        {
+          "slug": "ionic_bonding",
+          "label": "Ionic bonding",
+          "description": "Identify ionic bonding as the electrostatic attraction between oppositely charged ions formed by complete electron transfer, typically between a metal and a nonmetal with a large electronegativity difference. This focuses on ionic character, not the partial-ionic (polar covalent) case (a separate keyword).",
+          "examples": ["Na gives one $e^-$ to Cl → $\\text{Na}^+\\text{Cl}^-$", "large electronegativity difference → ionic character", "lattice energy stabilizes ionic crystal"]
+        },
+        {
+          "slug": "covalent_bonding",
+          "label": "Covalent bonding",
+          "description": "Identify covalent bonding as the sharing of one or more electron pairs between two atoms, typically nonmetals with similar electronegativities, forming a discrete molecule or network solid. This focuses on the electron-sharing model, not ionic or metallic bonding (separate keywords).",
+          "examples": ["shared electron pair in $\\text{H}_2$", "nonmetals bond covalently", "single, double, and triple bonds differ in shared-pair count"]
+        },
+        {
+          "slug": "metallic_bonding",
+          "label": "Metallic bonding",
+          "description": "Describe metallic bonding as a lattice of metal cations surrounded by a delocalized 'sea' of electrons, which explains metals' electrical conductivity, malleability, and luster. This focuses on metallic character, not ionic or covalent bonds (separate keywords).",
+          "examples": ["electron sea → conducts electricity", "delocalized $e^-$ in Cu metal", "malleability: layers slide without shattering bond"]
+        }
+      ]
+    },
+    {
+      "slug": "lewis_structures",
+      "label": "Lewis Electron-Dot Formulas",
+      "description": "Using the octet rule and electron counting to draw valid Lewis structures, assign formal charges, and identify exceptions to the octet rule.",
+      "intro": {
+        "slug": "lewis_structures_intro",
+        "label": "Lewis Electron-Dot Formulas Overview",
+        "description": "Lewis structures place valence-electron dots around atomic symbols to show bonding pairs and lone pairs. The octet rule (atoms 'want' 8 electrons) guides structure drawing, but several important molecules violate it. Formal charge helps choose the best Lewis structure when multiple are possible.",
+        "examples": ["$\\text{H}_2\\text{O}$: O has 2 bonds + 2 lone pairs", "count total valence electrons, distribute to satisfy octets", "formal charge selects best resonance structure"]
+      },
+      "in_depth": [
+        {
+          "slug": "octet_rule",
+          "label": "Octet rule",
+          "description": "Apply the octet rule — atoms in molecules tend to achieve 8 valence electrons through bonding — to distribute bonds and lone pairs in a Lewis structure. This focuses on the rule itself, not the exceptions to it (a separate keyword).",
+          "examples": ["C needs 4 bonds to complete its octet", "O has 2 bonds + 2 lone pairs in $\\text{H}_2\\text{O}$", "octet drives bond formation"]
+        },
+        {
+          "slug": "octet_exceptions",
+          "label": "Exceptions to the octet rule",
+          "description": "Identify the three categories of octet violations: electron-deficient species (e.g., $\\text{BF}_3$, 6 electrons on B), radicals with an odd total electron count (e.g., $\\text{NO}$), and expanded-octet species for period-3+ atoms (e.g., $\\text{PCl}_5$, $\\text{SF}_6$). This focuses on exceptions, not the normal octet application (a separate keyword).",
+          "examples": ["$\\text{BF}_3$: B has only 6 $e^-$ (electron deficient)", "$\\text{PCl}_5$: P expands to 10 $e^-$ (period 3+)", "$\\text{NO}$: odd-electron radical"]
+        },
+        {
+          "slug": "formal_charge",
+          "label": "Formal charge",
+          "description": "Calculate formal charge using $\\text{FC} = V - L - \\tfrac{B}{2}$ (valence electrons minus lone-pair electrons minus half the bonding electrons) to identify the best Lewis structure as the one with the smallest formal charges and negative charges on the most electronegative atom. This focuses on formal-charge calculation and use, not the concept of partial ionic character (a separate keyword).",
+          "examples": ["$\\text{FC} = V - L - B/2$", "$\\text{CO}_2$: double bonds give FC = 0 on all atoms", "prefer structure where O (EN) carries negative FC over C"]
+        },
+        {
+          "slug": "lewis_acids_bases",
+          "label": "Lewis acids and bases",
+          "description": "Classify a Lewis acid as an electron-pair acceptor (electron-deficient, e.g., $\\text{BF}_3$, $\\text{AlCl}_3$, metal cations) and a Lewis base as an electron-pair donor (lone-pair donor, e.g., $\\text{NH}_3$, $\\text{H}_2\\text{O}$). This focuses on the Lewis electron-pair definition, not the Brønsted–Lowry proton-transfer definition (built in C6).",
+          "examples": ["$\\text{BF}_3 + \\text{NH}_3$: BF₃ = Lewis acid, NH₃ = Lewis base", "Lewis acid = $e^-$-pair acceptor", "$\\text{Fe}^{3+}$ coordinates water: metal-ion Lewis acid"]
+        }
+      ]
+    },
+    {
+      "slug": "resonance_delocalization",
+      "label": "Resonance & Electron Delocalization",
+      "description": "Describing molecules that cannot be represented by a single Lewis structure through resonance contributors and the concept of delocalized electrons.",
+      "intro": {
+        "slug": "resonance_delocalization_intro",
+        "label": "Resonance & Electron Delocalization Overview",
+        "description": "Some molecules have equivalent bond positions that a single Lewis structure misrepresents; the true structure is a resonance hybrid with electron density spread (delocalized) over multiple atoms. Resonance lowers energy and affects bond length and bond order in predictable ways. It underlies aromaticity, carboxylate stability, and the geometry of conjugated systems.",
+        "examples": ["$\\text{O}_3$: two equivalent Lewis structures → one hybrid", "benzene: 6 $\\pi$ electrons delocalized over ring", "resonance hybrid is lower energy than any single contributor"]
+      },
+      "in_depth": [
+        {
+          "slug": "resonance_structures",
+          "label": "Drawing resonance structures",
+          "description": "Draw all valid resonance contributors for a molecule or ion by moving lone pairs and $\\pi$ electrons (never moving atom positions) and indicate the hybrid with dashed bonds or fractional bond orders; weight contributors by minimizing formal charges. This focuses on drawing and ranking contributors, not on how delocalization changes bond length or strength (a separate keyword).",
+          "examples": ["$\\text{NO}_3^-$: 3 equivalent contributors, each with one N=O", "move $\\pi e^-$ and lone pairs, never atoms", "major contributor = lowest formal charge, EN atom negative"]
+        },
+        {
+          "slug": "delocalized_electrons",
+          "label": "Delocalized electrons and resonance stability",
+          "description": "Explain that delocalized $\\pi$ electrons are spread across multiple atoms in the resonance hybrid, stabilizing the molecule or ion relative to any single Lewis contributor, as seen in carboxylate ions ($\\text{RCOO}^-$), benzene, and other conjugated systems. This focuses on the stabilization effect, not on the drawing of individual contributors (a separate keyword).",
+          "examples": ["carboxylate $\\text{RCOO}^-$: both C–O bonds equal length", "benzene: all C–C bond lengths = 140 pm (between single and double)", "delocalization → lower energy than any single Lewis structure"]
+        }
+      ]
+    },
+    {
+      "slug": "bond_order_length_energy",
+      "label": "Bond Order, Bond Length & Bond Energy",
+      "description": "How the number of shared electron pairs (bond order) inversely affects bond length and directly affects bond dissociation energy, and how multiple bonds confer rigidity.",
+      "intro": {
+        "slug": "bond_order_length_energy_intro",
+        "label": "Bond Order, Bond Length & Bond Energy Overview",
+        "description": "Bond order counts the number of shared electron pairs between two atoms. Increasing bond order shortens the bond and raises the energy required to break it. Double and triple bonds also restrict rotation around the bond axis, imposing rigidity on molecular structure — a key feature in alkenes, amides, and aromatic rings.",
+        "examples": ["C–C single (1) > C=C double (2) > C≡C triple (3): decreasing length", "triple bond: highest bond energy, hardest to break", "C=C double bond: restricted rotation → cis/trans isomers possible"]
+      },
+      "in_depth": [
+        {
+          "slug": "bond_order",
+          "label": "Bond order",
+          "description": "Define bond order as the number of shared electron pairs between two bonded atoms (single = 1, double = 2, triple = 3) and calculate fractional bond orders from resonance hybrids (e.g., $\\text{NO}_3^-$ N–O bond order = 4/3). This focuses on counting shared pairs and fractional orders, not on the resulting bond-length or bond-energy trends (separate keywords).",
+          "examples": ["$\\text{N}_2$: bond order = 3 (triple bond)", "$\\text{NO}_3^-$: 3 bonds shared over 3 N–O → bond order = 4/3", "bond order = (bonding $e^-$ − antibonding $e^-$)/2 from MO (conceptual)"]
+        },
+        {
+          "slug": "bond_length_trend",
+          "label": "Bond length vs. bond order",
+          "description": "Predict that bond length decreases as bond order increases for the same pair of atoms: single > double > triple bond lengths. This focuses on the length trend, not the energy trend (a separate keyword).",
+          "examples": ["C–C ≈ 154 pm; C=C ≈ 134 pm; C≡C ≈ 120 pm", "higher bond order → atoms held closer", "shorter bond = stronger attraction between nuclei and shared $e^-$"]
+        },
+        {
+          "slug": "bond_energy_trend",
+          "label": "Bond energy vs. bond order",
+          "description": "Predict that bond dissociation energy increases as bond order increases for the same pair of atoms (triple > double > single), and use tabulated bond energies to estimate $\\Delta H_{rxn} \\approx \\sum D(\\text{broken}) - \\sum D(\\text{formed})$. This focuses on the energy trend and enthalpy estimates, not on bond length (a separate keyword).",
+          "examples": ["C–C ≈ 347 kJ/mol; C=C ≈ 614 kJ/mol; C≡C ≈ 839 kJ/mol", "$\\Delta H_{rxn} \\approx \\sum D(\\text{bonds broken}) - \\sum D(\\text{bonds formed})$", "triple bond is hardest to break"]
+        },
+        {
+          "slug": "rigidity_multiple_bonds",
+          "label": "Rigidity from multiple bonds",
+          "description": "Explain that double and triple bonds prevent free rotation around the bond axis (because the $\\pi$ bond would be disrupted), imposing rigidity that locks atoms in a plane and enables geometric isomerism in alkenes. This focuses on the rotational rigidity consequence, not on the length or energy of multiple bonds (separate keywords).",
+          "examples": ["C=C double bond: no free rotation → cis/trans isomers", "amide bond C(=O)–N: partial $\\pi$ character → planar peptide bond", "single C–C bond: free rotation → no geometric isomers"]
+        }
+      ]
+    },
+    {
+      "slug": "partial_ionic_character",
+      "label": "Partial Ionic Character & Dipole Moments",
+      "description": "How electronegativity differences create bond polarity (partial charges), and how bond dipoles combine to determine whether a molecule has a net dipole moment.",
+      "intro": {
+        "slug": "partial_ionic_character_intro",
+        "label": "Partial Ionic Character & Dipole Moments Overview",
+        "description": "When two atoms of different electronegativities share a bond, the more electronegative atom draws electron density toward itself, creating a partial negative charge ($\\delta^-$) there and partial positive ($\\delta^+$) on the other. The vector sum of all bond dipoles determines the molecule's net dipole moment. A polar bond does NOT guarantee a polar molecule — geometry matters.",
+        "examples": ["$\\text{H}–\\text{F}$: F is more EN → $\\delta^-$ on F", "$\\text{CO}_2$: 2 polar bonds cancel → zero net dipole", "$\\text{H}_2\\text{O}$: bent geometry → net dipole"]
+      },
+      "in_depth": [
+        {
+          "slug": "electronegativity_bond_polarity",
+          "label": "Electronegativity and bond polarity",
+          "description": "Use the electronegativity difference between bonded atoms to classify a bond as nonpolar covalent (ΔEN ≈ 0), polar covalent (ΔEN intermediate), or ionic (ΔEN large), with the more electronegative atom carrying $\\delta^-$. This focuses on the bond itself, not on how molecular geometry affects the net molecular dipole (a separate keyword).",
+          "examples": ["ΔEN ≈ 0: nonpolar (H–H, C–C)", "ΔEN intermediate: polar covalent (C–O, N–H, O–H)", "ΔEN large (>~1.7): ionic character dominates"]
+        },
+        {
+          "slug": "dipole_moment_bond",
+          "label": "Bond dipole moment",
+          "description": "Define the bond dipole moment $\\mu = Q \\cdot d$ as the product of partial charge magnitude and bond length, measured in debyes (D), with the arrow pointing from $\\delta^+$ to $\\delta^-$ by convention. This focuses on the bond-level dipole, not the molecular (net) dipole which depends on geometry (a separate keyword).",
+          "examples": ["$\\mu = Q \\cdot d$; units = debye (D)", "H–F has larger $\\mu$ than H–Cl: EN difference dominates", "dipole arrow: $\\delta^+$ → $\\delta^-$ (toward electronegative atom)"]
+        },
+        {
+          "slug": "molecular_dipole_moment",
+          "label": "Molecular polarity and net dipole moment",
+          "description": "Predict whether a molecule has a net dipole moment by taking the vector sum of all bond dipoles: a molecule with polar bonds can still be nonpolar if the geometry causes bond dipoles to cancel ($\\text{CO}_2$, $\\text{CCl}_4$), while asymmetric molecules like $\\text{H}_2\\text{O}$ and $\\text{NH}_3$ retain a net dipole. This focuses on the molecular net dipole, not on individual bond dipoles (a separate keyword).",
+          "examples": ["$\\text{CO}_2$ (linear): 2 C=O dipoles cancel → $\\mu = 0$", "$\\text{H}_2\\text{O}$ (bent): dipoles reinforce → net $\\mu \\neq 0$", "$\\text{CCl}_4$ (tetrahedral): 4 C–Cl dipoles cancel → nonpolar"]
+        }
+      ]
+    },
+    {
+      "slug": "sigma_pi_bonds",
+      "label": "$\\sigma$ and $\\pi$ Bonds",
+      "description": "The distinction between sigma (head-on) and pi (side-on) bond overlap, and how bond type and count relate to hybridization and geometry.",
+      "intro": {
+        "slug": "sigma_pi_bonds_intro",
+        "label": "$\\sigma$ and $\\pi$ Bonds Overview",
+        "description": "A sigma ($\\sigma$) bond forms from head-on orbital overlap along the internuclear axis and is the first bond in any covalent pair; all single bonds are $\\sigma$ bonds. A pi ($\\pi$) bond forms from side-on overlap of parallel p orbitals, adds a second or third bond in double/triple bonds, and is weaker than a $\\sigma$ bond. Every double bond = 1 $\\sigma$ + 1 $\\pi$; every triple bond = 1 $\\sigma$ + 2 $\\pi$.",
+        "examples": ["single bond = 1 $\\sigma$", "double bond = 1 $\\sigma$ + 1 $\\pi$", "triple bond = 1 $\\sigma$ + 2 $\\pi$"]
+      },
+      "in_depth": [
+        {
+          "slug": "sigma_bond",
+          "label": "Sigma ($\\sigma$) bond",
+          "description": "Identify a sigma bond as formed by head-on (end-to-end) overlap of two orbitals along the internuclear axis, resulting in cylindrical electron density; every single bond is a $\\sigma$ bond, and $\\sigma$ bonds allow free rotation. This focuses on $\\sigma$ overlap, not $\\pi$ overlap (a separate keyword).",
+          "examples": ["s–s, s–p, p–p (head-on) all form $\\sigma$ bonds", "free rotation around a $\\sigma$ bond", "H–H, C–H bonds are pure $\\sigma$"]
+        },
+        {
+          "slug": "pi_bond",
+          "label": "Pi ($\\pi$) bond",
+          "description": "Identify a pi bond as formed by side-on (lateral) overlap of two parallel p orbitals above and below the internuclear axis; $\\pi$ bonds are the 2nd bond in a double bond and the 2nd and 3rd bonds in a triple bond, restrict rotation, and are weaker than $\\sigma$ bonds. This focuses on $\\pi$ overlap, not $\\sigma$ overlap (a separate keyword).",
+          "examples": ["C=C: 1 $\\sigma$ + 1 $\\pi$ (side-on p–p overlap)", "$\\pi$ bond restricts rotation → geometric isomers in alkenes", "$\\pi$ bond weaker than $\\sigma$ bond (less overlap)"]
+        }
+      ]
+    },
+    {
+      "slug": "hybridization",
+      "label": "Hybrid Orbitals & Geometries",
+      "description": "How atomic orbitals mix to form hybrid orbitals that rationalize the observed bond angles and geometries in organic and inorganic molecules.",
+      "intro": {
+        "slug": "hybridization_intro",
+        "label": "Hybrid Orbitals & Geometries Overview",
+        "description": "Hybridization theory explains molecular geometry by imagining that one s orbital and some number of p orbitals on a central atom mathematically blend into equivalent hybrid orbitals. The hybridization state ($sp^3$, $sp^2$, or $sp$) sets the number and arrangement of electron groups around the central atom, giving the characteristic bond angles. Unhybridized p orbitals remain available for $\\pi$ bond formation.",
+        "examples": ["$sp^3$: 4 hybrid orbitals, 109.5°", "$sp^2$: 3 hybrid orbitals, 120°, 1 unhybridized p for $\\pi$", "$sp$: 2 hybrid orbitals, 180°, 2 unhybridized p"]
+      },
+      "in_depth": [
+        {
+          "slug": "sp3_hybridization",
+          "label": "$sp^3$ hybridization",
+          "description": "Identify $sp^3$ hybridization (one s + three p orbitals → four equivalent $sp^3$ orbitals arranged tetrahedrally at 109.5°) in atoms with four electron groups; $sp^3$ atoms form only $\\sigma$ bonds and have no unhybridized p orbitals for $\\pi$ bonding. This focuses on $sp^3$, not $sp^2$ or $sp$ (separate keywords).",
+          "examples": ["$\\text{CH}_4$: C is $sp^3$, 4 bonds, 109.5°", "$\\text{H}_2\\text{O}$: O is $sp^3$ (2 bonds + 2 lone pairs)", "$\\text{NH}_3$: N is $sp^3$ (3 bonds + 1 lone pair)"]
+        },
+        {
+          "slug": "sp2_hybridization",
+          "label": "$sp^2$ hybridization",
+          "description": "Identify $sp^2$ hybridization (one s + two p orbitals → three equivalent $sp^2$ orbitals in a plane at 120°) in atoms with three electron groups; the remaining unhybridized p orbital is perpendicular to the plane and forms the $\\pi$ bond in double-bonded systems. This focuses on $sp^2$, not $sp^3$ or $sp$ (separate keywords).",
+          "examples": ["$\\text{C}_2\\text{H}_4$: each C is $sp^2$, C=C double bond", "$\\text{BF}_3$: B is $sp^2$, 120°, trigonal planar", "unhybridized p orbital perpendicular → $\\pi$ bond side-on overlap"]
+        },
+        {
+          "slug": "sp_hybridization",
+          "label": "$sp$ hybridization",
+          "description": "Identify $sp$ hybridization (one s + one p orbital → two $sp$ orbitals at 180°) in atoms with two electron groups, leaving two unhybridized p orbitals for forming two $\\pi$ bonds in triple-bonded systems; $sp$ hybridization gives linear geometry. This focuses on $sp$, not $sp^2$ or $sp^3$ (separate keywords).",
+          "examples": ["$\\text{C}_2\\text{H}_2$ (acetylene): each C is $sp$, 180°", "$\\text{CO}_2$: C is $sp$, O's are $sp^2$; linear", "two unhybridized p → 2 $\\pi$ bonds in C≡C"]
+        }
+      ]
+    },
+    {
+      "slug": "vsepr_molecular_geometry",
+      "label": "VSEPR & Molecular Shapes",
+      "description": "Using electron-group repulsion to predict the geometry of molecules with H, C, N, O, F, S, P, Si, and Cl as central atoms.",
+      "intro": {
+        "slug": "vsepr_molecular_geometry_intro",
+        "label": "VSEPR & Molecular Shapes Overview",
+        "description": "Valence Shell Electron Pair Repulsion (VSEPR) theory states that electron groups (bonds + lone pairs) around a central atom arrange to minimize repulsion, determining the electron-group geometry; lone pairs count in the geometry but are not 'seen' in the molecular shape label. The key shapes tested on the MCAT include linear, trigonal planar, tetrahedral, trigonal pyramidal, bent, and others for expanded-octet species.",
+        "examples": ["4 electron groups → tetrahedral electron geometry", "$\\text{NH}_3$: 3 bonds + 1 LP → trigonal pyramidal shape", "$\\text{H}_2\\text{O}$: 2 bonds + 2 LP → bent, ~104.5°"]
+      },
+      "in_depth": [
+        {
+          "slug": "vsepr_two_groups",
+          "label": "VSEPR: 2 electron groups — linear",
+          "description": "Predict a linear molecular geometry (180°) when a central atom has exactly 2 electron groups (bonds or lone pairs), as in $\\text{CO}_2$ (2 double bonds, no lone pairs on C) and $\\text{BeH}_2$. This covers the 2-group case only; other electron-group counts are separate keywords.",
+          "examples": ["$\\text{CO}_2$: 2 double bonds on C → linear, 180°", "$\\text{BeH}_2$: 2 bonds, 0 LP → linear", "$\\text{C}_2\\text{H}_2$: each C has 2 groups → linear"]
+        },
+        {
+          "slug": "vsepr_three_groups",
+          "label": "VSEPR: 3 electron groups — trigonal planar / bent",
+          "description": "Predict trigonal planar geometry (120°) for 3 bonding groups and 0 lone pairs (e.g., $\\text{BF}_3$, $\\text{SO}_3$), and bent geometry (~120°) for 2 bonding groups + 1 lone pair (e.g., $\\text{SO}_2$). This covers the 3-group case; 4-group geometries are a separate keyword.",
+          "examples": ["$\\text{BF}_3$: 3 bonds, 0 LP → trigonal planar, 120°", "$\\text{SO}_2$: 2 bonds + 1 LP on S → bent", "lone pair occupies equatorial position in 3-group arrangement"]
+        },
+        {
+          "slug": "vsepr_four_groups",
+          "label": "VSEPR: 4 electron groups — tetrahedral / trigonal pyramidal / bent",
+          "description": "Predict tetrahedral (109.5°) for 4 bonds + 0 lone pairs (e.g., $\\text{CH}_4$, $\\text{SiH}_4$), trigonal pyramidal (~107°) for 3 bonds + 1 lone pair (e.g., $\\text{NH}_3$, $\\text{PH}_3$), and bent (~104.5°) for 2 bonds + 2 lone pairs (e.g., $\\text{H}_2\\text{O}$, $\\text{H}_2\\text{S}$), because lone pairs compress bond angles more than bonding pairs. This covers the 4-group case; 5- or 6-group geometries are a separate keyword.",
+          "examples": ["$\\text{CH}_4$: 4 bonds, 0 LP → tetrahedral, 109.5°", "$\\text{NH}_3$: 3 bonds, 1 LP → trigonal pyramidal, 107°", "$\\text{H}_2\\text{O}$: 2 bonds, 2 LP → bent, 104.5°"]
+        },
+        {
+          "slug": "vsepr_five_six_groups",
+          "label": "VSEPR: 5 and 6 electron groups — expanded octets",
+          "description": "Predict molecular shapes for period-3+ central atoms with 5 electron groups (trigonal bipyramidal, e.g., $\\text{PCl}_5$) or 6 electron groups (octahedral, e.g., $\\text{SF}_6$), and recognize how lone pairs modify these geometries (e.g., $\\text{SF}_4$ = see-saw, $\\text{ClF}_3$ = T-shaped, $\\text{XeF}_2$ = linear for 5 groups with lone pairs). This covers expanded-octet geometries; 4-group shapes are a separate keyword.",
+          "examples": ["$\\text{PCl}_5$: 5 bonds → trigonal bipyramidal", "$\\text{SF}_6$: 6 bonds → octahedral", "$\\text{SF}_4$: 4 bonds + 1 LP → see-saw"]
+        },
+        {
+          "slug": "structural_formulas_common_elements",
+          "label": "Structural formulas for H, C, N, O, F, S, P, Si, Cl",
+          "description": "Draw condensed or skeletal structural formulas for molecules containing H, C, N, O, F, S, P, Si, and Cl, applying each element's typical valence (H=1, C=4, N=3, O=2, F=1, S=2/4/6, P=3/5, Si=4, Cl=1/3/5/7) and recognizing common bonding patterns. This focuses on structural representation for the AAMC-listed elements, not on mechanisms or reactions (organic categories).",
+          "examples": ["C makes 4 bonds; N makes 3 (+ 1 LP)", "$\\text{H}_3\\text{PO}_4$: P with 4 bonds (expanded octet acceptable)", "Si uses 4 bonds like C; Cl typically 1 bond in simple molecules"]
+        }
+      ]
+    },
+    {
+      "slug": "bond_polarity_molecular_polarity",
+      "label": "Bond Polarity vs. Molecular Polarity",
+      "description": "Connecting individual bond polarities and molecular geometry to determine whether a molecule is polar or nonpolar overall.",
+      "intro": {
+        "slug": "bond_polarity_molecular_polarity_intro",
+        "label": "Bond Polarity vs. Molecular Polarity Overview",
+        "description": "A molecule's overall polarity depends on both the polarity of its individual bonds AND its three-dimensional shape. Symmetric arrangements of identical polar bonds cancel all dipoles (e.g., $\\text{CO}_2$, $\\text{CCl}_4$), while asymmetric placement of lone pairs or different substituents gives a net dipole. This distinction is heavily tested on the MCAT when predicting solubility and intermolecular forces.",
+        "examples": ["$\\text{CCl}_4$: 4 polar C–Cl bonds, tetrahedral → zero net dipole", "$\\text{CHCl}_3$: asymmetric → net dipole", "polar molecule: prerequisite for dipole–dipole IMFs (C3)"]
+      },
+      "in_depth": [
+        {
+          "slug": "symmetry_cancellation",
+          "label": "Dipole cancellation in symmetric molecules",
+          "description": "Predict that a molecule is nonpolar when its geometry is symmetric enough for bond dipoles to cancel as vectors, even if individual bonds are polar (e.g., $\\text{CO}_2$ linear, $\\text{CCl}_4$ tetrahedral, $\\text{BF}_3$ trigonal planar, $\\text{SF}_6$ octahedral). This focuses on cancellation due to symmetry, not on asymmetric polar molecules (a separate keyword).",
+          "examples": ["$\\text{CO}_2$: linear, 2 C=O dipoles point opposite → cancel", "$\\text{CCl}_4$: 4 C–Cl dipoles point to tetrahedral corners → cancel", "$\\text{BF}_3$: 3 B–F dipoles in plane → cancel"]
+        },
+        {
+          "slug": "net_dipole_asymmetric",
+          "label": "Net dipole in asymmetric molecules",
+          "description": "Predict that a molecule is polar when its geometry is asymmetric — either from lone pairs on the central atom or from different substituents — so bond dipoles do not cancel and a net dipole moment remains (e.g., $\\text{H}_2\\text{O}$, $\\text{NH}_3$, $\\text{SO}_2$, $\\text{CHCl}_3$). This focuses on asymmetric polar molecules, not cancellation in symmetric ones (a separate keyword).",
+          "examples": ["$\\text{H}_2\\text{O}$: bent + 2 LP → net dipole points toward O", "$\\text{NH}_3$: trigonal pyramidal + 1 LP → net dipole toward N", "$\\text{CHCl}_3$: one H vs three Cl → asymmetric, net dipole"]
+        }
+      ]
+    }
+  ]
+}

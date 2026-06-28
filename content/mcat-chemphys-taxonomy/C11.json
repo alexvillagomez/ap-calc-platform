@@ -1,0 +1,525 @@
+{
+  "section": "chemistry",
+  "category_code": "C11",
+  "category_label": "Organic Chemistry — Structure, Bonding & Stereochemistry",
+  "order_index": 10,
+  "umbrellas": [
+    {
+      "slug": "isomers_overview",
+      "label": "Isomers — Types & Classification",
+      "description": "The different ways two molecules can share a molecular formula but differ in atom connectivity or spatial arrangement.",
+      "intro": {
+        "slug": "isomers_overview_intro",
+        "label": "Isomers Overview",
+        "description": "Isomers are compounds with the same molecular formula but different structures or spatial arrangements. They are classified first by connectivity (structural isomers) and then by spatial relationships (stereoisomers). Recognizing isomer types is foundational for stereochemistry, nomenclature, and predicting physical/biological properties.",
+        "examples": ["same molecular formula, different structures", "structural vs. stereoisomers", "connectivity vs. spatial arrangement"]
+      },
+      "in_depth": [
+        {
+          "slug": "structural_isomers",
+          "label": "Structural (constitutional) isomers",
+          "description": "Identify structural isomers as compounds with the same molecular formula but different atom-to-atom connectivity (different bond sequences). This focuses on connectivity differences, not spatial arrangement (a separate keyword for stereoisomers).",
+          "examples": ["butane vs. isobutane: $\\text{C}_4\\text{H}_{10}$", "different carbon skeleton or functional-group position", "1-propanol vs. 2-propanol"]
+        },
+        {
+          "slug": "stereoisomers_definition",
+          "label": "Stereoisomers — definition and subtypes",
+          "description": "Define stereoisomers as compounds with the same connectivity but different spatial arrangements of atoms; distinguish the two main subtypes — enantiomers (non-superimposable mirror images) and diastereomers (stereoisomers that are not mirror images). This focuses on the top-level classification, not the detailed rules for assigning R/S or E/Z (separate keywords).",
+          "examples": ["same bonds, different 3-D arrangement", "enantiomers: non-superimposable mirror images", "diastereomers: stereoisomers that are NOT mirror images"]
+        },
+        {
+          "slug": "enantiomers",
+          "label": "Enantiomers",
+          "description": "Identify enantiomers as non-superimposable mirror-image stereoisomers that differ in optical rotation direction ($+$ vs. $-$) but share identical physical properties in achiral environments. This focuses on enantiomeric relationships, not the broader class of diastereomers (a separate keyword).",
+          "examples": ["non-superimposable mirror images", "identical melting points, opposite optical rotation", "L-alanine vs. D-alanine"]
+        },
+        {
+          "slug": "diastereomers",
+          "label": "Diastereomers",
+          "description": "Identify diastereomers as stereoisomers that are not mirror images of each other; they differ in configuration at some but not all stereocenters, have different physical properties (melting point, solubility), and different optical rotations. This focuses on diastereomeric relationships, not enantiomers or cis–trans isomers (separate keywords).",
+          "examples": ["differ at some but not all stereocenters", "different physical properties than enantiomers", "$(2R,3S)$-tartrate vs. $(2R,3R)$-tartrate"]
+        },
+        {
+          "slug": "cis_trans_isomers",
+          "label": "Cis–trans (geometric) isomers",
+          "description": "Identify cis–trans isomers (a subtype of diastereomers) arising from restricted rotation across a double bond or ring, where substituents are on the same side (cis) or opposite sides (trans) of the reference plane. This covers the cis/trans naming convention; formal E/Z priority rules are a separate keyword.",
+          "examples": ["cis-2-butene vs. trans-2-butene", "same groups on same side = cis", "restricted rotation due to $\\text{C=C}$ or ring"]
+        },
+        {
+          "slug": "conformational_isomers",
+          "label": "Conformational isomers (conformers)",
+          "description": "Distinguish conformational isomers as representations of the same molecule rotated about single bonds (not separated by a bond-breaking barrier); they interconvert rapidly at room temperature and are NOT structural or stereo isomers. This focuses on rotation about $\\sigma$ bonds, not geometry about double bonds (cis–trans, a separate keyword).",
+          "examples": ["rotation about C–C single bond", "eclipsed vs. staggered ethane", "interconvert without breaking bonds"]
+        }
+      ]
+    },
+    {
+      "slug": "chirality_stereocenters",
+      "label": "Chirality & Stereocenters",
+      "description": "The concepts of molecular chirality, stereocenters, and the conditions that produce chiral molecules.",
+      "intro": {
+        "slug": "chirality_stereocenters_intro",
+        "label": "Chirality & Stereocenters Overview",
+        "description": "A chiral molecule is non-superimposable on its mirror image, typically because it contains one or more stereocenters (sp³ carbons bearing four different substituents). Understanding chirality underpins optical activity, R/S assignment, and the biological significance of molecular handedness.",
+        "examples": ["chiral = non-superimposable on mirror image", "stereocenter = four different groups on $\\text{sp}^3$ carbon", "chirality → optical activity"]
+      },
+      "in_depth": [
+        {
+          "slug": "chirality_definition",
+          "label": "Chirality — definition and conditions",
+          "description": "Define a chiral molecule as one that is non-superimposable on its mirror image, and identify the most common source of chirality: a tetrahedral carbon bearing four different substituents (a stereocenter). This focuses on the structural condition for chirality, not the measurement of optical rotation (a separate keyword).",
+          "examples": ["four different groups on sp³ carbon → chiral", "superimposable on mirror image → achiral", "hands as a physical analogy for chirality"]
+        },
+        {
+          "slug": "meso_compounds",
+          "label": "Meso compounds",
+          "description": "Identify a meso compound as a molecule with stereocenters that is overall achiral due to an internal plane (or point) of symmetry, making it superimposable on its mirror image and optically inactive. This focuses on the meso special case, not general enantiomers or diastereomers (separate keywords).",
+          "examples": ["meso-tartaric acid: two stereocenters, internal mirror plane", "optically inactive despite stereocenters", "superimposable on its own mirror image"]
+        },
+        {
+          "slug": "stereocenters_counting",
+          "label": "Counting stereocenters & maximum stereoisomers",
+          "description": "Determine the number of stereocenters in a molecule and apply the $2^n$ rule (where $n$ is the number of stereocenters) to predict the maximum number of stereoisomers, adjusting downward for meso forms. This focuses on enumeration, not the R/S assignment procedure (a separate keyword).",
+          "examples": ["$n$ stereocenters → at most $2^n$ stereoisomers", "adjust down if meso forms exist", "identify sp³ carbons with four different groups"]
+        }
+      ]
+    },
+    {
+      "slug": "optical_activity",
+      "label": "Optical Activity & Specific Rotation",
+      "description": "How chiral compounds interact with plane-polarized light and how optical activity is quantified.",
+      "intro": {
+        "slug": "optical_activity_intro",
+        "label": "Optical Activity Overview",
+        "description": "Chiral molecules rotate the plane of polarized light; this property is called optical activity. A compound rotating light clockwise is dextrorotatory ($+$) and one rotating light counterclockwise is levorotatory ($-$). Specific rotation $[\\alpha]$ standardizes the measurement for concentration and path length.",
+        "examples": ["plane-polarized light rotated by chiral compounds", "$(+)$ dextrorotatory; $(-)$ levorotatory", "$[\\alpha] = \\alpha / (c \\cdot l)$"]
+      },
+      "in_depth": [
+        {
+          "slug": "optical_activity_definition",
+          "label": "Optical activity — definition and sign",
+          "description": "Define optical activity as the rotation of plane-polarized light by a chiral compound; classify a compound as dextrorotatory ($(+)$, clockwise) or levorotatory ($(-)$, counterclockwise) based on its observed rotation. This focuses on the observable property, not the calculation of specific rotation (a separate keyword).",
+          "examples": ["$(+)$ = clockwise rotation of polarized light", "$(-)$ = counterclockwise rotation", "achiral or racemic compound: $\\alpha = 0$"]
+        },
+        {
+          "slug": "specific_rotation",
+          "label": "Specific rotation $[\\alpha]$",
+          "description": "Calculate or interpret the specific rotation $[\\alpha]_\\lambda^T = \\frac{\\alpha}{c \\cdot l}$, where $\\alpha$ is the observed rotation (degrees), $c$ is concentration (g/mL), and $l$ is path length (dm). This focuses on the standardized measurement, not on predicting rotation from structure (which cannot be done from R/S alone).",
+          "examples": ["$[\\alpha] = \\alpha / (c \\cdot l)$, units: $°\\cdot\\text{mL}\\cdot\\text{g}^{-1}\\cdot\\text{dm}^{-1}$", "concentration doubles → observed rotation doubles", "enantiomers have equal and opposite $[\\alpha]$"]
+        },
+        {
+          "slug": "racemic_mixture",
+          "label": "Racemic mixtures & optical inactivity",
+          "description": "Identify a racemic mixture (racemate) as a 50:50 mixture of enantiomers that is optically inactive because the rotations cancel; contrast with a single enantiomer or a non-racemic mixture. This focuses on the cancellation principle, not the laboratory separation of enantiomers (C13).",
+          "examples": ["50:50 enantiomers → net rotation = 0", "racemate vs. pure enantiomer", "external compensation, not intramolecular (contrast meso)"]
+        }
+      ]
+    },
+    {
+      "slug": "configuration_assignment",
+      "label": "Absolute & Relative Configuration",
+      "description": "Rules for assigning and communicating the three-dimensional arrangement at stereocenters and double bonds.",
+      "intro": {
+        "slug": "configuration_assignment_intro",
+        "label": "Configuration Assignment Overview",
+        "description": "Configuration describes the actual three-dimensional arrangement of groups at a stereocenter or double bond. The R/S (Cahn–Ingold–Prelog) system assigns absolute configuration at sp³ stereocenters; the E/Z system does the same for double-bond geometry. Relative configuration compares two stereocenters without specifying absolute handedness.",
+        "examples": ["CIP priority rules: higher atomic number = higher priority", "R/S for tetrahedral stereocenters", "E/Z for double-bond geometry"]
+      },
+      "in_depth": [
+        {
+          "slug": "cip_priority_rules",
+          "label": "Cahn–Ingold–Prelog (CIP) priority rules",
+          "description": "Assign CIP priorities to substituents by comparing atomic numbers at the point of difference (higher atomic number = higher priority, with isotopes and phantom atoms for double bonds as needed). This focuses on the priority-assignment step, not the subsequent R/S determination (a separate keyword).",
+          "examples": ["O > N > C > H in atomic number", "phantom atom duplicated for double/triple bonds", "tie → move outward to next atom"]
+        },
+        {
+          "slug": "rs_configuration",
+          "label": "R/S configuration at sp³ stereocenters",
+          "description": "Assign R (rectus, clockwise) or S (sinister, counterclockwise) configuration: arrange substituents by CIP priority (1→2→3), orient so the lowest-priority group points away, then read the rotation direction; swap if the lowest-priority group is pointing toward you. This focuses on the assignment procedure, not on CIP priority rules themselves (a separate keyword).",
+          "examples": ["lowest priority pointing away → read clockwise = R", "swap assignment if lowest priority points toward viewer", "(R)-2-bromobutane vs. (S)-2-bromobutane"]
+        },
+        {
+          "slug": "ez_configuration",
+          "label": "E/Z configuration at double bonds",
+          "description": "Assign E (entgegen, opposite) or Z (zusammen, same side) to a double bond by applying CIP priorities independently to each carbon of the double bond: Z if the higher-priority groups are on the same side, E if opposite. This is the rigorous replacement for cis/trans when both carbons bear two different substituents.",
+          "examples": ["Z = same side (higher priorities together)", "E = opposite side", "(E)-2-pentene vs. (Z)-2-pentene using CIP"]
+        },
+        {
+          "slug": "relative_vs_absolute_config",
+          "label": "Relative vs. absolute configuration",
+          "description": "Distinguish relative configuration (which describes whether two stereocenters are on the same or opposite faces, e.g., erythro/threo or $syn$/$anti$) from absolute configuration (R or S, determined by X-ray crystallography or comparison to a known standard). This focuses on the conceptual distinction, not the assignment procedures (separate keywords).",
+          "examples": ["absolute config: actual 3-D handedness (R or S)", "relative config: same or opposite side at two centers", "D/L system is relative; R/S is absolute"]
+        }
+      ]
+    },
+    {
+      "slug": "projections_conformations",
+      "label": "Fischer, Newman & Chair Projections",
+      "description": "Two-dimensional conventions for representing three-dimensional molecular structure, and analysis of preferred conformations.",
+      "intro": {
+        "slug": "projections_conformations_intro",
+        "label": "Projections & Conformational Analysis Overview",
+        "description": "Fischer, Newman, and chair projections are standardized 2-D drawings that encode 3-D spatial relationships. Fischer projections orient a carbon chain vertically with horizontal bonds projecting toward the viewer; Newman projections show rotation about a single bond; chair conformations depict the preferred shape of cyclohexane rings. Reading and interconverting these representations is essential for stereochemistry and conformational analysis.",
+        "examples": ["Fischer: horizontal bonds toward viewer", "Newman: front vs. back carbon along a bond", "chair: axial vs. equatorial positions"]
+      },
+      "in_depth": [
+        {
+          "slug": "fischer_projections",
+          "label": "Fischer projections",
+          "description": "Draw and interpret Fischer projections: the main chain runs vertically with the most oxidized carbon at the top; horizontal bonds project toward the viewer (wedge) and vertical bonds project away (dash). Use Fischer projections to assign R/S or D/L and to identify enantiomers/diastereomers. This focuses on the Fischer convention, not Newman projections (a separate keyword).",
+          "examples": ["horizontal bonds: out of page toward viewer", "top = most oxidized (e.g., aldehyde in sugars)", "swap two groups twice → same stereoisomer"]
+        },
+        {
+          "slug": "newman_projections",
+          "label": "Newman projections",
+          "description": "Draw and interpret Newman projections by sighting along a C–C bond: the front carbon is a point, the back carbon is a circle, and substituents radiate at $120°$. Use Newman projections to identify staggered vs. eclipsed conformations and to estimate torsional strain. This focuses on the Newman convention, not the chair representation for rings (a separate keyword).",
+          "examples": ["front carbon = dot; back carbon = circle", "anti: $180°$ dihedral, lowest energy for linear chains", "gauche: $60°$ dihedral; eclipsed: $0°$ (highest strain)"]
+        },
+        {
+          "slug": "chair_conformation_cyclohexane",
+          "label": "Chair conformations of cyclohexane",
+          "description": "Draw the chair conformation of cyclohexane, identify axial and equatorial positions, and predict the preferred chair based on 1,3-diaxial strain (large equatorial substituents minimize strain). Relate ring-flip to interconversion of axial and equatorial positions. This focuses on cyclohexane chairs, not Newman projections of acyclic chains (a separate keyword).",
+          "examples": ["equatorial positions minimize 1,3-diaxial interactions", "ring-flip converts axial ↔ equatorial", "bulky group (e.g., $t$-Bu) locks equatorial chair"]
+        },
+        {
+          "slug": "conformational_energy_acyclic",
+          "label": "Conformational energy in acyclic chains",
+          "description": "Rank conformers of acyclic chains by energy: anti < gauche < eclipsed (gauche), using torsional strain and steric strain concepts; apply this to predict the preferred conformation of simple molecules like ethane, butane. This focuses on energy ranking, not the drawing conventions themselves (separate keywords).",
+          "examples": ["anti ($180°$) = global minimum for butane", "two gauche conformers are equal in energy", "torsional strain in eclipsed > steric strain in gauche"]
+        }
+      ]
+    },
+    {
+      "slug": "hybridization_organic",
+      "label": "Hybridization & Bonding in Organic Molecules",
+      "description": "How orbital hybridization determines bond angles, geometry, and degrees of unsaturation in organic compounds.",
+      "intro": {
+        "slug": "hybridization_organic_intro",
+        "label": "Hybridization in Organic Molecules Overview",
+        "description": "Carbon hybridizes its atomic orbitals to form bonds: $\\text{sp}^3$ (tetrahedral, $109.5°$), $\\text{sp}^2$ (trigonal planar, $120°$), or $\\text{sp}$ (linear, $180°$). The hybridization determines geometry, bond angles, and whether double or triple bonds are present. Degrees of unsaturation (index of hydrogen deficiency) provide a quick count of double bonds plus rings from a molecular formula.",
+        "examples": ["$\\text{sp}^3$: $109.5°$, single bonds only", "$\\text{sp}^2$: $120°$, one $\\pi$ bond (C=C, C=O)", "$\\text{sp}$: $180°$, two $\\pi$ bonds (triple bond)"]
+      },
+      "in_depth": [
+        {
+          "slug": "sp3_hybridization",
+          "label": "$\\text{sp}^3$ hybridization",
+          "description": "Recognize $\\text{sp}^3$ hybridization: four equivalent hybrid orbitals arranged tetrahedrally ($109.5°$), found at carbons forming four single bonds (alkanes, saturated heteroatoms). This focuses on sp³, not sp² or sp (separate keywords).",
+          "examples": ["methane: tetrahedral, $\\angle \\text{HCH} = 109.5°$", "all four bonds are $\\sigma$ bonds", "no $\\pi$ bonds; carbon has no remaining p orbital"]
+        },
+        {
+          "slug": "sp2_hybridization",
+          "label": "$\\text{sp}^2$ hybridization",
+          "description": "Recognize $\\text{sp}^2$ hybridization: three hybrid orbitals in a plane ($120°$) with one unhybridized p orbital perpendicular to the plane, enabling one $\\pi$ bond; found at alkene carbons, carbonyl carbons, and aromatic carbons. This focuses on sp², not sp or sp³ (separate keywords).",
+          "examples": ["ethene: trigonal planar, $\\angle \\text{HCH} = 120°$", "one remaining p orbital forms the $\\pi$ bond", "restricted rotation due to $\\pi$ bond"]
+        },
+        {
+          "slug": "sp_hybridization",
+          "label": "$\\text{sp}$ hybridization",
+          "description": "Recognize $\\text{sp}$ hybridization: two hybrid orbitals oriented linearly ($180°$) with two unhybridized p orbitals, enabling two $\\pi$ bonds (a triple bond); found at alkynes and nitriles. This focuses on sp, not sp² or sp³ (separate keywords).",
+          "examples": ["acetylene: linear, $\\angle \\text{HCC} = 180°$", "two perpendicular $\\pi$ bonds + one $\\sigma$ bond", "nitrile carbon also sp hybridized"]
+        },
+        {
+          "slug": "degrees_of_unsaturation",
+          "label": "Degrees of unsaturation (index of hydrogen deficiency, IHD)",
+          "description": "Calculate degrees of unsaturation from a molecular formula using $\\text{IHD} = \\frac{2C + 2 + N - H - X}{2}$ (oxygen and sulfur don't change IHD), where each degree represents one double bond or ring; a triple bond counts as two degrees. This focuses on calculating IHD from formula, not drawing the structure.",
+          "examples": ["$\\text{C}_6\\text{H}_6$: $\\text{IHD} = 4$ (3 double bonds + 1 ring = benzene)", "each ring or double bond = 1 degree", "triple bond = 2 degrees; $\\text{IHD} \\geq 4$ suggests aromatic ring"]
+        }
+      ]
+    },
+    {
+      "slug": "functional_groups_nomenclature",
+      "label": "Functional Groups & IUPAC Nomenclature",
+      "description": "Identifying functional-group families and applying IUPAC naming rules across the major organic compound classes.",
+      "intro": {
+        "slug": "functional_groups_nomenclature_intro",
+        "label": "Functional Groups & Nomenclature Overview",
+        "description": "Functional groups determine the reactivity class of an organic molecule; recognition of alcohols, ethers, aldehydes, ketones, carboxylic acids, esters, amides, amines, and related families is prerequisite to all organic chemistry. IUPAC nomenclature provides a systematic name from parent chain, functional-group suffix, and substituent prefixes. On the MCAT, functional-group identification and basic naming are more important than advanced IUPAC formalism.",
+        "examples": ["–OH = alcohol; –COOH = carboxylic acid; –NH₂ = amine", "IUPAC: longest chain + highest-priority suffix", "functional group dictates reactivity class"]
+      },
+      "in_depth": [
+        {
+          "slug": "alcohol_ether_functional_groups",
+          "label": "Alcohols and ethers — identification & nomenclature",
+          "description": "Identify the alcohol ($\\text{–OH}$) and ether ($\\text{R–O–R'}$) functional groups; apply IUPAC naming (alkan-1-ol, -2-ol; diethyl ether / ethoxyethane); classify alcohols as primary ($1°$), secondary ($2°$), or tertiary ($3°$). This focuses on structure/naming, not reactions (C12).",
+          "examples": ["1° alcohol: $\\text{–CH}_2\\text{OH}$; 2°: $\\text{RCHOHR'}$; 3°: $\\text{RC(OH)R'R''}$", "ether: $\\text{R–O–R'}$ oxygen flanked by carbons", "methanol, ethanol; diethyl ether"]
+        },
+        {
+          "slug": "aldehyde_ketone_functional_groups",
+          "label": "Aldehydes and ketones — identification & nomenclature",
+          "description": "Identify the aldehyde ($\\text{–CHO}$, carbonyl at chain end) and ketone ($\\text{–C=O–}$, carbonyl internal) functional groups; apply IUPAC naming (-al, -one) and common names (acetaldehyde, acetone). This focuses on structure/naming, not nucleophilic addition reactions (C12).",
+          "examples": ["aldehyde: $\\text{–CHO}$ at chain terminus", "ketone: $\\text{C=O}$ flanked by two carbons", "ethanal (acetaldehyde); propan-2-one (acetone)"]
+        },
+        {
+          "slug": "carboxylic_acid_functional_groups",
+          "label": "Carboxylic acids and derivatives — identification & nomenclature",
+          "description": "Identify carboxylic acids ($\\text{–COOH}$), esters ($\\text{–COOR}$), amides ($\\text{–CONH}_2/\\text{NHR}/\\text{NR}_2$), anhydrides ($\\text{–CO–O–CO–}$), and acyl halides ($\\text{–COX}$); apply IUPAC naming suffixes (–oic acid, –oate, –amide). This focuses on structure/naming, not acyl-substitution mechanisms (C12).",
+          "examples": ["–COOH: carboxylic acid; –COOR: ester; –CONH₂: amide", "ethanoic acid (acetic acid); ethyl acetate; acetamide", "acyl halide (–COCl) most reactive; amide least reactive"]
+        },
+        {
+          "slug": "amine_functional_groups",
+          "label": "Amines — identification, classification & nomenclature",
+          "description": "Identify amines ($\\text{–NH}_2$, $\\text{–NHR}$, $\\text{–NR}_2$) and classify them as primary, secondary, or tertiary based on the number of carbon substituents on nitrogen; apply IUPAC naming (alkanamine) and recognize common names. This focuses on structure/classification, not amine reactions (C12).",
+          "examples": ["1° amine: $\\text{–NH}_2$; 2°: $\\text{–NHR}$; 3°: $\\text{–NR}_2$", "methylamine; dimethylamine; trimethylamine", "amines are basic due to lone pair on nitrogen"]
+        },
+        {
+          "slug": "phenol_functional_group",
+          "label": "Phenols — identification & nomenclature",
+          "description": "Identify phenols as compounds with a hydroxyl group ($\\text{–OH}$) directly attached to an aromatic ring; recognize that the aromatic ring makes phenols more acidic than aliphatic alcohols (p$K_a \\approx 10$). This focuses on structure/identification, not phenol reactions (C12).",
+          "examples": ["phenol: $\\text{C}_6\\text{H}_5\\text{OH}$", "more acidic than alcohols (resonance stabilizes phenoxide)", "–OH on aromatic ring distinguishes from alcohol –OH on $\\text{sp}^3$ carbon"]
+        },
+        {
+          "slug": "iupac_naming_rules",
+          "label": "IUPAC naming — parent chain, suffixes & locants",
+          "description": "Apply IUPAC nomenclature: (1) find the longest chain containing the principal functional group; (2) number from the end giving the functional group the lowest locant; (3) name substituents as prefixes with their positions; (4) use the correct suffix for the highest-priority functional group (priority: acid > ester > amide > aldehyde > ketone > alcohol > amine). This focuses on the naming algorithm, not on identifying functional groups (separate keywords).",
+          "examples": ["longest chain + lowest locant for principal group", "priority: –COOH > –CHO > C=O > –OH > –NH₂", "2-methylpropan-1-ol: 3-C chain, OH at C-1, methyl at C-2"]
+        }
+      ]
+    },
+    {
+      "slug": "aromaticity",
+      "label": "Aromaticity & Hückel's Rule",
+      "description": "The criteria for aromaticity and its structural consequences for cyclic conjugated systems.",
+      "intro": {
+        "slug": "aromaticity_intro",
+        "label": "Aromaticity Overview",
+        "description": "Aromatic compounds are cyclic, planar, fully conjugated, and contain $4n+2$ $\\pi$ electrons (Hückel's rule, $n = 0, 1, 2, \\ldots$). Aromaticity confers exceptional thermodynamic stability and distinctive reactivity (electrophilic aromatic substitution rather than addition). Antiaromatic compounds ($4n$ $\\pi$ electrons) are destabilized.",
+        "examples": ["Hückel: $4n+2$ $\\pi$ electrons for aromaticity", "benzene: $n=1$, 6 $\\pi$ electrons, aromatic", "cyclobutadiene: $4n$, antiaromatic"]
+      },
+      "in_depth": [
+        {
+          "slug": "huckel_rule",
+          "label": "Hückel's rule ($4n+2$ $\\pi$ electrons)",
+          "description": "Apply Hückel's rule: a cyclic, planar, fully conjugated system is aromatic if it contains $4n+2$ $\\pi$ electrons ($n = 0, 1, 2, \\ldots$); it is antiaromatic if it contains $4n$ $\\pi$ electrons; and non-aromatic if the conjugation is broken. This covers the criterion, not the structural identification of aromatic heterocycles (a separate keyword).",
+          "examples": ["benzene: 6 $\\pi$ e⁻ ($n=1$), aromatic", "naphthalene: 10 $\\pi$ e⁻ ($n=2$), aromatic", "cyclobutadiene: 4 $\\pi$ e⁻ ($n=1$), antiaromatic"]
+        },
+        {
+          "slug": "benzene_structure",
+          "label": "Benzene — structure, resonance & stability",
+          "description": "Describe benzene ($\\text{C}_6\\text{H}_6$) as a regular hexagon with delocalized $\\pi$ electrons over all six carbons (two equivalent resonance structures); quantify its extra stability as resonance energy (delocalization energy, $\\approx 36$ kcal/mol below the hypothetical cyclohexatriene). This focuses on benzene structure, not the broader Hückel criterion (a separate keyword).",
+          "examples": ["two Kekulé resonance structures average to one hybrid", "all C–C bonds equal length ($\\approx 1.40$ Å)", "resonance energy ≈ 36 kcal/mol vs. hypothetical cyclohexatriene"]
+        },
+        {
+          "slug": "aromatic_ions",
+          "label": "Aromatic ions — cyclopentadienyl & cycloheptatrienyl",
+          "description": "Identify charged cyclic species that satisfy Hückel's rule: the cyclopentadienyl anion ($\\text{C}_5\\text{H}_5^-$, 6 $\\pi$ e⁻, aromatic) and the cycloheptatrienyl (tropylium) cation ($\\text{C}_7\\text{H}_7^+$, 6 $\\pi$ e⁻, aromatic). This focuses on ionic aromatic systems, not neutral benzene (a separate keyword).",
+          "examples": ["cyclopentadienyl anion: 6 $\\pi$ e⁻, aromatic", "tropylium cation $\\text{C}_7\\text{H}_7^+$: 6 $\\pi$ e⁻, aromatic", "cyclopentadienyl cation: 4 $\\pi$ e⁻, antiaromatic"]
+        }
+      ]
+    },
+    {
+      "slug": "heterocyclic_aromatic",
+      "label": "Polycyclic & Heterocyclic Aromatic Compounds",
+      "description": "Structure and aromaticity of biologically important fused-ring and heteroatom-containing aromatic systems.",
+      "intro": {
+        "slug": "heterocyclic_aromatic_intro",
+        "label": "Heterocyclic Aromatic Compounds Overview",
+        "description": "Heterocyclic aromatic compounds contain at least one non-carbon atom (N, O, S) in an aromatic ring. Biologically important examples include pyrimidine and purine (nucleobases), imidazole (histidine side chain), and indole (tryptophan side chain). Polycyclic aromatics such as naphthalene and anthracene extend benzene's $\\pi$ system across fused rings.",
+        "examples": ["pyridine: N in 6-membered aromatic ring", "pyrimidine/purine: nucleobase ring systems", "imidazole: 5-membered ring with two nitrogens"]
+      },
+      "in_depth": [
+        {
+          "slug": "pyridine_pyrimidine_structure",
+          "label": "Pyridine and pyrimidine — structure & aromaticity",
+          "description": "Recognize pyridine (6-membered ring, one N, 6 $\\pi$ electrons) and pyrimidine (6-membered ring, two N atoms, 6 $\\pi$ electrons) as aromatic heterocycles; note that nitrogen's lone pair is NOT part of the $\\pi$ system in pyridine (it occupies an $\\text{sp}^2$ orbital in the plane). This focuses on 6-membered N-heterocycles, not 5-membered imidazole (a separate keyword).",
+          "examples": ["pyridine: one N, isoelectronic with benzene minus one CH", "pyrimidine: N at positions 1 and 3", "cytosine, thymine, uracil = pyrimidine bases"]
+        },
+        {
+          "slug": "purine_structure",
+          "label": "Purine — fused ring structure & aromaticity",
+          "description": "Recognize purine as a bicyclic aromatic heterocycle consisting of a fused pyrimidine and imidazole ring ($\\text{C}_5\\text{H}_4\\text{N}_4$); identify adenine and guanine as biologically common purines (nucleobases). This focuses on the purine ring system structure, not its biological roles (Biology).",
+          "examples": ["purine: pyrimidine fused to imidazole", "adenine and guanine are purine nucleobases", "9 atoms in the bicyclic ring system, $10$ $\\pi$ electrons"]
+        },
+        {
+          "slug": "imidazole_structure",
+          "label": "Imidazole — structure & aromaticity",
+          "description": "Recognize imidazole as a 5-membered aromatic ring containing two nitrogens: one pyridine-like N (lone pair in plane, not in $\\pi$ system) and one pyrrole-like N (lone pair contributes 2 $\\pi$ electrons, total 6 $\\pi$ electrons → aromatic). This focuses on the imidazole ring, not the histidine side-chain biology (Biology).",
+          "examples": ["imidazole: two N, 5-membered aromatic ring", "pyrrole-type N: lone pair in $\\pi$ system", "histidine side chain contains imidazole ring"]
+        },
+        {
+          "slug": "pyrrole_indole_structure",
+          "label": "Pyrrole and indole — structure & aromaticity",
+          "description": "Recognize pyrrole (5-membered ring, one N, lone pair in $\\pi$ system for 6 $\\pi$ total) and indole (benzene fused to pyrrole) as aromatic; note that the N lone pair in pyrrole contributes to aromaticity, making pyrrole a poor base (lone pair unavailable for protonation). This focuses on structure, not tryptophan biology (Biology).",
+          "examples": ["pyrrole: N lone pair = 2 $\\pi$ e⁻, completes 6-$\\pi$ count", "indole: benzene + pyrrole fused → tryptophan side chain", "pyrrole much weaker base than pyridine (N lone pair tied up)"]
+        },
+        {
+          "slug": "polycyclic_aromatics",
+          "label": "Polycyclic aromatic hydrocarbons — naphthalene & anthracene",
+          "description": "Recognize naphthalene ($10$ $\\pi$ electrons, two fused benzene rings) and anthracene/phenanthrene ($14$ $\\pi$ electrons, three fused rings) as aromatic per Hückel's rule; identify the biological and pharmacological relevance of the steroid scaffold as a polycyclic system. This focuses on PAH structure, not specific biological contexts (Biology).",
+          "examples": ["naphthalene: $10$ $\\pi$ e⁻, $n=2$ in Hückel", "anthracene: $14$ $\\pi$ e⁻, three linearly fused rings", "steroid scaffold = polycyclic fused ring system"]
+        }
+      ]
+    },
+    {
+      "slug": "amino_acid_structure_organic",
+      "label": "Amino Acid Structure — Organic Chemistry Angle",
+      "description": "The organic structural features of amino acids: stereochemistry at the α-carbon, zwitterion form, and classification by side-chain properties.",
+      "intro": {
+        "slug": "amino_acid_structure_organic_intro",
+        "label": "Amino Acid Organic Structure Overview",
+        "description": "From an organic chemistry perspective, amino acids are $\\alpha$-amino acids bearing an amine ($\\text{–NH}_2$ at $\\alpha$-C), a carboxylic acid ($\\text{–COOH}$), a hydrogen, and a variable R group on the same chiral carbon. At physiological pH they exist as zwitterions. Their classification (acidic/basic, polar/nonpolar, hydrophilic/hydrophobic) follows from R-group structure. This is the organic angle only; protein 2°/3°/4° structure and enzyme biology are covered in Biology.",
+        "examples": ["$\\alpha$-carbon: four different groups → chiral (L or S config)", "zwitterion: $\\text{–NH}_3^+$ and $\\text{–COO}^-$ at neutral pH", "classify by R group: acidic, basic, polar, nonpolar"]
+      },
+      "in_depth": [
+        {
+          "slug": "alpha_carbon_configuration",
+          "label": "Absolute configuration at the $\\alpha$-carbon (L/D and S/R)",
+          "description": "Assign configuration at the $\\alpha$-carbon of amino acids using both the D/L (Fischer projection, glyceraldehyde reference) and R/S (CIP) conventions; recognize that all naturally occurring amino acids are L-amino acids (which correspond to S configuration at $\\alpha$-C for all except cysteine). This focuses on stereochemistry at $\\alpha$-C, not R-group classification (a separate keyword).",
+          "examples": ["L-amino acid: $\\text{–NH}_2$ on left in Fischer projection", "all 20 standard amino acids are L (S config at $\\alpha$-C)", "L ≠ always S: cysteine is L but R (CIP priority of –CH₂SH)"]
+        },
+        {
+          "slug": "zwitterion_form",
+          "label": "Zwitterion (dipolar ion) form of amino acids",
+          "description": "Recognize that amino acids exist predominantly as zwitterions at physiological pH, with the amine protonated ($\\text{–NH}_3^+$) and the carboxylate deprotonated ($\\text{–COO}^-$), giving an overall neutral charge at the isoelectric point. This focuses on the zwitterion concept, not the quantitative isoelectric point calculation (a separate keyword).",
+          "examples": ["at pH 7: $\\text{–NH}_3^+$ and $\\text{–COO}^-$ both present", "net charge = 0 at isoelectric point $\\text{p}I$", "dipolar ion: not neutral in the traditional sense"]
+        },
+        {
+          "slug": "isoelectric_point_amino_acid",
+          "label": "Isoelectric point ($\\text{p}I$) of amino acids",
+          "description": "Calculate or estimate the isoelectric point as the pH at which an amino acid bears no net charge: $\\text{p}I = \\frac{\\text{p}K_{a1} + \\text{p}K_{a2}}{2}$ for simple amino acids (average the two $\\text{p}K_a$ values flanking the zwitterion). Adjust for acidic (lower $\\text{p}I$) and basic (higher $\\text{p}I$) R groups. This focuses on the acid–base structural concept, not the biology of protein isoelectric points (Biology).",
+          "examples": ["simple AA: $\\text{p}I = (\\text{p}K_1 + \\text{p}K_2)/2$", "aspartate (acidic R): $\\text{p}I < 7$", "lysine (basic R): $\\text{p}I > 7$"]
+        },
+        {
+          "slug": "amino_acid_classification",
+          "label": "Amino acid side-chain classification",
+          "description": "Classify the 20 standard amino acids by R-group properties: nonpolar/hydrophobic (aliphatic, aromatic), polar/hydrophilic (neutral), acidic (negatively charged at pH 7: Asp, Glu), and basic (positively charged at pH 7: Lys, Arg; pH-dependent: His). Recognize the structural features (alkyl, –OH, –SH, –COOH, –NH₂, aromatic, indole, imidazole) that place an amino acid in each class. This focuses on classification by structure, not protein folding biology (Biology).",
+          "examples": ["nonpolar: glycine (–H), alanine (–CH₃), phenylalanine (–CH₂Ph)", "acidic: Asp/Glu (–COOH side chain); basic: Lys/Arg/His", "polar uncharged: Ser (–OH), Cys (–SH), Asn (–CONH₂)"]
+        }
+      ]
+    },
+    {
+      "slug": "carbohydrate_structure_organic",
+      "label": "Carbohydrate Structure — Organic Chemistry Angle",
+      "description": "The organic structural features of carbohydrates: naming conventions, D/L configuration, ring formation, and stereochemical relationships among monosaccharides.",
+      "intro": {
+        "slug": "carbohydrate_structure_organic_intro",
+        "label": "Carbohydrate Organic Structure Overview",
+        "description": "Carbohydrates are polyhydroxy aldehydes or ketones (and their cyclic hemiacetal/hemiketal forms). Key organic concepts include D/L configuration (based on the Fischer projection reference carbon), the cyclization reaction (open-chain ↔ ring) forming anomers, and stereochemical relationships such as epimers. This is the organic structure angle only; carbohydrate metabolism and biological function are in Biology.",
+        "examples": ["monosaccharide: polyhydroxy aldehyde or ketone", "D/L: configuration of highest-numbered chiral center in Fischer", "ring form: hemiacetal/hemiketal; $\\alpha$ vs. $\\beta$ anomer"]
+      },
+      "in_depth": [
+        {
+          "slug": "monosaccharide_nomenclature",
+          "label": "Monosaccharide nomenclature & classification",
+          "description": "Name monosaccharides by the number of carbons (triose, tetrose, pentose, hexose) and the carbonyl type (aldose = aldehyde at C-1; ketose = ketone, typically at C-2); recognize common names (glucose, fructose, galactose, ribose, deoxyribose). This focuses on naming/classification, not ring structure (a separate keyword).",
+          "examples": ["glucose: aldohexose; fructose: ketohexose", "ribose: aldopentose; deoxyribose: 2-deoxy-ribose", "triose–hexose naming from carbon count"]
+        },
+        {
+          "slug": "dl_configuration_sugars",
+          "label": "D/L configuration of sugars",
+          "description": "Assign D or L configuration to a monosaccharide using the Fischer projection: the reference carbon is the highest-numbered chiral carbon; if the $\\text{–OH}$ is on the right, it is D; if on the left, it is L. All common biological monosaccharides are D-sugars. This focuses on the D/L assignment, not R/S or ring forms (separate keywords).",
+          "examples": ["D-glucose: $\\text{–OH}$ at C-5 on the right in Fischer", "L-sugar: $\\text{–OH}$ on the left at reference C", "biological sugars are D; biological amino acids are L"]
+        },
+        {
+          "slug": "cyclic_sugar_structures",
+          "label": "Cyclic structures of hexoses — Haworth & chair forms",
+          "description": "Draw and interpret the cyclic (pyranose/furanose) forms of monosaccharides formed by intramolecular hemiacetal/hemiketal reactions; read Haworth projections (groups below = right in Fischer for D-sugars); recognize chair conformations of pyranoses with axial/equatorial substituents. This focuses on ring structure, not anomers (a separate keyword).",
+          "examples": ["glucose → pyranose (6-membered ring hemiacetal)", "Haworth: down = right in Fischer projection (D-sugar)", "chair: –OH groups equatorial in $\\beta$-D-glucose preferred"]
+        },
+        {
+          "slug": "anomers",
+          "label": "Anomers ($\\alpha$ and $\\beta$)",
+          "description": "Identify anomers as the two stereoisomers generated at the anomeric carbon (C-1 for aldoses, C-2 for ketoses) when a monosaccharide ring closes: $\\alpha$ = anomeric $\\text{–OH}$ axial (trans to the reference $\\text{–CH}_2\\text{OH}$ in pyranoses); $\\beta$ = anomeric $\\text{–OH}$ equatorial. Anomers interconvert in solution (mutarotation). This focuses on anomeric stereochemistry, not D/L or epimer concepts (separate keywords).",
+          "examples": ["$\\alpha$-D-glucose: anomeric –OH axial (down in Haworth)", "$\\beta$-D-glucose: anomeric –OH equatorial (up in Haworth)", "mutarotation: $\\alpha \\rightleftharpoons$ open chain $\\rightleftharpoons \\beta$ in solution"]
+        },
+        {
+          "slug": "epimers_sugars",
+          "label": "Epimers",
+          "description": "Identify epimers as diastereomers that differ in configuration at exactly one carbon other than the anomeric carbon; recognize that glucose and galactose are C-4 epimers, and glucose and mannose are C-2 epimers. This focuses on the epimer relationship, not the anomer relationship (a separate keyword).",
+          "examples": ["glucose vs. galactose: C-4 epimers", "glucose vs. mannose: C-2 epimers", "epimers differ at one non-anomeric stereocenter"]
+        }
+      ]
+    },
+    {
+      "slug": "lipid_structure",
+      "label": "Lipid Structure — Structural Identification",
+      "description": "Structural identification of the major lipid classes by their organic chemical features.",
+      "intro": {
+        "slug": "lipid_structure_intro",
+        "label": "Lipid Structure Overview",
+        "description": "Lipids are a structurally diverse group of hydrophobic or amphipathic biomolecules. The major classes differ in their backbone (glycerol vs. sphingosine vs. steroid fused-ring) and polar head group (ester linkage, phosphate, etc.). MCAT structural identification focuses on distinguishing these classes by their organic functional groups, not their biological metabolism (Biology).",
+        "examples": ["triacylglycerol: glycerol + 3 fatty-acid esters", "phospholipid: glycerol + 2 fatty acids + phosphate + head group", "steroid: four fused rings (three 6-membered, one 5-membered)"]
+      },
+      "in_depth": [
+        {
+          "slug": "fatty_acids_structure",
+          "label": "Fatty acids — structure & classification",
+          "description": "Identify a fatty acid as a long-chain carboxylic acid; distinguish saturated (no C=C) from unsaturated (one or more C=C) fatty acids, and cis from trans unsaturation; recognize that cis double bonds introduce kinks that lower melting point. This focuses on fatty-acid structure, not saponification reactions (C12) or metabolism (Biology).",
+          "examples": ["saturated: palmitic ($\\text{C}_{16}$), stearic ($\\text{C}_{18}$)", "unsaturated: oleic acid (1 cis C=C, $\\text{C}_{18:1}$)", "cis unsaturation → kink → lower melting point"]
+        },
+        {
+          "slug": "triacylglycerols_structure",
+          "label": "Triacylglycerols (triglycerides) — structure",
+          "description": "Identify a triacylglycerol as a glycerol backbone with three fatty acids attached via ester linkages ($\\text{–OOCR}$); note that all three hydroxyl groups of glycerol are esterified. This focuses on structural identification, not saponification or metabolic hydrolysis (Biology).",
+          "examples": ["glycerol backbone + 3 ester-linked fatty acids", "all three –OH of glycerol → ester bonds", "no free –OH; fully esterified → nonpolar, hydrophobic"]
+        },
+        {
+          "slug": "phospholipids_structure",
+          "label": "Phospholipids — structure & amphipathic character",
+          "description": "Identify a glycerophospholipid as glycerol + 2 fatty acids (ester-linked at sn-1 and sn-2) + phosphate + head group (e.g., choline, ethanolamine, serine) at sn-3; explain amphipathic character (nonpolar fatty-acid tails + polar phosphate head). This focuses on structural identification, not membrane biology (Biology).",
+          "examples": ["sn-1, sn-2: ester-linked fatty acids; sn-3: phosphoester", "phosphatidylcholine = lecithin (most common)", "amphipathic: forms bilayers due to dual character"]
+        },
+        {
+          "slug": "sphingolipids_structure",
+          "label": "Sphingolipids — structure & sphingosine backbone",
+          "description": "Identify sphingolipids as lipids built on a sphingosine backbone (an 18-carbon amino alcohol with a trans double bond) rather than glycerol; recognize that a fatty acid is attached via an amide bond to the amine, forming ceramide as the core structure, with head groups (phosphocholine → sphingomyelin; sugars → cerebrosides/gangliosides). This focuses on the structural scaffold, not neurological biology (Biology).",
+          "examples": ["sphingosine: 18-C amino alcohol, $\\text{–OH}$ and $\\text{–NH}_2$", "ceramide = sphingosine + fatty acid (amide bond)", "sphingomyelin: ceramide + phosphocholine head group"]
+        },
+        {
+          "slug": "waxes_structure",
+          "label": "Waxes — structure",
+          "description": "Identify waxes as long-chain fatty acid esters of long-chain fatty alcohols ($\\text{R–COO–R'}$ where both R and R' are $\\text{C}_{14}$–$\\text{C}_{36}$); recognize their highly hydrophobic, water-repellent, solid-at-room-temperature nature. This focuses on structural identification, not biological role (Biology).",
+          "examples": ["wax = fatty acid ester of fatty alcohol (both long-chain)", "beeswax, carnauba wax: common examples", "very nonpolar, solid at room temperature, water-repellent"]
+        },
+        {
+          "slug": "steroids_structure",
+          "label": "Steroids — fused-ring scaffold",
+          "description": "Identify the steroid scaffold as a tetracyclic fused-ring system (three 6-membered rings + one 5-membered ring = gonane); recognize cholesterol as the prototypical steroid, with a hydroxyl group at C-3, a double bond at $\\Delta^5$, and an 8-carbon side chain. This focuses on the ring structure, not hormone biology (Biology).",
+          "examples": ["4 fused rings: A(6), B(6), C(6), D(5)", "cholesterol: –OH at C-3, $\\Delta^5$ double bond", "steroids share the gonane core; differ in substituents/oxidation"]
+        },
+        {
+          "slug": "fat_soluble_vitamins_structure",
+          "label": "Fat-soluble vitamins — structural classification",
+          "description": "Classify the fat-soluble vitamins (A, D, E, K) by their structural type: vitamin A (retinol) = isoprenoid polyene alcohol; vitamin D = steroid-derived with broken B ring; vitamin E (tocopherol) = chromanol + isoprenoid tail; vitamin K = naphthoquinone. Recognize all as nonpolar, lipid-soluble. This focuses on structural classification, not biological vitamin functions (Biology).",
+          "examples": ["vitamins A, D, E, K: fat-soluble (nonpolar)", "vitamin D: steroid derivative (ring B opened)", "vitamin K: naphthoquinone ring system"]
+        },
+        {
+          "slug": "prostaglandins_structure",
+          "label": "Prostaglandins — structural features",
+          "description": "Identify prostaglandins as 20-carbon, C-20 lipid mediators derived from arachidonic acid, characterized by a five-membered cyclopentane ring with two aliphatic side chains and oxygen-containing functional groups (hydroxyl, ketone, carboxylic acid). This focuses on structural recognition, not biosynthesis or signaling biology (Biology).",
+          "examples": ["20-carbon eicosanoid with cyclopentane ring", "derived from arachidonic acid ($\\text{C}_{20:4}$)", "PGE₂: ketone at C-9, –OH at C-11, on cyclopentane"]
+        }
+      ]
+    },
+    {
+      "slug": "nucleotide_structure_organic",
+      "label": "Nucleotide & Nucleic Acid Structure — Organic Level",
+      "description": "The organic structural components of nucleotides and the sugar-phosphate backbone of nucleic acids.",
+      "intro": {
+        "slug": "nucleotide_structure_organic_intro",
+        "label": "Nucleotide Organic Structure Overview",
+        "description": "Nucleotides consist of three organic components: a nitrogenous base (purine or pyrimidine), a pentose sugar ($\\beta$-D-ribose in RNA; $\\beta$-2-deoxyribose in DNA), and one or more phosphate groups. The polymer backbone of nucleic acids is formed by $3'$–$5'$ phosphodiester bonds between the sugar-phosphate units. This is the organic structure angle; the biology of replication/transcription/translation is in Biology.",
+        "examples": ["nucleotide = base + pentose + phosphate", "DNA: deoxyribose; RNA: ribose", "$3'$–$5'$ phosphodiester backbone"]
+      },
+      "in_depth": [
+        {
+          "slug": "pyrimidine_purine_bases",
+          "label": "Pyrimidine and purine nucleobases",
+          "description": "Identify the five nucleobases by ring type: pyrimidines (cytosine, thymine, uracil — 6-membered ring) and purines (adenine, guanine — bicyclic purine scaffold); associate each base with its nucleic acid (DNA: A, T, G, C; RNA: A, U, G, C). This focuses on base structure/classification, not nucleobase aromaticity in depth (covered in the heterocyclic umbrella).",
+          "examples": ["pyrimidines: cytosine (C), thymine (T), uracil (U)", "purines: adenine (A), guanine (G)", "DNA has thymine; RNA has uracil (difference)"]
+        },
+        {
+          "slug": "pentose_sugar_nucleotides",
+          "label": "Pentose sugars in nucleotides — ribose vs. deoxyribose",
+          "description": "Distinguish $\\beta$-D-ribose (RNA, 2-OH present) from $\\beta$-2-deoxy-D-ribose (DNA, 2-OH replaced by H); recognize both in their furanose (5-membered ring) $\\beta$ form as the sugar component of nucleotides, with the base attached at C-1' (N-glycosidic bond) and phosphate at C-5'. This focuses on sugar structure, not the 3-D double-helix biology (Biology).",
+          "examples": ["ribose: –OH at C-2'; deoxyribose: –H at C-2'", "$\\beta$ configuration at C-1' (anomeric) in natural nucleosides", "N-glycosidic bond: base attached to C-1' of sugar"]
+        },
+        {
+          "slug": "phosphodiester_backbone",
+          "label": "Phosphodiester backbone — $3'$–$5'$ linkage",
+          "description": "Describe the sugar-phosphate backbone of nucleic acids as a repeating unit of pentose–phosphate connected by $3'$–$5'$ phosphodiester bonds (phosphate bridges the $3'$-OH of one nucleotide to the $5'$-carbon of the next), giving the strand a directionality ($5' \\to 3'$). This focuses on the covalent backbone linkage, not base-pairing or higher-order structure (Biology).",
+          "examples": ["phosphodiester: phosphate bridges $3'$-OH to $5'$-C", "strand direction: $5'$-phosphate end to $3'$-OH end", "acidic backbone due to phosphate $\\text{p}K_a < 1$"]
+        }
+      ]
+    }
+  ]
+}

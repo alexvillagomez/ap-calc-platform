@@ -1,0 +1,458 @@
+{
+  "category_code": "8C",
+  "umbrellas": [
+    {
+      "slug": "status",
+      "label": "Status",
+      "description": "The social positions individuals occupy and how those positions are acquired — whether through effort or by birth.",
+      "intro": {
+        "slug": "status_intro",
+        "label": "Status: achieved and ascribed",
+        "description": "Status refers to a recognized social position that carries expectations about how a person behaves and is treated. Sociologists distinguish between positions earned through individual effort and those assigned at birth or by circumstances beyond one's control. Understanding both types clarifies how social hierarchies are maintained and how individuals experience them.",
+        "examples": ["doctor (achieved) vs. first-born son (ascribed)", "social position shapes how others treat you", "achieved vs ascribed distinction"]
+      },
+      "in_depth": [
+        {
+          "slug": "achieved_status",
+          "label": "Achieved status",
+          "description": "Identify achieved status as a social position earned through individual effort, choice, or accomplishment. This focuses on statuses that are won or worked toward, not those assigned at birth or by fixed characteristics (ascribed status, a separate keyword).",
+          "examples": ["college graduate", "elected mayor", "earning the rank of doctor"]
+        },
+        {
+          "slug": "ascribed_status",
+          "label": "Ascribed status",
+          "description": "Identify ascribed status as a social position assigned at birth or involuntarily on the basis of fixed characteristics such as race, sex, or family origin. This focuses on positions that are not chosen or earned, not those that can be attained through effort (achieved status, a separate keyword).",
+          "examples": ["being born into a royal family", "racial category assigned by society", "sex assigned at birth"]
+        },
+        {
+          "slug": "master_status",
+          "label": "Master status",
+          "description": "Identify master status as the single status that overrides all others in shaping how an individual is perceived and how they perceive themselves. This focuses on the dominance of one status over others, not the distinction between achieved and ascribed types (separate keywords).",
+          "examples": ["'ex-convict' eclipsing all other roles", "disability as master status", "celebrity fame overshadowing other identities"]
+        }
+      ]
+    },
+    {
+      "slug": "roles",
+      "label": "Roles",
+      "description": "The behavioral expectations attached to social positions, and the tensions, competing demands, and transitions that arise from holding multiple roles.",
+      "intro": {
+        "slug": "roles_intro",
+        "label": "Social roles, conflict, strain, and exit",
+        "description": "A role is the set of behaviors society expects of someone who occupies a particular status. People hold many roles simultaneously — employee, parent, friend — and those roles can pull in different directions. Role conflict arises when two separate roles clash; role strain arises from competing demands within a single role; role exit describes the process of leaving a central role behind. Each concept captures a distinct source of social tension.",
+        "examples": ["parent vs. employee demands", "nurse caring for both patient and family wishes", "retiring from a long-held career"]
+      },
+      "in_depth": [
+        {
+          "slug": "role_conflict",
+          "label": "Role conflict",
+          "description": "Identify role conflict as tension arising when the expectations of two or more separate roles a person holds are incompatible. This focuses on conflict between distinct roles, not competing demands within one role (role strain, a separate keyword).",
+          "examples": ["a doctor who is also a parent must choose between a night shift and a school event", "soldier ordered to act against personal moral code", "police officer whose friend has broken the law"]
+        },
+        {
+          "slug": "role_strain",
+          "label": "Role strain",
+          "description": "Identify role strain as the tension that arises when a single role carries contradictory or overwhelming demands. This focuses on internal pressure within one role, not clashes between separate roles (role conflict, a separate keyword).",
+          "examples": ["a manager expected to be both friendly and authoritative to the same team", "teacher pressured to give high grades and maintain rigorous standards", "nurse overwhelmed by the demands of patient care alone"]
+        },
+        {
+          "slug": "role_exit",
+          "label": "Role exit",
+          "description": "Identify role exit as the process by which a person disengages from a role that has been central to their identity, including residual identity and the transition challenges that follow. This focuses on the identity-restructuring aspect of leaving a role, not the conflicts that occur while holding roles (separate keywords).",
+          "examples": ["retiring after 30 years as a police officer", "nun leaving religious life", "ex-athlete adjusting to non-athlete identity"]
+        }
+      ]
+    },
+    {
+      "slug": "social_groups",
+      "label": "Social Groups",
+      "description": "The types of groups people belong to — from intimate dyads to large secondary organizations — and how group membership shapes identity and behavior.",
+      "intro": {
+        "slug": "social_groups_intro",
+        "label": "Primary, secondary, in-group, out-group, and group size",
+        "description": "Social groups range from small, emotionally intimate units to large, impersonal associations. Sociologists classify them by the nature of relationships (primary vs. secondary), by membership identity (in-group vs. out-group), and by size (dyads, triads). Each type has distinct effects on how members behave and see themselves. Together these concepts explain where social ties begin, how solidarity forms, and how exclusion operates.",
+        "examples": ["family (primary) vs. coworker team (secondary)", "in-group favoritism", "a dyad's unique vulnerability to dissolution"]
+      },
+      "in_depth": [
+        {
+          "slug": "primary_groups",
+          "label": "Primary groups",
+          "description": "Identify primary groups as small, long-lasting groups characterized by close personal relationships, mutual care, and strong emotional bonds (e.g., family, close friends). This focuses on intimacy and long-term ties, not the impersonal associations of secondary groups (a separate keyword).",
+          "examples": ["nuclear family", "childhood friend group", "tight-knit sports team"]
+        },
+        {
+          "slug": "secondary_groups",
+          "label": "Secondary groups",
+          "description": "Identify secondary groups as larger, more impersonal groups organized around a shared goal or activity rather than deep personal bonds (e.g., coworkers, classmates). This focuses on goal-oriented, less emotionally intimate associations, not the close bonds of primary groups (a separate keyword).",
+          "examples": ["a college lecture class", "corporate department", "professional association"]
+        },
+        {
+          "slug": "in_group_out_group",
+          "label": "In-group vs. out-group",
+          "description": "Distinguish in-groups (groups one belongs to and identifies with) from out-groups (groups one defines oneself against), and predict in-group favoritism and out-group derogation. This focuses on the identity and bias effects of group membership, not on primary vs. secondary group type (separate keywords).",
+          "examples": ["rooting for your own team while dismissing rivals", "'us vs. them' thinking", "in-group favoritism in resource allocation"]
+        },
+        {
+          "slug": "group_size_dyads_triads",
+          "label": "Group size: dyads and triads",
+          "description": "Predict how group size — especially the shift from a dyad (two members) to a triad (three members) — changes group dynamics, including vulnerability to collapse and the emergence of coalition and mediation. This focuses on the structural consequences of adding a third member, not on primary/secondary distinctions (separate keywords).",
+          "examples": ["a dyad dissolves if one member leaves", "a triad allows two to ally against one", "Simmel's analysis of dyad vs. triad"]
+        },
+        {
+          "slug": "reference_groups",
+          "label": "Reference groups",
+          "description": "Identify reference groups as groups individuals use as a standard for self-evaluation and identity, even without formal membership. This focuses on the comparative function of groups rather than actual membership structure (covered by other group-type keywords).",
+          "examples": ["comparing your salary to peers in the same profession", "aspiring to the lifestyle of a social class above your own", "reference group as standard for relative deprivation"]
+        }
+      ]
+    },
+    {
+      "slug": "social_networks",
+      "label": "Social Networks",
+      "description": "The webs of social ties connecting individuals, and how the strength and structure of those ties shape access to information and resources.",
+      "intro": {
+        "slug": "social_networks_intro",
+        "label": "Networks and social capital",
+        "description": "A social network is the map of relationships linking individuals to one another. Network position — who you are connected to and how — determines what information you receive and what resources you can access. Key concepts include the strength of weak ties (bridging distant clusters) and how networks underlie social capital. Networks differ from formal organizations in that they need no official rules or hierarchy.",
+        "examples": ["weak ties as bridges to new job opportunities", "dense vs. sparse social network", "LinkedIn network as social capital"]
+      },
+      "in_depth": [
+        {
+          "slug": "strength_of_weak_ties",
+          "label": "Strength of weak ties",
+          "description": "Apply Granovetter's concept that weak ties (acquaintances, distant contacts) are more valuable than strong ties for accessing novel information and opportunities, because they bridge otherwise disconnected social clusters. This focuses on the informational advantage of weak ties, not the emotional support role of strong-tie primary groups (a separate keyword cluster).",
+          "examples": ["finding a job through a distant acquaintance", "a bridge tie connecting two otherwise separate groups", "weak tie as information channel"]
+        },
+        {
+          "slug": "network_structure_position",
+          "label": "Network structure and social capital",
+          "description": "Recognize how an individual's position in a social network — including centrality and access to bridging vs. bonding ties — determines their social capital (the resources available through relationships). This focuses on network position as a resource mechanism, not the content of relationships in primary/secondary groups (separate keywords).",
+          "examples": ["a broker who connects two otherwise unlinked groups", "dense family network providing bonding capital", "high centrality = information advantage"]
+        }
+      ]
+    },
+    {
+      "slug": "organizations_bureaucracy",
+      "label": "Organizations and Bureaucracy",
+      "description": "How large formal organizations are structured and how sociologists have theorized their tendencies — toward efficiency and toward dysfunction.",
+      "intro": {
+        "slug": "organizations_bureaucracy_intro",
+        "label": "Formal organizations and bureaucracy",
+        "description": "Formal organizations are large secondary groups with explicit rules, defined roles, and goals. The most common type is the bureaucracy, which Weber described as an ideal type — the purest rational form for coordinating large-scale activity. Sociologists have also identified tendencies that subvert this rationality: Michels's iron law of oligarchy (power concentrates at the top) and Ritzer's McDonaldization (efficiency applied so relentlessly that it produces irrationality). Each represents a different lens on how modern organizations behave.",
+        "examples": ["a government agency as bureaucracy", "iron law of oligarchy in a labor union", "McDonald's efficiency model applied to healthcare"]
+      },
+      "in_depth": [
+        {
+          "slug": "ideal_type_bureaucracy",
+          "label": "Ideal-type bureaucracy (Weber)",
+          "description": "List Weber's defining characteristics of an ideal-type bureaucracy: hierarchical authority, written rules and records, division of labor by specialization, impersonality, and technical qualifications for positions. This focuses on the structural features of the ideal form, not on what actually goes wrong in real bureaucracies (covered by iron law of oligarchy and McDonaldization keywords).",
+          "examples": ["formal job descriptions and written procedures", "promotion based on credentials not connections", "a hierarchy of clearly defined offices"]
+        },
+        {
+          "slug": "iron_law_of_oligarchy",
+          "label": "Iron law of oligarchy (Michels)",
+          "description": "Apply Michels's iron law of oligarchy: even organizations founded on democratic principles tend to concentrate power in the hands of a small elite over time. This focuses on power concentration as an organizational tendency, not on the original ideal-type model (Weber, a separate keyword) or the efficiency-vs.-humanity tension (McDonaldization, a separate keyword).",
+          "examples": ["a labor union gradually controlled by its own leaders", "a political party becoming oligarchic despite democratic founding", "elite capture of a grassroots organization"]
+        },
+        {
+          "slug": "mcdonaldization",
+          "label": "McDonaldization (Ritzer)",
+          "description": "Apply Ritzer's McDonaldization concept: the spread of fast-food principles (efficiency, calculability, predictability, control/substitution of technology) to other sectors, producing the 'irrationality of rationality.' This focuses on rationalization as a cultural and organizational trend, not on bureaucratic structure in the abstract (ideal-type keyword) or power concentration (iron law keyword).",
+          "examples": ["standardized hospital protocols mimicking fast-food consistency", "online education replacing human interaction with automated modules", "efficiency → dehumanization paradox"]
+        }
+      ]
+    },
+    {
+      "slug": "self_presentation",
+      "label": "Self-Presentation and Impression Management",
+      "description": "How individuals manage the impressions others form of them — the strategies used, the theatrical metaphor of social life, and the role of front-stage versus back-stage contexts.",
+      "intro": {
+        "slug": "self_presentation_intro",
+        "label": "Goffman's dramaturgical approach and impression management",
+        "description": "Erving Goffman argued that social interaction resembles a theatrical performance: people actively manage the impression they project (impression management) and shift behavior depending on whether they are 'on stage' (front stage) or away from the audience (back stage). This dramaturgical perspective treats everyday life as performance and explains why behavior changes across social contexts. It connects to broader questions of self-presentation, authenticity, and face-saving.",
+        "examples": ["acting professionally at work vs. relaxing at home", "Goffman's dramaturgical analogy", "saving face after an embarrassing mistake"]
+      },
+      "in_depth": [
+        {
+          "slug": "impression_management",
+          "label": "Impression management",
+          "description": "Identify impression management as the conscious or unconscious effort individuals make to control how they are perceived by others, including tactics such as ingratiation, self-promotion, intimidation, and exemplification. This focuses on the active shaping of self-image, not the specific front/back-stage setting in which it occurs (a separate keyword).",
+          "examples": ["dressing professionally for a job interview", "using flattery to gain approval", "impression management on social media profiles"]
+        },
+        {
+          "slug": "front_back_stage_self",
+          "label": "Front-stage vs. back-stage self (Goffman)",
+          "description": "Apply Goffman's front-stage/back-stage distinction: the front stage is the setting where a performance is given for an audience; the back stage is where individuals can relax role-performance and 'be themselves.' This focuses on contextual performance settings, not the general strategies used to manage impressions (impression management, a separate keyword).",
+          "examples": ["a waiter is deferential to customers (front) but complains in the kitchen (back)", "a politician's public speech vs. private conversation", "the office restroom as back-stage space"]
+        }
+      ]
+    },
+    {
+      "slug": "emotion_expression",
+      "label": "Expressing and Detecting Emotion",
+      "description": "How emotions are communicated and perceived, and the cultural and gender-based factors that shape emotional expression across social interactions.",
+      "intro": {
+        "slug": "emotion_expression_intro",
+        "label": "Emotion expression, detection, and social context",
+        "description": "Emotions are not purely private experiences; they are expressed through facial expressions, body language, tone, and words — and they are interpreted by others. While some expressions (Ekman's basic emotions) appear universal, culture and gender shape both how much emotion is displayed and how well it is detected. Emotional labor (managing emotions as part of a job) adds a workplace dimension. Understanding these social influences separates emotion as a biological signal from emotion as a socially regulated display.",
+        "examples": ["display rules differ across cultures", "women rated as better emotion detectors", "flight attendant managing emotional expression as labor"]
+      },
+      "in_depth": [
+        {
+          "slug": "gender_emotion_expression",
+          "label": "Gender and emotion expression/detection",
+          "description": "Recognize how gender norms shape emotional expression (e.g., men socialized to suppress fear/sadness; women permitted more emotional expressiveness) and how gender affects accuracy in detecting others' emotions. This focuses on gender as a social shaper of emotional display and detection, not on cultural variation across societies (a separate keyword).",
+          "examples": ["men less likely to express sadness publicly", "women outperforming men on emotion-recognition tasks on average", "boys told 'don't cry'"]
+        },
+        {
+          "slug": "culture_emotion_expression",
+          "label": "Culture and emotion expression/detection",
+          "description": "Recognize how cultural display rules determine which emotions are appropriate to express, to whom, and in what contexts, producing cross-cultural variation in emotional behavior. This focuses on cultural variation in emotional norms, not gender-based variation (a separate keyword) or emotion theories (category 6C).",
+          "examples": ["Japanese display rules suppressing negative emotions in public", "cultures varying in physical expressiveness", "individualist vs. collectivist norms for emotional display"]
+        },
+        {
+          "slug": "emotional_labor",
+          "label": "Emotional labor",
+          "description": "Define emotional labor as the management of one's feelings to fulfill the emotional requirements of a job, as described by Hochschild, and identify its potential costs (burnout, emotional exhaustion). This focuses on the occupational demand to display particular emotions, not general social display rules (a separate keyword).",
+          "examples": ["flight attendant required to stay cheerful", "nurse suppressing distress while comforting patients", "emotional exhaustion from sustained surface acting"]
+        }
+      ]
+    },
+    {
+      "slug": "verbal_nonverbal_communication",
+      "label": "Verbal and Nonverbal Communication",
+      "description": "The channels through which meaning is conveyed in social interaction — spoken language, body language, proxemics, and animal signaling.",
+      "intro": {
+        "slug": "verbal_nonverbal_communication_intro",
+        "label": "Communication channels in social interaction",
+        "description": "Social interaction depends on both verbal communication (words, tone, syntax) and nonverbal communication (gestures, facial expressions, posture, eye contact, personal space). The two channels often convey different — sometimes contradictory — information, and both are culturally patterned. Animal signals extend the communication concept to non-human species, linking to evolutionary and biological perspectives on social behavior.",
+        "examples": ["eye contact vs. eye avoidance across cultures", "personal space norms (proxemics)", "body language contradicting spoken words"]
+      },
+      "in_depth": [
+        {
+          "slug": "nonverbal_communication_types",
+          "label": "Types of nonverbal communication",
+          "description": "Categorize the main channels of nonverbal communication — facial expressions, gestures, posture, eye contact, touch, and proxemics (use of personal space) — and recognize that they carry meaning independent of words. This focuses on identifying and classifying nonverbal channels, not on verbal communication or animal signaling (separate keywords).",
+          "examples": ["crossed arms signaling defensiveness", "proxemics: intimate vs. social vs. public distance", "sustained eye contact communicating confidence or dominance"]
+        },
+        {
+          "slug": "animal_signals_communication",
+          "label": "Animal signals and communication",
+          "description": "Recognize that non-human animals communicate via signals (chemical, visual, auditory, tactile) that coordinate behavior including mating, alarm, and territorial defense, and connect this to evolutionary theories of social behavior. This focuses on animal signaling at an intro-level evolutionary framing, not on human nonverbal channels (a separate keyword) or detailed sociobiology (separate keywords in the social behavior umbrella).",
+          "examples": ["bee waggle dance communicating food location", "pheromone release as chemical signal", "threat display deterring rival without physical fight"]
+        }
+      ]
+    },
+    {
+      "slug": "attraction",
+      "label": "Attraction",
+      "description": "The psychological factors that draw individuals to one another and predict the formation of friendships and romantic relationships.",
+      "intro": {
+        "slug": "attraction_intro",
+        "label": "Factors that influence interpersonal attraction",
+        "description": "Attraction — the basis of friendship, romantic relationships, and social bonding — is shaped by a consistent set of factors: physical proximity, repeated exposure, perceived similarity, physical attractiveness, and reciprocal liking. Research in social psychology has identified how each of these independently and jointly predicts who we are drawn to. These factors operate across friendship and romantic attraction, though they play out somewhat differently in each.",
+        "examples": ["proximity effect: you like your neighbors more", "mere exposure effect: familiar → more liked", "similarity attraction: shared attitudes bond people"]
+      },
+      "in_depth": [
+        {
+          "slug": "proximity_mere_exposure_attraction",
+          "label": "Proximity and mere exposure effect in attraction",
+          "description": "Apply the proximity effect (physical closeness increases the likelihood of attraction) and the mere exposure effect (repeated exposure to a stimulus increases liking for it) to predict who forms social bonds. This focuses on situational/environmental predictors of attraction, not personality similarity or physical attractiveness (separate keywords).",
+          "examples": ["dormmates becoming friends", "a song becoming more likeable the more times it plays", "Zajonc's mere exposure experiments"]
+        },
+        {
+          "slug": "similarity_attraction",
+          "label": "Similarity and attraction",
+          "description": "Apply the similarity-attraction principle: people are more attracted to others who share their attitudes, values, and backgrounds than to those who are dissimilar. This focuses on perceived similarity as a predictor of liking, not on situational factors like proximity (a separate keyword).",
+          "examples": ["political agreement predicting friendship", "matching hypothesis in romantic partners", "shared hobbies accelerating bond formation"]
+        },
+        {
+          "slug": "physical_attractiveness_halo",
+          "label": "Physical attractiveness and the halo effect",
+          "description": "Recognize the role of physical attractiveness in initial attraction and the halo effect: attractive individuals are assumed to possess other positive qualities (intelligence, warmth, competence). This focuses on appearance-based biases in social judgment, not similarity or proximity (separate keywords).",
+          "examples": ["attractive candidates rated as more competent", "halo effect in hiring decisions", "attractiveness as first-impression driver"]
+        }
+      ]
+    },
+    {
+      "slug": "aggression",
+      "label": "Aggression",
+      "description": "The causes, types, and social determinants of aggressive behavior, including biological, learning-based, and situational explanations.",
+      "intro": {
+        "slug": "aggression_intro",
+        "label": "Aggression: causes and social determinants",
+        "description": "Aggression is behavior intended to harm another person. Social psychologists identify multiple overlapping causes: frustration (the frustration-aggression hypothesis), social learning (Bandura's Bobo doll studies), biological predispositions, and situational cues such as heat or provocation. Understanding the difference between hostile aggression (emotion-driven) and instrumental aggression (goal-driven) organizes the landscape of causes.",
+        "examples": ["road rage as frustration-driven aggression", "Bandura's Bobo doll: children imitate violent models", "heat → increased aggression in field studies"]
+      },
+      "in_depth": [
+        {
+          "slug": "frustration_aggression_hypothesis",
+          "label": "Frustration-aggression hypothesis",
+          "description": "Apply the frustration-aggression hypothesis: frustration (blocking of a goal) produces a drive toward aggression, sometimes displaced onto a substitute target. This focuses on the frustration → aggression causal link, not on social-learning explanations of aggression (a separate keyword).",
+          "examples": ["slamming a door after a bad day", "scapegoating a minority group during economic hardship", "displaced aggression when the true target is unavailable"]
+        },
+        {
+          "slug": "social_learning_aggression",
+          "label": "Social learning and aggression",
+          "description": "Apply Bandura's social learning account: aggression is learned through observation and imitation of aggressive models, as demonstrated in the Bobo doll experiments. This focuses on observational learning as an explanation of aggression, not on the frustration-based drive account (a separate keyword).",
+          "examples": ["Bobo doll: children who watched adult hit doll imitated the behavior", "violent media exposure and aggressive behavior", "children modeling parental aggression"]
+        }
+      ]
+    },
+    {
+      "slug": "attachment",
+      "label": "Attachment",
+      "description": "The emotional bond between infants and caregivers, the four recognized attachment styles, and the long-term implications of early attachment patterns for social behavior.",
+      "intro": {
+        "slug": "attachment_intro",
+        "label": "Attachment theory and attachment styles",
+        "description": "Attachment is the lasting emotional bond that forms between an infant and a primary caregiver. Bowlby's attachment theory argues this bond is biologically based and that early patterns shape later relationships. Ainsworth's Strange Situation procedure revealed four distinct patterns — secure, anxious-ambivalent, avoidant, and disorganized — each linked to different caregiving styles and predicting different social and emotional outcomes. Attachment styles extend into adult romantic relationships.",
+        "examples": ["Ainsworth's Strange Situation experiment", "secure base: explore freely, return to caregiver", "avoidant child ignores returning caregiver"]
+      },
+      "in_depth": [
+        {
+          "slug": "secure_attachment",
+          "label": "Secure attachment style",
+          "description": "Identify secure attachment: the child uses the caregiver as a secure base, is distressed by separation but easily comforted upon reunion, and explores freely. This focuses on the features and caregiver correlates of secure attachment, not the insecure styles (each a separate keyword).",
+          "examples": ["child cries briefly when caregiver leaves, calms quickly when they return", "responsive caregiving associated with secure attachment", "secure base behavior in the Strange Situation"]
+        },
+        {
+          "slug": "anxious_ambivalent_attachment",
+          "label": "Anxious-ambivalent (resistant) attachment style",
+          "description": "Identify anxious-ambivalent attachment: the child is highly distressed during separation, but shows ambivalence on reunion (seeks contact yet resists and protests). This focuses on the features of this insecure style, not secure or avoidant patterns (separate keywords).",
+          "examples": ["child clings to caregiver before separation, then pushes away on return", "inconsistent caregiving linked to anxious-ambivalent style", "heightened separation distress + anger at reunion"]
+        },
+        {
+          "slug": "avoidant_attachment",
+          "label": "Avoidant attachment style",
+          "description": "Identify avoidant attachment: the child shows little distress during separation and actively ignores or avoids the caregiver upon reunion, having learned that emotional needs will not be reliably met. This focuses on the features of avoidant attachment, not anxious-ambivalent or secure patterns (separate keywords).",
+          "examples": ["child does not cry when caregiver leaves and turns away on return", "emotionally distant caregiving linked to avoidant attachment", "suppressed attachment behaviors masking underlying stress"]
+        },
+        {
+          "slug": "disorganized_attachment",
+          "label": "Disorganized attachment style",
+          "description": "Identify disorganized attachment: the child shows no coherent strategy — displaying confused, contradictory, or fearful behaviors at reunion — often associated with frightening or neglectful caregiving. This focuses on the disorganized pattern as a fourth distinct type, not the three organized patterns (separate keywords).",
+          "examples": ["child approaches caregiver then freezes or falls to the floor", "maltreatment or frightening caregiver behavior linked to disorganized attachment", "lack of consistent attachment strategy"]
+        }
+      ]
+    },
+    {
+      "slug": "altruism_prosocial",
+      "label": "Altruism and Prosocial Behavior",
+      "description": "Why individuals help others — psychological and evolutionary explanations — and the situational factors that suppress helping.",
+      "intro": {
+        "slug": "altruism_prosocial_intro",
+        "label": "Altruism, prosocial behavior, and the bystander effect",
+        "description": "Prosocial behavior is any voluntary action intended to benefit others. True altruism — helping with no expected personal benefit — is debated; most helping can be explained by empathy-driven arousal, social norms, or the expectation of reciprocity. A key insight from social psychology is that prosocial behavior is suppressed in crowds via diffusion of responsibility (the bystander effect). Evolutionary accounts add kin selection and reciprocal altruism as biological mechanisms.",
+        "examples": ["bystander effect: larger crowd → less helping", "diffusion of responsibility", "empathy-altruism hypothesis"]
+      },
+      "in_depth": [
+        {
+          "slug": "bystander_effect_diffusion",
+          "label": "Bystander effect and diffusion of responsibility",
+          "description": "Apply the bystander effect: as the number of witnesses increases, the probability that any one witness intervenes decreases, due to diffusion of responsibility (assuming someone else will act) and pluralistic ignorance (looking to others for cues). This focuses on the suppression of helping in groups, not on the evolutionary foundations of altruism (a separate keyword cluster).",
+          "examples": ["Kitty Genovese case as historical motivator", "more bystanders → less helping in Latané & Darley experiments", "diffusion of responsibility in emergency situations"]
+        },
+        {
+          "slug": "empathy_altruism_hypothesis",
+          "label": "Empathy-altruism hypothesis",
+          "description": "Apply Batson's empathy-altruism hypothesis: empathic concern for another person produces genuinely altruistic motivation to help, not just egoistic motivation. This focuses on empathy as the psychological route to helping, not on group-level suppression of helping (bystander effect, a separate keyword) or evolutionary mechanisms (separate keywords).",
+          "examples": ["feeling empathic concern motivates helping even when escape is easy", "empathy → helping even at personal cost", "distinguishing empathic concern from personal distress as helping motives"]
+        },
+        {
+          "slug": "social_support",
+          "label": "Social support",
+          "description": "Identify social support as resources provided by others — emotional, informational, tangible, and appraisal support — and recognize its buffering effect on stress and health outcomes. This focuses on the types and health effects of received support, not on the evolutionary logic of altruism (a separate keyword).",
+          "examples": ["emotional support from friends reducing stress", "informational support: advice during a medical decision", "social support as buffer against negative health effects"]
+        }
+      ]
+    },
+    {
+      "slug": "sociobiology_foraging_mating",
+      "label": "Sociobiology: Foraging and Mating Behavior",
+      "description": "Evolutionary and biological explanations of foraging strategies and mate choice in animals, grounded in natural and sexual selection.",
+      "intro": {
+        "slug": "sociobiology_foraging_mating_intro",
+        "label": "Sociobiology: foraging theory and mate selection",
+        "description": "Sociobiology applies evolutionary logic to social behavior. Optimal foraging theory asks how animals maximize energy gain per unit foraging cost. Sexual selection theory explains mate choice: why animals show preferences for particular traits in partners and how those preferences evolved. Both frameworks emphasize that behavior, like anatomy, is shaped by natural selection. At the MCAT intro level, the key is understanding the directional predictions these models make, not mathematical precision.",
+        "examples": ["optimal foraging: animal patches with highest energy return", "female choosiness vs. male competition in sexual selection", "costly signal as honest indicator of mate quality"]
+      },
+      "in_depth": [
+        {
+          "slug": "optimal_foraging_theory",
+          "label": "Optimal foraging theory",
+          "description": "Apply optimal foraging theory: animals behave so as to maximize energy intake relative to foraging costs (time, energy, risk), predicting when they should leave a depleted patch and where they should search. This focuses on energy-optimization predictions, not mate-choice or social behavior explanations (separate keywords).",
+          "examples": ["predicting when a bee leaves a flower patch", "marginal value theorem: leave when local return < average habitat return", "patch choice based on food density vs. travel cost"]
+        },
+        {
+          "slug": "mate_choice_sexual_selection",
+          "label": "Mate choice and sexual selection",
+          "description": "Apply sexual selection to predict mate-choice patterns: females tend to be choosier because of greater parental investment; males compete among themselves; costly, honest signals (e.g., elaborate ornaments) indicate genetic quality. This focuses on evolutionary explanations of mate preferences, not foraging or game-theoretic cooperation (separate keywords).",
+          "examples": ["peacock tail as honest fitness signal", "female choice based on male resource display", "parental investment theory predicting sex roles in mating"]
+        }
+      ]
+    },
+    {
+      "slug": "sociobiology_game_theory_altruism",
+      "label": "Sociobiology: Game Theory, Kin Selection, and Altruism",
+      "description": "Evolutionary explanations of cooperation, self-sacrifice, and reciprocal helping — how behaviors that seem costly to the individual can be favored by selection.",
+      "intro": {
+        "slug": "sociobiology_game_theory_altruism_intro",
+        "label": "Game theory, inclusive fitness, and reciprocal altruism",
+        "description": "Why do animals cooperate, share, or sacrifice themselves? Three complementary frameworks answer this: game theory shows when cooperation beats defection under repeated interaction; inclusive fitness (kin selection) shows how helping relatives can spread your genes even without direct reproduction; reciprocal altruism shows how helping non-relatives is adaptive when partners meet repeatedly. Together they explain most cooperative social behavior without invoking 'good for the species' reasoning.",
+        "examples": ["Prisoner's Dilemma: mutual cooperation beats mutual defection long-run", "worker bees sacrificing reproduction to support the queen (kin selection)", "vampire bats sharing blood meals with non-relatives (reciprocal altruism)"]
+      },
+      "in_depth": [
+        {
+          "slug": "game_theory_cooperation",
+          "label": "Game theory and cooperation (Prisoner's Dilemma)",
+          "description": "Apply game-theoretic reasoning to predict when cooperation or defection is favored: in a one-shot Prisoner's Dilemma, defection dominates; in repeated interactions, tit-for-tat and other cooperative strategies can be stable. This focuses on strategic interaction logic, not on genetic relatedness as a driver of cooperation (kin selection, a separate keyword).",
+          "examples": ["Prisoner's Dilemma payoff matrix", "tit-for-tat as a stable cooperative strategy", "repeated game enabling reciprocal cooperation"]
+        },
+        {
+          "slug": "inclusive_fitness_kin_selection",
+          "label": "Inclusive fitness and kin selection",
+          "description": "Apply Hamilton's rule: an altruistic act is favored by selection when rB > C (relatedness × benefit to recipient > cost to actor), explaining why animals preferentially help genetic relatives. This focuses on genetic relatedness as the mechanism, not reciprocity between non-relatives (a separate keyword).",
+          "examples": ["ground squirrel alarm calls more likely toward relatives", "worker bee sterility explained by haplodiploidy relatedness", "Hamilton's rule: rB > C"]
+        },
+        {
+          "slug": "reciprocal_altruism",
+          "label": "Reciprocal altruism",
+          "description": "Apply Trivers's reciprocal altruism: helping a non-relative is adaptive when the recipient is likely to return the favor in the future, provided cheating can be detected and punished. This focuses on the reciprocity mechanism between non-kin, not the genetic-relatedness mechanism of kin selection (a separate keyword).",
+          "examples": ["vampire bats regurgitating blood meals to unrelated roostmates", "grooming exchange among non-kin primates", "cheater detection as a prerequisite for stable reciprocal altruism"]
+        }
+      ]
+    },
+    {
+      "slug": "discrimination",
+      "label": "Discrimination",
+      "description": "The unfair treatment of individuals based on group membership — its individual vs. institutional forms, its relationship to prejudice, and how power structures enable it.",
+      "intro": {
+        "slug": "discrimination_intro",
+        "label": "Discrimination: individual, institutional, and the prejudice link",
+        "description": "Discrimination is behavior that disadvantages or excludes people based on their social group membership. It differs from prejudice (an attitude) and stereotyping (a cognitive schema) — discrimination is action. Sociologists distinguish individual discrimination (acts by a single person) from institutional discrimination (policies and structures that systematically disadvantage groups). Power, prestige, and class determine who has the capacity to discriminate and whose discrimination causes the most harm at a societal level.",
+        "examples": ["refusing to hire a qualified woman (individual discrimination)", "mortgage redlining as institutional discrimination", "prejudice does not always produce discrimination (LaPiere study)"]
+      },
+      "in_depth": [
+        {
+          "slug": "individual_vs_institutional_discrimination",
+          "label": "Individual vs. institutional discrimination",
+          "description": "Distinguish individual discrimination (deliberate harmful acts by one person toward another based on group membership) from institutional discrimination (laws, policies, or organizational practices that systematically disadvantage a group, regardless of individual intent). This focuses on the level of analysis — individual vs. structural — not on the psychological roots of discrimination (separate keywords).",
+          "examples": ["a landlord refusing to rent to a family based on race (individual)", "school funding tied to property taxes producing educational inequality (institutional)", "institutional discrimination operating without prejudiced intent"]
+        },
+        {
+          "slug": "prejudice_discrimination_relationship",
+          "label": "Relationship between prejudice and discrimination",
+          "description": "Recognize that prejudice (negative attitude) and discrimination (biased behavior) are conceptually distinct and can occur independently: one can be prejudiced without discriminating (e.g., due to social norms) or can discriminate without explicit prejudice (e.g., institutional rules). This focuses on attitude–behavior dissociation, not on the structural forms of discrimination (a separate keyword).",
+          "examples": ["LaPiere study: innkeepers served Chinese couple but wrote they would not", "a non-prejudiced manager following a discriminatory company policy", "reduced discrimination in public vs. private settings"]
+        },
+        {
+          "slug": "power_prestige_class_discrimination",
+          "label": "Power, prestige, and class in facilitating discrimination",
+          "description": "Apply the sociological principle that discrimination requires power: members of dominant groups (higher power, prestige, and class) have greater capacity to enact discrimination with societal consequences, while members of subordinate groups may hold prejudice but lack institutional power to discriminate in the same way. This focuses on the power dimension of discrimination, not on individual vs. institutional distinctions (a separate keyword).",
+          "examples": ["dominant-group prejudice backed by legal and economic power produces systemic harm", "low-status group prejudice lacks institutional enforcement", "class and prestige as determinants of who controls hiring, housing, and lending"]
+        }
+      ]
+    }
+  ]
+}

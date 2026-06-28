@@ -1,0 +1,162 @@
+{
+  "section": "chemistry",
+  "category_code": "C10",
+  "category_label": "Electrochemistry & Redox",
+  "order_index": 9,
+  "umbrellas": [
+    {
+      "slug": "electrolytic_cells",
+      "label": "Electrolytic Cells & Electrolysis",
+      "description": "Electrochemical cells that consume electrical energy to drive non-spontaneous redox reactions (electrolysis).",
+      "intro": {
+        "slug": "electrolytic_cells_intro",
+        "label": "Electrolytic Cells Overview",
+        "description": "An electrolytic cell uses an external power source to force a non-spontaneous redox reaction: electrical energy drives the decomposition or deposition of substances at two electrodes immersed in an electrolyte. The anode is positive and the site of oxidation; the cathode is negative and the site of reduction. Quantitative control over how much material deposits or gas is liberated comes from Faraday's law, which links current, time, and moles of electrons to moles of product.",
+        "examples": ["external power source forces non-spontaneous reaction", "electrolysis of water: $2H_2O \\rightarrow 2H_2 + O_2$", "electroplating a metal onto a cathode"]
+      },
+      "in_depth": [
+        {
+          "slug": "electrolytic_cell_setup",
+          "label": "Electrolytic cell structure and electrolyte",
+          "description": "Identify the components of an electrolytic cell: an external power source (battery/DC supply), two electrodes (anode = positive terminal, cathode = negative terminal), and an electrolyte (ionic conductor — dissolved salt, molten salt, or acid) that carries current between electrodes. This focuses on the cell architecture and role of the electrolyte, not the quantitative amount deposited (Faraday's law, a separate keyword).",
+          "examples": ["electrolyte = ionic conductor enabling charge flow", "dissolved NaCl solution as electrolyte", "molten NaCl → Na deposited at cathode, Cl₂ at anode"]
+        },
+        {
+          "slug": "electrolytic_anode_cathode",
+          "label": "Anode and cathode: oxidation/reduction in electrolytic cells",
+          "description": "Identify the anode as the electrode where oxidation occurs (connected to the positive terminal of the power supply, so electrons are pulled away) and the cathode as the electrode where reduction occurs (negative terminal, electrons supplied). Apply the mnemonic 'an ox / red cat' and 'OIL RIG' (Oxidation Is Loss, Reduction Is Gain). This focuses on electrode identity in electrolytic cells; galvanic cell polarity conventions differ and are a separate keyword.",
+          "examples": ["an ox: anode = oxidation; red cat: cathode = reduction", "OIL RIG — oxidation is loss of electrons, reduction is gain", "Cl⁻ oxidized to Cl₂ at the anode during electrolysis of NaCl(aq)"]
+        },
+        {
+          "slug": "faradays_law_electrolysis",
+          "label": "Faraday's law of electrolysis",
+          "description": "Apply Faraday's law to calculate the mass of an element deposited (or volume of gas liberated) at an electrode: $m = \\frac{MIt}{nF}$, where $M$ is molar mass, $I$ is current (A), $t$ is time (s), $n$ is the number of electrons transferred per ion, and $F = 96{,}485\\,\\text{C/mol}$ is the Faraday constant ($\\approx 96{,}500$ for MCAT). This focuses on mass/moles of product from current and time, not the cell voltage or thermodynamics (separate keywords).",
+          "examples": ["$m = \\frac{MIt}{nF}$: mass deposited from current × time", "$1\\,\\text{mol e}^-$ = $96{,}485$ C (1 Faraday)", "2 mol e⁻ needed per mol Cu²⁺ → Cu"]
+        },
+        {
+          "slug": "electron_flow_electrolytic",
+          "label": "Electron flow direction in an electrolytic cell",
+          "description": "Trace electron flow in an electrolytic cell: electrons travel from the negative terminal of the power supply to the cathode (where reduction occurs), through the external circuit; the anode is connected to the positive terminal, pulling electrons away and driving oxidation. Cations in solution migrate toward the cathode; anions migrate toward the anode. This focuses on the direction of current and migration in the driven cell, not in the spontaneous galvanic cell (a separate keyword).",
+          "examples": ["electrons: power supply → cathode; anode → power supply", "cations migrate to cathode, anions to anode", "external circuit carries electrons; ions carry charge internally"]
+        }
+      ]
+    },
+    {
+      "slug": "galvanic_cells",
+      "label": "Galvanic (Voltaic) Cells",
+      "description": "Electrochemical cells that convert spontaneous chemical energy into electrical energy via separated oxidation and reduction half-reactions.",
+      "intro": {
+        "slug": "galvanic_cells_intro",
+        "label": "Galvanic Cells Overview",
+        "description": "A galvanic (voltaic) cell couples two spontaneous half-reactions — oxidation at the anode and reduction at the cathode — in separate half-cells connected by a salt bridge (or porous divider). The difference in reduction potentials between the half-cells determines the cell voltage, and the sign of the cell potential tells you whether the reaction is spontaneous. Electrons flow from the anode to the cathode through the external wire, producing useful electrical work.",
+        "examples": ["Zn/Cu Daniell cell: Zn oxidized at anode, Cu²⁺ reduced at cathode", "salt bridge completes circuit while preventing mixing", "cell potential = $E^\\circ_{cathode} - E^\\circ_{anode}$"]
+      },
+      "in_depth": [
+        {
+          "slug": "half_reactions",
+          "label": "Half-reactions in galvanic cells",
+          "description": "Write and balance separate half-reactions for oxidation (anode) and reduction (cathode), then combine them to give the overall cell reaction. Ensure electrons cancel completely; multiply half-reactions by integers if needed (do not multiply $E^\\circ$ values). This focuses on writing/balancing half-reactions, not on calculating the resulting cell potential (a separate keyword).",
+          "examples": ["Zn → Zn²⁺ + 2e⁻ (oxidation); Cu²⁺ + 2e⁻ → Cu (reduction)", "multiply coefficients so electrons cancel — do NOT scale $E^\\circ$", "net: Zn + Cu²⁺ → Zn²⁺ + Cu"]
+        },
+        {
+          "slug": "standard_reduction_potentials",
+          "label": "Standard reduction potentials",
+          "description": "Use a table of standard reduction potentials ($E^\\circ$, measured vs. SHE at 25 °C, 1 atm, 1 M) to rank the tendency of half-reactions to proceed as written reductions: a more positive $E^\\circ$ means a stronger oxidizing agent. Reverse a half-reaction to write it as oxidation and flip the sign of $E^\\circ$. This focuses on reading and using the table of $E^\\circ$ values, not on calculating the full cell potential or the Nernst equation (separate keywords).",
+          "examples": ["$F_2 + 2e^- \\rightarrow 2F^-$: $E^\\circ = +2.87\\,\\text{V}$ (strongest oxidizer)", "more positive $E^\\circ$ = stronger oxidizing agent, weaker reducing agent", "flip sign when reversing a half-reaction (reduction → oxidation)"]
+        },
+        {
+          "slug": "cell_potential",
+          "label": "Cell potential: $E^\\circ_{cell} = E^\\circ_{cathode} - E^\\circ_{anode}$",
+          "description": "Calculate standard cell potential using $E^\\circ_{cell} = E^\\circ_{cathode} - E^\\circ_{anode}$; a positive $E^\\circ_{cell}$ indicates a spontaneous reaction under standard conditions. Identify which half-reaction runs as reduction (cathode, higher $E^\\circ$) and which as oxidation (anode, lower $E^\\circ$). This focuses on the standard calculation; non-standard conditions require the Nernst equation (a separate keyword).",
+          "examples": ["$E^\\circ_{cell} = E^\\circ_{cathode} - E^\\circ_{anode}$", "positive $E^\\circ_{cell}$ → spontaneous (galvanic); negative → requires input (electrolytic)", "Zn/Cu cell: $E^\\circ = 0.34 - (-0.76) = 1.10\\,\\text{V}$"]
+        },
+        {
+          "slug": "electron_flow_galvanic",
+          "label": "Direction of electron flow in galvanic cells",
+          "description": "Predict electron flow direction in a galvanic cell: electrons travel from the anode (oxidation, more negative $E^\\circ$) through the external circuit to the cathode (reduction, more positive $E^\\circ$); ions flow through the salt bridge to maintain charge balance. In a galvanic cell the anode is the negative terminal (unlike the electrolytic cell, where it is positive). This focuses on electron/ion flow direction, complementing cell-potential and electrode-identity keywords.",
+          "examples": ["electrons flow: anode → external wire → cathode", "salt bridge anions flow toward anode; cations toward cathode", "galvanic anode = negative terminal (opposite of electrolytic)"]
+        },
+        {
+          "slug": "galvanic_vs_electrolytic",
+          "label": "Galvanic vs. electrolytic cell comparison",
+          "description": "Distinguish galvanic (spontaneous, $\\Delta G < 0$, converts chemical → electrical energy, $E_{cell} > 0$) from electrolytic (non-spontaneous, $\\Delta G > 0$, converts electrical → chemical energy, requires external power, $E_{cell} < 0$ for the spontaneous direction). Both cells have an anode (oxidation) and cathode (reduction), but the anode is negative in a galvanic cell and positive in an electrolytic cell. This keyword focuses on the conceptual contrast between the two types.",
+          "examples": ["galvanic: spontaneous, produces electricity; electrolytic: driven, consumes electricity", "galvanic $\\Delta G < 0$ / $E_{cell} > 0$; electrolytic $\\Delta G > 0$", "same OIL RIG rule applies in both — anode polarity flips"]
+        },
+        {
+          "slug": "balancing_redox_half_reactions",
+          "label": "Balancing redox half-reactions (acidic/basic solution)",
+          "description": "Balance a redox half-reaction in acidic solution by: (1) balance atoms other than H and O; (2) balance O by adding $H_2O$; (3) balance H by adding $H^+$; (4) balance charge by adding electrons. For basic solution, add $OH^-$ to neutralize $H^+$ after balancing in acid. This focuses on the half-reaction balancing technique within the context of electrochemical cells; plain oxidation-number assignment is in C4.",
+          "examples": ["acidic: add H₂O for O, H⁺ for H, then e⁻ for charge", "$MnO_4^- + 8H^+ + 5e^- \\rightarrow Mn^{2+} + 4H_2O$", "basic: neutralize H⁺ with OH⁻ after acid-balance step"]
+        },
+        {
+          "slug": "oil_rig_mnemonic",
+          "label": "OIL RIG and 'an ox / red cat' mnemonics",
+          "description": "Apply the mnemonics OIL RIG ('Oxidation Is Loss, Reduction Is Gain' of electrons) and 'an ox / red cat' ('the anode is where oxidation occurs; the cathode is where reduction occurs') to quickly classify electrodes and half-reactions in any electrochemical cell. This keyword focuses on mnemonic recognition and application; the detailed electrode roles are built in separate keywords.",
+          "examples": ["OIL RIG: oxidation = loss of e⁻; reduction = gain of e⁻", "an ox: anode = oxidation; red cat: cathode = reduction", "applies to both galvanic and electrolytic cells"]
+        }
+      ]
+    },
+    {
+      "slug": "cell_potential_thermodynamics",
+      "label": "Cell Potential, Free Energy & the Nernst Equation",
+      "description": "Quantitative relationships linking cell potential to thermodynamics ($\\Delta G^\\circ$) and to concentration via the Nernst equation.",
+      "intro": {
+        "slug": "cell_potential_thermodynamics_intro",
+        "label": "Cell Potential & Thermodynamics Overview",
+        "description": "Cell potential, Gibbs free energy, and the equilibrium constant are three faces of the same spontaneity criterion. At standard conditions, $\\Delta G^\\circ = -nFE^\\circ$ bridges electrochemistry to thermodynamics, while $\\Delta G^\\circ = -RT\\ln K$ links it to equilibrium. When concentrations deviate from standard (1 M), the Nernst equation corrects the cell potential: $E = E^\\circ - \\frac{RT}{nF}\\ln Q$. A concentration cell exploits this concentration dependence to generate a voltage even when both electrodes are the same metal.",
+        "examples": ["$\\Delta G^\\circ = -nFE^\\circ$ — links cell potential to free energy", "Nernst equation corrects $E^\\circ$ for non-standard concentrations", "concentration cell: same metal, different $[M^{n+}]$ → nonzero $E$"]
+      },
+      "in_depth": [
+        {
+          "slug": "delta_g_cell_potential",
+          "label": "$\\Delta G^\\circ = -nFE^\\circ$: linking free energy to cell potential",
+          "description": "Use $\\Delta G^\\circ = -nFE^\\circ$ to convert between standard Gibbs free energy and standard cell potential, where $n$ is moles of electrons transferred and $F \\approx 96{,}485\\,\\text{C/mol}$. A positive $E^\\circ$ gives negative $\\Delta G^\\circ$ (spontaneous). This focuses on the $\\Delta G / E$ bridge; the Nernst equation handles non-standard conditions (a separate keyword).",
+          "examples": ["$\\Delta G^\\circ = -nFE^\\circ$: positive $E^\\circ$ → negative $\\Delta G^\\circ$ → spontaneous", "units: $n$ in mol, $F$ in C/mol, $E^\\circ$ in V → $\\Delta G^\\circ$ in joules", "doubling cell reaction doubles $n$ and $\\Delta G^\\circ$ but leaves $E^\\circ$ unchanged"]
+        },
+        {
+          "slug": "nernst_equation",
+          "label": "Nernst equation: $E = E^\\circ - \\frac{RT}{nF}\\ln Q$",
+          "description": "Apply the Nernst equation $E = E^\\circ - \\frac{RT}{nF}\\ln Q$ to find the cell potential under non-standard conditions, where $Q$ is the reaction quotient, $R = 8.314\\,\\text{J/mol·K}$, $T$ is absolute temperature (K), $n$ is moles of electrons, and $F \\approx 96{,}485\\,\\text{C/mol}$. At 25 °C, the simplified form is $E = E^\\circ - \\frac{0.0592}{n}\\log Q$. This focuses on adjusting $E$ for concentration; $\\Delta G / E$ under standard conditions is a separate keyword.",
+          "examples": ["$E = E^\\circ - \\frac{0.0592}{n}\\log Q$ at 25 °C", "increasing $Q$ (product-heavy) lowers $E$; equilibrium when $E = 0$", "$Q < K$ → $E > 0$; $Q > K$ → $E < 0$"]
+        },
+        {
+          "slug": "concentration_cell",
+          "label": "Concentration cell",
+          "description": "Recognize a concentration cell as a galvanic cell where both half-cells use the same electrode metal and the same ion but at different concentrations; the driving force is purely the concentration difference, giving $E = \\frac{0.0592}{n}\\log\\frac{[\\text{high}]}{[\\text{low}]}$ at 25 °C ($E^\\circ = 0$ since the half-reactions are identical). Electrons flow from the dilute (lower $E^\\circ$) side to the concentrated (higher reduction tendency) side. This focuses on the concentration-cell concept, an application of the Nernst equation.",
+          "examples": ["two Cu/Cu²⁺ half-cells, different [Cu²⁺] → nonzero $E$", "$E^\\circ_{cell} = 0$; voltage comes entirely from concentration difference via Nernst", "dilute side oxidized (anode); concentrated side reduced (cathode)"]
+        }
+      ]
+    },
+    {
+      "slug": "batteries",
+      "label": "Batteries & Practical Electrochemical Cells",
+      "description": "Common battery types (lead-acid, nickel-cadmium) and key battery concepts (EMF, voltage, discharge/recharge).",
+      "intro": {
+        "slug": "batteries_intro",
+        "label": "Batteries Overview",
+        "description": "A battery is one or more galvanic cells that deliver a steady EMF (electromotive force) to an external circuit. The lead-acid battery and nickel-cadmium battery are the two AAMC-listed examples; each exploits a specific spontaneous redox couple to supply a characteristic cell voltage. Rechargeable batteries reverse the spontaneous reaction by applying an external voltage, converting them temporarily into electrolytic cells.",
+        "examples": ["lead-acid: 2V per cell; 12V car battery = 6 cells in series", "Ni-Cd: ~1.2V per cell; rechargeable via external voltage", "EMF = maximum voltage at zero current (no internal resistance loss)"]
+      },
+      "in_depth": [
+        {
+          "slug": "emf_voltage_batteries",
+          "label": "Electromotive force (EMF) and terminal voltage",
+          "description": "Distinguish electromotive force (EMF, the ideal open-circuit voltage of a cell, equal to $E^\\circ_{cell}$ under standard conditions) from terminal voltage (EMF minus the voltage drop across internal resistance: $V_{terminal} = \\text{EMF} - Ir$). A larger internal resistance or higher current reduces the usable output voltage. This focuses on the EMF / terminal-voltage concept; circuit physics (Ohm's law) is in P10.",
+          "examples": ["EMF = theoretical max voltage (open circuit)", "$V_{terminal} = \\varepsilon - Ir$ — drops under load", "battery 'dies' when internal resistance rises or reactants depleted"]
+        },
+        {
+          "slug": "lead_storage_battery",
+          "label": "Lead-storage (lead-acid) battery",
+          "description": "Describe the lead-acid battery: Pb anode (oxidized to $PbSO_4$), $PbO_2$ cathode (reduced to $PbSO_4$), concentrated $H_2SO_4$ electrolyte; each cell gives $\\approx 2\\,\\text{V}$; six cells in series → 12 V car battery. Both electrodes produce $PbSO_4$ on discharge; recharging reverses the reactions. This focuses on the specific chemistry and voltage of the lead-acid cell, not Ni-Cd (a separate keyword).",
+          "examples": ["anode: $Pb + SO_4^{2-} \\rightarrow PbSO_4 + 2e^-$", "cathode: $PbO_2 + 4H^+ + SO_4^{2-} + 2e^- \\rightarrow PbSO_4 + 2H_2O$", "6 cells × 2 V = 12 V; $H_2SO_4$ electrolyte consumed on discharge"]
+        },
+        {
+          "slug": "nickel_cadmium_battery",
+          "label": "Nickel-cadmium (Ni-Cd) battery",
+          "description": "Describe the nickel-cadmium battery: Cd anode (oxidized to $Cd(OH)_2$), $NiO(OH)$ cathode (reduced to $Ni(OH)_2$), KOH electrolyte; each cell gives $\\approx 1.2\\,\\text{V}$; fully rechargeable. Contrast with the lead-acid battery in terms of electrolyte (alkaline vs. acidic), voltage per cell, and electrode materials. This focuses on the Ni-Cd chemistry and distinguishes it from the lead-acid cell.",
+          "examples": ["Cd anode → $Cd(OH)_2$; $NiO(OH)$ cathode → $Ni(OH)_2$", "alkaline (KOH) electrolyte; ~1.2 V per cell", "rechargeable: external current reverses reaction"]
+        }
+      ]
+    }
+  ]
+}

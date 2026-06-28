@@ -1,0 +1,258 @@
+{
+  "category_code": "6A",
+  "umbrellas": [
+    {
+      "slug": "psychophysics_basics",
+      "label": "Sensation and Psychophysics",
+      "description": "The quantitative study of how the mind detects and responds to physical stimuli — thresholds, sensitivity, and scaling laws.",
+      "intro": {
+        "slug": "psychophysics_basics_intro",
+        "label": "Sensation, Perception, and Psychophysics",
+        "description": "Sensation is the pickup of raw stimulus energy by sensory receptors; perception is the brain's interpretation of that input. Psychophysics asks: how intense must a stimulus be to be detected, and how reliably can small differences be noticed? The keywords in this umbrella cover absolute and difference thresholds, Weber's law, signal detection theory, and sensory adaptation — the core psychophysical tools used to quantify sensory experience.",
+        "examples": ["sensation vs perception defined", "thresholds and sensitivity", "psychophysics as a science"]
+      },
+      "in_depth": [
+        {
+          "slug": "absolute_threshold",
+          "label": "Absolute threshold",
+          "description": "Define the absolute threshold as the minimum stimulus intensity detected 50% of the time under ideal conditions. This focuses on the minimum-detectable level of a stimulus, not the smallest detectable change between two stimuli (difference threshold, a separate keyword).",
+          "examples": ["faintest sound heard 50% of trials", "minimum light detectable in a dark room", "absolute threshold vs difference threshold"]
+        },
+        {
+          "slug": "difference_threshold_jnd",
+          "label": "Difference threshold and JND",
+          "description": "Identify the difference threshold (just-noticeable difference, JND) as the smallest change in stimulus intensity that can be detected 50% of the time. This focuses on detecting a change between two stimuli, not on the minimum-detectable starting intensity (absolute threshold, a separate keyword).",
+          "examples": ["noticing a weight is slightly heavier", "JND for brightness", "difference threshold in sound loudness"]
+        },
+        {
+          "slug": "webers_law",
+          "label": "Weber's law",
+          "description": "Apply Weber's law: the JND is a constant proportion (Weber fraction) of the original stimulus magnitude, not a fixed absolute amount. This focuses on the proportional-change rule; it does not address the absolute minimum for detection (absolute threshold, a separate keyword).",
+          "examples": ["lifting 10 lb vs 11 lb: same JND fraction as 100 vs 110 lb", "Weber fraction stays constant", "1% rule for weight discrimination"]
+        },
+        {
+          "slug": "signal_detection_theory",
+          "label": "Signal detection theory",
+          "description": "Apply signal detection theory to explain how detectability depends on both stimulus intensity and the observer's response bias, producing four outcomes: hit, miss, false alarm, and correct rejection. This focuses on the hits/misses/false-alarms framework and the role of motivation/criterion, not on fixed thresholds (a separate keyword cluster).",
+          "examples": ["radiologist setting detection criterion", "hit vs false alarm in a detection task", "sensitivity (d') vs response bias (β)"]
+        },
+        {
+          "slug": "sensory_adaptation",
+          "label": "Sensory adaptation",
+          "description": "Explain sensory adaptation: prolonged exposure to a constant stimulus reduces receptor firing and perceived intensity, allowing the sensory system to recalibrate to baseline. This focuses on decreased sensitivity from sustained stimulation, not on changes in detection threshold across trials (a separate concept).",
+          "examples": ["no longer smelling a candle after a few minutes", "eyes adapting to dim light", "skin ceasing to feel a watch strap"]
+        },
+        {
+          "slug": "subliminal_stimuli",
+          "label": "Subliminal stimuli",
+          "description": "Define subliminal stimuli as inputs presented below the absolute threshold that may influence behavior without reaching conscious awareness. This focuses on below-threshold influences, distinct from supraliminal stimuli (above threshold) and from signal detection's criterion-setting concept.",
+          "examples": ["priming effects of below-threshold words", "subliminal advertising claims", "stimuli detected below 50% threshold"]
+        }
+      ]
+    },
+    {
+      "slug": "visual_processing_psych",
+      "label": "Visual Perception and Processing",
+      "description": "The psychological and neural processing of visual information — how the brain interprets signals from the eye into perceived scenes.",
+      "intro": {
+        "slug": "visual_processing_psych_intro",
+        "label": "Visual Processing as Cognition",
+        "description": "Once light signals leave the retina, the brain performs extensive processing to build a perceived visual world. This umbrella focuses on the cognitive and neural processing side of vision: the visual pathway from eye to cortex, how the brain uses parallel and feature-based processing to recognize objects, and the role of parallel streams for different visual attributes. Anatomy and receptor biology (rods, cones, eye structure) belong to the Biology section.",
+        "examples": ["visual cortex processing streams", "how edges and color are analyzed simultaneously", "pathway from retina to V1"]
+      },
+      "in_depth": [
+        {
+          "slug": "visual_pathways_brain",
+          "label": "Visual pathways in the brain",
+          "description": "Trace the visual pathway: retina → optic nerve → optic chiasm (partial decussation) → lateral geniculate nucleus → primary visual cortex (V1). This focuses on the route and the contralateral representation of the visual field, not on retinal receptor transduction (Biology section).",
+          "examples": ["optic chiasm and left/right visual field split", "lateral geniculate nucleus relay", "primary visual cortex location in occipital lobe"]
+        },
+        {
+          "slug": "parallel_processing_vision",
+          "label": "Parallel processing in vision",
+          "description": "Explain parallel processing: the brain simultaneously analyzes different visual features — color, motion, depth, form — through separate pathways at the same time, rather than sequentially. This focuses on simultaneous multi-attribute analysis, not on the individual features themselves (covered in perceptual organization keywords).",
+          "examples": ["seeing color and motion simultaneously", "dorsal ('where') vs ventral ('what') streams", "parallel analysis allows fast perception"]
+        },
+        {
+          "slug": "feature_detection_vision",
+          "label": "Feature detection",
+          "description": "Describe feature detection: specialized neurons (feature detectors) in the visual cortex respond selectively to specific stimulus features such as edges, angles, and movement direction. This focuses on the neural specificity of feature detectors (Hubel & Wiesel), not on the top-level object-recognition result.",
+          "examples": ["Hubel and Wiesel edge-detector cells", "neurons tuned to specific orientations", "feature detectors for lines and corners"]
+        }
+      ]
+    },
+    {
+      "slug": "auditory_processing_psych",
+      "label": "Auditory Perception and Processing",
+      "description": "The psychological processing of sound — how neural signals from the ear are transformed into perceived pitch, loudness, and location in the brain.",
+      "intro": {
+        "slug": "auditory_processing_psych_intro",
+        "label": "Auditory Processing as Cognition",
+        "description": "After hair cells transduce sound vibrations (Biology), the auditory nervous system routes and interprets that information to produce perceived sound. This umbrella covers the auditory pathway from cochlea to auditory cortex and the cognitive dimensions of auditory perception. Ear anatomy, cochlear mechanics, and hair-cell transduction are Biology territory.",
+        "examples": ["auditory cortex processing sound", "pathway from cochlea to temporal lobe", "perceiving pitch and location from neural signals"]
+      },
+      "in_depth": [
+        {
+          "slug": "auditory_pathways_brain",
+          "label": "Auditory pathways in the brain",
+          "description": "Trace the auditory pathway: cochlea (cranial nerve VIII) → brainstem nuclei → thalamus (medial geniculate nucleus) → primary auditory cortex in the temporal lobe. This focuses on the cognitive-level route and bilateral projection, not on the mechanical transduction in hair cells (Biology section).",
+          "examples": ["cranial nerve VIII carries sound signals", "medial geniculate nucleus relay in thalamus", "auditory cortex in temporal lobe"]
+        }
+      ]
+    },
+    {
+      "slug": "other_senses_psych",
+      "label": "Other Senses — Perceptual Dimension",
+      "description": "The psychology of somatosensation, pain, smell, taste, proprioception, and vestibular sense — framed as perception, not anatomy.",
+      "intro": {
+        "slug": "other_senses_psych_intro",
+        "label": "Beyond Vision and Hearing — Other Perceptual Systems",
+        "description": "The MCAT tests a basic understanding of several other sensory systems, but from the psychological rather than anatomical perspective: how pain perception is gated and modulated, how olfaction reaches limbic areas and triggers memory/emotion, how pheromones operate chemically, and how proprioception and vestibular signals inform body awareness. Receptor biology and organ anatomy for each sense lives in the Biology section.",
+        "examples": ["gate control theory of pain", "olfaction and limbic system connection", "proprioception and sense of body position"]
+      },
+      "in_depth": [
+        {
+          "slug": "somatosensation_pain_perception",
+          "label": "Pain perception and gate control",
+          "description": "Explain pain perception using the gate control theory: non-pain sensory signals (touch, pressure) can 'close the gate' in the spinal cord and reduce perceived pain intensity. This focuses on the psychological modulation of pain, not on nociceptor anatomy or transduction (Biology section).",
+          "examples": ["rubbing a bumped elbow reduces pain", "gate control theory: spinal dorsal horn gate", "pain as modifiable perception, not fixed signal"]
+        },
+        {
+          "slug": "olfactory_pathways_limbic",
+          "label": "Olfactory pathways and limbic connection",
+          "description": "Identify that olfactory signals travel directly to the limbic system (amygdala, hippocampus) without first routing through the thalamus, explaining the strong links between smell, emotion, and memory. This focuses on the distinctive olfactory-limbic route, not on chemoreceptor structure (Biology section).",
+          "examples": ["smell triggering vivid memories", "olfactory bulb → limbic system bypass of thalamus", "emotional potency of scent"]
+        },
+        {
+          "slug": "pheromones",
+          "label": "Pheromones",
+          "description": "Define pheromones as chemical signals released by individuals that influence the behavior or physiology of same-species conspecifics, and recognize their role in social signaling in animals and contested role in humans. This focuses on the communicative/behavioral function, not on olfactory receptor-binding chemistry.",
+          "examples": ["pheromones coordinate mating behavior in animals", "vomeronasal organ detection", "menstrual synchrony hypothesis"]
+        },
+        {
+          "slug": "kinesthetic_sense",
+          "label": "Kinesthetic sense (proprioception)",
+          "description": "Define kinesthesis as the sense of body and limb position and movement, derived from receptors in muscles, tendons, and joints. This focuses on conscious awareness of body position, distinct from the vestibular sense of balance and head orientation (a separate keyword).",
+          "examples": ["knowing your arm position with eyes closed", "muscle spindle feedback during movement", "kinesthesis guides fine motor control"]
+        },
+        {
+          "slug": "vestibular_sense_psych",
+          "label": "Vestibular sense and balance",
+          "description": "Identify the vestibular sense as the system that detects head orientation, linear acceleration, and rotational movement, contributing to balance and spatial orientation. This focuses on the perceptual function of balance/orientation, not on semicircular canal anatomy (Biology section).",
+          "examples": ["feeling dizzy after spinning", "sensing head tilt via vestibular system", "balance and spatial orientation"]
+        }
+      ]
+    },
+    {
+      "slug": "perceptual_processing",
+      "label": "Perceptual Processing Approaches",
+      "description": "How the brain uses incoming data and prior knowledge to construct perception — the interplay of bottom-up and top-down processing.",
+      "intro": {
+        "slug": "perceptual_processing_intro",
+        "label": "Bottom-Up and Top-Down Perception",
+        "description": "Perception is not a passive printout of sensory data — it is an active construction. Bottom-up processing builds percepts from raw sensory features (data-driven); top-down processing shapes perception using expectations, context, and prior knowledge (concept-driven). Understanding this distinction explains phenomena like perceptual set, context effects, and why the same stimulus can be perceived differently in different contexts.",
+        "examples": ["reading in low-resolution text using context", "optical illusions from top-down expectation", "feature-by-feature recognition vs whole-object expectations"]
+      },
+      "in_depth": [
+        {
+          "slug": "bottom_up_processing",
+          "label": "Bottom-up (data-driven) processing",
+          "description": "Describe bottom-up processing: perception built step-by-step from raw sensory features to higher-order recognition, driven entirely by the incoming stimulus with no prior knowledge needed. This focuses on the stimulus-driven, feature-aggregation direction of perception, not on the knowledge-driven direction (top-down, a separate keyword).",
+          "examples": ["recognizing letters by detecting lines and curves", "feature detectors feeding higher perceptual areas", "data-driven processing starts from stimulus input"]
+        },
+        {
+          "slug": "top_down_processing",
+          "label": "Top-down (concept-driven) processing",
+          "description": "Describe top-down processing: prior knowledge, context, expectations, and mental schemas influence and shape perception from the outset, before feature analysis is complete. This focuses on the knowledge-driven, expectation-shaping direction, not on the raw stimulus-driven direction (bottom-up, a separate keyword).",
+          "examples": ["reading a misspelled word without noticing the error", "perceptual set making ambiguous figure look like a face", "context makes the same shape read as 'B' or '13'"]
+        }
+      ]
+    },
+    {
+      "slug": "perceptual_organization",
+      "label": "Perceptual Organization",
+      "description": "How the brain groups, segregates, and interprets sensory input to form coherent perceptions of depth, form, motion, and stable objects.",
+      "intro": {
+        "slug": "perceptual_organization_intro",
+        "label": "Organizing the Perceptual World",
+        "description": "The brain does not passively record a scene — it actively organizes raw sensory input into meaningful objects and spatial relationships. Perceptual organization covers depth perception (both monocular and binocular cues), how motion is perceived, how stable objects are recognized despite changing retinal images (perceptual constancy), and how forms are segregated from backgrounds. The Gestalt principles of grouping (a separate umbrella) are the classic rules governing this organization.",
+        "examples": ["perceiving a 3-D world from a 2-D retinal image", "tracking a moving object", "size constancy when an object moves farther away"]
+      },
+      "in_depth": [
+        {
+          "slug": "binocular_depth_cues",
+          "label": "Binocular depth cues",
+          "description": "Identify binocular depth cues — retinal disparity and convergence — which require two eyes and provide strong signals for nearby distance. Retinal disparity is larger when objects are close; convergence is the inward eye-turn for near objects. This focuses on two-eye cues, not one-eye (monocular) cues (a separate keyword).",
+          "examples": ["retinal disparity increases for close objects", "stereopsis from slightly different left/right images", "convergence: eyes turn inward for near objects"]
+        },
+        {
+          "slug": "monocular_depth_cues",
+          "label": "Monocular depth cues",
+          "description": "Identify monocular depth cues — available to one eye — including linear perspective, interposition (overlap), relative size, texture gradient, aerial perspective, motion parallax, and shading/light. This focuses on one-eye cues, not binocular cues (a separate keyword).",
+          "examples": ["railroad tracks converging in the distance (linear perspective)", "overlapping objects signal closer position (interposition)", "texture becomes finer with distance (texture gradient)"]
+        },
+        {
+          "slug": "motion_perception",
+          "label": "Motion perception",
+          "description": "Explain how the visual system detects motion via changes in stimulus position over time, and describe the phi phenomenon (stroboscopic motion) as the perception of movement from rapidly alternating still images. This focuses on real and apparent motion, not depth or form grouping.",
+          "examples": ["phi phenomenon: blinking lights appear to move", "retinal image shift signals motion", "motion parallax: near objects move faster across visual field"]
+        },
+        {
+          "slug": "perceptual_constancy",
+          "label": "Perceptual constancy",
+          "description": "Explain perceptual constancy: the perception of an object's size, shape, color, and brightness as stable even when the retinal image changes with distance, angle, or lighting. Identify size constancy and shape constancy as the main examples. This focuses on the stability of percept despite changing retinal input, not on depth cues per se.",
+          "examples": ["a door seen as rectangular even when opened at an angle (shape constancy)", "a friend seen as same size at 10 m vs 1 m (size constancy)", "a white page still perceived as white in dim light (brightness constancy)"]
+        },
+        {
+          "slug": "figure_ground_organization",
+          "label": "Figure-ground perception",
+          "description": "Describe figure-ground organization: the tendency to perceive a scene as a distinct foreground figure against a background, and explain how the same image can flip between figure and ground interpretations. This is a foundational perceptual-organization principle; the Gestalt grouping rules (proximity, similarity, etc.) are separate keywords.",
+          "examples": ["Rubin's vase: face or vase?", "figure pops out from background", "figure tends to be smaller, more object-like region"]
+        }
+      ]
+    },
+    {
+      "slug": "gestalt_principles",
+      "label": "Gestalt Principles of Grouping",
+      "description": "The set of rules by which the visual system groups local elements into unified wholes — proximity, similarity, continuity, closure, and common fate.",
+      "intro": {
+        "slug": "gestalt_principles_intro",
+        "label": "Gestalt Grouping Principles",
+        "description": "The Gestalt psychologists proposed that 'the whole is greater than the sum of its parts' — the brain imposes organization on sensory elements according to a set of grouping rules. These principles explain why scattered dots look like a pattern, why a broken circle still looks like a circle, and why elements moving together are seen as a unit. Each principle (proximity, similarity, continuity, closure, common fate) is a distinct, testable rule.",
+        "examples": ["dots close together grouped as a cluster (proximity)", "similar shapes grouped together (similarity)", "incomplete circle seen as whole (closure)"]
+      },
+      "in_depth": [
+        {
+          "slug": "gestalt_proximity",
+          "label": "Gestalt principle: proximity",
+          "description": "Apply the Gestalt principle of proximity: elements that are close together in space are perceived as belonging to the same group. This focuses solely on spatial nearness as the grouping cue, not on similarity, continuity, or other Gestalt principles (separate keywords).",
+          "examples": ["dots grouped into rows by closeness", "items near each other seen as a set", "proximity overrides similarity in ambiguous arrays"]
+        },
+        {
+          "slug": "gestalt_similarity",
+          "label": "Gestalt principle: similarity",
+          "description": "Apply the Gestalt principle of similarity: elements that share visual properties (shape, color, size, orientation) are perceived as belonging to the same group. This focuses on shared visual features as the grouping cue, not on nearness (proximity, a separate keyword).",
+          "examples": ["circles and squares in a grid grouped by shape", "same-color items seen as a set", "similar items grouped despite spatial distance"]
+        },
+        {
+          "slug": "gestalt_continuity",
+          "label": "Gestalt principle: continuity (good continuation)",
+          "description": "Apply the Gestalt principle of continuity: the perceptual system favors smooth, continuous contours over abrupt direction changes, grouping elements that form a continuous line or curve. This focuses on smooth-path preference, not on spatial nearness (proximity) or completing missing parts (closure — separate keywords).",
+          "examples": ["two crossing lines seen as two continuous lines, not four segments", "dot arrays following a curve grouped together", "smooth contour preferred over jagged alternative"]
+        },
+        {
+          "slug": "gestalt_closure",
+          "label": "Gestalt principle: closure",
+          "description": "Apply the Gestalt principle of closure: the brain fills in missing contour information to perceive incomplete figures as whole, complete shapes. This focuses on filling gaps to complete objects, not on grouping by nearness or continuity (separate keywords).",
+          "examples": ["broken circle perceived as complete", "Pac-Man shape seen as a circle with a wedge missing", "triangular outline from three Pac-Man shapes"]
+        },
+        {
+          "slug": "gestalt_common_fate",
+          "label": "Gestalt principle: common fate",
+          "description": "Apply the Gestalt principle of common fate: elements moving in the same direction at the same speed are perceived as belonging to the same group or object. This focuses on motion as the grouping cue, not on spatial arrangement or similarity (separate keywords).",
+          "examples": ["a flock of birds moving together seen as a unit", "marching band members moving in unison perceived as one group", "common fate distinguishes figure from background via motion"]
+        }
+      ]
+    }
+  ]
+}

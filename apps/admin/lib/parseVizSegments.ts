@@ -9,6 +9,7 @@ export type VizSegment =
       rangeX: string;
       rangeY: string;
       points: string;
+      equalScale: string;
     };
 
 /**
@@ -49,6 +50,7 @@ export function parseVizSegments(raw: string): VizSegment[] {
         rangeX: attrs.rangex ?? "",
         rangeY: attrs.rangey ?? "",
         points: attrs.points ?? "",
+        equalScale: attrs.equalscale ?? "",
       });
     }
 

@@ -1,0 +1,257 @@
+{
+  "category_code": "10A",
+  "umbrellas": [
+    {
+      "slug": "spatial_inequality",
+      "label": "Spatial Inequality",
+      "description": "How geographic location structures access to resources, safety, and environmental quality — and how place-based disadvantage reinforces broader social inequality.",
+      "intro": {
+        "slug": "spatial_inequality_intro",
+        "label": "Spatial Inequality Overview",
+        "description": "Spatial inequality refers to the unequal distribution of resources, hazards, and opportunities across geographic space. Where people live shapes their exposure to violence, pollution, quality schools, and health risks — and residential patterns are rarely random. The keywords in this umbrella cover the mechanisms that sort populations into advantaged and disadvantaged neighborhoods and the consequences of that sorting.",
+        "examples": ["wealthy vs low-income neighborhoods differ in resources", "who gets to live near green space or highways", "place as a determinant of life outcomes"]
+      },
+      "in_depth": [
+        {
+          "slug": "residential_segregation",
+          "label": "Residential segregation",
+          "description": "Identify residential segregation as the systematic separation of racial, ethnic, or socioeconomic groups into distinct neighborhoods, often maintained by historical policies (e.g., redlining) and ongoing discrimination. This focuses on the spatial sorting of groups, not the general concept of discrimination (a separate keyword).",
+          "examples": ["redlining channeled Black families away from suburban mortgages", "hypersegregated cities like Chicago and Detroit", "racial composition of neighborhoods rarely reflects random chance"]
+        },
+        {
+          "slug": "neighborhood_safety_violence",
+          "label": "Neighborhood safety and violence",
+          "description": "Recognize that neighborhood-level violence and safety are unevenly distributed and tied to concentrated poverty, disinvestment, and structural disadvantage rather than individual moral failure. This focuses on the social-structural causes of neighborhood violence, not individual criminal psychology.",
+          "examples": ["high-poverty zip codes have higher violent-crime rates", "community disinvestment → fewer social controls", "collective efficacy as protective factor"]
+        },
+        {
+          "slug": "environmental_justice",
+          "label": "Environmental justice",
+          "description": "Define environmental justice as the principle that all communities deserve equal protection from environmental hazards, and identify how low-income and minority communities disproportionately bear exposure to pollution, toxic waste, and health risks tied to their location. This focuses on the spatial distribution of environmental harms, not health disparities in general (a separate keyword).",
+          "examples": ["hazardous waste sites sited near low-income communities", "Flint water crisis and race/class", "environmental racism as a form of spatial inequality"]
+        }
+      ]
+    },
+    {
+      "slug": "social_class_stratification",
+      "label": "Social Class and Stratification",
+      "description": "The structure of socioeconomic hierarchy — how social class is defined, how it reproduces itself, and the resources and advantages that flow from class position.",
+      "intro": {
+        "slug": "social_class_stratification_intro",
+        "label": "Social Class and Stratification Overview",
+        "description": "Social stratification describes society's organization into ranked layers, with social class as a primary axis. Class is not merely about income — it involves status, power, cultural resources, and social networks that together determine life chances. The keywords here cover how class is defined, how it is maintained across generations through cultural and social capital and social reproduction, and how dimensions of inequality intersect.",
+        "examples": ["why children of professionals tend to become professionals", "Bourdieu on cultural vs social capital", "wealth gaps across race and gender"]
+      },
+      "in_depth": [
+        {
+          "slug": "social_class_and_ses",
+          "label": "Social class and socioeconomic status (SES)",
+          "description": "Define social class as a ranked grouping based on economic resources, occupational prestige, and education, and distinguish it from the composite measure of socioeconomic status (SES), which combines income, education, and occupational prestige into a continuous gradient. This focuses on definitions and measurement, not the mechanisms of class reproduction (separate keywords).",
+          "examples": ["upper, middle, working, lower class as ranked strata", "SES combining income + education + occupation", "measuring inequality with Gini coefficients or class categories"]
+        },
+        {
+          "slug": "class_consciousness",
+          "label": "Class consciousness",
+          "description": "Define class consciousness as awareness by members of a social class of their shared economic interests and their opposition to other classes, as described by Marx. This focuses on genuine, accurate awareness of one's class position and collective interests, not distorted or false beliefs about class (false consciousness, a separate keyword).",
+          "examples": ["workers organizing around shared exploitation", "Marx: proletariat becoming aware of their class position", "class consciousness as precondition for revolution"]
+        },
+        {
+          "slug": "false_consciousness",
+          "label": "False consciousness",
+          "description": "Define false consciousness as a Marxist concept in which members of a subordinate class hold beliefs, values, or ideologies that serve the interests of the dominant class rather than their own, thereby preventing class solidarity. This focuses on ideological distortion that masks class interests, not the accurate awareness that class consciousness describes (a separate keyword).",
+          "examples": ["working-class voters supporting policies that benefit the wealthy", "believing the system is fair when structural barriers exist", "ideology that normalizes inequality"]
+        },
+        {
+          "slug": "cultural_capital",
+          "label": "Cultural capital",
+          "description": "Apply Bourdieu's concept of cultural capital: the non-financial social assets — knowledge, skills, education, tastes, behaviors, and credentials — that confer advantages and are transmitted across class lines. This focuses on culturally acquired advantages (tastes, educational credentials, cultural literacy), not network-based advantages (social capital, a separate keyword).",
+          "examples": ["knowing how to navigate professional job interviews", "classical music taste signaling class membership", "educational credentials as institutionalized cultural capital"]
+        },
+        {
+          "slug": "social_capital",
+          "label": "Social capital",
+          "description": "Apply Bourdieu's (and Putnam's) concept of social capital: the advantages that flow from one's network of relationships, connections, and group memberships. This focuses on the value of who you know and network ties, not the cultural knowledge or credentials that cultural capital describes (a separate keyword).",
+          "examples": ["getting a job through a friend's referral", "professional networks that open doors", "bridging vs bonding social capital"]
+        },
+        {
+          "slug": "social_reproduction",
+          "label": "Social reproduction",
+          "description": "Explain social reproduction as the process by which social inequalities are perpetuated across generations through institutions (family, school) that transmit class-based advantages and disadvantages. This focuses on the intergenerational maintenance of class structure, not the specific mechanisms of mobility or capital (covered by adjacent keywords).",
+          "examples": ["elite schools perpetuate class privilege", "Lareau's concerted cultivation vs natural growth parenting", "habitus as internalized class disposition"]
+        },
+        {
+          "slug": "power_privilege_prestige",
+          "label": "Power, privilege, and prestige",
+          "description": "Distinguish among power (the ability to impose one's will despite resistance), prestige (social honor and respect attached to a position), and privilege (unearned advantages accruing to members of dominant groups), and explain how these three dimensions of stratification reinforce class hierarchy. This focuses on the conceptual distinctions among these three constructs, not intersectionality as a framework (a separate keyword).",
+          "examples": ["Weber's three dimensions: class, status, party", "a doctor has high prestige even without political power", "white privilege as structural unearned advantage"]
+        },
+        {
+          "slug": "intersectionality",
+          "label": "Intersectionality",
+          "description": "Apply the concept of intersectionality: multiple social identities (race, gender, class, age, sexuality) overlap and interact to produce compounding and qualitatively distinct patterns of advantage or disadvantage that cannot be reduced to any single identity axis. This focuses on the multiplicative interaction of identities, not the separate analysis of any single axis of inequality.",
+          "examples": ["Black women's experience ≠ Black men's + white women's", "Crenshaw's intersectionality framework", "low-income + disabled + immigrant = compounding disadvantages"]
+        },
+        {
+          "slug": "socioeconomic_gradient_health",
+          "label": "Socioeconomic gradient in health",
+          "description": "Recognize the socioeconomic gradient in health: health outcomes improve monotonically across the SES ladder — not just poor vs. non-poor, but at every step up in income or education, health is better. This focuses on the graded, continuous relationship between SES and health, not specific access barriers (health care disparities, a separate keyword).",
+          "examples": ["Whitehall studies: even civil servants just below the top rank had worse health", "income predicts life expectancy across the entire distribution", "stress, behaviors, and resources all vary by SES grade"]
+        },
+        {
+          "slug": "global_inequalities",
+          "label": "Global inequalities",
+          "description": "Recognize that social stratification operates at a global level, with core (wealthy, industrialized) nations dominating peripheral (low-income, developing) nations through economic and political structures, and identify world-systems theory as a framework for understanding global inequality. This focuses on the global dimension of stratification, not domestic class structure (covered by adjacent keywords).",
+          "examples": ["Wallerstein's core/periphery/semi-periphery model", "global wealth concentrated in high-income nations", "multinational corporations extracting value from low-wage countries"]
+        }
+      ]
+    },
+    {
+      "slug": "social_mobility",
+      "label": "Social Mobility",
+      "description": "The movement of individuals or groups through the stratification system — how mobility is measured, in which direction it runs, and whether it is earned or structurally constrained.",
+      "intro": {
+        "slug": "social_mobility_intro",
+        "label": "Social Mobility Overview",
+        "description": "Social mobility describes movement up or down the socioeconomic hierarchy. It can be tracked within a single lifetime (intragenerational) or across generations (intergenerational), and movement can be upward or downward (vertical) or lateral within the same rank (horizontal). The meritocracy ideal holds that mobility is based on effort and talent — but structural constraints often limit how much actual mobility occurs. These keywords unpack those distinctions.",
+        "examples": ["rags-to-riches narratives vs inherited advantage", "comparing parents' vs children's social class", "whether education actually equalizes opportunity"]
+      },
+      "in_depth": [
+        {
+          "slug": "intergenerational_mobility",
+          "label": "Intergenerational mobility",
+          "description": "Define intergenerational mobility as the change in social class or socioeconomic status between parents and their children — measured by comparing the class position of one generation with that of the next. This focuses on cross-generation comparisons, not mobility within a single individual's lifetime (intragenerational mobility, a separate keyword).",
+          "examples": ["child born to working-class parents rises to professional class", "parent-to-child income correlations as a mobility measure", "low intergenerational mobility = 'sticky' class positions"]
+        },
+        {
+          "slug": "intragenerational_mobility",
+          "label": "Intragenerational mobility",
+          "description": "Define intragenerational mobility as the change in social class or socioeconomic status that occurs within a single person's own lifetime — from early career to retirement. This focuses on within-lifetime trajectory, not across-generation comparisons (intergenerational mobility, a separate keyword).",
+          "examples": ["starting as a factory worker and becoming a manager over a career", "a single individual's SES change from age 25 to 55", "career advancement as intragenerational upward mobility"]
+        },
+        {
+          "slug": "vertical_mobility",
+          "label": "Vertical mobility",
+          "description": "Define vertical mobility as movement upward or downward in the social hierarchy — gaining or losing status, income, or class position. This focuses on directional rank change, not lateral movement between positions of equal rank (horizontal mobility, a separate keyword).",
+          "examples": ["promotion from hourly worker to salaried manager = upward", "corporate bankruptcy causing downward mobility", "vertical mobility as the stereotypic 'moving up or down'"]
+        },
+        {
+          "slug": "horizontal_mobility",
+          "label": "Horizontal mobility",
+          "description": "Define horizontal mobility as movement between social positions that are roughly equivalent in rank, prestige, or income — changing roles without changing status level. This focuses on lateral occupational or positional shifts, not rank change (vertical mobility, a separate keyword).",
+          "examples": ["switching from one doctor's practice to another at the same status", "a teacher moving to a different school with comparable pay", "horizontal ≠ upward or downward movement"]
+        },
+        {
+          "slug": "meritocracy",
+          "label": "Meritocracy",
+          "description": "Define meritocracy as the ideology that social position is (or should be) determined by individual talent, effort, and achievement rather than inherited advantage, and identify how sociologists critique this ideal by pointing to structural barriers that limit equal opportunity. This focuses on the concept as both an ideal and a contested claim, not on specific mobility types (separate keywords).",
+          "examples": ["'anyone can make it if they work hard enough'", "college admissions as supposedly meritocratic vs legacy preferences", "sociologists: meritocracy is partly myth given unequal starting points"]
+        }
+      ]
+    },
+    {
+      "slug": "poverty",
+      "label": "Poverty",
+      "description": "How poverty is defined and measured, and how exclusion from mainstream society compounds material deprivation.",
+      "intro": {
+        "slug": "poverty_intro",
+        "label": "Poverty Overview",
+        "description": "Poverty is not a single, fixed condition — it can be measured in absolute terms (lack of basic necessities) or relative terms (falling below societal norms of adequacy), and its effects extend beyond material deprivation to social exclusion and isolation. These keywords distinguish the definitions and map the social processes by which poverty becomes entrenched.",
+        "examples": ["federal poverty line as an absolute threshold", "being poor relative to the society you live in", "poverty traps and social isolation"]
+      },
+      "in_depth": [
+        {
+          "slug": "absolute_poverty",
+          "label": "Absolute poverty",
+          "description": "Define absolute poverty as a condition in which individuals or households lack the minimum resources (food, shelter, clothing) necessary for physical survival, measured against a fixed threshold independent of the broader society's living standards. This focuses on the survival-level deprivation standard, not comparisons to average societal living standards (relative poverty, a separate keyword).",
+          "examples": ["living below the international $2.15/day poverty line", "lacking reliable food, safe housing, or clean water", "absolute poverty threshold does not shift as society gets richer"]
+        },
+        {
+          "slug": "relative_poverty",
+          "label": "Relative poverty",
+          "description": "Define relative poverty as a condition in which individuals or households fall significantly below the average income or living standards of their society, such that they cannot participate fully in the social and economic norms of their community. This focuses on comparison to societal norms rather than a fixed survival threshold (absolute poverty, a separate keyword).",
+          "examples": ["a family in a wealthy country that cannot afford a car or home internet", "EU defines relative poverty as < 60% of median income", "relative poverty threshold rises as the average standard of living rises"]
+        },
+        {
+          "slug": "social_exclusion",
+          "label": "Social exclusion (segregation and isolation)",
+          "description": "Define social exclusion as the process by which individuals or groups are systematically prevented from participating in social, economic, political, and cultural life — going beyond material poverty to encompass isolation from networks, institutions, and community. This focuses on the multi-dimensional exclusion that compounds poverty, not spatial segregation per se (covered under spatial inequality).",
+          "examples": ["long-term unemployed losing social connections and civic participation", "poverty + stigma → withdrawal from community life", "social exclusion = poverty + isolation + powerlessness"]
+        }
+      ]
+    },
+    {
+      "slug": "health_disparities",
+      "label": "Health Disparities",
+      "description": "Inequalities in health outcomes — differences in disease rates, mortality, morbidity, and life expectancy across social groups defined by class, race, gender, and other axes.",
+      "intro": {
+        "slug": "health_disparities_intro",
+        "label": "Health Disparities Overview",
+        "description": "Health disparities refer to systematic differences in health outcomes — who gets sick, who recovers, and who dies — across racial, class, gender, and other social lines. These are not random; they reflect the cumulative effects of structural inequality (poverty, stress, environmental exposure, discrimination) on bodies. Health disparities are distinct from health care disparities, which concern access to and quality of treatment rather than health outcomes themselves.",
+        "examples": ["Black Americans have higher rates of hypertension and infant mortality than white Americans", "lower-income groups have shorter life expectancy", "social determinants of health driving outcome gaps"]
+      },
+      "in_depth": [
+        {
+          "slug": "health_disparities_by_class",
+          "label": "Health disparities by social class",
+          "description": "Recognize that lower socioeconomic status is associated with worse health outcomes across nearly every disease category — higher rates of chronic illness, disability, infant mortality, and premature death — and explain this through pathways including chronic stress, health behaviors, environmental exposures, and material deprivation. This focuses on class-based outcome gaps, not access-to-care differences (health care disparities, a separate keyword).",
+          "examples": ["working-class adults have higher diabetes and obesity rates", "income predicts life expectancy even within the same city", "poverty-related chronic stress accelerates biological aging"]
+        },
+        {
+          "slug": "health_disparities_by_race",
+          "label": "Health disparities by race and ethnicity",
+          "description": "Recognize that racial and ethnic minorities in the United States experience systematically worse health outcomes — including higher rates of cardiovascular disease, diabetes, maternal mortality, and lower life expectancy — and identify structural racism (not biology) as the primary driver. This focuses on racial health outcome gaps, not race-based differences in access to care (health care disparities, a separate keyword).",
+          "examples": ["Black maternal mortality rates 2–3× white rates in the U.S.", "Native Americans have the highest diabetes prevalence of any group", "weathering hypothesis: chronic stress of racism accelerates physiological aging"]
+        },
+        {
+          "slug": "health_disparities_by_gender",
+          "label": "Health disparities by gender",
+          "description": "Recognize that health outcomes differ by gender — women have longer life expectancy but higher rates of autoimmune diseases and depression; men have higher rates of heart disease and accidental death — and explain these gaps through both biological sex differences and gendered social roles and stressors. This focuses on gender-based health outcome differences, not gender differences in health care access or treatment (health care disparities, a separate keyword).",
+          "examples": ["men die earlier on average but women report worse chronic illness", "women more likely to be diagnosed with depression; men with substance disorders", "gender roles affecting health behaviors (e.g., men less likely to seek care)"]
+        },
+        {
+          "slug": "social_determinants_of_health",
+          "label": "Social determinants of health",
+          "description": "Define social determinants of health as the non-medical, structural conditions in which people are born, live, work, and age — including income, education, housing, neighborhood, and social support — that account for a large share of population health outcomes and drive health disparities. This focuses on the upstream structural drivers of health outcomes, not differences in medical access or treatment quality (health care disparities).",
+          "examples": ["zip code as a stronger predictor of health than genetic code", "food deserts limiting access to nutritious food", "WHO framework: income, education, environment as health determinants"]
+        }
+      ]
+    },
+    {
+      "slug": "health_care_disparities",
+      "label": "Health Care Disparities",
+      "description": "Inequalities in access to, quality of, and utilization of health care services across social groups — distinct from differences in health outcomes themselves.",
+      "intro": {
+        "slug": "health_care_disparities_intro",
+        "label": "Health Care Disparities Overview",
+        "description": "Health care disparities concern inequalities in who receives medical care, what quality of care they receive, and whether they are treated equitably within the health system — not the health outcomes that result. They arise from structural barriers (cost, insurance, geographic access), provider bias, and systemic exclusion. These keywords distinguish health care disparities from health disparities (outcome-focused) and unpack the mechanisms behind unequal treatment.",
+        "examples": ["uninsured patients forgoing needed care", "minority patients receiving lower-quality pain management", "rural areas with no nearby hospitals or specialists"]
+      },
+      "in_depth": [
+        {
+          "slug": "health_care_disparities_by_class",
+          "label": "Health care disparities by social class",
+          "description": "Recognize that lower-income and uninsured individuals face systematic barriers to accessing quality health care — including cost, lack of insurance, fewer nearby providers, and inability to take time off work — resulting in delayed diagnosis, less preventive care, and lower-quality treatment. This focuses on class-based access and treatment differences, not the health outcomes that result from those differences (health disparities, a separate keyword).",
+          "examples": ["skipping doctor visits due to cost", "Medicaid patients less likely to get specialist referrals", "low-income neighborhoods with fewer primary care providers"]
+        },
+        {
+          "slug": "health_care_disparities_by_race",
+          "label": "Health care disparities by race and ethnicity",
+          "description": "Recognize that racial and ethnic minorities receive lower-quality health care than white patients — even controlling for insurance status and income — due to provider implicit bias, structural racism in health systems, and historical mistrust of medicine. This focuses on inequitable treatment within the health care system, not the health outcome gaps that result (health disparities, a separate keyword).",
+          "examples": ["Black patients undertreated for pain compared to white patients", "Institute of Medicine 'Unequal Treatment' report", "language barriers limiting care for non-English speakers"]
+        },
+        {
+          "slug": "health_care_disparities_by_gender",
+          "label": "Health care disparities by gender",
+          "description": "Recognize that gender shapes health care access and treatment — women have historically been underrepresented in clinical trials, cardiac symptoms are more likely to be dismissed in women than men, and gender minorities (transgender individuals) face significant barriers to affirming care. This focuses on gender-based differences in health care access and treatment, not health outcome differences (health disparities, a separate keyword).",
+          "examples": ["women's heart attack symptoms historically attributed to anxiety", "transgender patients facing refusal of care", "gender bias in clinical research historically excluding women"]
+        },
+        {
+          "slug": "barriers_to_health_care_access",
+          "label": "Barriers to health care access",
+          "description": "Identify the structural barriers that limit health care access across disadvantaged groups: lack of insurance, high out-of-pocket costs, geographic distance from providers, transportation, language, and cultural barriers — and distinguish these supply/access-side factors from demand-side factors like health literacy and mistrust. This focuses on why people cannot access care, not what quality of care they receive once they access it.",
+          "examples": ["rural hospital closures leaving counties without emergency care", "high deductibles causing people to skip preventive visits", "Medicaid expansion reduced uninsured rates in expansion states"]
+        }
+      ]
+    }
+  ]
+}

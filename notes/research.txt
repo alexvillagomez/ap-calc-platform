@@ -1,0 +1,437 @@
+# Adaptive Learning Research for AP Calculus Practice Platform
+
+## Executive Summary
+
+This document synthesizes research on optimal practice structures for adaptive math learning systems, with specific recommendations for the AP Calc platform. Key findings support a hybrid approach: introduce concepts through structured topic blocks with adaptive difficulty, incorporate interleaved practice for long-term retention and strategy flexibility, and apply spaced repetition with evidence-based review intervals.
+
+---
+
+## 1. Topic Structure: Blocks vs. Interleaving
+
+### Research Findings
+
+**Initial Learning (Blocked Practice)**
+- Students learn mathematical content more quickly with blocked practice (all problems of one type together)
+- Blocked practice feels more comfortable and achieves better immediate performance
+- Students often misperceive blocked practice as more effective than it actually is
+
+**Long-Term Retention & Transfer (Interleaved Practice)**
+- Interleaved/mixed practice (problems of different types mixed together) produces significantly better long-term performance
+- A landmark study of ~800 seventh-grade students in Florida showed:
+  * Interleaved practice: 61% correct on delayed test (1 month later)
+  * Blocked practice: 38% correct on the same test
+  * 24-hour gap: interleaved (77%) vs. blocked (38%)
+
+**Why Interleaving Works**
+- Blocked practice lets students solve problems without choosing appropriate strategies—they know the strategy before reading the problem
+- Interleaving forces students to decide *which* strategy applies, developing flexible and adaptive strategy use
+- This cognitive effort is uncomfortable but essential for long-term mastery and transfer to new contexts
+
+### Recommendation for AP Calc Platform
+
+**Hybrid Structure:**
+1. **Initial Mastery Phase (Blocked):** When a student first encounters a topic, present 3-5 focused problems of that single type to build fluency
+2. **Consolidation Phase (Interleaved):** Once initial mastery is achieved, systematically interleave this topic with other related topics (e.g., derivatives mixed with integrals, limits, etc.)
+3. **Spacing & Retrieval (Interleaved + Spaced):** In subsequent practice sessions, include this topic in mixed sets with increasing time gaps
+
+This mirrors your hypothesis of "topic blocks" for introduction, but emphasizes the need to transition to interleaving for long-term retention.
+
+**Evidence:** [Interleaving in Math](https://www.aft.org/ae/spring2020/agarwal_agostinelli); [Interleaved Learning in Elementary School Mathematics](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6385790/); [When to Block versus Interleave Practice](https://escholarship.org/content/qt4h12h31r/qt4h12h31r_noSplash_4e42bdca59a1dd71648e55d13e49781f.pdf?t=sgics3)
+
+---
+
+## 2. Spaced Repetition: Science & Optimal Intervals
+
+### Core Principle
+
+Spaced repetition leverages the "spacing effect"—material reviewed at strategically timed intervals is retained far longer than material crammed or blocked together. The optimal review timing is *just before* the student would forget, typically around 85-90% recall probability.
+
+### Evidence-Based Review Schedules
+
+**Standard Schedule (D = day of initial learning):**
+- Review 1: D+1 (1 day later)
+- Review 2: D+3 (3 days later)
+- Review 3: D+7 (1 week)
+- Review 4: D+14 (2 weeks)
+- Review 5: D+30 (1 month)
+
+Alternative schedule (also supported): days 1, 7, 16, 35 after initial learning.
+
+**Key principle:** After just 5 spaced review sessions, information moves to long-term memory for most learners.
+
+### Why Timing Matters
+
+- **Review too early** → material not yet at forgetting threshold; weak consolidation effect
+- **Review too late** → forced to relearn (inefficient time use)
+- **85-90% recall window** → sweet spot for maximum retention with minimum effort
+
+### Implementation Guidance
+
+For AP Calculus:
+- Students who master a topic should see a *new problem on that topic* approximately 1-3 days later
+- If student struggles (< 70% success rate), maintain higher frequency (daily or every other day)
+- If student demonstrates strong mastery (≥ 80% over 3+ attempts), space out to the full D+7, D+14, D+30 schedule
+- Vary the difficulty and context (interleave with other topics) during spaced reviews
+
+**Advantage:** Spaced practice improves long-term retention 200-300% compared to massed practice (repeated practice in one session).
+
+**Evidence:** [Spaced Repetition Guide](https://revizly.app/blog/revision-espacee-guide); [Teacher's Guide to Spaced Repetition](https://thirdspacelearning.com/us/blog/spaced-repetition/); [Cognitive Science of Learning](https://www.justinmath.com/cognitive-science-of-learning-spaced-repetition/)
+
+---
+
+## 3. Advanced Spacing Algorithms: SM-2, FSRS, & IRT
+
+### SM-2 Algorithm (Anki)
+
+**What it is:** Mathematical formula developed by Piotr Wozniak (1987) for calculating optimal review intervals.
+
+**How it works:**
+- Assigns an "easiness factor" (EF) to each card/problem
+- Adjusts EF based on performance: correct answers increase EF, wrong answers decrease it
+- Calculates next review interval using: `Interval = Previous Interval × EF`
+
+**Advantage:** Simpler to implement; proven effective (200-300% better retention than passive study).
+
+**Limitation:** "Ease hell"—if a student struggles with a card, the EF drops permanently, causing intervals to become very short even after recovery. Difficult for students regaining momentum.
+
+### FSRS Algorithm (Modern Standard, 2022)
+
+**What it is:** Free Spaced Repetition Scheduler by Jarrett Ye; machine-learning-based refinement of SM-2.
+
+**How it works:**
+- Uses three variables: **Difficulty**, **Stability**, **Retrievability**
+- Difficulty uses "mean reversion"—after correct answers, it gradually returns to baseline rather than staying permanently damaged
+- Parameters are fitted to individual review history via machine learning
+
+**Key advantage over SM-2:** Eliminates "ease hell"—recovering students get appropriate intervals sooner.
+
+**Effectiveness:** Reduces required reviews by 20-30% for the same retention rate compared to SM-2.
+
+**Adoption:** Now built into Anki (as of 2023), RemNote, and many educational apps. Proven in medical education, language learning, and STEM skill acquisition.
+
+### Item Response Theory (IRT) Approach
+
+**What it is:** Educational measurement framework that models ability and difficulty on a continuous scale.
+
+**Implementation in adaptive systems:**
+- Target 85% correct on problems at student's current skill level
+- Increase difficulty when student consistently scores ≥ 85%
+- Decrease difficulty when student falls below ~60%
+
+**Advantage for AP Calc:** Provides continuous difficulty scaling rather than discrete levels; adapts to individual student trajectories.
+
+### Recommendation for AP Calc Platform
+
+**Progressive Implementation:**
+1. **Phase 1 (MVP):** Simple rule-based spacing (D+1, D+3, D+7, D+14, D+30) triggered manually or by mastery thresholds
+2. **Phase 2:** IRT-based difficulty targeting (aim for 70-85% success rate; adjust difficulty accordingly)
+3. **Phase 3:** FSRS integration for optimal interval calculation per student per topic
+
+Your current system in `apps/student/lib/practiceAlgorithm.ts` and `diagnosticScoring.ts` already implements EMA (exponential moving average) for skill tracking, which pairs well with FSRS.
+
+**Evidence:** [Spaced Repetition Algorithms](https://www.mindomax.com/spaced-repetition-algorithms); [FSRS vs SM-2](https://www.neurako.com/blog/fsrs-vs-sm2-spaced-repetition-algorithms-compared); [SM-2 Algorithm Explained](https://tegaru.app/en/blog/sm2-algorithm-explained)
+
+---
+
+## 4. Difficulty Progression & Mastery Thresholds
+
+### When to Increase Difficulty
+
+**Rule-based thresholds:**
+- **3 consecutive correct answers** → increase difficulty
+- **1 incorrect answer** → return to previous difficulty level
+- **Alternative:** Increase difficulty when success rate ≥ 80% over 5+ attempts; decrease when < 60%
+
+**IRT approach (recommended):**
+- Track student's estimated ability (skill level)
+- Target difficulty where success probability = 70-85%
+- Automatically adjust problem difficulty to maintain this zone
+
+**Difficulty should increase gradually:**
+- Avoid jumps that exceed student's ZPD (zone of proximal development)
+- Each difficulty step should feel achievable with effort, not overwhelming
+
+### Mastery Thresholds
+
+**Standard thresholds (from research):**
+- **80% correct** over 5-10 problems → foundational mastery
+- **90% correct** over 9-10 problems → strong mastery (correlates with better long-term retention)
+- **4/5 correct** → acceptable for complex, time-consuming problems (like multi-step calculus problems)
+
+**Effect of threshold level:**
+- 90% threshold produces higher long-term retention than 80%
+- 80% threshold produces higher retention than 50%
+- Higher thresholds correlate with better response maintenance over time
+
+**For AP Calculus specifics:**
+- Simpler topics (e.g., derivative power rule): 90% over 10 problems
+- Complex topics (e.g., u-substitution, curve sketching): 80% over 5-8 problems
+- Multi-step problems: 4/5 correct or 80% is reasonable
+
+### Recommended Progression
+
+```
+Difficulty 1 (Computational): Isolated, straightforward application
+  Mastery: 90% correct over 10 problems
+  Next: Move to Difficulty 2
+
+Difficulty 2 (Multi-step): Requires multiple concepts, but still guided
+  Mastery: 80% correct over 8 problems
+  Next: Move to Difficulty 3
+
+Difficulty 3 (Conceptual): Requires strategy selection; less guidance
+  Mastery: 75% correct over 6+ problems
+  Next: Spaced review in mixed context; don't increase further
+
+Difficulty 4 (Challenge/Synthesis): Novel contexts; high cognitive load
+  Target: Present after Difficulty 3 mastery + 2-week spacing
+  Purpose: Deep transfer, not frequent practice
+```
+
+**Evidence:** [Demonstrating and Assessing Mastery](https://www.gettingsmart.com/2019/09/11/demonstrating-and-assessing-mastery-and-managing-mastery-learning-data/); [Mastery Thresholds Examples](https://www.gettingsmart.com/2019/09/18/examples-of-mastery-thresholds-to-enable-mastery-learning-in-multiple-subjects/); [Challenge of Challenges in Mastery Learning](https://educationaldatamining.org/edm2024/proceedings/2024.EDM-doctoral-consortium.124/index.html)
+
+---
+
+## 5. Struggling vs. Advancing Students
+
+### Struggling Students (< 60% success rate)
+
+**Intervention principles:**
+- **Decrease difficulty immediately** (return to Difficulty 1 or 2)
+- **Increase practice frequency** (daily or every other day, not spaced)
+- **Maintain blocking** (same topic for 5-10 problems before interleaving)
+- **Add scaffolding:** Hints, worked examples, conceptual foundation checks
+- **Shorter problem sets** to prevent frustration; more frequent success experiences
+
+**Specific actions:**
+1. Check for prerequisite gaps (e.g., if struggling with derivatives, diagnose calculus prerequisites)
+2. Provide 1-2 worked examples of the exact problem type
+3. Reduce problem difficulty by 1-2 levels and rebuild
+4. Increase success target from 70% to just 50-60% initially; rebuild confidence
+5. Transition back to spaced repetition only after ≥ 75% success over 5+ attempts
+
+**Perception note:** Students often feel that struggling is ineffective, but it's actually a sign of productive learning if difficulty is calibrated correctly. Educators should frame difficulty as "stretch" not "failure."
+
+### Advancing Students (≥ 80% success rate)
+
+**Acceleration principles:**
+- **Increase difficulty more aggressively** (move from Difficulty 1 → 3 after 6-8 correct)
+- **Introduce interleaving sooner** (after 5-6 blocked problems instead of 10)
+- **Sparse out review intervals** (D+7, D+21, D+60 instead of D+1, D+3, D+7)
+- **Offer challenge problems** (Difficulty 4) with novel contexts or multiple concepts
+- **Mix topics earlier** in their learning trajectory
+
+**Specific actions:**
+1. Diagnostic pretest to identify already-mastered topics
+2. Skip Difficulty 1-2 for advanced students; start at Difficulty 2-3
+3. Offer "bonus" or "extension" problems (multi-concept synthesis) after mastery
+4. Transition to true spaced repetition with long intervals (14-30 days)
+5. Encourage self-explanation and teaching peers
+
+**Perception benefit:** Advanced students perceive challenge (reasonable difficulty) as more effective than easy practice; maintain their motivation through progressive difficulty.
+
+### Balancing Within Mixed Cohorts
+
+**For teachers/platforms with mixed-ability students:**
+- Use adaptive algorithms to create personalized paths (not one-size-fits-all)
+- Allow Difficulty 1/2 students and Difficulty 4 students to work on the same topic in parallel
+- Use interleaving strategically: Difficulty 1 students benefit from blocked + some interleaving; advanced students need more interleaving
+- Track "attempt count" per topic—don't force advanced students through 10 problems if 5 suffice
+
+**Evidence:** [Math Strategies for Struggling Students](https://blog.acceleratelearning.com/math-strategies-for-struggling-students); [Mathematics Interventions](https://educationnorthwest.org/resources/mathematics-interventions-what-strategies-work-for-struggling-students); [Students' Perceptions of Effective Math Learning Strategies](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12383065/)
+
+---
+
+## 6. Problems Per Topic Before Moving On
+
+### Research-Based Guidance
+
+**Minimum exposure:**
+- 5-6 problems of the same type for initial fluency (blocked practice)
+- Then transition to interleaving/spacing
+
+**Standard full mastery:**
+- 8-10 problems for simple, computational topics
+- 5-8 problems for complex, conceptual topics (e.g., curve sketching, optimization)
+- 4-5 problems for very time-consuming topics (e.g., multi-step application problems)
+
+**Variation by complexity:**
+| Topic Type | Problem Count | Mastery Threshold |
+|---|---|---|
+| Simple computation (power rule, basic limits) | 10 | 90% |
+| Multi-step procedures (u-substitution, integration by parts) | 8 | 80% |
+| Conceptual & strategic (when to use which method) | 6 | 75% |
+| Synthesis/challenge (novel contexts) | 3-4 | 70% |
+
+### For AP Calculus Specifically
+
+- **Foundational topics** (limits, continuity, derivatives): 10 problems at Difficulty 1
+- **Procedural topics** (differentiation rules, antiderivatives): 8 problems mixed Difficulties 1-2
+- **Application topics** (optimization, related rates): 6-8 problems mixed Difficulties 2-3
+- **Advanced synthesis** (full curve sketches, multi-concept problems): 3-5 problems at Difficulties 3-4, highly spaced
+
+### Moving On (When to Progress)
+
+**Decision point:**
+- Attempt count ≥ min threshold (5-10 depending on complexity)
+- Success rate ≥ mastery threshold (75-90%)
+- 3+ consecutive correct (optional additional gate for high-stakes topics)
+
+**Do NOT wait for:**
+- "Perfect" performance (85% is sufficient to progress and interleave)
+- Arbitrary time limits
+- All students ready (use adaptive routing)
+
+**Implement early interleaving:**
+Once 5-6 initial problems are solved correctly, introduce 1 problem from a *related* topic (e.g., if practicing derivatives, include 1 limit or integration problem per 4 derivative problems). This accelerates the learning-how-to-choose-strategy phase.
+
+**Evidence:** [Mastery Learning Data](https://www.gettingsmart.com/2019/09/11/demonstrating-and-assessing-mastery-and-managing-mastery-learning-data/); [Does Practice Make Perfect?](https://educationaldatamining.org/edm2022/proceedings/2022.EDM-short-papers.27/index.html)
+
+---
+
+## 7. Adaptive Learning: Putting It All Together
+
+### Recommended System Architecture
+
+**Phase 1: Diagnostic & Topic Selection**
+- Administer diagnostic quiz (5-7 questions) covering foundational prerequisites
+- Score using EMA (exponential moving average)
+- Route to topic based on gaps identified
+
+**Phase 2: Introduction & Blocked Practice**
+- Introduce topic with 1 worked example + explanation
+- Present 5-8 blocked problems (same type) at Difficulty 1
+- Target: 80%+ success
+- If struggling: provide hint, show solution, practice again
+- If succeeding: move to Phase 3
+
+**Phase 3: Consolidation & Early Interleaving**
+- Mix in related topics (e.g., derivatives + limits + continuity)
+- Present 3-5 more problems at Difficulties 1-2, interleaved
+- Apply EMA scoring to track mastery
+
+**Phase 4: Spaced Review**
+- Schedule topic problems at D+1, D+3, D+7, D+14 intervals
+- Use interleaved, increased-difficulty versions
+- Adjust spacing based on success:
+  * ≥ 75% correct → lengthen spacing
+  * < 60% correct → shorten spacing, add hint
+- Update EMA skill scores per attempt
+
+**Phase 5: Advancement & Challenge**
+- Once ≥ 80% over 6+ spaced attempts, offer Difficulty 3-4 problems
+- Include in mixed practice sets (once weekly or biweekly)
+- Track "advanced mastery" separately from foundational mastery
+
+### Key Metrics to Track
+
+1. **Per-student:**
+   - EMA skill score per topic (range 0-1)
+   - Attempt count per topic
+   - Success rate (% correct) per difficulty level
+   - Last review date + next scheduled review date
+
+2. **Per-problem:**
+   - Attempt count
+   - Success rate
+   - Estimated difficulty (EMA-based)
+   - Word difficulty (how often chosen vs. total pool)
+
+3. **System-wide:**
+   - Average topic mastery time to 80% success
+   - Retention rate (% of students who maintain 70%+ score after 30-day gap)
+   - Interleaving effect (do students in mixed practice sets score better on transfer tasks?)
+
+### Student Experience Flow (from CLAUDE.md alignment)
+
+Your current `/learn` state machine in `apps/student/app/` is well-aligned:
+
+```
+diagnostic → results → lesson/refresher/targeted → practice → spaced_review
+```
+
+**Recommended enhancement:**
+- **Diagnostic phase:** Use 5-7 MCQs on umbrella topics; classify into 3 tiers (needs foundation lesson, needs refresher, ready for practice)
+- **Lesson/Refresher phase:** Use your existing on-demand generation; add interleaved problems toward the end
+- **Practice phase:** Implement IRT-based difficulty targeting (your `scoreProblem()` function already does this)
+- **Spaced review:** Track next-review-date; inject D+1, D+7, D+21 problems into the practice queue at the scheduled times
+
+Your `learn_student_keyword_states` table with `spaced_review_due_at` is the right structure; implement the scheduling logic in `apps/student/app/api/learn/practice/next`.
+
+**Evidence:** [Adaptive Learning in Mathematics](https://www.sowiso.com/blog/adaptive-learning-mathematics/); [How Mastery Learning Algorithms Support Adaptive Math Learning](https://www.playpowerlabs.com/post/how-mastery-learning-algorithms-can-support-adaptive-math-learning-in-the-classroom); [Current Practices in Artificial Intelligence in Education](https://files.eric.ed.gov/fulltext/EJ1469663.pdf)
+
+---
+
+## 8. Key Takeaways for AP Calc Platform
+
+### Your Hypothesis: Validated & Refined
+
+Your intuition to "introduce topics in blocks, feed more questions when struggling, sparse out once mastered, return later" is **evidence-based and sound**. Refine it as follows:
+
+1. **Introduction (Days 1-2):** 5-8 blocked problems, Difficulty 1, target 80%+
+2. **Early interleaving (Days 2-3):** Mix in related topics; 3-5 more problems, Difficulties 1-2
+3. **Consolidation (Days 4-7):** Spaced reviews at D+1, D+3; increase to Difficulty 2-3
+4. **Long-term spacing (Weeks 2-4):** D+7, D+14, D+30 reviews; interleaved with other topics
+5. **Mastery confirmation:** Once ≥ 80% over 6+ spaced attempts, topic moves to "mastered" state
+6. **Challenge phase:** Offer Difficulty 4 problems with novel contexts, 1-2x per week
+
+### Critical Implementation Points
+
+1. **Don't force interleaving too early** → Students need fluency before strategy flexibility
+2. **Don't delay interleaving too long** → Interleaved practice is essential for long-term transfer
+3. **Balance challenge with success** → Target 70-85% success; boredom < 70%, frustration > 90%
+4. **Track spaced reviews explicitly** → Use a `next_review_date` column; don't rely on student intuition
+5. **Struggling students need scaffolding** → Reduce difficulty, increase hints, lengthen intervals between hard problems
+6. **Advanced students need challenge** → Increase difficulty, introduce interleaving sooner, offer synthesis problems
+
+### Next Steps
+
+1. **Immediate (this sprint):**
+   - Implement mastery threshold gates: 80% over 6+ attempts → mark topic "mastered"
+   - Add `next_review_date` logic to `learn_student_keyword_states`
+   - Schedule D+1, D+3, D+7 reviews in `practice/next` route
+
+2. **Medium-term (1-2 sprints):**
+   - Implement IRT-based difficulty targeting in `scoreProblem()` (target 75-80% success)
+   - Add interleaving logic: after 6 blocked problems, start mixing 1-in-4 related topics
+   - Track attempt count per topic; measure time-to-mastery
+
+3. **Long-term (future roadmap):**
+   - Integrate FSRS algorithm for optimal spacing per student
+   - Implement challenge problem logic (Difficulty 4) for post-mastery review
+   - A/B test blocked vs. interleaved; measure retention and transfer on AP exam
+
+---
+
+## References
+
+### Primary Research Sources
+
+[Current practices and future direction of artificial intelligence in education](https://files.eric.ed.gov/fulltext/EJ1469663.pdf)
+[Artificial Intelligence Interventions in Mathematics Education](https://files.eric.ed.gov/fulltext/EJ1481890.pdf)
+[Adaptive Learning in Mathematics Education](https://www.sowiso.com/blog/adaptive-learning-mathematics/)
+[The Research Hotspots and Future Trends of Adaptive Learning](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12377960/)
+[Interleaving in Math](https://www.aft.org/ae/spring2020/agarwal_agostinelli)
+[Exploring necessary conditions for observing interleaved practice benefits](https://www.sciencedirect.com/science/article/abs/pii/S0959475222000044)
+[Interleaved Learning in Elementary School Mathematics](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6385790/)
+[When to Block versus Interleave Practice?](https://escholarship.org/content/qt4h12h31r/qt4h12h31r_noSplash_4e42bdca59a1dd71648e55d13e49781f.pdf?t=sgics3)
+[The Impact of Blocked Practice versus Mixed Practice in Calculus](https://www.tandfonline.com/doi/abs/10.1080/19477503.2024.2321834)
+[Spaced Repetition Guide](https://revizly.app/blog/revision-espacee-guide)
+[Teacher's Guide to Spaced Repetition](https://thirdspacelearning.com/us/blog/spaced-repetition/)
+[Cognitive Science of Learning: Spaced Repetition](https://www.justinmath.com/cognitive-science-of-learning-spaced-repetition/)
+[Spaced Repetition Algorithms: From SM-2 to FSRS](https://www.mindomax.com/spaced-repetition-algorithms)
+[FSRS vs SM-2](https://www.neurako.com/blog/fsrs-vs-sm2-spaced-repetition-algorithms-compared)
+[SM-2 Algorithm Explained](https://tegaru.app/en/blog/sm2-algorithm-explained)
+[Challenge of Challenges in Mastery Learning](https://educationaldatamining.org/edm2024/proceedings/2024.EDM-doctoral-consortium.124/index.html)
+[Demonstrating and Assessing Mastery](https://www.gettingsmart.com/2019/09/11/demonstrating-and-assessing-mastery-and-managing-mastery-learning-data/)
+[Mastery Thresholds Examples](https://www.gettingsmart.com/2019/09/18/examples-of-mastery-thresholds-to-enable-mastery-learning-in-multiple-subjects/)
+[Does Practice Make Perfect?](https://educationaldatamining.org/edm2022/proceedings/2022.EDM-short-papers.27/index.html)
+[How Mastery Learning Algorithms Support Adaptive Math Learning](https://www.playpowerlabs.com/post/how-mastery-learning-algorithms-can-support-adaptive-math-learning-in-the-classroom)
+[Math Strategies for Struggling Students](https://blog.acceleratelearning.com/math-strategies-for-struggling-students)
+[Mathematics Interventions](https://educationnorthwest.org/resources/mathematics-interventions-what-strategies-work-for-struggling-students/)
+[Students' Perceptions of Effective Math Learning Strategies](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12383065/)
+
+---
+
+*Research summary compiled: May 27, 2026*
+*For AP Calculus Adaptive Learning Platform*

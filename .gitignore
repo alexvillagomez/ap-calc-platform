@@ -28,6 +28,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+.Rhistory
 .vercel
 
 # Test/scratch artifacts (auto-added)
@@ -35,6 +36,12 @@ test-results/
 apps/*/test-results/
 apps/*/tmp/
 ux-audit-screenshots/
+playwright-report/
+# Session QA / spec-alignment artifacts — never commit
+align/
+judge-math/
+judge-mcat/
+**/screenshots/
 *.tsbuildinfo
 supabase/.temp/
 /burst_test.mjs
@@ -42,3 +49,10 @@ supabase/.temp/
 /dashboard.html
 /demo-diagnostic-verification-report.txt
 .claude/worktrees/
+
+# Consolidated local audit/QA artifacts (judge runs, align notes, screenshots, scratch)
+audits/
+
+# Guard: stray nested dir from a misresolved NEXT_DIST_DIR (build output, never commit)
+apps/student/Users/
+/scripts/embed-rest-tmp.mjs

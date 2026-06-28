@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { SoundToggle } from "@/components/ui/SoundToggle";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { YieldBadge } from "@/components/mcat/YieldBadge";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
@@ -79,85 +79,72 @@ function umbrellaAttempts(u: Umbrella): number {
 }
 
 function sortUmbrellas(umbrellas: Umbrella[]): Umbrella[] {
-  return [...umbrellas].sort((a, b) => {
-    const aAtt = umbrellaAttempts(a) > 0;
-    const bAtt = umbrellaAttempts(b) > 0;
-    if (!aAtt && !bAtt) return 0;
-    if (aAtt && !bAtt) return -1;
-    if (!aAtt && bAtt) return 1;
-    const aScore = umbrellaDisplayScore(a) ?? 100;
-    const bScore = umbrellaDisplayScore(b) ?? 100;
-    return aScore - bScore;
-  });
+  return umbrellas;
 }
 
 function sortChildren(children: InDepthChild[]): InDepthChild[] {
-  return [...children].sort((a, b) => {
-    const aAtt = a.total_attempts > 0;
-    const bAtt = b.total_attempts > 0;
-    if (!aAtt && !bAtt) return 0;
-    if (aAtt && !bAtt) return -1;
-    if (!aAtt && bAtt) return 1;
-    const aScore = a.score ?? 1;
-    const bScore = b.score ?? 1;
-    return aScore - bScore;
-  });
-}
-
-function scoreColor(pct: number): string {
-  return pct >= 80 ? "text-success-500" : pct >= 50 ? "text-amber-600" : "text-error-500";
+  return children;
 }
 
 function scoreBarColor(pct: number): "brand" | "success" | "error" {
   if (pct >= 80) return "success";
-  if (pct >= 50) return "brand";
+  if (pct >= 55) return "brand";
   return "error";
 }
 
-// ── Overall stats helpers ─────────────────────────────────────────────────────
+// ── Word-label status (mirrors mathUiTypes.ts thresholds) ─────────────────────
+// Keyword: ≥5 attempts | Umbrella: ≥5 total | Category: ≥5 attempts + ≥min(3,N) keywords
 
-interface OverallStats {
-  totalKeywords: number;
-  practicedKeywords: number;
-  totalAttempts: number;
-  totalCorrect: number;
+interface ProgressStatus {
+  label: string;
+  labelClass: string;
+  sufficient: boolean;
 }
 
-function computeOverallStats(categories: Category[]): OverallStats {
-  let totalKeywords = 0;
-  let practicedKeywords = 0;
-  let totalAttempts = 0;
-  let totalCorrect = 0;
-
-  for (const cat of categories) {
-    if (cat.umbrellas && cat.umbrellas.length > 0) {
-      for (const u of cat.umbrellas) {
-        if (u.children.length > 0) {
-          for (const c of u.children) {
-            totalKeywords++;
-            if (c.total_attempts > 0) practicedKeywords++;
-            totalAttempts += c.total_attempts;
-            totalCorrect += c.correct_attempts;
-          }
-        } else {
-          totalKeywords++;
-          if (u.total_attempts > 0) practicedKeywords++;
-          totalAttempts += u.total_attempts;
-          totalCorrect += u.correct_attempts;
-        }
-      }
-    } else if (cat.keywords) {
-      for (const k of cat.keywords) {
-        totalKeywords++;
-        if (k.total_attempts > 0) practicedKeywords++;
-        totalAttempts += k.total_attempts;
-        totalCorrect += k.correct_attempts;
-      }
-    }
+function keywordProgressStatus(attempts: number, pct: number | null): ProgressStatus {
+  if (attempts === 0 || pct === null) {
+    return { label: "Not started", labelClass: "text-neutral-400", sufficient: false };
   }
-
-  return { totalKeywords, practicedKeywords, totalAttempts, totalCorrect };
+  if (attempts < 5) {
+    return { label: "Just started", labelClass: "text-neutral-500", sufficient: false };
+  }
+  if (pct >= 80) return { label: "Strong",        labelClass: "text-success-700", sufficient: true };
+  if (pct >= 55) return { label: "Getting there", labelClass: "text-amber-700",   sufficient: true };
+  return               { label: "Needs work",     labelClass: "text-error-600",   sufficient: true };
 }
+
+function umbrellaProgressStatus(totalAttempts: number, displayScore: number | null): ProgressStatus {
+  if (totalAttempts === 0 || displayScore === null) {
+    return { label: "Not started", labelClass: "text-neutral-400", sufficient: false };
+  }
+  if (totalAttempts < 5) {
+    return { label: "Just started", labelClass: "text-neutral-500", sufficient: false };
+  }
+  if (displayScore >= 80) return { label: "Strong",        labelClass: "text-success-700", sufficient: true };
+  if (displayScore >= 55) return { label: "Getting there", labelClass: "text-amber-700",   sufficient: true };
+  return                  { label: "Needs work",           labelClass: "text-error-600",   sufficient: true };
+}
+
+function categoryProgressStatus(
+  totalKeywords: number,
+  keywordsAttempted: number,
+  totalAttempts: number,
+  avgScore: number | null
+): ProgressStatus {
+  if (totalAttempts === 0 || avgScore === null) {
+    return { label: "Not started", labelClass: "text-neutral-400", sufficient: false };
+  }
+  const minKeywordsNeeded = Math.min(3, totalKeywords);
+  const sufficient = totalAttempts >= 5 && keywordsAttempted >= minKeywordsNeeded;
+  if (!sufficient) {
+    return { label: "Just started", labelClass: "text-neutral-500", sufficient: false };
+  }
+  if (avgScore >= 80) return { label: "Strong",        labelClass: "text-success-700", sufficient: true };
+  if (avgScore >= 55) return { label: "Getting there", labelClass: "text-amber-700",   sufficient: true };
+  return               { label: "Needs work",          labelClass: "text-error-600",   sufficient: true };
+}
+
+// ── Category stats helpers ────────────────────────────────────────────────────
 
 function categoryAvgPct(cat: Category): number | null {
   if (cat.umbrellas && cat.umbrellas.length > 0) {
@@ -175,6 +162,32 @@ function categoryAvgPct(cat: Category): number | null {
     );
   }
   return null;
+}
+
+function categoryKeywordStats(cat: Category): { totalKeywords: number; keywordsAttempted: number; totalAttempts: number } {
+  let totalKeywords = 0, keywordsAttempted = 0, totalAttempts = 0;
+  if (cat.umbrellas && cat.umbrellas.length > 0) {
+    for (const u of cat.umbrellas) {
+      if (u.children.length > 0) {
+        for (const c of u.children) {
+          totalKeywords++;
+          if (c.total_attempts > 0) keywordsAttempted++;
+          totalAttempts += c.total_attempts;
+        }
+      } else {
+        totalKeywords++;
+        if (u.total_attempts > 0) keywordsAttempted++;
+        totalAttempts += u.total_attempts;
+      }
+    }
+  } else if (cat.keywords) {
+    for (const k of cat.keywords) {
+      totalKeywords++;
+      if (k.total_attempts > 0) keywordsAttempted++;
+      totalAttempts += k.total_attempts;
+    }
+  }
+  return { totalKeywords, keywordsAttempted, totalAttempts };
 }
 
 // ── Umbrella row with expandable children ─────────────────────────────────────
@@ -195,6 +208,7 @@ function UmbrellaRow({
     : umbrella.children.reduce((s, c) => s + c.dont_know_count, 0);
   const hasChildren = umbrella.children.length > 0;
   const sorted = hasChildren ? sortChildren(umbrella.children) : [];
+  const status = umbrellaProgressStatus(attempts, displayScore);
 
   return (
     <div>
@@ -233,22 +247,9 @@ function UmbrellaRow({
               </span>
             )}
           </div>
-          <div className="flex items-center gap-1.5 shrink-0">
-            {attempts > 0 && attempts < 5 && (
-              <span className="text-xs text-amber-600 bg-amber-50 border border-amber-100 px-1.5 py-0.5 rounded">
-                low sample (n={attempts})
-              </span>
-            )}
-            {displayScore !== null ? (
-              <span className={`text-sm font-medium ${scoreColor(displayScore)}`}>
-                {displayScore}%
-              </span>
-            ) : (
-              <span className="text-xs text-neutral-400">Not started</span>
-            )}
-          </div>
+          <span className={`text-xs font-medium shrink-0 ${status.labelClass}`}>{status.label}</span>
         </div>
-        {displayScore !== null && (
+        {status.sufficient && displayScore !== null && (
           <ProgressBar
             value={displayScore}
             size="xs"
@@ -272,6 +273,7 @@ function UmbrellaRow({
 
 function ChildRow({ child }: { child: InDepthChild }) {
   const pct = child.score !== null ? Math.round(child.score * 100) : null;
+  const status = keywordProgressStatus(child.total_attempts, pct);
 
   return (
     <div className="py-2.5 border-t border-neutral-50 first:border-0">
@@ -294,11 +296,6 @@ function ChildRow({ child }: { child: InDepthChild }) {
           )}
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          {child.total_attempts > 0 && child.total_attempts < 5 && (
-            <span className="text-xs text-amber-600 bg-amber-50 border border-amber-100 px-1.5 py-0.5 rounded">
-              low sample (n={child.total_attempts})
-            </span>
-          )}
           {child.needs_lesson && (
             <Link
               href={`/mcat/lesson/${child.id}?label=${encodeURIComponent(child.label)}`}
@@ -307,14 +304,10 @@ function ChildRow({ child }: { child: InDepthChild }) {
               Lesson
             </Link>
           )}
-          {pct !== null ? (
-            <span className={`text-sm font-medium ${scoreColor(pct)}`}>{pct}%</span>
-          ) : (
-            <span className="text-xs text-neutral-400">not started</span>
-          )}
+          <span className={`text-xs font-medium ${status.labelClass}`}>{status.label}</span>
         </div>
       </div>
-      {pct !== null && (
+      {status.sufficient && pct !== null && (
         <ProgressBar value={pct} size="xs" color={scoreBarColor(pct)} label={child.label} />
       )}
     </div>
@@ -327,9 +320,6 @@ export default function McatProgressPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // Honest per-question counts from the attempt log (NOT summed per-keyword).
-  const [questionsAnswered, setQuestionsAnswered] = useState(0);
-  const [correctAnswers, setCorrectAnswers] = useState(0);
 
   const load = async () => {
     setLoading(true);
@@ -338,10 +328,8 @@ export default function McatProgressPage() {
       const sid = await getOrCreateMcatSession();
       const res = await fetch(`/api/mcat/taxonomy?session_id=${sid}`);
       if (!res.ok) throw new Error(await res.text());
-      const data = await res.json() as { categories: Category[]; questions_answered?: number; correct_answers?: number };
+      const data = await res.json() as { categories: Category[] };
       setCategories(data.categories ?? []);
-      setQuestionsAnswered(data.questions_answered ?? 0);
-      setCorrectAnswers(data.correct_answers ?? 0);
     } catch (e) {
       setError((e as Error).message ?? "Failed to load progress");
     } finally {
@@ -352,12 +340,6 @@ export default function McatProgressPage() {
   useEffect(() => {
     load();
   }, []); // load is stable (defined in component scope, not changing)
-
-  const stats = computeOverallStats(categories);
-  const overallAccuracy =
-    questionsAnswered > 0
-      ? Math.round((correctAnswers / questionsAnswered) * 100)
-      : null;
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -378,12 +360,12 @@ export default function McatProgressPage() {
           </div>
           <div className="flex items-center gap-2">
             <StreakBadge />
-            <SoundToggle />
+            <NavMenu />
           </div>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-2xl mx-auto px-4 py-6 space-y-6 pb-safe-bottom">
         {/* Loading */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-20 gap-3">
@@ -405,37 +387,13 @@ export default function McatProgressPage() {
 
         {!loading && !error && (
           <>
-            {/* Overall stats */}
-            <div className="grid grid-cols-3 gap-3">
-              <Card className="p-3 text-center" noPadding>
-                <div className="p-3 text-center">
-                  <p className="text-xl font-bold text-neutral-900">
-                    {stats.practicedKeywords}/{stats.totalKeywords}
-                  </p>
-                  <p className="text-xs text-neutral-500 mt-0.5">Practiced</p>
-                </div>
-              </Card>
-              <Card className="p-3 text-center" noPadding>
-                <div className="p-3 text-center">
-                  <p className="text-xl font-bold text-neutral-900">{questionsAnswered}</p>
-                  <p className="text-xs text-neutral-500 mt-0.5">Questions answered</p>
-                </div>
-              </Card>
-              <Card className="p-3 text-center" noPadding>
-                <div className="p-3 text-center">
-                  <p className={`text-xl font-bold ${overallAccuracy !== null ? (overallAccuracy >= 80 ? "text-success-500" : overallAccuracy >= 50 ? "text-amber-600" : "text-error-500") : "text-neutral-900"}`}>
-                    {overallAccuracy !== null ? `${overallAccuracy}%` : "—"}
-                  </p>
-                  <p className="text-xs text-neutral-500 mt-0.5">Accuracy</p>
-                </div>
-              </Card>
-            </div>
-
             {/* Per-category sections */}
             {categories.map((cat) => {
               const avgPct = categoryAvgPct(cat);
               const hasUmbrellas = cat.umbrellas && cat.umbrellas.length > 0;
               const sortedUmbrellas = hasUmbrellas ? sortUmbrellas(cat.umbrellas!) : [];
+              const kwStats = categoryKeywordStats(cat);
+              const catStatus = categoryProgressStatus(kwStats.totalKeywords, kwStats.keywordsAttempted, kwStats.totalAttempts, avgPct);
 
               return (
                 <Card key={cat.id} noPadding>
@@ -448,15 +406,11 @@ export default function McatProgressPage() {
                       >
                         {cat.label}
                       </Link>
-                      {avgPct !== null ? (
-                        <span className={`text-sm font-semibold ${scoreColor(avgPct)}`}>
-                          {avgPct}%
-                        </span>
-                      ) : (
-                        <span className="text-xs text-neutral-400">Not started</span>
-                      )}
+                      <span className={`text-xs font-semibold ${catStatus.labelClass}`}>
+                        {catStatus.label}
+                      </span>
                     </div>
-                    {avgPct !== null && (
+                    {catStatus.sufficient && avgPct !== null && (
                       <ProgressBar
                         value={avgPct}
                         size="xs"
@@ -483,28 +437,26 @@ export default function McatProgressPage() {
                     <div className="px-4 divide-y divide-neutral-50">
                       {cat.keywords
                         .filter((k) => k.tier === "umbrella" || !k.parent_keyword_id)
-                        .map((kw) => (
-                          <div key={kw.id} className="py-2.5">
-                            <div className="flex items-center justify-between gap-2 mb-1">
-                              <span className="text-sm text-neutral-800 truncate">{kw.label}</span>
-                              {kw.score !== null ? (
-                                <span className={`text-sm font-medium ${scoreColor(Math.round(kw.score * 100))}`}>
-                                  {Math.round(kw.score * 100)}%
-                                </span>
-                              ) : (
-                                <span className="text-xs text-neutral-400">not started</span>
+                        .map((kw) => {
+                          const kwPct = kw.score !== null ? Math.round(kw.score * 100) : null;
+                          const kwStatus = keywordProgressStatus(kw.total_attempts, kwPct);
+                          return (
+                            <div key={kw.id} className="py-2.5">
+                              <div className="flex items-center justify-between gap-2 mb-1">
+                                <span className="text-sm text-neutral-800 truncate">{kw.label}</span>
+                                <span className={`text-xs font-medium ${kwStatus.labelClass}`}>{kwStatus.label}</span>
+                              </div>
+                              {kwStatus.sufficient && kwPct !== null && (
+                                <ProgressBar
+                                  value={kwPct}
+                                  size="xs"
+                                  color={scoreBarColor(kwPct)}
+                                  label={kw.label}
+                                />
                               )}
                             </div>
-                            {kw.score !== null && (
-                              <ProgressBar
-                                value={Math.round(kw.score * 100)}
-                                size="xs"
-                                color={scoreBarColor(Math.round(kw.score * 100))}
-                                label={kw.label}
-                              />
-                            )}
-                          </div>
-                        ))}
+                          );
+                        })}
                     </div>
                   )}
                 </Card>

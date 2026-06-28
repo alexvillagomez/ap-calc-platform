@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import MathText from "@/components/mcat/MathText";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { getOrCreateMathSession } from "@/lib/mathSession";
 import { COURSE_LABELS } from "@/components/math/mathUiTypes";
 import type { MathCourse } from "@/lib/mathTypes";
@@ -256,6 +257,7 @@ function DiagnosticInner({
           <h1 className="font-semibold text-neutral-900 text-sm">
             Placement Diagnostic
           </h1>
+          <NavMenu className="ml-auto" />
         </div>
 
         {/* Progress dots */}
@@ -350,21 +352,31 @@ function DiagnosticInner({
           </Card>
         )}
 
-        {/* Unavailable */}
+        {/* Unavailable — friendly fallback that routes into guided learning
+            (auto mode builds content on demand, so there's always somewhere to go). */}
         {phase === "unavailable" && (
           <Card className="text-center space-y-4">
             <p className="text-base font-semibold text-neutral-800">
-              Diagnostic not ready yet
+              Let&apos;s skip the placement check
             </p>
             <p className="text-sm text-neutral-500">
-              The diagnostic requires course content to be seeded. Check back
-              once taxonomy is populated.
+              We couldn&apos;t set up a placement check right now — no problem. You
+              can jump straight into {courseLabel} and start learning from the
+              beginning. We&apos;ll adapt as you go.
             </p>
-            <Link href={`/math/${course}`}>
-              <Button variant="secondary" size="md">
-                Back to {courseLabel}
+            <Link href={`/math/${course}/auto`}>
+              <Button variant="primary" size="md">
+                Start learning
               </Button>
             </Link>
+            <div>
+              <Link
+                href={`/math/${course}`}
+                className="text-xs text-neutral-400 hover:text-neutral-600"
+              >
+                Back to {courseLabel}
+              </Link>
+            </div>
           </Card>
         )}
 

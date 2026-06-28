@@ -4,8 +4,10 @@ import { use, useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { LessonView, type LessonData } from "@/components/mcat/LessonView";
+import PrereqSeeAlso from "@/components/practice/PrereqSeeAlso";
 import { humanizeSlug } from "@/lib/humanize";
 
 export default function StandaloneLessonPage({
@@ -16,6 +18,10 @@ export default function StandaloneLessonPage({
   const { keywordId } = use(params);
   const router = useRouter();
   const searchParams = useSearchParams();
+  // Topic context (passed by the category page) so the end screen can route
+  // "practice more of this topic" and "back to topic" correctly.
+  const category = searchParams.get("category");
+  const scope = searchParams.get("scope"); // "keyword" | "umbrella"
 
   const [sessionId, setSessionId] = useState<string>("");
   const [ready, setReady] = useState(false);
@@ -29,6 +35,16 @@ export default function StandaloneLessonPage({
 
   const rawLabel = searchParams.get("label") ?? "";
   const keywordLabel = rawLabel ? rawLabel : humanizeSlug(keywordId);
+
+  const enc = rawLabel ? `&label=${encodeURIComponent(rawLabel)}` : "";
+  // Where "back" goes: an explicit ?return → the topic/category page → progress.
+  // Mirrors the math lesson page so the header, completion buttons, and skip all
+  // land where the user came from instead of dumping on the section home.
+  const backToTopicHref =
+    searchParams.get("return") ?? (category ? `/mcat/${category}` : "/mcat/progress");
+  const practiceMoreHref = category
+    ? `/mcat/${category}/practice?${scope === "umbrella" ? "umbrella" : "keyword"}=${encodeURIComponent(keywordId)}${enc}`
+    : null;
 
   useEffect(() => {
     getOrCreateMcatSession().then((sid) => {
@@ -60,7 +76,7 @@ export default function StandaloneLessonPage({
   }, [fetchLesson]);
 
   const handleDone = () => {
-    router.back();
+    router.push(backToTopicHref);
   };
 
   return (
@@ -73,20 +89,23 @@ export default function StandaloneLessonPage({
               <LoderaLogo size={22} />
             </Link>
             <Link
-              href="/mcat/progress"
+              href={backToTopicHref}
               className="text-xs text-neutral-400 hover:text-brand-600 shrink-0 transition-colors"
             >
-              ← My Progress
+              ← Back
             </Link>
           </div>
           <p className="font-semibold text-neutral-900 text-sm truncate px-3">
             {keywordLabel}
           </p>
-          <div className="w-20" />
+          <NavMenu />
         </div>
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-8">
+        {ready && sessionId && !loading && lesson && (
+          <PrereqSeeAlso system="mcat" keywordId={keywordId} className="mb-4" />
+        )}
         {!ready || !sessionId || loading ? (
           <div className="flex items-center justify-center py-32">
             <div className="relative w-10 h-10">
@@ -115,7 +134,7 @@ export default function StandaloneLessonPage({
                 Try again
               </button>
               <Link
-                href="/mcat/progress"
+                href={backToTopicHref}
                 className="px-4 py-2 rounded-xl border border-neutral-200 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors"
               >
                 Back
@@ -130,6 +149,24 @@ export default function StandaloneLessonPage({
             initialLesson={lesson}
             onComplete={handleDone}
             onSkip={handleDone}
+            completionActions={[
+              ...(practiceMoreHref
+                ? [
+                    {
+                      label: "Practice this topic",
+                      sublabel: "Try questions on what you just learned",
+                      href: practiceMoreHref,
+                      primary: true,
+                    },
+                  ]
+                : []),
+              {
+                label: rawLabel ? `Back to ${rawLabel}` : "Back to topic",
+                href: backToTopicHref,
+                primary: !practiceMoreHref,
+              },
+              { label: "MCAT home", href: "/mcat" },
+            ]}
           />
         )}
       </main>

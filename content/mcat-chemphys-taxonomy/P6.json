@@ -1,0 +1,555 @@
+{
+  "section": "physics",
+  "category_code": "P6",
+  "category_label": "Thermodynamics & Heat",
+  "order_index": 5,
+  "umbrellas": [
+    {
+      "slug": "thermo_systems_state_functions",
+      "label": "Thermodynamic Systems & State Functions",
+      "description": "Scope of a thermodynamic system and the meaning of state functions that describe its condition.",
+      "intro": {
+        "slug": "thermo_systems_state_functions_intro",
+        "label": "Thermodynamic Systems & State Functions Overview",
+        "description": "A thermodynamic system is the region of interest (open, closed, or isolated), and its surroundings are everything else; energy can cross the boundary as heat or work. State functions (internal energy, temperature, pressure, volume) depend only on the current state, not on the path taken to reach it. Understanding system types and state functions is the foundation for applying the laws of thermodynamics.",
+        "examples": [
+          "open vs. closed vs. isolated system",
+          "state function: depends on current state, not path",
+          "surroundings exchange heat/work with system"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "system_types",
+          "label": "Types of thermodynamic systems",
+          "description": "Classify a thermodynamic system as open (exchanges matter and energy), closed (exchanges energy but not matter), or isolated (exchanges neither) based on boundary conditions. This focuses on the system-type classification, not the specific laws governing energy exchange (covered in First Law keywords).",
+          "examples": [
+            "open: gas in a piston open to atmosphere",
+            "closed: sealed flask losing heat to surroundings",
+            "isolated: ideal thermos — no heat or matter transfer"
+          ]
+        },
+        {
+          "slug": "state_functions_vs_path_functions",
+          "label": "State functions vs. path functions",
+          "description": "Distinguish state functions (internal energy $U$, temperature $T$, pressure $P$, volume $V$, enthalpy $H$) — which depend only on the current state — from path functions (heat $Q$ and work $W$) — which depend on how a process occurs. This focuses on the state-vs.-path distinction, not the calculation of $Q$ or $W$ for specific processes (separate keywords).",
+          "examples": [
+            "state function: $\\Delta U$ same for any path between two states",
+            "path function: $Q$ and $W$ differ for isothermal vs. adiabatic",
+            "pressure, volume, temperature are state functions"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "zeroth_law_temperature",
+      "label": "Zeroth Law & Temperature",
+      "description": "The Zeroth Law of Thermodynamics, the concept of thermal equilibrium, and temperature scales.",
+      "intro": {
+        "slug": "zeroth_law_temperature_intro",
+        "label": "Zeroth Law & Temperature Overview",
+        "description": "The Zeroth Law states that if two systems are each in thermal equilibrium with a third system, they are in thermal equilibrium with each other — this is the logical basis for the concept of temperature as a measurable property. Temperature quantifies the average kinetic energy of particles, and the absolute (Kelvin) scale anchors zero to the point where molecular motion effectively ceases. Thermal equilibrium means no net heat flow between objects in contact.",
+        "examples": [
+          "Zeroth Law: A↔C and B↔C equilibrium → A↔B equilibrium",
+          "absolute zero: 0 K = −273.15 °C",
+          "thermal equilibrium: no net heat flow between objects"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "zeroth_law",
+          "label": "Zeroth Law of Thermodynamics",
+          "description": "Apply the Zeroth Law: if object A is in thermal equilibrium with object C, and object B is also in thermal equilibrium with C, then A and B are in thermal equilibrium with each other, establishing temperature as a transitive, measurable property. This focuses on the logical basis for temperature measurement, not the direction of heat flow (a First Law concept).",
+          "examples": [
+            "thermometer in equilibrium with both objects → same temperature",
+            "transitivity: A=C and B=C in temp → A=B in temp",
+            "foundation for defining a temperature scale"
+          ]
+        },
+        {
+          "slug": "thermal_equilibrium_heat_flow_direction",
+          "label": "Thermal equilibrium and direction of heat flow",
+          "description": "Predict that heat flows spontaneously from an object at higher temperature to one at lower temperature until both reach the same temperature (thermal equilibrium), at which point net heat transfer ceases. This focuses on the direction and end-condition of heat flow, not the rate or mechanism of transfer (conduction/convection/radiation are separate keywords).",
+          "examples": [
+            "hot coffee cools toward room temperature",
+            "heat flows high $T$ → low $T$, never the reverse spontaneously",
+            "equilibrium reached when $T_1 = T_2$"
+          ]
+        },
+        {
+          "slug": "temperature_scales",
+          "label": "Temperature scales and conversions",
+          "description": "Convert between Celsius, Fahrenheit, and Kelvin using $T(\\text{K}) = T(^\\circ\\text{C}) + 273$ and $T(^\\circ\\text{F}) = \\tfrac{9}{5}T(^\\circ\\text{C}) + 32$; recognize that thermodynamic calculations require the absolute (Kelvin) scale. This focuses on scale definitions and conversions, not on how temperature drives heat flow (a separate keyword).",
+          "examples": [
+            "$0\\,^\\circ\\text{C} = 273\\,\\text{K}$; $100\\,^\\circ\\text{C} = 373\\,\\text{K}$",
+            "always use Kelvin in gas-law and thermo equations",
+            "$T(^\\circ\\text{F}) = \\tfrac{9}{5}T + 32$"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "first_law_energy_conservation",
+      "label": "First Law of Thermodynamics",
+      "description": "Conservation of energy applied to thermodynamic systems: internal energy, heat, and work.",
+      "intro": {
+        "slug": "first_law_energy_conservation_intro",
+        "label": "First Law of Thermodynamics Overview",
+        "description": "The First Law of Thermodynamics is a statement of energy conservation: the change in internal energy of a system equals the heat added to the system minus the work done by the system, $\\Delta U = Q - W$. Internal energy is a state function; $Q$ and $W$ are path-dependent. Understanding sign conventions and how each term is calculated for different processes is central to MCAT thermodynamics.",
+        "examples": [
+          "$\\Delta U = Q - W$ (energy conservation for a system)",
+          "heat added to system: $Q > 0$; heat released: $Q < 0$",
+          "work done BY system: $W > 0$; work done ON system: $W < 0$"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "first_law_equation",
+          "label": "First Law equation and sign conventions",
+          "description": "Apply the First Law $\\Delta U = Q - W$: the change in internal energy equals heat absorbed by the system minus work done by the system on its surroundings; use sign conventions consistently (Q > 0 = heat in, W > 0 = work out). This focuses on the equation and sign rules, not on computing $W$ from a PV diagram (a separate keyword).",
+          "examples": [
+            "$\\Delta U = Q - W$; if $Q = 500\\,\\text{J}$, $W = 200\\,\\text{J}$, then $\\Delta U = 300\\,\\text{J}$",
+            "exothermic process: $Q < 0$ → internal energy decreases if no work done",
+            "sign convention: heat INTO system is positive"
+          ]
+        },
+        {
+          "slug": "internal_energy",
+          "label": "Internal energy as a state function",
+          "description": "Recognize internal energy $U$ as a state function representing the total kinetic and potential energy of particles in a system; $\\Delta U$ depends only on initial and final states, not the process path. This focuses on the nature of $U$, not the calculation of $Q$ or $W$ individually.",
+          "examples": [
+            "$U$ depends on state (T, P, V), not on how the state was reached",
+            "ideal monatomic gas: $U = \\tfrac{3}{2}nRT$",
+            "isothermal process for ideal gas: $\\Delta U = 0$"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "pv_diagrams_thermodynamic_work",
+      "label": "PV Diagrams & Thermodynamic Work",
+      "description": "Graphical representation of thermodynamic processes on pressure–volume diagrams and calculation of work from the area under or enclosed by the curve.",
+      "intro": {
+        "slug": "pv_diagrams_thermodynamic_work_intro",
+        "label": "PV Diagrams & Work Overview",
+        "description": "A PV diagram plots pressure vs. volume for a thermodynamic process; the area under the curve equals the work done BY the gas ($W = \\int P\\,dV$), while the area enclosed by a cycle equals the net work of the cycle. Different processes (isothermal, isobaric, adiabatic, isochoric) trace characteristic curves on the diagram, and reading these diagrams is a key MCAT skill.",
+        "examples": [
+          "area under PV curve = work done by gas",
+          "closed cycle: net work = enclosed area; clockwise = positive net work",
+          "isochoric: vertical line, $W = 0$ (no area)"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "work_as_pv_area",
+          "label": "Work as area under a PV curve",
+          "description": "Calculate or compare the work done by a gas as the area under its path on a PV diagram ($W = P\\Delta V$ for isobaric; area under curve for general path); a larger area = more work done by the gas. This focuses on reading and comparing areas, not on identifying the process type (separate keywords).",
+          "examples": [
+            "isobaric expansion: $W = P\\Delta V$ = area of rectangle under path",
+            "greater area under curve → more work done by gas",
+            "compression: area under curve = work done ON gas (negative by gas)"
+          ]
+        },
+        {
+          "slug": "pv_cycle_net_work",
+          "label": "Net work in a thermodynamic cycle",
+          "description": "Determine the net work done per cycle as the area enclosed by the closed loop on a PV diagram; clockwise traversal means net positive work (engine); counterclockwise means net negative work (refrigerator/pump). This focuses on cycle geometry and net work sign, not individual-process details.",
+          "examples": [
+            "clockwise PV loop: engine does positive net work on surroundings",
+            "net work = area enclosed by the closed loop",
+            "counterclockwise loop: net work input (refrigeration cycle)"
+          ]
+        },
+        {
+          "slug": "isothermal_process",
+          "label": "Isothermal process",
+          "description": "Characterize an isothermal process (constant temperature, $\\Delta T = 0$): for an ideal gas $\\Delta U = 0$, so $Q = W$; the PV diagram traces a hyperbola ($P \\propto 1/V$). This focuses on isothermal behavior, not other process types (each is a separate keyword).",
+          "examples": [
+            "$\\Delta T = 0 \\Rightarrow \\Delta U = 0$ for ideal gas; all heat converts to work",
+            "PV curve: hyperbola $PV = nRT = \\text{const}$",
+            "slow expansion of gas in thermal contact with reservoir"
+          ]
+        },
+        {
+          "slug": "adiabatic_process",
+          "label": "Adiabatic process",
+          "description": "Characterize an adiabatic process (no heat exchange, $Q = 0$): by the First Law $\\Delta U = -W$, so the gas cools during expansion and heats during compression; the PV curve is steeper than the isothermal curve. This focuses on adiabatic behavior, not isothermal or isobaric processes.",
+          "examples": [
+            "$Q = 0 \\Rightarrow \\Delta U = -W$: expansion cools the gas",
+            "adiabatic PV curve steeper than isothermal hyperbola at same point",
+            "rapid compression of gas in insulated cylinder heats it"
+          ]
+        },
+        {
+          "slug": "isobaric_process",
+          "label": "Isobaric process",
+          "description": "Characterize an isobaric process (constant pressure, $\\Delta P = 0$): work is simply $W = P\\Delta V$, and both $Q$ and $\\Delta U$ are generally nonzero; on a PV diagram the path is a horizontal line. This focuses on constant-pressure behavior, not isothermal or adiabatic processes.",
+          "examples": [
+            "horizontal line on PV diagram at constant $P$",
+            "$W = P\\Delta V$ — the simplest work calculation",
+            "gas heated in a cylinder open to atmosphere: $P$ stays constant"
+          ]
+        },
+        {
+          "slug": "isochoric_process",
+          "label": "Isochoric (isovolumetric) process",
+          "description": "Characterize an isochoric process (constant volume, $\\Delta V = 0$): no work is done ($W = 0$), so all heat transfer directly changes internal energy ($\\Delta U = Q$); on a PV diagram the path is a vertical line. This focuses on constant-volume behavior, not constant-pressure or constant-temperature processes.",
+          "examples": [
+            "$\\Delta V = 0 \\Rightarrow W = 0 \\Rightarrow \\Delta U = Q$",
+            "vertical line on PV diagram",
+            "heating gas in a rigid sealed container"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "second_law_entropy",
+      "label": "Second Law & Entropy",
+      "description": "The Second Law of Thermodynamics: entropy as a measure of disorder and the direction of spontaneous processes.",
+      "intro": {
+        "slug": "second_law_entropy_intro",
+        "label": "Second Law & Entropy Overview",
+        "description": "The Second Law states that in any spontaneous process the total entropy of the universe (system + surroundings) never decreases — it either stays the same (reversible) or increases (irreversible). Entropy is a measure of the dispersal of energy or molecular disorder; gases have more entropy than liquids, which have more than crystalline solids. This directionality determines which processes happen naturally and underlies the limits on heat engines.",
+        "examples": [
+          "spontaneous process: $\\Delta S_{universe} \\geq 0$",
+          "entropy order: gas > liquid > crystal",
+          "ice melting at room temp: entropy of universe increases"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "second_law_statement",
+          "label": "Second Law of Thermodynamics",
+          "description": "State and apply the Second Law: the entropy of an isolated system tends to increase; natural processes proceed in the direction that increases total entropy of the universe; no spontaneous process can decrease universal entropy. This focuses on the law's directionality, not the quantitative calculation of $\\Delta S$ for reactions (C7).",
+          "examples": [
+            "heat never flows spontaneously from cold to hot",
+            "$\\Delta S_{universe} = \\Delta S_{system} + \\Delta S_{surroundings} \\geq 0$",
+            "irreversible processes generate entropy"
+          ]
+        },
+        {
+          "slug": "entropy_as_disorder",
+          "label": "Entropy as molecular disorder",
+          "description": "Interpret entropy as a measure of the dispersal of energy and the disorder of molecular arrangements; higher entropy = more microstates available to the system. This focuses on the conceptual meaning of entropy, not its role in chemical spontaneity ($\\Delta G = \\Delta H - T\\Delta S$, which is C7).",
+          "examples": [
+            "mixing gases: entropy increases (more microstates)",
+            "more particles, larger volume, higher temp → more entropy",
+            "Boltzmann: $S = k_B \\ln W$ (qualitative understanding)"
+          ]
+        },
+        {
+          "slug": "relative_entropy_states_of_matter",
+          "label": "Relative entropy of gas, liquid, and crystal",
+          "description": "Rank the entropy of substances in different phases: crystalline solid (lowest disorder) < liquid < gas (highest disorder), because gas molecules have far more available microstates and energy is highly dispersed. This focuses on phase-based entropy ranking, not on the entropy change of a chemical reaction.",
+          "examples": [
+            "gas $\\gg$ liquid $>$ crystal in entropy",
+            "vaporization: large $\\Delta S > 0$ (liquid → gas)",
+            "perfectly ordered crystal at 0 K: $S = 0$ (Third Law)"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "calorimetry_heat_capacity",
+      "label": "Calorimetry & Heat Capacity",
+      "description": "Measuring heat changes and relating heat transfer to temperature change via heat capacity and specific heat.",
+      "intro": {
+        "slug": "calorimetry_heat_capacity_intro",
+        "label": "Calorimetry & Heat Capacity Overview",
+        "description": "Calorimetry is the experimental measurement of heat transfer, typically by monitoring temperature change in a known substance. Heat capacity is the amount of heat needed to raise an object's temperature by 1°C; specific heat is the capacity per gram of material, encoded in the formula $Q = mc\\Delta T$. These tools allow quantitative tracking of thermal energy in physical and chemical processes.",
+        "examples": [
+          "$Q = mc\\Delta T$: heat = mass × specific heat × temp change",
+          "water: high specific heat $\\approx 4.18\\,\\text{J/(g·°C)}$",
+          "bomb calorimeter measures heat of combustion"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "specific_heat_q_mcdt",
+          "label": "Specific heat and $Q = mc\\Delta T$",
+          "description": "Apply $Q = mc\\Delta T$ to calculate the heat absorbed or released by a substance: $Q$ is heat (J), $m$ is mass (g or kg), $c$ is specific heat capacity (J/g·°C), and $\\Delta T$ is the temperature change. This focuses on sensible heat (no phase change); latent heat calculations use $Q = mL$ (a separate keyword).",
+          "examples": [
+            "$Q = mc\\Delta T$: 100 g water, $c = 4.18\\,\\text{J/(g·°C)}$, $\\Delta T = 10\\,^\\circ\\text{C}$ → $Q = 4180\\,\\text{J}$",
+            "high $c$ = large heat needed per °C — water buffers temperature changes",
+            "metals have low $c$: heat up quickly for same $Q$"
+          ]
+        },
+        {
+          "slug": "heat_capacity",
+          "label": "Heat capacity (total vs. specific)",
+          "description": "Distinguish total heat capacity $C$ (heat per degree for the whole object, $Q = C\\Delta T$) from specific heat capacity $c$ (heat per gram per degree); relate them by $C = mc$. This focuses on the definition and distinction of capacities, not on the calorimetry measurement setup.",
+          "examples": [
+            "total: $C = mc$ (J/°C for the object)",
+            "specific: $c$ in J/(g·°C) — an intrinsic material property",
+            "a large mass of low-$c$ material may have same $C$ as small mass of high-$c$"
+          ]
+        },
+        {
+          "slug": "calorimetry_measurement",
+          "label": "Calorimetry — measuring heat changes",
+          "description": "Describe how a calorimeter (coffee-cup or bomb) measures heat transfer by monitoring the temperature change of water or a surrounding medium and applying $Q_{rxn} = -Q_{cal} = -mc\\Delta T$; the sign reflects that heat released by the reaction is absorbed by the calorimeter. This focuses on the experimental setup and sign convention, not on specific heat values.",
+          "examples": [
+            "coffee-cup calorimeter: constant pressure, $Q = n\\Delta H_{rxn}$",
+            "bomb calorimeter: constant volume, $Q = \\Delta U_{rxn}$",
+            "$Q_{rxn} = -Q_{water}$: energy released by reaction heats water"
+          ]
+        },
+        {
+          "slug": "heat_capacity_constant_p_vs_v",
+          "label": "Heat capacity at constant pressure vs. constant volume",
+          "description": "Distinguish $C_P$ (heat capacity at constant pressure) from $C_V$ (heat capacity at constant volume): $C_P > C_V$ for gases because at constant pressure, some heat goes into PV work of expansion; for incompressible solids and liquids $C_P \\approx C_V$. This focuses on the $C_P$ vs. $C_V$ distinction, not on the specific process types (covered in PV diagram keywords).",
+          "examples": [
+            "$C_P > C_V$ for gases: extra heat needed for expansion work",
+            "for ideal monatomic gas: $C_P = \\tfrac{5}{2}R$, $C_V = \\tfrac{3}{2}R$",
+            "solids/liquids: $C_P \\approx C_V$ (negligible $\\Delta V$)"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "latent_heat_phase_changes",
+      "label": "Latent Heat & Phase Changes",
+      "description": "Heat absorbed or released during phase transitions at constant temperature: heat of fusion and heat of vaporization.",
+      "intro": {
+        "slug": "latent_heat_phase_changes_intro",
+        "label": "Latent Heat & Phase Changes Overview",
+        "description": "When a substance changes phase (solid↔liquid or liquid↔gas), heat is absorbed or released at constant temperature — this is latent heat. The heat of fusion ($L_f$) governs melting/freezing and the heat of vaporization ($L_v$) governs boiling/condensation; the formula $Q = mL$ applies to both. Because phase transitions occur at constant temperature, they do not appear on a $Q = mc\\Delta T$ segment of a heating curve.",
+        "examples": [
+          "$Q = mL$: latent heat absorbed/released without temperature change",
+          "heat of vaporization of water $\\approx 2260\\,\\text{J/g}$ (much larger than fusion)",
+          "heating curve: flat plateau at melting/boiling point"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "heat_of_fusion",
+          "label": "Heat of fusion ($Q = mL_f$)",
+          "description": "Calculate heat absorbed during melting (or released during freezing) using $Q = mL_f$, where $L_f$ is the specific heat of fusion; temperature remains constant throughout the phase change. This focuses on solid↔liquid transitions, not liquid↔gas transitions (heat of vaporization is a separate keyword).",
+          "examples": [
+            "$Q = mL_f$: 100 g ice, $L_f = 334\\,\\text{J/g}$ → $Q = 33{,}400\\,\\text{J}$ to melt",
+            "freezing releases the same heat: $Q = -mL_f$",
+            "temperature stays at 0 °C while ice melts"
+          ]
+        },
+        {
+          "slug": "heat_of_vaporization",
+          "label": "Heat of vaporization ($Q = mL_v$)",
+          "description": "Calculate heat absorbed during vaporization (or released during condensation) using $Q = mL_v$, where $L_v$ is the specific heat of vaporization; temperature remains constant during boiling. $L_v \\gg L_f$ for most substances because separating molecules to vapor requires much more energy than disrupting the solid lattice. This focuses on liquid↔gas transitions.",
+          "examples": [
+            "$Q = mL_v$: water $L_v \\approx 2260\\,\\text{J/g}$ at 100 °C",
+            "$L_v \\gg L_f$: vaporization needs far more energy than fusion",
+            "condensation releases $Q = mL_v$ — why steam burns badly"
+          ]
+        },
+        {
+          "slug": "heating_curve_interpretation",
+          "label": "Heating curve — temperature vs. heat added",
+          "description": "Interpret a heating curve: sloped regions ($Q = mc\\Delta T$) represent temperature rising within a phase; flat plateaus at melting point and boiling point represent phase transitions ($Q = mL$) at constant temperature. This focuses on reading the composite curve, not on calculating individual segments in isolation.",
+          "examples": [
+            "flat plateau at 0 °C: ice melting ($Q = mL_f$)",
+            "flat plateau at 100 °C: water boiling ($Q = mL_v$)",
+            "slope of rising segments inversely related to specific heat"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "phase_diagrams",
+      "label": "Phase Diagrams (P–T)",
+      "description": "Pressure–temperature phase diagrams: phase boundaries, triple point, critical point, and reading phase at given conditions.",
+      "intro": {
+        "slug": "phase_diagrams_intro",
+        "label": "Phase Diagrams Overview",
+        "description": "A phase diagram is a map of a substance's stable phase as a function of pressure and temperature; the three regions (solid, liquid, gas) are separated by two-phase boundary curves. The triple point is the unique P–T where all three phases coexist; the critical point marks where the liquid–gas boundary ends and above which only a supercritical fluid exists. Reading and interpreting phase diagrams is directly tested on the MCAT.",
+        "examples": [
+          "triple point: unique P and T where solid, liquid, gas coexist",
+          "critical point: end of liquid–gas boundary; supercritical fluid above",
+          "increase P at fixed T: can force gas → liquid → solid"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "phase_diagram_regions_boundaries",
+          "label": "Phase regions and boundaries on a P–T diagram",
+          "description": "Identify the solid, liquid, and gas regions on a P–T phase diagram and the three boundary curves (melting/freezing curve, vaporization/condensation curve, sublimation/deposition curve); crossing a boundary at any point indicates a phase transition. This focuses on region/boundary identification, not the special points (triple/critical point are separate keywords).",
+          "examples": [
+            "above vaporization curve: liquid; below it: gas",
+            "increasing $P$ at constant $T$ can drive gas → liquid",
+            "three boundaries meet at the triple point"
+          ]
+        },
+        {
+          "slug": "triple_point",
+          "label": "Triple point",
+          "description": "Identify the triple point as the unique combination of temperature and pressure at which the solid, liquid, and gas phases of a substance coexist in equilibrium; at this point all three phase-boundary lines meet. This focuses on the triple point specifically, not the critical point (a separate keyword).",
+          "examples": [
+            "water triple point: 0.01 °C, 0.006 atm",
+            "only one T and P where all three phases coexist",
+            "below triple-point pressure: solid sublimes directly to gas"
+          ]
+        },
+        {
+          "slug": "critical_point",
+          "label": "Critical point and supercritical fluid",
+          "description": "Identify the critical point (critical temperature $T_c$ and critical pressure $P_c$) as the terminus of the liquid–gas boundary; above $T_c$ and $P_c$, the substance exists as a supercritical fluid with properties intermediate between liquid and gas, and no phase transition occurs upon compression. This focuses on the critical point, not the triple point.",
+          "examples": [
+            "above $T_c$: cannot liquefy gas by pressure alone",
+            "supercritical $\\text{CO}_2$: widely used as a solvent (no surface tension)",
+            "$\\text{CO}_2$: $T_c = 31\\,^\\circ\\text{C}$, $P_c = 72.8\\,\\text{atm}$ (conceptual)"
+          ]
+        },
+        {
+          "slug": "sublimation_deposition",
+          "label": "Sublimation and deposition",
+          "description": "Describe sublimation (solid → gas) and deposition (gas → solid) as direct phase transitions that occur below the triple-point pressure, bypassing the liquid phase; dry ice ($\\text{CO}_2$) at atmospheric pressure is a common example. This focuses on the solid–gas transition, not the other boundaries.",
+          "examples": [
+            "dry ice sublimates at 1 atm: below $\\text{CO}_2$ triple-point pressure",
+            "below triple-point pressure: no liquid phase possible",
+            "frost formation: water vapor deposits directly as ice"
+          ]
+        },
+        {
+          "slug": "water_phase_diagram_anomaly",
+          "label": "Water's anomalous phase diagram",
+          "description": "Explain why water's solid–liquid boundary has a negative slope (melting point decreases with increasing pressure), the opposite of most substances, because ice is less dense than liquid water; applying pressure favors the denser liquid phase. This focuses on the water anomaly, not the general rules of phase diagrams.",
+          "examples": [
+            "ice floats: water expands on freezing (density anomaly)",
+            "negative slope: pressing on ice at 0 °C can melt it",
+            "most substances: positive slope (solid denser than liquid)"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "heat_transfer_mechanisms",
+      "label": "Heat Transfer Mechanisms",
+      "description": "The three modes by which thermal energy moves from one place to another: conduction, convection, and radiation.",
+      "intro": {
+        "slug": "heat_transfer_mechanisms_intro",
+        "label": "Heat Transfer Mechanisms Overview",
+        "description": "Heat moves from warmer to cooler regions by three distinct mechanisms: conduction (direct molecular collisions through a solid or stationary fluid), convection (bulk fluid motion carrying thermal energy), and radiation (electromagnetic waves, which require no medium). Each mechanism depends on different physical parameters and dominates in different contexts — solids conduct, fluids convect, and all objects radiate.",
+        "examples": [
+          "conduction: metal spoon heats in hot coffee",
+          "convection: warm air rises, cool air sinks (currents)",
+          "radiation: Sun's energy reaches Earth through vacuum"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "conduction",
+          "label": "Conduction",
+          "description": "Describe conduction as heat transfer through a material by direct molecular collisions or electron transport without bulk movement of matter; rate depends on thermal conductivity $k$, cross-sectional area $A$, temperature gradient $\\Delta T / L$ via Fourier's law $\\dot{Q} = kA(\\Delta T/L)$. Metals are excellent conductors; insulators have low $k$. This focuses on conduction, not convection or radiation (separate keywords).",
+          "examples": [
+            "$\\dot{Q} = kA(\\Delta T/L)$: steeper temp gradient → faster conduction",
+            "metals (high $k$) conduct quickly; wood/foam (low $k$) insulate",
+            "no bulk material movement: adjacent molecules collide"
+          ]
+        },
+        {
+          "slug": "convection",
+          "label": "Convection",
+          "description": "Describe convection as heat transfer by the bulk movement of a fluid (liquid or gas): natural convection is driven by density differences (warm fluid rises, cool fluid sinks); forced convection uses a pump or fan. This focuses on fluid-bulk-motion heat transfer, not molecular-collision conduction or radiative transfer.",
+          "examples": [
+            "natural: warm water rises in a pot, creating currents",
+            "forced: fan blowing cool air over a hot component",
+            "convection requires a fluid medium (not in solids or vacuum)"
+          ]
+        },
+        {
+          "slug": "radiation_heat_transfer",
+          "label": "Radiation (thermal)",
+          "description": "Describe radiation as heat transfer via electromagnetic waves (infrared), which requires no medium; the Stefan–Boltzmann law gives power radiated $P = \\varepsilon \\sigma A T^4$, where $\\varepsilon$ is emissivity, $\\sigma = 5.67 \\times 10^{-8}\\,\\text{W/m}^2\\text{K}^4$, and $T$ is absolute temperature. A blackbody ($\\varepsilon = 1$) radiates maximally; good absorbers are also good emitters. This focuses on electromagnetic radiative transfer, not conduction or convection.",
+          "examples": [
+            "sun heats Earth through vacuum: pure radiation",
+            "$P \\propto T^4$: doubling absolute temp → 16× power radiated",
+            "dark/matte surfaces: high emissivity $\\varepsilon \\approx 1$; shiny: low $\\varepsilon$"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "thermal_expansion",
+      "label": "Thermal Expansion",
+      "description": "How materials change size (length, area, volume) in response to temperature changes.",
+      "intro": {
+        "slug": "thermal_expansion_intro",
+        "label": "Thermal Expansion Overview",
+        "description": "Most materials expand when heated and contract when cooled, because increased thermal energy increases average inter-atomic spacing. Linear expansion is characterized by the coefficient of linear thermal expansion $\\alpha$; volumetric expansion by $\\beta \\approx 3\\alpha$. These effects matter in engineering (gaps in bridges, bimetallic strips, thermometers) and on the MCAT for qualitative reasoning about pressure buildup in sealed containers.",
+        "examples": [
+          "$\\Delta L = \\alpha L_0 \\Delta T$: longer rod expands more",
+          "$\\Delta V = \\beta V_0 \\Delta T$, where $\\beta \\approx 3\\alpha$",
+          "bimetallic strip bends because two metals have different $\\alpha$"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "linear_thermal_expansion",
+          "label": "Linear thermal expansion",
+          "description": "Apply $\\Delta L = \\alpha L_0 \\Delta T$ to calculate the change in length of a solid when its temperature changes by $\\Delta T$, where $\\alpha$ is the coefficient of linear thermal expansion and $L_0$ is the original length; longer objects and those with larger $\\alpha$ expand more. This focuses on one-dimensional length change, not volumetric expansion.",
+          "examples": [
+            "$\\Delta L = \\alpha L_0 \\Delta T$: steel bridge span grows in summer",
+            "larger $\\alpha$ (e.g., aluminum) vs. smaller $\\alpha$ (e.g., Invar) — differential expansion",
+            "bimetallic strip: two metals bonded, different $\\alpha$ → bending"
+          ]
+        },
+        {
+          "slug": "volumetric_thermal_expansion",
+          "label": "Volumetric thermal expansion",
+          "description": "Apply $\\Delta V = \\beta V_0 \\Delta T$ for volumetric expansion, where $\\beta \\approx 3\\alpha$ for isotropic solids; liquids also expand volumetrically with their own $\\beta$. This focuses on three-dimensional volume change; linear expansion in one dimension is a separate keyword.",
+          "examples": [
+            "$\\Delta V = \\beta V_0 \\Delta T$; $\\beta \\approx 3\\alpha$ for solids",
+            "liquid in a sealed rigid container: pressure rises when heated (no expansion allowed)",
+            "mercury thermometer: liquid $Hg$ expands more than the glass"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "heat_engines_efficiency",
+      "label": "Heat Engines & Efficiency",
+      "description": "Conversion of heat into work: heat engine operation, efficiency, and the Carnot limit.",
+      "intro": {
+        "slug": "heat_engines_efficiency_intro",
+        "label": "Heat Engines & Efficiency Overview",
+        "description": "A heat engine absorbs heat $Q_H$ from a hot reservoir, converts part to work $W$, and rejects the remainder $Q_C$ to a cold reservoir; the Second Law forbids 100% conversion of heat to work. Efficiency is $e = W/Q_H = 1 - Q_C/Q_H$. The Carnot engine is the ideal (maximum efficiency) reversible engine operating between two temperatures, with $e_{Carnot} = 1 - T_C/T_H$ (temperatures in Kelvin); all real engines have lower efficiency.",
+        "examples": [
+          "$e = W/Q_H = 1 - Q_C/Q_H$",
+          "Carnot efficiency: $e_{Carnot} = 1 - T_C/T_H$ (max possible)",
+          "Second Law: $e < 1$ always; can't convert all heat to work"
+        ]
+      },
+      "in_depth": [
+        {
+          "slug": "heat_engine_operation",
+          "label": "Heat engine operation",
+          "description": "Describe a heat engine as a device that absorbs heat $Q_H$ from a high-temperature reservoir, performs work $W = Q_H - Q_C$ on the surroundings, and rejects waste heat $Q_C$ to a low-temperature reservoir; by the First Law, $W = Q_H - Q_C$. This focuses on the energy-flow picture, not on efficiency calculations (separate keywords).",
+          "examples": [
+            "energy flow: $Q_H$ in → $W$ out + $Q_C$ rejected",
+            "steam engine: hot steam is the heat source; atmosphere or condenser is the cold sink",
+            "$W = Q_H - Q_C$ (First Law applied to the engine cycle)"
+          ]
+        },
+        {
+          "slug": "thermal_efficiency",
+          "label": "Thermal efficiency of a heat engine",
+          "description": "Calculate thermal efficiency $e = W/Q_H = 1 - Q_C/Q_H$; recognize that the Second Law requires $Q_C > 0$ so $e < 1$ (no engine converts all input heat to work). This focuses on efficiency calculation, not on the maximum (Carnot) efficiency formula (a separate keyword).",
+          "examples": [
+            "$e = 1 - Q_C/Q_H$; if $Q_H = 1000\\,\\text{J}$, $Q_C = 600\\,\\text{J}$ → $e = 0.40$",
+            "40% efficient: 40 J of work per 100 J of heat input",
+            "always $e < 1$: some heat must be wasted to cold reservoir"
+          ]
+        },
+        {
+          "slug": "carnot_efficiency",
+          "label": "Carnot efficiency and the ideal engine",
+          "description": "Apply the Carnot efficiency formula $e_{Carnot} = 1 - T_C/T_H$ (temperatures in Kelvin) as the maximum theoretical efficiency for any heat engine operating between a hot reservoir at $T_H$ and a cold reservoir at $T_C$; all real (irreversible) engines are less efficient. This focuses on the Carnot upper bound, not on actual engine cycles or general efficiency calculation.",
+          "examples": [
+            "$e_{Carnot} = 1 - T_C/T_H$: $T_H = 600\\,\\text{K}$, $T_C = 300\\,\\text{K}$ → $e = 50\\%$",
+            "real engine always: $e < e_{Carnot}$ (irreversibility generates entropy)",
+            "to maximize Carnot efficiency: increase $T_H$ or decrease $T_C$"
+          ]
+        }
+      ]
+    }
+  ]
+}

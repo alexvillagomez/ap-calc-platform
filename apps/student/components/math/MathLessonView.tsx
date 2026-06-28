@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import MathText from "@/components/mcat/MathText";
 import MathFeedbackWidget from "@/components/math/MathFeedbackWidget";
+import { EndScreenActions, type EndAction } from "@/components/practice/EndScreenActions";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -17,10 +18,21 @@ interface CheckQuestion {
 
 interface MicroStep {
   step_index: number;
+  /** Optional understanding-check. When false (or choices blank), the page has no quiz. */
+  has_check?: boolean;
   explanation_latex: string;
   example_latex: string;
   check_question: CheckQuestion;
   hint_latex: string;
+}
+
+/** A page carries a check only when flagged AND it has real (non-blank) choices. */
+function stepHasCheck(step: MicroStep): boolean {
+  return (
+    step.has_check !== false &&
+    Array.isArray(step.check_question?.choices) &&
+    step.check_question.choices.some((c) => c.trim() !== "")
+  );
 }
 
 export interface LessonData {
@@ -48,6 +60,17 @@ interface MathLessonViewProps {
    * rendering.
    */
   initialLesson?: LessonData;
+  /**
+   * Optional end-of-lesson actions. When provided, the "Lesson complete" screen
+   * shows these choices (e.g. practice more / back to topic / home) instead of a
+   * single "Continue" button. Omit it (auto mode, struggle lessons) to keep the
+   * single-Continue → onComplete behavior unchanged.
+   */
+  completionActions?: EndAction[];
+  /** When true, render a "← Previous lesson" control (page 1 / footer). */
+  hasPreviousLesson?: boolean;
+  /** Invoked when the student chooses to go to the previous lesson. */
+  onPreviousLesson?: () => void;
 }
 
 export function MathLessonView({
@@ -56,12 +79,19 @@ export function MathLessonView({
   keywordLabel,
   onComplete,
   onSkip,
+  completionActions,
   onComboUpdate,
   initialLesson,
+  hasPreviousLesson,
+  onPreviousLesson,
 }: MathLessonViewProps) {
   const [lesson, setLesson] = useState<LessonData | null>(initialLesson ?? null);
   const [loading, setLoading] = useState(!initialLesson);
   const [error, setError] = useState<string | null>(null);
+
+  // Prefer the clean DB label carried by the loaded lesson over a (possibly
+  // humanized-slug) prop, so the heading never shows an internal id prefix.
+  const displayLabel = lesson?.keyword_label?.trim() || keywordLabel;
 
   const [stepIndex, setStepIndex] = useState(0);
   const [stepPhase, setStepPhase] = useState<StepPhase>("read");
@@ -83,13 +113,14 @@ export function MathLessonView({
     try {
       const res = await fetch(`/api/math/lesson/${encodeURIComponent(keywordId)}`);
       if (!res.ok) {
-        const body = await res.text().catch(() => "Unknown error");
-        throw new Error(body || `HTTP ${res.status}`);
+        // Log server detail for debugging, never surface raw error JSON to the user.
+        await res.text().then((b) => console.error("math lesson load failed:", b)).catch(() => {});
+        throw new Error("friendly");
       }
       const data = (await res.json()) as LessonData;
       setLesson(data);
-    } catch (e) {
-      setError((e as Error).message ?? "Failed to load lesson");
+    } catch {
+      setError("We couldn't load this lesson right now — try again or skip.");
     } finally {
       setLoading(false);
     }
@@ -139,9 +170,20 @@ export function MathLessonView({
     }
   }, [lesson, stepIndex]);
 
+  // Spec: a wrong understanding-quiz answer takes the student back to the
+  // initial lesson page (the read phase of the page the quiz just tested),
+  // so they re-read it rather than being stuck re-attempting the question.
   const handleTryAgain = useCallback(() => {
     setSelectedChoice(null);
-    setStepPhase("question");
+    setStepPhase("read");
+    setShowHint(false);
+  }, []);
+
+  // Spec: free backward navigation between lesson pages.
+  const handleBack = useCallback(() => {
+    setStepIndex((i) => Math.max(0, i - 1));
+    setStepPhase("read");
+    setSelectedChoice(null);
     setShowHint(false);
   }, []);
 
@@ -193,8 +235,10 @@ export function MathLessonView({
           </h2>
           <p className="text-sm text-neutral-500">
             Great work on{" "}
-            <span className="font-medium text-neutral-700">{keywordLabel}</span>.
-            Time to practice.
+            <span className="font-medium text-neutral-700"><MathText>{keywordLabel}</MathText></span>.
+            {completionActions && completionActions.length > 0
+              ? " What's next?"
+              : " Time to practice."}
           </p>
         </div>
         <div className="border-t border-neutral-100 pt-4">
@@ -204,12 +248,16 @@ export function MathLessonView({
             contentId={lesson.id}
           />
         </div>
-        <button
-          onClick={onComplete}
-          className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
-        >
-          Continue
-        </button>
+        {completionActions && completionActions.length > 0 ? (
+          <EndScreenActions actions={completionActions} />
+        ) : (
+          <button
+            onClick={onComplete}
+            className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
+          >
+            Continue
+          </button>
+        )}
       </div>
     );
   }
@@ -246,7 +294,7 @@ export function MathLessonView({
       <div className="bg-white rounded-xl border border-neutral-200 shadow-brand-xs overflow-hidden">
         <div className="px-5 py-3 border-b border-neutral-100 bg-neutral-50">
           <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
-            Lesson: {keywordLabel}
+            Lesson: {displayLabel}
           </p>
         </div>
 
@@ -258,31 +306,34 @@ export function MathLessonView({
                 <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-2">
                   Explanation
                 </p>
-                <p className="text-sm text-neutral-800 leading-relaxed">
+                {/* div (not p): MathText may render a figure block (graph/table). */}
+                <div className="text-sm text-neutral-800 leading-relaxed">
                   <MathText>{step.explanation_latex}</MathText>
-                </p>
+                </div>
               </div>
               {step.example_latex && (
                 <div className="bg-brand-50 rounded-lg border border-brand-100 p-4">
                   <p className="text-xs font-semibold text-brand-600 uppercase tracking-wide mb-2">
                     Example
                   </p>
-                  <p className="text-sm text-neutral-800 leading-relaxed">
+                  <div className="text-sm text-neutral-800 leading-relaxed">
                     <MathText>{step.example_latex}</MathText>
-                  </p>
+                  </div>
                 </div>
               )}
-              <button
-                onClick={() => setStepPhase("question")}
-                className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
-              >
-                Try a question
-              </button>
+              {stepHasCheck(step) && (
+                <button
+                  onClick={() => setStepPhase("question")}
+                  className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
+                >
+                  Try a question
+                </button>
+              )}
             </>
           )}
 
-          {/* Question phase */}
-          {(stepPhase === "question" || stepPhase === "correct" || stepPhase === "wrong") && (
+          {/* Question phase — only rendered for pages that carry a check */}
+          {stepHasCheck(step) && (stepPhase === "question" || stepPhase === "correct" || stepPhase === "wrong") && (
             <>
               <div>
                 <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-2">
@@ -322,14 +373,6 @@ export function MathLessonView({
                       <MathText>{step.check_question.solution_latex}</MathText>
                     </p>
                   )}
-                  <div className="flex justify-end pt-1">
-                    <button
-                      onClick={handleNext}
-                      className="px-5 py-2.5 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
-                    >
-                      {stepIndex + 1 >= totalSteps ? "Finish lesson" : "Next step"}
-                    </button>
-                  </div>
                 </div>
               )}
 
@@ -352,24 +395,43 @@ export function MathLessonView({
                     </p>
                   )}
 
-                  <div className="flex gap-2 pt-1">
+                  <div className="flex pt-1">
                     <button
                       onClick={handleTryAgain}
                       className="flex-1 py-2.5 rounded-xl bg-error-600 text-white text-sm font-semibold hover:bg-error-700 transition-colors"
                     >
-                      Try again
-                    </button>
-                    <button
-                      onClick={handleNext}
-                      className="flex-1 py-2.5 rounded-xl border border-neutral-200 bg-white text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors"
-                    >
-                      {stepIndex + 1 >= totalSteps ? "Finish lesson" : "Move on"}
+                      Re-read the page
                     </button>
                   </div>
                 </div>
               )}
             </>
           )}
+        </div>
+
+        {/* Persistent footer: free navigation — answering the check is optional */}
+        <div className="px-5 py-3 border-t border-neutral-100 bg-neutral-50 flex items-center gap-2">
+          <button
+            onClick={handleBack}
+            disabled={stepIndex === 0}
+            className="py-2.5 px-4 rounded-xl border border-neutral-200 bg-white text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            ← Back
+          </button>
+          {stepIndex === 0 && hasPreviousLesson && onPreviousLesson && (
+            <button
+              onClick={onPreviousLesson}
+              className="py-2.5 px-4 rounded-xl border border-neutral-200 bg-white text-neutral-600 text-sm font-medium hover:bg-neutral-50 transition-colors"
+            >
+              ← Previous lesson
+            </button>
+          )}
+          <button
+            onClick={handleNext}
+            className="ml-auto py-2.5 px-5 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
+          >
+            {stepIndex + 1 >= totalSteps ? "Finish lesson →" : "Next →"}
+          </button>
         </div>
       </div>
     </div>

@@ -5,81 +5,35 @@
  * - tagByEmbedding: top-4 cosine match, threshold 0.25 (fallback top-2), normalized.
  * - loadTargetKeywords: in_depth preferred, umbrella fallback per category.
  */
-import OpenAI from "openai";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { McatGenError } from "@/lib/mcatGenerator";
 import { ConceptBlueprint } from "@/lib/mcatBlueprint";
+import { fetchAllPages } from "@/lib/mathPagedQuery";
+import {
+  cosineSimilarity,
+  tagByEmbedding,
+  embedTextRaw,
+  EmbeddingError,
+} from "@/lib/courseEngine/embeddings";
+import { buildContractsForSet } from "@/lib/scopeContract";
+import { cached } from "@/lib/serverCache";
 
-// ─── Cosine similarity ────────────────────────────────────────────────────────
-
-export function cosineSimilarity(a: number[], b: number[]): number {
-  if (a.length !== b.length || a.length === 0) return 0;
-  let dot = 0, normA = 0, normB = 0;
-  for (let i = 0; i < a.length; i++) {
-    dot += a[i]! * b[i]!;
-    normA += a[i]! * a[i]!;
-    normB += b[i]! * b[i]!;
-  }
-  const denom = Math.sqrt(normA) * Math.sqrt(normB);
-  return denom === 0 ? 0 : dot / denom;
-}
+// Shared embedding/tagging primitives (single impl in courseEngine), re-exported
+// so existing importers of mcatTagging keep working unchanged.
+export { cosineSimilarity, tagByEmbedding };
 
 // ─── Embedding ────────────────────────────────────────────────────────────────
 
+/** Wraps the shared embedding call in McatGenError to preserve the soft-fail contract. */
 export async function embedText(text: string): Promise<number[]> {
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) throw new McatGenError("OPENAI_API_KEY not set", 500);
-  const client = new OpenAI({ apiKey: key });
   try {
-    const res = await client.embeddings.create({
-      model: "text-embedding-3-small",
-      input: text.slice(0, 8000),
-    });
-    return res.data[0].embedding;
+    return await embedTextRaw(text);
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    throw new McatGenError(`Embedding request failed: ${msg}`);
+    if (err instanceof EmbeddingError) {
+      throw new McatGenError(err.message, err.kind === "no_key" ? 500 : undefined);
+    }
+    throw err;
   }
-}
-
-// ─── Tagging by embedding ─────────────────────────────────────────────────────
-
-/**
- * Tag an embedding against a keyword pool.
- * Returns normalized weights for top-4 keywords with sim > 0.25.
- * Falls back to top-2 (no threshold) if none pass.
- * Returns {} if no keyword has a valid array embedding.
- */
-export function tagByEmbedding(
-  embedding: number[],
-  keywords: { id: string; embedding: unknown }[]
-): Record<string, number> {
-  const withEmbed = keywords.filter(
-    (k) => Array.isArray(k.embedding) && (k.embedding as unknown[]).length > 0
-  );
-  if (withEmbed.length === 0) return {};
-
-  const scored = withEmbed
-    .map((kw) => ({
-      id: kw.id,
-      sim: cosineSimilarity(embedding, kw.embedding as number[]),
-    }))
-    .sort((a, b) => b.sim - a.sim);
-
-  // Top 4 with threshold
-  let top = scored.slice(0, 4).filter((k) => k.sim > 0.25);
-
-  // Fallback: top 2 regardless of threshold
-  if (top.length === 0) {
-    top = scored.slice(0, 2);
-  }
-
-  if (top.length === 0) return {};
-
-  const total = top.reduce((acc, k) => acc + k.sim, 0);
-  if (total === 0) return {};
-
-  return Object.fromEntries(top.map((k) => [k.id, k.sim / total]));
 }
 
 // ─── Target keyword loader ────────────────────────────────────────────────────
@@ -94,6 +48,8 @@ export type TargetKeyword = {
   embedding: unknown;
   concept_blueprint: ConceptBlueprint | null;
   yield_level: "high" | "medium" | "low" | null;
+  /** -1 marks an umbrella INTRO keyword (framing-only; never a question target). */
+  order_index: number | null;
 };
 
 /**
@@ -103,20 +59,54 @@ export type TargetKeyword = {
  */
 export async function loadTargetKeywords(
   supabase: SupabaseClient,
-  categoryIds: string[]
+  categoryIds: string[],
+  opts?: { excludeIntros?: boolean }
 ): Promise<TargetKeyword[]> {
   if (categoryIds.length === 0) return [];
 
-  const { data, error } = await supabase
-    .from("mcat_keywords")
-    .select(
-      "id, label, description, tier, parent_keyword_id, category_id, embedding, concept_blueprint, yield_level"
-    )
-    .in("category_id", categoryIds)
-    .eq("status", "approved")
-    .order("order_index");
+  // INTRO keywords (order_index === -1) are framing-only and must NEVER be a
+  // question/quiz target — pass excludeIntros from any QUESTION-selection caller
+  // (next-question, quiz). Flashcard/lesson callers leave it off (intros still get
+  // their own lesson + framing flashcards).
+  const excludeIntros = opts?.excludeIntros === true;
 
-  if (error || !data) return [];
+  // Taxonomy is static per category-set — no per-session data — so cache the whole
+  // derivation to take it off the hot path (every next-question/quiz re-loads it today).
+  const cacheKey = `mcat:targetkw:${excludeIntros ? "nointro:" : ""}${[...categoryIds].sort().join(",")}`;
+  return cached<TargetKeyword[]>(cacheKey, 5 * 60 * 1000, () =>
+    loadTargetKeywordsUncached(supabase, categoryIds, excludeIntros)
+  );
+}
+
+async function loadTargetKeywordsUncached(
+  supabase: SupabaseClient,
+  categoryIds: string[],
+  excludeIntros: boolean
+): Promise<TargetKeyword[]> {
+  // Paginate: across many categories the keyword set can exceed PostgREST's
+  // 1000-row cap, which would silently drop keywords from the target pool.
+  let data: TargetKeyword[];
+  try {
+    data = await fetchAllPages<TargetKeyword>((from, to) =>
+      supabase
+        .from("mcat_keywords")
+        .select(
+          "id, label, description, tier, parent_keyword_id, category_id, embedding, concept_blueprint, yield_level, order_index"
+        )
+        .in("category_id", categoryIds)
+        .eq("status", "approved")
+        .order("order_index")
+        .order("id")
+        .range(from, to)
+    );
+  } catch {
+    return [];
+  }
+
+  // Drop INTRO keywords (order_index === -1) from the question-target pool when asked.
+  if (excludeIntros) {
+    data = (data as TargetKeyword[]).filter((r) => r.order_index !== -1);
+  }
 
   // Group by category
   const byCat = new Map<string, TargetKeyword[]>();
@@ -137,6 +127,33 @@ export async function loadTargetKeywords(
       const umbrella = rows.filter((r) => r.tier === "umbrella");
       result.push(...umbrella);
     }
+  }
+
+  // UNIVERSAL SCOPE CONTRACT — stamp an always-present scope contract onto every
+  // returned keyword, derived in-memory from the full category set. Guarantees
+  // every downstream generator that reads `concept_blueprint` gets a strict
+  // in/out-of-scope + forward fence even when the stored blueprint is null.
+  // See lib/scopeContract.ts.
+  const contracts = buildContractsForSet(
+    result.map((r) => ({
+      id: r.id,
+      label: r.label,
+      tier: r.tier,
+      parent_keyword_id: r.parent_keyword_id,
+      category_id: r.category_id,
+      concept_blueprint: r.concept_blueprint,
+    })),
+    (data as TargetKeyword[]).map((r) => ({
+      id: r.id,
+      label: r.label,
+      tier: r.tier,
+      parent_keyword_id: r.parent_keyword_id,
+      category_id: r.category_id,
+    }))
+  );
+  for (const r of result) {
+    const c = contracts.get(r.id);
+    if (c) r.concept_blueprint = c as ConceptBlueprint;
   }
 
   return result;

@@ -3,7 +3,9 @@ import { createClient } from "@supabase/supabase-js";
 import { generateSimilarQuestion, McatGenError, verifyQuestionFast } from "@/lib/mcatGenerator";
 import { loadTargetKeywords, embedText, tagByEmbedding } from "@/lib/mcatTagging";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
+import { sectionFromId } from "@/lib/mcatSection";
 import { ConceptBlueprint } from "@/lib/mcatBlueprint";
+import { resolveScopeContract } from "@/lib/scopeContract";
 
 export const runtime = "nodejs";
 
@@ -55,32 +57,42 @@ export async function POST(request: Request) {
   const { data: kwMeta } = kwIds.length > 0
     ? await supabase
         .from("mcat_keywords")
-        .select("id, label, description, concept_blueprint")
+        .select("id, label, description, concept_blueprint, tier, parent_keyword_id, category_id")
         .in("id", kwIds)
     : { data: [] };
 
-  const keywords = (kwMeta ?? []).map((k) => ({
+  // Resolve an always-present scope contract per source keyword (stored merged
+  // with forward fence, or derived) so a "similar" question can't drift past
+  // the original keyword's scope.
+  const resolveKw = async (k: Record<string, unknown>) => ({
     id: k.id as string,
     label: k.label as string,
     description: (k.description as string) ?? "",
-    blueprint: (k.concept_blueprint as ConceptBlueprint | null) ?? null,
-  }));
+    blueprint:
+      ((await resolveScopeContract(supabase, "mcat_keywords", {
+        id: k.id as string,
+        label: k.label as string,
+        description: (k.description as string) ?? "",
+        tier: (k.tier as string | null) ?? null,
+        parent_keyword_id: (k.parent_keyword_id as string | null) ?? null,
+        category_id: (k.category_id as string | null) ?? null,
+        concept_blueprint: k.concept_blueprint,
+      })) as ConceptBlueprint | null) ??
+      ((k.concept_blueprint as ConceptBlueprint | null) ?? null),
+  });
+
+  const keywords = await Promise.all((kwMeta ?? []).map(resolveKw));
 
   // Fall back to all category keywords if no valid ones found
   let finalKeywords = keywords;
   if (finalKeywords.length === 0) {
     const { data: catKws } = await supabase
       .from("mcat_keywords")
-      .select("id, label, description, concept_blueprint")
+      .select("id, label, description, concept_blueprint, tier, parent_keyword_id, category_id")
       .eq("category_id", sourceQ.category_id as string)
       .eq("status", "approved")
       .limit(5);
-    finalKeywords = (catKws ?? []).map((k) => ({
-      id: k.id as string,
-      label: k.label as string,
-      description: (k.description as string) ?? "",
-      blueprint: (k.concept_blueprint as ConceptBlueprint | null) ?? null,
-    }));
+    finalKeywords = await Promise.all((catKws ?? []).map(resolveKw));
   }
 
   if (finalKeywords.length === 0) {
@@ -172,7 +184,7 @@ export async function POST(request: Request) {
   const { data: inserted, error: insertError } = await supabase
     .from("mcat_questions")
     .insert({
-      section: "biology",
+      section: sectionFromId(sourceQ.category_id),
       category_id: sourceQ.category_id as string,
       stem: generated.stem,
       choices: generated.choices,

@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
-import { updateStrengths, computeNextReviewDate } from "@/lib/practiceAlgorithm";
+import { computeNextReviewDate } from "@/lib/practiceAlgorithm";
+import {
+  updateMasteryMap,
+  isMastered,
+  difficultyTierFromScore,
+  MASTERY_START,
+} from "@/lib/courseEngine/adaptive";
 import {
   autoResolvePriorities,
   logServerEvent,
@@ -16,6 +22,37 @@ export const runtime = "nodejs";
 // delta is multiplied by this factor and the answer never counts toward the clean
 // consecutive_correct streak that drives mastery.
 const REFRESHER_CREDIT_FACTOR = 0.4;
+
+// Wrong-answer-driven (distractor-specific) weighting — see math/attempt/route.ts
+// for the full rationale. The chosen distractor's misconception keyword_weights
+// (mcat_questions.wrong_answer_data, aligned to choices) are shifted toward the
+// misconception by up to ~20% (scaled by weight): score → score·(1−0.20·w).
+// Fail-soft: questions without wrong_answer_data keep the old generic behavior.
+const DISTRACTOR_WRONG_SHIFT = 0.20;
+
+type WrongAnswerEntry = {
+  description?: string | null;
+  embedding?: number[] | null;
+  keyword_weights?: Record<string, number> | null;
+} | null;
+
+function selectedDistractorWeights(
+  wrongAnswerData: unknown,
+  selectedIndex: number | undefined,
+  wasCorrect: boolean
+): Record<string, number> {
+  if (wasCorrect || selectedIndex == null) return {};
+  if (!Array.isArray(wrongAnswerData)) return {};
+  const entry = wrongAnswerData[selectedIndex] as WrongAnswerEntry;
+  const w = entry?.keyword_weights;
+  if (!w || typeof w !== "object") return {};
+  const out: Record<string, number> = {};
+  for (const [id, val] of Object.entries(w)) {
+    const num = typeof val === "number" ? val : Number(val);
+    if (Number.isFinite(num) && num > 0) out[id] = Math.min(1, num);
+  }
+  return out;
+}
 
 export async function POST(request: Request) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -65,10 +102,10 @@ export async function POST(request: Request) {
 
   const supabase = createClient(supabaseUrl, key);
 
-  // Load question
+  // Load question (wrong_answer_data carries per-distractor misconception weights)
   const { data: question, error: questionError } = await supabase
     .from("mcat_questions")
-    .select("correct_index, keyword_weights, category_id")
+    .select("correct_index, keyword_weights, category_id, wrong_answer_data, difficulty")
     .eq("id", question_id)
     .maybeSingle();
 
@@ -99,7 +136,16 @@ export async function POST(request: Request) {
 
   const keywordWeights =
     (question.keyword_weights as Record<string, number>) ?? {};
-  const kwIds = Object.keys(keywordWeights);
+  // The selected distractor's misconception keywords (empty if correct / no data).
+  const distractorWeights = selectedDistractorWeights(
+    question.wrong_answer_data,
+    selected_index,
+    correct
+  );
+  // Union of the question's keywords and the chosen distractor's keywords.
+  const kwIds = [
+    ...new Set([...Object.keys(keywordWeights), ...Object.keys(distractorWeights)]),
+  ];
 
   if (kwIds.length === 0) {
     return NextResponse.json({
@@ -123,8 +169,19 @@ export async function POST(request: Request) {
   const filteredWeights = Object.fromEntries(
     Object.entries(keywordWeights).filter(([id]) => validKwSet.has(id))
   );
+  const filteredDistractorWeights = Object.fromEntries(
+    Object.entries(distractorWeights).filter(([id]) => validKwSet.has(id))
+  );
 
-  if (Object.keys(filteredWeights).length === 0) {
+  // Every keyword we'll write a state for: question keywords ∪ distractor keywords.
+  const targetKwIds = [
+    ...new Set([
+      ...Object.keys(filteredWeights),
+      ...Object.keys(filteredDistractorWeights),
+    ]),
+  ];
+
+  if (targetKwIds.length === 0) {
     return NextResponse.json({
       correct,
       correct_index: question.correct_index as number,
@@ -139,22 +196,30 @@ export async function POST(request: Request) {
       "keyword_id, score, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, spaced_review_due_at, spaced_review_count"
     )
     .eq("session_id", session_id)
-    .in("keyword_id", Object.keys(filteredWeights));
+    .in("keyword_id", targetKwIds);
 
   const existingMap = new Map(
     (existingStates ?? []).map((s) => [s.keyword_id as string, s])
   );
 
-  // Build current strengths map
+  // Build current strengths map over the union of keywords
   const currentStrengths: Record<string, number> = Object.fromEntries(
-    Object.keys(filteredWeights).map((id) => [
+    targetKwIds.map((id) => [
       id,
-      (existingMap.get(id)?.score as number) ?? 0.5,
+      (existingMap.get(id)?.score as number) ?? MASTERY_START,
     ])
   );
 
-  // EMA update using practiceAlgorithm.ts updateStrengths (learning rate 0.12)
-  let newStrengths = updateStrengths(currentStrengths, filteredWeights, correct);
+  // Logarithmic, context-aware mastery update (lib/courseEngine/adaptive.ts).
+  // Source = question; difficulty tier from the stored 0–1 difficulty; dont_know
+  // applies a small downgrade inside the update.
+  const difficultyTier = difficultyTierFromScore(question.difficulty as number);
+  let newStrengths = updateMasteryMap(currentStrengths, filteredWeights, {
+    correct,
+    dontKnow: dont_know,
+    difficulty: difficultyTier,
+    source: "question",
+  });
 
   // Post-refresher dampening: scale down only the positive gain of a correct
   // answer. Wrong answers and dont_know are unaffected (they already hurt).
@@ -169,8 +234,19 @@ export async function POST(request: Request) {
     newStrengths = dampened;
   }
 
+  // Wrong-answer-driven shift: pull the chosen distractor's misconception keywords
+  // toward the misconception (~20% scaled by the distractor's weight).
+  if (!correct && Object.keys(filteredDistractorWeights).length > 0) {
+    const shifted: Record<string, number> = { ...newStrengths };
+    for (const [id, w] of Object.entries(filteredDistractorWeights)) {
+      const base = shifted[id] ?? currentStrengths[id] ?? 0.5;
+      shifted[id] = Math.max(0, base * (1 - DISTRACTOR_WRONG_SHIFT * w));
+    }
+    newStrengths = shifted;
+  }
+
   const now = new Date().toISOString();
-  const upserts = Object.keys(filteredWeights).map((kwId) => {
+  const upserts = targetKwIds.map((kwId) => {
     const prev = existingMap.get(kwId);
     const prevTotal = (prev?.total_attempts as number) ?? 0;
     const prevCorrect = (prev?.correct_attempts as number) ?? 0;
@@ -198,7 +274,8 @@ export async function POST(request: Request) {
     let spacedReviewDueAt: string | null = prevSpacedReviewDueAt;
     let spacedReviewCount = prevSpacedReviewCount;
 
-    const masteryMet = score >= 0.8 && consecutiveCorrect >= 4;
+    // THRESHOLD-based mastery — no consecutive-correct gate (score ≥ MASTERY_ADVANCE).
+    const masteryMet = isMastered(score);
     const wasAlreadyMastered = prevState === "mastered";
 
     if (masteryMet && !wasAlreadyMastered) {

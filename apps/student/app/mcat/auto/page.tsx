@@ -27,33 +27,76 @@
 
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { LoginGate } from "@/components/auth/LoginGate";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import { LessonView } from "@/components/mcat/LessonView";
 import MathText from "@/components/mcat/MathText";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { ComboMeter } from "@/components/gamification/ComboMeter";
-import { SoundToggle } from "@/components/ui/SoundToggle";
+import { GrindMeter } from "@/components/gamification/GrindMeter";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { CorrectPulse } from "@/components/ui/CorrectPulse";
-import { ProgressBar } from "@/components/ui/ProgressBar";
+import { AnswerAffirmation } from "@/components/ui/AnswerAffirmation";
+import { GeneratingLoader } from "@/components/ui/GeneratingLoader";
+import QuestionToolbar from "@/components/practice/QuestionToolbar";
+import LessonModal from "@/components/practice/LessonModal";
+import FlipCard from "@/components/cards/FlipCard";
+import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
+import {
+  reviewProbabilityFor,
+  FULL_INTRO_DECK_COUNT,
+} from "@/lib/courseEngine/config";
+import {
+  type DifficultyTier,
+  tierForMastery,
+  isMastered,
+  MASTERY_START,
+  REVIEW_FLASHCARD_SHARE,
+} from "@/lib/courseEngine/adaptive";
+import {
+  createPracticeBuffer,
+  type PracticeBuffer,
+  type ServeDescriptor,
+  type ReadyItem,
+} from "@/lib/courseEngine/practiceBuffer";
+import { nextSrsState, MEMORIZED_BOX, type SrsState } from "@/lib/flashcardSrs";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
+//
+// Emphasis-driven knobs (mastery streak, warm-up flashcard count, review rate) now
+// come from the CourseConfig registry (lib/courseEngine/config.ts), proficiency-gated.
+// MCAT is flashcard-dominant until proficient, then shifts toward quiz.
 
+const COURSE_ID = "mcat_bio";
 const TOPIC_MAX_QUESTIONS = 8;
-const MASTERY_STREAK = 4; // MCAT uses 4 consecutive correct (per existing practice page)
-const REVIEW_PROBABILITY = 0.35;
+// Advancement is THRESHOLD-based on the 0–1 mastery score (MASTERY_ADVANCE) — no
+// "N correct in a row" gate. See lib/courseEngine/adaptive.ts.
+const REVIEW_PROBABILITY = reviewProbabilityFor(COURSE_ID);
 const AUTO_REPLAN_INTERVAL = 8;
 const MINI_QUIZ_COUNT = 4;
-const MAX_WARMUP_FLASHCARDS = 3;
+
+// ── Per-keyword intro persistence ───────────────────────────────────────────
+// Each frontier skill's guided sequence is LESSON → FLASHCARDS → PRACTICE. The
+// lesson + flashcards "intro" is shown ONCE per keyword; we remember which
+// keywords have had their intro so a reload (or returning later) drops straight
+// into practice instead of re-showing the lesson.
+//
+// This "intro seen" set is SERVER-AUTHORITATIVE and keyed PER USER (session):
+// it comes from /api/mcat/auto-plan (`intro_seen`) and is persisted via
+// /api/mcat/auto-intro into mcat_student_keyword_states.intro_seen. It used to
+// live in localStorage (`lodera_auto_intro_mcat`), which made a brand-new
+// account in a browser with prior progress inherit stale "already seen" state
+// and look like a returning student. localStorage is no longer consulted.
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Phase =
   | "loading"
+  | "needs_diagnostic"
   | "flashcard"
   | "lesson"
   | "practicing"
@@ -71,7 +114,15 @@ interface AutoPlanFrontier {
   id: string;
   label: string;
   order_index: number;
-  umbrella_label: string | null;
+}
+
+interface AutoPlanTopic {
+  id: string;          // umbrella keyword id (the current topic)
+  label: string;
+  category_id: string;
+  topic_number: number;
+  topic_total: number;
+  in_depth_ids: string[];
 }
 
 interface AutoPlanCategoryProgress {
@@ -85,10 +136,15 @@ interface AutoPlanCategoryProgress {
 }
 
 interface AutoPlanResponse {
+  needs_diagnostic: boolean;
   frontier: AutoPlanFrontier | null;
+  frontier_topic: AutoPlanTopic | null;
   next_focus: string[];
+  review_focus: string[];
   progress: AutoPlanCategoryProgress[];
   overall_pct: number;
+  intro_seen?: string[];
+  intro_ids?: string[];
 }
 
 interface QueueKeyword {
@@ -141,13 +197,17 @@ interface AttemptResponse {
   keyword_states: Record<string, { score: number; state: string; needs_lesson: boolean }>;
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function diffLabel(d: number) {
-  if (d < 0.35) return { label: "Easy",   cls: "bg-success-100 text-success-600" };
-  if (d < 0.65) return { label: "Medium", cls: "bg-amber-100 text-amber-700" };
-  return            { label: "Hard",   cls: "bg-error-100 text-error-600" };
+/** A snapshot of a previously-seen question for read-only review navigation. */
+interface HistoryEntry {
+  question: Question;
+  selectedChoice: number | null;
+  revealed: boolean;
+  wasCorrect: boolean | null;
 }
+
+const HISTORY_CAP = 30;
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function pickReviewKeyword(pool: ReviewKeyword[]): ReviewKeyword | null {
   if (pool.length === 0) return null;
@@ -164,6 +224,13 @@ function pickReviewKeyword(pool: ReviewKeyword[]): ReviewKeyword | null {
 // ─── Inner component ──────────────────────────────────────────────────────────
 
 function McatAutoInner() {
+  const router = useRouter();
+  // "Learn this" scope — when present, restricts this auto run to a single object
+  // (category / umbrella / keyword). Threaded into every auto-plan fetch.
+  const searchParams = useSearchParams();
+  const scopeParam = searchParams.get("scope");
+  const scopeIdParam = searchParams.get("scope_id");
+  const sectionParam = searchParams.get("section");
   // Session
   const [sessionId, setSessionId] = useState("");
   const [phase, setPhase] = useState<Phase>("loading");
@@ -172,6 +239,7 @@ function McatAutoInner() {
   // Auto plan
   const [plan, setPlan] = useState<AutoPlanResponse | null>(null);
   const [frontier, setFrontier] = useState<AutoPlanFrontier | null>(null);
+  const [topic, setTopic] = useState<AutoPlanTopic | null>(null);
   const planRef = useRef<AutoPlanResponse | null>(null);
 
   // Practice queue state
@@ -181,27 +249,57 @@ function McatAutoInner() {
   const currentKeyword = queue[queueIndex] ?? null;
 
   const lessonedKeywordsRef = useRef<Set<string>>(new Set());
-  const [topicCorrectStreak, setTopicCorrectStreak] = useState(0);
+  // Setter retained for gamification reset points; value no longer gates mastery.
+  const [, setTopicCorrectStreak] = useState(0);
   const [topicQuestionCount, setTopicQuestionCount] = useState(0);
   const excludeIdsRef = useRef<string[]>([]);
 
   const [question, setQuestion] = useState<Question | null>(null);
+  // Movement/review history: previously-seen questions (answered or skipped).
+  const historyRef = useRef<HistoryEntry[]>([]);
+  // null = viewing the LIVE current question; otherwise index into historyRef.
+  const [reviewIndex, setReviewIndex] = useState<number | null>(null);
+  const inReview = reviewIndex !== null;
+  const reviewEntry = inReview ? historyRef.current[reviewIndex] ?? null : null;
+
   const [isReviewCard, setIsReviewCard] = useState(false);
   const [pendingReviewBetweenTopics, setPendingReviewBetweenTopics] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
-  const [showLessonOffer, setShowLessonOffer] = useState(false);
   const consecutiveWrongRef = useRef(0);
 
-  // Flashcard warm-up
+  // ── Adaptive-engine refs (mastery → flashcard:question ratio + difficulty) ───
+  const currentKwScoreRef = useRef(MASTERY_START);
+  const flashcardModeRef = useRef<"intro" | "practice">("intro");
+  const fcInRowRef = useRef(0);
+  const reviewPoolRef = useRef<ReviewKeyword[]>([]);
+  const queueIndexRef = useRef(0);
+  useEffect(() => { queueIndexRef.current = queueIndex; }, [queueIndex]);
+  useEffect(() => { reviewPoolRef.current = reviewPool; }, [reviewPool]);
+
+  // See-lesson POPUP (in-page) + the keyword the live item was SERVED under, so
+  // every see-lesson / refresher / auto-surface corresponds to the question/card
+  // (behavior 7) instead of the embedding-pinpointed primary_keyword_id.
+  const [lessonModal, setLessonModal] = useState<{ keywordId: string; label?: string } | null>(null);
+  const [servedKeywordId, setServedKeywordId] = useState<string | null>(null);
+
+  // Per-topic flashcard step (LESSON → FLASHCARDS → QUESTIONS)
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [fcIndex, setFcIndex] = useState(0);
-  const [fcBackShown, setFcBackShown] = useState(false);
-  const warmupDoneCategoriesRef = useRef<Set<string>>(new Set());
+  // Per-card Leitner box for the current intro deck (reuses lib/flashcardSrs). A
+  // missed card recirculates (spaced) until it reaches the memorized box.
+  const fcBoxRef = useRef<Map<string, SrsState>>(new Map());
+
+  // Topic intro (LESSON → FLASHCARDS → PRACTICE) — true while we're in the
+  // proactive intro for a frontier skill (vs. a mid-practice struggle lesson,
+  // which returns to the same question instead of advancing the sequence).
+  const inTopicIntroRef = useRef(false);
 
   // Stats + gamification
   const [stats, setStats] = useState({ answered: 0, correct: 0, lessons: 0, topicsMastered: 0 });
   const [transitionLabel, setTransitionLabel] = useState("");
   const [combo, setCombo] = useState(0);
+  // When this study session started — drives the grind meter's time-on-app heat.
+  const [sessionStart] = useState(() => Date.now());
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
   const sessionAnswersRef = useRef(0);
 
@@ -217,23 +315,146 @@ function McatAutoInner() {
   const [quizCorrect, setQuizCorrect] = useState(0);
 
   // Refs for handlers that need latest state
-  const topicStreakRef = useRef(topicCorrectStreak);
   const topicCountRef = useRef(topicQuestionCount);
   const currentFrontierIdRef = useRef<string | null>(null);
-  useEffect(() => { topicStreakRef.current = topicCorrectStreak; }, [topicCorrectStreak]);
   useEffect(() => { topicCountRef.current = topicQuestionCount; }, [topicQuestionCount]);
   useEffect(() => { currentFrontierIdRef.current = frontier?.id ?? null; }, [frontier]);
+
+  // Diversity tracking: last N primary keyword ids + seen stems for near-dup filter
+  const recentKeywordIdsRef = useRef<string[]>([]);
+  const recentQuestionIdsRef = useRef<string[]>([]);
+  const seenStemsRef = useRef<string[]>([]);
+
+  // ─── Practice buffer: serve the next item from memory / prefetch (instant Next).
+  // See lib/courseEngine/practiceBuffer.ts. The server hands back a `buffer` of ready
+  // extras with each fetch (one round-trip covers several questions); a prefetch
+  // during the answer-reveal window makes Continue instant. take/prefetch are
+  // side-effect-free w.r.t. the page (refs mutate only in applyQuestion/applyFlashcards).
+  const bufferRef = useRef<PracticeBuffer<Question, Flashcard, ReviewKeyword> | null>(null);
+  if (!bufferRef.current) {
+    bufferRef.current = createPracticeBuffer<Question, Flashcard, ReviewKeyword>({
+      fetchQuestionBatch: async (d) => {
+        try {
+          const body: Record<string, unknown> = {
+            session_id: d.sessionId,
+            category_id: d.categoryId,
+            keyword_id: d.keywordId,
+            exclude_ids: excludeIdsRef.current,
+            recent_keyword_ids: recentKeywordIdsRef.current.slice(-6),
+            recent_question_ids: recentQuestionIdsRef.current.slice(-10),
+            seen_stems: seenStemsRef.current.slice(-30),
+          };
+          if (d.difficulty) body.difficulty = d.difficulty;
+          const res = await fetch("/api/mcat/next-question", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+          if (!res.ok) {
+            const msg =
+              res.status === 502
+                ? "Question generation is temporarily unavailable. Please try again."
+                : await res.text().catch(() => "Unknown error");
+            return { error: msg, status: res.status };
+          }
+          const data = (await res.json()) as { question: Question; buffer?: Question[] };
+          return {
+            head: data.question,
+            extras: Array.isArray(data.buffer) ? data.buffer : [],
+          };
+        } catch (e) {
+          return { error: (e as Error).message ?? "Failed to load question" };
+        }
+      },
+      fetchFlashcards: async (d) => {
+        try {
+          const res = await fetch("/api/mcat/flashcards", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              session_id: d.sessionId,
+              category_id: d.categoryId,
+              count: 1,
+              keyword_ids: [d.keywordId],
+            }),
+          });
+          if (!res.ok) return { flashcards: [] };
+          const data = (await res.json()) as { flashcards: Flashcard[] };
+          return { flashcards: (data.flashcards ?? []).slice(0, 1) };
+        } catch {
+          return { flashcards: [] };
+        }
+      },
+    });
+  }
+  // Indirection so handleChoice/handleDontKnow (defined earlier) can kick off a
+  // prefetch without a forward reference.
+  const prefetchNextRef = useRef<((sid: string) => void) | null>(null);
+
+  // Server-authoritative "intro seen" set (populated from auto-plan.intro_seen).
+  const introSeenRef = useRef<Set<string>>(new Set());
+
+  // Set of framing-only INTRO keyword ids (order_index === -1), from auto-plan.
+  // An intro shows LESSON → FLASHCARDS then advances — it is NEVER practiced.
+  const introIdsRef = useRef<Set<string>>(new Set());
+  const isIntroKw = useCallback((id: string) => introIdsRef.current.has(id), []);
+  // Latest advanceKeyword, so callbacks defined BEFORE it (startSkillFlashcards)
+  // can advance past a framing-only intro without a TDZ forward-reference.
+  const advanceKeywordRef = useRef<((opts?: { wasMastered: boolean }) => Promise<void>) | null>(null);
+
+  // Mark a skill's LESSON→FLASHCARDS intro complete: update the local cache AND
+  // persist per-user to Supabase (mcat_student_keyword_states.intro_seen).
+  const markIntroSeen = useCallback(
+    (sid: string, keywordId: string, categoryId: string) => {
+      introSeenRef.current.add(keywordId);
+      void fetch("/api/mcat/auto-intro", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: sid,
+          keyword_id: keywordId,
+          category_id: categoryId,
+        }),
+      }).catch(() => {});
+    },
+    []
+  );
+
+  // Authoritatively persist that a subtopic was MASTERED so the server frontier
+  // advances and reopening auto mode resumes past it (mirror of math master-skill).
+  const markSkillMastered = useCallback(
+    (sid: string, keywordId: string, categoryId: string) => {
+      introSeenRef.current.add(keywordId);
+      void fetch("/api/mcat/master-skill", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: sid,
+          keyword_id: keywordId,
+          category_id: categoryId,
+        }),
+      }).catch(() => {});
+    },
+    []
+  );
 
   useStreakTouchOnce();
 
   // ─── Fetch auto-plan ─────────────────────────────────────────────────────
 
   const fetchPlan = useCallback(async (sid: string): Promise<AutoPlanResponse | null> => {
-    const res = await fetch(`/api/mcat/auto-plan?session_id=${encodeURIComponent(sid)}`);
+    let url = `/api/mcat/auto-plan?session_id=${encodeURIComponent(sid)}`;
+    if (scopeParam && scopeIdParam) {
+      url += `&scope=${encodeURIComponent(scopeParam)}&scope_id=${encodeURIComponent(scopeIdParam)}`;
+    }
+    if (sectionParam) {
+      url += `&section=${encodeURIComponent(sectionParam)}`;
+    }
+    const res = await fetch(url);
     if (res.status === 404) return null;
     if (!res.ok) throw new Error(await res.text().catch(() => "Failed to load plan"));
     return (await res.json()) as AutoPlanResponse;
-  }, []);
+  }, [scopeParam, scopeIdParam, sectionParam]);
 
   // ─── Fetch mini-quiz questions ────────────────────────────────────────────
 
@@ -255,7 +476,7 @@ function McatAutoInner() {
 
   // ─── Fetch warmup flashcards ─────────────────────────────────────────────
 
-  const fetchFlashcards = useCallback(async (sid: string, categoryId: string, keywordIds: string[]): Promise<Flashcard[]> => {
+  const fetchFlashcards = useCallback(async (sid: string, categoryId: string, keywordIds: string[], count: number): Promise<Flashcard[]> => {
     try {
       const res = await fetch("/api/mcat/flashcards", {
         method: "POST",
@@ -263,75 +484,189 @@ function McatAutoInner() {
         body: JSON.stringify({
           session_id: sid,
           category_id: categoryId,
-          count: MAX_WARMUP_FLASHCARDS,
+          count,
           keyword_ids: keywordIds,
         }),
       });
       if (!res.ok) return [];
       const data = (await res.json()) as { flashcards: Flashcard[] };
-      return (data.flashcards ?? []).slice(0, MAX_WARMUP_FLASHCARDS);
+      return (data.flashcards ?? []).slice(0, count);
     } catch {
       return [];
     }
   }, []);
 
+  // ─── Apply a fetched item to the UI ─────────────────────────────────────────
+  // The APPLY half (the only place the seen/exclude/recent refs are mutated). The
+  // FETCH half lives in the practice buffer and is side-effect-free, so an unused
+  // prefetch never pollutes these refs.
+
+  const applyQuestion = useCallback(
+    (q: Question, d: ServeDescriptor<ReviewKeyword>) => {
+      fcInRowRef.current = 0;
+      setServedKeywordId(d.reviewKeyword?.id ?? d.keywordId);
+      setQuestion(q);
+      excludeIdsRef.current = [...excludeIdsRef.current, q.id];
+      recentQuestionIdsRef.current = [...recentQuestionIdsRef.current, q.id].slice(-10);
+      if (q.primary_keyword_id) {
+        recentKeywordIdsRef.current = [...recentKeywordIdsRef.current, q.primary_keyword_id].slice(-10);
+      }
+      if (q.stem) {
+        const norm = q.stem.toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+        seenStemsRef.current = [...seenStemsRef.current, norm].slice(-50);
+      }
+      setReviewIndex(null);
+      setSelectedChoice(null);
+      setLastAnswerCorrect(false);
+      setIsReviewCard(!!d.forReview);
+      setPhase("practicing");
+    },
+    []
+  );
+
+  const applyFlashcards = useCallback(
+    (cards: Flashcard[], d: ServeDescriptor<ReviewKeyword>) => {
+      flashcardModeRef.current = "practice";
+      fcInRowRef.current += 1;
+      setIsReviewCard(false);
+      setServedKeywordId(d.reviewKeyword?.id ?? d.keywordId);
+      setFlashcards(cards);
+      setFcIndex(0);
+      setPhase("flashcard");
+    },
+    []
+  );
+
+  const applyReady = useCallback(
+    (ready: ReadyItem<Question, Flashcard, ReviewKeyword>) => {
+      if (!ready.ok) {
+        setErrorMsg(ready.error);
+        setPhase("error");
+        return;
+      }
+      if (ready.kind === "question") applyQuestion(ready.question, ready.descriptor);
+      else applyFlashcards(ready.flashcards, ready.descriptor);
+    },
+    [applyQuestion, applyFlashcards]
+  );
+
   // ─── Load question ────────────────────────────────────────────────────────
+  // Serve a question for the given keyword via the buffer (instant if buffered).
 
   const loadQuestion = useCallback(
-    async (sid: string, keywordId: string, categoryId: string) => {
+    async (
+      sid: string,
+      keywordId: string,
+      categoryId: string,
+      forReview?: ReviewKeyword,
+      difficulty?: DifficultyTier,
+    ) => {
       setPhase("generating");
       setQuestion(null);
       setSelectedChoice(null);
-      setShowLessonOffer(false);
-      setLastAnswerCorrect(false);
-
-      try {
-        const res = await fetch("/api/mcat/next-question", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            session_id: sid,
-            category_id: categoryId,
-            keyword_id: keywordId,
-            exclude_ids: excludeIdsRef.current,
-          }),
-        });
-
-        if (!res.ok) {
-          // Degrade gracefully: if generation 502s, show error but allow retry
-          const msg = await res.text().catch(() => "Unknown error");
-          if (res.status === 502) {
-            setErrorMsg("Question generation is temporarily unavailable. Please try again.");
-          } else {
-            setErrorMsg(msg);
-          }
-          setPhase("error");
-          return;
-        }
-
-        const data = (await res.json()) as { question: Question; generated?: boolean };
-        setQuestion(data.question);
-        excludeIdsRef.current = [...excludeIdsRef.current, data.question.id];
-        setIsReviewCard(false);
-        setPhase("practicing");
-      } catch (e) {
-        setErrorMsg((e as Error).message ?? "Failed to load question");
-        setPhase("error");
-      }
+      setReviewIndex(null);
+      const ready = await bufferRef.current!.take({
+        sessionId: sid,
+        keywordId,
+        categoryId,
+        kind: "question",
+        difficulty,
+        forReview: !!forReview,
+        reviewKeyword: forReview,
+      });
+      applyReady(ready);
     },
-    []
+    [applyReady]
   );
 
   // ─── Start keyword ────────────────────────────────────────────────────────
 
   const startKeyword = useCallback(
     async (sid: string, kw: QueueKeyword, categoryId: string) => {
+      // New keyword context → drop any prefetch/buffer from the previous keyword.
+      bufferRef.current?.clear();
       setTopicCorrectStreak(0);
       setTopicQuestionCount(0);
       consecutiveWrongRef.current = 0;
-      await loadQuestion(sid, kw.id, categoryId);
+      fcInRowRef.current = 0;
+      currentKwScoreRef.current = kw.score ?? MASTERY_START;
+      await loadQuestion(sid, kw.id, categoryId, undefined, tierForMastery(kw.score ?? 0.5, false));
     },
     [loadQuestion]
+  );
+
+  // ─── Per-skill intro: LESSON → FLASHCARDS → PRACTICE for ONE frontier skill ──
+  // Each frontier skill (next_focus keyword) gets its own lesson + flashcard
+  // warm-up (shown once, remembered per keyword id) before its practice
+  // questions. If the intro is already done for this skill, jump straight to
+  // its practice question.
+  const beginSkillIntro = useCallback(
+    (sid: string, kw: QueueKeyword, categoryId: string) => {
+      // New skill context → drop any prefetch/buffer from the previous keyword.
+      bufferRef.current?.clear();
+      setTopicCorrectStreak(0);
+      setTopicQuestionCount(0);
+      consecutiveWrongRef.current = 0;
+      fcInRowRef.current = 0;
+      currentKwScoreRef.current = kw.score ?? MASTERY_START;
+      // A previously-seen NORMAL subtopic jumps straight to practice. Intros are
+      // never practiced — always run their (short) framing lesson + flashcards,
+      // which ends by persisting mastery and advancing (self-heals a missed master).
+      if (introSeenRef.current.has(kw.id) && !isIntroKw(kw.id)) {
+        inTopicIntroRef.current = false;
+        void loadQuestion(sid, kw.id, categoryId, undefined, tierForMastery(kw.score ?? 0.5, false));
+        return;
+      }
+      // Step 1: LESSON on the skill. LessonView self-fetches /api/mcat/lesson.
+      inTopicIntroRef.current = true;
+      setPhase("lesson");
+    },
+    [loadQuestion, isIntroKw]
+  );
+
+  // ─── Skill flashcard warm-up (step 2 of LESSON → FLASHCARDS → PRACTICE) ──────
+  const startSkillFlashcards = useCallback(
+    async (sid: string, kw: QueueKeyword, categoryId: string) => {
+      // (D) INTRO KEYWORDS: framing-only (order_index === -1). After their lesson,
+      // go straight to auto-master + advance — do NOT fetch or show flashcards.
+      if (isIntroKw(kw.id)) {
+        markIntroSeen(sid, kw.id, categoryId);
+        inTopicIntroRef.current = false;
+        markSkillMastered(sid, kw.id, categoryId);
+        void advanceKeywordRef.current?.({ wasMastered: false });
+        return;
+      }
+
+      // FLASHCARDS-FIRST: the student must see and try to memorize this subtopic's
+      // COMPLETE flashcard deck BEFORE any practice question. Request the full deck
+      // (route caps a complete per-keyword deck at FULL_INTRO_DECK_COUNT), scoped to
+      // this one subtopic, so every card is shown up front. (Scoping to the single
+      // subtopic — not the whole topic — keeps each subtopic's intro to its OWN deck
+      // and avoids re-showing the same cards across the topic's subtopics.)
+      const scopeIds = [kw.id];
+      // The flashcards STEP must never be skipped between lesson and quiz. A cold
+      // per-keyword deck may need a moment to generate, so if the first fetch is
+      // empty, retry once before falling through to practice.
+      let cards = await fetchFlashcards(sid, categoryId, scopeIds, FULL_INTRO_DECK_COUNT);
+      if (cards.length === 0) {
+        await new Promise((r) => setTimeout(r, 1500));
+        cards = await fetchFlashcards(sid, categoryId, scopeIds, FULL_INTRO_DECK_COUNT);
+      }
+      if (cards.length > 0) {
+        flashcardModeRef.current = "intro";
+        setServedKeywordId(kw.id);
+        fcBoxRef.current = new Map(); // fresh Leitner state for this deck
+        setFlashcards(cards);
+        setFcIndex(0);
+        setPhase("flashcard");
+        return;
+      }
+      // No flashcards for this warm-up (generation unavailable) → start practice.
+      markIntroSeen(sid, kw.id, categoryId);
+      inTopicIntroRef.current = false;
+      void loadQuestion(sid, kw.id, categoryId);
+    },
+    [fetchFlashcards, loadQuestion, markIntroSeen, isIntroKw, markSkillMastered]
   );
 
   // ─── Advance to next category (re-plan) ───────────────────────────────────
@@ -361,13 +696,26 @@ function McatAutoInner() {
       setPlan(newPlan);
       planRef.current = newPlan;
 
-      if (!newPlan.frontier) {
+      if (newPlan.needs_diagnostic) {
+        setPhase("needs_diagnostic");
+        return;
+      }
+
+      if (!newPlan.frontier || !newPlan.frontier_topic) {
         setPhase("course_complete");
         return;
       }
 
       setFrontier(newPlan.frontier);
-      const frontierCatId = newPlan.frontier.id;
+      const topicPlan = newPlan.frontier_topic;
+      setTopic(topicPlan);
+      // The current topic's category drives question scope / lesson fetches.
+      const frontierCatId = topicPlan.category_id || newPlan.frontier.id;
+
+      // Seed the server-authoritative intro-seen set for this user.
+      introSeenRef.current = new Set(newPlan.intro_seen ?? []);
+      // Seed the framing-only intro keyword ids (never practiced).
+      introIdsRef.current = new Set(newPlan.intro_ids ?? []);
 
       if (newPlan.next_focus.length === 0) {
         setPhase("course_complete");
@@ -403,8 +751,30 @@ function McatAutoInner() {
           return;
         }
 
-        setQueue(scopedQueue);
-        setReviewPool(data.review_pool ?? []);
+        // PRESERVE next_focus order (in-order guided path), NOT the weakness-ranked
+        // queue order. next_focus is already the unmastered in_depth skills of the
+        // current topic in CED order.
+        const focusOrder = new Map(newPlan.next_focus.map((id, i) => [id, i]));
+        const orderedQueue = [...scopedQueue].sort(
+          (a, b) =>
+            (focusOrder.get(a.id) ?? Number.MAX_SAFE_INTEGER) -
+            (focusOrder.get(b.id) ?? Number.MAX_SAFE_INTEGER)
+        );
+
+        // Spiral review = earlier topics' skills only. Exclude the current topic's
+        // own skills (review_focus from the plan, when present, scopes the pool).
+        const topicSkillSet = new Set(topicPlan.in_depth_ids);
+        const reviewFocusSet = new Set(newPlan.review_focus ?? []);
+        let reviewPoolFiltered = (data.review_pool ?? []).filter(
+          (r) => !topicSkillSet.has(r.id)
+        );
+        if (reviewFocusSet.size > 0) {
+          const scoped = reviewPoolFiltered.filter((r) => reviewFocusSet.has(r.id));
+          if (scoped.length > 0) reviewPoolFiltered = scoped;
+        }
+
+        setQueue(orderedQueue);
+        setReviewPool(reviewPoolFiltered);
         setQueueIndex(0);
         setTopicCorrectStreak(0);
         setTopicQuestionCount(0);
@@ -412,26 +782,14 @@ function McatAutoInner() {
         setIsReviewCard(false);
         setPendingReviewBetweenTopics(false);
 
-        // Flashcard warm-up for new category (once per session per category)
-        if (!warmupDoneCategoriesRef.current.has(frontierCatId)) {
-          warmupDoneCategoriesRef.current.add(frontierCatId);
-          const cards = await fetchFlashcards(sid, frontierCatId, newPlan.next_focus);
-          if (cards.length > 0) {
-            setFlashcards(cards);
-            setFcIndex(0);
-            setFcBackShown(false);
-            setPhase("flashcard");
-            return;
-          }
-        }
-
-        await startKeyword(sid, scopedQueue[0]!, frontierCatId);
+        // Begin the first subtopic (next_focus[0]) LESSON → FLASHCARDS → PRACTICE intro.
+        beginSkillIntro(sid, orderedQueue[0]!, frontierCatId);
       } catch (e) {
         setErrorMsg((e as Error).message ?? "Failed to load practice queue");
         setPhase("error");
       }
     },
-    [advanceToNextCategory, fetchFlashcards, startKeyword]
+    [advanceToNextCategory, beginSkillIntro]
   );
 
   // ─── Initial mount ────────────────────────────────────────────────────────
@@ -471,14 +829,20 @@ function McatAutoInner() {
 
   // ─── Handle choice ────────────────────────────────────────────────────────
 
+  // Push the currently-live question into review history (answered or skipped).
+  const pushHistory = useCallback((entry: HistoryEntry) => {
+    historyRef.current = [...historyRef.current, entry].slice(-HISTORY_CAP);
+  }, []);
+
   const handleChoice = useCallback(
     async (idx: number) => {
-      if (!question || !currentKeyword || phase !== "practicing") return;
+      if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
 
       setSelectedChoice(idx);
       setPhase("revealed");
 
       const correct = idx === question.correct_index;
+      pushHistory({ question, selectedChoice: idx, revealed: true, wasCorrect: correct });
       setLastAnswerCorrect(correct);
       setCombo((prev) => {
         const next = comboReducer({ count: prev }, correct ? "correct" : "incorrect").count;
@@ -517,23 +881,39 @@ function McatAutoInner() {
         if (res.ok) {
           const data = (await res.json()) as AttemptResponse;
           const kwState = data.keyword_states[currentKeyword.id];
+          if (typeof kwState?.score === "number") currentKwScoreRef.current = kwState.score;
+          // Prefetch the next item NOW — during the answer-reveal read window — so
+          // Continue is instant. Skip when this answer will ADVANCE the keyword
+          // (mastered): that path has its own transition and a different keyword.
+          if (!isReviewCard && !isMastered(currentKwScoreRef.current)) {
+            prefetchNextRef.current?.(sessionId);
+          }
           const needsLesson = kwState?.needs_lesson === true;
           const tooManyWrong = consecutiveWrongRef.current >= 2;
-          if ((tooManyWrong || needsLesson) && !lessonedKeywordsRef.current.has(currentKeyword.id)) {
-            setShowLessonOffer(true);
+          if (
+            !correct &&
+            (tooManyWrong || needsLesson) &&
+            !lessonedKeywordsRef.current.has(currentKeyword.id)
+          ) {
+            // ANY lesson recommendation — single needs_lesson signal OR repeated
+            // misses (8) — surfaces as a closeable POPUP (not an inline offer),
+            // keyed to the SERVED keyword so it matches the question (7).
+            lessonedKeywordsRef.current.add(currentKeyword.id);
+            setLessonModal({ keywordId: servedKeywordId ?? currentKeyword.id, label: currentKeyword.label });
           }
         }
       } catch { /* non-fatal */ }
     },
-    [question, currentKeyword, phase, sessionId, isReviewCard, maybeTriggerReplan]
+    [question, currentKeyword, phase, sessionId, isReviewCard, maybeTriggerReplan, inReview, pushHistory, servedKeywordId]
   );
 
   // ─── Handle don't know ────────────────────────────────────────────────────
 
   const handleDontKnow = useCallback(async () => {
-    if (!question || !currentKeyword || phase !== "practicing") return;
+    if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
     setSelectedChoice(null);
     setPhase("revealed");
+    pushHistory({ question, selectedChoice: null, revealed: true, wasCorrect: false });
     setLastAnswerCorrect(false);
     setCombo((prev) => comboReducer({ count: prev }, "incorrect").count);
     onIncorrectAnswer();
@@ -561,13 +941,106 @@ function McatAutoInner() {
       if (res.ok) {
         const data = (await res.json()) as AttemptResponse;
         const kwState = data.keyword_states[currentKeyword.id];
+        if (typeof kwState?.score === "number") currentKwScoreRef.current = kwState.score;
+        // Prefetch the next item during the reveal window (see handleChoice).
+        if (!isReviewCard && !isMastered(currentKwScoreRef.current)) {
+          prefetchNextRef.current?.(sessionId);
+        }
         const needsLesson = kwState?.needs_lesson === true;
-        if ((consecutiveWrongRef.current >= 2 || needsLesson) && !lessonedKeywordsRef.current.has(currentKeyword.id)) {
-          setShowLessonOffer(true);
+        if (
+          (consecutiveWrongRef.current >= 2 || needsLesson) &&
+          !lessonedKeywordsRef.current.has(currentKeyword.id)
+        ) {
+          // Any lesson recommendation → closeable POPUP (served keyword), 7+8.
+          lessonedKeywordsRef.current.add(currentKeyword.id);
+          setLessonModal({ keywordId: servedKeywordId ?? currentKeyword.id, label: currentKeyword.label });
         }
       }
     } catch { /* non-fatal */ }
-  }, [question, currentKeyword, phase, sessionId, isReviewCard, maybeTriggerReplan]);
+  }, [question, currentKeyword, phase, sessionId, isReviewCard, maybeTriggerReplan, inReview, pushHistory, servedKeywordId]);
+
+  // ─── Free movement: Back / Forward / Skip ───────────────────────────────────
+
+  // Step back to an earlier history entry (read-only review).
+  const handleReviewBack = useCallback(() => {
+    const hist = historyRef.current;
+    if (hist.length === 0) return;
+    setReviewIndex((cur) => (cur === null ? hist.length - 1 : Math.max(0, cur - 1)));
+  }, []);
+
+  // Step forward through history; past the last entry returns to the LIVE question.
+  const handleReviewForward = useCallback(() => {
+    setReviewIndex((cur) => {
+      if (cur === null) return null;
+      const next = cur + 1;
+      return next >= historyRef.current.length ? null : next;
+    });
+  }, []);
+
+  // Skip the live question: record NO attempt, no mastery/streak change; load next
+  // from the SAME keyword (reuses the existing load path; never advances).
+  const handleSkip = useCallback(() => {
+    if (!question || !currentKeyword || phase !== "practicing" || inReview || !frontier?.id) return;
+    pushHistory({ question, selectedChoice: null, revealed: false, wasCorrect: null });
+    void loadQuestion(sessionId, currentKeyword.id, frontier.id);
+  }, [question, currentKeyword, phase, inReview, frontier, pushHistory, loadQuestion, sessionId]);
+
+  // ─── Review a past session event (timeline tile click) ──────────────────────
+  // ─── Adaptive: DECIDE the next practice item ────────────────────────────────
+  // Behaviors 2/4/5: mastery sets the flashcard:question ratio + difficulty,
+  // struggling shifts to flashcards, and spaced review interleaves past keywords
+  // (as questions OR flashcards). Pure + instant — returns a descriptor the buffer
+  // serves (and that handleChoice prefetches during the answer-reveal window).
+  // Mastery-gated ADVANCE stays in handleNext.
+  const decideNextDescriptor = useCallback(
+    (sid: string): ServeDescriptor<ReviewKeyword> | null => {
+      const fid = currentFrontierIdRef.current;
+      const cur = queue[queueIndexRef.current];
+      if (!fid || !cur) return null;
+      const recentlyBad = consecutiveWrongRef.current >= 2;
+      const pool = reviewPoolRef.current;
+
+      // (2) Spaced review — past keywords, as questions OR flashcards. Suppressed
+      // while struggling so we keep focus on the current keyword.
+      if (!recentlyBad && pool.length > 0 && Math.random() < REVIEW_PROBABILITY) {
+        const rk = pickReviewKeyword(pool);
+        if (rk) {
+          const kind = Math.random() < REVIEW_FLASHCARD_SHARE ? "flashcard" : "question";
+          return { sessionId: sid, keywordId: rk.id, categoryId: fid, kind, forReview: true, reviewKeyword: rk };
+        }
+      }
+
+      // (4)(5) Current keyword — QUESTIONS ONLY. The subtopic's COMPLETE flashcard
+      // deck is shown up front in the intro (flashcards-first), so no current-keyword
+      // flashcards are interleaved into practice. Difficulty still tracks mastery and
+      // struggle. (Spaced review of EARLIER, already-completed keywords above can
+      // still surface a review flashcard.)
+      const score = currentKwScoreRef.current;
+      const tier = tierForMastery(score, recentlyBad);
+      return { sessionId: sid, keywordId: cur.id, categoryId: fid, kind: "question", difficulty: tier };
+    },
+    [queue]
+  );
+
+  // Serve the decided item now (the fallback path when nothing was prefetched).
+  const serveNextItem = useCallback(
+    (sid: string) => {
+      const d = decideNextDescriptor(sid);
+      if (!d) return;
+      setPhase("generating");
+      void bufferRef.current!.take(d).then(applyReady);
+    },
+    [decideNextDescriptor, applyReady]
+  );
+
+  // Expose decide+prefetch so handleChoice/handleDontKnow (defined earlier) can
+  // warm the next item during the answer-reveal window without a forward reference.
+  useEffect(() => {
+    prefetchNextRef.current = (sid: string) => {
+      const d = decideNextDescriptor(sid);
+      if (d) bufferRef.current?.prefetch(d);
+    };
+  }, [decideNextDescriptor]);
 
   // ─── Advance keyword in queue ─────────────────────────────────────────────
 
@@ -576,6 +1049,8 @@ function McatAutoInner() {
       if (!currentKeyword) return;
       if (opts?.wasMastered) {
         setStats((s) => ({ ...s, topicsMastered: s.topicsMastered + 1 }));
+        // Persist mastery server-side so the frontier advances across sessions.
+        if (frontier?.id) markSkillMastered(sessionId, currentKeyword.id, frontier.id);
       }
       const nextIndex = queueIndex + 1;
 
@@ -615,11 +1090,13 @@ function McatAutoInner() {
             return;
           }
         }
-        if (frontier?.id) startKeyword(sessionId, nextKw, frontier.id);
+        // New skill → run its own LESSON → FLASHCARDS → PRACTICE intro.
+        if (frontier?.id) beginSkillIntro(sessionId, nextKw, frontier.id);
       }, 1200);
     },
-    [currentKeyword, queueIndex, queue, reviewPool, sessionId, loadQuestion, startKeyword, advanceToNextCategory, frontier]
+    [currentKeyword, queueIndex, queue, reviewPool, sessionId, loadQuestion, beginSkillIntro, advanceToNextCategory, frontier, markSkillMastered]
   );
+  advanceKeywordRef.current = advanceKeyword;
 
   // ─── Handle Next (after answer) ───────────────────────────────────────────
 
@@ -631,7 +1108,9 @@ function McatAutoInner() {
       if (pendingReviewBetweenTopics) {
         setPendingReviewBetweenTopics(false);
         const nextKw = queue[queueIndex];
-        if (nextKw && frontier?.id) { startKeyword(sessionId, nextKw, frontier.id); }
+        // Resuming onto a (possibly new) skill after an interleaved review card →
+        // run its intro so a brand-new skill still gets its lesson + flashcards.
+        if (nextKw && frontier?.id) { beginSkillIntro(sessionId, nextKw, frontier.id); }
         else { advanceToNextCategory(sessionId); }
         return;
       }
@@ -639,13 +1118,19 @@ function McatAutoInner() {
       return;
     }
 
-    const streak = topicStreakRef.current;
+    // THRESHOLD-based advancement: mastered once the live 0–1 mastery score
+    // crosses MASTERY_ADVANCE (no consecutive-correct requirement). Score is kept
+    // current from each /attempt response in currentKwScoreRef.
+    const score = currentKwScoreRef.current;
     const count = topicCountRef.current;
-    const masteredByStreak = streak >= MASTERY_STREAK;
+    const masteredByScore = isMastered(score);
     const hitCap = count >= TOPIC_MAX_QUESTIONS;
 
-    if (masteredByStreak || hitCap) {
-      if (hitCap && !masteredByStreak) {
+    if (masteredByScore || hitCap) {
+      // Advancing to a different keyword → any prefetched same-keyword item is stale.
+      // Discard it (free — the buffer's fetch never touched the seen/exclude refs).
+      bufferRef.current?.clear();
+      if (hitCap && !masteredByScore) {
         setQueue((prev) => {
           const copy = [...prev];
           const [capped] = copy.splice(queueIndex, 1);
@@ -653,39 +1138,56 @@ function McatAutoInner() {
           return copy;
         });
       }
-      advanceKeyword({ wasMastered: masteredByStreak });
+      advanceKeyword({ wasMastered: masteredByScore });
       return;
     }
 
-    if (frontier?.id) loadQuestion(sessionId, currentKeyword.id, frontier.id);
+    // Not yet mastered, cap not hit → serve the next item. Use the item prefetched
+    // during the answer-reveal window if one is ready (instant); else decide + fetch
+    // now. topicQuestionCount is incremented when an answer is recorded
+    // (handleChoice/handleDontKnow), not here.
+    const pending = bufferRef.current?.consume();
+    if (pending) {
+      if (!pending.settled) setPhase("generating");
+      void pending.promise.then(applyReady);
+      return;
+    }
+    serveNextItem(sessionId);
   }, [
     currentKeyword, isReviewCard, pendingReviewBetweenTopics, queue, queueIndex,
-    sessionId, loadQuestion, startKeyword, advanceKeyword, frontier, advanceToNextCategory,
+    sessionId, loadQuestion, beginSkillIntro, advanceKeyword, frontier, advanceToNextCategory,
+    serveNextItem, applyReady,
   ]);
 
   // ─── Lesson handlers ──────────────────────────────────────────────────────
 
-  const handleStartLesson = useCallback(() => {
-    setShowLessonOffer(false);
-    setPhase("lesson");
-  }, []);
-
   const handleLessonComplete = useCallback(() => {
     if (!currentKeyword || !frontier?.id) return;
-    lessonedKeywordsRef.current.add(currentKeyword.id);
     setStats((s) => ({ ...s, lessons: s.lessons + 1 }));
     consecutiveWrongRef.current = 0;
     setTopicCorrectStreak(0);
+    // Intro lesson → continue to FLASHCARDS for this skill. A mid-practice
+    // struggle lesson (inTopicIntroRef false) just returns to the question.
+    if (inTopicIntroRef.current) {
+      void startSkillFlashcards(sessionId, currentKeyword, frontier.id);
+      return;
+    }
+    lessonedKeywordsRef.current.add(currentKeyword.id);
     loadQuestion(sessionId, currentKeyword.id, frontier.id);
-  }, [currentKeyword, sessionId, frontier, loadQuestion]);
+  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards]);
 
   const handleLessonSkip = useCallback(() => {
     if (!currentKeyword || !frontier?.id) return;
-    lessonedKeywordsRef.current.add(currentKeyword.id);
     consecutiveWrongRef.current = 0;
     setTopicCorrectStreak(0);
+    // Skipping the intro lesson → still show its FLASHCARDS, then practice.
+    if (inTopicIntroRef.current) {
+      void startSkillFlashcards(sessionId, currentKeyword, frontier.id);
+      return;
+    }
+    lessonedKeywordsRef.current.add(currentKeyword.id);
     loadQuestion(sessionId, currentKeyword.id, frontier.id);
-  }, [currentKeyword, sessionId, frontier, loadQuestion]);
+  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards]);
 
   // ─── Category complete handlers ───────────────────────────────────────────
 
@@ -766,45 +1268,91 @@ function McatAutoInner() {
 
   // ─── Flashcard handlers ───────────────────────────────────────────────────
 
-  const handleFlashcardFlip = useCallback(() => {
-    setFcBackShown(true);
-  }, []);
-
+  // Advance past the END of the intro deck (every card memorized) or a practice-mode
+  // card. The intro recirculation itself lives in gradeFlashcard/handleFlashcardSkip;
+  // this only runs once the deck is exhausted (fcIndex stays 0 in intro mode, so the
+  // intro branch fires when the last remaining card is dropped).
   const handleFlashcardNext = useCallback(async () => {
     const nextIdx = fcIndex + 1;
-    if (nextIdx >= flashcards.length || nextIdx >= MAX_WARMUP_FLASHCARDS) {
-      // Warm-up done → start practice
-      if (queue.length > 0 && frontier?.id) {
-        await startKeyword(sessionId, queue[0]!, frontier.id);
+    if (nextIdx >= flashcards.length) {
+      if (flashcardModeRef.current === "intro") {
+        // End of the per-keyword warm-up deck.
+        if (currentKeyword && frontier?.id) {
+          markIntroSeen(sessionId, currentKeyword.id, frontier.id);
+          inTopicIntroRef.current = false;
+          if (isIntroKw(currentKeyword.id)) {
+            // Framing-only intro: NO practice. Persist mastered so it leaves
+            // next_focus, then advance straight to the first real subtopic.
+            markSkillMastered(sessionId, currentKeyword.id, frontier.id);
+            await advanceKeyword({ wasMastered: false });
+          } else {
+            // Normal subtopic → start its practice questions (step 3 of the path).
+            await startKeyword(sessionId, currentKeyword, frontier.id);
+          }
+        } else {
+          await advanceToNextCategory(sessionId);
+        }
       } else {
-        await advanceToNextCategory(sessionId);
+        // An interleaved adaptive flashcard finished → resume the adaptive loop.
+        serveNextItem(sessionId);
       }
       return;
     }
     setFcIndex(nextIdx);
-    setFcBackShown(false);
-    setStats((s) => ({ ...s, flashcards: (s as typeof s & { flashcards: number }).flashcards + 1 }));
-  }, [fcIndex, flashcards.length, queue, frontier, sessionId, startKeyword, advanceToNextCategory]);
+  }, [fcIndex, flashcards.length, currentKeyword, frontier, sessionId, startKeyword, advanceToNextCategory, markIntroSeen, serveNextItem, isIntroKw, markSkillMastered, advanceKeyword]);
 
-  const handleSkipFlashcards = useCallback(async () => {
-    if (queue.length > 0 && frontier?.id) {
-      await startKeyword(sessionId, queue[0]!, frontier.id);
-    } else {
-      await advanceToNextCategory(sessionId);
+  // Grade the current card (universal SRS + keyword state via the shared route),
+  // then advance. INTRO deck → reuse the Leitner SRS so missed/"don't know" cards
+  // recirculate (spaced) until memorized; the deck ends only when all are memorized.
+  const gradeFlashcard = useCallback(
+    async (result: "got_it" | "missed_it" | "dont_know") => {
+      const card = flashcards[fcIndex];
+      if (card) {
+        fetch("/api/mcat/flashcard-attempt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ session_id: sessionId, flashcard_id: card.id, result }),
+        }).catch(() => {});
+      }
+      if (flashcardModeRef.current === "intro" && card) {
+        const t = nextSrsState(fcBoxRef.current.get(card.id) ?? null, result);
+        fcBoxRef.current.set(card.id, { box: t.box, reps: t.reps, lapses: t.lapses, learned: t.learned });
+        const rest = flashcards.filter((c) => c.id !== card.id);
+        if (t.box < MEMORIZED_BOX) {
+          // Not yet memorized → re-queue a few cards later (gap grows with the box).
+          rest.splice(Math.min(rest.length, t.box <= 1 ? 2 : 5), 0, card);
+          setFlashcards(rest);
+          setFcIndex(0);
+          return;
+        }
+        if (rest.length > 0) {
+          setFlashcards(rest); // graduated, deck not empty → next card
+          setFcIndex(0);
+          return;
+        }
+        // Last card memorized → fall through to handleFlashcardNext for completion.
+      }
+      await handleFlashcardNext();
+    },
+    [flashcards, fcIndex, sessionId, handleFlashcardNext]
+  );
+
+  // Skip the current flashcard: no SRS update. In the intro deck the card is
+  // deferred (recirculates later, never back-to-back), so it isn't lost.
+  const handleFlashcardSkip = useCallback(async () => {
+    const card = flashcards[fcIndex];
+    if (flashcardModeRef.current === "intro" && card) {
+      const rest = flashcards.filter((c) => c.id !== card.id);
+      rest.splice(Math.min(rest.length, 3), 0, card);
+      setFlashcards(rest);
+      setFcIndex(0);
+      return;
     }
-  }, [queue, frontier, sessionId, startKeyword, advanceToNextCategory]);
+    await handleFlashcardNext();
+  }, [flashcards, fcIndex, handleFlashcardNext]);
 
   // ─── Derived state ────────────────────────────────────────────────────────
 
-  const diff = question ? diffLabel(question.difficulty) : null;
-  const quizDiff = currentQuizQuestion ? diffLabel(currentQuizQuestion.difficulty) : null;
-  const masteryDots = Array.from({ length: MASTERY_STREAK }, (_, i) =>
-    i < topicCorrectStreak ? "●" : "○"
-  ).join("");
-  const overallPct = plan?.overall_pct ?? 0;
-  const totalCategories = plan?.progress.length ?? 0;
-  const completedCategories = plan?.progress.filter((p) => p.complete).length ?? 0;
-  const frontierOrderIndex = frontier?.order_index ?? 0;
   const isInQuizPhase = phase === "mini_quiz" || phase === "mini_quiz_revealed" || phase === "mini_quiz_loading";
   const isInPracticePhase = phase === "practicing" || phase === "revealed";
   const quizScorePct = quizQuestions.length > 0
@@ -822,105 +1370,104 @@ function McatAutoInner() {
           <div className="flex items-center gap-2 min-w-0 flex-1">
             <Link
               href="/mcat"
-              className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0 whitespace-nowrap"
+              className="text-sm font-bold text-neutral-700 hover:text-brand-600 shrink-0 whitespace-nowrap"
             >
               ← MCAT
             </Link>
-            {frontier && phase !== "loading" && phase !== "course_complete" && (
-              <>
-                <span className="hidden sm:inline text-xs text-neutral-500 shrink-0 whitespace-nowrap">
-                  {frontierOrderIndex + 1}/{totalCategories}
-                </span>
-                <span className="text-xs font-medium text-neutral-700 truncate min-w-0">
-                  {frontier.label}
-                </span>
-              </>
+            {frontier && phase !== "loading" && phase !== "needs_diagnostic" && phase !== "course_complete" && (
+              <span className="text-xs font-medium text-neutral-700 truncate min-w-0">
+                {topic?.label ?? frontier.label}
+              </span>
             )}
           </div>
-          {/* Right: learn this + widgets */}
+          {/* Right: widgets. ("Learn this" removed — redundant with the
+              QuestionToolbar's "Take a lesson"; category-row Learn-this stays.)
+              The grind flame is a small, subtle corner indicator — it records
+              continuously and shows the streak/multiplier WITHOUT the big bar. */}
           <div className="flex items-center gap-2 shrink-0">
-            {isInPracticePhase && currentKeyword && !isReviewCard && (
-              <button
-                onClick={handleStartLesson}
-                className="hidden sm:inline text-xs text-neutral-400 hover:text-brand-600 underline underline-offset-2 transition-colors whitespace-nowrap"
-              >
-                Learn this
-              </button>
+            {plan && phase !== "loading" && phase !== "needs_diagnostic" && (
+              <GrindMeter mode="quiz" streak={combo} answered={stats.answered} startedAt={sessionStart} compact />
             )}
             <StreakBadge />
-            <SoundToggle />
+            <NavMenu />
           </div>
         </div>
 
-        {/* Overall progress bar */}
-        {plan && phase !== "loading" && (
-          <div className="w-full px-6 pb-2">
-            <div className="flex items-center gap-2">
-              <ProgressBar
-                value={overallPct}
-                size="sm"
-                color={overallPct >= 80 ? "success" : "brand"}
-                label="MCAT overall progress"
-                className="flex-1"
-              />
-              <span className="text-xs text-neutral-400 shrink-0">
-                {completedCategories}/{totalCategories} categories
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Mastery meter (practice only) */}
-        {currentKeyword && !isReviewCard && isInPracticePhase && (
-          <div className="w-full px-6 pb-1.5">
-            <p className="text-xs text-neutral-400">
-              Mastering:{" "}
-              <span className="font-mono tracking-wider text-brand-500">
-                {masteryDots}
-              </span>{" "}
-              <span className="text-neutral-400">
-                ({topicCorrectStreak}/{MASTERY_STREAK})
-              </span>
-            </p>
-          </div>
-        )}
-
-        {/* Mini-quiz progress */}
+        {/* Mini-quiz position (counter only — the GrindMeter is the single bar). */}
         {isInQuizPhase && quizQuestions.length > 0 && (
           <div className="w-full px-6 pb-2">
-            <div className="flex items-center gap-2">
-              <div className="flex-1 h-1.5 bg-neutral-200 rounded-full overflow-hidden">
-                <div
-                  className="h-1.5 bg-brand-500 rounded-full transition-all"
-                  style={{ width: `${Math.round((quizIndex / quizQuestions.length) * 100)}%` }}
-                />
-              </div>
-              <span className="text-xs text-neutral-400 shrink-0">
-                Quiz {quizIndex + 1}/{quizQuestions.length}
-                {quizIndex > 0 && ` · ${quizScorePct}%`}
-              </span>
-            </div>
+            <span className="text-xs text-neutral-400">
+              Quiz {quizIndex + 1}/{quizQuestions.length}
+              {quizIndex > 0 && ` · ${quizScorePct}%`}
+            </span>
           </div>
         )}
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4">
+
+      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4 pb-safe-bottom">
 
         {/* Loading */}
         {(phase === "loading" || phase === "mini_quiz_loading") && (
-          <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin" />
-            <p className="text-sm text-neutral-500">
-              {phase === "mini_quiz_loading" ? "Loading checkpoint quiz…" : "Finding your next challenge…"}
-            </p>
-          </div>
+          <GeneratingLoader
+            messages={
+              phase === "mini_quiz_loading"
+                ? ["Loading your checkpoint quiz…", "Pulling together what you've learned…"]
+                : ["Finding your next challenge…", "Tailoring it to where you are…"]
+            }
+          />
         )}
 
         {/* Generating */}
-        {phase === "generating" && (
-          <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin" />
-            <p className="text-sm text-neutral-500">Finding your next question…</p>
+        {phase === "generating" && <GeneratingLoader />}
+
+        {/* Needs diagnostic */}
+        {phase === "needs_diagnostic" && (
+          <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs text-center space-y-5">
+            <div className="w-14 h-14 rounded-full bg-brand-100 flex items-center justify-center mx-auto">
+              <span className="text-brand-600 text-2xl">✦</span>
+            </div>
+            <div>
+              <h1 className="text-xl font-semibold text-neutral-900">
+                Start with a placement check
+              </h1>
+              <p className="text-sm text-neutral-500 mt-1 leading-relaxed">
+                A quick diagnostic finds your starting point so automatic mode
+                begins where you need it most.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => router.push("/mcat/diagnostic")}
+                className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors text-center"
+              >
+                Take placement diagnostic
+              </button>
+              <button
+                onClick={async () => {
+                  // Skip diagnostic — start from the beginning.
+                  setPhase("loading");
+                  try {
+                    // Persist the skip server-side so the diagnostic gate never
+                    // re-appears on future page loads (client-only was forgotten).
+                    await fetch("/api/mcat/diagnostic/skip", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ session_id: sessionId }),
+                    });
+                    const newPlan = await fetchPlan(sessionId);
+                    if (!newPlan) { setPhase("course_complete"); return; }
+                    await applyPlan(sessionId, { ...newPlan, needs_diagnostic: false });
+                  } catch (e) {
+                    setErrorMsg((e as Error).message ?? "Failed to start");
+                    setPhase("error");
+                  }
+                }}
+                className="w-full py-3 rounded-xl border border-neutral-200 bg-white text-neutral-600 text-sm font-medium hover:bg-neutral-50 transition-colors"
+              >
+                Skip and start from the beginning
+              </button>
+            </div>
           </div>
         )}
 
@@ -957,55 +1504,35 @@ function McatAutoInner() {
           </div>
         )}
 
-        {/* Flashcard warm-up */}
+        {/* Flashcard step (same universal flip-card as standalone flashcards) */}
         {phase === "flashcard" && flashcards[fcIndex] && (
           <div className="space-y-4">
-            {/* Warm-up header */}
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-neutral-400 uppercase tracking-wide font-medium mb-0.5">
-                  Warm-up · {fcIndex + 1} of {Math.min(flashcards.length, MAX_WARMUP_FLASHCARDS)}
-                </p>
-                <p className="text-sm font-semibold text-neutral-800">{frontier?.label}</p>
-              </div>
-              <button
-                onClick={handleSkipFlashcards}
-                className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2"
-              >
-                Skip warm-up
-              </button>
-            </div>
+            <FlipCard
+              front={flashcards[fcIndex]!.front}
+              back={flashcards[fcIndex]!.back}
+              onGrade={gradeFlashcard}
+              resetKey={`${flashcards[fcIndex]!.id}#${fcBoxRef.current.get(flashcards[fcIndex]!.id)?.reps ?? 0}`}
+            />
 
-            {/* Flashcard */}
-            <div className="bg-white rounded-xl border border-neutral-200 shadow-brand-xs overflow-hidden">
-              <div className="p-6 text-center">
-                <p className="text-xs text-brand-500 font-semibold uppercase tracking-wide mb-3">
-                  {fcBackShown ? "Answer" : "Question"}
-                </p>
-                <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                  <MathText>{fcBackShown ? flashcards[fcIndex]!.back : flashcards[fcIndex]!.front}</MathText>
-                </p>
-              </div>
-              {!fcBackShown && (
-                <div className="border-t border-neutral-100 p-4 flex justify-center">
-                  <button
-                    onClick={handleFlashcardFlip}
-                    className="px-6 py-2.5 rounded-lg bg-brand-50 text-brand-700 text-sm font-semibold hover:bg-brand-100 transition-colors"
-                  >
-                    Reveal answer
-                  </button>
-                </div>
-              )}
-              {fcBackShown && (
-                <div className="border-t border-neutral-100 p-4 flex justify-center">
-                  <button
-                    onClick={handleFlashcardNext}
-                    className="px-6 py-2.5 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
-                  >
-                    {fcIndex + 1 >= Math.min(flashcards.length, MAX_WARMUP_FLASHCARDS) ? "Start practice" : "Next card"}
-                  </button>
-                </div>
-              )}
+            {/* Lesson (POPUP) / refresher access for the current card's topic */}
+            <QuestionToolbar
+              system="mcat"
+              keywordId={servedKeywordId ?? primaryKeywordId(flashcards[fcIndex]!.keyword_weights) ?? currentKeyword?.id ?? null}
+              sessionId={sessionId || null}
+              questionId={flashcards[fcIndex]!.id}
+              contentType="flashcard"
+              resetSignal={flashcards[fcIndex]!.id}
+              onStateChange={() => bufferRef.current?.clear()}
+            />
+
+            {/* Skip flashcard — no SRS update, no mastery change */}
+            <div className="flex justify-center">
+              <button
+                onClick={handleFlashcardSkip}
+                className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
+              >
+                Skip →
+              </button>
             </div>
           </div>
         )}
@@ -1102,19 +1629,59 @@ function McatAutoInner() {
           />
         )}
 
-        {/* ─── Practice / Revealed ──────────────────────────────────────────── */}
-        {isInPracticePhase && question && (
+        {/* ─── Practice / Revealed / Review ─────────────────────────────────── */}
+        {isInPracticePhase && (inReview ? reviewEntry : question) && (() => {
+          // When in review, render the historical entry READ-ONLY.
+          const dispQuestion = (inReview ? reviewEntry!.question : question)!;
+          const dispSelected = inReview ? reviewEntry!.selectedChoice : selectedChoice;
+          const dispRevealed = inReview ? reviewEntry!.revealed : phase === "revealed";
+          const hasEarlier = inReview ? reviewIndex! > 0 : historyRef.current.length > 0;
+          const positionLabel = inReview
+            ? `Reviewing earlier question (${reviewIndex! + 1} of ${historyRef.current.length})`
+            : `Question ${historyRef.current.length + 1}`;
+          return (
           <>
+            {/* Position + movement controls */}
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <span className="text-xs text-neutral-400">{positionLabel}</span>
+              <div className="flex items-center gap-2">
+                {hasEarlier && (
+                  <button
+                    onClick={handleReviewBack}
+                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  >
+                    ← Back
+                  </button>
+                )}
+                {inReview && (
+                  <button
+                    onClick={handleReviewForward}
+                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  >
+                    {reviewIndex! + 1 >= historyRef.current.length ? "Return to current →" : "Forward →"}
+                  </button>
+                )}
+                {!inReview && phase === "practicing" && (
+                  <button
+                    onClick={handleSkip}
+                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  >
+                    Skip →
+                  </button>
+                )}
+              </div>
+            </div>
+
             {/* Badge row */}
             <div className="flex items-center gap-2 flex-wrap">
-              {isReviewCard && (
+              {isReviewCard && !inReview && (
                 <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-700">
                   Review
                 </span>
               )}
-              {diff && (
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${diff.cls}`}>
-                  {diff.label}
+              {inReview && (
+                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-600">
+                  {dispRevealed ? "Read-only" : "Skipped"}
                 </span>
               )}
             </div>
@@ -1122,24 +1689,35 @@ function McatAutoInner() {
             {/* Stem */}
             <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
               <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                <MathText>{question.stem}</MathText>
+                <MathText>{dispQuestion.stem}</MathText>
               </p>
             </div>
 
-            {/* Combo meter */}
-            <ComboMeter combo={combo} />
-
+            {/* Action bar — quick refresher / see lesson (POPUP) / prioritize.
+                Keyed to the SERVED question's keyword so see-lesson corresponds (3,7). */}
+            {!inReview && (
+              <QuestionToolbar
+                system="mcat"
+                keywordId={servedKeywordId ?? currentKeyword?.id ?? null}
+                sessionId={sessionId || null}
+                questionId={dispQuestion.id}
+                contentType="question"
+                resetSignal={dispQuestion.id}
+                answerSignal={phase === "revealed" ? dispQuestion.id : undefined}
+                onStateChange={() => bufferRef.current?.clear()}
+              />
+            )}
             {/* Choices */}
             <CorrectPulse
-              trigger={phase === "revealed" && lastAnswerCorrect}
+              trigger={!inReview && phase === "revealed" && lastAnswerCorrect}
               className="block w-full"
             >
               <div className="space-y-2">
-                {question.choices.map((choice, i) => {
+                {dispQuestion.choices.map((choice, i) => {
                   let state: "default" | "selected" | "correct" | "wrong" | "dimmed" = "default";
-                  if (phase === "revealed") {
-                    if (i === question.correct_index) state = "correct";
-                    else if (i === selectedChoice) state = "wrong";
+                  if (dispRevealed) {
+                    if (i === dispQuestion.correct_index) state = "correct";
+                    else if (i === dispSelected) state = "wrong";
                     else state = "dimmed";
                   }
                   return (
@@ -1148,16 +1726,21 @@ function McatAutoInner() {
                       index={i}
                       text={choice}
                       state={state}
-                      disabled={phase === "revealed"}
-                      onClick={() => handleChoice(i)}
+                      disabled={inReview || dispRevealed}
+                      onClick={() => { if (!inReview) handleChoice(i); }}
                     />
                   );
                 })}
               </div>
             </CorrectPulse>
 
-            {/* I don't know */}
-            {phase === "practicing" && (
+            {/* Affirmation banner — live reveal only */}
+            {!inReview && phase === "revealed" && (
+              <AnswerAffirmation correct={lastAnswerCorrect} streak={combo} />
+            )}
+
+            {/* I don't know — live only */}
+            {!inReview && phase === "practicing" && (
               <div className="flex justify-center">
                 <button
                   onClick={handleDontKnow}
@@ -1169,47 +1752,27 @@ function McatAutoInner() {
             )}
 
             {/* Explanation */}
-            {phase === "revealed" && question.explanation && (
+            {dispRevealed && dispQuestion.explanation && (
               <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
                 <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
                   Explanation
                 </p>
                 <p className="text-sm text-neutral-700 leading-relaxed">
-                  <MathText>{question.explanation}</MathText>
+                  <MathText>{dispQuestion.explanation}</MathText>
                 </p>
               </div>
             )}
 
-            {/* Lesson offer */}
-            {phase === "revealed" && showLessonOffer && currentKeyword && (
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 space-y-3">
-                <p className="text-sm font-medium text-amber-800">
-                  Struggling with {currentKeyword.label}? Take a quick lesson.
-                </p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={handleStartLesson}
-                    className="flex-1 py-2.5 rounded-xl bg-amber-600 text-white text-sm font-semibold hover:bg-amber-700 transition-colors"
-                  >
-                    Start lesson
-                  </button>
-                  <button
-                    onClick={() => setShowLessonOffer(false)}
-                    className="flex-1 py-2.5 rounded-xl border border-amber-200 bg-white text-amber-700 text-sm font-medium hover:bg-amber-50 transition-colors"
-                  >
-                    Keep going
-                  </button>
-                </div>
-              </div>
-            )}
+            {/* Lesson recommendations now surface as a closeable POPUP (LessonModal,
+                rendered near the page root), not an inline bottom offer. */}
 
-            {/* Feedback + Continue */}
-            {phase === "revealed" && (
+            {/* Feedback + Continue — live only (review is navigated via Back/Forward) */}
+            {!inReview && phase === "revealed" && (
               <>
                 <FeedbackWidget
                   sessionId={sessionId}
                   contentType="question"
-                  contentId={question.id}
+                  contentId={question!.id}
                   className="px-1"
                 />
                 <button
@@ -1221,7 +1784,8 @@ function McatAutoInner() {
               </>
             )}
           </>
-        )}
+          );
+        })()}
 
         {/* ─── Mini-quiz ───────────────────────────────────────────────────── */}
         {(phase === "mini_quiz" || phase === "mini_quiz_revealed") && currentQuizQuestion && (
@@ -1230,11 +1794,6 @@ function McatAutoInner() {
               <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700">
                 Checkpoint
               </span>
-              {quizDiff && (
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${quizDiff.cls}`}>
-                  {quizDiff.label}
-                </span>
-              )}
             </div>
 
             <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
@@ -1242,9 +1801,6 @@ function McatAutoInner() {
                 <MathText>{currentQuizQuestion.stem}</MathText>
               </p>
             </div>
-
-            <ComboMeter combo={combo} />
-
             <CorrectPulse
               trigger={phase === "mini_quiz_revealed" && lastAnswerCorrect}
               className="block w-full"
@@ -1271,6 +1827,11 @@ function McatAutoInner() {
               </div>
             </CorrectPulse>
 
+            {/* Affirmation banner — quiz reveal */}
+            {phase === "mini_quiz_revealed" && (
+              <AnswerAffirmation correct={lastAnswerCorrect} streak={combo} />
+            )}
+
             {phase === "mini_quiz_revealed" && currentQuizQuestion.explanation && (
               <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
                 <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
@@ -1294,6 +1855,20 @@ function McatAutoInner() {
         )}
 
       </main>
+
+      {/* See-lesson POPUP — opened from the toolbar, the "Learn this" header
+          button, the after-problem offer, and auto-surfaced on repeated misses
+          (8). Keyed to the served keyword so it corresponds to the item (7). */}
+      {lessonModal && (
+        <LessonModal
+          system="mcat"
+          keywordId={lessonModal.keywordId}
+          label={lessonModal.label}
+          sessionId={sessionId || null}
+          onClose={() => setLessonModal(null)}
+        />
+      )}
+
     </div>
   );
 }

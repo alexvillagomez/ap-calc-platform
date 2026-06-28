@@ -1,0 +1,243 @@
+{
+  "section": "physics",
+  "category_code": "P10",
+  "category_label": "Circuits",
+  "order_index": 9,
+  "umbrellas": [
+    {
+      "slug": "current_and_charge",
+      "label": "Electric Current & Charge Flow",
+      "description": "Concepts of electric current, charge flow, and conventional sign conventions for circuits.",
+      "intro": {
+        "slug": "current_and_charge_intro",
+        "label": "Electric Current Overview",
+        "description": "Electric current is the rate of charge flow through a conductor, defined as $I = \\Delta Q / \\Delta t$ and measured in amperes. By convention, current direction is the direction positive charge flows, opposite to electron flow. These foundations underpin every other circuit quantity.",
+        "examples": ["$I = \\Delta Q / \\Delta t$", "current direction = positive charge flow", "1 ampere = 1 coulomb per second"]
+      },
+      "in_depth": [
+        {
+          "slug": "current_definition",
+          "label": "Definition of electric current",
+          "description": "Calculate electric current as the rate of charge flow using $I = \\Delta Q / \\Delta t$, where $I$ is in amperes (A), $\\Delta Q$ in coulombs (C), and $\\Delta t$ in seconds (s). This focuses on the defining relation and units, not on Ohm's law or resistance (separate keywords).",
+          "examples": ["$I = \\Delta Q / \\Delta t$", "ampere = coulomb per second", "2 C passes in 4 s → $I = 0.5$ A"]
+        },
+        {
+          "slug": "current_sign_conventions",
+          "label": "Conventional current direction & sign conventions",
+          "description": "Apply the sign convention that conventional current flows from high to low potential (positive terminal out), opposite to electron flow, and assign current direction consistently around a circuit loop. This focuses on sign/direction bookkeeping, not on calculating current magnitude from Ohm's law (a separate keyword).",
+          "examples": ["conventional current: positive charge flows from + to −", "electron flow opposite to conventional current", "consistent sign around a loop: Kirchhoff setup"]
+        }
+      ]
+    },
+    {
+      "slug": "emf_and_voltage",
+      "label": "EMF, Voltage & Internal Resistance",
+      "description": "Electromotive force (EMF) as an energy source driving current, terminal voltage, and the effect of internal resistance on a real battery.",
+      "intro": {
+        "slug": "emf_and_voltage_intro",
+        "label": "EMF & Voltage Overview",
+        "description": "Electromotive force (EMF, symbol $\\mathcal{E}$) is the energy per unit charge supplied by a source such as a battery; voltage (potential difference $V$) is the energy per unit charge between two points. A real EMF source has internal resistance $r$, so terminal voltage $V = \\mathcal{E} - Ir$ is lower than the ideal EMF when current flows. Understanding EMF and voltage is prerequisite to analyzing complete circuits.",
+        "examples": ["EMF = energy per unit charge from source", "terminal voltage $V = \\mathcal{E} - Ir$", "volt = joule per coulomb"]
+      },
+      "in_depth": [
+        {
+          "slug": "emf_definition",
+          "label": "Electromotive force (EMF)",
+          "description": "Identify EMF ($\\mathcal{E}$) as the energy per unit charge a source provides to drive current, measured in volts, and distinguish it from the potential difference (voltage) across circuit elements. This focuses on the EMF concept and its role as an energy supplier, not on terminal-voltage reduction due to internal resistance (a separate keyword).",
+          "examples": ["EMF = energy per unit charge from battery", "$\\mathcal{E}$ drives current around a closed loop", "units: volts (V)"]
+        },
+        {
+          "slug": "terminal_voltage_internal_resistance",
+          "label": "Terminal voltage and internal resistance",
+          "description": "Calculate the terminal voltage of a real battery using $V_{\\text{terminal}} = \\mathcal{E} - Ir$, where $r$ is the internal resistance and $I$ is the current drawn, and predict how terminal voltage drops under load. This focuses on the EMF-source model with internal resistance, not on external-circuit resistance combinations (a separate keyword).",
+          "examples": ["$V_{\\text{terminal}} = \\mathcal{E} - Ir$", "heavy load → large $I$ → lower terminal voltage", "short-circuit current $I_{\\text{sc}} = \\mathcal{E}/r$"]
+        },
+        {
+          "slug": "voltage_potential_difference",
+          "label": "Voltage across a circuit element",
+          "description": "Interpret the voltage (potential difference $\\Delta V$) across a circuit element as the energy delivered or dissipated per unit charge as charge passes through it, and identify which node is at higher potential to set the current direction in a circuit. This focuses on voltage as the circuit-driving quantity across components, not on the field definition of electric potential at a point in space (built in Electrostatics & Magnetism, P9).",
+          "examples": ["voltage drop across a resistor drives current", "higher-potential node → lower: current flows", "voltmeter reads $\\Delta V$ across two nodes"]
+        }
+      ]
+    },
+    {
+      "slug": "resistance_ohms_law",
+      "label": "Resistance & Ohm's Law",
+      "description": "Ohm's law relating current, voltage, and resistance; the factors governing a resistor's resistance; and how resistors combine in series and parallel.",
+      "intro": {
+        "slug": "resistance_ohms_law_intro",
+        "label": "Resistance & Ohm's Law Overview",
+        "description": "Resistance ($R$) opposes current flow; Ohm's law $I = V/R$ (or $V = IR$) relates the three fundamental circuit quantities for ohmic devices. The physical resistance of a conductor depends on its geometry and material via $R = \\rho L / A$. Multiple resistors can be combined in series or parallel to yield an equivalent resistance. Together these ideas let you solve any single-loop or multi-loop resistor network.",
+        "examples": ["$V = IR$", "resistors in series: $R_{\\text{eq}} = R_1 + R_2$", "resistors in parallel: $1/R_{\\text{eq}} = 1/R_1 + 1/R_2$"]
+      },
+      "in_depth": [
+        {
+          "slug": "ohms_law",
+          "label": "Ohm's law",
+          "description": "Apply Ohm's law $V = IR$ (equivalently $I = V/R$) to relate the voltage across, current through, and resistance of an ohmic conductor, and use it to find any one quantity given the other two. This focuses on applying the $V = IR$ relation, not on resistivity or resistor combinations (separate keywords).",
+          "examples": ["$V = IR$; double voltage → double current", "solve for any one of $V$, $I$, $R$", "ohmic device: linear $V$–$I$ graph through origin"]
+        },
+        {
+          "slug": "resistivity",
+          "label": "Resistivity and resistance of a conductor",
+          "description": "Calculate the resistance of a uniform conductor from its material resistivity $\\rho$, length $L$, and cross-sectional area $A$ using $R = \\rho L / A$, and predict how doubling length or halving area changes resistance. This focuses on the geometric/material dependence of resistance, not on Ohm's law applied to circuits (a separate keyword).",
+          "examples": ["$R = \\rho L / A$", "longer wire → higher $R$; thicker wire → lower $R$", "copper has low $\\rho$ ≈ metallic conductor"]
+        },
+        {
+          "slug": "resistors_in_series",
+          "label": "Resistors in series",
+          "description": "Combine resistors connected end-to-end (series) into an equivalent resistance $R_{\\text{eq}} = R_1 + R_2 + \\cdots$, recognizing that the same current flows through each resistor and voltages add. This focuses on the series combination rule, not on parallel combinations (a separate keyword).",
+          "examples": ["$R_{\\text{eq}} = R_1 + R_2 + \\cdots$", "same $I$ through all; voltages add: $V = V_1 + V_2$", "series adds resistance; overall $R_{\\text{eq}} > $ any single resistor"]
+        },
+        {
+          "slug": "resistors_in_parallel",
+          "label": "Resistors in parallel",
+          "description": "Combine resistors connected between the same two nodes (parallel) using $\\frac{1}{R_{\\text{eq}}} = \\frac{1}{R_1} + \\frac{1}{R_2} + \\cdots$, noting that all share the same voltage and currents add. This focuses on the parallel combination rule, not on series combinations (a separate keyword).",
+          "examples": ["$1/R_{\\text{eq}} = 1/R_1 + 1/R_2$", "same $V$ across all; currents add: $I = I_1 + I_2$", "parallel $R_{\\text{eq}} < $ smallest branch"]
+        },
+        {
+          "slug": "combining_resistors",
+          "label": "Combining series and parallel resistors",
+          "description": "Reduce a mixed series–parallel resistor network step by step to a single equivalent resistance by identifying and collapsing sub-groups, then apply Ohm's law. This focuses on multi-step network reduction, not on the individual series or parallel rules in isolation (separate keywords).",
+          "examples": ["reduce innermost parallel group first, then add in series", "ladder networks: peel one stage at a time", "re-apply $V = IR$ at each level after reduction"]
+        },
+        {
+          "slug": "kirchhoffs_laws",
+          "label": "Kirchhoff's junction and loop rules",
+          "description": "Apply Kirchhoff's junction rule (charge conservation: $\\sum I_{\\text{in}} = \\sum I_{\\text{out}}$ at any node) and loop rule (energy conservation: $\\sum \\Delta V = 0$ around any closed loop) to solve multi-loop circuits that do not reduce by series/parallel alone. This focuses on the conservation-law method of circuit analysis, not on the series/parallel combination rules (separate keywords).",
+          "examples": ["junction rule: $\\sum I_{\\text{in}} = \\sum I_{\\text{out}}$", "loop rule: $\\sum \\Delta V = 0$ around a loop", "for multi-loop networks irreducible by series/parallel"]
+        }
+      ]
+    },
+    {
+      "slug": "electric_power",
+      "label": "Electric Power & Energy Dissipation",
+      "description": "Power delivered to or dissipated by circuit elements, and the energy consumed over time.",
+      "intro": {
+        "slug": "electric_power_intro",
+        "label": "Electric Power Overview",
+        "description": "Electric power is the rate at which energy is transferred or dissipated in a circuit element. For any element with current $I$ and voltage $V$ across it, $P = IV$; for a pure resistor, equivalent forms $P = I^2 R = V^2/R$ are derived from Ohm's law. Energy dissipated over time $t$ is $E = Pt$. These relations are essential for comparing heating in different resistors and for analyzing power budgets.",
+        "examples": ["$P = IV = I^2 R = V^2/R$", "energy = $Pt$ (joules)", "higher resistance in series → more power dissipated"]
+      },
+      "in_depth": [
+        {
+          "slug": "electric_power_formula",
+          "label": "Electric power formula $P = IV$",
+          "description": "Calculate the power delivered to or dissipated by a circuit element as $P = IV$, and derive the equivalent resistor forms $P = I^2 R$ and $P = V^2/R$ by substituting Ohm's law. This focuses on power calculation, not on energy consumed over time (a separate keyword).",
+          "examples": ["$P = IV$", "resistor: $P = I^2 R$ or $P = V^2/R$", "doubling current → quadruples power for resistor"]
+        },
+        {
+          "slug": "electrical_energy",
+          "label": "Electrical energy consumed over time",
+          "description": "Calculate energy dissipated or delivered by a circuit element over a time interval using $E = Pt = IVt$, and convert between joules and kilowatt-hours for practical applications. This focuses on the energy (time-integrated power) quantity, not on the instantaneous power rate (a separate keyword).",
+          "examples": ["$E = Pt = IVt$", "1 kWh = 3.6 × 10⁶ J", "compare cost of running different appliances"]
+        }
+      ]
+    },
+    {
+      "slug": "capacitance",
+      "label": "Capacitance & Capacitors",
+      "description": "How capacitors store charge and energy, the parallel-plate model, the effect of dielectrics, and rules for combining capacitors in series and parallel.",
+      "intro": {
+        "slug": "capacitance_intro",
+        "label": "Capacitance & Capacitors Overview",
+        "description": "A capacitor stores separated charge; its capacitance $C = Q/V$ (farads) quantifies how much charge is stored per volt. The parallel-plate geometry gives $C = \\varepsilon_0 A / d$, and inserting a dielectric increases $C$ by the factor $\\kappa$. The energy stored is $U = \\frac{1}{2}CV^2$. Capacitors combine in parallel (capacitances add) and in series (reciprocals add), opposite to the rules for resistors.",
+        "examples": ["$C = Q/V$", "energy $U = \\frac{1}{2}CV^2$", "parallel: $C_{\\text{eq}} = C_1 + C_2$; series: $1/C_{\\text{eq}} = 1/C_1 + 1/C_2$"]
+      },
+      "in_depth": [
+        {
+          "slug": "capacitance_definition",
+          "label": "Definition of capacitance $C = Q/V$",
+          "description": "Define capacitance as the charge stored per unit voltage, $C = Q/V$, measured in farads (F), and use it to find stored charge or voltage given the other two quantities. This focuses on the defining relation, not on how the geometry of the capacitor sets $C$ (a separate keyword).",
+          "examples": ["$C = Q/V$; larger $C$ → more charge per volt", "1 F = 1 C/V", "find $Q$ or $V$ given $C$ and the other"]
+        },
+        {
+          "slug": "parallel_plate_capacitor",
+          "label": "Parallel-plate capacitor geometry",
+          "description": "Calculate the capacitance of a parallel-plate capacitor from its geometry using $C = \\varepsilon_0 A / d$, and predict how changing plate area $A$ or separation $d$ affects $C$ (without a dielectric). This focuses on the geometric factors, not on dielectric modification (a separate keyword).",
+          "examples": ["$C = \\varepsilon_0 A / d$", "double plate area → double $C$", "halve plate separation → double $C$"]
+        },
+        {
+          "slug": "dielectrics",
+          "label": "Dielectrics in capacitors",
+          "description": "Explain how inserting a dielectric material of constant $\\kappa$ between capacitor plates increases capacitance to $C = \\kappa \\varepsilon_0 A / d$, reduces the electric field for fixed charge, and can increase stored charge for fixed voltage. This focuses on the dielectric effect on capacitance, not on the basic parallel-plate geometry without a dielectric (a separate keyword).",
+          "examples": ["$C_{\\text{dielectric}} = \\kappa C_0$", "dielectric reduces $E$-field (fixed $Q$) or increases $Q$ (fixed $V$)", "dielectric constant $\\kappa > 1$; vacuum $\\kappa = 1$"]
+        },
+        {
+          "slug": "energy_stored_capacitor",
+          "label": "Energy stored in a charged capacitor",
+          "description": "Calculate the energy stored in a capacitor using $U = \\frac{1}{2}CV^2 = \\frac{1}{2}QV = \\frac{Q^2}{2C}$, and predict how energy changes when capacitance, charge, or voltage is altered. This focuses on the energy of a static charged capacitor, not on charging/discharging dynamics (not in MCAT scope).",
+          "examples": ["$U = \\frac{1}{2}CV^2$", "double voltage → quadruple stored energy", "all three forms: $\\frac{1}{2}CV^2 = \\frac{1}{2}QV = Q^2/(2C)$"]
+        },
+        {
+          "slug": "capacitors_in_parallel",
+          "label": "Capacitors in parallel",
+          "description": "Combine capacitors connected between the same two nodes (parallel) using $C_{\\text{eq}} = C_1 + C_2 + \\cdots$, noting that all share the same voltage and total charge is the sum. This focuses on the parallel combination rule, not on series combinations (a separate keyword).",
+          "examples": ["$C_{\\text{eq}} = C_1 + C_2$", "same $V$; total charge $Q = Q_1 + Q_2$", "parallel $C_{\\text{eq}} > $ any individual capacitor"]
+        },
+        {
+          "slug": "capacitors_in_series",
+          "label": "Capacitors in series",
+          "description": "Combine capacitors connected end-to-end (series) using $\\frac{1}{C_{\\text{eq}}} = \\frac{1}{C_1} + \\frac{1}{C_2} + \\cdots$, noting that all carry the same charge and voltages add. This focuses on the series combination rule, not on parallel combinations (a separate keyword).",
+          "examples": ["$1/C_{\\text{eq}} = 1/C_1 + 1/C_2$", "same $Q$ on each; voltages add: $V = V_1 + V_2$", "series $C_{\\text{eq}} < $ smallest individual capacitor"]
+        },
+        {
+          "slug": "combining_capacitors",
+          "label": "Combining series and parallel capacitors",
+          "description": "Reduce a mixed series–parallel capacitor network to a single equivalent capacitance by identifying and collapsing sub-groups (opposite rules to resistors: parallel adds $C$, series adds $1/C$). This focuses on multi-step network reduction, not on the individual series or parallel rules in isolation (separate keywords).",
+          "examples": ["parallel group first → equivalent $C$, then combine in series", "resistor vs. capacitor rule reversal: series adds $1/C$", "re-apply $C = Q/V$ at each level"]
+        }
+      ]
+    },
+    {
+      "slug": "conductivity",
+      "label": "Conductivity — Metallic & Electrolytic",
+      "description": "The mechanisms by which metals and electrolyte solutions conduct electric current, and how conductivity relates to resistivity.",
+      "intro": {
+        "slug": "conductivity_intro",
+        "label": "Conductivity Overview",
+        "description": "Electrical conductivity $\\sigma = 1/\\rho$ measures how readily a material carries current. In metallic conductors, mobile free electrons carry charge; in electrolytic solutions, dissolved ions carry charge. These two mechanisms produce distinct temperature-dependence and biological relevance (body fluids conduct via ions, not electrons).",
+        "examples": ["conductivity $\\sigma = 1/\\rho$", "metals: free electrons carry current", "electrolytes: dissolved ions carry current"]
+      },
+      "in_depth": [
+        {
+          "slug": "metallic_conductivity",
+          "label": "Metallic conductivity",
+          "description": "Describe metallic conductivity as arising from the sea of delocalized free electrons in a metal lattice, explain why metals are good conductors ($\\rho$ very small), and note that resistance increases with temperature (lattice vibrations impede electron flow). This focuses on the electron-carrier mechanism in metals, not on ion-based conduction (a separate keyword).",
+          "examples": ["free electrons → low resistivity in metals", "heating a metal → higher resistance (more scattering)", "copper wire example of metallic conductor"]
+        },
+        {
+          "slug": "electrolytic_conductivity",
+          "label": "Electrolytic conductivity",
+          "description": "Describe electrolytic conductivity as current carried by dissolved cations and anions in solution, predict that conductivity increases with ion concentration and charge, and contrast it with metallic conduction. This focuses on ionic current carriers in solution, not on electrons in metals (a separate keyword).",
+          "examples": ["NaCl solution: Na⁺ and Cl⁻ carry current", "more dissolved ions → higher conductivity", "body fluids conduct via electrolytes, not free electrons"]
+        }
+      ]
+    },
+    {
+      "slug": "circuit_meters",
+      "label": "Circuit Meters — Ammeters & Voltmeters",
+      "description": "How ammeters and voltmeters are connected in circuits and the ideal-meter approximations used on the MCAT.",
+      "intro": {
+        "slug": "circuit_meters_intro",
+        "label": "Circuit Meters Overview",
+        "description": "An ammeter measures current and is connected in series (ideal ammeter: zero resistance so it doesn't disturb current). A voltmeter measures potential difference and is connected in parallel across a component (ideal voltmeter: infinite resistance so it draws no current). Knowing which meter goes where and what the ideal assumptions mean is an MCAT-level circuit-reading skill.",
+        "examples": ["ammeter: in series; ideal resistance = 0", "voltmeter: in parallel; ideal resistance = ∞", "non-ideal meters disturb the circuit under test"]
+      },
+      "in_depth": [
+        {
+          "slug": "ammeter_connection",
+          "label": "Ammeter — measuring current",
+          "description": "Connect an ammeter in series with the branch whose current is to be measured, apply the ideal-ammeter approximation (resistance ≈ 0, so it drops no voltage), and recognize that a real ammeter with nonzero resistance slightly reduces current. This focuses on current measurement and series connection, not on voltage measurement (a separate keyword).",
+          "examples": ["ammeter in series: same current flows through it", "ideal: $R_{\\text{ammeter}} = 0$; no voltage drop", "break the circuit to insert ammeter"]
+        },
+        {
+          "slug": "voltmeter_connection",
+          "label": "Voltmeter — measuring voltage",
+          "description": "Connect a voltmeter in parallel across the two nodes whose potential difference is to be measured, apply the ideal-voltmeter approximation (resistance → ∞, draws no current), and recognize that a finite-resistance voltmeter loads the circuit slightly. This focuses on voltage measurement and parallel connection, not on current measurement (a separate keyword).",
+          "examples": ["voltmeter in parallel: spans two nodes", "ideal: $R_{\\text{voltmeter}} \\to \\infty$; draws no current", "clip probes across component without breaking circuit"]
+        }
+      ]
+    }
+  ]
+}

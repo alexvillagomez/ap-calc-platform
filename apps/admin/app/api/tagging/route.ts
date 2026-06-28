@@ -146,7 +146,7 @@ ${buildCandidateBlock("KEYWORDS", candidates.keywords, 10)}
 ${buildCandidateBlock("TAGS", candidates.tags, 5)}`;
 
   const completion = await openai.chat.completions.create({
-    model: "gemini-3.5-flash",
+    model: "gpt-5.4-mini",
     messages: [{ role: "system", content: PROBLEM_SYSTEM }, { role: "user", content: userMsg }],
     response_format: { type: "json_object" },
     temperature: 0.1,
@@ -187,7 +187,7 @@ ${buildCandidateBlock("KEYWORDS", candidates.keywords, 10)}
 ${buildCandidateBlock("TAGS", candidates.tags, 5)}`;
 
   const completion = await openai.chat.completions.create({
-    model: "gemini-3.5-flash",
+    model: "gpt-5.4-mini",
     messages: [{ role: "system", content: WRONG_ANSWER_SYSTEM }, { role: "user", content: userMsg }],
     response_format: { type: "json_object" },
     temperature: 0.1,
@@ -238,8 +238,8 @@ export async function POST(request: Request) {
   // ── 3. Fetch all DB rows (parallel) ───────────────────────────────────────
   const [{ data: catRows }, { data: kwRows }, { data: tagRows }] = await Promise.all([
     supabase.from("learn_categories").select("id, name, description, embedding").not("embedding", "is", null),
-    supabase.from("learn_keywords").select("id, name, label, description, embedding").eq("tier", "in_depth").eq("status", "approved").not("embedding", "is", null),
-    supabase.from("learn_keywords").select("id, name, label, description, embedding").eq("tier", "tag").eq("status", "approved").not("embedding", "is", null),
+    supabase.from("learn_keywords").select("id, name, label, description, embedding").eq("tier", "in_depth").neq("keyword_type", "umbrella").eq("status", "approved").not("embedding", "is", null),
+    supabase.from("learn_keywords").select("id, name, label, description, embedding").eq("tier", "tag").neq("keyword_type", "umbrella").eq("status", "approved").not("embedding", "is", null),
   ]);
 
   const categories = (catRows ?? []) as DbRow[];

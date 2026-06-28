@@ -27,6 +27,7 @@ import { fetchExemplarProblems, buildExemplarBlock } from "@/lib/mathExemplars";
 import { outlineContextForCategory } from "@/lib/mathContentOutline";
 import type { MathCourse } from "@/lib/mathTypes";
 import { normalizeStem, jaccardSimilarity, NEAR_DUP_THRESHOLD } from "@/lib/questionDiversity";
+import { enrichQuestionsInBackground } from "@/lib/questionEnrichment";
 
 export const runtime = "nodejs";
 
@@ -118,7 +119,22 @@ export async function POST(request: Request) {
 
   const categoryKeywordIdSet = new Set(allKeywords.map((k) => k.id));
   const rawKeywordIds = Array.isArray(body.keyword_ids) ? body.keyword_ids : [];
-  const filteredKeywordIds = rawKeywordIds.filter((id) => categoryKeywordIdSet.has(id));
+  // Umbrella scope = ALL of its subtopics. If a passed id is an umbrella (not in
+  // the in_depth target set), expand it to its in_depth children so an umbrella
+  // quiz aggregates the question pools of every child subtopic. In_depth ids pass
+  // through unchanged. This makes the umbrella-quiz guarantee server-side, so it
+  // holds even if a caller passes the umbrella id directly.
+  const expandedKeywordIds = new Set<string>();
+  for (const id of rawKeywordIds) {
+    if (categoryKeywordIdSet.has(id)) {
+      expandedKeywordIds.add(id);
+    } else {
+      for (const child of allKeywords.filter((k) => k.parent_keyword_id === id)) {
+        expandedKeywordIds.add(child.id);
+      }
+    }
+  }
+  const filteredKeywordIds = [...expandedKeywordIds];
   const keywords =
     filteredKeywordIds.length > 0
       ? allKeywords.filter((k) => filteredKeywordIds.includes(k.id))
@@ -193,6 +209,22 @@ export async function POST(request: Request) {
     return d >= bandMin && d <= bandMax ? 2.0 : 1.0;
   }
 
+  // SCOPE GATE (mirrors next-question): only use a stored question for a keyword
+  // when that keyword is the question's PRIMARY (argmax) tag or holds a
+  // substantial share — a tiny incidental weight does NOT put it in scope.
+  const SCOPE_MIN_WEIGHT = 0.34;
+  const dominantKeyword = (
+    kw: Record<string, number> | null | undefined
+  ): string | null => {
+    if (!kw) return null;
+    let best: string | null = null;
+    let bestW = -Infinity;
+    for (const [id, w] of Object.entries(kw)) {
+      if (w > bestW) { bestW = w; best = id; }
+    }
+    return best;
+  };
+
   // Gather stored questions (≤2 per keyword, weakness-first)
   // Also track normalised stems already in the quiz to avoid near-duplicates within the batch.
   const selectedIds = new Set<string>();
@@ -218,8 +250,9 @@ export async function POST(request: Request) {
       .filter(
         (q) =>
           !selectedIds.has(q.id) &&
-          q.keyword_weights &&
-          Object.prototype.hasOwnProperty.call(q.keyword_weights, kwId)
+          !!q.keyword_weights &&
+          (dominantKeyword(q.keyword_weights as Record<string, number>) === kwId ||
+            ((q.keyword_weights as Record<string, number>)?.[kwId] ?? 0) >= SCOPE_MIN_WEIGHT)
       )
       .map((q) => {
         const kw2 = (q.keyword_weights as Record<string, number>) ?? {};
@@ -340,6 +373,15 @@ export async function POST(request: Request) {
           .select(
             "id, stem_latex, choices, correct_index, solution_latex, hint_latex, keyword_weights, difficulty, parent_question_id, avg_rating"
           );
+
+        if (inserted && inserted.length > 0) {
+          // Fire-and-forget four-dimension grounding of the new questions.
+          enrichQuestionsInBackground(
+            supabase,
+            "math",
+            (inserted as { id: string }[]).map((r) => r.id)
+          );
+        }
 
         return (inserted ?? []) as DbQuestion[];
       };

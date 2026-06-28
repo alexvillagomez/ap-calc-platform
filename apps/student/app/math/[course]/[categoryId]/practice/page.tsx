@@ -11,8 +11,8 @@ import QuestionToolbar from "@/components/practice/QuestionToolbar";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { MathLessonView } from "@/components/math/MathLessonView";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
-import { ComboMeter } from "@/components/gamification/ComboMeter";
-import { SoundToggle } from "@/components/ui/SoundToggle";
+import { GrindMeter } from "@/components/gamification/GrindMeter";
+import { NavMenu } from "@/components/nav/NavMenu";
 import { CorrectPulse } from "@/components/ui/CorrectPulse";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
@@ -22,7 +22,6 @@ import {
   MathReviewKeyword,
   MathPracticeQueueResponse,
   MathQuestion,
-  diffLabel,
   COURSE_LABELS,
 } from "@/components/math/mathUiTypes";
 import type { MathCourse } from "@/lib/mathTypes";
@@ -53,6 +52,16 @@ interface AttemptResponse {
   correct_index: number;
   keyword_states: Record<string, { score: number; state: string; needs_lesson: boolean }>;
 }
+
+/** A snapshot of a previously-seen question for read-only review navigation. */
+interface HistoryEntry {
+  question: MathQuestion;
+  selectedChoice: number | null;
+  revealed: boolean;
+  wasCorrect: boolean | null;
+}
+
+const HISTORY_CAP = 30;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -98,8 +107,17 @@ function MathPracticeInner({
   const [topicCorrectStreak, setTopicCorrectStreak] = useState(0);
   const [topicQuestionCount, setTopicQuestionCount] = useState(0);
   const excludeIdsRef = useRef<string[]>([]);
+  const recentKeywordIdsRef = useRef<string[]>([]);
+  const recentQuestionIdsRef = useRef<string[]>([]);
+  const seenStemsRef = useRef<string[]>([]);
 
   const [question, setQuestion] = useState<MathQuestion | null>(null);
+  // Movement/review history: previously-seen questions (answered or skipped).
+  const historyRef = useRef<HistoryEntry[]>([]);
+  // null = viewing the LIVE current question; otherwise index into historyRef.
+  const [reviewIndex, setReviewIndex] = useState<number | null>(null);
+  const inReview = reviewIndex !== null;
+  const reviewEntry = inReview ? historyRef.current[reviewIndex] ?? null : null;
   const [isReviewCard, setIsReviewCard] = useState(false);
   const [pendingReviewBetweenTopics, setPendingReviewBetweenTopics] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
@@ -110,6 +128,7 @@ function MathPracticeInner({
   const [stats, setStats] = useState({ answered: 0, correct: 0, lessons: 0, topicsMastered: 0 });
   const [transitionLabel, setTransitionLabel] = useState("");
   const [combo, setCombo] = useState(0);
+  const [sessionStart] = useState(() => Date.now());
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
   const [usedRefresher, setUsedRefresher] = useState(false);
 
@@ -139,6 +158,7 @@ function MathPracticeInner({
     async (sid: string, keywordId: string, forReview?: MathReviewKeyword, useSimilar?: boolean) => {
       setPhase("generating");
       setQuestion(null);
+      setReviewIndex(null);
       setSelectedChoice(null);
       setShowLessonOffer(false);
       setShowHint(false);
@@ -163,6 +183,9 @@ function MathPracticeInner({
             category_id: categoryId,
             keyword_id: keywordId,
             exclude_ids: excludeIdsRef.current,
+            recent_keyword_ids: recentKeywordIdsRef.current.slice(-6),
+            recent_question_ids: recentQuestionIdsRef.current.slice(-10),
+            seen_stems: seenStemsRef.current.slice(-30),
             course: course as MathCourse,
           };
           const mode = difficultyModeRef.current;
@@ -184,6 +207,14 @@ function MathPracticeInner({
 
         setQuestion(data.question);
         excludeIdsRef.current = [...excludeIdsRef.current, data.question.id];
+        recentQuestionIdsRef.current = [...recentQuestionIdsRef.current, data.question.id].slice(-10);
+        if (data.question.primary_keyword_id) {
+          recentKeywordIdsRef.current = [...recentKeywordIdsRef.current, data.question.primary_keyword_id].slice(-10);
+        }
+        const stemText = data.question.stem_latex ?? "";
+        if (stemText) {
+          seenStemsRef.current = [...seenStemsRef.current, stemText].slice(-50);
+        }
         setIsReviewCard(!!forReview);
         setPhase("practicing");
       } catch (e) {
@@ -262,14 +293,23 @@ function MathPracticeInner({
 
   // ── Handle choice ──────────────────────────────────────────────────────────
 
+  // Push the currently-live question into review history (answered or skipped).
+  const pushHistory = useCallback(
+    (entry: HistoryEntry) => {
+      historyRef.current = [...historyRef.current, entry].slice(-HISTORY_CAP);
+    },
+    []
+  );
+
   const handleChoice = useCallback(
     async (idx: number) => {
-      if (!question || !currentKeyword || phase !== "practicing") return;
+      if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
 
       setSelectedChoice(idx);
       setPhase("revealed");
 
       const correct = idx === question.correct_index;
+      pushHistory({ question, selectedChoice: idx, revealed: true, wasCorrect: correct });
       setLastAnswerCorrect(correct);
       setCombo((prev) => {
         const next = comboReducer({ count: prev }, correct ? "correct" : "incorrect").count;
@@ -310,6 +350,7 @@ function MathPracticeInner({
           const needsLesson = kwState?.needs_lesson === true;
           const tooManyWrong = consecutiveWrongRef.current >= 2;
           if (
+            !correct &&
             (tooManyWrong || needsLesson) &&
             !lessonedKeywordsRef.current.has(currentKeyword.id)
           ) {
@@ -318,15 +359,16 @@ function MathPracticeInner({
         }
       } catch { /* non-fatal */ }
     },
-    [question, currentKeyword, phase, sessionId, isReviewCard, course, usedRefresher]
+    [question, currentKeyword, phase, sessionId, isReviewCard, course, usedRefresher, inReview, pushHistory]
   );
 
   // ── Handle don't know ──────────────────────────────────────────────────────
 
   const handleDontKnow = useCallback(async () => {
-    if (!question || !currentKeyword || phase !== "practicing") return;
+    if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
     setSelectedChoice(null);
     setPhase("revealed");
+    pushHistory({ question, selectedChoice: null, revealed: true, wasCorrect: false });
     setLastAnswerCorrect(false);
     setCombo((prev) => comboReducer({ count: prev }, "incorrect").count);
     onIncorrectAnswer();
@@ -358,7 +400,33 @@ function MathPracticeInner({
         }
       }
     } catch { /* non-fatal */ }
-  }, [question, currentKeyword, phase, sessionId, isReviewCard, course, usedRefresher]);
+  }, [question, currentKeyword, phase, sessionId, isReviewCard, course, usedRefresher, inReview, pushHistory]);
+
+  // ── Free movement: Back / Forward / Skip ───────────────────────────────────
+
+  // Step back to an earlier history entry (read-only review).
+  const handleReviewBack = useCallback(() => {
+    const hist = historyRef.current;
+    if (hist.length === 0) return;
+    setReviewIndex((cur) => (cur === null ? hist.length - 1 : Math.max(0, cur - 1)));
+  }, []);
+
+  // Step forward through history; past the last entry returns to the LIVE question.
+  const handleReviewForward = useCallback(() => {
+    setReviewIndex((cur) => {
+      if (cur === null) return null;
+      const next = cur + 1;
+      return next >= historyRef.current.length ? null : next;
+    });
+  }, []);
+
+  // Skip the live question: record NO attempt, no mastery change; load next.
+  const handleSkip = useCallback(() => {
+    if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
+    pushHistory({ question, selectedChoice: null, revealed: false, wasCorrect: null });
+    const useSimilarPath = false;
+    loadQuestion(sessionId, currentKeyword.id, undefined, useSimilarPath);
+  }, [question, currentKeyword, phase, inReview, pushHistory, loadQuestion, sessionId]);
 
   // ── Advance keyword ────────────────────────────────────────────────────────
 
@@ -466,7 +534,6 @@ function MathPracticeInner({
 
   // ─── Render ────────────────────────────────────────────────────────────────
 
-  const diff = question ? diffLabel(question.difficulty) : null;
   const masteryDots = Array.from({ length: MASTERY_STREAK }, (_, i) =>
     i < topicCorrectStreak ? "●" : "○"
   ).join("");
@@ -492,41 +559,45 @@ function MathPracticeInner({
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="w-full px-4 sm:px-6 py-2.5 flex items-center gap-2 flex-wrap">
-          {/* Left: back + title */}
-          <div className="flex items-center gap-2 min-w-0 flex-1">
+        <div className="w-full px-4 sm:px-6 py-2.5 space-y-1.5">
+          {/* Row 1 — nav controls */}
+          <div className="flex items-center gap-2">
             <Link href={backHref} className="text-xs text-neutral-400 hover:text-neutral-600 shrink-0 whitespace-nowrap">
               {isScoped ? "← Back" : `← ${courseLabel}`}
             </Link>
-            {isScoped && scopeLabel && (
-              <span className="hidden sm:inline shrink-0 text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">
-                {umbrellaId ? "Topic" : "Keyword"}: {scopeLabel}
-              </span>
-            )}
-            {currentKeyword && phase !== "loading" && phase !== "done" && (
-              <p className="font-semibold text-neutral-900 text-sm truncate min-w-0">
-                {currentKeyword.label}
-              </p>
-            )}
+            <span className="text-[11px] uppercase tracking-wide text-neutral-400 font-medium">
+              Practice
+            </span>
+            <div className="ml-auto flex items-center gap-2 shrink-0">
+              {currentKeyword && (phase === "practicing" || phase === "revealed") && !isReviewCard && (
+                <button
+                  onClick={handleStartLesson}
+                  className="hidden sm:inline text-xs text-neutral-400 hover:text-brand-600 underline underline-offset-2 transition-colors whitespace-nowrap"
+                >
+                  Learn this
+                </button>
+              )}
+              {stats.answered > 0 && (
+                <p className="text-xs text-neutral-500 tabular-nums shrink-0">
+                  {stats.correct}/{stats.answered}
+                </p>
+              )}
+              <StreakBadge />
+              <NavMenu />
+            </div>
           </div>
-          {/* Right: actions + widgets */}
-          <div className="flex items-center gap-2 shrink-0">
-            {currentKeyword && (phase === "practicing" || phase === "revealed") && !isReviewCard && (
-              <button
-                onClick={handleStartLesson}
-                className="hidden sm:inline text-xs text-neutral-400 hover:text-brand-600 underline underline-offset-2 transition-colors whitespace-nowrap"
-              >
-                Learn this
-              </button>
-            )}
-            {stats.answered > 0 && (
-              <p className="text-xs text-neutral-500 tabular-nums shrink-0">
-                {stats.correct}/{stats.answered}
-              </p>
-            )}
-            <StreakBadge />
-            <SoundToggle />
-          </div>
+          {/* Row 2 — topic title gets its own room */}
+          {currentKeyword && phase !== "loading" && phase !== "done" ? (
+            <h1 className="font-semibold text-neutral-900 text-base leading-snug">
+              {currentKeyword.label}
+            </h1>
+          ) : (
+            isScoped && scopeLabel && (
+              <h1 className="font-semibold text-neutral-900 text-base leading-snug">
+                {scopeLabel}
+              </h1>
+            )
+          )}
         </div>
 
         {/* Mastery meter */}
@@ -565,25 +636,9 @@ function MathPracticeInner({
           </div>
         )}
 
-        {/* Queue progress */}
-        {queue.length > 0 && phase !== "loading" && phase !== "done" && (
-          <div className="w-full px-6 pb-2">
-            <div className="flex items-center gap-2">
-              <div className="flex-1 h-1 bg-neutral-200 rounded-full overflow-hidden">
-                <div
-                  className="h-1 bg-brand-500 rounded-full transition-all"
-                  style={{ width: `${Math.round((queueIndex / queue.length) * 100)}%` }}
-                />
-              </div>
-              <span className="text-xs text-neutral-400 shrink-0">
-                {queueIndex + 1} / {queue.length}
-              </span>
-            </div>
-          </div>
-        )}
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4">
+      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4 pb-safe-bottom">
         {/* Loading */}
         {phase === "loading" && (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
@@ -645,19 +700,64 @@ function MathPracticeInner({
           />
         )}
 
-        {/* Practice / Revealed */}
-        {(phase === "practicing" || phase === "revealed") && question && (
+        {/* Practice / Revealed / Review */}
+        {(phase === "practicing" || phase === "revealed") && (inReview ? reviewEntry : question) && (() => {
+          // When in review, render the historical entry READ-ONLY.
+          const dispQuestion = (inReview ? reviewEntry!.question : question)!;
+          const dispSelected = inReview ? reviewEntry!.selectedChoice : selectedChoice;
+          const dispRevealed = inReview ? reviewEntry!.revealed : phase === "revealed";
+          const hasEarlier = inReview ? reviewIndex! > 0 : historyRef.current.length > 0;
+          const positionLabel = inReview
+            ? `Reviewing earlier question (${reviewIndex! + 1} of ${historyRef.current.length})`
+            : `Question ${historyRef.current.length + 1}`;
+          return (
           <>
+            {/* Grind meter */}
+            <div className="pb-2">
+              <GrindMeter mode="quiz" streak={combo} answered={stats.answered} startedAt={sessionStart} hidden />
+            </div>
+
+            {/* Position + movement controls */}
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <span className="text-xs text-neutral-400">{positionLabel}</span>
+              <div className="flex items-center gap-2">
+                {hasEarlier && (
+                  <button
+                    onClick={handleReviewBack}
+                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  >
+                    ← Back
+                  </button>
+                )}
+                {inReview && (
+                  <button
+                    onClick={handleReviewForward}
+                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  >
+                    {reviewIndex! + 1 >= historyRef.current.length ? "Return to current →" : "Forward →"}
+                  </button>
+                )}
+                {!inReview && phase === "practicing" && (
+                  <button
+                    onClick={handleSkip}
+                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  >
+                    Skip →
+                  </button>
+                )}
+              </div>
+            </div>
+
             {/* Badge row */}
             <div className="flex items-center gap-2 flex-wrap">
-              {isReviewCard && (
+              {isReviewCard && !inReview && (
                 <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-700">
                   Review
                 </span>
               )}
-              {diff && (
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${diff.cls}`}>
-                  {diff.label}
+              {inReview && (
+                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-600">
+                  {dispRevealed ? "Read-only" : "Skipped"}
                 </span>
               )}
             </div>
@@ -665,7 +765,7 @@ function MathPracticeInner({
             {/* Stem */}
             <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
               <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                <MathText>{question.stem_latex}</MathText>
+                <MathText>{dispQuestion.stem_latex}</MathText>
               </p>
             </div>
 
@@ -673,19 +773,19 @@ function MathPracticeInner({
               system="math"
               course={course}
               keywordId={
-                question.primary_keyword_id ??
-                primaryKeywordId(question.keyword_weights)
+                dispQuestion.primary_keyword_id ??
+                primaryKeywordId(dispQuestion.keyword_weights)
               }
               sessionId={sessionId}
-              questionId={question.id}
+              questionId={dispQuestion.id}
               contentType="question"
-              resetSignal={question.id}
-              answerSignal={phase}
+              resetSignal={dispQuestion.id}
+              answerSignal={dispRevealed ? "revealed" : phase}
               onRefresherUsed={() => setUsedRefresher(true)}
             />
 
             {/* Hint button */}
-            {phase === "practicing" && question.hint_latex && (
+            {!inReview && phase === "practicing" && question?.hint_latex && (
               <div className="flex justify-center">
                 {!showHint ? (
                   <button
@@ -705,20 +805,17 @@ function MathPracticeInner({
               </div>
             )}
 
-            {/* Combo meter */}
-            <ComboMeter combo={combo} />
-
             {/* Choices */}
             <CorrectPulse
-              trigger={phase === "revealed" && lastAnswerCorrect}
+              trigger={!inReview && phase === "revealed" && lastAnswerCorrect}
               className="block w-full"
             >
               <div className="space-y-2">
-                {question.choices.map((choice, i) => {
+                {dispQuestion.choices.map((choice, i) => {
                   let state: "default" | "selected" | "correct" | "wrong" | "dimmed" = "default";
-                  if (phase === "revealed") {
-                    if (i === question.correct_index) state = "correct";
-                    else if (i === selectedChoice) state = "wrong";
+                  if (dispRevealed) {
+                    if (i === dispQuestion.correct_index) state = "correct";
+                    else if (i === dispSelected) state = "wrong";
                     else state = "dimmed";
                   }
                   return (
@@ -727,16 +824,16 @@ function MathPracticeInner({
                       index={i}
                       text={choice}
                       state={state}
-                      disabled={phase === "revealed"}
-                      onClick={() => handleChoice(i)}
+                      disabled={inReview || dispRevealed}
+                      onClick={() => { if (!inReview) handleChoice(i); }}
                     />
                   );
                 })}
               </div>
             </CorrectPulse>
 
-            {/* I don't know */}
-            {phase === "practicing" && (
+            {/* I don't know — live only */}
+            {!inReview && phase === "practicing" && (
               <div className="flex justify-center">
                 <button
                   onClick={handleDontKnow}
@@ -748,19 +845,19 @@ function MathPracticeInner({
             )}
 
             {/* Worked solution */}
-            {phase === "revealed" && question.solution_latex && (
+            {dispRevealed && dispQuestion.solution_latex && (
               <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
                 <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
                   Solution
                 </p>
                 <p className="text-sm text-neutral-700 leading-relaxed">
-                  <MathText>{question.solution_latex}</MathText>
+                  <MathText>{dispQuestion.solution_latex}</MathText>
                 </p>
               </div>
             )}
 
-            {/* Lesson offer banner */}
-            {phase === "revealed" && showLessonOffer && currentKeyword && (
+            {/* Lesson offer banner — live only */}
+            {!inReview && phase === "revealed" && showLessonOffer && currentKeyword && (
               <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 space-y-3">
                 <p className="text-sm font-medium text-amber-800">
                   Struggling with {currentKeyword.label}? Take a quick lesson.
@@ -773,7 +870,10 @@ function MathPracticeInner({
                     Start lesson
                   </button>
                   <button
-                    onClick={() => setShowLessonOffer(false)}
+                    onClick={() => {
+                      if (currentKeyword) lessonedKeywordsRef.current.add(currentKeyword.id);
+                      setShowLessonOffer(false);
+                    }}
                     className="flex-1 py-2.5 rounded-xl border border-amber-200 bg-white text-amber-700 text-sm font-medium hover:bg-amber-50 transition-colors"
                   >
                     Keep practicing
@@ -782,13 +882,13 @@ function MathPracticeInner({
               </div>
             )}
 
-            {/* Feedback + actions */}
-            {phase === "revealed" && (
+            {/* Feedback + actions — live only (review is navigated via Back/Forward) */}
+            {!inReview && phase === "revealed" && (
               <>
                 <MathFeedbackWidget
                   sessionId={sessionId}
                   contentType="question"
-                  contentId={question.id}
+                  contentId={question!.id}
                   className="px-1"
                 />
                 <div className="flex flex-col gap-2 sm:flex-row">
@@ -810,7 +910,8 @@ function MathPracticeInner({
               </>
             )}
           </>
-        )}
+          );
+        })()}
 
         {/* Done */}
         {phase === "done" && (

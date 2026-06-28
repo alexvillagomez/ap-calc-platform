@@ -1,0 +1,318 @@
+{
+  "section": "physics",
+  "category_code": "P8",
+  "category_label": "Light & Geometrical Optics",
+  "order_index": 7,
+  "umbrellas": [
+    {
+      "slug": "wave_optics_interference",
+      "label": "Wave Optics — Interference & Double-Slit",
+      "description": "How light waves superpose constructively and destructively, and how Young's double-slit experiment demonstrates this.",
+      "intro": {
+        "slug": "wave_optics_interference_intro",
+        "label": "Interference & Young's Double-Slit Overview",
+        "description": "When two coherent light waves overlap, they interfere: constructive interference produces bright fringes where path lengths differ by whole wavelengths ($\\Delta = m\\lambda$), and destructive interference produces dark fringes where they differ by half-wavelengths ($\\Delta = (m+\\tfrac{1}{2})\\lambda$). Young's double-slit experiment is the canonical demonstration, producing a bright-fringe pattern where slit spacing $d$ and screen distance $L$ determine fringe spacing $y = \\frac{m\\lambda L}{d}$. These ideas also underlie thin-film and diffraction-grating behavior.",
+        "examples": ["constructive: $\\Delta = m\\lambda$; destructive: $\\Delta = (m+\\tfrac{1}{2})\\lambda$", "Young's double-slit: bright fringe at $y = m\\lambda L/d$", "coherent sources required for stable interference pattern"]
+      },
+      "in_depth": [
+        {
+          "slug": "interference_constructive_destructive",
+          "label": "Constructive and destructive interference",
+          "description": "Identify constructive interference (bright) when two waves have a path-length difference $\\Delta = m\\lambda$ ($m = 0, \\pm1, \\pm2,\\ldots$) and destructive interference (dark) when $\\Delta = (m+\\tfrac{1}{2})\\lambda$. This focuses on the general superposition criterion, not the specific fringe geometry of the double-slit (a separate keyword).",
+          "examples": ["$\\Delta = m\\lambda$ → bright (in phase)", "$\\Delta = (m+\\tfrac{1}{2})\\lambda$ → dark (out of phase)", "path difference determines fringe type"]
+        },
+        {
+          "slug": "youngs_double_slit",
+          "label": "Young's double-slit experiment",
+          "description": "Predict bright-fringe positions in Young's double-slit experiment using $y_m = \\frac{m\\lambda L}{d}$, where $d$ is slit separation, $L$ is distance to screen, and $m$ is fringe order; interpret fringe spacing as a measure of wavelength. This focuses on the geometric fringe pattern, not the abstract interference condition (a separate keyword).",
+          "examples": ["$y_m = m\\lambda L / d$: bright fringe positions", "smaller $d$ → wider fringe spacing", "measure $\\lambda$ from fringe spacing + geometry"]
+        }
+      ]
+    },
+    {
+      "slug": "wave_optics_diffraction",
+      "label": "Wave Optics — Diffraction, Thin Films & Gratings",
+      "description": "Diffraction phenomena — thin-film interference, diffraction gratings, single-slit diffraction, and X-ray diffraction — where the wave nature of light produces observable patterns.",
+      "intro": {
+        "slug": "wave_optics_diffraction_intro",
+        "label": "Diffraction, Thin Films & Gratings Overview",
+        "description": "Diffraction occurs when light bends around edges or passes through narrow apertures, producing intensity patterns that depend on wavelength and geometry. Thin films exploit phase shifts at boundaries to produce color interference (e.g., soap bubbles). Diffraction gratings use many slits to produce sharp, bright-line spectra. Single-slit diffraction produces an envelope pattern with a wide central maximum and narrower side lobes. X-ray diffraction uses Bragg's law ($n\\lambda = 2d\\sin\\theta$) to probe crystal-lattice spacing. All are consequences of wave superposition.",
+        "examples": ["thin film: phase shift at denser medium", "grating: $d\\sin\\theta = m\\lambda$ for principal maxima", "single-slit: dark minima at $a\\sin\\theta = m\\lambda$"]
+      },
+      "in_depth": [
+        {
+          "slug": "thin_film_interference",
+          "label": "Thin-film interference",
+          "description": "Predict whether a thin film (e.g., soap bubble, oil slick, coated lens) appears bright or dark for a given wavelength by accounting for the $\\lambda/2$ phase shift that occurs at each reflection from a denser medium and the round-trip path difference $2t$: total cancellation (dark) or reinforcement (bright) depends on whether the net phase difference is a whole or half wavelength. This focuses on reflective thin-film optics, not the transmitted fringe pattern of the double-slit (a separate keyword).",
+          "examples": ["phase flip at denser-medium reflection", "condition for constructive: $2t = (m+\\tfrac{1}{2})\\lambda/n$ (one flip)", "soap bubble colors from varying thickness $t$"]
+        },
+        {
+          "slug": "diffraction_grating",
+          "label": "Diffraction grating",
+          "description": "Apply the diffraction-grating equation $d\\sin\\theta = m\\lambda$ to find angles of principal maxima for a grating with slit spacing $d$ and identify which orders are present; recognize that more slits produce sharper, brighter lines than a double-slit. This focuses on multi-slit grating analysis, not thin-film interference (a separate keyword).",
+          "examples": ["$d\\sin\\theta = m\\lambda$: $m = 0, \\pm1, \\pm2,\\ldots$", "grating: sharper maxima than double-slit", "spectroscopy: separate wavelengths by order"]
+        },
+        {
+          "slug": "single_slit_diffraction",
+          "label": "Single-slit diffraction",
+          "description": "Describe the single-slit diffraction pattern — a wide central maximum flanked by weaker side lobes — and locate dark minima using $a\\sin\\theta = m\\lambda$, where $a$ is slit width and $m = \\pm1, \\pm2,\\ldots$; recognize that narrower slits spread light more. This focuses on single-aperture diffraction, not the grating or double-slit cases (separate keywords).",
+          "examples": ["dark minimum: $a\\sin\\theta = m\\lambda$ ($m \\neq 0$)", "narrower slit → wider central maximum", "central bright region is twice as wide as side lobes"]
+        },
+        {
+          "slug": "xray_diffraction",
+          "label": "X-ray diffraction & Bragg's law",
+          "description": "Apply Bragg's law $n\\lambda = 2d\\sin\\theta$ to explain how X-rays constructively reflect from parallel planes of atoms in a crystal separated by spacing $d$, and how the diffraction pattern reveals crystal structure. This focuses on X-ray diffraction in crystalline materials, not visible-light grating diffraction (a separate keyword).",
+          "examples": ["$n\\lambda = 2d\\sin\\theta$ (Bragg's law)", "X-ray $\\lambda \\sim$ atomic spacing ($\\sim$ 0.1 nm)", "crystallography: diffraction spots → lattice spacing $d$"]
+        }
+      ]
+    },
+    {
+      "slug": "polarization",
+      "label": "Polarization of Light",
+      "description": "Linear and circular polarization — how the oscillation direction of light's electric field is oriented and how polarizers transmit or block light.",
+      "intro": {
+        "slug": "polarization_intro",
+        "label": "Polarization Overview",
+        "description": "Unpolarized light has electric-field oscillations in all directions perpendicular to the direction of travel. A linear polarizer transmits only the component aligned with its transmission axis; a second polarizer at angle $\\theta$ reduces intensity by Malus's law ($I = I_0\\cos^2\\theta$). Circular polarization arises when two perpendicular linear components have equal amplitude but a $90°$ phase offset, producing a rotating electric-field vector. These properties matter for MCAT problems on polarized light and optical instruments.",
+        "examples": ["linear polarizer: transmits one plane of E field", "Malus's law: $I = I_0\\cos^2\\theta$", "circular polarization: E vector rotates at $c/\\lambda$"]
+      },
+      "in_depth": [
+        {
+          "slug": "linear_polarization",
+          "label": "Linear polarization",
+          "description": "Explain that a linear polarizer transmits electric-field oscillations along one axis only; apply Malus's law $I = I_0\\cos^2\\theta$ to find transmitted intensity when polarized light passes through a second polarizer at angle $\\theta$; recognize that crossed polarizers ($\\theta = 90°$) produce zero transmission. This focuses on linearly polarized light, not circular polarization (a separate keyword).",
+          "examples": ["crossed polarizers: $I = 0$ ($\\theta = 90°$)", "$I = I_0\\cos^2\\theta$ (Malus's law)", "polarization by reflection at Brewster's angle (conceptual)"]
+        },
+        {
+          "slug": "circular_polarization",
+          "label": "Circular polarization",
+          "description": "Identify circular polarization as arising when two perpendicular linearly polarized components of equal amplitude are $90°$ out of phase, causing the electric-field vector to rotate; distinguish left- from right-circular polarization by the direction of rotation. This focuses on circular polarization geometry, not the intensity-reduction rule of linear polarizers (a separate keyword).",
+          "examples": ["two ⊥ linear components, equal amplitude, $90°$ phase → circular", "left vs. right circular: CCW vs. CW rotation viewed head-on", "circular polarization used in 3-D cinema glasses"]
+        }
+      ]
+    },
+    {
+      "slug": "em_radiation_properties",
+      "label": "Properties of Electromagnetic Radiation",
+      "description": "The fundamental physical properties of EM waves — constant speed in vacuum, perpendicular oscillating fields, and the wave–particle relationship $E = hf$.",
+      "intro": {
+        "slug": "em_radiation_properties_intro",
+        "label": "EM Radiation Properties Overview",
+        "description": "Electromagnetic radiation propagates in vacuum at $c = 3.0 \\times 10^8\\,\\text{m/s}$ regardless of frequency. The wave consists of perpendicular, in-phase oscillating electric $\\mathbf{E}$ and magnetic $\\mathbf{B}$ fields, with the propagation direction perpendicular to both. Each photon carries energy $E = hf$ (where $h = 6.626 \\times 10^{-34}\\,\\text{J·s}$), so higher frequency means higher photon energy. These relationships tie together the wave and particle pictures of light tested on the MCAT.",
+        "examples": ["$c = 3.0\\times10^8$ m/s in vacuum", "$\\mathbf{E}$, $\\mathbf{B}$, and propagation are mutually perpendicular", "$E = hf$ (photon energy)"]
+      },
+      "in_depth": [
+        {
+          "slug": "em_wave_structure",
+          "label": "EM wave structure — perpendicular E and B fields",
+          "description": "Describe an electromagnetic wave as coupled, in-phase, mutually perpendicular electric $\\mathbf{E}$ and magnetic $\\mathbf{B}$ field oscillations, with the direction of energy propagation perpendicular to both fields (right-hand rule: $\\mathbf{E} \\times \\mathbf{B}$ points in the propagation direction). This focuses on the field geometry, not the speed or photon-energy relation (separate keywords).",
+          "examples": ["$\\mathbf{E} \\perp \\mathbf{B} \\perp$ propagation direction", "$\\mathbf{E}$ and $\\mathbf{B}$ oscillate in phase", "EM wave is transverse — not longitudinal"]
+        },
+        {
+          "slug": "speed_of_light_vacuum",
+          "label": "Speed of light in vacuum",
+          "description": "State that all EM radiation travels at $c = 3.0 \\times 10^8\\,\\text{m/s}$ in vacuum regardless of frequency or source motion, and apply the wave relation $c = f\\lambda$ to interconvert frequency and wavelength. This focuses on the invariance of $c$ and wave-relation arithmetic, not the photon-energy equation (a separate keyword).",
+          "examples": ["$c = 3.0\\times10^8$ m/s — same for all frequencies", "$c = f\\lambda$: higher $f$ → shorter $\\lambda$", "$\\lambda = c/f$: radio $\\lambda \\sim$ meters; X-ray $\\lambda \\sim 0.1$ nm"]
+        },
+        {
+          "slug": "photon_energy",
+          "label": "Photon energy $E = hf$",
+          "description": "Calculate photon energy using $E = hf = hc/\\lambda$, where $h = 6.626 \\times 10^{-34}\\,\\text{J·s}$, and predict that shorter wavelength (higher frequency) photons carry more energy; apply to compare energies across the EM spectrum. This focuses on the photon-energy calculation, not the photoelectric effect or atomic emission spectra (→ P11).",
+          "examples": ["$E = hf = hc/\\lambda$", "UV photons more energetic than IR photons", "doubling frequency doubles photon energy"]
+        }
+      ]
+    },
+    {
+      "slug": "em_spectrum",
+      "label": "The Electromagnetic Spectrum",
+      "description": "Classification of EM radiation by frequency/wavelength and the visible light sub-range including color.",
+      "intro": {
+        "slug": "em_spectrum_intro",
+        "label": "EM Spectrum & Color Overview",
+        "description": "The electromagnetic spectrum spans from radio waves (longest $\\lambda$, lowest $f$) through microwaves, infrared, visible light, ultraviolet, X-rays, to gamma rays (shortest $\\lambda$, highest $f$, highest photon energy). Within the visible range (roughly 400–700 nm), wavelength determines color from violet to red. Understanding the spectrum allows MCAT reasoning about which radiation type carries enough energy for ionization, heating, or particular biological effects.",
+        "examples": ["$\\gamma$ > X-ray > UV > visible > IR > microwave > radio (energy order)", "visible: 400–700 nm (violet to red)", "longer $\\lambda$ → lower $E_{photon}$"]
+      },
+      "in_depth": [
+        {
+          "slug": "em_spectrum_classification",
+          "label": "Classifying EM radiation by frequency and wavelength",
+          "description": "Rank the major regions of the EM spectrum in order of increasing frequency (and photon energy): radio, microwave, infrared, visible, ultraviolet, X-ray, gamma ray; recognize that ionizing radiation (UV and above) has sufficient photon energy to break chemical bonds. This focuses on classification and relative ranking, not detailed spectroscopic interpretation (→ C13).",
+          "examples": ["radio → micro → IR → vis → UV → X-ray → $\\gamma$", "ionizing radiation: UV and shorter wavelength", "microwave: absorbed by water, used in MRI"]
+        },
+        {
+          "slug": "visible_spectrum_color",
+          "label": "Visible spectrum and color",
+          "description": "Identify the visible range (approximately 400–700 nm) and the color sequence from violet (shortest visible $\\lambda$, highest visible $f$) to red (longest visible $\\lambda$, lowest visible $f$); relate object color to which wavelengths are reflected vs. absorbed. This focuses on color–wavelength assignments within the visible band, not the broader EM spectrum ranking (a separate keyword).",
+          "examples": ["violet $\\approx$ 400 nm; red $\\approx$ 700 nm", "object color = reflected wavelengths", "complementary color absorbed (e.g., red object absorbs green)"]
+        }
+      ]
+    },
+    {
+      "slug": "reflection",
+      "label": "Reflection",
+      "description": "Specular and diffuse reflection from surfaces — the law of reflection and its application to plane and spherical mirrors.",
+      "intro": {
+        "slug": "reflection_intro",
+        "label": "Reflection Overview",
+        "description": "When light strikes a smooth surface, the angle of incidence equals the angle of reflection ($\\theta_i = \\theta_r$), both measured from the normal. Plane mirrors produce virtual, upright, same-size images located behind the mirror. Spherical (concave and convex) mirrors produce real or virtual images whose position and size are found with the mirror equation $\\frac{1}{d_o}+\\frac{1}{d_i}=\\frac{1}{f}$ and the magnification relation $m = -d_i/d_o$. The law of reflection and mirror optics together form the geometrical-optics treatment of reflecting surfaces.",
+        "examples": ["$\\theta_i = \\theta_r$ (angles from normal)", "plane mirror: virtual image, $d_i = -d_o$", "concave mirror: $f = R/2$"]
+      },
+      "in_depth": [
+        {
+          "slug": "law_of_reflection",
+          "label": "Law of reflection",
+          "description": "State and apply the law of reflection: the angle of incidence $\\theta_i$ equals the angle of reflection $\\theta_r$, both measured from the normal to the surface at the point of incidence; distinguish specular (smooth surface) from diffuse (rough surface) reflection. This focuses on the angle relationship, not image formation (a separate keyword).",
+          "examples": ["$\\theta_i = \\theta_r$ (measured from normal)", "specular: parallel rays remain parallel after reflection", "diffuse reflection: rays scatter in all directions"]
+        },
+        {
+          "slug": "spherical_mirrors",
+          "label": "Spherical mirrors — image formation",
+          "description": "Locate images formed by concave and convex spherical mirrors using the mirror equation $\\frac{1}{d_o}+\\frac{1}{d_i}=\\frac{1}{f}$ (where focal length $f = R/2$, $R$ = radius of curvature) and magnification $m = -d_i/d_o$; apply sign conventions to determine whether images are real/virtual, upright/inverted, and enlarged/reduced. This focuses on spherical-mirror image calculation, not plane-mirror images (covered by the law-of-reflection keyword).",
+          "examples": ["$\\frac{1}{d_o}+\\frac{1}{d_i}=\\frac{1}{f}$; $f = R/2$", "concave: real/inverted image when $d_o > f$", "$m < 0$: inverted; $|m| > 1$: enlarged"]
+        }
+      ]
+    },
+    {
+      "slug": "refraction_snell",
+      "label": "Refraction & Snell's Law",
+      "description": "How light bends at an interface between media of different optical density, governed by the index of refraction and Snell's law.",
+      "intro": {
+        "slug": "refraction_snell_intro",
+        "label": "Refraction & Snell's Law Overview",
+        "description": "When light crosses a boundary between two media, it changes direction (refracts) because its speed changes: $v = c/n$, where $n$ is the index of refraction. Snell's law $n_1\\sin\\theta_1 = n_2\\sin\\theta_2$ quantifies the bending; the beam bends toward the normal when entering a denser medium ($n_2 > n_1$) and away from the normal when leaving. Dispersion (different $n$ for different wavelengths) causes white light to separate into colors in a prism. At a critical angle, total internal reflection traps light inside the denser medium — the principle behind optical fibers.",
+        "examples": ["Snell's: $n_1\\sin\\theta_1 = n_2\\sin\\theta_2$", "denser medium → smaller angle (bend toward normal)", "TIR: $\\theta_i > \\theta_c = \\sin^{-1}(n_2/n_1)$"]
+      },
+      "in_depth": [
+        {
+          "slug": "index_of_refraction",
+          "label": "Index of refraction",
+          "description": "Define the index of refraction $n = c/v$ as the ratio of the speed of light in vacuum to its speed $v$ in the medium; recognize that $n > 1$ for all ordinary materials and that a higher $n$ means slower propagation. This focuses on the definition and speed relationship, not the bending-angle calculation (a separate keyword).",
+          "examples": ["$n = c/v$; $n_{water} \\approx 1.33$, $n_{glass} \\approx 1.5$", "higher $n$ → slower $v$", "$n_{vacuum} = 1$ by definition"]
+        },
+        {
+          "slug": "snells_law",
+          "label": "Snell's law",
+          "description": "Apply Snell's law $n_1\\sin\\theta_1 = n_2\\sin\\theta_2$ to find the refracted-ray angle when light crosses an interface; predict the direction of bending (toward normal when entering a denser medium). This focuses on the angle calculation, not the physical cause (speed change) or dispersion effects (separate keywords).",
+          "examples": ["$n_1\\sin\\theta_1 = n_2\\sin\\theta_2$", "light bends toward normal entering denser medium", "angle of refraction < angle of incidence when $n_2 > n_1$"]
+        },
+        {
+          "slug": "dispersion",
+          "label": "Dispersion — index varies with wavelength",
+          "description": "Explain dispersion as the variation of index of refraction $n$ with wavelength (violet light has larger $n$ than red in glass), causing white light to separate into a spectrum in a prism; recognize that dispersion is the source of chromatic aberration in lenses. This focuses on the wavelength-dependence of $n$, not the basic bending geometry of Snell's law (a separate keyword).",
+          "examples": ["glass: $n_{violet} > n_{red}$ → violet bends more", "prism splits white light into rainbow", "dispersion → chromatic aberration in simple lenses"]
+        },
+        {
+          "slug": "total_internal_reflection",
+          "label": "Total internal reflection (TIR)",
+          "description": "Predict when total internal reflection occurs: light traveling from a denser to a less-dense medium ($n_1 > n_2$) undergoes TIR when the angle of incidence exceeds the critical angle $\\theta_c = \\sin^{-1}(n_2/n_1)$; apply to optical fibers and fiber-optic light transmission. This focuses on TIR conditions, not ordinary refraction (a separate keyword).",
+          "examples": ["$\\theta_c = \\sin^{-1}(n_2/n_1)$", "TIR only when going denser → less dense medium", "optical fiber: light trapped by TIR at cladding interface"]
+        }
+      ]
+    },
+    {
+      "slug": "thin_lenses",
+      "label": "Thin Lenses",
+      "description": "Converging and diverging thin lenses — image formation, the thin-lens equation, sign conventions, magnification, and lens power in diopters.",
+      "intro": {
+        "slug": "thin_lenses_intro",
+        "label": "Thin Lenses Overview",
+        "description": "A thin lens refracts light at two surfaces to form images described by the thin-lens equation $\\frac{1}{p}+\\frac{1}{q}=\\frac{1}{f}$ and lateral magnification $m = -q/p$. Converging (convex) lenses have $f > 0$ and can form real, inverted images or virtual, upright images depending on object position; diverging (concave) lenses always have $f < 0$ and form virtual, upright, reduced images. Lens power $P = 1/f$ (diopters, with $f$ in metres) allows additive combination of lenses. These relationships govern cameras, eyeglasses, microscopes, and the human eye.",
+        "examples": ["$\\frac{1}{p}+\\frac{1}{q}=\\frac{1}{f}$; $m = -q/p$", "converging: $f > 0$; diverging: $f < 0$", "power $P = 1/f$ (diopters)"]
+      },
+      "in_depth": [
+        {
+          "slug": "thin_lens_equation",
+          "label": "Thin-lens equation and sign conventions",
+          "description": "Apply the thin-lens equation $\\frac{1}{p}+\\frac{1}{q}=\\frac{1}{f}$ with Cartesian sign conventions ($q > 0$ = real image on opposite side; $f > 0$ = converging lens) to locate images; compute lateral magnification $m = -q/p$ and determine orientation (inverted if $m < 0$) and size. This focuses on the calculation procedure, not lens power or combinations (separate keywords).",
+          "examples": ["$1/p + 1/q = 1/f$; solve for $q$", "$m = -q/p$: $m < 0$ → inverted", "real image: $q > 0$ (same side as outgoing light)"]
+        },
+        {
+          "slug": "converging_vs_diverging_lenses",
+          "label": "Converging vs. diverging lenses",
+          "description": "Distinguish converging (biconvex, $f > 0$) from diverging (biconcave, $f < 0$) lenses by shape and by whether parallel rays converge to or diverge from a focal point; predict qualitatively whether an image is real/virtual, upright/inverted, enlarged/reduced based on lens type and object position. This focuses on qualitative lens classification, not the quantitative calculation (a separate keyword).",
+          "examples": ["converging: parallel rays → focal point at $f > 0$", "diverging: parallel rays appear to diverge from $f < 0$", "diverging lens always produces virtual, upright, reduced image"]
+        },
+        {
+          "slug": "lens_power_diopters",
+          "label": "Lens power and diopters",
+          "description": "Define lens power as $P = 1/f$ (units: diopters, D) with focal length $f$ in metres; convert between focal length and power; recognize that more powerful lenses have shorter focal lengths and that prescription eyeglasses specify power in diopters (positive for converging, negative for diverging). This focuses on the power–focal-length relationship, not the lens-combination rule (a separate keyword).",
+          "examples": ["$P = 1/f$ (D); $f$ in metres", "+2 D: $f = 0.5$ m (converging)", "negative diopters → diverging (myopia correction)"]
+        }
+      ]
+    },
+    {
+      "slug": "lens_combinations_aberration",
+      "label": "Combination of Lenses & Aberration",
+      "description": "How multiple lenses combine (powers add) and the main optical defects (aberrations) that limit image quality.",
+      "intro": {
+        "slug": "lens_combinations_aberration_intro",
+        "label": "Lens Combinations & Aberration Overview",
+        "description": "When two thin lenses are placed in contact, their powers simply add: $P_{total} = P_1 + P_2$, and the equivalent focal length is $1/f_{eq} = 1/f_1 + 1/f_2$. For separated lenses the image of the first lens becomes the object for the second. Real lenses also suffer from aberrations: chromatic aberration (different $n$ for different wavelengths, correctable by lens pairs) and spherical aberration (rays through the lens periphery focus closer than paraxial rays). Understanding combinations and aberrations is needed for MCAT problems on optical instruments.",
+        "examples": ["$P_{total} = P_1 + P_2$ (lenses in contact)", "chromatic aberration: dispersion misfocuses colors", "spherical aberration: paraxial vs. marginal rays differ"]
+      },
+      "in_depth": [
+        {
+          "slug": "lens_combination",
+          "label": "Combination of lenses",
+          "description": "Calculate the effective focal length of a two-lens system in contact using $1/f_{eq} = 1/f_1 + 1/f_2$ (equivalently $P_{total} = P_1 + P_2$); for separated lenses, trace the image produced by the first lens as the object for the second. This focuses on the combination rule, not aberrations or single-lens image formation (separate keywords).",
+          "examples": ["$1/f_{eq} = 1/f_1 + 1/f_2$ (contact lenses)", "$P_{total} = P_1 + P_2$ in diopters", "final image: use $q_1$ from lens 1 as $p_2$ for lens 2"]
+        },
+        {
+          "slug": "chromatic_aberration",
+          "label": "Chromatic aberration",
+          "description": "Explain chromatic aberration as the failure of a simple lens to focus all wavelengths at the same point, arising because the index of refraction depends on wavelength (dispersion); recognize that achromatic doublets (a converging + diverging lens pair of different glass types) correct this by equalizing focal lengths for two wavelengths. This focuses on color-dependent focusing error, not spherical aberration (a separate keyword).",
+          "examples": ["different $\\lambda$ → different $f$ → color fringing", "achromatic doublet: corrects chromatic aberration", "chromatic aberration worsens with larger $n$ dispersion"]
+        },
+        {
+          "slug": "spherical_aberration",
+          "label": "Spherical aberration",
+          "description": "Describe spherical aberration as the failure of a spherical lens (or mirror) to focus all rays — paraxial vs. marginal — to a single point; recognize that an aperture stop reducing lens diameter or an aspheric surface reduces it. This focuses on geometry-related focusing error, not color-dependent focusing (chromatic aberration, a separate keyword).",
+          "examples": ["marginal rays (outer) focus shorter than paraxial rays", "small aperture reduces spherical aberration", "aspheric lens: corrects marginal-ray error"]
+        }
+      ]
+    },
+    {
+      "slug": "optical_instruments",
+      "label": "Optical Instruments & the Human Eye",
+      "description": "How lenses and mirrors combine in real instruments — the camera, magnifying glass, microscope, telescope, and the human eye, including common vision defects.",
+      "intro": {
+        "slug": "optical_instruments_intro",
+        "label": "Optical Instruments & Eye Overview",
+        "description": "Optical instruments combine lenses to achieve magnification or image formation beyond what the naked eye can achieve. The human eye is itself a lens–retina system: the cornea and crystalline lens refract light onto the retina, with the ciliary muscles adjusting lens curvature (accommodation) to focus objects at varying distances. Common defects — myopia (near-sightedness) and hyperopia (far-sightedness) — are corrected with diverging and converging lenses respectively. Simple and compound microscopes, telescopes, and magnifying glasses are all analyzed using the thin-lens equation applied in sequence.",
+        "examples": ["eye: cornea + lens focus on retina; $f$ adjusted by ciliary muscles", "myopia corrected by diverging lens ($f < 0$)", "compound microscope: objective + eyepiece in series"]
+      },
+      "in_depth": [
+        {
+          "slug": "human_eye_structure",
+          "label": "Human eye — focusing and accommodation",
+          "description": "Describe the eye as a converging-lens system in which the cornea provides most refraction and the elastic crystalline lens adjusts focal length via ciliary-muscle contraction (accommodation) to focus objects from near to far; identify the retina as the image plane (containing rods and cones). This focuses on the optics of focusing, not the biology of the retina (→ Biology) or vision defects (a separate keyword).",
+          "examples": ["cornea: major refracting element (~40 D)", "accommodation: ciliary muscle contracts → lens thickens → shorter $f$", "retina = image sensor; rods (dim) vs. cones (color)"]
+        },
+        {
+          "slug": "myopia_hyperopia_correction",
+          "label": "Myopia, hyperopia & corrective lenses",
+          "description": "Distinguish myopia (near-sightedness: parallel light focuses in front of retina; corrected by a diverging lens) from hyperopia (far-sightedness: parallel light focuses behind retina; corrected by a converging lens); calculate required lens power from the near/far point distances. This focuses on vision-defect optics, not normal eye anatomy (a separate keyword).",
+          "examples": ["myopia: image in front of retina → diverging lens correction", "hyperopia: image behind retina → converging lens correction", "prescription power: $P = 1/f$ chosen so far/near point normalizes"]
+        },
+        {
+          "slug": "magnifying_glass",
+          "label": "Magnifying glass (simple magnifier)",
+          "description": "Explain that a converging lens used as a magnifying glass produces a virtual, upright, enlarged image when the object is placed inside the focal point ($d_o < f$); relate angular magnification $M \\approx 25\\,\\text{cm}/f$ (for relaxed eye at the near point 25 cm). This focuses on the simple magnifier, not the compound microscope or telescope (separate keywords).",
+          "examples": ["object inside focal point → virtual, upright, enlarged", "$M \\approx 25\\,\\text{cm}/f$ (angular magnification)", "greater $M$ → shorter $f$ needed"]
+        },
+        {
+          "slug": "compound_microscope",
+          "label": "Compound microscope",
+          "description": "Describe the compound microscope as two converging lenses in series: the objective forms a real, inverted, enlarged intermediate image just inside the focal point of the eyepiece, which then acts as a magnifying glass to produce a final virtual image; total magnification $M = M_{obj} \\times M_{eye}$. This focuses on the two-stage microscope arrangement, not the single-lens magnifier (a separate keyword).",
+          "examples": ["objective: short $f$, forms real intermediate image", "eyepiece: acts as magnifying glass", "$M_{total} = M_{obj} \\times M_{eye}$"]
+        },
+        {
+          "slug": "telescope",
+          "label": "Telescope (refracting)",
+          "description": "Describe a refracting telescope as two converging lenses: the large-diameter objective collects light and forms a real image at its focal plane; the eyepiece magnifies that image; angular magnification $M = -f_{obj}/f_{eye}$ (negative sign: inverted image). This focuses on the basic two-lens refracting telescope, not the compound microscope (a separate keyword).",
+          "examples": ["$M = -f_{obj}/f_{eye}$ (refracting telescope)", "larger objective $f$ → greater magnification", "image inverted (negative sign in $M$)"]
+        }
+      ]
+    }
+  ]
+}

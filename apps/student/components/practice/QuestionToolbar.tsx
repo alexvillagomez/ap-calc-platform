@@ -19,7 +19,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
-import MathText from "@/components/mcat/MathText";
+import PrereqSeeAlso from "@/components/practice/PrereqSeeAlso";
+import LessonModal from "@/components/practice/LessonModal";
+import RefresherModal from "@/components/practice/RefresherModal";
 import { trackEvent } from "@/lib/metrics";
 
 export type QuestionToolbarProps = {
@@ -32,28 +34,21 @@ export type QuestionToolbarProps = {
   /** Changing this value resets the stopwatch (new question/card). */
   resetSignal: unknown;
   /**
-   * Changing this value auto-dismisses the quick-refresher panel (e.g. when
+   * Changing this value auto-dismisses the quick-refresher modal (e.g. when
    * the student submits an answer). The refresher-used flag is NOT cleared —
    * ×0.4 credit is still applied if an answer is submitted after the refresher
-   * was opened, regardless of whether the panel is currently visible.
+   * was opened, regardless of whether the modal is currently visible.
    */
   answerSignal?: unknown;
   onRefresherUsed?: () => void;
+  /**
+   * Fired after an action that changes which item should be served next — today
+   * just "Prioritize this topic", which alters question-selection inputs. The auto
+   * pages use it to invalidate a next-item prefetch made before the change.
+   */
+  onStateChange?: () => void;
   label?: string;
 };
-
-type RefresherContent = {
-  keyword_id: string;
-  rule_latex: string | null;
-  example_latex: string | null;
-};
-
-function fmt(ms: number): string {
-  const total = Math.floor(ms / 1000);
-  const m = Math.floor(total / 60);
-  const s = total % 60;
-  return `${m}:${s.toString().padStart(2, "0")}`;
-}
 
 export default function QuestionToolbar({
   system,
@@ -65,10 +60,10 @@ export default function QuestionToolbar({
   resetSignal,
   answerSignal,
   onRefresherUsed,
+  onStateChange,
   label,
 }: QuestionToolbarProps) {
-  // ── Stopwatch ──────────────────────────────────────────────────────────────
-  const [elapsed, setElapsed] = useState(0);
+  // ── Timing (metrics only — no visible timer) ────────────────────────────────
   const startRef = useRef<number>(Date.now());
   // Snapshot of the question/keyword the running timer belongs to, so the
   // 'timer_stop' we emit on reset/unmount references the PREVIOUS question.
@@ -92,16 +87,11 @@ export default function QuestionToolbar({
     });
   }, [system, course, contentType]);
 
-  // Reset the stopwatch whenever resetSignal changes; emit the prior interval.
+  // Reset timing whenever resetSignal changes; emit the prior interval for metrics.
   useEffect(() => {
     emitTimerStop();
     startRef.current = Date.now();
-    setElapsed(0);
     stopMetaRef.current = { questionId, keywordId };
-    const id = setInterval(() => {
-      setElapsed(Date.now() - startRef.current);
-    }, 1000);
-    return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetSignal]);
 
@@ -118,6 +108,9 @@ export default function QuestionToolbar({
   }, []);
 
   // ── Take a lesson ────────────────────────────────────────────────────────────
+  // Opens the lesson as an IN-PAGE popup overlaid on the current surface, so the
+  // student never leaves their flashcard/question. Closeable any time.
+  const [lessonOpen, setLessonOpen] = useState(false);
   const handleLesson = () => {
     if (!keywordId) return;
     trackEvent({
@@ -128,59 +121,28 @@ export default function QuestionToolbar({
       question_id: questionId ?? undefined,
       content_type: contentType,
     });
-    const q = label ? `?label=${encodeURIComponent(label)}` : "";
-    // Open in a NEW TAB so the in-progress practice/quiz session is preserved
-    // (router.push would unmount this surface and abandon the session).
-    window.open(
-      `/${system}/lesson/${encodeURIComponent(keywordId)}${q}`,
-      "_blank",
-      "noopener"
-    );
+    setLessonOpen(true);
   };
 
   // ── Quick refresher ──────────────────────────────────────────────────────────
-  const [refOpen, setRefOpen] = useState(false);
-  const [refLoading, setRefLoading] = useState(false);
-  const [refError, setRefError] = useState(false);
-  const [refContent, setRefContent] = useState<RefresherContent | null>(null);
+  const [refresherOpen, setRefresherOpen] = useState(false);
 
-  // Collapse + clear the refresher panel when the question/card changes.
+  // Close the refresher modal when the question/card changes.
   useEffect(() => {
-    setRefOpen(false);
-    setRefContent(null);
-    setRefError(false);
-    setRefLoading(false);
+    setRefresherOpen(false);
   }, [resetSignal]);
 
-  // Auto-dismiss the panel when the student submits an answer (answerSignal
-  // changes). We only close the visual panel — we do NOT touch refContent or
-  // the parent's usedRefresher flag, so ×0.4 credit is fully preserved.
+  // Auto-dismiss the modal when the student submits an answer (answerSignal
+  // changes). We only close the visual modal — the parent's usedRefresher flag
+  // is NOT cleared, so ×0.4 credit is fully preserved.
   useEffect(() => {
     if (answerSignal === undefined) return;
-    setRefOpen(false);
+    setRefresherOpen(false);
   }, [answerSignal]);
 
-  // Secondary: auto-collapse after 30 s of inactivity so the panel never
-  // lingers indefinitely. Same rule: only the visual state; no flag reset.
-  const autoCollapseRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => {
-    if (!refOpen) {
-      if (autoCollapseRef.current) clearTimeout(autoCollapseRef.current);
-      return;
-    }
-    autoCollapseRef.current = setTimeout(() => setRefOpen(false), 30_000);
-    return () => {
-      if (autoCollapseRef.current) clearTimeout(autoCollapseRef.current);
-    };
-  }, [refOpen]);
-
-  const handleRefresher = async () => {
+  const handleRefresher = () => {
     if (!keywordId) return;
-    if (refOpen) {
-      setRefOpen(false);
-      return;
-    }
-    setRefOpen(true);
+    setRefresherOpen(true);
     onRefresherUsed?.();
     trackEvent({
       event_type: "refresher_used",
@@ -190,21 +152,6 @@ export default function QuestionToolbar({
       question_id: questionId ?? undefined,
       content_type: contentType,
     });
-    if (refContent || refError) return; // already loaded for this card
-    setRefLoading(true);
-    setRefError(false);
-    try {
-      const res = await fetch(
-        `/api/${system}/refresher/${encodeURIComponent(keywordId)}`
-      );
-      if (!res.ok) throw new Error(`status ${res.status}`);
-      const data = (await res.json()) as RefresherContent;
-      setRefContent(data);
-    } catch {
-      setRefError(true);
-    } finally {
-      setRefLoading(false);
-    }
   };
 
   // ── Prioritize this ──────────────────────────────────────────────────────────
@@ -238,6 +185,8 @@ export default function QuestionToolbar({
           question_id: questionId ?? undefined,
           content_type: contentType,
         });
+        // Selection inputs changed → let the parent invalidate any next-item prefetch.
+        onStateChange?.();
         toast.success("We'll show this topic more often until you improve.");
       } else {
         const res = await fetch("/api/priority", {
@@ -250,6 +199,7 @@ export default function QuestionToolbar({
           }),
         });
         if (!res.ok) throw new Error(`status ${res.status}`);
+        onStateChange?.();
         toast("Removed from prioritized topics.");
       }
     } catch {
@@ -266,37 +216,11 @@ export default function QuestionToolbar({
   return (
     <div className="rounded-xl border border-neutral-200 bg-white px-2.5 py-2 shadow-brand-xs">
       <div className="flex flex-wrap items-center gap-1.5">
-        {/* Stopwatch pill */}
-        <span
-          className="inline-flex items-center gap-1 rounded-lg bg-neutral-100 px-2 py-1 text-xs font-medium tabular-nums text-neutral-600"
-          aria-label="Time on this question"
-          title="Time on this question"
-        >
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="12" r="9" />
-            <path d="M12 7v5l3 2" />
-          </svg>
-          {fmt(elapsed)}
-        </span>
-
-        <span className="mx-0.5 hidden h-4 w-px bg-neutral-200 sm:block" />
-
         <Button
           variant="ghost"
           size="sm"
           onClick={handleRefresher}
           disabled={noKeyword}
-          aria-expanded={refOpen}
         >
           Quick refresher
         </Button>
@@ -334,63 +258,28 @@ export default function QuestionToolbar({
         </Button>
       </div>
 
-      {/* Inline refresher panel */}
-      {refOpen && (
-        <div className="mt-2 rounded-lg border border-brand-100 bg-brand-50 p-3 text-sm text-neutral-700">
-          <div className="mb-1.5 flex items-center justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wide text-brand-700">
-              Quick refresher
-            </p>
-            <button
-              onClick={() => setRefOpen(false)}
-              aria-label="Close refresher"
-              className="ml-2 rounded p-0.5 text-neutral-400 hover:bg-brand-100 hover:text-neutral-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
-            >
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                aria-hidden="true"
-              >
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          {refLoading && (
-            <p className="text-xs text-neutral-500">Loading a refresher…</p>
-          )}
-          {!refLoading && refError && (
-            <p className="text-xs text-neutral-500">
-              Couldn&apos;t load a refresher right now.
-            </p>
-          )}
-          {!refLoading &&
-            !refError &&
-            refContent &&
-            !refContent.rule_latex &&
-            !refContent.example_latex && (
-              <p className="text-xs text-neutral-500">
-                Couldn&apos;t load a refresher right now.
-              </p>
-            )}
-          {!refLoading && !refError && refContent?.rule_latex && (
-            <div className="leading-relaxed">
-              <MathText>{refContent.rule_latex}</MathText>
-            </div>
-          )}
-          {!refLoading && !refError && refContent?.example_latex && (
-            <div className="mt-2 leading-relaxed">
-              <p className="mb-0.5 text-xs font-semibold text-neutral-500">
-                Example
-              </p>
-              <MathText>{refContent.example_latex}</MathText>
-            </div>
-          )}
-        </div>
+      {/* Prerequisite "See also" — small, unobtrusive; hidden when there are none. */}
+      <PrereqSeeAlso system={system} course={course} keywordId={keywordId} className="mt-1.5 px-0.5" />
+
+      {/* In-page refresher popup */}
+      {refresherOpen && keywordId && (
+        <RefresherModal
+          system={system}
+          keywordId={keywordId}
+          onClose={() => setRefresherOpen(false)}
+        />
+      )}
+
+      {/* In-page lesson popup */}
+      {lessonOpen && keywordId && (
+        <LessonModal
+          system={system}
+          course={course}
+          keywordId={keywordId}
+          label={label}
+          sessionId={sessionId}
+          onClose={() => setLessonOpen(false)}
+        />
       )}
     </div>
   );
