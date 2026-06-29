@@ -209,7 +209,7 @@ export async function buildIdentityScopeBlock(
       if (inf.inScope.length)
         lines.push(
           opts?.forFlashcards
-            ? `    in scope — the deck must COVER every one of these, combining closely related ones into ONE card (skip a purely conceptual one): ${inf.inScope.join("; ")}`
+            ? `    in scope — the deck's ANSWERS must cover every one of these facts, combining closely related ones into ONE card (skip a purely conceptual one); these are what to RECALL, NOT how to word the front (keep fronts terse): ${inf.inScope.join("; ")}`
             : `    in scope — cover ONLY these: ${inf.inScope.join("; ")}`
         );
       if (inf.outOfScope.length)

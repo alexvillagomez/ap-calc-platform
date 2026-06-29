@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import MathText from "@/components/mcat/MathText";
+import { breakOutKeyTakeaway } from "@/lib/lessonText";
 import MathFeedbackWidget from "@/components/math/MathFeedbackWidget";
 import { EndScreenActions, type EndAction } from "@/components/practice/EndScreenActions";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
@@ -308,7 +309,7 @@ export function MathLessonView({
                 </p>
                 {/* div (not p): MathText may render a figure block (graph/table). */}
                 <div className="text-sm text-neutral-800 leading-relaxed">
-                  <MathText>{step.explanation_latex}</MathText>
+                  <MathText>{breakOutKeyTakeaway(step.explanation_latex)}</MathText>
                 </div>
               </div>
               {step.example_latex && (

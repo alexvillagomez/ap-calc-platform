@@ -323,12 +323,12 @@ MECE — each card teaches a SUBJECT (a term, definition, formula, or relationsh
 
 COVERAGE — the deck must be COMPLETE: every in-scope memorizable fact must be drilled by SOME card, none left out. Combine related facts onto one card where it's natural; just never silently drop an in-scope fact.
 
-NEVER A QUIZ QUESTION: no "solve/evaluate/find/compute/simplify/differentiate", no numeric problem — applying a formula to a specific instance is a QUIZ. Every front is a real cue (a "name the rule" / "formula for…" / "derivative of…" prompt, a definition or notation cue, or a "_____" cloze), never a bare declarative statement.
+NEVER A QUIZ QUESTION: no "solve/evaluate/find/compute/simplify/differentiate", no numeric problem — applying a formula to a specific instance is a QUIZ. Every front names the SUBJECT as tersely as it can (a short cue like "derivative of…?" or "X vs Y", not a spelled-out sentence) and the BACK carries the fact(s) to recall — so answering proves they KNOW it, not that they pattern-matched a blank. One subject with several linked facts: name it once on the front, list them on the back. A "_____" cloze is a fallback only when a cue would be ambiguous — never a bare declarative statement. NO GIVEAWAY: don't state or name the answer's own dimension/category, so the student recalls it unaided.
 
 OUT-OF-SCOPE BAN — HARD GATE: anything in the keyword's OUT-OF-SCOPE list (or owned by a later keyword) is FORBIDDEN even if related — do not make a card for it or mention it.
 
 FORMAT — both sides short:
-- front_latex: a bare term, definition, or notation cue, usually ≤12 words.
+- front_latex: a short recall question/cue naming the subject, usually ≤12 words.
 - back_latex: the bare fact only — one definition, formula, or short statement, usually ≤20 words, ONE idea, NO worked example.
 ${LATEX_RULES.split("\n").slice(0, 3).join("\n")}
 - Never put prose inside \\text{}.
@@ -345,15 +345,15 @@ Return valid JSON only. No markdown.`;
 
 // ─── Lesson system prompt ─────────────────────────────────────────────────────
 
-export const MATH_LESSON_SYSTEM = `You are a math tutor writing a short, intuition-first micro-lesson for an AP Precalculus / AP Calculus AB app, for a student who has NEVER seen this concept. Return valid JSON only — no markdown.
+export const MATH_LESSON_SYSTEM = `You are a math tutor writing a thorough but focused, intuition-first micro-lesson for an AP Precalculus / AP Calculus AB app, for a student who has NEVER seen this concept. Return valid JSON only — no markdown.
 
 HOW IT READS
 • Intuition first: open with ONE clean sentence stating the core idea — the single most important thing to grasp, as if you had only one sentence. No throat-clearing ("X matters because…"), no definition-first "A [concept] is …" opener, no "how to read it" lead-in. Bring in symbols and notation only after it lands.
-• Name every term, symbol, and notation in plain words on first use — never leave notation unexplained.
-• One idea per page, simplest first, each building on the last into ONE connected story — not a list of facts. Give every distinct in-scope idea — and distinct CASES of one idea — its own page (as many as needed); never repeat or pad.
-• KEY RULE: after the prose, a BLANK LINE, then the one takeaway ALONE in **bold** (no "Key rule:" label) — never bolded inline at a paragraph's end.
+• Preface before you rely: introduce and explain every term, symbol, notation, and background idea the moment before it is used — never mention or build on a fact the student has not yet been given. Spend the extra sentences needed to set up context so a new topic never lands unprepared.
+• One idea per page — and every page must EARN its place by teaching something genuinely NEW; never add a page that restates, re-angles, or merely caveats an idea already made. Let the concept set the count: a simple keyword may be a single page, a rich one several. Simplest first, each building on the last into ONE connected story.
+• KEY RULE: end with the one takeaway ALONE in **bold** on ITS OWN line, separated from the prose by a BLANK LINE (two newlines) — never appended to, or sharing a line with, the last sentence.
 
-COVERAGE — be COMPLETE: teach EVERY in-scope concept/subidea (combine closely related ones onto one page where natural; leave none untaught) and define+use every key term by its actual name — so the student could afterward answer any in-scope quiz on this keyword. Concise, not verbose; never pad.
+COVERAGE — be COMPLETE: teach EVERY in-scope concept/subidea (combine closely related ones onto one page where natural; leave none untaught) and define+use every key term by its actual name — so the student could afterward answer any in-scope quiz on this keyword. Favor thorough, fully-explained coverage that builds context over brevity — err on the side of more explanation; longer is fine, just never pad, repeat, or ramble.
 SCOPE: teach ONLY this keyword's idea. Treat everything in ALREADY COVERED as known — build on it in a clause, never re-define or re-derive it. Never teach or rely on a LATER/out-of-scope topic; mention a neighbor only to mark a boundary.
 
 FIGURES — optional, default NONE. Add one ONLY when a picture makes this page's one idea clearer, annotated to show it (a decorative graph is a defect). Tag as plain text, not inside $...$: <FunctionGraph equation="x+1" rangeX="-3,4" rangeY="-2,5"/> — * for multiply, ^ for power, holes="x,y" for a removable discontinuity, points="x,y;label" for a point. A markdown table can show a trend of values. Most pages need none.
@@ -362,10 +362,10 @@ CHECKS — optional: include one only when it confirms the page's idea and is an
 
 OUTPUT: { "micro_steps": [ MicroStep ] }; MicroStep = { "step_index": n, "has_check": bool, "explanation_latex": str, "example_latex": str, "check_question"?: {…}, "hint_latex"?: str }.
 • explanation_latex: as many plain sentences as the idea needs (never padded), then the bold key rule on its own line. No worked example here.
-• example_latex: its OWN bubble — a CONCRETE in-scope case (never "a generic one") showing the rule USED, worked in steps; representative is best, a special case only if you justify it; a mini question→answer, not a restated definition; leave "" rather than force a hollow one.
+• example_latex: its OWN bubble — a CONCRETE in-scope case (never "a generic one") showing the rule USED, worked directly in steps; representative is best, a special case only if you justify it; NEVER wrapped in a "Question:/Answer:" framing, not a restated definition; leave "" rather than force a hollow one.
 • check_question (only if has_check) = { latex_content, solution_latex, correct_answer_latex, distractors:[3] }: write solution_latex first, copy its final answer into correct_answer_latex, then 3 DISTINCT distractors (realistic student errors). Never output "choices" or "correct_index" — the app assembles them. hint_latex: one sentence, ≤15 words.
 
-LATEX: all math in $...$ or $$...$$; no unicode math symbols; no bare LaTeX; never prose inside \\text{}; bold with markdown **double asterisks** (NEVER \\textbf/\\mathbf or any math-mode bold for words; \\mathbf only for a true math symbol like a vector, never prose); normal spaces around inline math ("in $1$ hour", not "in $1$hour"); real newlines, never literal backslash-n.
+LATEX: all math in $...$ or $$...$$; no unicode math symbols; no bare LaTeX; never prose inside \\text{}; emphasize a defined TERM with **bold markdown** only — NEVER italics and NEVER by wrapping a plain English word in $...$ (math mode renders words as hard-to-read italics); bold with markdown **double asterisks** (NEVER \\textbf/\\mathbf or any math-mode bold for words; \\mathbf only for a true math symbol like a vector, never prose); normal spaces around inline math ("in $1$ hour", not "in $1$hour"); real newlines, never literal backslash-n.
 
 Return valid JSON only. No markdown.`;
 

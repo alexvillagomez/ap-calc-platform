@@ -15,7 +15,6 @@ import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import MathText from "@/components/mcat/MathText";
 import QuestionToolbar from "@/components/practice/QuestionToolbar";
 import FlipCard, { type FlipResult } from "@/components/cards/FlipCard";
-import LessonModal from "@/components/practice/LessonModal";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { groupCategoriesBySection } from "@/lib/mcatSection";
@@ -23,7 +22,6 @@ import { awardFlashcard, awardQuiz } from "@/lib/points";
 import {
   pickKeyword,
   pickContentKind,
-  shouldShowLesson,
   type EnabledTypes,
   type KeywordPick,
 } from "@/lib/courseEngine/generalPractice";
@@ -498,8 +496,8 @@ function McatPracticePageInner() {
   );
 
   // ── Content-type choices (what the student wants served) ──────────────────
+  // Lessons are NOT a rotation type — they're on-demand via the question toolbar.
   const [enabled, setEnabled] = useState<EnabledTypes>({
-    lessons: true,
     flashcards: true,
     quizzes: true,
   });
@@ -516,8 +514,6 @@ function McatPracticePageInner() {
   const [usedRefresher, setUsedRefresher] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [stats, setStats] = useState<SessionStats>({ answered: 0, correct: 0 });
-  /** Keyword whose lesson is shown inline (null = no lesson open). */
-  const [lessonModalKw, setLessonModalKw] = useState<string | null>(null);
 
   // ── Serving bookkeeping (refs — read inside async serve/answer flows) ─────
   /** Snapshot of the selected leaf ids, frozen when practice starts. */
@@ -528,8 +524,6 @@ function McatPracticePageInner() {
   const categoryOfRef = useRef<Map<string, string>>(new Map());
   /** Per-keyword recent-miss counter → drives easier difficulty when struggling. */
   const recentWrongRef = useRef<Map<string, number>>(new Map());
-  /** Keywords whose lesson has already been auto-surfaced this session. */
-  const lessonShownRef = useRef<Set<string>>(new Set());
   /** Question ids already served (exclude from the next-question pool). */
   const excludeRef = useRef<string[]>([]);
   /** Flashcard ids already shown this session. */
@@ -650,34 +644,6 @@ function McatPracticePageInner() {
     }
   }
 
-  /** Surface a lesson inline iff a miss left the keyword's mastery low enough. */
-  function maybeLesson(
-    kwId: string | null,
-    wasMiss: boolean,
-    states?: KwStates | null
-  ) {
-    if (!kwId) return;
-    const st = states?.[kwId];
-    const scoreAfter =
-      typeof st?.score === "number"
-        ? st.score
-        : scoresRef.current.get(kwId) ?? null;
-    const serverNeedsLesson =
-      st?.needs_lesson === true || st?.state === "needs_lesson";
-    if (
-      shouldShowLesson({
-        enabled,
-        wasMiss,
-        alreadyShown: lessonShownRef.current.has(kwId),
-        scoreAfter,
-        serverNeedsLesson,
-      })
-    ) {
-      lessonShownRef.current.add(kwId);
-      setLessonModalKw(kwId);
-    }
-  }
-
   /** Fetch one quiz question scoped to a single keyword, at a skill-fit difficulty. */
   async function fetchQuestion(kwId: string): Promise<Question> {
     const score = scoresRef.current.get(kwId) ?? 0.5;
@@ -748,22 +714,19 @@ function McatPracticePageInner() {
           setItemPhase("answering");
           return;
         }
-        // No flashcard for this keyword → fall back to a question if allowed,
-        // otherwise try a different keyword (bounded retries).
-        if (enabled.quizzes) {
-          const q = await fetchQuestion(kw.id);
-          setActiveItem({ kind: "question", data: q });
-          setItemPhase("answering");
-          return;
-        }
-        if (depth < 5) return serveNext(depth + 1);
-        setErrorMsg("No flashcards available for the selected topics yet.");
-        setItemPhase("error");
+        // No flashcard for this keyword (e.g. a framing-only intro keyword). In
+        // flashcards-only mode, try a few other keywords first to stay on cards.
+        if (!enabled.quizzes && depth < 5) return serveNext(depth + 1);
+        // Otherwise fall back to a question — next-question GENERATES when nothing
+        // is stored, so practice keeps going instead of dead-ending.
+        const fq = await fetchQuestion(kw.id);
+        setActiveItem({ kind: "question", data: fq });
+        setItemPhase("answering");
         return;
       }
 
-      // question (pickContentKind only returns null when neither type is
-      // enabled, which the Start button prevents)
+      // question — next-question generates a fresh batch when nothing is stored
+      // for this keyword, so there's always something to serve.
       const q = await fetchQuestion(kw.id);
       setActiveItem({ kind: "question", data: q });
       setItemPhase("answering");
@@ -778,8 +741,6 @@ function McatPracticePageInner() {
     excludeRef.current = [];
     seenCardsRef.current = new Set();
     recentWrongRef.current = new Map();
-    lessonShownRef.current = new Set();
-    setLessonModalKw(null);
     setStats({ answered: 0, correct: 0 });
     setPagePhase("practice");
     serveNext(0);
@@ -822,7 +783,6 @@ function McatPracticePageInner() {
         if (!res.ok) return;
         const data = (await res.json()) as { keyword_states?: KwStates };
         applyScores(data.keyword_states);
-        maybeLesson(kwId, !isCorrect, data.keyword_states);
       })
       .catch(() => {});
 
@@ -868,7 +828,6 @@ function McatPracticePageInner() {
         if (!res.ok) return;
         const data = (await res.json()) as { keyword_states?: KwStates };
         applyScores(data.keyword_states);
-        maybeLesson(kwId, true, data.keyword_states);
       })
       .catch(() => {});
 
@@ -911,7 +870,6 @@ function McatPracticePageInner() {
       if (res.ok) {
         const data = (await res.json()) as { keyword_states?: KwStates };
         applyScores(data.keyword_states);
-        maybeLesson(kwId, !gotIt, data.keyword_states);
       }
     } catch {
       /* non-fatal */
@@ -1085,7 +1043,6 @@ function McatPracticePageInner() {
                       [
                         ["flashcards", "Flashcards"],
                         ["quizzes", "Quizzes"],
-                        ["lessons", "Lessons"],
                       ] as const
                     ).map(([key, label]) => {
                       const on = enabled[key];
@@ -1132,8 +1089,9 @@ function McatPracticePageInner() {
                     })}
                   </div>
                   <p className="mt-2 text-[11px] text-neutral-400">
-                    Flashcards and quizzes adapt to your level for each topic.
-                    Lessons only appear when you keep missing one.
+                    Flashcards and quizzes adapt to your level for each topic. Open
+                    a lesson, refresher, or prioritize a topic anytime from the
+                    toolbar above each question.
                   </p>
                 </div>
 
@@ -1266,6 +1224,19 @@ function McatPracticePageInner() {
                   onGrade={handleGrade}
                   resetKey={activeItem.data.id}
                 />
+
+                {/* Lesson / refresher / prioritize — on-demand for this card's topic */}
+                <QuestionToolbar
+                  system="mcat"
+                  keywordId={
+                    currentKeywordId ??
+                    primaryKeywordId(activeItem.data.keyword_weights)
+                  }
+                  sessionId={sessionId}
+                  questionId={activeItem.data.id}
+                  contentType="flashcard"
+                  resetSignal={activeItem.data.id}
+                />
               </>
             )}
 
@@ -1385,16 +1356,6 @@ function McatPracticePageInner() {
                 </>
               )}
           </>
-        )}
-
-        {/* Inline lesson — surfaced automatically after a miss on a weak topic */}
-        {lessonModalKw && (
-          <LessonModal
-            system="mcat"
-            keywordId={lessonModalKw}
-            sessionId={sessionId}
-            onClose={() => setLessonModalKw(null)}
-          />
         )}
       </main>
     </div>

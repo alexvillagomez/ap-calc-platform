@@ -7,6 +7,7 @@ import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import MathText from "@/components/mcat/MathText";
+import { breakOutKeyTakeaway } from "@/lib/lessonText";
 import { EndScreenActions, type EndAction } from "@/components/practice/EndScreenActions";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -287,7 +288,7 @@ export function LessonView({
                 </p>
                 {/* div (not p): MathText may render a figure block (Molecule/Mermaid/table). */}
                 <div className="text-sm text-neutral-800 leading-relaxed">
-                  <MathText>{step.explanation_latex}</MathText>
+                  <MathText>{breakOutKeyTakeaway(step.explanation_latex)}</MathText>
                 </div>
               </div>
 
