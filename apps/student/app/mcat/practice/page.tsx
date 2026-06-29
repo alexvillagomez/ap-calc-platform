@@ -18,6 +18,7 @@ import FlipCard, { type FlipResult } from "@/components/cards/FlipCard";
 import LessonModal from "@/components/practice/LessonModal";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
+import { groupCategoriesBySection } from "@/lib/mcatSection";
 import { awardFlashcard, awardQuiz } from "@/lib/points";
 import {
   pickKeyword,
@@ -54,6 +55,7 @@ interface TaxonomyCategory {
   label: string;
   description: string;
   section?: string;
+  order_index?: number;
   umbrellas?: TaxonomyUmbrella[];
 }
 
@@ -613,14 +615,15 @@ function McatPracticePageInner() {
   }, []);
 
   const allLeafIds = categories.flatMap(categoryLeafIds);
+  const allSelected =
+    allLeafIds.length > 0 && selectedLeafs.size === allLeafIds.length;
 
-  const toggleSelectAll = () => {
-    if (selectedLeafs.size === allLeafIds.length && allLeafIds.length > 0) {
-      setSelectedLeafs(new Set());
-    } else {
-      setSelectedLeafs(new Set(allLeafIds));
-    }
-  };
+  const selectAll = () => setSelectedLeafs(new Set(allLeafIds));
+  const deselectAll = () => setSelectedLeafs(new Set());
+
+  // Categories grouped into the four MCAT sections, in curriculum order, so the
+  // selection list reads top-to-bottom by course instead of a cross-section mix.
+  const sectionGroups = groupCategoriesBySection(categories);
 
   // ── Summary line ──────────────────────────────────────────────────────────
 
@@ -1052,16 +1055,24 @@ function McatPracticePageInner() {
                       "No keywords selected"
                     )}
                   </p>
-                  <button
-                    type="button"
-                    onClick={toggleSelectAll}
-                    className="text-xs font-medium text-brand-600 hover:text-brand-800 shrink-0"
-                  >
-                    {selectedLeafs.size === allLeafIds.length &&
-                    allLeafIds.length > 0
-                      ? "Clear"
-                      : "Select all"}
-                  </button>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={selectAll}
+                      disabled={allSelected}
+                      className="text-xs font-medium text-brand-600 hover:text-brand-800 disabled:text-neutral-300 disabled:hover:text-neutral-300"
+                    >
+                      Select all
+                    </button>
+                    <button
+                      type="button"
+                      onClick={deselectAll}
+                      disabled={selectedLeafs.size === 0}
+                      className="text-xs font-medium text-neutral-500 hover:text-neutral-700 disabled:text-neutral-300 disabled:hover:text-neutral-300"
+                    >
+                      Deselect all
+                    </button>
+                  </div>
                 </div>
 
                 {/* What to practice — content-type choices */}
@@ -1126,22 +1137,54 @@ function McatPracticePageInner() {
                   </p>
                 </div>
 
-                {/* Category tree */}
-                <div className="space-y-3">
-                  {categories.map((cat) => (
-                    <CategoryRow
-                      key={cat.id}
-                      cat={cat}
-                      selected={selectedLeafs}
-                      expandedCategories={expandedCategories}
-                      expandedUmbrellas={expandedUmbrellas}
-                      onCategoryToggle={toggleLeafs}
-                      onUmbrellaToggle={toggleLeafs}
-                      onChildToggle={toggleLeaf}
-                      onCategoryExpandToggle={toggleExpandCategory}
-                      onUmbrellaExpandToggle={toggleExpandUmbrella}
-                    />
-                  ))}
+                {/* Category tree — grouped by the four MCAT sections, each in
+                    curriculum order; section header selects/deselects its set. */}
+                <div className="space-y-6">
+                  {sectionGroups.map((group) => {
+                    const groupLeafIds =
+                      group.categories.flatMap(categoryLeafIds);
+                    const groupState = selectionState(
+                      groupLeafIds,
+                      selectedLeafs
+                    );
+                    return (
+                      <div key={group.section} className="space-y-2.5">
+                        {/* Section header with select-all-in-section */}
+                        <div className="flex items-center gap-2 px-1">
+                          <Checkbox
+                            state={groupState}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleLeafs(groupLeafIds);
+                            }}
+                          />
+                          <h3 className="text-xs font-bold uppercase tracking-wide text-neutral-500">
+                            {group.label}
+                          </h3>
+                          <span className="text-[11px] text-neutral-400">
+                            {group.categories.length}{" "}
+                            categor{group.categories.length === 1 ? "y" : "ies"}
+                          </span>
+                        </div>
+                        <div className="space-y-3">
+                          {group.categories.map((cat) => (
+                            <CategoryRow
+                              key={cat.id}
+                              cat={cat}
+                              selected={selectedLeafs}
+                              expandedCategories={expandedCategories}
+                              expandedUmbrellas={expandedUmbrellas}
+                              onCategoryToggle={toggleLeafs}
+                              onUmbrellaToggle={toggleLeafs}
+                              onChildToggle={toggleLeaf}
+                              onCategoryExpandToggle={toggleExpandCategory}
+                              onUmbrellaExpandToggle={toggleExpandUmbrella}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {categories.length === 0 && (

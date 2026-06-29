@@ -11,6 +11,7 @@ import { NavMenu } from "@/components/nav/NavMenu";
 import MyProgressPanel from "@/components/gamification/MyProgressPanel";
 import { YieldBadge } from "@/components/mcat/YieldBadge";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
+import { groupCategoriesBySection } from "@/lib/mcatSection";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -59,6 +60,7 @@ interface Category {
   id: string;
   label: string;
   description: string;
+  section?: string;
   order_index: number;
   umbrellas?: Umbrella[];
   keywords?: LegacyKeyword[];
@@ -394,8 +396,13 @@ export default function McatProgressPage() {
 
         {!loading && !error && (
           <>
-            {/* Per-category sections */}
-            {categories.map((cat) => {
+            {/* Grouped by the four MCAT sections (curriculum order within each) */}
+            {groupCategoriesBySection(categories).map((group) => (
+              <div key={group.section} className="space-y-3">
+                <h2 className="px-1 text-xs font-bold uppercase tracking-wide text-neutral-500">
+                  {group.label}
+                </h2>
+                {group.categories.map((cat) => {
               const avgPct = categoryAvgPct(cat);
               const hasUmbrellas = cat.umbrellas && cat.umbrellas.length > 0;
               const sortedUmbrellas = hasUmbrellas ? sortUmbrellas(cat.umbrellas!) : [];
@@ -468,7 +475,9 @@ export default function McatProgressPage() {
                   )}
                 </Card>
               );
-            })}
+                })}
+              </div>
+            ))}
 
             {categories.length === 0 && (
               <div className="text-center py-12 text-neutral-400 text-sm">
