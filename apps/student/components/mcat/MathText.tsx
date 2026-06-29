@@ -146,7 +146,14 @@ function prepareText(input: string): string {
     .replace(/(^|[^\\A-Za-z])(lim|log|ln|exp|max|min|sup|inf|det|deg|arg|gcd)(?=[_^{(])/g, "$1\\$2")
     .replace(/(^|[^\\A-Za-z])(sin|cos|tan|cot|sec|csc|sinh|cosh|tanh)(?=[(^])/g, "$1\\$2")
     .replace(/\bpprox\b/g, "\\approx")
-    .replace(/(^|[^\\A-Za-z])infty\b/g, "$1\\infty");
+    .replace(/(^|[^\\A-Za-z])infty\b/g, "$1\\infty")
+    // Repair \boldsymbol corruption: the model emits `\boldsymbol{…}` but JSON
+    // single-escape parsing strips `\b` → control char BS (0x08) which may then
+    // be further stripped to nothing, leaving the literal token "oldsymbol".
+    // The \x08 case above already handles the survive-as-BS path; this handles
+    // the fully-lossy path (backspace stripped → bare "oldsymbol" in the text).
+    // "oldsymbol" NEVER appears legitimately in this content — it is always corruption.
+    .replace(/(?<![\\A-Za-z])oldsymbol(?=\{)/g, "\\boldsymbol");
 
   // Harden against legacy rows stored with ANSI/ESC corruption (→ box glyphs).
   // Also restore bare Greek math tokens ($alpha$ → $\alpha$) the model emits,

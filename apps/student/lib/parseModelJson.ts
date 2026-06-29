@@ -53,10 +53,19 @@ export function stripControlChars(s: string): string {
  * LaTeX; anything else (a real `\n`/`\t`/…) is left as a JSON escape.
  */
 const LATEX_COMMANDS_BFNRT = [
-  // b
+  // b — IMPORTANT: boldsymbol/bmatrix/begin must be here so \boldsymbol is not
+  // parsed as the JSON \b escape (backspace U+0008), which would then be stripped
+  // by deepStripControls leaving the lossy literal "oldsymbol" stored in the DB.
   "beta", "bar", "binom", "bmod", "big", "bigl", "bigr", "bigcup", "bigcap",
   "bigwedge", "bigvee", "bigoplus", "bigotimes", "boxed", "bullet", "because",
   "between", "bot", "blacksquare", "bowtie", "bigtriangleup", "bigtriangledown",
+  // b (extended — previously missing, causing \boldsymbol→oldsymbol corruption)
+  "boldsymbol", "bmatrix", "begin", "breve", "beth",
+  "backslash", "backsim", "backsimeq", "backepsilon", "barwedge",
+  "bigstar", "bigsqcup", "biguplus", "bigodot",
+  "blacklozenge", "blacktriangle", "blacktriangledown",
+  "blacktriangleleft", "blacktriangleright",
+  "boxplus", "boxminus", "boxtimes", "bumpeq",
   // f
   "frac", "forall", "fbox", "fcolorbox", "flat", "frown", "footnotesize",
   // n
