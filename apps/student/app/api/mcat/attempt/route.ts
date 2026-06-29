@@ -12,6 +12,7 @@ import {
   autoResolvePriorities,
   logServerEvent,
 } from "@/lib/priorities";
+import { getAuthUid } from "@/lib/supabaseServer";
 
 export const runtime = "nodejs";
 
@@ -193,7 +194,7 @@ export async function POST(request: Request) {
   const { data: existingStates } = await supabase
     .from("mcat_student_keyword_states")
     .select(
-      "keyword_id, score, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, spaced_review_due_at, spaced_review_count"
+      "keyword_id, score, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, spaced_review_due_at, spaced_review_count, floor"
     )
     .eq("session_id", session_id)
     .in("keyword_id", targetKwIds);
@@ -255,6 +256,8 @@ export async function POST(request: Request) {
     const prevState = (prev?.state as string) ?? null;
     const prevSpacedReviewCount = (prev?.spaced_review_count as number) ?? 0;
     const prevSpacedReviewDueAt = (prev?.spaced_review_due_at as string) ?? null;
+    // Pass-through the existing floor value; engine v2 will update it when implemented.
+    const prevFloor = (prev?.floor as number) ?? 0.40;
 
     const totalAttempts = prevTotal + 1;
     const correctAttempts = prevCorrect + (correct ? 1 : 0);
@@ -310,6 +313,8 @@ export async function POST(request: Request) {
       spaced_review_due_at: spacedReviewDueAt,
       spaced_review_count: spacedReviewCount,
       last_practiced_at: now,
+      last_review_at: now,
+      floor: prevFloor,
       updated_at: now,
     };
   });
@@ -326,10 +331,15 @@ export async function POST(request: Request) {
   }
 
   // ── Priority auto-resolve + server-side answer metric (best-effort) ─────────
-  // Top keyword = highest weight on this question (for telemetry + cookie uid).
+  // Top keyword = highest weight on this question (for telemetry + user id).
   const topKeywordId =
     Object.entries(filteredWeights).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
-  const userId = (await cookies()).get("lodera_uid")?.value ?? null;
+  // Prefer the verified Supabase auth uid; fall back to the lodera_uid cookie for
+  // sessions that pre-date the Supabase Auth migration (anonymous / legacy).
+  const userId =
+    (await getAuthUid()) ??
+    (await cookies()).get("lodera_uid")?.value ??
+    null;
 
   // Auto-resolve any active priority whose target_score is now met.
   const newScoreByKeyword = new Map(upserts.map((u) => [u.keyword_id, u.score]));

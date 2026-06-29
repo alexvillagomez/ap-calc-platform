@@ -9,6 +9,10 @@
  *
  * These are PURE functions/constants so both auto pages reuse identical behavior
  * rather than duplicating the curve.
+ *
+ * v2 additions (2026-06-28): time-decay, rising floor, goal-driven scheduling,
+ * probabilistic flashcard mix, within-deck card weights, cohort moderation.
+ * ALL tunable knobs live here so HMR sees them instantly.
  */
 
 export type DifficultyTier = "easy" | "medium" | "hard";
@@ -57,17 +61,128 @@ export const SOURCE_WEIGHT: Record<MasterySource, number> = {
   flashcard: 0.55,
 };
 
-/** Base downgrade for a WRONG answer (scaled by current mastery + the weights below). */
-export const WRONG_BASE_PENALTY = 0.18;
-/** Difficulty multiplier on a WRONG answer — missing an EASY item hurts more than missing a hard one. */
+/**
+ * Base downgrade for a WRONG answer (scaled by current mastery + the weights below).
+ * Raised from 0.18 → 0.26 (v2) so short-term recall doesn't masquerade as long-term memory.
+ */
+export const WRONG_BASE_PENALTY = 0.26;
+/**
+ * Difficulty multiplier on a WRONG answer — missing an EASY item hurts more than missing a hard one.
+ * Easy weight raised from 1.5 → 1.8 (v2) for same reason.
+ */
 export const WRONG_DIFFICULTY_WEIGHT: Record<DifficultyTier, number> = {
-  easy: 1.5,
+  easy: 1.8,
   medium: 1.0,
   hard: 0.6,
 };
 
 /** Small downgrade for an "I don't know"/skip (scaled by current mastery). */
 export const DONT_KNOW_PENALTY = 0.10;
+
+// ════════════════════════════════════════════════════════════════════════════
+//  TIME DECAY (v2)
+//  Mastery decays between sessions: m(t) = m_lastReview − DECAY_BETA·log(1 + Δt_min).
+//  Fast at first, slows over time (logarithmic). Clamped at the keyword's `floor`.
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Logarithmic decay rate per minute of elapsed time.
+ * At DECAY_BETA=0.004: after 60 min Δ≈0.017, after 1 day Δ≈0.068, after 1 week Δ≈0.11.
+ * Tune up to make forgetting faster, down to slow it.
+ */
+export const DECAY_BETA = 0.004;
+
+// ════════════════════════════════════════════════════════════════════════════
+//  RISING FLOOR (v2)
+//  A per-keyword floor acts as a lower bound on decayedScore.
+//  The floor rises with each spaced correct review and drops on a miss,
+//  so early reps see fast decay but sustained success → long retention.
+// ════════════════════════════════════════════════════════════════════════════
+
+/** Starting floor (no reviews yet). Low so early mistakes drop score visibly. */
+export const FLOOR_START = 0.40;
+/** Maximum the floor can ever reach (ceiling for retention after many successes). */
+export const FLOOR_MAX = 0.85;
+/** How much the floor rises per correctly-spaced review (toward FLOOR_MAX). */
+export const FLOOR_RISE_PER_REP = 0.05;
+/** How much the floor drops on a miss (toward FLOOR_START). */
+export const FLOOR_DROP_ON_MISS = 0.08;
+/**
+ * Minimum elapsed time (ms) between reviews for a correct answer to count as
+ * "spaced" (i.e., eligible for a floor rise). Below this → massed practice →
+ * the floor barely moves.
+ */
+export const FLOOR_SPACED_MIN_MS = 5 * 60 * 1000; // 5 minutes
+
+// ════════════════════════════════════════════════════════════════════════════
+//  MASTERY GOAL (v2)
+//  The target score a keyword must reach to be considered "done for now".
+//  Grows logarithmically with total study time, then moderated toward the cohort
+//  mean so no single topic races ahead while others lag.
+// ════════════════════════════════════════════════════════════════════════════
+
+/** Baseline goal when study time = 0. */
+export const GOAL_BASE = 0.50;
+/** Rate at which goal rises with log(1 + t_studied_minutes). */
+export const GOAL_LOG_RATE = 0.06;
+/** Maximum goal (cap — prevents the bar from being unreachably high). */
+export const GOAL_MAX = 0.88;
+/**
+ * How strongly the goal is pulled toward the cohort mean mastery.
+ * 0 = purely frontier-leaning (ignore cohort); 1 = lockstep (snap to cohort).
+ * Default 0.6 — meaningful cohort pull while still allowing individual progress.
+ */
+export const BREADTH_STRICTNESS = 0.6;
+
+// ════════════════════════════════════════════════════════════════════════════
+//  ITEM MIX (v2)
+//  Probabilistic flashcard vs. question ratio driven by current keyword mastery.
+//  Low mastery → lots of flashcards (memorize first); high mastery → questions.
+// ════════════════════════════════════════════════════════════════════════════
+
+/** P(serve flashcard) when mastery is near 0 (or below MASTERY_START). */
+export const MIX_FLASHCARD_AT_LOW = 0.8;
+/** P(serve flashcard) when mastery is at or above MASTERY_ADVANCE. */
+export const MIX_FLASHCARD_AT_GOAL = 0.1;
+
+// ════════════════════════════════════════════════════════════════════════════
+//  WITHIN-DECK CARD SELECTION (v2)
+//  When a flashcard is drawn, weight each card in the deck so weak/unseen cards
+//  appear more often, but every card eventually cycles and no card repeats immediately.
+// ════════════════════════════════════════════════════════════════════════════
+
+/** Multiplier on (1 − known) — how strongly weakness boosts a card's draw weight. */
+export const CARD_WEAKNESS_WEIGHT = 2.0;
+/** Flat additive bonus for a card not shown recently (coverage guarantee). */
+export const CARD_COVERAGE_BOOST = 0.5;
+/** Cards shown within this many ms have their weight forced to 0 (no immediate repeat). */
+export const CARD_MIN_SPACING_MS = 5 * 60 * 1000; // 5 minutes
+
+// ════════════════════════════════════════════════════════════════════════════
+//  CHECKPOINT QUIZ (v2)
+//  Yield-based question counts for end-of-unit checkpoint quizzes.
+// ════════════════════════════════════════════════════════════════════════════
+
+/** Numeric yield (0–1) above which a keyword is "high yield" in a checkpoint quiz. */
+export const YIELD_HIGH_THRESHOLD = 0.6;
+/** Questions to include per high-yield keyword in a checkpoint quiz. */
+export const Q_PER_HIGH_YIELD = 2;
+/** Questions to include per low-yield keyword in a checkpoint quiz. */
+export const Q_PER_LOW_YIELD = 1;
+
+// ════════════════════════════════════════════════════════════════════════════
+//  LEGACY CONSTANTS (unchanged; kept for backward compat)
+// ════════════════════════════════════════════════════════════════════════════
+
+/** Probability an interleaved spaced-review item is a FLASHCARD (vs a question). */
+export const REVIEW_FLASHCARD_SHARE = 0.4;
+
+/** Max flashcards served back-to-back while struggling before forcing an (easy) question. */
+export const MAX_FLASHCARDS_IN_ROW = 2;
+
+// ════════════════════════════════════════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════════════════════════════════════════
 
 /** Bucket a stored 0–1 question difficulty into a tier for the weight tables. */
 export function difficultyTierFromScore(d: number | null | undefined): DifficultyTier {
@@ -158,6 +273,7 @@ export function updateMasteryMap(
 /**
  * Probability the next CURRENT-keyword item is a FLASHCARD (vs a question),
  * from the keyword's mastery score: 0 → 0.50, 0.5 → 0.25, 0.84+ → 0.08.
+ * @deprecated Use {@link flashcardProbability} for the v2 probabilistic draw.
  */
 export function flashcardShareForMastery(score: number): number {
   return Math.max(0.08, Math.min(0.5, 0.5 - 0.5 * score));
@@ -174,8 +290,213 @@ export function tierForMastery(score: number, recentlyBad: boolean): DifficultyT
   return "hard";
 }
 
-/** Probability an interleaved spaced-review item is a FLASHCARD (vs a question). */
-export const REVIEW_FLASHCARD_SHARE = 0.4;
+// ════════════════════════════════════════════════════════════════════════════
+//  V2: TIME DECAY
+// ════════════════════════════════════════════════════════════════════════════
 
-/** Max flashcards served back-to-back while struggling before forcing an (easy) question. */
-export const MAX_FLASHCARDS_IN_ROW = 2;
+/**
+ * State object describing what is stored (or computed in-memory) per keyword.
+ * The `floor` and `last_review_at` columns are new (v2); existing code that
+ * passes only `score` can treat floor/last_review_at as optional.
+ */
+export type KeywordState = {
+  score: number;
+  /** Lower bound for decayed score. Rises on spaced correct; drops on miss. */
+  floor?: number;
+  /** ISO timestamp of last review (persisted per account). If absent, no decay applied. */
+  last_review_at?: string | null;
+};
+
+/**
+ * Compute the current effective mastery score after applying logarithmic time decay.
+ *
+ * Formula: m(t) = score − DECAY_BETA · log(1 + Δt_minutes)
+ * Clamped so result never goes below state.floor (or FLOOR_START if floor absent).
+ *
+ * PURE — does NOT mutate state. Call on read to get the "live" score.
+ *
+ * @param state  Stored keyword state (score + optional floor + optional last_review_at).
+ * @param nowMs  Current wall-clock time in ms (Date.now()). Required for decay calc.
+ */
+export function decayedScore(state: KeywordState, nowMs: number): number {
+  const floor = state.floor ?? FLOOR_START;
+  if (!state.last_review_at) {
+    // No review recorded → return clamped score (no decay yet).
+    return Math.max(floor, Math.min(1, state.score));
+  }
+  const lastMs = new Date(state.last_review_at).getTime();
+  const deltaMinutes = Math.max(0, (nowMs - lastMs) / 60_000);
+  const decayed = state.score - DECAY_BETA * Math.log(1 + deltaMinutes);
+  return Math.max(floor, Math.min(1, decayed));
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  V2: RISING FLOOR
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Update the floor for a keyword after one answer event.
+ *
+ * - CORRECT + spaced (elapsed ≥ minSpacingMs): floor rises toward FLOOR_MAX.
+ * - CORRECT + massed (< minSpacingMs): no change (short-term recall doesn't count).
+ * - WRONG: floor drops by FLOOR_DROP_ON_MISS, not below FLOOR_START.
+ * - DON'T-KNOW: no floor change (small penalty already applied to score).
+ *
+ * Returns the NEW floor value (caller persists it).
+ *
+ * @param currentFloor   Stored floor (defaults to FLOOR_START if undefined).
+ * @param correct        Whether the answer was correct.
+ * @param dontKnow       Whether the student tapped "I don't know".
+ * @param elapsedMs      Time since last review in ms (0 if first review).
+ * @param minSpacingMs   Override the FLOOR_SPACED_MIN_MS constant (optional).
+ */
+export function updatedFloor(
+  currentFloor: number | undefined,
+  correct: boolean,
+  dontKnow: boolean,
+  elapsedMs: number,
+  minSpacingMs: number = FLOOR_SPACED_MIN_MS
+): number {
+  const floor = currentFloor ?? FLOOR_START;
+  if (dontKnow) return floor; // no floor change on skip
+  if (!correct) {
+    return Math.max(FLOOR_START, floor - FLOOR_DROP_ON_MISS);
+  }
+  // Correct — only rise if spaced (not massed)
+  if (elapsedMs < minSpacingMs) return floor;
+  // Rise toward FLOOR_MAX
+  return Math.min(FLOOR_MAX, floor + FLOOR_RISE_PER_REP);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  V2: MASTERY GOAL
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Compute the mastery goal for a keyword given how long the student has studied
+ * and the cohort's mean mastery across started topics.
+ *
+ * Formula:
+ *   rawGoal = GOAL_BASE + GOAL_LOG_RATE · log(1 + tStudiedMinutes)
+ *   goal = rawGoal · (1 − BREADTH_STRICTNESS) + cohortMeanMastery · BREADTH_STRICTNESS
+ *   goal = clamp(goal, GOAL_BASE, GOAL_MAX)
+ *
+ * BREADTH_STRICTNESS = 0 → frontier-leaning (ignore cohort / solo race ahead)
+ * BREADTH_STRICTNESS = 1 → lockstep (goal = cohort mean)
+ *
+ * @param tStudiedMinutes    Total minutes the student has studied this course.
+ * @param cohortMeanMastery  Mean mastery across all started keywords (0–1). Pass 0 if unknown.
+ */
+export function masteryGoal(tStudiedMinutes: number, cohortMeanMastery: number): number {
+  const t = Math.max(0, tStudiedMinutes);
+  const cohort = Math.min(1, Math.max(0, cohortMeanMastery));
+  const rawGoal = GOAL_BASE + GOAL_LOG_RATE * Math.log(1 + t);
+  const moderated = rawGoal * (1 - BREADTH_STRICTNESS) + cohort * BREADTH_STRICTNESS;
+  return Math.min(GOAL_MAX, Math.max(GOAL_BASE, moderated));
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  V2: IS DUE
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Returns true when a keyword is due for review — its decayed score has fallen
+ * below the current mastery goal.
+ *
+ * PURE — takes all inputs, does nothing stateful.
+ *
+ * @param state              Stored keyword state.
+ * @param nowMs              Current wall-clock time in ms.
+ * @param cohortMeanMastery  Mean mastery across all started keywords (0 if unknown).
+ * @param tStudiedMinutes    Total study time in minutes.
+ */
+export function isDue(
+  state: KeywordState,
+  nowMs: number,
+  cohortMeanMastery: number,
+  tStudiedMinutes: number
+): boolean {
+  const live = decayedScore(state, nowMs);
+  const goal = masteryGoal(tStudiedMinutes, cohortMeanMastery);
+  return live < goal;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  V2: PROBABILISTIC FLASHCARD MIX
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Returns the probability (0–1) that the next item served for a keyword should
+ * be a FLASHCARD rather than a question.
+ *
+ * Interpolates linearly from MIX_FLASHCARD_AT_LOW (at mastery ≤ 0) to
+ * MIX_FLASHCARD_AT_GOAL (at mastery ≥ MASTERY_ADVANCE).
+ *
+ * Caller does the weighted coin-flip: `Math.random() < flashcardProbability(m)`.
+ *
+ * @param mastery  Current keyword mastery score (0–1, typically decayedScore result).
+ */
+export function flashcardProbability(mastery: number): number {
+  const m = Math.min(1, Math.max(0, mastery));
+  const t = Math.min(1, m / Math.max(0.001, MASTERY_ADVANCE));
+  return MIX_FLASHCARD_AT_LOW + t * (MIX_FLASHCARD_AT_GOAL - MIX_FLASHCARD_AT_LOW);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  V2: WITHIN-DECK CARD SELECTION WEIGHTS
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * A flashcard entry as needed by cardSelectionWeights. The per-card `known`
+ * value is a 0–1 familiarity score (or can be derived from SRS box: box/5).
+ */
+export type FlashcardEntry = {
+  id: string;
+  /** Per-card familiarity 0–1 (higher = more known). Use 0.5 default if unknown. */
+  known?: number;
+  /** ISO timestamp the card was last shown (undefined = never shown). */
+  last_shown_at?: string | null;
+};
+
+/**
+ * Compute a parallel array of selection weights for a deck of flashcards.
+ *
+ * Weight formula for each card:
+ *   weakness = CARD_WEAKNESS_WEIGHT · (1 − known)
+ *   coverage = CARD_COVERAGE_BOOST  (if NOT shown recently, i.e. elapsed ≥ CARD_MIN_SPACING_MS)
+ *   weight   = weakness + coverage
+ *   BUT weight = 0 if card was shown within CARD_MIN_SPACING_MS (no immediate repeat)
+ *
+ * Guarantees:
+ *   - Weak cards (low known) get higher weights.
+ *   - Every card that isn't in the min-spacing window gets nonzero weight (coverage via CARD_COVERAGE_BOOST).
+ *   - A just-shown card gets weight = 0 until the spacing window expires.
+ *
+ * Returns a parallel number[] of raw weights (NOT normalized — caller picks via
+ * weighted random using these weights).
+ *
+ * @param cards   Deck of flashcard entries.
+ * @param nowMs   Current wall-clock time in ms.
+ */
+export function cardSelectionWeights(cards: FlashcardEntry[], nowMs: number): number[] {
+  return cards.map((card) => {
+    const known = Math.min(1, Math.max(0, card.known ?? 0.5));
+
+    // Compute elapsed since last shown
+    let elapsedMs = Infinity;
+    if (card.last_shown_at) {
+      const lastMs = new Date(card.last_shown_at).getTime();
+      elapsedMs = Math.max(0, nowMs - lastMs);
+    }
+
+    // Suppress if shown within the minimum spacing window
+    if (elapsedMs < CARD_MIN_SPACING_MS) return 0;
+
+    const weakness = CARD_WEAKNESS_WEIGHT * (1 - known);
+    // Coverage boost applies when the card hasn't been shown recently (or ever)
+    const coverageBoost =
+      elapsedMs >= CARD_MIN_SPACING_MS ? CARD_COVERAGE_BOOST : 0;
+
+    return weakness + coverageBoost;
+  });
+}

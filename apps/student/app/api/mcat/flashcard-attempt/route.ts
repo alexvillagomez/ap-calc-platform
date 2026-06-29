@@ -6,6 +6,7 @@ import {
   MASTERY_START,
 } from "@/lib/courseEngine/adaptive";
 import { nextSrsState, type FlashcardResult } from "@/lib/flashcardSrs";
+import { getAuthUid } from "@/lib/supabaseServer";
 
 export const runtime = "nodejs";
 
@@ -74,6 +75,9 @@ export async function POST(request: Request) {
   // Load the existing SRS row, advance it, and upsert. Missing a card drops it
   // to box 1 / due-now so it recirculates this session; getting it right
   // promotes it. Fail-soft: never block the response on SRS write errors.
+  // For logged-in accounts prefer user_id keying (engine v2: account-scoped SRS).
+  const accountUid = await getAuthUid();
+
   const { data: srsPrev } = await supabase
     .from("mcat_flashcard_srs")
     .select("box, reps, lapses, learned")
@@ -101,12 +105,15 @@ export async function POST(request: Request) {
         session_id,
         flashcard_id,
         category_id: flashcard.category_id as string,
+        // account-keyed for engine v2 cross-session SRS (null for anonymous)
+        user_id: accountUid ?? null,
         box: transition.box,
         due_at: transition.due_at,
         reps: transition.reps,
         lapses: transition.lapses,
         learned: transition.learned,
         last_result: result,
+        last_shown_at: nowIso,
         last_reviewed_at: nowIso,
         updated_at: nowIso,
       },
@@ -151,7 +158,7 @@ export async function POST(request: Request) {
   const { data: existingStates } = await supabase
     .from("mcat_student_keyword_states")
     .select(
-      "keyword_id, score, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state"
+      "keyword_id, score, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, floor"
     )
     .eq("session_id", session_id)
     .in("keyword_id", Object.keys(filteredWeights));
@@ -184,6 +191,8 @@ export async function POST(request: Request) {
     const prevCorrect = (prev?.correct_attempts as number) ?? 0;
     const prevConsecutive = (prev?.consecutive_correct as number) ?? 0;
     const prevDontKnow = (prev?.dont_know_count as number) ?? 0;
+    // Pass-through the existing floor value; engine v2 will update it when implemented.
+    const prevFloor = (prev?.floor as number) ?? 0.40;
 
     const totalAttempts = prevTotal + 1;
     const correctAttempts = prevCorrect + (correct ? 1 : 0);
@@ -207,6 +216,8 @@ export async function POST(request: Request) {
       dont_know_count: dontKnowCount,
       state,
       last_practiced_at: now,
+      last_review_at: now,
+      floor: prevFloor,
       updated_at: now,
     };
   });
