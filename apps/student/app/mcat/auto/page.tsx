@@ -213,6 +213,21 @@ interface HistoryEntry {
   wasCorrect: boolean | null;
 }
 
+// ── Unified timeline (Phase E: unified back/forward) ────────────────────────
+// Every step shown to the student is appended here in order. Back/Forward walk
+// this ref; the live item is NEVER in the timeline.
+//
+// - kind "question" : answered or skipped question (same as old HistoryEntry).
+// - kind "flashcard": a single flashcard that was SHOWN (face the student saw).
+// - kind "lesson"   : a lesson that was displayed for a keyword.
+//
+// Nothing re-scores on review — all answer/grade side-effects are guarded by
+// `!inReview` in the handlers below.
+type TimelineEntry =
+  | { kind: "question"; question: Question; selectedChoice: number | null; revealed: boolean; wasCorrect: boolean | null }
+  | { kind: "flashcard"; card: Flashcard; keywordId: string; keywordLabel: string }
+  | { kind: "lesson"; keywordId: string; keywordLabel: string };
+
 const HISTORY_CAP = 30;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -265,11 +280,13 @@ function McatAutoInner() {
   const excludeIdsRef = useRef<string[]>([]);
 
   const [question, setQuestion] = useState<Question | null>(null);
-  // Movement/review history: previously-seen questions (answered or skipped).
-  const historyRef = useRef<HistoryEntry[]>([]);
-  // null = viewing the LIVE current question; otherwise index into historyRef.
+  // Unified ordered timeline of every step shown to the student in this session.
+  // null reviewIndex = viewing the LIVE item. See TimelineEntry for shape.
+  const historyRef = useRef<TimelineEntry[]>([]);
+  // null = viewing the LIVE item; otherwise an index into historyRef.
   const [reviewIndex, setReviewIndex] = useState<number | null>(null);
   const inReview = reviewIndex !== null;
+  // The timeline entry currently being reviewed (null when live).
   const reviewEntry = inReview ? historyRef.current[reviewIndex] ?? null : null;
 
   const [isReviewCard, setIsReviewCard] = useState(false);
@@ -844,8 +861,8 @@ function McatAutoInner() {
 
   // ─── Handle choice ────────────────────────────────────────────────────────
 
-  // Push the currently-live question into review history (answered or skipped).
-  const pushHistory = useCallback((entry: HistoryEntry) => {
+  // Append any timeline step (question / flashcard / lesson). Capped at HISTORY_CAP.
+  const pushHistory = useCallback((entry: TimelineEntry) => {
     historyRef.current = [...historyRef.current, entry].slice(-HISTORY_CAP);
   }, []);
 
@@ -857,7 +874,7 @@ function McatAutoInner() {
       setPhase("revealed");
 
       const correct = idx === question.correct_index;
-      pushHistory({ question, selectedChoice: idx, revealed: true, wasCorrect: correct });
+      pushHistory({ kind: "question", question, selectedChoice: idx, revealed: true, wasCorrect: correct });
       setLastAnswerCorrect(correct);
       setCombo((prev) => {
         const next = comboReducer({ count: prev }, correct ? "correct" : "incorrect").count;
@@ -928,7 +945,7 @@ function McatAutoInner() {
     if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
     setSelectedChoice(null);
     setPhase("revealed");
-    pushHistory({ question, selectedChoice: null, revealed: true, wasCorrect: false });
+    pushHistory({ kind: "question", question, selectedChoice: null, revealed: true, wasCorrect: false });
     setLastAnswerCorrect(false);
     setCombo((prev) => comboReducer({ count: prev }, "incorrect").count);
     onIncorrectAnswer();
@@ -976,14 +993,15 @@ function McatAutoInner() {
 
   // ─── Free movement: Back / Forward / Skip ───────────────────────────────────
 
-  // Step back to an earlier history entry (read-only review).
+  // Step back into the unified timeline (read-only).
+  // Any answer/grade side-effects are guarded by !inReview in their handlers.
   const handleReviewBack = useCallback(() => {
     const hist = historyRef.current;
     if (hist.length === 0) return;
     setReviewIndex((cur) => (cur === null ? hist.length - 1 : Math.max(0, cur - 1)));
   }, []);
 
-  // Step forward through history; past the last entry returns to the LIVE question.
+  // Step forward through the timeline; past the last entry returns to the LIVE item.
   const handleReviewForward = useCallback(() => {
     setReviewIndex((cur) => {
       if (cur === null) return null;
@@ -996,7 +1014,7 @@ function McatAutoInner() {
   // from the SAME keyword (reuses the existing load path; never advances).
   const handleSkip = useCallback(() => {
     if (!question || !currentKeyword || phase !== "practicing" || inReview || !frontier?.id) return;
-    pushHistory({ question, selectedChoice: null, revealed: false, wasCorrect: null });
+    pushHistory({ kind: "question", question, selectedChoice: null, revealed: false, wasCorrect: null });
     void loadQuestion(sessionId, currentKeyword.id, frontier.id);
   }, [question, currentKeyword, phase, inReview, frontier, pushHistory, loadQuestion, sessionId]);
 
@@ -1201,6 +1219,8 @@ function McatAutoInner() {
     setStats((s) => ({ ...s, lessons: s.lessons + 1 }));
     consecutiveWrongRef.current = 0;
     setTopicCorrectStreak(0);
+    // Record the lesson in the unified timeline so Back can replay it.
+    pushHistory({ kind: "lesson", keywordId: currentKeyword.id, keywordLabel: currentKeyword.label });
     // Intro lesson → continue to FLASHCARDS for this skill. A mid-practice
     // struggle lesson (inTopicIntroRef false) just returns to the question.
     if (inTopicIntroRef.current) {
@@ -1209,12 +1229,14 @@ function McatAutoInner() {
     }
     lessonedKeywordsRef.current.add(currentKeyword.id);
     loadQuestion(sessionId, currentKeyword.id, frontier.id);
-  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards]);
+  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards, pushHistory]);
 
   const handleLessonSkip = useCallback(() => {
     if (!currentKeyword || !frontier?.id) return;
     consecutiveWrongRef.current = 0;
     setTopicCorrectStreak(0);
+    // Record the lesson in the unified timeline so Back can replay it (even if skipped).
+    pushHistory({ kind: "lesson", keywordId: currentKeyword.id, keywordLabel: currentKeyword.label });
     // Skipping the intro lesson → still show its FLASHCARDS, then practice.
     if (inTopicIntroRef.current) {
       void startSkillFlashcards(sessionId, currentKeyword, frontier.id);
@@ -1222,7 +1244,7 @@ function McatAutoInner() {
     }
     lessonedKeywordsRef.current.add(currentKeyword.id);
     loadQuestion(sessionId, currentKeyword.id, frontier.id);
-  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards]);
+  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards, pushHistory]);
 
   // ─── Category complete handlers ───────────────────────────────────────────
 
@@ -1369,7 +1391,18 @@ function McatAutoInner() {
   // recirculate (spaced) until memorized; the deck ends only when all are memorized.
   const gradeFlashcard = useCallback(
     async (result: "got_it" | "missed_it" | "dont_know") => {
+      // Guard: no re-grading while in review.
+      if (inReview) return;
       const card = flashcards[fcIndex];
+      // Record that this card was shown (read-only replay available via Back).
+      if (card && currentKeyword) {
+        pushHistory({
+          kind: "flashcard",
+          card,
+          keywordId: servedKeywordId ?? currentKeyword.id,
+          keywordLabel: currentKeyword.label,
+        });
+      }
       if (card) {
         fetch("/api/mcat/flashcard-attempt", {
           method: "POST",
@@ -1397,7 +1430,7 @@ function McatAutoInner() {
       }
       await handleFlashcardNext();
     },
-    [flashcards, fcIndex, sessionId, handleFlashcardNext]
+    [flashcards, fcIndex, sessionId, handleFlashcardNext, inReview, pushHistory, servedKeywordId, currentKeyword]
   );
 
   // Skip the current flashcard: no SRS update. In the intro deck the card is
@@ -1567,8 +1600,49 @@ function McatAutoInner() {
           </div>
         )}
 
-        {/* Flashcard step (same universal flip-card as standalone flashcards) */}
-        {phase === "flashcard" && flashcards[fcIndex] && (
+        {/* ─── Practice / Revealed / Flashcard / Lesson / Review ──────────── */}
+        {/* Shared Back/Forward nav bar — shown any time the student can step back. */}
+        {(isInPracticePhase || phase === "flashcard" || phase === "lesson" || inReview) && (() => {
+          const hasEarlier = inReview ? reviewIndex! > 0 : historyRef.current.length > 0;
+          const totalSteps = historyRef.current.length;
+          const positionLabel = inReview
+            ? `Reviewing step ${reviewIndex! + 1} of ${totalSteps}`
+            : `Step ${totalSteps + 1}`;
+          return (
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <span className="text-xs text-neutral-400">{positionLabel}</span>
+              <div className="flex items-center gap-2">
+                {hasEarlier && (
+                  <button
+                    onClick={handleReviewBack}
+                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  >
+                    ← Back
+                  </button>
+                )}
+                {inReview && (
+                  <button
+                    onClick={handleReviewForward}
+                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  >
+                    {reviewIndex! + 1 >= historyRef.current.length ? "Return to current →" : "Forward →"}
+                  </button>
+                )}
+                {!inReview && phase === "practicing" && (
+                  <button
+                    onClick={handleSkip}
+                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
+                  >
+                    Skip →
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* ─── Live flashcard step (hidden while reviewing a timeline entry) ─ */}
+        {phase === "flashcard" && !inReview && flashcards[fcIndex] && (
           <div className="space-y-4">
             <FlipCard
               front={flashcards[fcIndex]!.front}
@@ -1599,6 +1673,68 @@ function McatAutoInner() {
             </div>
           </div>
         )}
+
+        {/* ─── Live lesson (inline) — hidden while reviewing a timeline entry ─ */}
+        {phase === "lesson" && !inReview && currentKeyword && sessionId && (
+          <LessonView
+            sessionId={sessionId}
+            keywordId={currentKeyword.id}
+            keywordLabel={currentKeyword.label}
+            onComplete={handleLessonComplete}
+            onSkip={handleLessonSkip}
+          />
+        )}
+
+        {/* ─── Review: flashcard entry (read-only) ──────────────────────── */}
+        {inReview && reviewEntry?.kind === "flashcard" && (() => {
+          const entry = reviewEntry;
+          return (
+            <>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-600">
+                  Read-only · Flashcard
+                </span>
+              </div>
+              {/* Show both faces of the card so the student can re-read it. */}
+              <div className="space-y-3">
+                <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
+                  <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-2">Front</p>
+                  <p className="text-sm font-medium text-neutral-900 leading-relaxed">
+                    <MathText>{entry.card.front}</MathText>
+                  </p>
+                </div>
+                <div className="bg-brand-50 rounded-xl border border-brand-100 p-5">
+                  <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-2">Back</p>
+                  <p className="text-sm text-neutral-700 leading-relaxed">
+                    <MathText>{entry.card.back}</MathText>
+                  </p>
+                </div>
+              </div>
+            </>
+          );
+        })()}
+
+        {/* ─── Review: lesson entry (read-only re-display) ──────────────── */}
+        {inReview && reviewEntry?.kind === "lesson" && sessionId && (() => {
+          const entry = reviewEntry;
+          return (
+            <>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-600">
+                  Read-only · Lesson
+                </span>
+              </div>
+              {/* Re-render the lesson view read-only (no complete/skip callbacks while inReview). */}
+              <LessonView
+                sessionId={sessionId}
+                keywordId={entry.keywordId}
+                keywordLabel={entry.keywordLabel}
+                onComplete={() => { /* read-only: do nothing */ }}
+                onSkip={() => { /* read-only: do nothing */ }}
+              />
+            </>
+          );
+        })()}
 
         {/* Category complete interstitial */}
         {phase === "category_complete" && (
@@ -1681,60 +1817,16 @@ function McatAutoInner() {
           </div>
         )}
 
-        {/* Lesson (inline) */}
-        {phase === "lesson" && currentKeyword && sessionId && (
-          <LessonView
-            sessionId={sessionId}
-            keywordId={currentKeyword.id}
-            keywordLabel={currentKeyword.label}
-            onComplete={handleLessonComplete}
-            onSkip={handleLessonSkip}
-          />
-        )}
-
-        {/* ─── Practice / Revealed / Review ─────────────────────────────────── */}
-        {isInPracticePhase && (inReview ? reviewEntry : question) && (() => {
-          // When in review, render the historical entry READ-ONLY.
-          const dispQuestion = (inReview ? reviewEntry!.question : question)!;
-          const dispSelected = inReview ? reviewEntry!.selectedChoice : selectedChoice;
-          const dispRevealed = inReview ? reviewEntry!.revealed : phase === "revealed";
-          const hasEarlier = inReview ? reviewIndex! > 0 : historyRef.current.length > 0;
-          const positionLabel = inReview
-            ? `Reviewing earlier question (${reviewIndex! + 1} of ${historyRef.current.length})`
-            : `Question ${historyRef.current.length + 1}`;
+        {/* ─── Live practice / Revealed / Review (question entry) ──────── */}
+        {(isInPracticePhase || (inReview && reviewEntry?.kind === "question")) &&
+          (inReview ? (reviewEntry?.kind === "question" ? reviewEntry : null) : question) && (() => {
+          // When in review, render the historical question entry READ-ONLY.
+          const qEntry = inReview ? (reviewEntry as Extract<TimelineEntry, { kind: "question" }>) : null;
+          const dispQuestion = (inReview ? qEntry!.question : question)!;
+          const dispSelected = inReview ? qEntry!.selectedChoice : selectedChoice;
+          const dispRevealed = inReview ? qEntry!.revealed : phase === "revealed";
           return (
           <>
-            {/* Position + movement controls */}
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              <span className="text-xs text-neutral-400">{positionLabel}</span>
-              <div className="flex items-center gap-2">
-                {hasEarlier && (
-                  <button
-                    onClick={handleReviewBack}
-                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
-                  >
-                    ← Back
-                  </button>
-                )}
-                {inReview && (
-                  <button
-                    onClick={handleReviewForward}
-                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
-                  >
-                    {reviewIndex! + 1 >= historyRef.current.length ? "Return to current →" : "Forward →"}
-                  </button>
-                )}
-                {!inReview && phase === "practicing" && (
-                  <button
-                    onClick={handleSkip}
-                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
-                  >
-                    Skip →
-                  </button>
-                )}
-              </div>
-            </div>
-
             {/* Badge row */}
             <div className="flex items-center gap-2 flex-wrap">
               {isReviewCard && !inReview && (
