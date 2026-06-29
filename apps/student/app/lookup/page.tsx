@@ -173,7 +173,7 @@ export default function LookupPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-3">
+        <div className="w-full px-4 sm:px-6 py-4 flex items-center gap-3">
           <button
             onClick={() => router.push("/precalc/practice")}
             className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"

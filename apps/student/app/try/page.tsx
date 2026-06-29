@@ -72,7 +72,7 @@ export default function TryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-brand-50/30 to-white flex flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-5 max-w-2xl mx-auto w-full">
+      <header className="flex items-center justify-between px-6 sm:px-8 py-5 w-full">
         <Link href="/" aria-label="Home">
           <LoderaLogo size={28} withWordmark />
         </Link>

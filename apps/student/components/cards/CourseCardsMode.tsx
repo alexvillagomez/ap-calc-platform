@@ -40,6 +40,7 @@ import QuestionToolbar from "@/components/practice/QuestionToolbar";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { getOrCreateMathSession } from "@/lib/mathSession";
+import { awardFlashcard } from "@/lib/points";
 
 // Cards pulled per keyword deck (a whole small deck — complete-mode caps at 30).
 const DECK_BATCH = 30;
@@ -369,6 +370,7 @@ export default function CourseCardsMode({
     if (!entry) return;
 
     setHistory((h) => [...h, result]);
+    awardFlashcard();
 
     if (result === "got_it") {
       setCombo((prev) => {

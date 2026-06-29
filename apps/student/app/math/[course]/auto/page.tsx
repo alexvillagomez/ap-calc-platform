@@ -47,9 +47,13 @@ import { GeneratingLoader } from "@/components/ui/GeneratingLoader";
 import QuestionToolbar from "@/components/practice/QuestionToolbar";
 import LessonModal from "@/components/practice/LessonModal";
 import FlipCard from "@/components/cards/FlipCard";
+import { HistorySidebar, type HistoryEntry } from "@/components/practice/HistorySidebar";
+import HistoryReviewModal from "@/components/practice/HistoryReviewModal";
+import { useIsDesktop } from "@/lib/useIsDesktop";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
+import { awardQuiz, awardFlashcard } from "@/lib/points";
 import { getOrCreateMathSession } from "@/lib/mathSession";
 import {
   MathQueueKeyword,
@@ -91,6 +95,7 @@ import { nextSrsState, MEMORIZED_BOX, type SrsState } from "@/lib/flashcardSrs";
 const TOPIC_MAX_QUESTIONS = 8;
 const AUTO_REPLAN_INTERVAL = 8; // re-fetch auto-plan every N questions answered
 const MINI_QUIZ_COUNT = 4;
+const HISTORY_CAP = 30;
 
 // Adaptive-engine knobs (mastery → flashcard:question ratio + difficulty) are
 // shared with the MCAT auto mode in lib/courseEngine/adaptive.ts.
@@ -181,32 +186,6 @@ interface AttemptResponse {
   keyword_states: Record<string, { score: number; state: string; needs_lesson: boolean }>;
 }
 
-/** A snapshot of a previously-seen question for read-only review navigation. */
-interface HistoryEntry {
-  question: MathQuestion;
-  selectedChoice: number | null;
-  revealed: boolean;
-  wasCorrect: boolean | null;
-}
-
-// ── Unified timeline (Phase E: unified back/forward) ────────────────────────
-// Every step shown to the student is appended here in order. Back/Forward walk
-// this ref; the live item is NEVER in the timeline (it remains in `question` /
-// `flashcards[fcIndex]` / the lesson state machine).
-//
-// - kind "question" : answered or skipped question (same as old HistoryEntry).
-// - kind "flashcard": a single flashcard that was SHOWN (face the student saw).
-// - kind "lesson"   : a lesson that was displayed (any page / keyword).
-//
-// Nothing re-scores on review — all answer/grade side-effects are guarded by
-// `!inReview` in the handlers below.
-type TimelineEntry =
-  | { kind: "question"; question: MathQuestion; selectedChoice: number | null; revealed: boolean; wasCorrect: boolean | null }
-  | { kind: "flashcard"; card: MathFlashcard; keywordId: string; keywordLabel: string }
-  | { kind: "lesson"; keywordId: string; keywordLabel: string };
-
-const HISTORY_CAP = 30;
-
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function pickReviewKeyword(pool: MathReviewKeyword[]): MathReviewKeyword | null {
@@ -219,6 +198,44 @@ function pickReviewKeyword(pool: MathReviewKeyword[]): MathReviewKeyword | null 
   return candidates.reduce((best, kw) =>
     (kw.score ?? 0.5) < (best.score ?? 0.5) ? kw : best
   );
+}
+
+// Adapt MathQuestion to the HistoryEntry HistoryQuestion shape (stem_latex → stem,
+// solution_latex → explanation). The HistoryEntry structural interface requires
+// `stem`, `choices`, `correct_index`, `explanation`, `keyword_weights`, `primary_keyword_id`.
+function mathQuestionToHistoryQuestion(q: MathQuestion): HistoryEntry["kind"] extends "question" ? never : {
+  id: string;
+  stem: string;
+  choices: string[];
+  correct_index: number;
+  explanation: string;
+  keyword_weights: Record<string, number>;
+  primary_keyword_id?: string | null;
+} {
+  return {
+    id: q.id,
+    stem: q.stem_latex,
+    choices: q.choices,
+    correct_index: q.correct_index,
+    explanation: q.solution_latex ?? "",
+    keyword_weights: q.keyword_weights ?? {},
+    primary_keyword_id: q.primary_keyword_id,
+  } as ReturnType<typeof mathQuestionToHistoryQuestion>;
+}
+
+// Adapt MathFlashcard to the HistoryEntry HistoryFlashcard shape (front_latex → front, back_latex → back).
+function mathFlashcardToHistoryFlashcard(c: MathFlashcard): {
+  id: string;
+  front: string;
+  back: string;
+  keyword_weights: Record<string, number>;
+} {
+  return {
+    id: c.id,
+    front: c.front_latex,
+    back: c.back_latex,
+    keyword_weights: c.keyword_weights ?? {},
+  };
 }
 
 // ─── Auto inner component ─────────────────────────────────────────────────────
@@ -397,14 +414,16 @@ function MathAutoInner({
   );
 
   const [question, setQuestion] = useState<MathQuestion | null>(null);
-  // Unified ordered timeline of every step shown to the student in this session.
-  // null reviewIndex = viewing the LIVE item. See TimelineEntry for shape.
-  const historyRef = useRef<TimelineEntry[]>([]);
-  // null = viewing the LIVE item; otherwise an index into historyRef.
-  const [reviewIndex, setReviewIndex] = useState<number | null>(null);
-  const inReview = reviewIndex !== null;
-  // The timeline entry currently being reviewed (null when live).
-  const reviewEntry = inReview ? historyRef.current[reviewIndex] ?? null : null;
+
+  // ── Desktop history sidebar (read-only) ────────────────────────────────────
+  // Append entries on answer/skip/flashcard-grade; never re-scores on review.
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const historyCountRef = useRef(0);
+  // Entry currently open in the read-only review modal (null = closed).
+  const [reviewEntry, setReviewEntry] = useState<HistoryEntry | null>(null);
+
+  const isDesktop = useIsDesktop();
+
   const [isReviewCard, setIsReviewCard] = useState(false);
   const [pendingReviewBetweenTopics, setPendingReviewBetweenTopics] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
@@ -574,7 +593,6 @@ function MathAutoInner({
       if (stemText) {
         seenStemsRef.current = [...seenStemsRef.current, stemText].slice(-50);
       }
-      setReviewIndex(null);
       setSelectedChoice(null);
       setShowHint(false);
       setErrorMsg("");
@@ -625,7 +643,6 @@ function MathAutoInner({
       setPhase("generating");
       setQuestion(null);
       setSelectedChoice(null);
-      setReviewIndex(null);
       const ready = await bufferRef.current!.take({
         sessionId: sid,
         keywordId,
@@ -886,22 +903,67 @@ function MathAutoInner({
     }
   }, [fetchPlan]);
 
-  // ─── Handle choice ─────────────────────────────────────────────────────────
+  // ─── History helpers ────────────────────────────────────────────────────────
 
-  // Append any timeline step (question / flashcard / lesson). Capped at HISTORY_CAP.
-  const pushHistory = useCallback((entry: TimelineEntry) => {
-    historyRef.current = [...historyRef.current, entry].slice(-HISTORY_CAP);
-  }, []);
+  // Append a question entry (answered or skipped). Capped at HISTORY_CAP.
+  const pushHistoryQuestion = useCallback(
+    (
+      q: MathQuestion,
+      selectedChoiceVal: number | null,
+      dontKnow: boolean,
+      wasCorrect: boolean,
+      keywordId: string | null,
+    ) => {
+      const uid = `${Date.now()}-${historyCountRef.current++}`;
+      setHistory((h) =>
+        [
+          ...h,
+          {
+            uid,
+            kind: "question" as const,
+            question: mathQuestionToHistoryQuestion(q),
+            selectedChoice: selectedChoiceVal,
+            dontKnow,
+            wasCorrect,
+            keywordId,
+          },
+        ].slice(-HISTORY_CAP)
+      );
+    },
+    []
+  );
+
+  // Append a flashcard entry (graded). Capped at HISTORY_CAP.
+  const pushHistoryFlashcard = useCallback(
+    (card: MathFlashcard, gotIt: boolean, keywordId: string | null) => {
+      const uid = `${Date.now()}-${historyCountRef.current++}`;
+      setHistory((h) =>
+        [
+          ...h,
+          {
+            uid,
+            kind: "flashcard" as const,
+            card: mathFlashcardToHistoryFlashcard(card),
+            gotIt,
+            keywordId,
+          },
+        ].slice(-HISTORY_CAP)
+      );
+    },
+    []
+  );
+
+  // ─── Handle choice ─────────────────────────────────────────────────────────
 
   const handleChoice = useCallback(
     async (idx: number) => {
-      if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
+      if (!question || !currentKeyword || phase !== "practicing") return;
 
       setSelectedChoice(idx);
       setPhase("revealed");
 
       const correct = idx === question.correct_index;
-      pushHistory({ kind: "question", question, selectedChoice: idx, revealed: true, wasCorrect: correct });
+      pushHistoryQuestion(question, idx, false, correct, servedKeywordId ?? currentKeyword.id);
       setLastAnswerCorrect(correct);
       setCombo((prev) => {
         const next = comboReducer({ count: prev }, correct ? "correct" : "incorrect").count;
@@ -911,6 +973,7 @@ function MathAutoInner({
       });
 
       setStats((s) => ({ ...s, answered: s.answered + 1, correct: s.correct + (correct ? 1 : 0) }));
+      awardQuiz();
 
       if (!isReviewCard) {
         setTopicQuestionCount((n) => n + 1);
@@ -973,20 +1036,21 @@ function MathAutoInner({
         }
       } catch { /* non-fatal */ }
     },
-    [question, currentKeyword, phase, sessionId, isReviewCard, course, maybeTriggerReplan, inReview, pushHistory, servedKeywordId]
+    [question, currentKeyword, phase, sessionId, isReviewCard, course, maybeTriggerReplan, pushHistoryQuestion, servedKeywordId]
   );
 
   // ─── Handle don't know ─────────────────────────────────────────────────────
 
   const handleDontKnow = useCallback(async () => {
-    if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
+    if (!question || !currentKeyword || phase !== "practicing") return;
     setSelectedChoice(null);
     setPhase("revealed");
-    pushHistory({ kind: "question", question, selectedChoice: null, revealed: true, wasCorrect: false });
+    pushHistoryQuestion(question, null, true, false, servedKeywordId ?? currentKeyword.id);
     setLastAnswerCorrect(false);
     setCombo((prev) => comboReducer({ count: prev }, "incorrect").count);
     onIncorrectAnswer();
     setStats((s) => ({ ...s, answered: s.answered + 1 }));
+    awardQuiz();
     if (!isReviewCard) {
       consecutiveWrongRef.current += 1;
       setTopicCorrectStreak(0);
@@ -1030,34 +1094,16 @@ function MathAutoInner({
         }
       }
     } catch { /* non-fatal */ }
-  }, [question, currentKeyword, phase, sessionId, isReviewCard, maybeTriggerReplan, course, inReview, pushHistory, servedKeywordId]);
+  }, [question, currentKeyword, phase, sessionId, isReviewCard, course, maybeTriggerReplan, pushHistoryQuestion, servedKeywordId]);
 
-  // ─── Free movement: Back / Forward / Skip ───────────────────────────────────
-
-  // Step back into the unified timeline (read-only).
-  // Any answer/grade side-effects are guarded by !inReview in their handlers.
-  const handleReviewBack = useCallback(() => {
-    const hist = historyRef.current;
-    if (hist.length === 0) return;
-    setReviewIndex((cur) => (cur === null ? hist.length - 1 : Math.max(0, cur - 1)));
-  }, []);
-
-  // Step forward through the timeline; past the last entry returns to the LIVE item.
-  const handleReviewForward = useCallback(() => {
-    setReviewIndex((cur) => {
-      if (cur === null) return null;
-      const next = cur + 1;
-      return next >= historyRef.current.length ? null : next;
-    });
-  }, []);
+  // ─── Skip ──────────────────────────────────────────────────────────────────
 
   // Skip the live question: record NO attempt, no mastery/streak change; load next
   // from the SAME keyword (reuses the existing load path; never advances).
   const handleSkip = useCallback(() => {
-    if (!question || !currentKeyword || phase !== "practicing" || inReview || !frontier?.id) return;
-    pushHistory({ kind: "question", question, selectedChoice: null, revealed: false, wasCorrect: null });
+    if (!question || !currentKeyword || phase !== "practicing" || !frontier?.id) return;
     void loadQuestion(sessionId, currentKeyword.id, frontier.id);
-  }, [question, currentKeyword, phase, inReview, frontier, pushHistory, loadQuestion, sessionId]);
+  }, [question, currentKeyword, phase, frontier, loadQuestion, sessionId]);
 
   // ─── Advance to next category ──────────────────────────────────────────────
 
@@ -1314,10 +1360,6 @@ function MathAutoInner({
     setStats((s) => ({ ...s, lessons: s.lessons + 1 }));
     consecutiveWrongRef.current = 0;
     setTopicCorrectStreak(0);
-    // Record the lesson in the unified timeline so Back can replay it.
-    if (lessonTarget) {
-      pushHistory({ kind: "lesson", keywordId: lessonTarget.id, keywordLabel: lessonTarget.label });
-    }
     // Subtopic-intro lesson → continue to FLASHCARDS for that subtopic. A mid-practice
     // struggle lesson (inTopicIntroRef false) just returns to the current question.
     if (inTopicIntroRef.current && currentKeyword && frontier?.id) {
@@ -1328,15 +1370,11 @@ function MathAutoInner({
       lessonedKeywordsRef.current.add(currentKeyword.id);
       loadQuestion(sessionId, currentKeyword.id, frontier.id);
     }
-  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards, lessonTarget, pushHistory]);
+  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards]);
 
   const handleLessonSkip = useCallback(() => {
     consecutiveWrongRef.current = 0;
     setTopicCorrectStreak(0);
-    // Record the lesson in the unified timeline so Back can replay it (even if skipped).
-    if (lessonTarget) {
-      pushHistory({ kind: "lesson", keywordId: lessonTarget.id, keywordLabel: lessonTarget.label });
-    }
     // Skipping the subtopic-intro lesson → still show its FLASHCARDS, then practice.
     if (inTopicIntroRef.current && currentKeyword && frontier?.id) {
       void startSkillFlashcards(sessionId, currentKeyword, frontier.id);
@@ -1346,24 +1384,17 @@ function MathAutoInner({
       lessonedKeywordsRef.current.add(currentKeyword.id);
       loadQuestion(sessionId, currentKeyword.id, frontier.id);
     }
-  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards, lessonTarget, pushHistory]);
+  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards]);
 
   // ─── Flashcard warm-up handlers ───────────────────────────────────────────
 
   const gradeFlashcard = useCallback(
     async (result: "got_it" | "missed_it" | "dont_know") => {
-      // Guard: no re-grading while in review.
-      if (inReview) return;
       const card = flashcards[fcIndex];
       if (!card || !currentKeyword || !frontier?.id) return;
 
-      // Record that this card was shown (read-only replay available via Back).
-      pushHistory({
-        kind: "flashcard",
-        card,
-        keywordId: servedKeywordId ?? currentKeyword.id,
-        keywordLabel: currentKeyword.label,
-      });
+      // Record for history sidebar.
+      pushHistoryFlashcard(card, result === "got_it", servedKeywordId ?? currentKeyword.id);
 
       // Record attempt — fire and forget (non-fatal)
       fetch("/api/math/flashcard-attempt", {
@@ -1376,6 +1407,7 @@ function MathAutoInner({
           course: course as MathCourse,
         }),
       }).catch(() => {});
+      awardFlashcard();
 
       // Gamification
       if (result === "got_it") {
@@ -1418,7 +1450,7 @@ function MathAutoInner({
       // An interleaved adaptive (practice-mode) flashcard finished → resume the loop.
       serveNextItem(sessionId);
     },
-    [flashcards, fcIndex, currentKeyword, frontier, sessionId, course, startKeyword, markIntroSeen, serveNextItem, inReview, pushHistory, servedKeywordId]
+    [flashcards, fcIndex, currentKeyword, frontier, sessionId, course, startKeyword, markIntroSeen, serveNextItem, pushHistoryFlashcard, servedKeywordId]
   );
 
   // ─── Category complete handlers ────────────────────────────────────────────
@@ -1553,6 +1585,9 @@ function MathAutoInner({
   const isInFlashcardPhase = phase === "flashcard";
   const currentFc = isInFlashcardPhase ? (flashcards[fcIndex] ?? null) : null;
 
+  // True when the 3-column desktop layout is active (practice/flashcard/lesson phases).
+  const showDesktopLayout = isDesktop && (isInPracticePhase || isInFlashcardPhase || phase === "lesson");
+
   // ─── Render ────────────────────────────────────────────────────────────────
 
   return (
@@ -1613,630 +1648,750 @@ function MathAutoInner({
         )}
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4 pb-safe-bottom">
+      {/* ── 3-column desktop layout (practice / flashcard / lesson) ────────── */}
+      {showDesktopLayout ? (
+        <div className="max-w-6xl mx-auto px-4 py-8 flex gap-6 items-start">
+          {/* LEFT: history sidebar */}
+          <aside className="w-56 shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
+            <HistorySidebar entries={history} onSelect={setReviewEntry} />
+          </aside>
 
-        {/* Loading */}
-        {(phase === "loading" || phase === "mini_quiz_loading") && (
-          <GeneratingLoader
-            messages={
-              phase === "mini_quiz_loading"
-                ? ["Loading your checkpoint quiz…", "Pulling together what you've learned…"]
-                : ["Finding your next challenge…", "Tailoring it to where you are…"]
-            }
-          />
-        )}
+          {/* CENTER: main content */}
+          <div className="flex-1 min-w-0 space-y-4">
+            {/* ─── Flashcard step ───────────────────────────────────────── */}
+            {isInFlashcardPhase && currentFc && (
+              <>
+                <FlipCard
+                  front={currentFc.front_latex}
+                  back={currentFc.back_latex}
+                  onGrade={gradeFlashcard}
+                  resetKey={`${currentFc.id}#${fcBoxRef.current.get(currentFc.id)?.reps ?? 0}`}
+                />
+              </>
+            )}
 
-        {/* Generating */}
-        {phase === "generating" && <GeneratingLoader />}
-
-        {/* Needs diagnostic */}
-        {phase === "needs_diagnostic" && (
-          <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs text-center space-y-5">
-            <div className="w-14 h-14 rounded-full bg-brand-100 flex items-center justify-center mx-auto">
-              <span className="text-brand-600 text-2xl">✦</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-semibold text-neutral-900">
-                Start with a placement check
-              </h1>
-              <p className="text-sm text-neutral-500 mt-1 leading-relaxed">
-                A quick 8–14 question diagnostic will find your starting point so
-                automatic mode begins where you need it most.
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Link
-                href={`/math/${course}/diagnostic?return=auto`}
-                className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors text-center"
-              >
-                Take placement diagnostic
-              </Link>
-              <button
-                onClick={async () => {
-                  // Skip diagnostic — start from beginning
-                  setPhase("loading");
-                  try {
-                    // Persist the skip server-side so the gate never re-appears.
-                    await fetch("/api/math/diagnostic/skip", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        session_id: sessionId,
-                        course: course as MathCourse,
-                      }),
-                    });
-                    const newPlan = await fetchPlan(sessionId);
-                    if (!newPlan) { setPhase("needs_diagnostic"); return; }
-                    // Force skip diagnostic by faking no needs_diagnostic
-                    await applyPlan(sessionId, { ...newPlan, needs_diagnostic: false });
-                  } catch (e) {
-                    setErrorMsg((e as Error).message ?? "Failed to start");
-                    setPhase("error");
-                  }
-                }}
-                className="w-full py-3 rounded-xl border border-neutral-200 bg-white text-neutral-600 text-sm font-medium hover:bg-neutral-50 transition-colors"
-              >
-                Skip and start from the beginning
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Error */}
-        {phase === "error" && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center space-y-3">
-            <p className="text-sm text-red-600">{errorMsg || "Something went wrong"}</p>
-            <button
-              onClick={() => {
-                setPhase("loading");
-                advanceToNextCategory(sessionId);
-              }}
-              className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors"
-            >
-              Try again
-            </button>
-          </div>
-        )}
-
-        {/* Transition */}
-        {phase === "transition" && (
-          <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <div className="bg-white rounded-xl border border-neutral-200 shadow-brand-xs px-6 py-5 text-center space-y-2 max-w-sm w-full">
-              <p className="text-xs text-neutral-400 uppercase tracking-wide font-medium">
-                Keyword complete
-              </p>
-              <p className="text-base font-semibold text-neutral-900 truncate">
-                {transitionLabel}
-              </p>
-              <p className="text-sm text-neutral-500 animate-pulse">
-                Moving to next keyword…
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Category complete interstitial */}
-        {phase === "category_complete" && (
-          <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs text-center space-y-5">
-            <div className="w-16 h-16 rounded-full bg-success-100 flex items-center justify-center mx-auto text-3xl">
-              🎉
-            </div>
-            <div>
-              <h1 className="text-xl font-semibold text-neutral-900">
-                {completedCategoryLabel} complete!
-              </h1>
-              <p className="text-sm text-neutral-500 mt-1">
-                Great progress. Take a quick 4-question checkpoint quiz before continuing.
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <button
-                onClick={handleTakeQuiz}
-                className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
-              >
-                Take checkpoint quiz
-              </button>
-              <button
-                onClick={handleSkipQuiz}
-                disabled={skipQuizPending}
-                className="w-full py-3 rounded-xl border border-neutral-200 bg-white text-neutral-600 text-sm font-medium hover:bg-neutral-50 transition-colors disabled:opacity-60"
-              >
-                {skipQuizPending ? "Continuing…" : "Skip quiz, keep going"}
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Course complete */}
-        {phase === "course_complete" && (
-          <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs text-center space-y-5">
-            <div className="w-16 h-16 rounded-full bg-success-100 flex items-center justify-center mx-auto">
-              <span className="text-success-600 text-3xl font-bold">✓</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-semibold text-neutral-900">
-                {courseLabel} complete!
-              </h1>
-              <p className="text-sm text-neutral-500 mt-1 leading-relaxed">
-                You&apos;ve mastered all categories. Come back for spaced review or explore
-                the full course.
-              </p>
-            </div>
-            {stats.answered > 0 && (
-              <div className="bg-neutral-50 rounded-xl border border-neutral-100 p-4 space-y-2 text-left">
-                <div className="flex justify-between text-sm">
-                  <span className="text-neutral-500">Questions answered</span>
-                  <span className="font-medium">{stats.answered}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-neutral-500">Correct</span>
-                  <span className="font-medium">
-                    {stats.correct} ({stats.answered > 0 ? Math.round((stats.correct / stats.answered) * 100) : 0}%)
-                  </span>
-                </div>
-                {stats.topicsMastered > 0 && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-neutral-500">Topics mastered</span>
-                    <span className="font-medium text-success-700">{stats.topicsMastered}</span>
+            {/* ─── Lesson (inline) ──────────────────────────────────────── */}
+            {phase === "lesson" && lessonTarget && sessionId && (
+              <>
+                {inTopicIntroRef.current && (
+                  <div className="text-center">
+                    <p className="text-xs text-brand-600 font-medium bg-brand-50 border border-brand-100 rounded-full inline-block px-3 py-1">
+                      Step 1 of 3 · Lesson
+                    </p>
                   </div>
                 )}
-              </div>
+                <MathLessonView
+                  sessionId={sessionId}
+                  keywordId={lessonTarget.id}
+                  keywordLabel={lessonTarget.label}
+                  onComplete={handleLessonComplete}
+                  onSkip={handleLessonSkip}
+                  hasPreviousLesson={
+                    inTopicIntroRef.current &&
+                    lessonTarget.id === currentKeyword?.id &&
+                    queueIndex > 0
+                  }
+                  onPreviousLesson={() => {
+                    if (!frontier?.id || queueIndex <= 0) return;
+                    const prevKw = queue[queueIndex - 1];
+                    if (!prevKw) return;
+                    setQueueIndex(queueIndex - 1);
+                    introSeenRef.current.delete(prevKw.id);
+                    beginSkillIntro(sessionId, prevKw, frontier.id);
+                  }}
+                />
+              </>
             )}
-            <div className="flex flex-col gap-2">
+
+            {/* ─── Live practice / Revealed ─────────────────────────────── */}
+            {isInPracticePhase && question && (
+              <>
+                {/* Badge row */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  {isReviewCard && (
+                    <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-700">
+                      Review
+                    </span>
+                  )}
+                </div>
+
+                {/* Stem */}
+                <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
+                  <p className="text-sm font-medium text-neutral-900 leading-relaxed">
+                    <MathText>{question.stem_latex}</MathText>
+                  </p>
+                </div>
+
+                {/* Skip link (practicing only, no toolbar on desktop left — toolbar is in right aside) */}
+                {phase === "practicing" && (
+                  <div className="flex justify-end">
+                    <button
+                      onClick={handleSkip}
+                      className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
+                    >
+                      Skip →
+                    </button>
+                  </div>
+                )}
+
+                {/* Hint */}
+                {phase === "practicing" && question?.hint_latex && (
+                  <div className="flex justify-center">
+                    {!showHint ? (
+                      <button
+                        onClick={() => setShowHint(true)}
+                        className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2"
+                      >
+                        Show hint
+                      </button>
+                    ) : (
+                      <div className="bg-amber-50 rounded-xl border border-amber-100 p-3 w-full text-left">
+                        <p className="text-xs font-semibold text-amber-700 mb-1">Hint</p>
+                        <p className="text-sm text-neutral-700 leading-relaxed">
+                          <MathText>{question.hint_latex}</MathText>
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Choices */}
+                <CorrectPulse
+                  trigger={phase === "revealed" && lastAnswerCorrect}
+                  className="block w-full"
+                >
+                  <div className="space-y-2">
+                    {question.choices.map((choice, i) => {
+                      let state: "default" | "selected" | "correct" | "wrong" | "dimmed" = "default";
+                      if (phase === "revealed") {
+                        if (i === question.correct_index) state = "correct";
+                        else if (i === selectedChoice) state = "wrong";
+                        else state = "dimmed";
+                      }
+                      return (
+                        <ChoiceButton
+                          key={i}
+                          index={i}
+                          text={choice}
+                          state={state}
+                          disabled={phase === "revealed"}
+                          onClick={() => handleChoice(i)}
+                        />
+                      );
+                    })}
+                  </div>
+                </CorrectPulse>
+
+                {/* Affirmation */}
+                {phase === "revealed" && (
+                  <AnswerAffirmation correct={lastAnswerCorrect} streak={combo} />
+                )}
+
+                {/* I don't know */}
+                {phase === "practicing" && (
+                  <div className="flex justify-center">
+                    <button
+                      onClick={handleDontKnow}
+                      className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
+                    >
+                      I don&apos;t know
+                    </button>
+                  </div>
+                )}
+
+                {/* Worked solution */}
+                {phase === "revealed" && question.solution_latex && (
+                  <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
+                    <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
+                      Solution
+                    </p>
+                    <p className="text-sm text-neutral-700 leading-relaxed">
+                      <MathText>{question.solution_latex}</MathText>
+                    </p>
+                  </div>
+                )}
+
+                {/* Feedback + Continue */}
+                {phase === "revealed" && (
+                  <>
+                    <MathFeedbackWidget
+                      sessionId={sessionId}
+                      contentType="question"
+                      contentId={question.id}
+                      className="px-1"
+                    />
+                    <button
+                      onClick={handleNext}
+                      className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
+                    >
+                      Continue
+                    </button>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+
+          {/* RIGHT: QuestionToolbar */}
+          <aside className="w-60 shrink-0 sticky top-20">
+            {isInFlashcardPhase && currentFc && (
+              <QuestionToolbar
+                system="math"
+                course={course}
+                keywordId={servedKeywordId ?? primaryKeywordId(currentFc.keyword_weights) ?? currentKeyword?.id ?? null}
+                sessionId={sessionId || null}
+                questionId={currentFc.id}
+                contentType="flashcard"
+                resetSignal={currentFc.id}
+                onStateChange={() => bufferRef.current?.clear()}
+              />
+            )}
+            {isInPracticePhase && question && (
+              <QuestionToolbar
+                system="math"
+                course={course}
+                keywordId={question.primary_keyword_id ?? servedKeywordId ?? primaryKeywordId(question.keyword_weights) ?? currentKeyword?.id ?? null}
+                sessionId={sessionId || null}
+                questionId={question.id}
+                contentType="question"
+                resetSignal={question.id}
+                answerSignal={phase === "revealed" ? question.id : undefined}
+                onStateChange={() => bufferRef.current?.clear()}
+              />
+            )}
+          </aside>
+        </div>
+      ) : (
+        /* ── Mobile / non-practice phases: single-column layout ────────── */
+        <main className="max-w-2xl mx-auto px-4 py-8 space-y-4 pb-safe-bottom">
+
+          {/* Loading */}
+          {(phase === "loading" || phase === "mini_quiz_loading") && (
+            <GeneratingLoader
+              messages={
+                phase === "mini_quiz_loading"
+                  ? ["Loading your checkpoint quiz…", "Pulling together what you've learned…"]
+                  : ["Finding your next challenge…", "Tailoring it to where you are…"]
+              }
+            />
+          )}
+
+          {/* Generating */}
+          {phase === "generating" && <GeneratingLoader />}
+
+          {/* Needs diagnostic */}
+          {phase === "needs_diagnostic" && (
+            <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs text-center space-y-5">
+              <div className="w-14 h-14 rounded-full bg-brand-100 flex items-center justify-center mx-auto">
+                <span className="text-brand-600 text-2xl">✦</span>
+              </div>
+              <div>
+                <h1 className="text-xl font-semibold text-neutral-900">
+                  Start with a placement check
+                </h1>
+                <p className="text-sm text-neutral-500 mt-1 leading-relaxed">
+                  A quick 8–14 question diagnostic will find your starting point so
+                  automatic mode begins where you need it most.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Link
+                  href={`/math/${course}/diagnostic?return=auto`}
+                  className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors text-center"
+                >
+                  Take placement diagnostic
+                </Link>
+                <button
+                  onClick={async () => {
+                    // Skip diagnostic — start from beginning
+                    setPhase("loading");
+                    try {
+                      // Persist the skip server-side so the gate never re-appears.
+                      await fetch("/api/math/diagnostic/skip", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          session_id: sessionId,
+                          course: course as MathCourse,
+                        }),
+                      });
+                      const newPlan = await fetchPlan(sessionId);
+                      if (!newPlan) { setPhase("needs_diagnostic"); return; }
+                      // Force skip diagnostic by faking no needs_diagnostic
+                      await applyPlan(sessionId, { ...newPlan, needs_diagnostic: false });
+                    } catch (e) {
+                      setErrorMsg((e as Error).message ?? "Failed to start");
+                      setPhase("error");
+                    }
+                  }}
+                  className="w-full py-3 rounded-xl border border-neutral-200 bg-white text-neutral-600 text-sm font-medium hover:bg-neutral-50 transition-colors"
+                >
+                  Skip and start from the beginning
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Error */}
+          {phase === "error" && (
+            <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center space-y-3">
+              <p className="text-sm text-red-600">{errorMsg || "Something went wrong"}</p>
+              <button
+                onClick={() => {
+                  setPhase("loading");
+                  advanceToNextCategory(sessionId);
+                }}
+                className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors"
+              >
+                Try again
+              </button>
+            </div>
+          )}
+
+          {/* Transition */}
+          {phase === "transition" && (
+            <div className="flex flex-col items-center justify-center py-24 gap-3">
+              <div className="bg-white rounded-xl border border-neutral-200 shadow-brand-xs px-6 py-5 text-center space-y-2 max-w-sm w-full">
+                <p className="text-xs text-neutral-400 uppercase tracking-wide font-medium">
+                  Keyword complete
+                </p>
+                <p className="text-base font-semibold text-neutral-900 truncate">
+                  {transitionLabel}
+                </p>
+                <p className="text-sm text-neutral-500 animate-pulse">
+                  Moving to next keyword…
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Category complete interstitial */}
+          {phase === "category_complete" && (
+            <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs text-center space-y-5">
+              <div className="w-16 h-16 rounded-full bg-success-100 flex items-center justify-center mx-auto text-3xl">
+                🎉
+              </div>
+              <div>
+                <h1 className="text-xl font-semibold text-neutral-900">
+                  {completedCategoryLabel} complete!
+                </h1>
+                <p className="text-sm text-neutral-500 mt-1">
+                  Great progress. Take a quick 4-question checkpoint quiz before continuing.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={handleTakeQuiz}
+                  className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
+                >
+                  Take checkpoint quiz
+                </button>
+                <button
+                  onClick={handleSkipQuiz}
+                  disabled={skipQuizPending}
+                  className="w-full py-3 rounded-xl border border-neutral-200 bg-white text-neutral-600 text-sm font-medium hover:bg-neutral-50 transition-colors disabled:opacity-60"
+                >
+                  {skipQuizPending ? "Continuing…" : "Skip quiz, keep going"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Course complete */}
+          {phase === "course_complete" && (
+            <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs text-center space-y-5">
+              <div className="w-16 h-16 rounded-full bg-success-100 flex items-center justify-center mx-auto">
+                <span className="text-success-600 text-3xl font-bold">✓</span>
+              </div>
+              <div>
+                <h1 className="text-xl font-semibold text-neutral-900">
+                  {courseLabel} complete!
+                </h1>
+                <p className="text-sm text-neutral-500 mt-1 leading-relaxed">
+                  You&apos;ve mastered all categories. Come back for spaced review or explore
+                  the full course.
+                </p>
+              </div>
+              {stats.answered > 0 && (
+                <div className="bg-neutral-50 rounded-xl border border-neutral-100 p-4 space-y-2 text-left">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-neutral-500">Questions answered</span>
+                    <span className="font-medium">{stats.answered}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-neutral-500">Correct</span>
+                    <span className="font-medium">
+                      {stats.correct} ({stats.answered > 0 ? Math.round((stats.correct / stats.answered) * 100) : 0}%)
+                    </span>
+                  </div>
+                  {stats.topicsMastered > 0 && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-neutral-500">Topics mastered</span>
+                      <span className="font-medium text-success-700">{stats.topicsMastered}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => advanceToNextCategory(sessionId)}
+                  className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
+                >
+                  Find spaced review
+                </button>
+                <Link
+                  href={`/math/${course}`}
+                  className="w-full py-3 rounded-xl border border-neutral-200 bg-white text-neutral-600 text-sm font-medium hover:bg-neutral-50 transition-colors text-center"
+                >
+                  View all categories
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* ─── Mobile: Flashcard step ──────────────────────────────────── */}
+          {isInFlashcardPhase && currentFc && (
+            <>
+              <FlipCard
+                front={currentFc.front_latex}
+                back={currentFc.back_latex}
+                onGrade={gradeFlashcard}
+                resetKey={`${currentFc.id}#${fcBoxRef.current.get(currentFc.id)?.reps ?? 0}`}
+              />
+
+              {/* Lesson / refresher access for the current card's topic */}
+              <QuestionToolbar
+                system="math"
+                course={course}
+                keywordId={servedKeywordId ?? primaryKeywordId(currentFc.keyword_weights) ?? currentKeyword?.id ?? null}
+                sessionId={sessionId || null}
+                questionId={currentFc.id}
+                contentType="flashcard"
+                resetSignal={currentFc.id}
+                onStateChange={() => bufferRef.current?.clear()}
+              />
+            </>
+          )}
+
+          {/* ─── Mobile: Lesson (inline) ─────────────────────────────────── */}
+          {phase === "lesson" && lessonTarget && sessionId && (
+            <>
+              {inTopicIntroRef.current && (
+                <div className="text-center">
+                  <p className="text-xs text-brand-600 font-medium bg-brand-50 border border-brand-100 rounded-full inline-block px-3 py-1">
+                    Step 1 of 3 · Lesson
+                  </p>
+                </div>
+              )}
+              <MathLessonView
+                sessionId={sessionId}
+                keywordId={lessonTarget.id}
+                keywordLabel={lessonTarget.label}
+                onComplete={handleLessonComplete}
+                onSkip={handleLessonSkip}
+                hasPreviousLesson={
+                  inTopicIntroRef.current &&
+                  lessonTarget.id === currentKeyword?.id &&
+                  queueIndex > 0
+                }
+                onPreviousLesson={() => {
+                  if (!frontier?.id || queueIndex <= 0) return;
+                  const prevKw = queue[queueIndex - 1];
+                  if (!prevKw) return;
+                  setQueueIndex(queueIndex - 1);
+                  introSeenRef.current.delete(prevKw.id);
+                  beginSkillIntro(sessionId, prevKw, frontier.id);
+                }}
+              />
+            </>
+          )}
+
+          {/* ─── Mobile: Practice / Revealed ────────────────────────────── */}
+          {isInPracticePhase && question && (
+            <>
+              {/* Badge row */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {isReviewCard && (
+                  <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-700">
+                    Review
+                  </span>
+                )}
+              </div>
+
+              {/* Stem */}
+              <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
+                <p className="text-sm font-medium text-neutral-900 leading-relaxed">
+                  <MathText>{question.stem_latex}</MathText>
+                </p>
+              </div>
+
+              {/* Action bar — quick refresher / see lesson (POPUP) / prioritize.
+                  Keyed to the SERVED question's keyword so see-lesson corresponds (3,7). */}
+              <QuestionToolbar
+                system="math"
+                course={course}
+                keywordId={question.primary_keyword_id ?? servedKeywordId ?? primaryKeywordId(question.keyword_weights) ?? currentKeyword?.id ?? null}
+                sessionId={sessionId || null}
+                questionId={question.id}
+                contentType="question"
+                resetSignal={question.id}
+                answerSignal={phase === "revealed" ? question.id : undefined}
+                onStateChange={() => bufferRef.current?.clear()}
+              />
+
+              {/* Hint */}
+              {phase === "practicing" && question?.hint_latex && (
+                <div className="flex justify-center">
+                  {!showHint ? (
+                    <button
+                      onClick={() => setShowHint(true)}
+                      className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2"
+                    >
+                      Show hint
+                    </button>
+                  ) : (
+                    <div className="bg-amber-50 rounded-xl border border-amber-100 p-3 w-full text-left">
+                      <p className="text-xs font-semibold text-amber-700 mb-1">Hint</p>
+                      <p className="text-sm text-neutral-700 leading-relaxed">
+                        <MathText>{question.hint_latex}</MathText>
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+              {/* Choices */}
+              <CorrectPulse
+                trigger={phase === "revealed" && lastAnswerCorrect}
+                className="block w-full"
+              >
+                <div className="space-y-2">
+                  {question.choices.map((choice, i) => {
+                    let state: "default" | "selected" | "correct" | "wrong" | "dimmed" = "default";
+                    if (phase === "revealed") {
+                      if (i === question.correct_index) state = "correct";
+                      else if (i === selectedChoice) state = "wrong";
+                      else state = "dimmed";
+                    }
+                    return (
+                      <ChoiceButton
+                        key={i}
+                        index={i}
+                        text={choice}
+                        state={state}
+                        disabled={phase === "revealed"}
+                        onClick={() => handleChoice(i)}
+                      />
+                    );
+                  })}
+                </div>
+              </CorrectPulse>
+
+              {/* Affirmation — the satisfying "Correct!" moment */}
+              {phase === "revealed" && (
+                <AnswerAffirmation correct={lastAnswerCorrect} streak={combo} />
+              )}
+
+              {/* I don't know */}
+              {phase === "practicing" && (
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleDontKnow}
+                    className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
+                  >
+                    I don&apos;t know
+                  </button>
+                </div>
+              )}
+
+              {/* Worked solution */}
+              {phase === "revealed" && question.solution_latex && (
+                <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
+                  <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
+                    Solution
+                  </p>
+                  <p className="text-sm text-neutral-700 leading-relaxed">
+                    <MathText>{question.solution_latex}</MathText>
+                  </p>
+                </div>
+              )}
+
+              {/* Lesson recommendations now surface as a closeable POPUP (LessonModal,
+                  rendered near the page root), not an inline bottom offer. */}
+
+              {/* Feedback + Continue */}
+              {phase === "revealed" && (
+                <>
+                  <MathFeedbackWidget
+                    sessionId={sessionId}
+                    contentType="question"
+                    contentId={question!.id}
+                    className="px-1"
+                  />
+                  <button
+                    onClick={handleNext}
+                    className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
+                  >
+                    Continue
+                  </button>
+                </>
+              )}
+
+              {/* Skip link (mobile) */}
+              {phase === "practicing" && (
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleSkip}
+                    className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
+                  >
+                    Skip →
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* ─── Mini-quiz ──────────────────────────────────────────────────── */}
+          {(phase === "mini_quiz" || phase === "mini_quiz_revealed") && currentQuizQuestion && (
+            <>
+              {/* Checkpoint badge */}
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700">
+                  Checkpoint
+                </span>
+              </div>
+
+              {/* Stem */}
+              <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
+                <p className="text-sm font-medium text-neutral-900 leading-relaxed">
+                  <MathText>{currentQuizQuestion.stem_latex}</MathText>
+                </p>
+              </div>
+
+              {/* Choices */}
+              <CorrectPulse
+                trigger={phase === "mini_quiz_revealed" && lastAnswerCorrect}
+                className="block w-full"
+              >
+                <div className="space-y-2">
+                  {currentQuizQuestion.choices.map((choice, i) => {
+                    let state: "default" | "selected" | "correct" | "wrong" | "dimmed" = "default";
+                    if (phase === "mini_quiz_revealed") {
+                      if (i === currentQuizQuestion.correct_index) state = "correct";
+                      else if (i === quizSelectedChoice) state = "wrong";
+                      else state = "dimmed";
+                    }
+                    return (
+                      <ChoiceButton
+                        key={i}
+                        index={i}
+                        text={choice}
+                        state={state}
+                        disabled={phase === "mini_quiz_revealed"}
+                        onClick={() => handleQuizChoice(i)}
+                      />
+                    );
+                  })}
+                </div>
+              </CorrectPulse>
+
+              {/* Affirmation */}
+              {phase === "mini_quiz_revealed" && (
+                <AnswerAffirmation correct={lastAnswerCorrect} streak={combo} />
+              )}
+
+              {/* Solution */}
+              {phase === "mini_quiz_revealed" && currentQuizQuestion.solution_latex && (
+                <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
+                  <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
+                    Solution
+                  </p>
+                  <p className="text-sm text-neutral-700 leading-relaxed">
+                    <MathText>{currentQuizQuestion.solution_latex}</MathText>
+                  </p>
+                </div>
+              )}
+
+              {phase === "mini_quiz_revealed" && (
+                <button
+                  onClick={handleQuizNext}
+                  className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
+                >
+                  {quizIndex + 1 >= quizQuestions.length ? "Continue" : "Next"}
+                </button>
+              )}
+            </>
+          )}
+
+          {/* ─── Checkpoint quiz results (remedial offer) ─────────────────── */}
+          {phase === "quiz_results" && (
+            <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs space-y-5">
+              <div className="text-center space-y-2">
+                <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mx-auto text-2xl">
+                  📋
+                </div>
+                <h1 className="text-lg font-semibold text-neutral-900">
+                  Checkpoint results — {quizScorePct}% correct
+                </h1>
+                <p className="text-sm text-neutral-500">
+                  {failedQuizKeywords.length > 0
+                    ? "You missed some topics. Practice them now or continue."
+                    : "Great work! All topics passed."}
+                </p>
+              </div>
+              {failedQuizKeywords.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+                    Topics to review
+                  </p>
+                  {failedQuizKeywords.map((kw) => (
+                    <button
+                      key={kw.id}
+                      onClick={() => {
+                        const catId = pendingAdvanceCategoryRef.current;
+                        if (!catId) return;
+                        // Point queueIndex to this keyword (if in queue) so currentKeyword resolves correctly.
+                        const kwIdx = queueRef.current.findIndex((q) => q.id === kw.id);
+                        if (kwIdx >= 0) {
+                          setQueueIndex(kwIdx);
+                          queueIndexRef.current = kwIdx;
+                        }
+                        const fromQueue = queueRef.current[kwIdx >= 0 ? kwIdx : 0];
+                        currentKwScoreRef.current = fromQueue?.score ?? MASTERY_START;
+                        bufferRef.current?.clear();
+                        loadQuestion(sessionId, kw.id, catId);
+                      }}
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-amber-200 bg-amber-50 text-sm text-neutral-800 hover:bg-amber-100 transition-colors text-left"
+                    >
+                      <span className="font-medium">{kw.label}</span>
+                      <span className="text-amber-700 text-xs font-semibold">Practice →</span>
+                    </button>
+                  ))}
+                </div>
+              )}
               <button
                 onClick={() => advanceToNextCategory(sessionId)}
                 className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
               >
-                Find spaced review
+                Continue to next unit
               </button>
-              <Link
-                href={`/math/${course}`}
-                className="w-full py-3 rounded-xl border border-neutral-200 bg-white text-neutral-600 text-sm font-medium hover:bg-neutral-50 transition-colors text-center"
-              >
-                View all categories
-              </Link>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* ─── Flashcard step (same universal flip-card as standalone) ─────── */}
-        {/* ─── Practice / Revealed / Flashcard / Lesson / Review ──────────── */}
-        {/* Shared Back/Forward nav bar — shown any time the student can step back. */}
-        {(isInPracticePhase || isInFlashcardPhase || phase === "lesson" || inReview) && (() => {
-          const hasEarlier = inReview ? reviewIndex! > 0 : historyRef.current.length > 0;
-          const totalSteps = historyRef.current.length;
-          const positionLabel = inReview
-            ? `Reviewing step ${reviewIndex! + 1} of ${totalSteps}`
-            : `Step ${totalSteps + 1}`;
-          return (
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              <span className="text-xs text-neutral-400">{positionLabel}</span>
-              <div className="flex items-center gap-2">
-                {hasEarlier && (
-                  <button
-                    onClick={handleReviewBack}
-                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
-                  >
-                    ← Back
-                  </button>
-                )}
-                {inReview && (
-                  <button
-                    onClick={handleReviewForward}
-                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
-                  >
-                    {reviewIndex! + 1 >= historyRef.current.length ? "Return to current →" : "Forward →"}
-                  </button>
-                )}
-                {!inReview && phase === "practicing" && (
-                  <button
-                    onClick={handleSkip}
-                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
-                  >
-                    Skip →
-                  </button>
-                )}
-              </div>
-            </div>
-          );
-        })()}
-
-        {/* ─── Live flashcard step (hidden while reviewing a timeline entry) ─ */}
-        {isInFlashcardPhase && !inReview && currentFc && (
-          <>
-            <FlipCard
-              front={currentFc.front_latex}
-              back={currentFc.back_latex}
-              onGrade={gradeFlashcard}
-              resetKey={`${currentFc.id}#${fcBoxRef.current.get(currentFc.id)?.reps ?? 0}`}
-            />
-
-            {/* Lesson / refresher access for the current card's topic */}
-            <QuestionToolbar
-              system="math"
-              course={course}
-              keywordId={servedKeywordId ?? primaryKeywordId(currentFc.keyword_weights) ?? currentKeyword?.id ?? null}
-              sessionId={sessionId || null}
-              questionId={currentFc.id}
-              contentType="flashcard"
-              resetSignal={currentFc.id}
-              onStateChange={() => bufferRef.current?.clear()}
-            />
-          </>
-        )}
-
-        {/* ─── Live lesson (inline) — hidden while reviewing a timeline entry ─ */}
-        {phase === "lesson" && !inReview && lessonTarget && sessionId && (
-          <>
-            {inTopicIntroRef.current && (
-              <div className="text-center">
-                <p className="text-xs text-brand-600 font-medium bg-brand-50 border border-brand-100 rounded-full inline-block px-3 py-1">
-                  Step 1 of 3 · Lesson
-                </p>
-              </div>
-            )}
-            <MathLessonView
-              sessionId={sessionId}
-              keywordId={lessonTarget.id}
-              keywordLabel={lessonTarget.label}
-              onComplete={handleLessonComplete}
-              onSkip={handleLessonSkip}
-              hasPreviousLesson={
-                inTopicIntroRef.current &&
-                lessonTarget.id === currentKeyword?.id &&
-                queueIndex > 0
-              }
-              onPreviousLesson={() => {
-                if (!frontier?.id || queueIndex <= 0) return;
-                const prevKw = queue[queueIndex - 1];
-                if (!prevKw) return;
-                setQueueIndex(queueIndex - 1);
-                introSeenRef.current.delete(prevKw.id);
-                beginSkillIntro(sessionId, prevKw, frontier.id);
-              }}
-            />
-          </>
-        )}
-
-        {/* ─── Review: flashcard entry (read-only) ──────────────────────── */}
-        {inReview && reviewEntry?.kind === "flashcard" && (() => {
-          const entry = reviewEntry;
-          return (
-            <>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-600">
-                  Read-only · Flashcard
-                </span>
-              </div>
-              {/* Show both faces of the card in review so the student can re-read it. */}
-              <div className="space-y-3">
-                <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
-                  <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-2">Front</p>
-                  <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                    <MathText>{entry.card.front_latex}</MathText>
-                  </p>
-                </div>
-                <div className="bg-brand-50 rounded-xl border border-brand-100 p-5">
-                  <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-2">Back</p>
-                  <p className="text-sm text-neutral-700 leading-relaxed">
-                    <MathText>{entry.card.back_latex}</MathText>
-                  </p>
-                </div>
-              </div>
-            </>
-          );
-        })()}
-
-        {/* ─── Review: lesson entry (read-only re-display) ──────────────── */}
-        {inReview && reviewEntry?.kind === "lesson" && sessionId && (() => {
-          const entry = reviewEntry;
-          return (
-            <>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-600">
-                  Read-only · Lesson
-                </span>
-              </div>
-              {/* Re-render the lesson view read-only (no complete/skip callbacks while inReview). */}
-              <MathLessonView
-                sessionId={sessionId}
-                keywordId={entry.keywordId}
-                keywordLabel={entry.keywordLabel}
-                onComplete={() => { /* read-only: do nothing */ }}
-                onSkip={() => { /* read-only: do nothing */ }}
-              />
-            </>
-          );
-        })()}
-
-        {/* ─── Live practice / Revealed / Review (question entry) ──────── */}
-        {(isInPracticePhase || (inReview && reviewEntry?.kind === "question")) &&
-          (inReview ? (reviewEntry?.kind === "question" ? reviewEntry : null) : question) && (() => {
-          // When in review, render the historical question entry READ-ONLY.
-          const qEntry = inReview ? (reviewEntry as Extract<TimelineEntry, { kind: "question" }>) : null;
-          const dispQuestion = (inReview ? qEntry!.question : question)!;
-          const dispSelected = inReview ? qEntry!.selectedChoice : selectedChoice;
-          const dispRevealed = inReview ? qEntry!.revealed : phase === "revealed";
-          return (
-          <>
-            {/* Badge row */}
-            <div className="flex items-center gap-2 flex-wrap">
-              {isReviewCard && !inReview && (
-                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-700">
-                  Review
-                </span>
-              )}
-              {inReview && (
-                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-600">
-                  {dispRevealed ? "Read-only" : "Skipped"}
-                </span>
-              )}
-            </div>
-
-            {/* Stem */}
-            <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
-              <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                <MathText>{dispQuestion.stem_latex}</MathText>
-              </p>
-            </div>
-
-            {/* Action bar — quick refresher / see lesson (POPUP) / prioritize.
-                Keyed to the SERVED question's keyword so see-lesson corresponds (3,7). */}
-            {!inReview && (
-              <QuestionToolbar
-                system="math"
-                course={course}
-                keywordId={servedKeywordId ?? currentKeyword?.id ?? null}
-                sessionId={sessionId || null}
-                questionId={dispQuestion.id}
-                contentType="question"
-                resetSignal={dispQuestion.id}
-                answerSignal={phase === "revealed" ? dispQuestion.id : undefined}
-                onStateChange={() => bufferRef.current?.clear()}
-              />
-            )}
-
-            {/* Hint */}
-            {!inReview && phase === "practicing" && question?.hint_latex && (
-              <div className="flex justify-center">
-                {!showHint ? (
-                  <button
-                    onClick={() => setShowHint(true)}
-                    className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2"
-                  >
-                    Show hint
-                  </button>
-                ) : (
-                  <div className="bg-amber-50 rounded-xl border border-amber-100 p-3 w-full text-left">
-                    <p className="text-xs font-semibold text-amber-700 mb-1">Hint</p>
-                    <p className="text-sm text-neutral-700 leading-relaxed">
-                      <MathText>{question.hint_latex}</MathText>
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-            {/* Choices */}
-            <CorrectPulse
-              trigger={!inReview && phase === "revealed" && lastAnswerCorrect}
-              className="block w-full"
-            >
-              <div className="space-y-2">
-                {dispQuestion.choices.map((choice, i) => {
-                  let state: "default" | "selected" | "correct" | "wrong" | "dimmed" = "default";
-                  if (dispRevealed) {
-                    if (i === dispQuestion.correct_index) state = "correct";
-                    else if (i === dispSelected) state = "wrong";
-                    else state = "dimmed";
-                  }
-                  return (
-                    <ChoiceButton
-                      key={i}
-                      index={i}
-                      text={choice}
-                      state={state}
-                      disabled={inReview || dispRevealed}
-                      onClick={() => { if (!inReview) handleChoice(i); }}
-                    />
-                  );
-                })}
-              </div>
-            </CorrectPulse>
-
-            {/* Affirmation — the satisfying "Correct!" moment (live only) */}
-            {!inReview && phase === "revealed" && (
-              <AnswerAffirmation correct={lastAnswerCorrect} streak={combo} />
-            )}
-
-            {/* I don't know — live only */}
-            {!inReview && phase === "practicing" && (
-              <div className="flex justify-center">
-                <button
-                  onClick={handleDontKnow}
-                  className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
-                >
-                  I don&apos;t know
-                </button>
-              </div>
-            )}
-
-            {/* Worked solution */}
-            {dispRevealed && dispQuestion.solution_latex && (
-              <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
-                <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
-                  Solution
-                </p>
-                <p className="text-sm text-neutral-700 leading-relaxed">
-                  <MathText>{dispQuestion.solution_latex}</MathText>
-                </p>
-              </div>
-            )}
-
-            {/* Lesson recommendations now surface as a closeable POPUP (LessonModal,
-                rendered near the page root), not an inline bottom offer. */}
-
-            {/* Feedback + Continue — live only (review is navigated via Back/Forward) */}
-            {!inReview && phase === "revealed" && (
-              <>
-                <MathFeedbackWidget
-                  sessionId={sessionId}
-                  contentType="question"
-                  contentId={question!.id}
-                  className="px-1"
-                />
-                <button
-                  onClick={handleNext}
-                  className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
-                >
-                  Continue
-                </button>
-              </>
-            )}
-          </>
-          );
-        })()}
-
-        {/* ─── Mini-quiz ──────────────────────────────────────────────────── */}
-        {(phase === "mini_quiz" || phase === "mini_quiz_revealed") && currentQuizQuestion && (
-          <>
-            {/* Checkpoint badge */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700">
-                Checkpoint
-              </span>
-            </div>
-
-            {/* Stem */}
-            <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
-              <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                <MathText>{currentQuizQuestion.stem_latex}</MathText>
-              </p>
-            </div>
-
-            {/* Choices */}
-            <CorrectPulse
-              trigger={phase === "mini_quiz_revealed" && lastAnswerCorrect}
-              className="block w-full"
-            >
-              <div className="space-y-2">
-                {currentQuizQuestion.choices.map((choice, i) => {
-                  let state: "default" | "selected" | "correct" | "wrong" | "dimmed" = "default";
-                  if (phase === "mini_quiz_revealed") {
-                    if (i === currentQuizQuestion.correct_index) state = "correct";
-                    else if (i === quizSelectedChoice) state = "wrong";
-                    else state = "dimmed";
-                  }
-                  return (
-                    <ChoiceButton
-                      key={i}
-                      index={i}
-                      text={choice}
-                      state={state}
-                      disabled={phase === "mini_quiz_revealed"}
-                      onClick={() => handleQuizChoice(i)}
-                    />
-                  );
-                })}
-              </div>
-            </CorrectPulse>
-
-            {/* Affirmation */}
-            {phase === "mini_quiz_revealed" && (
-              <AnswerAffirmation correct={lastAnswerCorrect} streak={combo} />
-            )}
-
-            {/* Solution */}
-            {phase === "mini_quiz_revealed" && currentQuizQuestion.solution_latex && (
-              <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
-                <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
-                  Solution
-                </p>
-                <p className="text-sm text-neutral-700 leading-relaxed">
-                  <MathText>{currentQuizQuestion.solution_latex}</MathText>
-                </p>
-              </div>
-            )}
-
-            {phase === "mini_quiz_revealed" && (
+          {/* Done (shouldn't appear — course_complete replaces it) */}
+          {phase === "done" && (
+            <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs text-center space-y-4">
+              <p className="text-neutral-900 font-semibold">Session complete!</p>
               <button
-                onClick={handleQuizNext}
+                onClick={() => advanceToNextCategory(sessionId)}
                 className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
               >
-                {quizIndex + 1 >= quizQuestions.length ? "Continue" : "Next"}
+                Continue
               </button>
-            )}
-          </>
-        )}
-
-        {/* ─── Checkpoint quiz results (remedial offer) ─────────────────── */}
-        {phase === "quiz_results" && (
-          <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs space-y-5">
-            <div className="text-center space-y-2">
-              <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mx-auto text-2xl">
-                📋
-              </div>
-              <h1 className="text-lg font-semibold text-neutral-900">
-                Checkpoint results — {quizScorePct}% correct
-              </h1>
-              <p className="text-sm text-neutral-500">
-                {failedQuizKeywords.length > 0
-                  ? "You missed some topics. Practice them now or continue."
-                  : "Great work! All topics passed."}
-              </p>
             </div>
-            {failedQuizKeywords.length > 0 && (
-              <div className="space-y-2">
-                <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
-                  Topics to review
-                </p>
-                {failedQuizKeywords.map((kw) => (
-                  <button
-                    key={kw.id}
-                    onClick={() => {
-                      const catId = pendingAdvanceCategoryRef.current;
-                      if (!catId) return;
-                      // Point queueIndex to this keyword (if in queue) so currentKeyword resolves correctly.
-                      const kwIdx = queueRef.current.findIndex((q) => q.id === kw.id);
-                      if (kwIdx >= 0) {
-                        setQueueIndex(kwIdx);
-                        queueIndexRef.current = kwIdx;
-                      }
-                      const fromQueue = queueRef.current[kwIdx >= 0 ? kwIdx : 0];
-                      currentKwScoreRef.current = fromQueue?.score ?? MASTERY_START;
-                      bufferRef.current?.clear();
-                      loadQuestion(sessionId, kw.id, catId);
-                    }}
-                    className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-amber-200 bg-amber-50 text-sm text-neutral-800 hover:bg-amber-100 transition-colors text-left"
-                  >
-                    <span className="font-medium">{kw.label}</span>
-                    <span className="text-amber-700 text-xs font-semibold">Practice →</span>
-                  </button>
-                ))}
-              </div>
-            )}
-            <button
-              onClick={() => advanceToNextCategory(sessionId)}
-              className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
-            >
-              Continue to next unit
-            </button>
-          </div>
-        )}
+          )}
 
-        {/* Done (shouldn't appear — course_complete replaces it) */}
-        {phase === "done" && (
-          <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs text-center space-y-4">
-            <p className="text-neutral-900 font-semibold">Session complete!</p>
-            <button
-              onClick={() => advanceToNextCategory(sessionId)}
-              className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
-            >
-              Continue
-            </button>
-          </div>
-        )}
-
-      </main>
+        </main>
+      )}
 
       {/* See-lesson POPUP — opened from the toolbar (handled there), the "Learn
           this" header button, the after-problem offer, and auto-surfaced on
@@ -2249,6 +2404,16 @@ function MathAutoInner({
           label={lessonModal.label}
           sessionId={sessionId || null}
           onClose={() => setLessonModal(null)}
+        />
+      )}
+
+      {/* Read-only history review modal (desktop sidebar click → opens this). */}
+      {reviewEntry && (
+        <HistoryReviewModal
+          entry={reviewEntry}
+          sessionId={sessionId}
+          system="math"
+          onClose={() => setReviewEntry(null)}
         />
       )}
 

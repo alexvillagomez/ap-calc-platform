@@ -16,6 +16,7 @@ import { NavMenu } from "@/components/nav/NavMenu";
 import { CorrectPulse } from "@/components/ui/CorrectPulse";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
+import { awardQuiz } from "@/lib/points";
 import { getOrCreateMathSession } from "@/lib/mathSession";
 import {
   MathQueueKeyword,
@@ -25,6 +26,9 @@ import {
   COURSE_LABELS,
 } from "@/components/math/mathUiTypes";
 import type { MathCourse } from "@/lib/mathTypes";
+import { HistorySidebar, type HistoryEntry } from "@/components/practice/HistorySidebar";
+import HistoryReviewModal from "@/components/practice/HistoryReviewModal";
+import { useIsDesktop } from "@/lib/useIsDesktop";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -53,15 +57,16 @@ interface AttemptResponse {
   keyword_states: Record<string, { score: number; state: string; needs_lesson: boolean }>;
 }
 
-/** A snapshot of a previously-seen question for read-only review navigation. */
-interface HistoryEntry {
+/** A snapshot of a previously-seen question for the inline back/forward navigation. */
+interface LocalHistoryEntry {
   question: MathQuestion;
   selectedChoice: number | null;
   revealed: boolean;
   wasCorrect: boolean | null;
 }
 
-const HISTORY_CAP = 30;
+const LOCAL_HISTORY_CAP = 30;
+const SIDEBAR_HISTORY_CAP = 50;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -113,11 +118,11 @@ function MathPracticeInner({
 
   const [question, setQuestion] = useState<MathQuestion | null>(null);
   // Movement/review history: previously-seen questions (answered or skipped).
-  const historyRef = useRef<HistoryEntry[]>([]);
+  const historyRef = useRef<LocalHistoryEntry[]>([]);
   // null = viewing the LIVE current question; otherwise index into historyRef.
   const [reviewIndex, setReviewIndex] = useState<number | null>(null);
   const inReview = reviewIndex !== null;
-  const reviewEntry = inReview ? historyRef.current[reviewIndex] ?? null : null;
+  const localReviewEntry = inReview ? historyRef.current[reviewIndex] ?? null : null;
   const [isReviewCard, setIsReviewCard] = useState(false);
   const [pendingReviewBetweenTopics, setPendingReviewBetweenTopics] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
@@ -133,6 +138,7 @@ function MathPracticeInner({
   const [usedRefresher, setUsedRefresher] = useState(false);
 
   useStreakTouchOnce();
+  const isDesktop = useIsDesktop();
 
   const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>(() => {
     if (typeof window !== "undefined") {
@@ -293,10 +299,14 @@ function MathPracticeInner({
 
   // ── Handle choice ──────────────────────────────────────────────────────────
 
+  // Sidebar history (for the HistorySidebar + HistoryReviewModal).
+  const [sidebarHistory, setSidebarHistory] = useState<HistoryEntry[]>([]);
+  const [sidebarReviewEntry, setSidebarReviewEntry] = useState<HistoryEntry | null>(null);
+
   // Push the currently-live question into review history (answered or skipped).
   const pushHistory = useCallback(
-    (entry: HistoryEntry) => {
-      historyRef.current = [...historyRef.current, entry].slice(-HISTORY_CAP);
+    (entry: LocalHistoryEntry) => {
+      historyRef.current = [...historyRef.current, entry].slice(-LOCAL_HISTORY_CAP);
     },
     []
   );
@@ -310,6 +320,30 @@ function MathPracticeInner({
 
       const correct = idx === question.correct_index;
       pushHistory({ question, selectedChoice: idx, revealed: true, wasCorrect: correct });
+      setSidebarHistory((prev) =>
+        [
+          ...prev,
+          {
+            uid: `${question.id}-${Date.now()}`,
+            kind: "question" as const,
+            question: {
+              id: question.id,
+              stem: question.stem_latex,
+              choices: question.choices,
+              correct_index: question.correct_index,
+              explanation: question.solution_latex,
+              keyword_weights: question.keyword_weights,
+              primary_keyword_id: question.primary_keyword_id,
+            },
+            selectedChoice: idx,
+            dontKnow: false,
+            wasCorrect: correct,
+            keywordId:
+              question.primary_keyword_id ??
+              primaryKeywordId(question.keyword_weights),
+          },
+        ].slice(-SIDEBAR_HISTORY_CAP)
+      );
       setLastAnswerCorrect(correct);
       setCombo((prev) => {
         const next = comboReducer({ count: prev }, correct ? "correct" : "incorrect").count;
@@ -319,6 +353,7 @@ function MathPracticeInner({
       });
 
       setStats((s) => ({ ...s, answered: s.answered + 1, correct: s.correct + (correct ? 1 : 0) }));
+      awardQuiz();
 
       if (!isReviewCard) {
         setTopicQuestionCount((n) => n + 1);
@@ -369,10 +404,35 @@ function MathPracticeInner({
     setSelectedChoice(null);
     setPhase("revealed");
     pushHistory({ question, selectedChoice: null, revealed: true, wasCorrect: false });
+    setSidebarHistory((prev) =>
+      [
+        ...prev,
+        {
+          uid: `${question.id}-${Date.now()}`,
+          kind: "question" as const,
+          question: {
+            id: question.id,
+            stem: question.stem_latex,
+            choices: question.choices,
+            correct_index: question.correct_index,
+            explanation: question.solution_latex,
+            keyword_weights: question.keyword_weights,
+            primary_keyword_id: question.primary_keyword_id,
+          },
+          selectedChoice: null,
+          dontKnow: true,
+          wasCorrect: false,
+          keywordId:
+            question.primary_keyword_id ??
+            primaryKeywordId(question.keyword_weights),
+        },
+      ].slice(-SIDEBAR_HISTORY_CAP)
+    );
     setLastAnswerCorrect(false);
     setCombo((prev) => comboReducer({ count: prev }, "incorrect").count);
     onIncorrectAnswer();
     setStats((s) => ({ ...s, answered: s.answered + 1 }));
+    awardQuiz();
     if (!isReviewCard) {
       consecutiveWrongRef.current += 1;
       setTopicCorrectStreak(0);
@@ -638,7 +698,26 @@ function MathPracticeInner({
 
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4 pb-safe-bottom">
+      {/* HistoryReviewModal */}
+      {sidebarReviewEntry && (
+        <HistoryReviewModal
+          entry={sidebarReviewEntry}
+          sessionId={sessionId}
+          system="math"
+          onClose={() => setSidebarReviewEntry(null)}
+        />
+      )}
+
+      <div className="max-w-6xl mx-auto px-4 py-8 flex gap-6 items-start">
+        {/* LEFT — history sidebar (desktop only) */}
+        {isDesktop && (
+          <aside className="w-56 shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
+            <HistorySidebar entries={sidebarHistory} onSelect={setSidebarReviewEntry} />
+          </aside>
+        )}
+
+        {/* CENTER — main content */}
+        <main className="flex-1 min-w-0 space-y-4 pb-safe-bottom">
         {/* Loading */}
         {phase === "loading" && (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
@@ -701,11 +780,11 @@ function MathPracticeInner({
         )}
 
         {/* Practice / Revealed / Review */}
-        {(phase === "practicing" || phase === "revealed") && (inReview ? reviewEntry : question) && (() => {
+        {(phase === "practicing" || phase === "revealed") && (inReview ? localReviewEntry : question) && (() => {
           // When in review, render the historical entry READ-ONLY.
-          const dispQuestion = (inReview ? reviewEntry!.question : question)!;
-          const dispSelected = inReview ? reviewEntry!.selectedChoice : selectedChoice;
-          const dispRevealed = inReview ? reviewEntry!.revealed : phase === "revealed";
+          const dispQuestion = (inReview ? localReviewEntry!.question : question)!;
+          const dispSelected = inReview ? localReviewEntry!.selectedChoice : selectedChoice;
+          const dispRevealed = inReview ? localReviewEntry!.revealed : phase === "revealed";
           const hasEarlier = inReview ? reviewIndex! > 0 : historyRef.current.length > 0;
           const positionLabel = inReview
             ? `Reviewing earlier question (${reviewIndex! + 1} of ${historyRef.current.length})`
@@ -769,20 +848,23 @@ function MathPracticeInner({
               </p>
             </div>
 
-            <QuestionToolbar
-              system="math"
-              course={course}
-              keywordId={
-                dispQuestion.primary_keyword_id ??
-                primaryKeywordId(dispQuestion.keyword_weights)
-              }
-              sessionId={sessionId}
-              questionId={dispQuestion.id}
-              contentType="question"
-              resetSignal={dispQuestion.id}
-              answerSignal={dispRevealed ? "revealed" : phase}
-              onRefresherUsed={() => setUsedRefresher(true)}
-            />
+            {/* Mobile-only inline toolbar (desktop shows it in right rail) */}
+            {!isDesktop && !inReview && (
+              <QuestionToolbar
+                system="math"
+                course={course}
+                keywordId={
+                  dispQuestion.primary_keyword_id ??
+                  primaryKeywordId(dispQuestion.keyword_weights)
+                }
+                sessionId={sessionId}
+                questionId={dispQuestion.id}
+                contentType="question"
+                resetSignal={dispQuestion.id}
+                answerSignal={dispRevealed ? "revealed" : phase}
+                onRefresherUsed={() => setUsedRefresher(true)}
+              />
+            )}
 
             {/* Hint button */}
             {!inReview && phase === "practicing" && question?.hint_latex && (
@@ -975,7 +1057,28 @@ function MathPracticeInner({
             </div>
           </div>
         )}
-      </main>
+        </main>
+
+        {/* RIGHT — QuestionToolbar rail (desktop only, active question) */}
+        {isDesktop && question && (phase === "practicing" || phase === "revealed") && !inReview && (
+          <aside className="w-60 shrink-0 sticky top-20">
+            <QuestionToolbar
+              system="math"
+              course={course}
+              keywordId={
+                question.primary_keyword_id ??
+                primaryKeywordId(question.keyword_weights)
+              }
+              sessionId={sessionId}
+              questionId={question.id}
+              contentType="question"
+              resetSignal={question.id}
+              answerSignal={phase === "revealed" ? "revealed" : phase}
+              onRefresherUsed={() => setUsedRefresher(true)}
+            />
+          </aside>
+        )}
+      </div>
     </div>
   );
 }

@@ -323,7 +323,7 @@ MECE + COVERAGE: each card a distinct SUBJECT — the same subject reworded is t
 
 NOT A QUIZ: no solve/evaluate/compute/simplify, no numeric problem — that's a quiz.
 
-FORMAT — the front names the SUBJECT with a GENERAL cue or directive (e.g. "Describe …", "… ?"), not a full sentence, ≤12 words — general enough that the student must RECALL the whole answer, never hinted toward it. The back carries the fact(s); it MAY run a little longer and add brief useful detail, but no worked example. Put each distinct fact on its OWN LINE (a line break between them), never joined by semicolons. **Bold** the key term or answer on each line. When a fact IS a formula, write it as an actual equation with $=$, not prose like "sum of …". NO GIVEAWAY (the core rule): the front must not state or imply any part of the answer, or name its dimension/category — if reading the front hands you the back, recast it.
+FORMAT — the front names the SUBJECT with a GENERAL cue or directive (e.g. "Describe …", "… ?"), not a full sentence, ≤12 words — general enough that the student must RECALL the whole answer, never hinted toward it. The back is the bare fact — short and direct, no explanation or worked example (that's the lesson/refresher). Put each distinct fact on its OWN LINE (a line break between them), never joined by semicolons, no bold. When a fact IS a formula, write it as an actual equation with $=$, not prose like "sum of …". NO GIVEAWAY (the core rule): the front must not state or imply any part of the answer, or name its dimension/category — if reading the front hands you the back, recast it.
 
 OUT-OF-SCOPE BAN — HARD GATE: anything out-of-scope (or owned by a later keyword) is forbidden.
 ${LATEX_RULES.split("\n").slice(0, 3).join("\n")}

@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
+import { GrindMeter } from "@/components/gamification/GrindMeter";
 import { NavMenu } from "@/components/nav/NavMenu";
 import { ChoiceButton } from "@/components/mcat/ChoiceButton";
 import { LoadingPanel } from "@/components/mcat/LoadingPanel";
@@ -16,7 +17,10 @@ import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import MathText from "@/components/mcat/MathText";
 import QuestionToolbar from "@/components/practice/QuestionToolbar";
 import FlipCard, { type FlipResult } from "@/components/cards/FlipCard";
+import { HistorySidebar, type HistoryEntry } from "@/components/practice/HistorySidebar";
+import HistoryReviewModal from "@/components/practice/HistoryReviewModal";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
+import { useIsDesktop } from "@/lib/useIsDesktop";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { groupCategoriesBySection } from "@/lib/mcatSection";
 import { awardFlashcard, awardQuiz } from "@/lib/points";
@@ -88,6 +92,24 @@ type KwStates = Record<
   string,
   { score?: number; state?: string; needs_lesson?: boolean }
 >;
+
+// ── Review-queue types ────────────────────────────────────────────────────────
+
+type ReviewEntry =
+  | {
+      kind: "flashcard";
+      card: Flashcard;
+      keywordId: string | null;
+      dueAt: number;
+      misses: number;
+    }
+  | {
+      kind: "question";
+      sourceQuestionId: string;
+      keywordId: string | null;
+      dueAt: number;
+      misses: number;
+    };
 
 type PagePhase = "select" | "practice";
 type QuestionPhase =
@@ -574,6 +596,8 @@ function McatPracticePageInner() {
   });
 
   // ── Practice phase ──
+  const isDesktop = useIsDesktop();
+
   const [pagePhase, setPagePhase] = useState<PagePhase>("select");
   // While practicing, "Change topics" opens the selection UI as a popup overlay
   // (NOT a phase switch) so the in-progress question stays mounted underneath and
@@ -590,6 +614,12 @@ function McatPracticePageInner() {
   const [errorMsg, setErrorMsg] = useState("");
   const [stats, setStats] = useState<SessionStats>({ answered: 0, correct: 0 });
 
+  // ── History (desktop sidebar) ─────────────────────────────────────────────
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [reviewEntry, setReviewEntry] = useState<HistoryEntry | null>(null);
+  /** Monotonic UID counter so repeated identical items get distinct keys. */
+  const historyCountRef = useRef<number>(0);
+
   // ── Serving bookkeeping (refs — read inside async serve/answer flows) ─────
   /** Snapshot of the selected leaf ids, frozen when practice starts. */
   const selectionRef = useRef<string[]>([]);
@@ -603,6 +633,14 @@ function McatPracticePageInner() {
   const excludeRef = useRef<string[]>([]);
   /** Flashcard ids already shown this session. */
   const seenCardsRef = useRef<Set<string>>(new Set());
+  /** Epoch ms when the current practice session started (for GrindMeter). */
+  const sessionStartRef = useRef<number>(0);
+  /** Monotonic "items shown" clock — incremented at the top of serveNext. */
+  const servedCountRef = useRef<number>(0);
+  /** Queue of missed items to re-serve, sorted by dueAt ascending. */
+  const reviewQueueRef = useRef<ReviewEntry[]>([]);
+  /** Per-item miss count: question id or flashcard id → number of misses. */
+  const missCountRef = useRef<Map<string, number>>(new Map());
 
   useEffect(() => {
     (async () => {
@@ -757,6 +795,31 @@ function McatPracticePageInner() {
     return deck.find((c) => !seenCardsRef.current.has(c.id)) ?? deck[0] ?? null;
   }
 
+  /** Fetch a similar question for re-queue serving (mirrors handleSimilar but returns the question). */
+  async function fetchSimilarQuestion(sourceId: string): Promise<Question> {
+    const res = await fetch("/api/mcat/similar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id: sessionId, question_id: sourceId }),
+    });
+    if (!res.ok) throw new Error(await res.text().catch(() => "Unknown error"));
+    const data = (await res.json()) as { question: Question };
+    const q = data.question;
+    if (!excludeRef.current.includes(q.id)) {
+      excludeRef.current = [...excludeRef.current, q.id];
+    }
+    return q;
+  }
+
+  /** Cap the review queue at 20 entries — drop the oldest (smallest dueAt) when full. */
+  function enqueueMiss(entry: ReviewEntry): void {
+    const q = reviewQueueRef.current;
+    q.push(entry);
+    // Keep sorted by dueAt so we can easily find the earliest due entry.
+    q.sort((a, b) => a.dueAt - b.dueAt);
+    if (q.length > 20) q.splice(0, q.length - 20);
+  }
+
   /**
    * Serve the next item: pick a keyword (60% random / 40% weakness-weighted),
    * then pick flashcard-vs-question adaptively by mastery (within the enabled
@@ -771,6 +834,31 @@ function McatPracticePageInner() {
     setExplanation("");
     setUsedRefresher(false);
     setErrorMsg("");
+
+    // Advance the monotonic clock and check for a due review entry.
+    servedCountRef.current += 1;
+    const now = servedCountRef.current;
+    const queue = reviewQueueRef.current;
+    const dueIdx = queue.findIndex((e) => e.dueAt <= now);
+    if (dueIdx !== -1) {
+      const entry = queue.splice(dueIdx, 1)[0];
+      if (entry.kind === "flashcard") {
+        setCurrentKeywordId(entry.keywordId);
+        setActiveItem({ kind: "flashcard", data: entry.card });
+        setItemPhase("answering");
+        return;
+      }
+      // question entry — fetch a similar question; fall through on failure
+      try {
+        const q = await fetchSimilarQuestion(entry.sourceQuestionId);
+        setCurrentKeywordId(entry.keywordId);
+        setActiveItem({ kind: "question", data: q });
+        setItemPhase("answering");
+        return;
+      } catch {
+        // fall through to normal pick
+      }
+    }
 
     const kw = pickKeyword(buildPool());
     if (!kw) {
@@ -816,7 +904,13 @@ function McatPracticePageInner() {
     excludeRef.current = [];
     seenCardsRef.current = new Set();
     recentWrongRef.current = new Map();
+    sessionStartRef.current = Date.now();
+    servedCountRef.current = 0;
+    reviewQueueRef.current = [];
+    missCountRef.current = new Map();
     setStats({ answered: 0, correct: 0 });
+    setHistory([]);
+    historyCountRef.current = 0;
     setShowTopicModal(false);
     setPagePhase("practice");
     serveNext(0);
@@ -857,7 +951,7 @@ function McatPracticePageInner() {
         isCorrect ? 0 : (recentWrongRef.current.get(kwId) ?? 0) + 1
       );
     }
-    if (isCorrect) awardQuiz();
+    awardQuiz();
 
     fetch("/api/mcat/attempt", {
       method: "POST",
@@ -884,7 +978,39 @@ function McatPracticePageInner() {
       answered: s.answered + 1,
       correct: s.correct + (isCorrect ? 1 : 0),
     }));
+
+    if (!isCorrect) {
+      const prevMisses = missCountRef.current.get(q.id) ?? 0;
+      const newMisses = prevMisses + 1;
+      missCountRef.current.set(q.id, newMisses);
+      const gap = Math.min(1 + prevMisses, 5);
+      enqueueMiss({
+        kind: "question",
+        sourceQuestionId: q.id,
+        keywordId: kwId,
+        dueAt: servedCountRef.current + gap,
+        misses: newMisses,
+      });
+    }
+
     setItemPhase("revealed");
+
+    // Append to history (display only — no scoring side-effects).
+    {
+      const uid = `${Date.now()}-${historyCountRef.current++}`;
+      setHistory((h) => [
+        ...h,
+        {
+          uid,
+          kind: "question",
+          question: q,
+          selectedChoice: idx,
+          dontKnow: false,
+          wasCorrect: isCorrect,
+          keywordId: kwId,
+        },
+      ]);
+    }
   };
 
   const handleDontKnow = async () => {
@@ -897,6 +1023,7 @@ function McatPracticePageInner() {
     const q = activeItem.data;
     const kwId = currentKeywordId;
     setDontKnow(true);
+    awardQuiz();
     if (kwId) {
       recentWrongRef.current.set(
         kwId,
@@ -926,7 +1053,39 @@ function McatPracticePageInner() {
     setRevealCorrect(q.correct_index);
     setExplanation(q.explanation);
     setStats((s) => ({ ...s, answered: s.answered + 1 }));
+
+    {
+      const prevMisses = missCountRef.current.get(q.id) ?? 0;
+      const newMisses = prevMisses + 1;
+      missCountRef.current.set(q.id, newMisses);
+      const gap = Math.min(1 + prevMisses, 5);
+      enqueueMiss({
+        kind: "question",
+        sourceQuestionId: q.id,
+        keywordId: kwId,
+        dueAt: servedCountRef.current + gap,
+        misses: newMisses,
+      });
+    }
+
     setItemPhase("revealed");
+
+    // Append to history.
+    {
+      const uid = `${Date.now()}-${historyCountRef.current++}`;
+      setHistory((h) => [
+        ...h,
+        {
+          uid,
+          kind: "question",
+          question: q,
+          selectedChoice: null,
+          dontKnow: true,
+          wasCorrect: false,
+          keywordId: kwId,
+        },
+      ]);
+    }
   };
 
   const handleGrade = async (result: FlipResult) => {
@@ -942,7 +1101,7 @@ function McatPracticePageInner() {
         gotIt ? 0 : (recentWrongRef.current.get(kwId) ?? 0) + 1
       );
     }
-    if (gotIt) awardFlashcard();
+    awardFlashcard();
     setStats((s) => ({
       answered: s.answered + 1,
       correct: s.correct + (gotIt ? 1 : 0),
@@ -964,6 +1123,29 @@ function McatPracticePageInner() {
       }
     } catch {
       /* non-fatal */
+    }
+
+    if (!gotIt) {
+      const prevMisses = missCountRef.current.get(card.id) ?? 0;
+      const newMisses = prevMisses + 1;
+      missCountRef.current.set(card.id, newMisses);
+      const gap = Math.min(1 + prevMisses, 5);
+      enqueueMiss({
+        kind: "flashcard",
+        card,
+        keywordId: kwId,
+        dueAt: servedCountRef.current + gap,
+        misses: newMisses,
+      });
+    }
+
+    // Append to history.
+    {
+      const uid = `${Date.now()}-${historyCountRef.current++}`;
+      setHistory((h) => [
+        ...h,
+        { uid, kind: "flashcard", card, gotIt, keywordId: kwId },
+      ]);
     }
 
     // Flashcards have no separate reveal screen — advance straight to the next
@@ -1011,7 +1193,7 @@ function McatPracticePageInner() {
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-2.5 flex items-center gap-2 flex-wrap">
+        <div className="w-full px-4 sm:px-6 py-2.5 flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-2 min-w-0 flex-1">
             <Link href="/mcat" className="shrink-0">
               <LoderaLogo size={20} />
@@ -1027,10 +1209,14 @@ function McatPracticePageInner() {
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            {pagePhase === "practice" && stats.answered > 0 && (
-              <span className="text-xs text-neutral-500 tabular-nums shrink-0">
-                {stats.correct}/{stats.answered}
-              </span>
+            {pagePhase === "practice" && (
+              <GrindMeter
+                mode="quiz"
+                streak={stats.correct}
+                answered={stats.answered}
+                startedAt={sessionStartRef.current}
+                compact
+              />
             )}
             {pagePhase === "practice" && (
               <button
@@ -1046,7 +1232,7 @@ function McatPracticePageInner() {
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4">
+      <main className={`mx-auto px-4 py-8 space-y-4 ${pagePhase === "practice" ? "max-w-6xl" : "max-w-2xl"}`}>
         {/* ── Phase 1: Topic select (inline) — and the in-practice popup ── */}
         {(pagePhase === "select" || showTopicModal) && (
           <TopicSelectShell
@@ -1272,7 +1458,16 @@ function McatPracticePageInner() {
 
         {/* ── Phase 2: Practice loop ─────────────────────────────────────── */}
         {pagePhase === "practice" && (
-          <>
+          <div className={isDesktop ? "flex gap-6 items-start" : undefined}>
+            {/* Left history sidebar — desktop only */}
+            {isDesktop && (
+              <aside className="w-56 shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
+                <HistorySidebar entries={history} onSelect={setReviewEntry} />
+              </aside>
+            )}
+
+            {/* Center: all existing practice content */}
+            <div className="flex-1 min-w-0 space-y-4">
             {/* Loading next item */}
             {itemPhase === "loading-next" && (
               <LoadingPanel
@@ -1303,155 +1498,213 @@ function McatPracticePageInner() {
 
             {/* Active flashcard */}
             {itemPhase === "answering" && activeItem?.kind === "flashcard" && (
-              <>
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">
-                    Flashcard
-                  </span>
-                  <span className="text-xs text-neutral-400">
-                    Recall it, then grade yourself
-                  </span>
-                </div>
-                <FlipCard
-                  front={activeItem.data.front}
-                  back={activeItem.data.back}
-                  onGrade={handleGrade}
-                  resetKey={activeItem.data.id}
-                />
+              <div className={isDesktop ? "flex gap-6 items-start" : undefined}>
+                {/* Left column: pill + FlipCard */}
+                <div className={isDesktop ? "flex-1 min-w-0 space-y-4" : "space-y-4"}>
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">
+                      Flashcard
+                    </span>
+                    <span className="text-xs text-neutral-400">
+                      Recall it, then grade yourself
+                    </span>
+                  </div>
+                  <FlipCard
+                    front={activeItem.data.front}
+                    back={activeItem.data.back}
+                    onGrade={handleGrade}
+                    resetKey={activeItem.data.id}
+                  />
 
-                {/* Lesson / refresher / prioritize — on-demand for this card's topic */}
-                <QuestionToolbar
-                  system="mcat"
-                  keywordId={
-                    currentKeywordId ??
-                    primaryKeywordId(activeItem.data.keyword_weights)
-                  }
-                  sessionId={sessionId}
-                  questionId={activeItem.data.id}
-                  contentType="flashcard"
-                  resetSignal={activeItem.data.id}
-                />
-              </>
+                  {/* Lesson / refresher / prioritize — inline on mobile */}
+                  {!isDesktop && (
+                    <QuestionToolbar
+                      system="mcat"
+                      keywordId={
+                        currentKeywordId ??
+                        primaryKeywordId(activeItem.data.keyword_weights)
+                      }
+                      sessionId={sessionId}
+                      questionId={activeItem.data.id}
+                      contentType="flashcard"
+                      resetSignal={activeItem.data.id}
+                    />
+                  )}
+                </div>
+
+                {/* Right sidebar: toolbar (desktop only) */}
+                {isDesktop && (
+                  <aside className="w-60 shrink-0 sticky top-20">
+                    <QuestionToolbar
+                      system="mcat"
+                      keywordId={
+                        currentKeywordId ??
+                        primaryKeywordId(activeItem.data.keyword_weights)
+                      }
+                      sessionId={sessionId}
+                      questionId={activeItem.data.id}
+                      contentType="flashcard"
+                      resetSignal={activeItem.data.id}
+                    />
+                  </aside>
+                )}
+              </div>
             )}
 
             {/* Active question */}
             {(itemPhase === "answering" || itemPhase === "revealed") &&
               activeItem?.kind === "question" && (
-                <>
-                  {/* Stem */}
-                  <Card>
-                    <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                      <MathText>{activeItem.data.stem}</MathText>
-                    </p>
-                  </Card>
+                <div className={isDesktop ? "flex gap-6 items-start" : undefined}>
+                  {/* Left column: stem + choices + reveal + I don't know */}
+                  <div className={isDesktop ? "flex-1 min-w-0 space-y-4" : "space-y-4"}>
+                    {/* Stem */}
+                    <Card>
+                      <p className="text-sm font-medium text-neutral-900 leading-relaxed">
+                        <MathText>{activeItem.data.stem}</MathText>
+                      </p>
+                    </Card>
 
-                  <QuestionToolbar
-                    system="mcat"
-                    keywordId={
-                      currentKeywordId ??
-                      activeItem.data.primary_keyword_id ??
-                      primaryKeywordId(activeItem.data.keyword_weights)
-                    }
-                    sessionId={sessionId}
-                    questionId={activeItem.data.id}
-                    contentType="question"
-                    resetSignal={activeItem.data.id}
-                    answerSignal={itemPhase}
-                    onRefresherUsed={() => setUsedRefresher(true)}
-                  />
+                    {/* Toolbar inline on mobile — between stem and choices */}
+                    {!isDesktop && (
+                      <QuestionToolbar
+                        system="mcat"
+                        keywordId={
+                          activeItem.data.primary_keyword_id ??
+                          currentKeywordId ??
+                          primaryKeywordId(activeItem.data.keyword_weights)
+                        }
+                        sessionId={sessionId}
+                        questionId={activeItem.data.id}
+                        contentType="question"
+                        resetSignal={activeItem.data.id}
+                        answerSignal={itemPhase}
+                        onRefresherUsed={() => setUsedRefresher(true)}
+                      />
+                    )}
 
-                  {/* Choices */}
-                  <div className="space-y-2">
-                    {activeItem.data.choices.map((choice, i) => {
-                      let state: "default" | "correct" | "wrong" | "dimmed" =
-                        "default";
-                      if (itemPhase === "revealed") {
-                        if (i === revealCorrect) state = "correct";
-                        else if (!dontKnow && i === selectedChoice)
-                          state = "wrong";
-                        else state = "dimmed";
-                      }
-                      return (
-                        <ChoiceButton
-                          key={i}
-                          index={i}
-                          text={choice}
-                          state={state}
-                          disabled={itemPhase === "revealed"}
-                          onClick={() => handleChoice(i)}
+                    {/* Choices */}
+                    <div className="space-y-2">
+                      {activeItem.data.choices.map((choice, i) => {
+                        let state: "default" | "correct" | "wrong" | "dimmed" =
+                          "default";
+                        if (itemPhase === "revealed") {
+                          if (i === revealCorrect) state = "correct";
+                          else if (!dontKnow && i === selectedChoice)
+                            state = "wrong";
+                          else state = "dimmed";
+                        }
+                        return (
+                          <ChoiceButton
+                            key={i}
+                            index={i}
+                            text={choice}
+                            state={state}
+                            disabled={itemPhase === "revealed"}
+                            onClick={() => handleChoice(i)}
+                          />
+                        );
+                      })}
+                    </div>
+
+                    {/* I don't know — only before answering */}
+                    {itemPhase === "answering" && (
+                      <div className="flex justify-center">
+                        <button
+                          onClick={handleDontKnow}
+                          className="text-xs text-neutral-400 hover:text-neutral-600 underline"
+                        >
+                          I don&apos;t know
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Post-answer reveal */}
+                    {itemPhase === "revealed" && (
+                      <>
+                        {/* Result pill */}
+                        <div className="flex justify-center">
+                          {dontKnow ? (
+                            <span className="px-3 py-1 rounded-full bg-neutral-100 text-neutral-600 text-xs font-medium">
+                              Skipped — correct answer highlighted above
+                            </span>
+                          ) : selectedChoice === revealCorrect ? (
+                            <span className="px-3 py-1 rounded-full bg-success-100 text-success-600 text-xs font-semibold">
+                              Correct! +2
+                            </span>
+                          ) : (
+                            <span className="px-3 py-1 rounded-full bg-error-100 text-error-600 text-xs font-semibold">
+                              Incorrect
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Explanation */}
+                        {explanation && (
+                          <div className="bg-brand-50 rounded-xl px-4 py-3 border border-brand-100">
+                            <p className="text-xs font-semibold text-brand-600 mb-1 uppercase tracking-wide">
+                              Explanation
+                            </p>
+                            <p className="text-sm text-brand-800 leading-relaxed">
+                              <MathText>{explanation}</MathText>
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Feedback widget */}
+                        <FeedbackWidget
+                          sessionId={sessionId}
+                          contentType="question"
+                          contentId={activeItem.data.id}
+                          className="px-1"
                         />
-                      );
-                    })}
+
+                        {/* Action buttons */}
+                        <div className="flex gap-2">
+                          <Button variant="secondary" size="lg" onClick={handleSimilar} className="flex-1">
+                            Similar question
+                          </Button>
+                          <Button variant="primary" size="lg" onClick={handleNext} className="flex-1">
+                            Next →
+                          </Button>
+                        </div>
+                      </>
+                    )}
                   </div>
 
-                  {/* I don't know — only before answering */}
-                  {itemPhase === "answering" && (
-                    <div className="flex justify-center">
-                      <button
-                        onClick={handleDontKnow}
-                        className="text-xs text-neutral-400 hover:text-neutral-600 underline"
-                      >
-                        I don&apos;t know
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Post-answer reveal */}
-                  {itemPhase === "revealed" && (
-                    <>
-                      {/* Result pill */}
-                      <div className="flex justify-center">
-                        {dontKnow ? (
-                          <span className="px-3 py-1 rounded-full bg-neutral-100 text-neutral-600 text-xs font-medium">
-                            Skipped — correct answer highlighted above
-                          </span>
-                        ) : selectedChoice === revealCorrect ? (
-                          <span className="px-3 py-1 rounded-full bg-success-100 text-success-600 text-xs font-semibold">
-                            Correct! +2
-                          </span>
-                        ) : (
-                          <span className="px-3 py-1 rounded-full bg-error-100 text-error-600 text-xs font-semibold">
-                            Incorrect
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Explanation */}
-                      {explanation && (
-                        <div className="bg-brand-50 rounded-xl px-4 py-3 border border-brand-100">
-                          <p className="text-xs font-semibold text-brand-600 mb-1 uppercase tracking-wide">
-                            Explanation
-                          </p>
-                          <p className="text-sm text-brand-800 leading-relaxed">
-                            <MathText>{explanation}</MathText>
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Feedback widget */}
-                      <FeedbackWidget
+                  {/* Right sidebar: toolbar (desktop only) */}
+                  {isDesktop && (
+                    <aside className="w-60 shrink-0 sticky top-20">
+                      <QuestionToolbar
+                        system="mcat"
+                        keywordId={
+                          activeItem.data.primary_keyword_id ??
+                          currentKeywordId ??
+                          primaryKeywordId(activeItem.data.keyword_weights)
+                        }
                         sessionId={sessionId}
+                        questionId={activeItem.data.id}
                         contentType="question"
-                        contentId={activeItem.data.id}
-                        className="px-1"
+                        resetSignal={activeItem.data.id}
+                        answerSignal={itemPhase}
+                        onRefresherUsed={() => setUsedRefresher(true)}
                       />
-
-                      {/* Action buttons */}
-                      <div className="flex gap-2">
-                        <Button variant="secondary" size="lg" onClick={handleSimilar} className="flex-1">
-                          Similar question
-                        </Button>
-                        <Button variant="primary" size="lg" onClick={handleNext} className="flex-1">
-                          Next →
-                        </Button>
-                      </div>
-                    </>
+                    </aside>
                   )}
-                </>
+                </div>
               )}
-          </>
+            </div>{/* end center column */}
+          </div>
         )}
       </main>
+
+      {/* Read-only history review modal */}
+      {reviewEntry && (
+        <HistoryReviewModal
+          entry={reviewEntry}
+          sessionId={sessionId}
+          onClose={() => setReviewEntry(null)}
+        />
+      )}
     </div>
   );
 }

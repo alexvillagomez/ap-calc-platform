@@ -14,9 +14,11 @@ import { GrindMeter } from "@/components/gamification/GrindMeter";
 import { NavMenu } from "@/components/nav/NavMenu";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
+import { awardQuiz } from "@/lib/points";
 import { getOrCreateMathSession } from "@/lib/mathSession";
 import { MathQuestion, COURSE_LABELS } from "@/components/math/mathUiTypes";
 import type { MathCourse } from "@/lib/mathTypes";
+import { useIsDesktop } from "@/lib/useIsDesktop";
 
 const QUIZ_COUNT = 8;
 
@@ -63,6 +65,7 @@ function MathCategoryQuizInner({
   const [usedRefresher, setUsedRefresher] = useState(false);
 
   useStreakTouchOnce();
+  const isDesktop = useIsDesktop();
 
   // Resolve umbrella children via taxonomy
   const resolveKeywordIds = async (sid: string): Promise<string[] | undefined> => {
@@ -161,6 +164,7 @@ function MathCategoryQuizInner({
         usedRefresher,
       }),
     }).catch(() => {});
+    awardQuiz();
 
     setUsedRefresher(false);
     if (currentIdx + 1 >= questions.length) {
@@ -211,7 +215,9 @@ function MathCategoryQuizInner({
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4 pb-safe-bottom">
+      <div className="max-w-4xl mx-auto px-4 py-8 flex gap-6 items-start">
+        {/* CENTER — main content */}
+        <main className="flex-1 min-w-0 space-y-4 pb-safe-bottom">
         {/* Loading */}
         {phase === "loading" && (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
@@ -273,19 +279,22 @@ function MathCategoryQuizInner({
               </p>
             </div>
 
-            <QuestionToolbar
-              system="math"
-              course={course}
-              keywordId={
-                currentQ.primary_keyword_id ??
-                primaryKeywordId(currentQ.keyword_weights)
-              }
-              sessionId={sessionId}
-              questionId={currentQ.id}
-              contentType="question"
-              resetSignal={currentQ.id}
-              onRefresherUsed={() => setUsedRefresher(true)}
-            />
+            {/* Mobile-only inline toolbar (desktop shows it in right rail) */}
+            {!isDesktop && (
+              <QuestionToolbar
+                system="math"
+                course={course}
+                keywordId={
+                  currentQ.primary_keyword_id ??
+                  primaryKeywordId(currentQ.keyword_weights)
+                }
+                sessionId={sessionId}
+                questionId={currentQ.id}
+                contentType="question"
+                resetSignal={currentQ.id}
+                onRefresherUsed={() => setUsedRefresher(true)}
+              />
+            )}
 
             {/* Choices — deferred feedback */}
             <div className="space-y-2">
@@ -438,7 +447,27 @@ function MathCategoryQuizInner({
             </div>
           </div>
         )}
-      </main>
+        </main>
+
+        {/* RIGHT — QuestionToolbar rail (desktop only, active quiz question) */}
+        {isDesktop && phase === "quiz" && currentQ && (
+          <aside className="w-60 shrink-0 sticky top-20">
+            <QuestionToolbar
+              system="math"
+              course={course}
+              keywordId={
+                currentQ.primary_keyword_id ??
+                primaryKeywordId(currentQ.keyword_weights)
+              }
+              sessionId={sessionId}
+              questionId={currentQ.id}
+              contentType="question"
+              resetSignal={currentQ.id}
+              onRefresherUsed={() => setUsedRefresher(true)}
+            />
+          </aside>
+        )}
+      </div>
     </div>
   );
 }

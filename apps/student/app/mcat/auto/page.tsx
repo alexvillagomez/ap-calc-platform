@@ -42,9 +42,13 @@ import { GeneratingLoader } from "@/components/ui/GeneratingLoader";
 import QuestionToolbar from "@/components/practice/QuestionToolbar";
 import LessonModal from "@/components/practice/LessonModal";
 import FlipCard from "@/components/cards/FlipCard";
+import { HistorySidebar, type HistoryEntry } from "@/components/practice/HistorySidebar";
+import HistoryReviewModal from "@/components/practice/HistoryReviewModal";
+import { useIsDesktop } from "@/lib/useIsDesktop";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
+import { awardQuiz, awardFlashcard } from "@/lib/points";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import {
   reviewProbabilityFor,
@@ -205,29 +209,6 @@ interface AttemptResponse {
   keyword_states: Record<string, { score: number; state: string; needs_lesson: boolean }>;
 }
 
-/** A snapshot of a previously-seen question for read-only review navigation. */
-interface HistoryEntry {
-  question: Question;
-  selectedChoice: number | null;
-  revealed: boolean;
-  wasCorrect: boolean | null;
-}
-
-// ── Unified timeline (Phase E: unified back/forward) ────────────────────────
-// Every step shown to the student is appended here in order. Back/Forward walk
-// this ref; the live item is NEVER in the timeline.
-//
-// - kind "question" : answered or skipped question (same as old HistoryEntry).
-// - kind "flashcard": a single flashcard that was SHOWN (face the student saw).
-// - kind "lesson"   : a lesson that was displayed for a keyword.
-//
-// Nothing re-scores on review — all answer/grade side-effects are guarded by
-// `!inReview` in the handlers below.
-type TimelineEntry =
-  | { kind: "question"; question: Question; selectedChoice: number | null; revealed: boolean; wasCorrect: boolean | null }
-  | { kind: "flashcard"; card: Flashcard; keywordId: string; keywordLabel: string }
-  | { kind: "lesson"; keywordId: string; keywordLabel: string };
-
 const HISTORY_CAP = 30;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -280,14 +261,11 @@ function McatAutoInner() {
   const excludeIdsRef = useRef<string[]>([]);
 
   const [question, setQuestion] = useState<Question | null>(null);
-  // Unified ordered timeline of every step shown to the student in this session.
-  // null reviewIndex = viewing the LIVE item. See TimelineEntry for shape.
-  const historyRef = useRef<TimelineEntry[]>([]);
-  // null = viewing the LIVE item; otherwise an index into historyRef.
-  const [reviewIndex, setReviewIndex] = useState<number | null>(null);
-  const inReview = reviewIndex !== null;
-  // The timeline entry currently being reviewed (null when live).
-  const reviewEntry = inReview ? historyRef.current[reviewIndex] ?? null : null;
+  // Sidebar history — display-only, never re-scores.
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const historyCountRef = useRef(0);
+  // The entry currently open in the read-only review modal (null = closed).
+  const [reviewEntry, setReviewEntry] = useState<HistoryEntry | null>(null);
 
   const [isReviewCard, setIsReviewCard] = useState(false);
   const [pendingReviewBetweenTopics, setPendingReviewBetweenTopics] = useState(false);
@@ -327,6 +305,7 @@ function McatAutoInner() {
   const [combo, setCombo] = useState(0);
   // When this study session started — drives the grind meter's time-on-app heat.
   const [sessionStart] = useState(() => Date.now());
+  const isDesktop = useIsDesktop();
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
   const sessionAnswersRef = useRef(0);
 
@@ -547,7 +526,6 @@ function McatAutoInner() {
         const norm = q.stem.toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
         seenStemsRef.current = [...seenStemsRef.current, norm].slice(-50);
       }
-      setReviewIndex(null);
       setSelectedChoice(null);
       setLastAnswerCorrect(false);
       setIsReviewCard(!!d.forReview);
@@ -596,7 +574,6 @@ function McatAutoInner() {
       setPhase("generating");
       setQuestion(null);
       setSelectedChoice(null);
-      setReviewIndex(null);
       const ready = await bufferRef.current!.take({
         sessionId: sid,
         keywordId,
@@ -861,20 +838,56 @@ function McatAutoInner() {
 
   // ─── Handle choice ────────────────────────────────────────────────────────
 
-  // Append any timeline step (question / flashcard / lesson). Capped at HISTORY_CAP.
-  const pushHistory = useCallback((entry: TimelineEntry) => {
-    historyRef.current = [...historyRef.current, entry].slice(-HISTORY_CAP);
-  }, []);
+  // Append a HistoryEntry (question or flashcard). Capped at HISTORY_CAP.
+  const pushHistoryQuestion = useCallback(
+    (q: Question, selectedChoice: number | null, dontKnow: boolean, wasCorrect: boolean, keywordId: string | null) => {
+      const uid = `${Date.now()}-${historyCountRef.current++}`;
+      setHistory((h) =>
+        [
+          ...h,
+          {
+            uid,
+            kind: "question" as const,
+            question: q,
+            selectedChoice,
+            dontKnow,
+            wasCorrect,
+            keywordId,
+          },
+        ].slice(-HISTORY_CAP)
+      );
+    },
+    []
+  );
+
+  const pushHistoryFlashcard = useCallback(
+    (card: Flashcard, gotIt: boolean, keywordId: string | null) => {
+      const uid = `${Date.now()}-${historyCountRef.current++}`;
+      setHistory((h) =>
+        [
+          ...h,
+          {
+            uid,
+            kind: "flashcard" as const,
+            card,
+            gotIt,
+            keywordId,
+          },
+        ].slice(-HISTORY_CAP)
+      );
+    },
+    []
+  );
 
   const handleChoice = useCallback(
     async (idx: number) => {
-      if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
+      if (!question || !currentKeyword || phase !== "practicing") return;
 
       setSelectedChoice(idx);
       setPhase("revealed");
 
       const correct = idx === question.correct_index;
-      pushHistory({ kind: "question", question, selectedChoice: idx, revealed: true, wasCorrect: correct });
+      pushHistoryQuestion(question, idx, false, correct, servedKeywordId ?? currentKeyword.id);
       setLastAnswerCorrect(correct);
       setCombo((prev) => {
         const next = comboReducer({ count: prev }, correct ? "correct" : "incorrect").count;
@@ -884,6 +897,7 @@ function McatAutoInner() {
       });
 
       setStats((s) => ({ ...s, answered: s.answered + 1, correct: s.correct + (correct ? 1 : 0) }));
+      awardQuiz();
 
       if (!isReviewCard) {
         setTopicQuestionCount((n) => n + 1);
@@ -936,20 +950,21 @@ function McatAutoInner() {
         }
       } catch { /* non-fatal */ }
     },
-    [question, currentKeyword, phase, sessionId, isReviewCard, maybeTriggerReplan, inReview, pushHistory, servedKeywordId]
+    [question, currentKeyword, phase, sessionId, isReviewCard, maybeTriggerReplan, pushHistoryQuestion, servedKeywordId]
   );
 
   // ─── Handle don't know ────────────────────────────────────────────────────
 
   const handleDontKnow = useCallback(async () => {
-    if (!question || !currentKeyword || phase !== "practicing" || inReview) return;
+    if (!question || !currentKeyword || phase !== "practicing") return;
     setSelectedChoice(null);
     setPhase("revealed");
-    pushHistory({ kind: "question", question, selectedChoice: null, revealed: true, wasCorrect: false });
+    pushHistoryQuestion(question, null, true, false, servedKeywordId ?? currentKeyword.id);
     setLastAnswerCorrect(false);
     setCombo((prev) => comboReducer({ count: prev }, "incorrect").count);
     onIncorrectAnswer();
     setStats((s) => ({ ...s, answered: s.answered + 1 }));
+    awardQuiz();
     if (!isReviewCard) {
       consecutiveWrongRef.current += 1;
       setTopicCorrectStreak(0);
@@ -989,36 +1004,17 @@ function McatAutoInner() {
         }
       }
     } catch { /* non-fatal */ }
-  }, [question, currentKeyword, phase, sessionId, isReviewCard, maybeTriggerReplan, inReview, pushHistory, servedKeywordId]);
+  }, [question, currentKeyword, phase, sessionId, isReviewCard, maybeTriggerReplan, pushHistoryQuestion, servedKeywordId]);
 
-  // ─── Free movement: Back / Forward / Skip ───────────────────────────────────
-
-  // Step back into the unified timeline (read-only).
-  // Any answer/grade side-effects are guarded by !inReview in their handlers.
-  const handleReviewBack = useCallback(() => {
-    const hist = historyRef.current;
-    if (hist.length === 0) return;
-    setReviewIndex((cur) => (cur === null ? hist.length - 1 : Math.max(0, cur - 1)));
-  }, []);
-
-  // Step forward through the timeline; past the last entry returns to the LIVE item.
-  const handleReviewForward = useCallback(() => {
-    setReviewIndex((cur) => {
-      if (cur === null) return null;
-      const next = cur + 1;
-      return next >= historyRef.current.length ? null : next;
-    });
-  }, []);
+  // ─── Skip ────────────────────────────────────────────────────────────────────
 
   // Skip the live question: record NO attempt, no mastery/streak change; load next
   // from the SAME keyword (reuses the existing load path; never advances).
   const handleSkip = useCallback(() => {
-    if (!question || !currentKeyword || phase !== "practicing" || inReview || !frontier?.id) return;
-    pushHistory({ kind: "question", question, selectedChoice: null, revealed: false, wasCorrect: null });
+    if (!question || !currentKeyword || phase !== "practicing" || !frontier?.id) return;
     void loadQuestion(sessionId, currentKeyword.id, frontier.id);
-  }, [question, currentKeyword, phase, inReview, frontier, pushHistory, loadQuestion, sessionId]);
+  }, [question, currentKeyword, phase, frontier, loadQuestion, sessionId]);
 
-  // ─── Review a past session event (timeline tile click) ──────────────────────
   // ─── Adaptive: DECIDE the next practice item ────────────────────────────────
   // Behaviors 2/4/5: mastery sets the flashcard:question ratio + difficulty,
   // struggling shifts to flashcards, and spaced review interleaves past keywords
@@ -1219,8 +1215,6 @@ function McatAutoInner() {
     setStats((s) => ({ ...s, lessons: s.lessons + 1 }));
     consecutiveWrongRef.current = 0;
     setTopicCorrectStreak(0);
-    // Record the lesson in the unified timeline so Back can replay it.
-    pushHistory({ kind: "lesson", keywordId: currentKeyword.id, keywordLabel: currentKeyword.label });
     // Intro lesson → continue to FLASHCARDS for this skill. A mid-practice
     // struggle lesson (inTopicIntroRef false) just returns to the question.
     if (inTopicIntroRef.current) {
@@ -1229,14 +1223,12 @@ function McatAutoInner() {
     }
     lessonedKeywordsRef.current.add(currentKeyword.id);
     loadQuestion(sessionId, currentKeyword.id, frontier.id);
-  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards, pushHistory]);
+  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards]);
 
   const handleLessonSkip = useCallback(() => {
     if (!currentKeyword || !frontier?.id) return;
     consecutiveWrongRef.current = 0;
     setTopicCorrectStreak(0);
-    // Record the lesson in the unified timeline so Back can replay it (even if skipped).
-    pushHistory({ kind: "lesson", keywordId: currentKeyword.id, keywordLabel: currentKeyword.label });
     // Skipping the intro lesson → still show its FLASHCARDS, then practice.
     if (inTopicIntroRef.current) {
       void startSkillFlashcards(sessionId, currentKeyword, frontier.id);
@@ -1244,7 +1236,7 @@ function McatAutoInner() {
     }
     lessonedKeywordsRef.current.add(currentKeyword.id);
     loadQuestion(sessionId, currentKeyword.id, frontier.id);
-  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards, pushHistory]);
+  }, [currentKeyword, sessionId, frontier, loadQuestion, startSkillFlashcards]);
 
   // ─── Category complete handlers ───────────────────────────────────────────
 
@@ -1391,17 +1383,14 @@ function McatAutoInner() {
   // recirculate (spaced) until memorized; the deck ends only when all are memorized.
   const gradeFlashcard = useCallback(
     async (result: "got_it" | "missed_it" | "dont_know") => {
-      // Guard: no re-grading while in review.
-      if (inReview) return;
       const card = flashcards[fcIndex];
-      // Record that this card was shown (read-only replay available via Back).
+      // Record that this card was graded (display-only history sidebar).
       if (card && currentKeyword) {
-        pushHistory({
-          kind: "flashcard",
+        pushHistoryFlashcard(
           card,
-          keywordId: servedKeywordId ?? currentKeyword.id,
-          keywordLabel: currentKeyword.label,
-        });
+          result === "got_it",
+          servedKeywordId ?? currentKeyword.id
+        );
       }
       if (card) {
         fetch("/api/mcat/flashcard-attempt", {
@@ -1409,6 +1398,7 @@ function McatAutoInner() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ session_id: sessionId, flashcard_id: card.id, result }),
         }).catch(() => {});
+        awardFlashcard();
       }
       if (flashcardModeRef.current === "intro" && card) {
         const t = nextSrsState(fcBoxRef.current.get(card.id) ?? null, result);
@@ -1430,7 +1420,7 @@ function McatAutoInner() {
       }
       await handleFlashcardNext();
     },
-    [flashcards, fcIndex, sessionId, handleFlashcardNext, inReview, pushHistory, servedKeywordId, currentKeyword]
+    [flashcards, fcIndex, sessionId, handleFlashcardNext, pushHistoryFlashcard, servedKeywordId, currentKeyword]
   );
 
   // Skip the current flashcard: no SRS update. In the intro deck the card is
@@ -1501,7 +1491,17 @@ function McatAutoInner() {
       </header>
 
 
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4 pb-safe-bottom">
+      {/* Practice phases use a wider max-w (3-column on desktop); others stay 2xl */}
+      <main
+        className={`mx-auto px-4 py-8 pb-safe-bottom ${
+          isInPracticePhase || phase === "flashcard"
+            ? "max-w-6xl"
+            : "max-w-2xl space-y-4"
+        }`}
+      >
+
+        {/* ── Non-practice phases (keep space-y-4 layout) ─────────────────── */}
+        <div className={isInPracticePhase || phase === "flashcard" ? "" : undefined}>
 
         {/* Loading */}
         {(phase === "loading" || phase === "mini_quiz_loading") && (
@@ -1600,82 +1600,8 @@ function McatAutoInner() {
           </div>
         )}
 
-        {/* ─── Practice / Revealed / Flashcard / Lesson / Review ──────────── */}
-        {/* Shared Back/Forward nav bar — shown any time the student can step back. */}
-        {(isInPracticePhase || phase === "flashcard" || phase === "lesson" || inReview) && (() => {
-          const hasEarlier = inReview ? reviewIndex! > 0 : historyRef.current.length > 0;
-          const totalSteps = historyRef.current.length;
-          const positionLabel = inReview
-            ? `Reviewing step ${reviewIndex! + 1} of ${totalSteps}`
-            : `Step ${totalSteps + 1}`;
-          return (
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              <span className="text-xs text-neutral-400">{positionLabel}</span>
-              <div className="flex items-center gap-2">
-                {hasEarlier && (
-                  <button
-                    onClick={handleReviewBack}
-                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
-                  >
-                    ← Back
-                  </button>
-                )}
-                {inReview && (
-                  <button
-                    onClick={handleReviewForward}
-                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
-                  >
-                    {reviewIndex! + 1 >= historyRef.current.length ? "Return to current →" : "Forward →"}
-                  </button>
-                )}
-                {!inReview && phase === "practicing" && (
-                  <button
-                    onClick={handleSkip}
-                    className="text-xs text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
-                  >
-                    Skip →
-                  </button>
-                )}
-              </div>
-            </div>
-          );
-        })()}
-
-        {/* ─── Live flashcard step (hidden while reviewing a timeline entry) ─ */}
-        {phase === "flashcard" && !inReview && flashcards[fcIndex] && (
-          <div className="space-y-4">
-            <FlipCard
-              front={flashcards[fcIndex]!.front}
-              back={flashcards[fcIndex]!.back}
-              onGrade={gradeFlashcard}
-              resetKey={`${flashcards[fcIndex]!.id}#${fcBoxRef.current.get(flashcards[fcIndex]!.id)?.reps ?? 0}`}
-            />
-
-            {/* Lesson (POPUP) / refresher access for the current card's topic */}
-            <QuestionToolbar
-              system="mcat"
-              keywordId={servedKeywordId ?? primaryKeywordId(flashcards[fcIndex]!.keyword_weights) ?? currentKeyword?.id ?? null}
-              sessionId={sessionId || null}
-              questionId={flashcards[fcIndex]!.id}
-              contentType="flashcard"
-              resetSignal={flashcards[fcIndex]!.id}
-              onStateChange={() => bufferRef.current?.clear()}
-            />
-
-            {/* Skip flashcard — no SRS update, no mastery change */}
-            <div className="flex justify-center">
-              <button
-                onClick={handleFlashcardSkip}
-                className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
-              >
-                Skip →
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ─── Live lesson (inline) — hidden while reviewing a timeline entry ─ */}
-        {phase === "lesson" && !inReview && currentKeyword && sessionId && (
+        {/* ─── Lesson (inline, no sidebars) ──────────────────────────────── */}
+        {phase === "lesson" && currentKeyword && sessionId && (
           <LessonView
             sessionId={sessionId}
             keywordId={currentKeyword.id}
@@ -1684,57 +1610,6 @@ function McatAutoInner() {
             onSkip={handleLessonSkip}
           />
         )}
-
-        {/* ─── Review: flashcard entry (read-only) ──────────────────────── */}
-        {inReview && reviewEntry?.kind === "flashcard" && (() => {
-          const entry = reviewEntry;
-          return (
-            <>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-600">
-                  Read-only · Flashcard
-                </span>
-              </div>
-              {/* Show both faces of the card so the student can re-read it. */}
-              <div className="space-y-3">
-                <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
-                  <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-2">Front</p>
-                  <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                    <MathText>{entry.card.front}</MathText>
-                  </p>
-                </div>
-                <div className="bg-brand-50 rounded-xl border border-brand-100 p-5">
-                  <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-2">Back</p>
-                  <p className="text-sm text-neutral-700 leading-relaxed">
-                    <MathText>{entry.card.back}</MathText>
-                  </p>
-                </div>
-              </div>
-            </>
-          );
-        })()}
-
-        {/* ─── Review: lesson entry (read-only re-display) ──────────────── */}
-        {inReview && reviewEntry?.kind === "lesson" && sessionId && (() => {
-          const entry = reviewEntry;
-          return (
-            <>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-600">
-                  Read-only · Lesson
-                </span>
-              </div>
-              {/* Re-render the lesson view read-only (no complete/skip callbacks while inReview). */}
-              <LessonView
-                sessionId={sessionId}
-                keywordId={entry.keywordId}
-                keywordLabel={entry.keywordLabel}
-                onComplete={() => { /* read-only: do nothing */ }}
-                onSkip={() => { /* read-only: do nothing */ }}
-              />
-            </>
-          );
-        })()}
 
         {/* Category complete interstitial */}
         {phase === "category_complete" && (
@@ -1817,132 +1692,217 @@ function McatAutoInner() {
           </div>
         )}
 
-        {/* ─── Live practice / Revealed / Review (question entry) ──────── */}
-        {(isInPracticePhase || (inReview && reviewEntry?.kind === "question")) &&
-          (inReview ? (reviewEntry?.kind === "question" ? reviewEntry : null) : question) && (() => {
-          // When in review, render the historical question entry READ-ONLY.
-          const qEntry = inReview ? (reviewEntry as Extract<TimelineEntry, { kind: "question" }>) : null;
-          const dispQuestion = (inReview ? qEntry!.question : question)!;
-          const dispSelected = inReview ? qEntry!.selectedChoice : selectedChoice;
-          const dispRevealed = inReview ? qEntry!.revealed : phase === "revealed";
-          return (
-          <>
-            {/* Badge row */}
-            <div className="flex items-center gap-2 flex-wrap">
-              {isReviewCard && !inReview && (
-                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-700">
-                  Review
-                </span>
-              )}
-              {inReview && (
-                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-600">
-                  {dispRevealed ? "Read-only" : "Skipped"}
-                </span>
-              )}
-            </div>
+        </div>{/* end non-practice wrapper */}
 
-            {/* Stem */}
-            <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
-              <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                <MathText>{dispQuestion.stem}</MathText>
-              </p>
-            </div>
+        {/* ─── Flashcard phase: 3-column on desktop ──────────────────────── */}
+        {phase === "flashcard" && flashcards[fcIndex] && (
+          <div className={isDesktop ? "flex gap-6 items-start" : "space-y-4"}>
+            {/* Left history sidebar — desktop only */}
+            {isDesktop && (
+              <aside className="w-56 shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
+                <HistorySidebar entries={history} onSelect={setReviewEntry} />
+              </aside>
+            )}
 
-            {/* Action bar — quick refresher / see lesson (POPUP) / prioritize.
-                Keyed to the SERVED question's keyword so see-lesson corresponds (3,7). */}
-            {!inReview && (
-              <QuestionToolbar
-                system="mcat"
-                keywordId={servedKeywordId ?? currentKeyword?.id ?? null}
-                sessionId={sessionId || null}
-                questionId={dispQuestion.id}
-                contentType="question"
-                resetSignal={dispQuestion.id}
-                answerSignal={phase === "revealed" ? dispQuestion.id : undefined}
-                onStateChange={() => bufferRef.current?.clear()}
+            {/* Center: flashcard */}
+            <div className={isDesktop ? "flex-1 min-w-0 space-y-4" : "space-y-4"}>
+              <FlipCard
+                front={flashcards[fcIndex]!.front}
+                back={flashcards[fcIndex]!.back}
+                onGrade={gradeFlashcard}
+                resetKey={`${flashcards[fcIndex]!.id}#${fcBoxRef.current.get(flashcards[fcIndex]!.id)?.reps ?? 0}`}
               />
-            )}
-            {/* Choices */}
-            <CorrectPulse
-              trigger={!inReview && phase === "revealed" && lastAnswerCorrect}
-              className="block w-full"
-            >
-              <div className="space-y-2">
-                {dispQuestion.choices.map((choice, i) => {
-                  let state: "default" | "selected" | "correct" | "wrong" | "dimmed" = "default";
-                  if (dispRevealed) {
-                    if (i === dispQuestion.correct_index) state = "correct";
-                    else if (i === dispSelected) state = "wrong";
-                    else state = "dimmed";
-                  }
-                  return (
-                    <ChoiceButton
-                      key={i}
-                      index={i}
-                      text={choice}
-                      state={state}
-                      disabled={inReview || dispRevealed}
-                      onClick={() => { if (!inReview) handleChoice(i); }}
-                    />
-                  );
-                })}
-              </div>
-            </CorrectPulse>
 
-            {/* Affirmation banner — live reveal only */}
-            {!inReview && phase === "revealed" && (
-              <AnswerAffirmation correct={lastAnswerCorrect} streak={combo} />
-            )}
+              {/* Toolbar inline on mobile */}
+              {!isDesktop && (
+                <QuestionToolbar
+                  system="mcat"
+                  keywordId={servedKeywordId ?? currentKeyword?.id ?? primaryKeywordId(flashcards[fcIndex]!.keyword_weights) ?? null}
+                  sessionId={sessionId || null}
+                  questionId={flashcards[fcIndex]!.id}
+                  contentType="flashcard"
+                  resetSignal={flashcards[fcIndex]!.id}
+                  onStateChange={() => bufferRef.current?.clear()}
+                />
+              )}
 
-            {/* I don't know — live only */}
-            {!inReview && phase === "practicing" && (
+              {/* Skip flashcard — no SRS update, no mastery change */}
               <div className="flex justify-center">
                 <button
-                  onClick={handleDontKnow}
+                  onClick={handleFlashcardSkip}
                   className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
                 >
-                  I don&apos;t know
+                  Skip →
                 </button>
               </div>
-            )}
+            </div>
 
-            {/* Explanation */}
-            {dispRevealed && dispQuestion.explanation && (
-              <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
-                <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
-                  Explanation
-                </p>
-                <p className="text-sm text-neutral-700 leading-relaxed">
-                  <MathText>{dispQuestion.explanation}</MathText>
-                </p>
-              </div>
-            )}
-
-            {/* Lesson recommendations now surface as a closeable POPUP (LessonModal,
-                rendered near the page root), not an inline bottom offer. */}
-
-            {/* Feedback + Continue — live only (review is navigated via Back/Forward) */}
-            {!inReview && phase === "revealed" && (
-              <>
-                <FeedbackWidget
-                  sessionId={sessionId}
-                  contentType="question"
-                  contentId={question!.id}
-                  className="px-1"
+            {/* Right toolbar rail — desktop only */}
+            {isDesktop && (
+              <aside className="w-60 shrink-0 sticky top-20">
+                <QuestionToolbar
+                  system="mcat"
+                  keywordId={servedKeywordId ?? currentKeyword?.id ?? primaryKeywordId(flashcards[fcIndex]!.keyword_weights) ?? null}
+                  sessionId={sessionId || null}
+                  questionId={flashcards[fcIndex]!.id}
+                  contentType="flashcard"
+                  resetSignal={flashcards[fcIndex]!.id}
+                  onStateChange={() => bufferRef.current?.clear()}
                 />
-                <button
-                  onClick={handleNext}
-                  className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
-                >
-                  Continue
-                </button>
-              </>
+              </aside>
             )}
-          </>
-          );
-        })()}
+          </div>
+        )}
 
-        {/* ─── Mini-quiz ───────────────────────────────────────────────────── */}
+        {/* ─── Practice / Revealed: 3-column on desktop ──────────────────── */}
+        {isInPracticePhase && question && (
+          <div className={isDesktop ? "flex gap-6 items-start" : "space-y-4"}>
+            {/* Left history sidebar — desktop only */}
+            {isDesktop && (
+              <aside className="w-56 shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
+                <HistorySidebar entries={history} onSelect={setReviewEntry} />
+              </aside>
+            )}
+
+            {/* Center: question body */}
+            <div className={isDesktop ? "flex-1 min-w-0 space-y-4" : "space-y-4"}>
+              {/* Badge row */}
+              {isReviewCard && (
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-700">
+                    Review
+                  </span>
+                </div>
+              )}
+
+              {/* Stem */}
+              <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-brand-xs">
+                <p className="text-sm font-medium text-neutral-900 leading-relaxed">
+                  <MathText>{question.stem}</MathText>
+                </p>
+              </div>
+
+              {/* Toolbar inline on mobile — between stem and choices */}
+              {!isDesktop && (
+                <QuestionToolbar
+                  system="mcat"
+                  keywordId={question.primary_keyword_id ?? servedKeywordId ?? currentKeyword?.id ?? null}
+                  sessionId={sessionId || null}
+                  questionId={question.id}
+                  contentType="question"
+                  resetSignal={question.id}
+                  answerSignal={phase === "revealed" ? question.id : undefined}
+                  onStateChange={() => bufferRef.current?.clear()}
+                />
+              )}
+
+              {/* Choices */}
+              <CorrectPulse
+                trigger={phase === "revealed" && lastAnswerCorrect}
+                className="block w-full"
+              >
+                <div className="space-y-2">
+                  {question.choices.map((choice, i) => {
+                    let state: "default" | "selected" | "correct" | "wrong" | "dimmed" = "default";
+                    if (phase === "revealed") {
+                      if (i === question.correct_index) state = "correct";
+                      else if (i === selectedChoice) state = "wrong";
+                      else state = "dimmed";
+                    }
+                    return (
+                      <ChoiceButton
+                        key={i}
+                        index={i}
+                        text={choice}
+                        state={state}
+                        disabled={phase === "revealed"}
+                        onClick={() => handleChoice(i)}
+                      />
+                    );
+                  })}
+                </div>
+              </CorrectPulse>
+
+              {/* Affirmation banner */}
+              {phase === "revealed" && (
+                <AnswerAffirmation correct={lastAnswerCorrect} streak={combo} />
+              )}
+
+              {/* I don't know */}
+              {phase === "practicing" && (
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleDontKnow}
+                    className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
+                  >
+                    I don&apos;t know
+                  </button>
+                </div>
+              )}
+
+              {/* Skip */}
+              {phase === "practicing" && (
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleSkip}
+                    className="text-xs text-neutral-400 hover:text-neutral-600 underline underline-offset-2 transition-colors"
+                  >
+                    Skip →
+                  </button>
+                </div>
+              )}
+
+              {/* Explanation */}
+              {phase === "revealed" && question.explanation && (
+                <div className="bg-brand-50 rounded-xl border border-brand-100 p-4">
+                  <p className="text-xs font-semibold text-brand-700 uppercase tracking-wide mb-1.5">
+                    Explanation
+                  </p>
+                  <p className="text-sm text-neutral-700 leading-relaxed">
+                    <MathText>{question.explanation}</MathText>
+                  </p>
+                </div>
+              )}
+
+              {/* Feedback + Continue */}
+              {phase === "revealed" && (
+                <>
+                  <FeedbackWidget
+                    sessionId={sessionId}
+                    contentType="question"
+                    contentId={question.id}
+                    className="px-1"
+                  />
+                  <button
+                    onClick={handleNext}
+                    className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
+                  >
+                    Continue
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Right toolbar rail — desktop only */}
+            {isDesktop && (
+              <aside className="w-60 shrink-0 sticky top-20">
+                <QuestionToolbar
+                  system="mcat"
+                  keywordId={question.primary_keyword_id ?? servedKeywordId ?? currentKeyword?.id ?? null}
+                  sessionId={sessionId || null}
+                  questionId={question.id}
+                  contentType="question"
+                  resetSignal={question.id}
+                  answerSignal={phase === "revealed" ? question.id : undefined}
+                  onStateChange={() => bufferRef.current?.clear()}
+                />
+              </aside>
+            )}
+          </div>
+        )}
+
+        {/* ─── Mini-quiz (no sidebars, narrow layout) ──────────────────────── */}
+        <div className="max-w-2xl mx-auto space-y-4">
         {(phase === "mini_quiz" || phase === "mini_quiz_revealed") && currentQuizQuestion && (
           <>
             <div className="flex items-center gap-2">
@@ -2063,6 +2023,8 @@ function McatAutoInner() {
           </div>
         )}
 
+        </div>{/* end mini-quiz narrow wrapper */}
+
       </main>
 
       {/* See-lesson POPUP — opened from the toolbar, the "Learn this" header
@@ -2075,6 +2037,16 @@ function McatAutoInner() {
           label={lessonModal.label}
           sessionId={sessionId || null}
           onClose={() => setLessonModal(null)}
+        />
+      )}
+
+      {/* Read-only history review modal */}
+      {reviewEntry && (
+        <HistoryReviewModal
+          entry={reviewEntry}
+          sessionId={sessionId}
+          system="mcat"
+          onClose={() => setReviewEntry(null)}
         />
       )}
 

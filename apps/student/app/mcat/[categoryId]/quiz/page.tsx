@@ -19,6 +19,7 @@ import { GrindMeter } from "@/components/gamification/GrindMeter";
 import { NavMenu } from "@/components/nav/NavMenu";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
+import { awardQuiz } from "@/lib/points";
 
 const QUIZ_COUNT = 8;
 
@@ -262,6 +263,7 @@ function McatQuizInner({
         usedRefresher,
       }),
     }).catch(() => {});
+    awardQuiz();
 
     setUsedRefresher(false);
     if (currentIdx + 1 >= questions.length) {
@@ -295,7 +297,7 @@ function McatQuizInner({
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-2.5 space-y-1.5">
+        <div className="w-full px-4 sm:px-6 py-2.5 space-y-1.5">
           {/* Row 1 — nav controls */}
           <div className="flex items-center gap-2">
             <Link href={backHref} className="shrink-0">

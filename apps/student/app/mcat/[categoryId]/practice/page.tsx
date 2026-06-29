@@ -13,7 +13,10 @@ import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import { LessonView } from "@/components/mcat/LessonView";
 import MathText from "@/components/mcat/MathText";
 import QuestionToolbar from "@/components/practice/QuestionToolbar";
+import { HistorySidebar, type HistoryEntry } from "@/components/practice/HistorySidebar";
+import HistoryReviewModal from "@/components/practice/HistoryReviewModal";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
+import { useIsDesktop } from "@/lib/useIsDesktop";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { GrindMeter } from "@/components/gamification/GrindMeter";
@@ -21,6 +24,7 @@ import { NavMenu } from "@/components/nav/NavMenu";
 import { useStreakTouchOnce } from "@/components/gamification/useStreakTouchOnce";
 import { CorrectPulse } from "@/components/ui/CorrectPulse";
 import { comboReducer, onCorrectAnswer, onIncorrectAnswer } from "@/lib/gamification";
+import { awardQuiz } from "@/lib/points";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -79,14 +83,6 @@ interface AttemptResponse {
     string,
     { score: number; state: string; needs_lesson: boolean }
   >;
-}
-
-/** A snapshot of a previously-seen question for read-only review navigation. */
-interface HistoryEntry {
-  question: Question;
-  selectedChoice: number | null;
-  revealed: boolean;
-  wasCorrect: boolean | null;
 }
 
 const HISTORY_CAP = 30;
@@ -181,8 +177,16 @@ function McatPracticeInner({
 
   // Question
   const [question, setQuestion] = useState<Question | null>(null);
+  // ── Desktop layout ──────────────────────────────────────────────────────────
+  const isDesktop = useIsDesktop();
+  // History sidebar entries (shared type from HistorySidebar)
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  // Entry selected from the sidebar → opens read-only modal
+  const [historyReviewEntry, setHistoryReviewEntry] = useState<HistoryEntry | null>(null);
+
   // Movement/review history: previously-seen questions (answered or skipped).
-  const historyRef = useRef<HistoryEntry[]>([]);
+  // historyRef is kept for in-page back/forward navigation logic.
+  const historyRef = useRef<{ question: Question; selectedChoice: number | null; revealed: boolean; wasCorrect: boolean | null }[]>([]);
   // null = viewing the LIVE current question; otherwise index into historyRef.
   const [reviewIndex, setReviewIndex] = useState<number | null>(null);
   const inReview = reviewIndex !== null;
@@ -527,9 +531,29 @@ function McatPracticeInner({
   // ── Handle answer ─────────────────────────────────────────────────────────
 
   // Push the currently-live question into review history (answered or skipped).
-  const pushHistory = useCallback((entry: HistoryEntry) => {
-    historyRef.current = [...historyRef.current, entry].slice(-HISTORY_CAP);
-  }, []);
+  const pushHistory = useCallback(
+    (entry: { question: Question; selectedChoice: number | null; revealed: boolean; wasCorrect: boolean | null }) => {
+      historyRef.current = [...historyRef.current, entry].slice(-HISTORY_CAP);
+    },
+    []
+  );
+
+  // Push a graded question into the sidebar history list.
+  const pushSidebarHistory = useCallback(
+    (q: Question, selectedChoice: number | null, dontKnow: boolean, wasCorrect: boolean) => {
+      const sidebarEntry: HistoryEntry = {
+        uid: `${q.id}-${Date.now()}`,
+        kind: "question",
+        question: q,
+        selectedChoice,
+        dontKnow,
+        wasCorrect,
+        keywordId: q.primary_keyword_id ?? primaryKeywordId(q.keyword_weights),
+      };
+      setHistory((prev) => [...prev, sidebarEntry].slice(-HISTORY_CAP));
+    },
+    []
+  );
 
   const handleChoice = useCallback(
     async (idx: number) => {
@@ -540,6 +564,7 @@ function McatPracticeInner({
 
       const correct = idx === question.correct_index;
       pushHistory({ question, selectedChoice: idx, revealed: true, wasCorrect: correct });
+      pushSidebarHistory(question, idx, false, correct);
 
       // ── Gamification: sounds + combo ──────────────────────────────────────
       setLastAnswerCorrect(correct);
@@ -555,6 +580,7 @@ function McatPracticeInner({
         answered: s.answered + 1,
         correct: s.correct + (correct ? 1 : 0),
       }));
+      awardQuiz();
 
       if (!isReviewCard) {
         setTopicQuestionCount((n) => n + 1);
@@ -611,7 +637,7 @@ function McatPracticeInner({
         // Non-fatal
       }
     },
-    [question, currentKeyword, phase, sessionId, isReviewCard, usedRefresher, inReview, pushHistory]
+    [question, currentKeyword, phase, sessionId, isReviewCard, usedRefresher, inReview, pushHistory, pushSidebarHistory]
   );
 
   // ── Handle "I don't know" ─────────────────────────────────────────────────
@@ -622,6 +648,7 @@ function McatPracticeInner({
     setSelectedChoice(null);
     setPhase("revealed");
     pushHistory({ question, selectedChoice: null, revealed: true, wasCorrect: false });
+    pushSidebarHistory(question, null, true, false);
 
     // ── Gamification: incorrect ───────────────────────────────────────────
     setLastAnswerCorrect(false);
@@ -629,6 +656,7 @@ function McatPracticeInner({
     onIncorrectAnswer();
 
     setStats((s) => ({ ...s, answered: s.answered + 1 }));
+    awardQuiz();
 
     if (!isReviewCard) {
       consecutiveWrongRef.current += 1;
@@ -665,7 +693,7 @@ function McatPracticeInner({
     } catch {
       // Non-fatal
     }
-  }, [question, currentKeyword, phase, sessionId, isReviewCard, usedRefresher, inReview, pushHistory]);
+  }, [question, currentKeyword, phase, sessionId, isReviewCard, usedRefresher, inReview, pushHistory, pushSidebarHistory]);
 
   // ── Free movement: Back / Forward / Skip ───────────────────────────────────
 
@@ -898,11 +926,39 @@ function McatPracticeInner({
     { value: "hard", label: "Hard" },
   ];
 
+  // ── Active QuestionToolbar props for the desktop right rail ───────────────
+  // Compute once; rendered in right rail (desktop) or inline in center (mobile).
+  const activeToolbar = (() => {
+    if (phase === "flashcard" && currentFc) {
+      return {
+        keywordId: primaryKeywordId(currentFc.keyword_weights),
+        questionId: currentFc.id,
+        contentType: "flashcard" as const,
+        resetSignal: currentFc.id,
+        answerSignal: undefined as string | undefined,
+      };
+    }
+    if ((phase === "practicing" || phase === "revealed") && question) {
+      const dispQuestion = inReview && reviewEntry ? reviewEntry.question : question;
+      const dispRevealed = inReview && reviewEntry ? reviewEntry.revealed : phase === "revealed";
+      return {
+        keywordId:
+          dispQuestion.primary_keyword_id ??
+          primaryKeywordId(dispQuestion.keyword_weights),
+        questionId: dispQuestion.id,
+        contentType: "question" as const,
+        resetSignal: dispQuestion.id,
+        answerSignal: dispRevealed ? "revealed" : phase,
+      };
+    }
+    return null;
+  })();
+
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Top bar */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-2.5 space-y-1.5">
+        <div className="w-full px-4 sm:px-6 py-2.5 space-y-1.5">
           {/* Row 1 — nav controls */}
           <div className="flex items-center gap-2">
             <Link href={backHref} className="shrink-0">
@@ -955,7 +1011,7 @@ function McatPracticeInner({
         {currentKeyword &&
           !isReviewCard &&
           (phase === "practicing" || phase === "revealed") && (
-            <div className="max-w-2xl mx-auto px-4 pb-1.5">
+            <div className="w-full px-4 sm:px-6 pb-1.5">
               <p className="text-xs text-neutral-400">
                 Mastering:{" "}
                 <span className="font-mono tracking-wider text-brand-600">
@@ -974,7 +1030,7 @@ function McatPracticeInner({
           phase === "revealed" ||
           phase === "generating" ||
           phase === "flashcard") && (
-          <div className="max-w-2xl mx-auto px-4 pb-2">
+          <div className="w-full px-4 sm:px-6 pb-2">
             <div className="inline-flex rounded-lg border border-neutral-200 overflow-hidden text-xs">
               {difficultyOptions.map(({ value, label }) => (
                 <button
@@ -995,7 +1051,28 @@ function McatPracticeInner({
 
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-4 pb-safe-bottom">
+      {/* History review modal — opened from the sidebar */}
+      {historyReviewEntry && (
+        <HistoryReviewModal
+          entry={historyReviewEntry}
+          sessionId={sessionId}
+          system="mcat"
+          onClose={() => setHistoryReviewEntry(null)}
+        />
+      )}
+
+      {/* ── 3-column desktop layout ── */}
+      <div className="max-w-6xl mx-auto px-4 py-8 flex gap-6 items-start pb-safe-bottom">
+
+        {/* LEFT — history sidebar (desktop only) */}
+        {isDesktop && (
+          <aside className="w-56 shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
+            <HistorySidebar entries={history} onSelect={setHistoryReviewEntry} />
+          </aside>
+        )}
+
+        {/* CENTER — main content */}
+        <main className="flex-1 min-w-0 space-y-4">
 
         {/* ── Loading ── */}
         {phase === "loading" && (
@@ -1109,15 +1186,18 @@ function McatPracticeInner({
               </p>
             </button>
 
-            <QuestionToolbar
-              system="mcat"
-              keywordId={primaryKeywordId(currentFc.keyword_weights)}
-              sessionId={sessionId}
-              questionId={currentFc.id}
-              contentType="flashcard"
-              resetSignal={currentFc.id}
-              onRefresherUsed={() => setUsedRefresher(true)}
-            />
+            {/* Mobile-only inline toolbar; desktop shows in right rail */}
+            <div className="lg:hidden">
+              <QuestionToolbar
+                system="mcat"
+                keywordId={primaryKeywordId(currentFc.keyword_weights)}
+                sessionId={sessionId}
+                questionId={currentFc.id}
+                contentType="flashcard"
+                resetSignal={currentFc.id}
+                onRefresherUsed={() => setUsedRefresher(true)}
+              />
+            </div>
 
             {/* Show answer button */}
             {!fcBackShown && (
@@ -1236,19 +1316,22 @@ function McatPracticeInner({
               </p>
             </Card>
 
-            <QuestionToolbar
-              system="mcat"
-              keywordId={
-                dispQuestion.primary_keyword_id ??
-                primaryKeywordId(dispQuestion.keyword_weights)
-              }
-              sessionId={sessionId}
-              questionId={dispQuestion.id}
-              contentType="question"
-              resetSignal={dispQuestion.id}
-              answerSignal={dispRevealed ? "revealed" : phase}
-              onRefresherUsed={() => setUsedRefresher(true)}
-            />
+            {/* Mobile-only inline toolbar; desktop shows in right rail */}
+            <div className="lg:hidden">
+              <QuestionToolbar
+                system="mcat"
+                keywordId={
+                  dispQuestion.primary_keyword_id ??
+                  primaryKeywordId(dispQuestion.keyword_weights)
+                }
+                sessionId={sessionId}
+                questionId={dispQuestion.id}
+                contentType="question"
+                resetSignal={dispQuestion.id}
+                answerSignal={dispRevealed ? "revealed" : phase}
+                onRefresherUsed={() => setUsedRefresher(true)}
+              />
+            </div>
 
             {/* Choices */}
             <CorrectPulse trigger={!inReview && phase === "revealed" && lastAnswerCorrect} className="block w-full">
@@ -1450,7 +1533,25 @@ function McatPracticeInner({
             </div>
           </Card>
         )}
-      </main>
+        </main>
+
+        {/* RIGHT — toolbar rail (desktop only) */}
+        {isDesktop && activeToolbar && (
+          <aside className="w-60 shrink-0 sticky top-20">
+            <QuestionToolbar
+              system="mcat"
+              keywordId={activeToolbar.keywordId}
+              sessionId={sessionId}
+              questionId={activeToolbar.questionId}
+              contentType={activeToolbar.contentType}
+              resetSignal={activeToolbar.resetSignal}
+              answerSignal={activeToolbar.answerSignal}
+              onRefresherUsed={() => setUsedRefresher(true)}
+            />
+          </aside>
+        )}
+
+      </div>{/* end 3-column flex */}
     </div>
   );
 }

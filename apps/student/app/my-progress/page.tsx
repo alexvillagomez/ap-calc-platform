@@ -15,7 +15,7 @@ export default function MyProgressPage() {
   return (
     <div className="min-h-screen bg-neutral-50">
       <header className="sticky top-0 z-10 border-b border-neutral-200 bg-white">
-        <div className="mx-auto flex max-w-2xl flex-wrap items-center gap-2 px-4 py-2.5">
+        <div className="w-full flex flex-wrap items-center gap-2 px-4 sm:px-6 py-2.5">
           <div className="flex min-w-0 flex-1 items-center gap-2">
             <Link href="/" className="shrink-0">
               <LoderaLogo size={20} />

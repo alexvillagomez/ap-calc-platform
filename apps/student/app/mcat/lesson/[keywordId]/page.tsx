@@ -83,7 +83,7 @@ export default function StandaloneLessonPage({
     <div className="min-h-screen bg-neutral-50">
       {/* Top bar */}
       <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="w-full px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
             <Link href="/mcat/progress" className="shrink-0">
               <LoderaLogo size={22} />
