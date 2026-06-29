@@ -110,7 +110,11 @@ export default function QuestionToolbar({
   // ── Take a lesson ────────────────────────────────────────────────────────────
   // Opens the lesson as an IN-PAGE popup overlaid on the current surface, so the
   // student never leaves their flashcard/question. Closeable any time.
-  const [lessonOpen, setLessonOpen] = useState(false);
+  //
+  // lessonTarget tracks WHICH keyword's lesson to show — either the current
+  // question's keyword (handleLesson) or a prerequisite keyword (handleOpenPrereqLesson).
+  const [lessonTarget, setLessonTarget] = useState<{ keywordId: string; label?: string } | null>(null);
+
   const handleLesson = () => {
     if (!keywordId) return;
     trackEvent({
@@ -121,8 +125,23 @@ export default function QuestionToolbar({
       question_id: questionId ?? undefined,
       content_type: contentType,
     });
-    setLessonOpen(true);
+    setLessonTarget({ keywordId, label });
   };
+
+  const handleOpenPrereqLesson = useCallback(
+    (prereqKeywordId: string, prereqLabel: string) => {
+      trackEvent({
+        event_type: "lesson_opened",
+        system,
+        course,
+        keyword_id: prereqKeywordId,
+        question_id: questionId ?? undefined,
+        content_type: contentType,
+      });
+      setLessonTarget({ keywordId: prereqKeywordId, label: prereqLabel });
+    },
+    [system, course, questionId, contentType],
+  );
 
   // ── Quick refresher ──────────────────────────────────────────────────────────
   const [refresherOpen, setRefresherOpen] = useState(false);
@@ -258,8 +277,15 @@ export default function QuestionToolbar({
         </Button>
       </div>
 
-      {/* Prerequisite "See also" — small, unobtrusive; hidden when there are none. */}
-      <PrereqSeeAlso system={system} course={course} keywordId={keywordId} className="mt-1.5 px-0.5" />
+      {/* Prerequisite "See also" — small, unobtrusive; hidden when there are none.
+          Clicking a prereq opens its lesson as an in-page popup (no new tab). */}
+      <PrereqSeeAlso
+        system={system}
+        course={course}
+        keywordId={keywordId}
+        className="mt-1.5 px-0.5"
+        onOpenLesson={handleOpenPrereqLesson}
+      />
 
       {/* In-page refresher popup */}
       {refresherOpen && keywordId && (
@@ -270,15 +296,16 @@ export default function QuestionToolbar({
         />
       )}
 
-      {/* In-page lesson popup */}
-      {lessonOpen && keywordId && (
+      {/* In-page lesson popup — covers both "Take a lesson" (current keyword) and
+          prerequisite links (prereq keyword). Closing returns the student to where they were. */}
+      {lessonTarget && (
         <LessonModal
           system={system}
           course={course}
-          keywordId={keywordId}
-          label={label}
+          keywordId={lessonTarget.keywordId}
+          label={lessonTarget.label}
           sessionId={sessionId}
-          onClose={() => setLessonOpen(false)}
+          onClose={() => setLessonTarget(null)}
         />
       )}
     </div>

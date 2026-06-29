@@ -25,6 +25,12 @@ interface PrereqSeeAlsoProps {
   course?: string;
   keywordId: string | null;
   className?: string;
+  /**
+   * When provided, clicking a prerequisite link opens a lesson popup in-place
+   * rather than navigating to a new page. Receives the prerequisite keyword id
+   * and its display label.
+   */
+  onOpenLesson?: (keywordId: string, label: string) => void;
 }
 
 export default function PrereqSeeAlso({
@@ -32,6 +38,7 @@ export default function PrereqSeeAlso({
   course,
   keywordId,
   className,
+  onOpenLesson,
 }: PrereqSeeAlsoProps) {
   const [items, setItems] = useState<PrereqItem[]>([]);
 
@@ -63,13 +70,24 @@ export default function PrereqSeeAlso({
       <span className="shrink-0">Shaky on a prerequisite? See also:</span>
       {items.map((it, i) => (
         <span key={it.id} className="inline-flex items-baseline">
-          <Link
-            href={it.href}
-            className="font-medium text-brand-500 hover:text-brand-700 underline underline-offset-2 transition-colors"
-            title={`Refresher: ${it.label}`}
-          >
-            {it.label}
-          </Link>
+          {onOpenLesson ? (
+            <button
+              type="button"
+              onClick={() => onOpenLesson(it.id, it.label)}
+              className="font-medium text-brand-500 hover:text-brand-700 underline underline-offset-2 transition-colors cursor-pointer"
+              title={`Open lesson: ${it.label}`}
+            >
+              {it.label}
+            </button>
+          ) : (
+            <Link
+              href={it.href}
+              className="font-medium text-brand-500 hover:text-brand-700 underline underline-offset-2 transition-colors"
+              title={`Refresher: ${it.label}`}
+            >
+              {it.label}
+            </Link>
+          )}
           {i < items.length - 1 && <span className="ml-1.5 text-neutral-300">·</span>}
         </span>
       ))}
