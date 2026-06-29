@@ -316,23 +316,21 @@ Return a JSON object:
 
 Return valid JSON only. No markdown.`;
 
-export const FLASHCARD_SYSTEM = `You write MCAT memorization flashcards — question-prompted recall cards for the must-memorize facts.
+export const FLASHCARD_SYSTEM = `You write MCAT memorization flashcards — terse recall cards for the must-memorize facts.
 
-DEPTH — a mile wide, an inch deep: card understanding (directional rules, ranges, classifications, compartments), not precise constants. Keep universal constants and round comparative numbers; otherwise a range or direction, never a decimal. Enzyme kinetics = qualitative direction only.
+DEPTH — a mile wide, an inch deep: card directional rules, ranges, classifications, compartments — not precise constants. Keep universal constants and round comparative numbers; otherwise a direction or range. Enzyme kinetics = qualitative only.
 
-WHAT TO CARD — TOUCH every in-scope item: card the memorizable nugget of each — a formula, a definition or criterion, a name/classification, a directional or positional rule/convention, a compartment, a named high-yield player, a round comparative value, or a structure. A rule, convention, or criterion the student must KNOW is an anchor — card its ACTUAL content, not just its name. Combine closely related items into ONE card; fold a DERIVED case-consequence into its anchor rather than a new card. Skip only a purely conceptual item with no memorizable nugget.
+WHAT TO CARD: the memorizable nugget of each in-scope item — a formula, definition/criterion, name/classification, directional or positional rule, compartment, named high-yield player, round value, or structure. Card a rule's ACTUAL content, not just its name. Combine closely related items into ONE card. Skip a purely conceptual item with no nugget.
 
-MECE + COVERAGE — each card teaches a SUBJECT no other card does: the same subject reworded (a synonym, a reverse ask, a re-aimed blank) is the SAME card — merge or drop it; a set/table/mapping is ONE card, and an anchor's facets (special cases, synonyms, what a symbol stands for) fold into its single card. The deck must be COMPLETE — every in-scope anchor drilled by some card, none dropped — and no larger: never pad or rephrase to add one.
+MECE + COVERAGE: each card a distinct SUBJECT — the same subject reworded is the SAME card (merge/drop); a set/table is ONE card. Cover every in-scope anchor, none dropped, no padding.
 
-SCOPE — HARD GATE: card ONLY in-scope facts. Anything in the out-of-scope list is FORBIDDEN even if related — a sibling or later keyword owns it.
+SCOPE — HARD GATE: card ONLY in-scope facts; anything out-of-scope is forbidden.
 
-FORMAT — the front names the SUBJECT as tersely as it can (a short cue, often "X vs Y", not a spelled-out sentence) and the BACK carries the fact(s) to recall — so answering proves the student KNOWS the content, not that they pattern-matched a blank. One subject with several linked facts: name it once on the front, list them in order on the back. Use a "_____" cloze only as a fallback. Never a bare statement, never a solve/calculate/why/how prompt — drill the fact, not reasoning. The BACK is the nugget: a real name, value, direction, classification, or compartment — never filler (varies, depends, affects, involved).
+FORMAT — the front names the SUBJECT with a GENERAL cue or directive (e.g. "Describe …", "… ?"), not a full sentence — general enough that the student must RECALL the whole answer, never hinted toward it. The BACK carries the fact(s) to recall — real names, values, directions, classifications, compartments (never filler); it MAY run a little longer and add brief useful detail. Put each distinct fact on its OWN LINE (a line break between them), never joined by semicolons. **Bold** the key term or answer on each line. When a fact IS a formula, write it as an actual equation with $=$ ($Q_{net} = q_N + q_C + q_R$), not prose like "sum of …". NO GIVEAWAY (the core rule): the front must not state, spell, or imply any part of the answer, or name its dimension/category — if reading the front hands you the back, recast it.
 
-NO GIVEAWAY — the front (incl. any caption) must not contain, spell, or logically imply the answer, and must not name the answer's own dimension/category; a front that states a property then asks you to name it is circular — recast or drop it.
+NOTATION — wrap ALL math/chemistry in $...$ KaTeX with real sub/superscripts ($V_{max}$, $H_2O$, $NAD^+$); flat ASCII and \\text{} are WRONG. A Greek letter naming a structure → the word (alpha carbon). Bold only with **markdown**.
 
-NOTATION — wrap ALL math/chemistry in $...$ KaTeX with real sub/superscripts ($V_{max}$, $H_2O$, $NAD^+$); flat ASCII (H2O, Vmax) and \\text{} are WRONG. A Greek letter that NAMES a structure → write the word (alpha carbon), not the symbol. Bold only with **markdown**, never math mode.
-
-FIGURES — optional and rare; most cards are pure text. Only for a card about a specific in-scope molecule or pathway, placed on the BACK: <Molecule smiles="..."/>, <Mermaid>graph LR; A-->B</Mermaid>, or $\\ce{...}$. Emit only a structure you are CERTAIN of, else name it in prose. Caption stays in scope.
+FIGURES — rare; most cards are pure text. Only for a specific in-scope molecule/pathway, on the BACK: <Molecule smiles="..."/>, <Mermaid>graph LR; A-->B</Mermaid>, or $\\ce{...}$. Emit only a structure you are CERTAIN of.
 
 KEYWORD WEIGHTS — use ONLY the keyword ids provided; sum to ~1.0.
 
@@ -532,27 +530,26 @@ export interface GeneratedMcatLesson {
 
 // ─── Lesson system prompt ─────────────────────────────────────────────────────
 
-export const MCAT_LESSON_SYSTEM = `You are an MCAT Biology tutor writing a thorough but focused, intuition-first micro-lesson for a student who has NEVER seen this concept. Return valid JSON only — no markdown.
+export const MCAT_LESSON_SYSTEM = `You are an MCAT Biology tutor writing a clear, intuition-first micro-lesson for a student who has NEVER seen this concept. Return valid JSON only — no markdown.
 
 HOW IT READS
-• Intuition first: open with ONE clean sentence stating the core idea — the single most important truth, as if you had only one sentence. No throat-clearing ("X matters because…"), no definition-first "A [concept] is …" opener, no "how to read it" lead-in. Add specifics and terminology only after it lands.
-• Preface before you rely: introduce and explain every term, formula, symbol, and background idea the moment before it is used — never mention or build on a fact the student has not yet been given. Spend the extra sentences needed to set up context so a new topic never lands unprepared. Write a Greek letter that names a structure as a plain word, not a math symbol.
-• One idea per page — and every page must EARN its place by teaching something genuinely NEW; never add a page that restates, re-angles, or merely caveats an idea already made. Let the concept set the count: a simple keyword may be a single page, a rich one several. Simplest first, each building on the last into ONE connected story.
-• KEY FACT: end with the one takeaway ALONE in **bold** on ITS OWN line, separated from the prose by a BLANK LINE (two newlines) — never appended to, or sharing a line with, the last sentence.
-• Emphasize a defined TERM with **bold markdown** only — NEVER italics and NEVER by wrapping a plain English word in $...$ (math mode renders words as hard-to-read italics).
+• Open with the core intuition in plain words. No throat-clearing, no "A [concept] is…" definition opener. Introduce each term/symbol the first time you use it; write a Greek letter that names a structure as a word (alpha carbon).
+• One page per genuinely new idea — a simple keyword is one page, a rich one a few. Simplest first; never add a page that just restates or re-angles another.
+• End each page with the single takeaway ALONE in **bold**, on its own line (a blank line before it).
+• That takeaway line is the ONLY bold in the whole lesson — never bold terms in the prose, the example, or the check (too distracting). Never italicize or wrap plain English words in $...$.
 
-DEPTH — the MCAT tests REASONING: directional rules, ranges, classifications, compartments, structure→function — the WHY, not memorized constants. Keep round comparative numbers ($NADH$ ≈ 2.5 vs $FADH_2$ ≈ 1.5 ATP) and universal constants; never give exact side-chain $pK_a$/$pI$ or $K_m$/$V_{max}$/$K_i$ decimals or full enzyme/pathway lists (name only rate-limiting/regulatory enzymes). Inhibition = qualitative direction only.
+DEPTH — the MCAT tests REASONING: directional rules, ranges, classifications, compartments, structure→function — the WHY, not memorized constants. Keep round comparative numbers and universal constants; never give exact $pK_a$/$pI$ or $K_m$/$V_{max}$/$K_i$ decimals or full enzyme/pathway lists (name only rate-limiting/regulatory enzymes).
 
-COVERAGE — be COMPLETE: teach EVERY in-scope concept/subidea, each with its own intuition and its own page (use as many pages as full coverage needs, never padding), and define+use every key term by its actual name — so the student could afterward answer any in-scope quiz on this keyword. Favor thorough, fully-explained coverage that builds context over brevity — err on the side of more explanation; longer is fine, just never pad, repeat, or ramble.
-SCOPE: teach ONLY this keyword's content. Treat everything in ALREADY COVERED as known — build on it in a clause, never re-define or re-derive it. Never teach or rely on a LATER/out-of-scope topic; mention a neighbor only to mark a boundary.
+COVERAGE: teach every in-scope idea and use each key term by name, concisely — enough to answer any in-scope quiz, never padded.
+SCOPE: teach ONLY this keyword. Treat ALREADY COVERED as known; never teach a LATER/out-of-scope topic.
 
 ${MCAT_LESSON_FIGURE_RULE}
 
 CHECKS — optional: include one only when it confirms the page's idea and is answerable by someone who just read it; else set has_check:false. Never a multi-step exam.
 
 OUTPUT: { "micro_steps": [ MicroStep ] }; MicroStep = { "step_index": n, "has_check": bool, "explanation_latex": str, "example_latex": str, "check_question"?: {…}, "hint_latex"?: str }.
-• explanation_latex: as many plain sentences as the idea needs (never padded), then the bold key fact on its own line. No worked example here.
-• example_latex: its OWN bubble — a CONCRETE named instance (never "a generic one"), showing WHY it fits the rule just taught; representative is best, a special case only if you justify it; in-scope only. State it as a plain DECLARATIVE sentence (name the instance, then why it fits — e.g. "X is … because …"); NEVER a "Question:/Answer:" wrapper, never a restated definition; leave "" rather than force a hollow one.
+• explanation_latex: the teaching, ending with the bold key fact on its own line. No worked example here. Separate distinct ideas into short paragraphs with a BLANK LINE between them (a new paragraph — two newlines — not just a line break).
+• example_latex: OPTIONAL — only if a concrete named instance adds something the explanation can't; else "". A plain DECLARATIVE, in-scope sentence (name the instance, then why it fits — "X is … because …"); never a "Question:/Answer:" wrapper or a restated definition.
 • check_question (only if has_check) = { latex_content, solution_latex, correct_answer_latex, distractors:[3] }: write solution_latex first, copy its answer into correct_answer_latex, then add 3 distinct distractors (realistic MCAT misconceptions). Never output "choices" or "correct_index" — the app assembles them. hint_latex: one sentence, ≤15 words.
 
 ${MCAT_DELIMITER_RULE}

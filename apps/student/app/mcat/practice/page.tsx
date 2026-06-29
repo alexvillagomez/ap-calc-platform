@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
+import { createPortal } from "react-dom";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { LoderaLogo } from "@/components/brand/LoderaLogo";
@@ -473,6 +474,76 @@ function CategoryRow({
   );
 }
 
+// ── Topic-select shell ────────────────────────────────────────────────────────
+
+/**
+ * Wraps the topic-selection UI. On the initial select phase it renders inline;
+ * once practice is underway, "Change topics" opens it as a popup OVERLAY
+ * (portal) so the in-progress question stays mounted underneath. Closing the
+ * popup (X, backdrop, Esc) leaves the current question untouched — only
+ * "Start practice" applies a new selection and restarts.
+ */
+function TopicSelectShell({
+  asModal,
+  onClose,
+  children,
+}: {
+  asModal: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  if (!asModal) return <>{children}</>;
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-neutral-900/50 p-4 backdrop-blur-sm sm:p-6"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Change topics"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="relative my-auto w-full max-w-2xl rounded-2xl bg-neutral-50 shadow-brand-lg">
+        {/* Header */}
+        <div className="sticky top-0 z-10 flex items-center gap-3 rounded-t-2xl border-b border-neutral-200 bg-white px-5 py-3">
+          <div className="min-w-0 flex-1">
+            <h2 className="truncate text-sm font-semibold text-neutral-900">
+              Change topics
+            </h2>
+            <p className="text-[11px] text-neutral-400">
+              Close to keep your current question — only Start practice restarts.
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="-mr-1 rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              aria-hidden="true"
+            >
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Scrollable selection body */}
+        <div className="space-y-4 px-5 py-5 sm:px-6">{children}</div>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 function McatPracticePageInner() {
@@ -504,6 +575,10 @@ function McatPracticePageInner() {
 
   // ── Practice phase ──
   const [pagePhase, setPagePhase] = useState<PagePhase>("select");
+  // While practicing, "Change topics" opens the selection UI as a popup overlay
+  // (NOT a phase switch) so the in-progress question stays mounted underneath and
+  // closing the popup returns the student to exactly where they were — no harm.
+  const [showTopicModal, setShowTopicModal] = useState(false);
   const [itemPhase, setItemPhase] = useState<QuestionPhase>("loading-next");
   const [activeItem, setActiveItem] = useState<ActiveItem | null>(null);
   const [currentKeywordId, setCurrentKeywordId] = useState<string | null>(null);
@@ -742,9 +817,25 @@ function McatPracticePageInner() {
     seenCardsRef.current = new Set();
     recentWrongRef.current = new Map();
     setStats({ answered: 0, correct: 0 });
+    setShowTopicModal(false);
     setPagePhase("practice");
     serveNext(0);
   };
+
+  // Esc closes the change-topics popup (closing keeps the current question).
+  useEffect(() => {
+    if (!showTopicModal) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShowTopicModal(false);
+    };
+    window.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [showTopicModal]);
 
   // ── Answer handlers ───────────────────────────────────────────────────────
 
@@ -943,8 +1034,8 @@ function McatPracticePageInner() {
             )}
             {pagePhase === "practice" && (
               <button
-                onClick={() => setPagePhase("select")}
-                className="hidden sm:inline text-xs text-brand-600 hover:text-brand-800 shrink-0 whitespace-nowrap"
+                onClick={() => setShowTopicModal(true)}
+                className="text-xs text-brand-600 hover:text-brand-800 shrink-0 whitespace-nowrap"
               >
                 Change topics
               </button>
@@ -956,9 +1047,12 @@ function McatPracticePageInner() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-8 space-y-4">
-        {/* ── Phase 1: Topic select ──────────────────────────────────────── */}
-        {pagePhase === "select" && (
-          <>
+        {/* ── Phase 1: Topic select (inline) — and the in-practice popup ── */}
+        {(pagePhase === "select" || showTopicModal) && (
+          <TopicSelectShell
+            asModal={showTopicModal}
+            onClose={() => setShowTopicModal(false)}
+          >
             <div>
               <h2 className="text-base font-semibold text-neutral-900 mb-1">
                 Choose topics to practice
@@ -1173,7 +1267,7 @@ function McatPracticePageInner() {
                 </Button>
               </>
             )}
-          </>
+          </TopicSelectShell>
         )}
 
         {/* ── Phase 2: Practice loop ─────────────────────────────────────── */}

@@ -163,9 +163,18 @@ function prepareText(input: string): string {
   // Render-side safety net for stored ASCII science notation.
   // Only runs when there are no existing delimiters/LaTeX — avoids double-processing
   // properly-formatted content.
-  return !stripped.includes("$") && !BARE_LATEX_RE.test(stripped)
-    ? normalizeScienceNotation(stripped)
-    : stripped;
+  const out =
+    !stripped.includes("$") && !BARE_LATEX_RE.test(stripped)
+      ? normalizeScienceNotation(stripped)
+      : stripped;
+
+  // UNIVERSAL line-break spacing: every line break renders as a full blank-line
+  // gap (paragraph spacing), whether the source used one newline or two. Collapse
+  // any run of newlines (and the spaces around them) to exactly two, then trim the
+  // ends. Figure payloads (SMILES/Mermaid/tables) never reach here, so they're safe.
+  return out
+    .replace(/[^\S\n]*\n(?:[^\S\n]*\n)*[^\S\n]*/g, "\n\n")
+    .replace(/^\n+|\n+$/g, "");
 }
 
 /** Render an already-prepared latex segment as inline React. */
