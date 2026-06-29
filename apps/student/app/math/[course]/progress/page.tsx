@@ -6,6 +6,8 @@ import { LoginGate } from "@/components/auth/LoginGate";
 import { YieldBadge } from "@/components/ui/Badge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { NavMenu } from "@/components/nav/NavMenu";
+import { Card } from "@/components/ui/Card";
+import MyProgressPanel from "@/components/gamification/MyProgressPanel";
 import { getOrCreateMathSession } from "@/lib/mathSession";
 import {
   MathCategory,
@@ -306,6 +308,12 @@ function MathProgressInner({
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6 pb-safe-bottom">
+        {/* Points summary — carries the global My Progress points alongside the
+            mastery report. */}
+        <Card>
+          <MyProgressPanel />
+        </Card>
+
         {loading && (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
             <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin" />

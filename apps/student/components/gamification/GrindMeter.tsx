@@ -103,7 +103,7 @@ function rainbowGradient(hueOffset: number, direction: "90deg" | "to bottom"): s
 
 export function GrindMeter({ mode, streak, answered = 0, startedAt, className, hidden, compact }: GrindMeterProps) {
   // Persistent grind state (per user/day). Hydrated after mount (SSR-safe).
-  const [state, setState] = useState<GrindState>({ date: "", level: 0, seenToday: 0, multiplier: 1 });
+  const [state, setState] = useState<GrindState>({ date: "", level: 0, seenToday: 0 });
   useEffect(() => {
     setState(loadGrind());
     return subscribeGrind(setState);
@@ -198,13 +198,10 @@ export function GrindMeter({ mode, streak, answered = 0, startedAt, className, h
     prevCycle.current = cycle;
   }, [cycle]);
 
-  const multiplier = Math.max(1, state.multiplier);
-  const showMultiplier = mode === "quiz" && multiplier >= 2;
-
   const ariaLabel =
     mode === "flashcard"
       ? `Grind meter: ${tier.label}, ${state.seenToday} cards seen today`
-      : `Grind meter: ${tier.label}${showMultiplier ? `, ${multiplier}× streak` : ""}`;
+      : `Grind meter: ${tier.label}`;
 
   // Gradient values for the flame SVG stop colors and the heat bar.
   // For rainbow tier we pull live hsl strings; otherwise use the tier's fixed colors.
@@ -265,8 +262,8 @@ export function GrindMeter({ mode, streak, answered = 0, startedAt, className, h
   // laps. The fill accelerates while a correct-streak multiplier is active
   // (level climbs faster), and each lap flashes. Replaces the old flame-only chip.
   if (compact) {
-    // Start warm (skip the cold-grey tier); every completed lap is a hotter tier.
-    const cIdx = Math.min(TIERS.length - 1, cycle + 1);
+    // Start cold; every completed lap shifts the colour one tier warmer.
+    const cIdx = Math.min(TIERS.length - 1, cycle);
     const cTier = TIERS[cIdx]!;
     const cRainbow = !!cTier.rainbow;
     const cFrom = cRainbow ? `hsl(${hueOffset % 360},85%,62%)` : (cTier.from ?? "#fb923c");
@@ -278,7 +275,6 @@ export function GrindMeter({ mode, streak, answered = 0, startedAt, className, h
       ? `hsla(${(hueOffset + 60) % 360},80%,65%,0.6)`
       : (cTier.glow ?? "rgba(251,146,60,0.35)");
     const barFillPct = Math.max(5, Math.round(cycleFill * 100));
-    const metric = showMultiplier ? `${multiplier}×` : "";
 
     return (
       <div
@@ -319,7 +315,7 @@ export function GrindMeter({ mode, streak, answered = 0, startedAt, className, h
         <div
           key={`lap-${lapKey}`}
           className={cn(
-            "h-1.5 w-14 sm:w-16 rounded-full bg-neutral-200/70 overflow-hidden",
+            "h-1.5 w-24 sm:w-32 rounded-full bg-neutral-200/70 overflow-hidden",
             lapKey > 0 && "motion-safe:animate-[lodera-correct-pop_320ms_cubic-bezier(0.34,1.56,0.64,1)]"
           )}
         >
@@ -332,10 +328,6 @@ export function GrindMeter({ mode, streak, answered = 0, startedAt, className, h
             }}
           />
         </div>
-
-        {metric && (
-          <span className={cn("text-[11px] font-bold tabular-nums", cTier.text)}>{metric}</span>
-        )}
       </div>
     );
   }
@@ -363,10 +355,7 @@ export function GrindMeter({ mode, streak, answered = 0, startedAt, className, h
 
       {/* Label + mode-specific subtle metric */}
       <span className={cn("shrink-0 text-xs font-semibold tabular-nums flex items-center gap-1.5", tier.text)}>
-        <span>
-          {tier.label}
-          {showMultiplier ? ` · ${multiplier}×` : ""}
-        </span>
+        <span>{tier.label}</span>
         {mode === "flashcard" && (
           <span className="font-medium text-neutral-400" aria-hidden>
             · {state.seenToday} seen today

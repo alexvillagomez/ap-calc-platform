@@ -4,6 +4,9 @@ import {
   updateMasteryMap,
   isMastered,
   MASTERY_START,
+  updatedFloor,
+  FLOOR_START,
+  FLOOR_SPACED_MIN_MS,
 } from "@/lib/courseEngine/adaptive";
 import { nextSrsState, type FlashcardResult } from "@/lib/flashcardSrs";
 import { getAuthUid } from "@/lib/supabaseServer";
@@ -154,11 +157,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ keyword_states: {} });
   }
 
-  // Load current states
+  // Load current states (include last_review_at for floor spacing calculation)
   const { data: existingStates } = await supabase
     .from("mcat_student_keyword_states")
     .select(
-      "keyword_id, score, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, floor"
+      "keyword_id, score, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, floor, last_review_at"
     )
     .eq("session_id", session_id)
     .in("keyword_id", Object.keys(filteredWeights));
@@ -191,8 +194,12 @@ export async function POST(request: Request) {
     const prevCorrect = (prev?.correct_attempts as number) ?? 0;
     const prevConsecutive = (prev?.consecutive_correct as number) ?? 0;
     const prevDontKnow = (prev?.dont_know_count as number) ?? 0;
-    // Pass-through the existing floor value; engine v2 will update it when implemented.
-    const prevFloor = (prev?.floor as number) ?? 0.40;
+    const prevFloor = (prev?.floor as number) ?? FLOOR_START;
+    const prevLastReviewAt = (prev?.last_review_at as string | null | undefined) ?? null;
+    const nowMs = new Date(now).getTime();
+    const elapsedMs = prevLastReviewAt
+      ? Math.max(0, nowMs - new Date(prevLastReviewAt).getTime())
+      : 0;
 
     const totalAttempts = prevTotal + 1;
     const correctAttempts = prevCorrect + (correct ? 1 : 0);
@@ -217,7 +224,8 @@ export async function POST(request: Request) {
       state,
       last_practiced_at: now,
       last_review_at: now,
-      floor: prevFloor,
+      // v2: compute the rising floor based on spacing since last review.
+      floor: updatedFloor(prevFloor, correct, isDontKnow, elapsedMs, FLOOR_SPACED_MIN_MS),
       updated_at: now,
     };
   });

@@ -25,6 +25,10 @@ import { outlineContextForCategory } from "@/lib/mathContentOutline";
 import type { MathCourse } from "@/lib/mathTypes";
 import { cached, invalidate } from "@/lib/serverCache";
 import { MEMORIZED_BOX } from "@/lib/flashcardSrs";
+import {
+  cardSelectionWeights,
+  type FlashcardEntry,
+} from "@/lib/courseEngine/adaptive";
 
 export const runtime = "nodejs";
 // Per-keyword complete-deck generation runs gpt-5.5 (enumerate→emit); give it headroom.
@@ -46,6 +50,7 @@ type SrsRow = {
   flashcard_id: string;
   box: number;
   due_at: string;
+  last_shown_at?: string | null;
 };
 
 export async function POST(request: Request) {
@@ -98,7 +103,7 @@ export async function POST(request: Request) {
       .eq("session_id", session_id),
     supabase
       .from("math_flashcard_srs")
-      .select("flashcard_id, box, due_at")
+      .select("flashcard_id, box, due_at, last_shown_at")
       .eq("session_id", session_id)
       .eq("category_id", category_id),
     supabase
@@ -126,13 +131,6 @@ export async function POST(request: Request) {
     : [];
   const scopedKeywordIds: Set<string> | null =
     filteredKeywordIds.length > 0 ? new Set(filteredKeywordIds) : null;
-
-  const strengths: Record<string, number> = Object.fromEntries(
-    (statesRes.data ?? []).map((s) => [
-      s.keyword_id as string,
-      (s.score as number) ?? 0.5,
-    ])
-  );
 
   const srsByCard = new Map<string, SrsRow>(
     (srsRes.data ?? []).map((r) => [r.flashcard_id as string, r as SrsRow])
@@ -379,19 +377,6 @@ export async function POST(request: Request) {
     });
   const dueIds = new Set(dueReviews.map((x) => x.fc.id));
 
-  const weaknessOf = (fc: DbFlashcard): number => {
-    const kw = (fc.keyword_weights as Record<string, number>) ?? {};
-    let weightedWeakness = 0;
-    let totalWeight = 0;
-    for (const [id, w] of Object.entries(kw)) {
-      if (w > 0) {
-        weightedWeakness += w * (1 - (strengths[id] ?? 0.5));
-        totalWeight += w;
-      }
-    }
-    return totalWeight > 0 ? weightedWeakness / totalWeight : 0.5;
-  };
-
   // Curriculum rank: position of a card's subtopic in `keywords` (order_index-sorted).
   const kwRank = new Map(keywords.map((k, i) => [k.id, i]));
   const curriculumRankOf = (fc: DbFlashcard): number => {
@@ -402,29 +387,69 @@ export async function POST(request: Request) {
     }
     return best;
   };
-  const shownOf = (fc: DbFlashcard): number =>
-    (seenCount.get(fc.id) ?? 0) + (srsByCard.get(fc.id)?.box ?? 0);
 
-  const rotation = scopedFcs
-    .filter((fc) => !dueIds.has(fc.id))
-    .sort((a, b) => {
-      if (curriculumOrder) {
-        const ra = curriculumRankOf(a);
-        const rb = curriculumRankOf(b);
-        if (ra !== rb) return ra - rb; // first subtopic first
-        const sa = shownOf(a);
-        const sb = shownOf(b);
-        if (sa !== sb) return sa - sb;
-        return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+  // Non-due cards: use cardSelectionWeights (v2) for the adaptive probabilistic draw.
+  // In curriculum_order mode (CourseCardsMode) we still deterministically sort by
+  // position first, then apply weighted random within a same-rank tier so the
+  // in-order walk is preserved while still favouring weak, unseen cards.
+  const nonDueFcs = scopedFcs.filter((fc) => !dueIds.has(fc.id));
+
+  // Build FlashcardEntry descriptors for the weight computation.
+  const toFlashcardEntry = (fc: DbFlashcard): FlashcardEntry => {
+    const srs = srsByCard.get(fc.id);
+    // `known` is derived from Leitner box (0–1; MEMORIZED_BOX as the max).
+    const known = srs ? Math.min(1, srs.box / Math.max(1, MEMORIZED_BOX)) : 0;
+    return {
+      id: fc.id,
+      known,
+      last_shown_at: srs?.last_shown_at ?? null,
+    };
+  };
+
+  /**
+   * Pick `n` cards without replacement via weighted random draw using
+   * cardSelectionWeights. Falls back to first-N if all weights are 0.
+   */
+  function weightedPickN(pool: DbFlashcard[], n: number): DbFlashcard[] {
+    const remaining = [...pool];
+    const picks: DbFlashcard[] = [];
+    while (picks.length < n && remaining.length > 0) {
+      const entries = remaining.map(toFlashcardEntry);
+      const weights = cardSelectionWeights(entries, nowMs);
+      const total = weights.reduce((a, b) => a + b, 0);
+      let idx: number;
+      if (total <= 0) {
+        // All weights zero (everything shown recently) → take first in order.
+        idx = 0;
+      } else {
+        let r = Math.random() * total;
+        idx = 0;
+        for (let i = 0; i < weights.length; i++) {
+          r -= weights[i]!;
+          if (r <= 0) { idx = i; break; }
+        }
+        idx = Math.min(idx, remaining.length - 1);
       }
-      const sa = shownOf(a);
-      const sb = shownOf(b);
-      if (sa !== sb) return sa - sb; // least-shown first
-      const wa = weaknessOf(a);
-      const wb = weaknessOf(b);
-      if (wa !== wb) return wb - wa; // weaker first
-      return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+      picks.push(remaining[idx]!);
+      remaining.splice(idx, 1);
+    }
+    return picks;
+  }
+
+  let rotation: DbFlashcard[];
+  if (curriculumOrder) {
+    // Sort by curriculum position first (deterministic walk), then apply weighted
+    // random within each tier to favour weak/unseen cards at that position.
+    nonDueFcs.sort((a, b) => {
+      const ra = curriculumRankOf(a);
+      const rb = curriculumRankOf(b);
+      return ra - rb;
     });
+    rotation = nonDueFcs;
+  } else {
+    // Full deck — use cardSelectionWeights to pick adaptively.
+    rotation = weightedPickN(nonDueFcs, nonDueFcs.length);
+  }
 
   type OutCard = DbFlashcard & { box: number; is_review: boolean };
   const selected: OutCard[] = [];
@@ -432,6 +457,9 @@ export async function POST(request: Request) {
     if (selected.length >= count) break;
     selected.push({ ...fc, box: srs.box, is_review: true });
   }
+  // When not in curriculum_order mode the rotation is already weighted-shuffled.
+  // In curriculum_order mode we walk in order but still want weighted pick within
+  // same-rank cards — the sort above keeps order; we push in order from that list.
   for (const fc of rotation) {
     if (selected.length >= count) break;
     const srs = srsByCard.get(fc.id);

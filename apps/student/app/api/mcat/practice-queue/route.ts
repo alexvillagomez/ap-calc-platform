@@ -152,7 +152,7 @@ export async function GET(request: Request) {
   const { data: states } = await supabase
     .from("mcat_student_keyword_states")
     .select(
-      "keyword_id, score, total_attempts, correct_attempts, dont_know_count, state, spaced_review_due_at"
+      "keyword_id, score, total_attempts, correct_attempts, dont_know_count, state, spaced_review_due_at, last_review_at, floor"
     )
     .eq("session_id", sessionId)
     .in("keyword_id", [...categoryKeywordIds]);
@@ -166,6 +166,8 @@ export async function GET(request: Request) {
       dont_know_count: number;
       state: string | null;
       spaced_review_due_at: string | null;
+      last_review_at: string | null;
+      floor: number | null;
     }
   >();
   for (const s of states ?? []) {
@@ -176,6 +178,8 @@ export async function GET(request: Request) {
       dont_know_count: (s.dont_know_count as number) ?? 0,
       state: (s.state as string) ?? null,
       spaced_review_due_at: (s.spaced_review_due_at as string) ?? null,
+      last_review_at: (s.last_review_at as string | null) ?? null,
+      floor: (s.floor as number | null) ?? null,
     });
   }
 
@@ -198,6 +202,8 @@ export async function GET(request: Request) {
     label: string;
     score: number | null;
     spaced_review_due_at: string | null;
+    last_review_at: string | null;
+    floor: number | null;
   }[] = [];
 
   // review_pool: whole-category
@@ -217,6 +223,9 @@ export async function GET(request: Request) {
         label: kw.label,
         score,
         spaced_review_due_at: spacedReviewDueAt,
+        // v2: pass through decay fields so the client can call decayedScore / isDue
+        last_review_at: st?.last_review_at ?? null,
+        floor: st?.floor ?? null,
       });
     }
   }

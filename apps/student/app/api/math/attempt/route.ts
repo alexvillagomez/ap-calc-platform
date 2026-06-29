@@ -20,6 +20,9 @@ import {
   isMastered,
   difficultyTierFromScore,
   MASTERY_START,
+  updatedFloor,
+  FLOOR_START,
+  FLOOR_SPACED_MIN_MS,
 } from "@/lib/courseEngine/adaptive";
 import {
   autoResolvePriorities,
@@ -208,11 +211,11 @@ export async function POST(request: Request) {
     });
   }
 
-  // Load current states
+  // Load current states (include last_review_at for floor spacing calculation)
   const { data: existingStates } = await supabase
     .from("math_student_keyword_states")
     .select(
-      "keyword_id, score, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, spaced_review_due_at, spaced_review_count, floor"
+      "keyword_id, score, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, spaced_review_due_at, spaced_review_count, floor, last_review_at"
     )
     .eq("session_id", session_id)
     .in("keyword_id", targetKwIds);
@@ -275,8 +278,13 @@ export async function POST(request: Request) {
     const prevState = (prev?.state as string) ?? null;
     const prevSpacedReviewCount = (prev?.spaced_review_count as number) ?? 0;
     const prevSpacedReviewDueAt = (prev?.spaced_review_due_at as string) ?? null;
-    // Pass-through the existing floor value; engine v2 will update it when implemented.
-    const prevFloor = (prev?.floor as number) ?? 0.40;
+    const prevFloor = (prev?.floor as number) ?? FLOOR_START;
+    const prevLastReviewAt = (prev?.last_review_at as string | null | undefined) ?? null;
+    // Compute how long since the last review (for spaced-floor update).
+    const nowMs = new Date(now).getTime();
+    const elapsedMs = prevLastReviewAt
+      ? Math.max(0, nowMs - new Date(prevLastReviewAt).getTime())
+      : 0;
 
     const totalAttempts = prevTotal + 1;
     const correctAttempts = prevCorrect + (correct ? 1 : 0);
@@ -333,7 +341,8 @@ export async function POST(request: Request) {
       course,
       last_practiced_at: now,
       last_review_at: now,
-      floor: prevFloor,
+      // v2: compute the rising floor based on spacing since last review.
+      floor: updatedFloor(prevFloor, correct, dont_know, elapsedMs, FLOOR_SPACED_MIN_MS),
       updated_at: now,
     };
   });

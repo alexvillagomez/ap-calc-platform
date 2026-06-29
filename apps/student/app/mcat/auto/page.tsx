@@ -55,7 +55,10 @@ import {
   tierForMastery,
   isMastered,
   MASTERY_START,
-  REVIEW_FLASHCARD_SHARE,
+  flashcardProbability,
+  decayedScore,
+  isDue,
+  type KeywordState,
 } from "@/lib/courseEngine/adaptive";
 import {
   createPracticeBuffer,
@@ -165,6 +168,10 @@ interface ReviewKeyword {
   label: string;
   score: number | null;
   spaced_review_due_at: string | null;
+  /** v2: ISO timestamp of last review — used for time-decay in decideNextDescriptor. */
+  last_review_at?: string | null;
+  /** v2: Rising floor value — used for decayedScore clamping. */
+  floor?: number;
 }
 
 interface PracticeQueueResponse {
@@ -1005,8 +1012,28 @@ function McatAutoInner() {
       if (!recentlyBad && pool.length > 0 && Math.random() < REVIEW_PROBABILITY) {
         const rk = pickReviewKeyword(pool);
         if (rk) {
-          const kind = Math.random() < REVIEW_FLASHCARD_SHARE ? "flashcard" : "question";
-          return { sessionId: sid, keywordId: rk.id, categoryId: fid, kind, forReview: true, reviewKeyword: rk };
+          // v2: probabilistic flashcard draw based on decayed keyword mastery.
+          const rkState: KeywordState = {
+            score: rk.score ?? 0.5,
+            floor: rk.floor,
+            last_review_at: rk.last_review_at,
+          };
+          const nowTs = Date.now();
+          const rkDecayed = decayedScore(rkState, nowTs);
+          // isDue check: compute cohort mean from pool, tStudied from session elapsed.
+          const cohortMean =
+            pool.reduce((s, r) => {
+              const st: KeywordState = { score: r.score ?? 0.5, floor: r.floor, last_review_at: r.last_review_at };
+              return s + decayedScore(st, nowTs);
+            }, 0) / pool.length;
+          const tStudied = Math.max(0, (nowTs - sessionStart) / 60_000);
+          if (!isDue(rkState, nowTs, cohortMean, tStudied)) {
+            // Not due — fall through to current keyword
+          } else {
+            // v2: probabilistic flashcard draw driven by decayed mastery
+            const kind = Math.random() < flashcardProbability(rkDecayed) ? "flashcard" : "question";
+            return { sessionId: sid, keywordId: rk.id, categoryId: fid, kind, forReview: true, reviewKeyword: rk };
+          }
         }
       }
 

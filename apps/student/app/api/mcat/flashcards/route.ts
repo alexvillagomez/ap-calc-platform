@@ -7,6 +7,10 @@ import { sectionFromId } from "@/lib/mcatSection";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
 import { MEMORIZED_BOX } from "@/lib/flashcardSrs";
 import { cached, invalidate } from "@/lib/serverCache";
+import {
+  cardSelectionWeights,
+  type FlashcardEntry,
+} from "@/lib/courseEngine/adaptive";
 
 export const runtime = "nodejs";
 // Complete-deck generation runs gpt-5.5 (enumerate→emit) and may chain a few
@@ -28,6 +32,7 @@ type SrsRow = {
   flashcard_id: string;
   box: number;
   due_at: string;
+  last_shown_at?: string | null;
 };
 
 export async function POST(request: Request) {
@@ -80,7 +85,7 @@ export async function POST(request: Request) {
       .eq("session_id", session_id),
     supabase
       .from("mcat_flashcard_srs")
-      .select("flashcard_id, box, due_at")
+      .select("flashcard_id, box, due_at, last_shown_at")
       .eq("session_id", session_id)
       .eq("category_id", category_id),
     supabase
@@ -132,13 +137,6 @@ export async function POST(request: Request) {
     : [];
   const scopedKeywordIds: Set<string> | null =
     filteredKeywordIds.length > 0 ? new Set(filteredKeywordIds) : null;
-
-  const strengths: Record<string, number> = Object.fromEntries(
-    (statesRes.data ?? []).map((s) => [
-      s.keyword_id as string,
-      (s.score as number) ?? 0.5,
-    ])
-  );
 
   const srsByCard = new Map<string, SrsRow>(
     (srsRes.data ?? []).map((r) => [r.flashcard_id as string, r as SrsRow])
@@ -494,26 +492,13 @@ export async function POST(request: Request) {
       return new Date(a.srs.due_at).getTime() - new Date(b.srs.due_at).getTime();
     });
 
-  // ── Even-coverage rotation (non-due cards) ──────────────────────────────────
-  // Everything not surfaced as a due review is served LEAST-shown-first this
-  // session, tie-broken by weakness (minor nudge) then stable id. This cycles the
-  // whole deck before any card repeats. Per-session seen-count = attempt rows +
-  // SRS reps (box), so cards reviewed via SRS also count toward "shown".
+  // ── Non-due card selection via cardSelectionWeights (v2) ────────────────────
+  // Due reviews are served first (Leitner SRS). The remainder is picked via
+  // adaptive weighted random: weak/unseen cards appear more often, recently-shown
+  // cards are suppressed (CARD_MIN_SPACING_MS), and coverage is guaranteed via
+  // CARD_COVERAGE_BOOST. In curriculum_order mode we keep the positional sort
+  // but still apply within-position weighted draw.
   const dueIds = new Set(dueReviews.map((x) => x.fc.id));
-  const weaknessOf = (fc: DbFlashcard): number => {
-    const kw = (fc.keyword_weights as Record<string, number>) ?? {};
-    let weightedWeakness = 0;
-    let totalWeight = 0;
-    for (const [id, w] of Object.entries(kw)) {
-      if (w > 0) {
-        weightedWeakness += w * (1 - (strengths[id] ?? 0.5));
-        totalWeight += w;
-      }
-    }
-    return totalWeight > 0 ? weightedWeakness / totalWeight : 0.5;
-  };
-  const shownOf = (fc: DbFlashcard): number =>
-    (seenCount.get(fc.id) ?? 0) + (srsByCard.get(fc.id)?.box ?? 0);
 
   // Curriculum rank: position of a card's subtopic in `keywords` (already
   // order_index-sorted by loadTargetKeywords). Lower = earlier in the course.
@@ -527,28 +512,50 @@ export async function POST(request: Request) {
     return best;
   };
 
-  const rotation = scopedFcs
-    .filter((fc) => !dueIds.has(fc.id))
-    .sort((a, b) => {
-      if (curriculumOrder) {
-        const ra = curriculumRankOf(a);
-        const rb = curriculumRankOf(b);
-        if (ra !== rb) return ra - rb; // first subtopic (order_index) first
-        const sa = shownOf(a);
-        const sb = shownOf(b);
-        if (sa !== sb) return sa - sb; // within a subtopic, least-shown first
-        return a.id < b.id ? -1 : a.id > b.id ? 1 : 0; // stable
-      }
-      const sa = shownOf(a);
-      const sb = shownOf(b);
-      if (sa !== sb) return sa - sb; // least-shown first
-      const wa = weaknessOf(a);
-      const wb = weaknessOf(b);
-      if (wa !== wb) return wb - wa; // weaker first (minor nudge)
-      return a.id < b.id ? -1 : a.id > b.id ? 1 : 0; // stable
-    });
+  const nonDueFcs = scopedFcs.filter((fc) => !dueIds.has(fc.id));
 
-  // Build the batch: due reviews first (SRS priority), then even rotation.
+  const toFlashcardEntry = (fc: DbFlashcard): FlashcardEntry => {
+    const srs = srsByCard.get(fc.id);
+    const known = srs ? Math.min(1, srs.box / Math.max(1, MEMORIZED_BOX)) : 0;
+    return {
+      id: fc.id,
+      known,
+      last_shown_at: srs?.last_shown_at ?? null,
+    };
+  };
+
+  function weightedPickN(pool: DbFlashcard[], n: number): DbFlashcard[] {
+    const remaining = [...pool];
+    const picks: DbFlashcard[] = [];
+    while (picks.length < n && remaining.length > 0) {
+      const entries = remaining.map(toFlashcardEntry);
+      const weights = cardSelectionWeights(entries, nowMs);
+      const total = weights.reduce((a, b) => a + b, 0);
+      let idx = 0;
+      if (total > 0) {
+        let r = Math.random() * total;
+        for (let i = 0; i < weights.length; i++) {
+          r -= weights[i]!;
+          if (r <= 0) { idx = i; break; }
+        }
+        idx = Math.min(idx, remaining.length - 1);
+      }
+      picks.push(remaining[idx]!);
+      remaining.splice(idx, 1);
+    }
+    return picks;
+  }
+
+  let rotation: DbFlashcard[];
+  if (curriculumOrder) {
+    // Preserve positional order; weighted pick within the already-sorted list.
+    nonDueFcs.sort((a, b) => curriculumRankOf(a) - curriculumRankOf(b));
+    rotation = nonDueFcs;
+  } else {
+    rotation = weightedPickN(nonDueFcs, nonDueFcs.length);
+  }
+
+  // Build the batch: due reviews first (SRS priority), then weighted rotation.
   type OutCard = DbFlashcard & { box: number; is_review: boolean };
   const selected: OutCard[] = [];
   for (const { fc, srs } of dueReviews) {

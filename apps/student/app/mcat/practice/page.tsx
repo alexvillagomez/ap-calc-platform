@@ -14,8 +14,19 @@ import { LoadingPanel } from "@/components/mcat/LoadingPanel";
 import FeedbackWidget from "@/components/mcat/FeedbackWidget";
 import MathText from "@/components/mcat/MathText";
 import QuestionToolbar from "@/components/practice/QuestionToolbar";
+import FlipCard, { type FlipResult } from "@/components/cards/FlipCard";
+import LessonModal from "@/components/practice/LessonModal";
 import { primaryKeywordId } from "@/lib/primaryKeyword";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
+import { awardFlashcard, awardQuiz } from "@/lib/points";
+import {
+  pickKeyword,
+  pickContentKind,
+  shouldShowLesson,
+  type EnabledTypes,
+  type KeywordPick,
+} from "@/lib/courseEngine/generalPractice";
+import { tierForMastery } from "@/lib/courseEngine/adaptive";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -59,6 +70,24 @@ interface Question {
   parent_question_id: string | null;
 }
 
+interface Flashcard {
+  id: string;
+  front: string;
+  back: string;
+  keyword_weights: Record<string, number>;
+}
+
+/** The active practice item — a quiz question or a memorization flashcard. */
+type ActiveItem =
+  | { kind: "question"; data: Question }
+  | { kind: "flashcard"; data: Flashcard };
+
+/** Shape of the per-keyword state map returned by the attempt routes. */
+type KwStates = Record<
+  string,
+  { score?: number; state?: string; needs_lesson?: boolean }
+>;
+
 type PagePhase = "select" | "practice";
 type QuestionPhase =
   | "answering"
@@ -93,6 +122,32 @@ function categoryLeafIds(cat: TaxonomyCategory): string[] {
 function umbrellaLeafIds(u: TaxonomyUmbrella): string[] {
   if (u.children.length > 0) return u.children.map((c) => c.id);
   return [u.id];
+}
+
+/**
+ * Index the loaded taxonomy into two leaf maps: leafId → mastery-score and
+ * leafId → category id (the question/flashcard routes need the category to load
+ * their pools). Each in-depth child uses its own score; a childless umbrella
+ * uses its (implied) score. Unknown scores default to 0.5.
+ */
+function seedLeafIndex(
+  cats: TaxonomyCategory[],
+  scoreMap: Map<string, number>,
+  catMap: Map<string, string>
+): void {
+  for (const cat of cats) {
+    for (const u of cat.umbrellas ?? []) {
+      if (u.children.length > 0) {
+        for (const c of u.children) {
+          scoreMap.set(c.id, c.score ?? 0.5);
+          catMap.set(c.id, cat.id);
+        }
+      } else {
+        scoreMap.set(u.id, u.implied_score ?? u.score ?? 0.5);
+        catMap.set(u.id, cat.id);
+      }
+    }
+  }
 }
 
 /** Returns "all" | "some" | "none" */
@@ -440,27 +495,43 @@ function McatPracticePageInner() {
     new Set()
   );
 
+  // ── Content-type choices (what the student wants served) ──────────────────
+  const [enabled, setEnabled] = useState<EnabledTypes>({
+    lessons: true,
+    flashcards: true,
+    quizzes: true,
+  });
+
   // ── Practice phase ──
   const [pagePhase, setPagePhase] = useState<PagePhase>("select");
-  const [questionPhase, setQuestionPhase] =
-    useState<QuestionPhase>("loading-next");
-  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
+  const [itemPhase, setItemPhase] = useState<QuestionPhase>("loading-next");
+  const [activeItem, setActiveItem] = useState<ActiveItem | null>(null);
+  const [currentKeywordId, setCurrentKeywordId] = useState<string | null>(null);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
   const [dontKnow, setDontKnow] = useState(false);
   const [revealCorrect, setRevealCorrect] = useState<number | null>(null);
   const [explanation, setExplanation] = useState<string>("");
   const [usedRefresher, setUsedRefresher] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [excludeIds, setExcludeIds] = useState<string[]>([]);
   const [stats, setStats] = useState<SessionStats>({ answered: 0, correct: 0 });
+  /** Keyword whose lesson is shown inline (null = no lesson open). */
+  const [lessonModalKw, setLessonModalKw] = useState<string | null>(null);
 
-  // ── Struggle detection (mirrors category practice) ────────────────────────
-  /** Consecutive wrong answers on the current question stream. Reset on correct. */
-  const consecutiveWrongRef = useRef(0);
-  /** Keywords already offered a lesson this session — show banner at most once. */
-  const lessonedKeywordsRef = useRef<Set<string>>(new Set());
-  /** Controls the "Struggling? take a lesson" push banner. */
-  const [showLessonOffer, setShowLessonOffer] = useState(false);
+  // ── Serving bookkeeping (refs — read inside async serve/answer flows) ─────
+  /** Snapshot of the selected leaf ids, frozen when practice starts. */
+  const selectionRef = useRef<string[]>([]);
+  /** Live per-keyword mastery (seeded from taxonomy, updated from attempts). */
+  const scoresRef = useRef<Map<string, number>>(new Map());
+  /** leafId → category id (the question/flashcard routes need the category). */
+  const categoryOfRef = useRef<Map<string, string>>(new Map());
+  /** Per-keyword recent-miss counter → drives easier difficulty when struggling. */
+  const recentWrongRef = useRef<Map<string, number>>(new Map());
+  /** Keywords whose lesson has already been auto-surfaced this session. */
+  const lessonShownRef = useRef<Set<string>>(new Set());
+  /** Question ids already served (exclude from the next-question pool). */
+  const excludeRef = useRef<string[]>([]);
+  /** Flashcard ids already shown this session. */
+  const seenCardsRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     (async () => {
@@ -478,6 +549,11 @@ function McatPracticePageInner() {
       if (!res.ok) throw new Error(await res.text().catch(() => "Unknown error"));
       const data = (await res.json()) as { categories: TaxonomyCategory[] };
       setAllCategories(data.categories ?? []);
+      seedLeafIndex(
+        data.categories ?? [],
+        scoresRef.current,
+        categoryOfRef.current
+      );
     } catch (e) {
       setCatsError((e as Error).message ?? "Failed to load categories");
     } finally {
@@ -553,275 +629,328 @@ function McatPracticePageInner() {
     (cat) => categoryLeafIds(cat).some((id) => selectedLeafs.has(id))
   ).length;
 
-  // ── Build API payload from selection ─────────────────────────────────────
+  // ── Practice loop (general practice = controlled randomness) ──────────────
 
-  /**
-   * If the entire selection is made up of one-or-more whole categories (every
-   * leaf in those categories is selected, and no partial categories are
-   * included), send category_ids only. Otherwise send keyword_ids explicitly.
-   */
-  function buildApiPayload(): {
-    category_ids?: string[];
-    keyword_ids?: string[];
-  } {
-    // Categorise each category: "all" | "partial" | "none"
-    const wholeCatIds: string[] = [];
-    let hasPartial = false;
-
-    for (const cat of categories) {
-      const leafIds = categoryLeafIds(cat);
-      const state = selectionState(leafIds, selectedLeafs);
-      if (state === "all") wholeCatIds.push(cat.id);
-      if (state === "some") hasPartial = true;
-    }
-
-    if (!hasPartial && wholeCatIds.length > 0) {
-      // Pure whole-category selection → use category_ids (smaller payload)
-      return { category_ids: wholeCatIds };
-    }
-
-    // Any partial selection → enumerate all keyword ids explicitly
-    return { keyword_ids: Array.from(selectedLeafs) };
+  /** The selected keywords with their current mastery, for keyword selection. */
+  function buildPool(): KeywordPick[] {
+    return selectionRef.current.map((id) => ({
+      id,
+      score: scoresRef.current.get(id) ?? 0.5,
+    }));
   }
 
-  // ── Practice loop ─────────────────────────────────────────────────────────
+  /** Merge fresh per-keyword scores from an attempt response into scoresRef. */
+  function applyScores(states?: KwStates | null) {
+    if (!states) return;
+    for (const [kw, st] of Object.entries(states)) {
+      if (typeof st.score === "number") scoresRef.current.set(kw, st.score);
+    }
+  }
 
-  const startPractice = () => {
-    setPagePhase("practice");
-    setExcludeIds([]);
-    setStats({ answered: 0, correct: 0 });
-    fetchNextQuestion([]);
-  };
+  /** Surface a lesson inline iff a miss left the keyword's mastery low enough. */
+  function maybeLesson(
+    kwId: string | null,
+    wasMiss: boolean,
+    states?: KwStates | null
+  ) {
+    if (!kwId) return;
+    const st = states?.[kwId];
+    const scoreAfter =
+      typeof st?.score === "number"
+        ? st.score
+        : scoresRef.current.get(kwId) ?? null;
+    const serverNeedsLesson =
+      st?.needs_lesson === true || st?.state === "needs_lesson";
+    if (
+      shouldShowLesson({
+        enabled,
+        wasMiss,
+        alreadyShown: lessonShownRef.current.has(kwId),
+        scoreAfter,
+        serverNeedsLesson,
+      })
+    ) {
+      lessonShownRef.current.add(kwId);
+      setLessonModalKw(kwId);
+    }
+  }
 
-  const fetchNextQuestion = async (currentExclude: string[]) => {
-    setQuestionPhase("loading-next");
-    setCurrentQuestion(null);
+  /** Fetch one quiz question scoped to a single keyword, at a skill-fit difficulty. */
+  async function fetchQuestion(kwId: string): Promise<Question> {
+    const score = scoresRef.current.get(kwId) ?? 0.5;
+    const recentlyBad = (recentWrongRef.current.get(kwId) ?? 0) >= 1;
+    const res = await fetch("/api/mcat/next-question", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        session_id: sessionId,
+        category_id: categoryOfRef.current.get(kwId),
+        keyword_id: kwId,
+        difficulty: tierForMastery(score, recentlyBad),
+        exclude_ids: excludeRef.current.length ? excludeRef.current : undefined,
+      }),
+    });
+    if (!res.ok) throw new Error(await res.text().catch(() => "Unknown error"));
+    const data = (await res.json()) as { question: Question };
+    return data.question;
+  }
+
+  /** Fetch one not-yet-seen flashcard for a keyword (null when none available). */
+  async function fetchFlashcard(kwId: string): Promise<Flashcard | null> {
+    const res = await fetch("/api/mcat/flashcards", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        session_id: sessionId,
+        category_id: categoryOfRef.current.get(kwId),
+        keyword_id: kwId,
+      }),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { flashcards?: Flashcard[] };
+    const deck = data.flashcards ?? [];
+    if (deck.length === 0) return null;
+    return deck.find((c) => !seenCardsRef.current.has(c.id)) ?? deck[0] ?? null;
+  }
+
+  /**
+   * Serve the next item: pick a keyword (60% random / 40% weakness-weighted),
+   * then pick flashcard-vs-question adaptively by mastery (within the enabled
+   * types), and fetch it. `depth` bounds the no-content retry loop.
+   */
+  async function serveNext(depth = 0): Promise<void> {
+    setItemPhase("loading-next");
+    setActiveItem(null);
     setSelectedChoice(null);
     setDontKnow(false);
     setRevealCorrect(null);
     setExplanation("");
     setUsedRefresher(false);
     setErrorMsg("");
-    setShowLessonOffer(false);
+
+    const kw = pickKeyword(buildPool());
+    if (!kw) {
+      setErrorMsg("No topics selected.");
+      setItemPhase("error");
+      return;
+    }
+    setCurrentKeywordId(kw.id);
+    const kind = pickContentKind(kw.score, enabled);
 
     try {
-      const payload = buildApiPayload();
-      const res = await fetch("/api/mcat/next-question", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          session_id: sessionId,
-          ...payload,
-          exclude_ids:
-            currentExclude.length > 0 ? currentExclude : undefined,
-        }),
-      });
-      if (!res.ok)
-        throw new Error(await res.text().catch(() => "Unknown error"));
-      const data = (await res.json()) as {
-        question: Question;
-        generated: boolean;
-      };
-      setCurrentQuestion(data.question);
-      setQuestionPhase("answering");
+      if (kind === "flashcard") {
+        const card = await fetchFlashcard(kw.id);
+        if (card) {
+          setActiveItem({ kind: "flashcard", data: card });
+          setItemPhase("answering");
+          return;
+        }
+        // No flashcard for this keyword → fall back to a question if allowed,
+        // otherwise try a different keyword (bounded retries).
+        if (enabled.quizzes) {
+          const q = await fetchQuestion(kw.id);
+          setActiveItem({ kind: "question", data: q });
+          setItemPhase("answering");
+          return;
+        }
+        if (depth < 5) return serveNext(depth + 1);
+        setErrorMsg("No flashcards available for the selected topics yet.");
+        setItemPhase("error");
+        return;
+      }
+
+      // question (pickContentKind only returns null when neither type is
+      // enabled, which the Start button prevents)
+      const q = await fetchQuestion(kw.id);
+      setActiveItem({ kind: "question", data: q });
+      setItemPhase("answering");
     } catch (e) {
-      setErrorMsg((e as Error).message ?? "Failed to fetch question");
-      setQuestionPhase("error");
+      setErrorMsg((e as Error).message ?? "Failed to load the next item");
+      setItemPhase("error");
     }
+  }
+
+  const startPractice = () => {
+    selectionRef.current = Array.from(selectedLeafs);
+    excludeRef.current = [];
+    seenCardsRef.current = new Set();
+    recentWrongRef.current = new Map();
+    lessonShownRef.current = new Set();
+    setLessonModalKw(null);
+    setStats({ answered: 0, correct: 0 });
+    setPagePhase("practice");
+    serveNext(0);
   };
 
-  const handleDontKnow = async () => {
-    if (!currentQuestion || questionPhase !== "answering") return;
-    setDontKnow(true);
-
-    // Struggle detection: "don't know" counts as a miss
-    consecutiveWrongRef.current += 1;
-
-    fetch("/api/mcat/attempt", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        session_id: sessionId,
-        question_id: currentQuestion.id,
-        dont_know: true,
-        context: "practice",
-        usedRefresher,
-      }),
-    })
-      .then(async (res) => {
-        if (res.ok) {
-          const data = (await res.json()) as {
-            keyword_states?: Record<string, { needs_lesson?: boolean }>;
-          };
-          const primaryKwId =
-            currentQuestion.primary_keyword_id ??
-            primaryKeywordId(currentQuestion.keyword_weights);
-          const kwState = primaryKwId
-            ? data.keyword_states?.[primaryKwId]
-            : undefined;
-          const needsLessonFromServer = kwState?.needs_lesson === true;
-          const tooManyWrong = consecutiveWrongRef.current >= 2;
-          if (
-            (tooManyWrong || needsLessonFromServer) &&
-            primaryKwId &&
-            !lessonedKeywordsRef.current.has(primaryKwId)
-          ) {
-            setShowLessonOffer(true);
-          }
-        } else {
-          // Non-fatal fallback: use client-side counter only
-          const primaryKwId =
-            currentQuestion.primary_keyword_id ??
-            primaryKeywordId(currentQuestion.keyword_weights);
-          if (
-            consecutiveWrongRef.current >= 2 &&
-            primaryKwId &&
-            !lessonedKeywordsRef.current.has(primaryKwId)
-          ) {
-            setShowLessonOffer(true);
-          }
-        }
-      })
-      .catch(() => {
-        const primaryKwId =
-          currentQuestion.primary_keyword_id ??
-          primaryKeywordId(currentQuestion.keyword_weights);
-        if (
-          consecutiveWrongRef.current >= 2 &&
-          primaryKwId &&
-          !lessonedKeywordsRef.current.has(primaryKwId)
-        ) {
-          setShowLessonOffer(true);
-        }
-      });
-
-    const newExclude = [...excludeIds, currentQuestion.id];
-    setExcludeIds(newExclude);
-    setRevealCorrect(currentQuestion.correct_index);
-    setExplanation(currentQuestion.explanation);
-    setStats((s) => ({ ...s, answered: s.answered + 1 }));
-    setQuestionPhase("revealed");
-  };
+  // ── Answer handlers ───────────────────────────────────────────────────────
 
   const handleChoice = async (idx: number) => {
-    if (!currentQuestion || questionPhase !== "answering") return;
+    if (
+      !activeItem ||
+      activeItem.kind !== "question" ||
+      itemPhase !== "answering"
+    )
+      return;
+    const q = activeItem.data;
+    const kwId = currentKeywordId;
     setSelectedChoice(idx);
+    const isCorrect = idx === q.correct_index;
 
-    const isCorrect = idx === currentQuestion.correct_index;
-
-    // Struggle detection: reset on correct, increment on wrong
-    if (isCorrect) {
-      consecutiveWrongRef.current = 0;
-    } else {
-      consecutiveWrongRef.current += 1;
+    if (kwId) {
+      recentWrongRef.current.set(
+        kwId,
+        isCorrect ? 0 : (recentWrongRef.current.get(kwId) ?? 0) + 1
+      );
     }
+    if (isCorrect) awardQuiz();
 
     fetch("/api/mcat/attempt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         session_id: sessionId,
-        question_id: currentQuestion.id,
+        question_id: q.id,
         selected_index: idx,
         context: "practice",
         usedRefresher,
       }),
     })
       .then(async (res) => {
-        if (res.ok && !isCorrect) {
-          const data = (await res.json()) as {
-            keyword_states?: Record<string, { needs_lesson?: boolean }>;
-          };
-          const primaryKwId =
-            currentQuestion.primary_keyword_id ??
-            primaryKeywordId(currentQuestion.keyword_weights);
-          const kwState = primaryKwId
-            ? data.keyword_states?.[primaryKwId]
-            : undefined;
-          const needsLessonFromServer = kwState?.needs_lesson === true;
-          const tooManyWrong = consecutiveWrongRef.current >= 2;
-          if (
-            (tooManyWrong || needsLessonFromServer) &&
-            primaryKwId &&
-            !lessonedKeywordsRef.current.has(primaryKwId)
-          ) {
-            setShowLessonOffer(true);
-          }
-        } else if (!res.ok && !isCorrect) {
-          // Non-fatal fallback
-          const primaryKwId =
-            currentQuestion.primary_keyword_id ??
-            primaryKeywordId(currentQuestion.keyword_weights);
-          if (
-            consecutiveWrongRef.current >= 2 &&
-            primaryKwId &&
-            !lessonedKeywordsRef.current.has(primaryKwId)
-          ) {
-            setShowLessonOffer(true);
-          }
-        }
+        if (!res.ok) return;
+        const data = (await res.json()) as { keyword_states?: KwStates };
+        applyScores(data.keyword_states);
+        maybeLesson(kwId, !isCorrect, data.keyword_states);
       })
-      .catch(() => {
-        if (!isCorrect) {
-          const primaryKwId =
-            currentQuestion.primary_keyword_id ??
-            primaryKeywordId(currentQuestion.keyword_weights);
-          if (
-            consecutiveWrongRef.current >= 2 &&
-            primaryKwId &&
-            !lessonedKeywordsRef.current.has(primaryKwId)
-          ) {
-            setShowLessonOffer(true);
-          }
-        }
-      });
+      .catch(() => {});
 
-    const newExclude = [...excludeIds, currentQuestion.id];
-    setExcludeIds(newExclude);
-    setRevealCorrect(currentQuestion.correct_index);
-    setExplanation(currentQuestion.explanation);
+    excludeRef.current = [...excludeRef.current, q.id];
+    setRevealCorrect(q.correct_index);
+    setExplanation(q.explanation);
     setStats((s) => ({
       answered: s.answered + 1,
       correct: s.correct + (isCorrect ? 1 : 0),
     }));
-    setQuestionPhase("revealed");
+    setItemPhase("revealed");
   };
 
-  const handleSimilar = async () => {
-    if (!currentQuestion) return;
-    setQuestionPhase("loading-similar");
+  const handleDontKnow = async () => {
+    if (
+      !activeItem ||
+      activeItem.kind !== "question" ||
+      itemPhase !== "answering"
+    )
+      return;
+    const q = activeItem.data;
+    const kwId = currentKeywordId;
+    setDontKnow(true);
+    if (kwId) {
+      recentWrongRef.current.set(
+        kwId,
+        (recentWrongRef.current.get(kwId) ?? 0) + 1
+      );
+    }
+
+    fetch("/api/mcat/attempt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        session_id: sessionId,
+        question_id: q.id,
+        dont_know: true,
+        context: "practice",
+        usedRefresher,
+      }),
+    })
+      .then(async (res) => {
+        if (!res.ok) return;
+        const data = (await res.json()) as { keyword_states?: KwStates };
+        applyScores(data.keyword_states);
+        maybeLesson(kwId, true, data.keyword_states);
+      })
+      .catch(() => {});
+
+    excludeRef.current = [...excludeRef.current, q.id];
+    setRevealCorrect(q.correct_index);
+    setExplanation(q.explanation);
+    setStats((s) => ({ ...s, answered: s.answered + 1 }));
+    setItemPhase("revealed");
+  };
+
+  const handleGrade = async (result: FlipResult) => {
+    if (!activeItem || activeItem.kind !== "flashcard") return;
+    const card = activeItem.data;
+    const kwId = currentKeywordId;
+    const gotIt = result === "got_it";
+
+    seenCardsRef.current.add(card.id);
+    if (kwId) {
+      recentWrongRef.current.set(
+        kwId,
+        gotIt ? 0 : (recentWrongRef.current.get(kwId) ?? 0) + 1
+      );
+    }
+    if (gotIt) awardFlashcard();
+    setStats((s) => ({
+      answered: s.answered + 1,
+      correct: s.correct + (gotIt ? 1 : 0),
+    }));
 
     try {
-      const res = await fetch("/api/mcat/similar", {
+      const res = await fetch("/api/mcat/flashcard-attempt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           session_id: sessionId,
-          question_id: currentQuestion.id,
+          flashcard_id: card.id,
+          result,
         }),
+      });
+      if (res.ok) {
+        const data = (await res.json()) as { keyword_states?: KwStates };
+        applyScores(data.keyword_states);
+        maybeLesson(kwId, !gotIt, data.keyword_states);
+      }
+    } catch {
+      /* non-fatal */
+    }
+
+    // Flashcards have no separate reveal screen — advance straight to the next
+    // item. A surfaced lesson (if any) overlays on top until dismissed.
+    serveNext(0);
+  };
+
+  const handleSimilar = async () => {
+    if (!activeItem || activeItem.kind !== "question") return;
+    const q = activeItem.data;
+    setItemPhase("loading-similar");
+    try {
+      const res = await fetch("/api/mcat/similar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_id: sessionId, question_id: q.id }),
       });
       if (!res.ok)
         throw new Error(await res.text().catch(() => "Unknown error"));
       const data = (await res.json()) as { question: Question };
       const newQ = data.question;
-      const newExclude = [...excludeIds];
-      if (!newExclude.includes(newQ.id)) newExclude.push(newQ.id);
-      setExcludeIds(newExclude);
-      setCurrentQuestion(newQ);
+      if (!excludeRef.current.includes(newQ.id)) {
+        excludeRef.current = [...excludeRef.current, newQ.id];
+      }
+      setActiveItem({ kind: "question", data: newQ });
       setSelectedChoice(null);
       setDontKnow(false);
       setRevealCorrect(null);
       setExplanation("");
       setUsedRefresher(false);
-      setQuestionPhase("answering");
+      setItemPhase("answering");
     } catch (e) {
       setErrorMsg((e as Error).message ?? "Failed to fetch similar question");
-      setQuestionPhase("error");
+      setItemPhase("error");
     }
   };
 
   const handleNext = () => {
-    fetchNextQuestion(excludeIds);
+    serveNext(0);
   };
 
   // ── Render ────────────────────────────────────────────────────────────────
@@ -842,7 +971,7 @@ function McatPracticePageInner() {
               ← MCAT
             </Link>
             <p className="font-semibold text-neutral-900 text-sm truncate min-w-0">
-              General Practice
+              Custom Practice
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -935,6 +1064,68 @@ function McatPracticePageInner() {
                   </button>
                 </div>
 
+                {/* What to practice — content-type choices */}
+                <div className="rounded-xl border border-neutral-200 bg-white p-3">
+                  <p className="mb-2 text-xs font-medium text-neutral-500">
+                    What to practice
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {(
+                      [
+                        ["flashcards", "Flashcards"],
+                        ["quizzes", "Quizzes"],
+                        ["lessons", "Lessons"],
+                      ] as const
+                    ).map(([key, label]) => {
+                      const on = enabled[key];
+                      return (
+                        <button
+                          key={key}
+                          type="button"
+                          onClick={() =>
+                            setEnabled((e) => ({ ...e, [key]: !e[key] }))
+                          }
+                          aria-pressed={on}
+                          className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                            on
+                              ? "border-brand-300 bg-brand-50 text-brand-700"
+                              : "border-neutral-200 bg-white text-neutral-400 hover:border-neutral-300"
+                          }`}
+                        >
+                          <span
+                            className={`flex h-3.5 w-3.5 items-center justify-center rounded border ${
+                              on
+                                ? "border-brand-500 bg-brand-500"
+                                : "border-neutral-300 bg-white"
+                            }`}
+                          >
+                            {on && (
+                              <svg
+                                className="h-2 w-2 text-white"
+                                fill="none"
+                                viewBox="0 0 10 10"
+                                stroke="currentColor"
+                                strokeWidth={2.5}
+                              >
+                                <path
+                                  d="M1.5 5l2.5 2.5 4.5-4.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            )}
+                          </span>
+                          {label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="mt-2 text-[11px] text-neutral-400">
+                    Flashcards and quizzes adapt to your level for each topic.
+                    Lessons only appear when you keep missing one.
+                  </p>
+                </div>
+
                 {/* Category tree */}
                 <div className="space-y-3">
                   {categories.map((cat) => (
@@ -960,12 +1151,21 @@ function McatPracticePageInner() {
                 )}
 
                 {/* Start button */}
+                {!enabled.flashcards && !enabled.quizzes && (
+                  <p className="text-center text-xs text-amber-600">
+                    Pick at least Flashcards or Quizzes — lessons appear
+                    automatically when you need them.
+                  </p>
+                )}
                 <Button
                   type="button"
                   variant="primary"
                   size="lg"
                   onClick={startPractice}
-                  disabled={selectedLeafs.size === 0}
+                  disabled={
+                    selectedLeafs.size === 0 ||
+                    (!enabled.flashcards && !enabled.quizzes)
+                  }
                   className="w-full mt-2"
                 >
                   Start practice
@@ -978,16 +1178,16 @@ function McatPracticePageInner() {
         {/* ── Phase 2: Practice loop ─────────────────────────────────────── */}
         {pagePhase === "practice" && (
           <>
-            {/* Loading next question */}
-            {questionPhase === "loading-next" && (
+            {/* Loading next item */}
+            {itemPhase === "loading-next" && (
               <LoadingPanel
-                message="Generating a question… can take ~20s"
-                sub="Finding the best question for your selected topics"
+                message="Finding your next item…"
+                sub="Questions can take ~20s to generate the first time."
               />
             )}
 
             {/* Loading similar question */}
-            {questionPhase === "loading-similar" && (
+            {itemPhase === "loading-similar" && (
               <LoadingPanel
                 message="Generating a similar question…"
                 sub="This can take ~20s"
@@ -995,49 +1195,69 @@ function McatPracticePageInner() {
             )}
 
             {/* Error */}
-            {questionPhase === "error" && (
+            {itemPhase === "error" && (
               <div className="rounded-xl border border-error-200 bg-error-50 p-6 text-center">
                 <p className="text-sm text-error-600 mb-3">
-                  {errorMsg || "Failed to load question"}
+                  {errorMsg || "Failed to load the next item"}
                 </p>
-                <Button variant="primary" size="sm" onClick={() => fetchNextQuestion(excludeIds)}>
+                <Button variant="primary" size="sm" onClick={() => serveNext(0)}>
                   Try again
                 </Button>
               </div>
             )}
 
+            {/* Active flashcard */}
+            {itemPhase === "answering" && activeItem?.kind === "flashcard" && (
+              <>
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">
+                    Flashcard
+                  </span>
+                  <span className="text-xs text-neutral-400">
+                    Recall it, then grade yourself
+                  </span>
+                </div>
+                <FlipCard
+                  front={activeItem.data.front}
+                  back={activeItem.data.back}
+                  onGrade={handleGrade}
+                  resetKey={activeItem.data.id}
+                />
+              </>
+            )}
+
             {/* Active question */}
-            {(questionPhase === "answering" ||
-              questionPhase === "revealed") &&
-              currentQuestion && (
+            {(itemPhase === "answering" || itemPhase === "revealed") &&
+              activeItem?.kind === "question" && (
                 <>
                   {/* Stem */}
                   <Card>
                     <p className="text-sm font-medium text-neutral-900 leading-relaxed">
-                      <MathText>{currentQuestion.stem}</MathText>
+                      <MathText>{activeItem.data.stem}</MathText>
                     </p>
                   </Card>
 
                   <QuestionToolbar
                     system="mcat"
                     keywordId={
-                      currentQuestion.primary_keyword_id ??
-                      primaryKeywordId(currentQuestion.keyword_weights)
+                      currentKeywordId ??
+                      activeItem.data.primary_keyword_id ??
+                      primaryKeywordId(activeItem.data.keyword_weights)
                     }
                     sessionId={sessionId}
-                    questionId={currentQuestion.id}
+                    questionId={activeItem.data.id}
                     contentType="question"
-                    resetSignal={currentQuestion.id}
-                    answerSignal={questionPhase}
+                    resetSignal={activeItem.data.id}
+                    answerSignal={itemPhase}
                     onRefresherUsed={() => setUsedRefresher(true)}
                   />
 
                   {/* Choices */}
                   <div className="space-y-2">
-                    {currentQuestion.choices.map((choice, i) => {
+                    {activeItem.data.choices.map((choice, i) => {
                       let state: "default" | "correct" | "wrong" | "dimmed" =
                         "default";
-                      if (questionPhase === "revealed") {
+                      if (itemPhase === "revealed") {
                         if (i === revealCorrect) state = "correct";
                         else if (!dontKnow && i === selectedChoice)
                           state = "wrong";
@@ -1049,7 +1269,7 @@ function McatPracticePageInner() {
                           index={i}
                           text={choice}
                           state={state}
-                          disabled={questionPhase === "revealed"}
+                          disabled={itemPhase === "revealed"}
                           onClick={() => handleChoice(i)}
                         />
                       );
@@ -1057,7 +1277,7 @@ function McatPracticePageInner() {
                   </div>
 
                   {/* I don't know — only before answering */}
-                  {questionPhase === "answering" && (
+                  {itemPhase === "answering" && (
                     <div className="flex justify-center">
                       <button
                         onClick={handleDontKnow}
@@ -1069,7 +1289,7 @@ function McatPracticePageInner() {
                   )}
 
                   {/* Post-answer reveal */}
-                  {questionPhase === "revealed" && (
+                  {itemPhase === "revealed" && (
                     <>
                       {/* Result pill */}
                       <div className="flex justify-center">
@@ -1079,7 +1299,7 @@ function McatPracticePageInner() {
                           </span>
                         ) : selectedChoice === revealCorrect ? (
                           <span className="px-3 py-1 rounded-full bg-success-100 text-success-600 text-xs font-semibold">
-                            Correct!
+                            Correct! +2
                           </span>
                         ) : (
                           <span className="px-3 py-1 rounded-full bg-error-100 text-error-600 text-xs font-semibold">
@@ -1100,53 +1320,11 @@ function McatPracticePageInner() {
                         </div>
                       )}
 
-                      {/* Lesson offer banner — pushed when struggling (≥2 consecutive misses) */}
-                      {showLessonOffer && (() => {
-                        const primaryKwId =
-                          currentQuestion.primary_keyword_id ??
-                          primaryKeywordId(currentQuestion.keyword_weights);
-                        if (!primaryKwId) return null;
-                        return (
-                          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 space-y-3">
-                            <p className="text-sm font-medium text-amber-800">
-                              Struggling? A quick lesson might help.
-                            </p>
-                            <div className="flex gap-2">
-                              <button
-                                onClick={() => {
-                                  lessonedKeywordsRef.current.add(primaryKwId);
-                                  setShowLessonOffer(false);
-                                  window.open(
-                                    `/mcat/lesson/${encodeURIComponent(primaryKwId)}`,
-                                    "_blank",
-                                    "noopener"
-                                  );
-                                }}
-                                className="flex-1 py-2.5 rounded-xl bg-amber-500 text-white text-sm font-semibold hover:bg-amber-600 transition-colors"
-                              >
-                                Take a lesson
-                              </button>
-                              <button
-                                onClick={() => {
-                                  if (primaryKwId) {
-                                    lessonedKeywordsRef.current.add(primaryKwId);
-                                  }
-                                  setShowLessonOffer(false);
-                                }}
-                                className="flex-1 py-2.5 rounded-xl border border-amber-200 bg-white text-amber-700 text-sm font-medium hover:bg-amber-50 transition-colors"
-                              >
-                                Keep practicing
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      })()}
-
                       {/* Feedback widget */}
                       <FeedbackWidget
                         sessionId={sessionId}
                         contentType="question"
-                        contentId={currentQuestion.id}
+                        contentId={activeItem.data.id}
                         className="px-1"
                       />
 
@@ -1156,7 +1334,7 @@ function McatPracticePageInner() {
                           Similar question
                         </Button>
                         <Button variant="primary" size="lg" onClick={handleNext} className="flex-1">
-                          Next question →
+                          Next →
                         </Button>
                       </div>
                     </>
@@ -1164,6 +1342,16 @@ function McatPracticePageInner() {
                 </>
               )}
           </>
+        )}
+
+        {/* Inline lesson — surfaced automatically after a miss on a weak topic */}
+        {lessonModalKw && (
+          <LessonModal
+            system="mcat"
+            keywordId={lessonModalKw}
+            sessionId={sessionId}
+            onClose={() => setLessonModalKw(null)}
+          />
         )}
       </main>
     </div>

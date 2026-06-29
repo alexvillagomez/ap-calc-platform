@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { NavMenu } from "@/components/nav/NavMenu";
+import MyProgressPanel from "@/components/gamification/MyProgressPanel";
 import { YieldBadge } from "@/components/mcat/YieldBadge";
 import { getOrCreateMcatSession } from "@/lib/mcatSession";
 
@@ -366,6 +367,12 @@ export default function McatProgressPage() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-6 pb-safe-bottom">
+        {/* Points summary — the global My Progress points, shown above the
+            mastery report so this page carries everything My Progress shows. */}
+        <Card>
+          <MyProgressPanel />
+        </Card>
+
         {/* Loading */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-20 gap-3">

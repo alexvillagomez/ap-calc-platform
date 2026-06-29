@@ -230,18 +230,19 @@ function McatLandingPageInner() {
               </div>
             </Link>
 
-            {/* Flashcards-only mode — MCAT is flashcards-first; offered alongside auto. */}
-            <Link href={`/mcat/cards${sectionQuery}`} className="group block mt-3">
-              <div className="rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50 p-5 transition-all group-hover:shadow-brand-sm group-hover:border-orange-300">
+            {/* Custom Practice — pick your own topics + content mix (flashcards /
+                quizzes / lessons). Replaces the old flashcards-only mode. */}
+            <Link href={`/mcat/practice${sectionQuery}`} className="group block mt-3">
+              <div className="rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-violet-50 p-5 transition-all group-hover:shadow-brand-sm group-hover:border-brand-300">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl shrink-0">🔥</span>
+                  <span className="text-2xl shrink-0">🎯</span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold text-neutral-900">Flashcards</p>
+                    <p className="text-sm font-bold text-neutral-900">Custom Practice</p>
                     <p className="text-xs text-neutral-500 mt-0.5">
-                      Memorize the whole course.
+                      Pick your topics and mix — flashcards, quizzes, and lessons.
                     </p>
                   </div>
-                  <span className="shrink-0 text-orange-600 font-semibold text-sm inline-flex items-center gap-1">
+                  <span className="shrink-0 text-brand-600 font-semibold text-sm inline-flex items-center gap-1">
                     Start
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth={2}>
                       <path d="M6 3l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
@@ -250,17 +251,6 @@ function McatLandingPageInner() {
                 </div>
               </div>
             </Link>
-
-            {/* Secondary mode — kept available, visually subordinate */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-3 px-1">
-              <span className="text-xs text-neutral-400">Prefer to choose your own topics?</span>
-              <Link
-                href={`/mcat/practice${sectionQuery}`}
-                className="text-xs font-medium text-neutral-500 hover:text-brand-600 underline underline-offset-2 transition-colors"
-              >
-                General practice
-              </Link>
-            </div>
           </section>
         )}
 

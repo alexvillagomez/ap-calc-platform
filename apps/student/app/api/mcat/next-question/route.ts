@@ -20,6 +20,10 @@ import {
   mmrRerank,
   type DiversityDims,
 } from "@/lib/questionDiversity";
+import {
+  decayedScore,
+  type KeywordState,
+} from "@/lib/courseEngine/adaptive";
 
 export const runtime = "nodejs";
 
@@ -239,7 +243,7 @@ export async function POST(request: Request) {
   const [statesRes, attemptsRes] = await Promise.all([
     supabase
       .from("mcat_student_keyword_states")
-      .select("keyword_id, score, consecutive_correct")
+      .select("keyword_id, score, consecutive_correct, last_review_at, floor")
       .eq("session_id", session_id),
     supabase
       .from("mcat_question_attempts")
@@ -247,11 +251,18 @@ export async function POST(request: Request) {
       .eq("session_id", session_id),
   ]);
 
+  const nowMs = Date.now();
+
+  // Build decayed strengths map: apply time-decay on read so selection sees live mastery.
   const strengths: Record<string, number> = Object.fromEntries(
-    (statesRes.data ?? []).map((s) => [
-      s.keyword_id as string,
-      (s.score as number) ?? 0.5,
-    ])
+    (statesRes.data ?? []).map((s) => {
+      const state: KeywordState = {
+        score: (s.score as number) ?? 0.5,
+        floor: (s.floor as number | undefined) ?? undefined,
+        last_review_at: (s.last_review_at as string | null | undefined) ?? null,
+      };
+      return [s.keyword_id as string, decayedScore(state, nowMs)];
+    })
   );
 
   const consecutiveCorrectMap: Record<string, number> = Object.fromEntries(

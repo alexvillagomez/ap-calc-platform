@@ -71,6 +71,10 @@ export interface MathReviewKeyword {
   category_id?: string;
   score: number | null;
   spaced_review_due_at: string | null;
+  /** v2: ISO timestamp of last review — used for time-decay in decideNextDescriptor. */
+  last_review_at?: string | null;
+  /** v2: Rising floor value — used for decayedScore clamping. */
+  floor?: number;
 }
 
 export interface MathPracticeQueueResponse {

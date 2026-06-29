@@ -7,10 +7,8 @@
  * correctness meter. Its level ONLY EVER INCREASES within a day:
  *  - FLASHCARDS: every card SEEN (Got it / Missed it / Don't know) adds a small
  *    boost, and increments the "seen today" counter.
- *  - QUIZZES / QUESTIONS: a CORRECT answer adds, multiplied by the current
- *    correct-streak multiplier (consecutive correct answers compound). A WRONG
- *    answer never subtracts — it just resets the multiplier back to ×1; the
- *    meter level itself holds steady.
+ *  - QUIZZES / QUESTIONS: a CORRECT answer adds a flat boost. A WRONG answer
+ *    never subtracts — the meter level simply holds steady.
  *
  * Persistence is per user (lodera_uid cookie) per DAY, in localStorage:
  *  - `level` accumulates through the day and never decreases within a session.
@@ -21,17 +19,17 @@
 
 const STORAGE_PREFIX = "lodera_grind_v1";
 
-// Tuning. Points are abstract; heat saturates via HEAT_K below.
+// Tuning. Points are abstract; heat saturates via HEAT_K below. The meter is
+// intentionally LONG and SLOW — it should take a good chunk of a session to
+// climb through the colour tiers, and there is no streak multiplier.
 export const FLASHCARD_BOOST = 4; // points per flashcard seen
-export const QUIZ_BASE = 6; // points per correct quiz answer (× multiplier)
-export const MAX_MULTIPLIER = 6; // multiplier cap so it stays motivating, not silly
-const HEAT_K = 160; // points → ~63% heat; full session climbs through tiers
+export const QUIZ_BASE = 6; // points per correct quiz answer
+const HEAT_K = 320; // points → ~63% heat; higher = slower climb
 
 export type GrindState = {
   date: string; // YYYY-MM-DD this state belongs to
   level: number; // monotonic effort points for the day
   seenToday: number; // flashcards seen today
-  multiplier: number; // current quiz correct-streak multiplier (≥1)
 };
 
 function todayKey(): string {
@@ -54,7 +52,7 @@ function storageKey(): string {
 }
 
 function fresh(): GrindState {
-  return { date: todayKey(), level: 0, seenToday: 0, multiplier: 1 };
+  return { date: todayKey(), level: 0, seenToday: 0 };
 }
 
 /** Load today's state, rolling over (resetting) if the stored day is stale. */
@@ -69,7 +67,6 @@ export function loadGrind(): GrindState {
       date: parsed.date,
       level: Math.max(0, Number(parsed.level) || 0),
       seenToday: Math.max(0, Math.floor(Number(parsed.seenToday) || 0)),
-      multiplier: Math.max(1, Number(parsed.multiplier) || 1),
     };
   } catch {
     return fresh();
@@ -108,25 +105,13 @@ export function recordFlashcardSeen(count = 1): GrindState {
 
 /**
  * Record one quiz/question answer.
- *  - correct: multiplier compounds (capped), level += QUIZ_BASE × multiplier.
- *  - wrong: multiplier resets to ×1, level UNCHANGED (never decreases).
+ *  - correct: level += QUIZ_BASE (flat — no streak multiplier).
+ *  - wrong: level UNCHANGED (never decreases).
  */
 export function recordQuizAnswer(correct: boolean): GrindState {
   const s = loadGrind();
-  if (correct) {
-    const multiplier = Math.min(MAX_MULTIPLIER, s.multiplier + 1);
-    // First correct after a reset is ×1; each subsequent correct adds one more.
-    const applied = Math.max(1, s.multiplier);
-    const next: GrindState = {
-      ...s,
-      level: s.level + QUIZ_BASE * applied,
-      multiplier,
-    };
-    save(next);
-    return next;
-  }
-  // Wrong: hold the level, drop the multiplier back to base.
-  const next: GrindState = { ...s, multiplier: 1 };
+  if (!correct) return s; // wrong: hold the level steady
+  const next: GrindState = { ...s, level: s.level + QUIZ_BASE };
   save(next);
   return next;
 }
@@ -157,16 +142,13 @@ export function overdriveFromLevel(level: number): number {
  * Cyclic grind bar (the compact header meter).
  *
  * Instead of one saturating fill, the compact meter fills left → right and
- * then "laps": every full fill bumps it to a HOTTER colour tier, and after
- * enough laps it goes full rainbow. Because the underlying `level` climbs
- * FASTER when a correct-streak multiplier is active (recordQuizAnswer adds
- * QUIZ_BASE × multiplier), the bar visibly accelerates on a hot streak — which
- * is exactly the "goes faster with streak multipliers" feel.
+ * then "laps": every full fill bumps it to a HOTTER colour tier (cold → warm),
+ * and after enough laps it goes full rainbow.
  *
  * `cycle` = how many times it has lapped (0,1,2,…) → drives the colour tier.
  * `fill`  = 0..1 progress through the CURRENT lap → drives the bar width.
  */
-export const CYCLE_SIZE = 60; // points to fill the bar once (~10 base answers)
+export const CYCLE_SIZE = 150; // points to fill the bar once — long & slow
 
 export function cycleProgress(level: number): { cycle: number; fill: number } {
   const p = Math.max(0, level);

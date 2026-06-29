@@ -24,6 +24,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabaseBrowser";
 import { cn } from "@/lib/cn";
 import { useSoundPreference } from "@/components/ui/SoundToggle";
+import MyProgressChip from "@/components/gamification/MyProgressChip";
 
 const USERNAME_KEY    = "ap_calc_username";
 const LAST_CENTER_KEY = "lodera_last_center";
@@ -127,7 +128,9 @@ export function NavMenu({ section: sectionProp, className }: NavMenuProps) {
   }
 
   return (
-    <div ref={wrapRef} className={cn("flex items-center", className)}>
+    <div ref={wrapRef} className={cn("flex items-center gap-2", className)}>
+      {/* My Progress points chip — present in every app header via NavMenu */}
+      <MyProgressChip />
       {/* Avatar + dropdown */}
       <div className="relative">
         <button

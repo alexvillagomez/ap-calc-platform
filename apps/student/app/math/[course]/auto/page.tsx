@@ -69,7 +69,10 @@ import {
   isMastered,
   MASTERY_ADVANCE,
   MASTERY_START,
-  REVIEW_FLASHCARD_SHARE,
+  flashcardProbability,
+  decayedScore,
+  isDue,
+  type KeywordState,
 } from "@/lib/courseEngine/adaptive";
 import {
   createPracticeBuffer,
@@ -1086,8 +1089,31 @@ function MathAutoInner({
         const rk = pickReviewKeyword(pool);
         if (rk) {
           const rcat = rk.category_id ?? fid;
-          const kind = Math.random() < REVIEW_FLASHCARD_SHARE ? "flashcard" : "question";
-          return { sessionId: sid, keywordId: rk.id, categoryId: rcat, kind, forReview: true, reviewKeyword: rk };
+          // v2: probabilistic flashcard draw based on keyword mastery (decayed if
+          // last_review_at is available on the review keyword, else use raw score).
+          const rkState: KeywordState = {
+            score: rk.score ?? 0.5,
+            floor: rk.floor,
+            last_review_at: rk.last_review_at,
+          };
+          const rkDecayed = decayedScore(rkState, Date.now());
+          // Suppress review item when decayed score is above the cohort goal
+          // (it has not dipped below the mastery goal — not actually due yet).
+          // isDue check: use mean decayed score of review pool as cohort proxy
+          // and session-minutes as tStudied proxy.
+          const cohortMean =
+            pool.reduce((s, r) => {
+              const st: KeywordState = { score: r.score ?? 0.5, floor: r.floor, last_review_at: r.last_review_at };
+              return s + decayedScore(st, Date.now());
+            }, 0) / pool.length;
+          const tStudied = Math.max(0, (Date.now() - sessionStart) / 60_000);
+          if (!isDue(rkState, Date.now(), cohortMean, tStudied)) {
+            // Not due — fall through to current keyword
+          } else {
+            // v2: probabilistic flashcard draw driven by decayed mastery
+            const kind = Math.random() < flashcardProbability(rkDecayed) ? "flashcard" : "question";
+            return { sessionId: sid, keywordId: rk.id, categoryId: rcat, kind, forReview: true, reviewKeyword: rk };
+          }
         }
       }
 
