@@ -7,6 +7,10 @@ import { sectionFromId } from "@/lib/mcatSection";
 import { outlineContextForCategory } from "@/lib/mcatContentOutline";
 import { normalizeStem, jaccardSimilarity, NEAR_DUP_THRESHOLD } from "@/lib/questionDiversity";
 import { enrichQuestionsInBackground } from "@/lib/questionEnrichment";
+import {
+  Q_PER_HIGH_YIELD,
+  Q_PER_LOW_YIELD,
+} from "@/lib/courseEngine/adaptive";
 
 export const runtime = "nodejs";
 
@@ -62,6 +66,8 @@ export async function POST(request: Request) {
     keyword_ids?: string[];
     difficulty?: DifficultyTier;
     mixed?: boolean;
+    /** When true, applies even-coverage + yield-weighted selection (checkpoint quiz). */
+    checkpoint?: boolean;
   };
 
   const { session_id, category_id } = body;
@@ -69,6 +75,7 @@ export async function POST(request: Request) {
   const explicitTier: DifficultyTier | null = body.difficulty ?? null;
   // mixed only applies when no explicit difficulty override
   const mixed = !explicitTier && (body.mixed ?? false);
+  const checkpoint = body.checkpoint ?? false;
 
   if (!session_id || !category_id) {
     return NextResponse.json(
@@ -220,9 +227,12 @@ export async function POST(request: Request) {
     return best;
   };
 
-  // Gather questions covering weakest keywords (≤2 per keyword)
-  // Apply rating nudge + in-band boost when ranking.
-  // Also track normalised stems to avoid near-duplicates within this quiz batch.
+  // Gather questions.
+  // CHECKPOINT mode: even-coverage + yield-weighted count.
+  //   Round 1 — one question per keyword (weakest-first within the keyword).
+  //   Round 2 — a second question for high-yield keywords only (yield_level === "high").
+  //   Near-duplicate filter is preserved in both rounds.
+  // DEFAULT mode: ≤2 per keyword, weakness-first (unchanged behaviour).
   const selectedIds = new Set<string>();
   const selectedQs: DbQuestion[] = [];
   const selectedNormStems: string[] = [];
@@ -237,14 +247,9 @@ export async function POST(request: Request) {
     );
   }
 
-  for (const kw of rankedKws) {
-    if (selectedQs.length >= count) break;
-    const kwId = kw.id;
-    const coverage = kwCoverage.get(kwId) ?? 0;
-    if (coverage >= 2) continue;
-
-    // Score candidates for this keyword with rating nudge + in-band boost
-    const matching = unseenQs
+  /** Candidate questions for a given keyword, sorted by composite weakness score. */
+  function candidatesForKw(kwId: string): DbQuestion[] {
+    return unseenQs
       .filter(
         (q) =>
           !selectedIds.has(q.id) &&
@@ -271,11 +276,15 @@ export async function POST(request: Request) {
       })
       .sort((a, b) => b.score - a.score)
       .map((x) => x.q);
+  }
 
+  /** Pick up to `n` questions for a keyword, skipping near-dups. */
+  function pickQsForKw(kwId: string, n: number): void {
+    const matching = candidatesForKw(kwId);
+    let picked = 0;
     for (const q of matching) {
-      if (selectedQs.length >= count) break;
+      if (picked >= n || selectedQs.length >= count) break;
       if (selectedIds.has(q.id)) continue;
-      // Skip near-duplicates within the batch; fall through to next candidate.
       if (isNearDupOfSelected(q.stem)) {
         console.warn(
           `[mcat/quiz] near-dup stem skipped for question ${q.id}; will fall back if no alternative`
@@ -290,6 +299,32 @@ export async function POST(request: Request) {
       )) {
         kwCoverage.set(id, (kwCoverage.get(id) ?? 0) + 1);
       }
+      picked++;
+    }
+  }
+
+  if (checkpoint) {
+    // CHECKPOINT: even coverage — one question per keyword in weakness order (round 1),
+    // then a second question for high-yield keywords (round 2).
+    // rankedKws is already sorted weakest-first (with yield nudge applied).
+    for (const kw of rankedKws) {
+      if (selectedQs.length >= count) break;
+      pickQsForKw(kw.id, Q_PER_LOW_YIELD); // Q_PER_LOW_YIELD = 1
+    }
+    // Round 2: AAMC high-yield keywords get a second question
+    for (const kw of rankedKws) {
+      if (selectedQs.length >= count) break;
+      if (kw.yield_level === "high") {
+        pickQsForKw(kw.id, Q_PER_HIGH_YIELD - Q_PER_LOW_YIELD); // 1 more
+      }
+    }
+  } else {
+    // DEFAULT: weakest-first, ≤2 per keyword
+    for (const kw of rankedKws) {
+      if (selectedQs.length >= count) break;
+      const kwId = kw.id;
+      if ((kwCoverage.get(kwId) ?? 0) >= 2) continue;
+      pickQsForKw(kwId, 2 - (kwCoverage.get(kwId) ?? 0));
     }
   }
 

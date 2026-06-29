@@ -123,6 +123,7 @@ type Phase =
   | "mini_quiz_loading"
   | "mini_quiz"
   | "mini_quiz_revealed"
+  | "quiz_results"
   | "course_complete"
   | "done"
   | "error";
@@ -431,6 +432,11 @@ function MathAutoInner({
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizSelectedChoice, setQuizSelectedChoice] = useState<number | null>(null);
   const [quizCorrect, setQuizCorrect] = useState(0);
+  // Per-question result tracking for the remedial offer on quiz completion.
+  // Maps dominant keyword_id → { label, correct } for questions answered in the quiz.
+  const quizKwResultsRef = useRef<Map<string, { label: string; correct: boolean }>>(new Map());
+  // Keywords that were failed in the checkpoint quiz (shown on quiz_results screen).
+  const [failedQuizKeywords, setFailedQuizKeywords] = useState<Array<{ id: string; label: string }>>([]);
   const pendingAdvanceCategoryRef = useRef<string | null>(null); // category id to advance past
 
   // ── Category complete ──────────────────────────────────────────────────────
@@ -489,6 +495,7 @@ function MathAutoInner({
         category_id: categoryId,
         count: MINI_QUIZ_COUNT,
         mixed: true,
+        checkpoint: true,
         course: course as MathCourse,
       }),
     });
@@ -1390,10 +1397,12 @@ function MathAutoInner({
         await advanceToNextCategory(sessionId);
         return;
       }
+      quizKwResultsRef.current = new Map();
       setQuizQuestions(qs);
       setQuizIndex(0);
       setQuizSelectedChoice(null);
       setQuizCorrect(0);
+      setFailedQuizKeywords([]);
       setPhase("mini_quiz");
     } catch {
       await advanceToNextCategory(sessionId);
@@ -1426,6 +1435,25 @@ function MathAutoInner({
       });
       setLastAnswerCorrect(correct);
 
+      // Track per-keyword result for the remedial offer. We attribute the question
+      // to its dominant keyword and record the first (worst) result per keyword so
+      // a high-yield keyword that gets two questions shows as failed if either fails.
+      const kwWeights = currentQuizQuestion.keyword_weights ?? {};
+      let domKwId: string | null = null;
+      let domW = -Infinity;
+      for (const [id, w] of Object.entries(kwWeights)) {
+        if (w > domW) { domW = w; domKwId = id; }
+      }
+      if (domKwId) {
+        const existing = quizKwResultsRef.current.get(domKwId);
+        // Find label: prefer queue, fall back to keyword id
+        const kwLabel = queueRef.current.find((k) => k.id === domKwId)?.label ?? domKwId;
+        // If already recorded a wrong answer for this kw, keep it wrong
+        if (!existing || (!existing.correct && correct) || (existing.correct && !correct)) {
+          quizKwResultsRef.current.set(domKwId, { label: kwLabel, correct });
+        }
+      }
+
       sessionAnswersRef.current += 1;
       try {
         await fetch("/api/math/attempt", {
@@ -1447,8 +1475,18 @@ function MathAutoInner({
   const handleQuizNext = useCallback(async () => {
     const nextIdx = quizIndex + 1;
     if (nextIdx >= quizQuestions.length) {
-      // Quiz done → advance
-      await advanceToNextCategory(sessionId);
+      // Quiz done → compute failed keywords and show results screen.
+      const failed: Array<{ id: string; label: string }> = [];
+      for (const [id, res] of quizKwResultsRef.current.entries()) {
+        if (!res.correct) failed.push({ id, label: res.label });
+      }
+      if (failed.length > 0) {
+        setFailedQuizKeywords(failed);
+        setPhase("quiz_results");
+      } else {
+        // All passed — advance immediately.
+        await advanceToNextCategory(sessionId);
+      }
       return;
     }
     setQuizIndex(nextIdx);
@@ -1473,7 +1511,7 @@ function MathAutoInner({
     i < Math.round(masteryProgress * MASTERY_DOT_COUNT) ? "●" : "○"
   ).join("");
 
-  const isInQuizPhase = phase === "mini_quiz" || phase === "mini_quiz_revealed" || phase === "mini_quiz_loading";
+  const isInQuizPhase = phase === "mini_quiz" || phase === "mini_quiz_revealed" || phase === "mini_quiz_loading" || phase === "quiz_results";
   const isInPracticePhase = phase === "practicing" || phase === "revealed";
   const isInFlashcardPhase = phase === "flashcard";
   const currentFc = isInFlashcardPhase ? (flashcards[fcIndex] ?? null) : null;
@@ -2031,6 +2069,61 @@ function MathAutoInner({
               </button>
             )}
           </>
+        )}
+
+        {/* ─── Checkpoint quiz results (remedial offer) ─────────────────── */}
+        {phase === "quiz_results" && (
+          <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-brand-xs space-y-5">
+            <div className="text-center space-y-2">
+              <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mx-auto text-2xl">
+                📋
+              </div>
+              <h1 className="text-lg font-semibold text-neutral-900">
+                Checkpoint results — {quizScorePct}% correct
+              </h1>
+              <p className="text-sm text-neutral-500">
+                {failedQuizKeywords.length > 0
+                  ? "You missed some topics. Practice them now or continue."
+                  : "Great work! All topics passed."}
+              </p>
+            </div>
+            {failedQuizKeywords.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+                  Topics to review
+                </p>
+                {failedQuizKeywords.map((kw) => (
+                  <button
+                    key={kw.id}
+                    onClick={() => {
+                      const catId = pendingAdvanceCategoryRef.current;
+                      if (!catId) return;
+                      // Point queueIndex to this keyword (if in queue) so currentKeyword resolves correctly.
+                      const kwIdx = queueRef.current.findIndex((q) => q.id === kw.id);
+                      if (kwIdx >= 0) {
+                        setQueueIndex(kwIdx);
+                        queueIndexRef.current = kwIdx;
+                      }
+                      const fromQueue = queueRef.current[kwIdx >= 0 ? kwIdx : 0];
+                      currentKwScoreRef.current = fromQueue?.score ?? MASTERY_START;
+                      bufferRef.current?.clear();
+                      loadQuestion(sessionId, kw.id, catId);
+                    }}
+                    className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-amber-200 bg-amber-50 text-sm text-neutral-800 hover:bg-amber-100 transition-colors text-left"
+                  >
+                    <span className="font-medium">{kw.label}</span>
+                    <span className="text-amber-700 text-xs font-semibold">Practice →</span>
+                  </button>
+                ))}
+              </div>
+            )}
+            <button
+              onClick={() => advanceToNextCategory(sessionId)}
+              className="w-full py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors"
+            >
+              Continue to next unit
+            </button>
+          </div>
         )}
 
         {/* Done (shouldn't appear — course_complete replaces it) */}

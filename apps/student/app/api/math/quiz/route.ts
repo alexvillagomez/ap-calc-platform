@@ -28,6 +28,11 @@ import { outlineContextForCategory } from "@/lib/mathContentOutline";
 import type { MathCourse } from "@/lib/mathTypes";
 import { normalizeStem, jaccardSimilarity, NEAR_DUP_THRESHOLD } from "@/lib/questionDiversity";
 import { enrichQuestionsInBackground } from "@/lib/questionEnrichment";
+import {
+  YIELD_HIGH_THRESHOLD,
+  Q_PER_HIGH_YIELD,
+  Q_PER_LOW_YIELD,
+} from "@/lib/courseEngine/adaptive";
 
 export const runtime = "nodejs";
 
@@ -81,6 +86,8 @@ export async function POST(request: Request) {
     difficulty?: DifficultyTier;
     mixed?: boolean;
     course?: MathCourse;
+    /** When true, applies even-coverage + yield-weighted selection (checkpoint quiz). */
+    checkpoint?: boolean;
   };
 
   const { session_id, category_id } = body;
@@ -88,6 +95,7 @@ export async function POST(request: Request) {
   const explicitTier: DifficultyTier | null = body.difficulty ?? null;
   const mixed = !explicitTier && (body.mixed ?? false);
   const course: MathCourse = body.course ?? "precalc";
+  const checkpoint = body.checkpoint ?? false;
 
   if (!session_id || !category_id) {
     return NextResponse.json(
@@ -225,8 +233,12 @@ export async function POST(request: Request) {
     return best;
   };
 
-  // Gather stored questions (≤2 per keyword, weakness-first)
-  // Also track normalised stems already in the quiz to avoid near-duplicates within the batch.
+  // Gather stored questions.
+  // CHECKPOINT mode: even-coverage + yield-weighted count.
+  //   Round 1 — one question per keyword (weakest-first within the keyword).
+  //   Round 2 — a second question for high-yield keywords only (yield_score ≥ YIELD_HIGH_THRESHOLD).
+  //   Near-duplicate filter is preserved in both rounds.
+  // DEFAULT mode: ≤2 per keyword, weakness-first (unchanged behaviour).
   const selectedIds = new Set<string>();
   const selectedQs: DbQuestion[] = [];
   const selectedNormStems: string[] = [];
@@ -241,12 +253,9 @@ export async function POST(request: Request) {
     );
   }
 
-  for (const kw of rankedKws) {
-    if (selectedQs.length >= count) break;
-    const kwId = kw.id;
-    if ((kwCoverage.get(kwId) ?? 0) >= 2) continue;
-
-    const matching = unseenQs
+  /** Candidate questions for a given keyword, sorted by composite weakness score. */
+  function candidatesForKw(kwId: string): DbQuestion[] {
+    return unseenQs
       .filter(
         (q) =>
           !selectedIds.has(q.id) &&
@@ -274,12 +283,15 @@ export async function POST(request: Request) {
       })
       .sort((a, b) => b.score - a.score)
       .map((x) => x.q);
+  }
 
+  /** Pick up to `n` questions for a keyword, skipping near-dups. */
+  function pickQsForKw(kwId: string, n: number): void {
+    const matching = candidatesForKw(kwId);
+    let picked = 0;
     for (const q of matching) {
-      if (selectedQs.length >= count) break;
+      if (picked >= n || selectedQs.length >= count) break;
       if (selectedIds.has(q.id)) continue;
-      // Skip near-duplicates of already-selected questions within this quiz batch.
-      // Fallback: if every remaining candidate is a near-dup, include the first one anyway.
       if (isNearDupOfSelected(q.stem_latex)) {
         console.warn(
           `[math/quiz] near-dup stem skipped for question ${q.id}; will fall back if no alternative`
@@ -294,6 +306,32 @@ export async function POST(request: Request) {
       )) {
         kwCoverage.set(id, (kwCoverage.get(id) ?? 0) + 1);
       }
+      picked++;
+    }
+  }
+
+  if (checkpoint) {
+    // CHECKPOINT: even coverage — one question per keyword in weakness order (round 1),
+    // then a second question for high-yield keywords (round 2).
+    // rankedKws is already sorted weakest-first (with yield nudge applied).
+    for (const kw of rankedKws) {
+      if (selectedQs.length >= count) break;
+      pickQsForKw(kw.id, Q_PER_LOW_YIELD); // Q_PER_LOW_YIELD = 1
+    }
+    // Round 2: high-yield keywords get a second question
+    for (const kw of rankedKws) {
+      if (selectedQs.length >= count) break;
+      if ((kw.yield_score ?? 0) >= YIELD_HIGH_THRESHOLD) {
+        pickQsForKw(kw.id, Q_PER_HIGH_YIELD - Q_PER_LOW_YIELD); // 1 more
+      }
+    }
+  } else {
+    // DEFAULT: weakest-first, ≤2 per keyword
+    for (const kw of rankedKws) {
+      if (selectedQs.length >= count) break;
+      const kwId = kw.id;
+      if ((kwCoverage.get(kwId) ?? 0) >= 2) continue;
+      pickQsForKw(kwId, 2 - (kwCoverage.get(kwId) ?? 0));
     }
   }
 
