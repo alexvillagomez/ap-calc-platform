@@ -40,7 +40,7 @@ export class McatGenError extends Error {
  * ratios, $H_2O$, aligned steps in solutions/examples) MUST be delimited or it
  * renders as literal backslashes. Included in every system prompt.
  */
-const MCAT_DELIMITER_RULE = `MATH/NOTATION (mandatory, EVERY field): wrap ALL math/chemistry in $...$ (inline) or $$...$$ (block) using KaTeX — NEVER bare LaTeX, NEVER \\text{}. Use KaTeX sub/superscripts for ALL biochem symbols: "$V_{max}$","$K_m$","$pK_a$","$H_2O$","$CO_2$","$NAD^+$","$FADH_2$","$OH^-$","$H^+$". Flat ASCII ("H2O","Vmax","pKa","NAD+") renders as plain text and is WRONG. BOLD/EMPHASIS: use markdown **double asterisks** ONLY — NEVER bold prose by wrapping it in math ($\\mathbf{...}$, \\textbf{...}, or any math mode); that renders words as math and is WRONG. Inside a **...** run keep math as ordinary $...$. \\mathbf/\\boldsymbol may bold a genuine math SYMBOL (e.g. a vector) but NEVER a word or sentence.`;
+const MCAT_DELIMITER_RULE = `MATH/NOTATION (mandatory, EVERY field): wrap ALL math/chemistry in $...$ (inline) or $$...$$ (block) using KaTeX — NEVER bare LaTeX, NEVER \\text{}. Use KaTeX sub/superscripts for ALL biochem symbols: "$V_{max}$","$K_m$","$pK_a$","$H_2O$","$CO_2$","$NAD^+$","$FADH_2$","$OH^-$","$H^+$". Flat ASCII ("H2O","Vmax","pKa","NAD+") renders as plain text and is WRONG. DEGREES/TEMPERATURE: write as PLAIN TEXT with a literal degree sign — "4°C", "37°C", "109.5°" — NEVER inside $...$ and NEVER \\circ/\\degree (those corrupt into a stray superscript). BOLD/EMPHASIS: use markdown **double asterisks** ONLY — NEVER bold prose by wrapping it in math ($\\mathbf{...}$, \\textbf{...}, or any math mode); that renders words as math and is WRONG. Inside a **...** run keep math as ordinary $...$. \\mathbf/\\boldsymbol may bold a genuine math SYMBOL (e.g. a vector) but NEVER a word or sentence.`;
 
 // Shared depth contract — injected into every MCAT generator (flashcards, questions,
 // quizzes, lessons). Calibrated to the MilesDown Anki deck: the MCAT is "a mile wide
@@ -49,7 +49,7 @@ const MCAT_DELIMITER_RULE = `MATH/NOTATION (mandatory, EVERY field): wrap ALL ma
 const MCAT_DEPTH_RULE = `MCAT DEPTH — "A MILE WIDE AND AN INCH DEEP" (mandatory): the MCAT is a REASONING exam — it tests conceptual understanding (relationships, directional rules, approximate ranges, causal logic), NOT recall of precise biochemical constants. A student who understands WHY beats one who memorized a decimal.
 
 Before stating ANY number, ask in order:
-1. Universal constant (speed of light, Avogadro's, bond angle $109.5°$)? → keep the exact value.
+1. Universal constant (speed of light, Avogadro's, bond angle 109.5°)? → keep the exact value.
 2. Round COMPARATIVE number where the comparison IS the concept ($NADH = 2.5$ vs $FADH_2 = 1.5$ ATP; glycolysis net $2$ ATP)? → keep it.
 3. Otherwise → state a RANGE / direction / qualitative relationship, never a decimal.
 
@@ -328,7 +328,7 @@ SCOPE — HARD GATE: card ONLY in-scope facts; anything out-of-scope is forbidde
 
 FORMAT — the front names the SUBJECT with a GENERAL cue or directive (e.g. "Describe …", "… ?"), not a full sentence — general enough that the student must RECALL the whole answer, never hinted toward it. The BACK is the bare answer — short and direct (a name, value, direction, classification, compartment, or formula), never filler and never an explanation (that's the lesson/refresher). Put each distinct fact on its OWN LINE (a line break between them), never joined by semicolons, no bold. When a fact IS a formula, write it as an actual equation with $=$ ($Q_{net} = q_N + q_C + q_R$), not prose like "sum of …". NO GIVEAWAY (the core rule): the front must not state, spell, or imply any part of the answer, or name its dimension/category — if reading the front hands you the back, recast it.
 
-NOTATION — wrap ALL math/chemistry in $...$ KaTeX with real sub/superscripts ($V_{max}$, $H_2O$, $NAD^+$); flat ASCII and \\text{} are WRONG. A Greek letter naming a structure → the word (alpha carbon). Bold only with **markdown**.
+NOTATION — wrap ALL math/chemistry in $...$ KaTeX with real sub/superscripts ($V_{max}$, $H_2O$, $NAD^+$); flat ASCII and \\text{} are WRONG. DEGREES/TEMPERATURE go in PLAIN TEXT with a literal degree sign ("4°C", "37°C", "109.5°") — NEVER inside $...$, NEVER \\circ/\\degree (they corrupt into a stray superscript). A Greek letter naming a structure → the word (alpha carbon). Bold only with **markdown**.
 
 FIGURES — rare; most cards are pure text. Only for a specific in-scope molecule/pathway, on the BACK: <Molecule smiles="..."/>, <Mermaid>graph LR; A-->B</Mermaid>, or $\\ce{...}$. Emit only a structure you are CERTAIN of.
 
