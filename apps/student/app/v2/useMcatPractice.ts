@@ -238,9 +238,17 @@ export function useMcatPractice() {
   // otherwise redirect to /login on a missing session).
   const bootstrap = useCallback(async (signal: { cancelled: boolean }) => {
     // Auth pre-check — avoid getOrCreateMcatSession's redirect-on-missing-session.
-    const {
-      data: { user },
-    } = await supabaseBrowser().auth.getUser();
+    // Wrapped so a thrown/rejected auth client (e.g. missing Supabase config, a
+    // network blip) can NEVER leave us on the blank pre-auth screen: any failure
+    // falls back to "logged out" → the in-page LoginModal shows. authChecked is
+    // ALWAYS set so the page advances past the blank gate.
+    let user: { id: string } | null = null;
+    try {
+      const res = await supabaseBrowser().auth.getUser();
+      user = res.data.user;
+    } catch {
+      user = null;
+    }
     if (signal.cancelled) return;
     setAuthChecked(true);
     if (!user) {
