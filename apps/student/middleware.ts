@@ -1,6 +1,17 @@
 /**
- * middleware.ts — API rate limiting for the Lodera student app.
+ * middleware.ts — single-page routing + API rate limiting for Lodera.
  *
+ * ── ROUTING (the site is now the /v2 single page) ──────────────────────────────
+ * lodera.ai IS the /v2 study app, served at the root with a clean URL. The old
+ * ~45-route app is intentionally unreachable. Concretely:
+ *   - `/`                → internally REWRITTEN to `/v2` (URL stays `/`).
+ *   - `/v2`, `/v2/...`   → REDIRECTED to `/` (keep the URL clean; never expose /v2).
+ *   - any other page     → REDIRECTED to `/` (legacy routes are gone).
+ *   - `/api/*`           → passed through (the app depends on it) + rate limited.
+ *   - static / _next     → excluded by the matcher (served untouched).
+ * To bring the legacy app back, revert this routing block + the matcher.
+ *
+ * ── RATE LIMITING (/api/* only) ────────────────────────────────────────────────
  * WHY: the production DB is a tiny "Nano" Supabase instance. A single runaway
  * client, a buggy retry loop, or a scraping script can exhaust its IO and take
  * the app down. This middleware caps `/api/*` request volume per identity so
@@ -15,22 +26,26 @@
  * IDENTITY: the `lodera_uid` cookie (logged-in user) is preferred; otherwise the
  * client IP from `x-forwarded-for` (first hop) or `x-real-ip`; else 'anon'.
  *
- * DISABLE: set env `RATE_LIMIT_DISABLED=1` to bypass entirely.
- * DURABLE BACKEND: set `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` to
- *   use Upstash Redis (works on the edge); otherwise an in-process per-instance
- *   counter is used. See lib/rateLimit.ts.
+ * DISABLE: set env `RATE_LIMIT_DISABLED=1` to bypass rate limiting (routing still
+ * applies). DURABLE BACKEND: set `UPSTASH_REDIS_REST_URL` + `..._TOKEN` for
+ * Upstash Redis; otherwise an in-process per-instance counter is used.
  *
- * SAFETY: the matcher restricts this to `/api/*` only, and all logic is wrapped
- * so any unexpected error falls through to NextResponse.next() (fail-open).
+ * SAFETY: all logic is wrapped so any unexpected error falls through to
+ * NextResponse.next() (fail-open) — a broken limiter never blocks a request.
  */
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { rateLimit } from "@/lib/rateLimit";
 
+// Run on every route EXCEPT Next internals and static files (anything with a
+// dot, e.g. .svg/.png/.ico). `/api/*` IS included so rate limiting still applies.
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };
+
+/** The physical route segment that holds the single-page app. */
+const APP_SEGMENT = "/v2";
 
 const WINDOW_MS = 10_000;
 
@@ -74,12 +89,35 @@ function clientIdFor(req: NextRequest): string {
 }
 
 export async function middleware(req: NextRequest) {
+  const pathname = req.nextUrl.pathname;
+
+  // ── Page routing (everything that isn't an /api/* call) ──────────────────────
+  // The whole site is the single-page app. Map URLs onto it and bury the old app.
+  if (!pathname.startsWith("/api/")) {
+    try {
+      // Root → render the app (URL stays "/").
+      if (pathname === "/") {
+        const url = req.nextUrl.clone();
+        url.pathname = APP_SEGMENT;
+        return NextResponse.rewrite(url);
+      }
+      // Never expose the /v2 path itself — send it to the clean root.
+      // Any other (legacy) page route is gone → also home.
+      const url = req.nextUrl.clone();
+      url.pathname = "/";
+      url.search = "";
+      return NextResponse.redirect(url);
+    } catch {
+      return NextResponse.next(); // fail-open
+    }
+  }
+
+  // ── /api/* rate limiting ─────────────────────────────────────────────────────
   try {
     if (process.env.RATE_LIMIT_DISABLED === "1") {
       return NextResponse.next();
     }
 
-    const pathname = req.nextUrl.pathname;
     const tier = tierFor(pathname);
     const max = LIMITS[tier];
     const clientId = clientIdFor(req);
