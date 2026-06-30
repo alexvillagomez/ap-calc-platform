@@ -83,7 +83,7 @@ export default function V2StudyPage() {
     history,
     viewIndex,
     atFrontier,
-    setEnabled,
+    setEnabledTypes,
     commitSelection,
     answerQuestion,
     skipToNext,
@@ -110,8 +110,11 @@ export default function V2StudyPage() {
   });
 
   useEffect(() => {
-    setEnabled({ lessons: modes.Lessons, flashcards: modes.Flashcards, quizzes: modes.Questions });
-  }, [modes.Lessons, modes.Flashcards, modes.Questions, setEnabled]);
+    // setEnabledTypes invalidates the look-ahead buffer + re-serves so a mode
+    // change takes effect on the NEXT item (a same-value call — incl. this one on
+    // mount — is a no-op there). See useMcatPractice.setEnabledTypes.
+    setEnabledTypes({ lessons: modes.Lessons, flashcards: modes.Flashcards, quizzes: modes.Questions });
+  }, [modes.Lessons, modes.Flashcards, modes.Questions, setEnabledTypes]);
 
   function toggleMode(mode: StudyMode) {
     setModes((prev) => {
@@ -239,7 +242,14 @@ export default function V2StudyPage() {
   const [targetKw, setTargetKw] = useState<string | null>(null);
   const targetKeyword = targetKw ?? currentKeywordId;
   const targetLabel = targetKeyword ? labelIndex.get(targetKeyword) ?? currentLabel : currentLabel;
-  const onDemand = useOnDemand({ sessionId, keywordId: currentKeywordId, keywordLabel: currentLabel });
+  const onDemand = useOnDemand({
+    sessionId,
+    keywordId: currentKeywordId,
+    keywordLabel: currentLabel,
+    // Whenever a question or flashcard is on screen, silently warm the lesson +
+    // refresher for its topic so the right-panel buttons / modals open instantly.
+    prefetchContent: activeItem?.kind === "question" || activeItem?.kind === "flashcard",
+  });
 
   // ── Lesson stepper (shared by inline view + modal) ───────────────────────────
   const [lessonStep, setLessonStep] = useState(1);

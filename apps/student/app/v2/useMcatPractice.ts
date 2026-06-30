@@ -165,8 +165,10 @@ export function useMcatPractice() {
   // Selection — Set of leaf keyword ids (single source of truth).
   const [selectedLeafs, setSelectedLeafs] = useState<Set<string>>(new Set());
 
-  // Enabled content types (driven from the design's mode toggles).
-  const [enabled, setEnabled] = useState<EnabledTypes>({ lessons: false, flashcards: true, quizzes: true });
+  // Enabled content types (driven from the design's mode toggles). Defaults MUST
+  // match page.tsx's default `modes` so the mount-time sync is a no-op (see
+  // setEnabledTypes — a no-change call must not disturb the serve queue).
+  const [enabled, setEnabled] = useState<EnabledTypes>({ lessons: false, flashcards: false, quizzes: true });
   const enabledRef = useRef<EnabledTypes>(enabled);
   useEffect(() => {
     enabledRef.current = enabled;
@@ -663,6 +665,49 @@ export function useMcatPractice() {
     refillBuffer();
   }
 
+  /** Change the enabled content TYPES (the left-sidebar Lessons/Flashcards/
+   *  Questions modes) and make the change take effect on the NEXT served item —
+   *  not several items later. The look-ahead buffer was built under the OLD mix,
+   *  so it's dropped entirely; then:
+   *    • if the item currently on screen is a type the user just turned OFF, it's
+   *      replaced immediately (serveNext), and
+   *    • otherwise the current item stays and we just rebuild the look-ahead so
+   *      the very next item reflects the new mix.
+   *  A no-op call (same types — e.g. the mount-time sync of page defaults) returns
+   *  early WITHOUT touching the queue, so bootstrap still owns the first serve. */
+  const setEnabledTypes = useCallback(
+    (nextTypes: EnabledTypes) => {
+      const cur = enabledRef.current;
+      if (
+        cur.lessons === nextTypes.lessons &&
+        cur.flashcards === nextTypes.flashcards &&
+        cur.quizzes === nextTypes.quizzes
+      ) {
+        return; // no real change — don't disturb the active item or the buffer
+      }
+      setEnabled(nextTypes);
+      enabledRef.current = nextTypes; // sync NOW so a synchronous re-serve reads it
+      bufferRef.current = []; // anything pre-built under the old mix is invalid
+      const curKind = activeKeyRef.current?.split(":")[0] ?? null;
+      const curStillEnabled =
+        curKind === "question"
+          ? nextTypes.quizzes
+          : curKind === "flashcard"
+          ? nextTypes.flashcards
+          : curKind === "lesson"
+          ? nextTypes.lessons
+          : false;
+      if (!curStillEnabled) {
+        serveNext(0); // on-screen type was turned off → swap it for an enabled one now
+      } else {
+        refillBuffer(); // current item still allowed → just rebuild what comes next
+      }
+    },
+    // refillBuffer reads only refs; serveNext is the meaningful dependency.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [serveNext]
+  );
+
   // ── Answer handlers ─────────────────────────────────────────────────────────
   const answerQuestion = useCallback(
     async (idx: number) => {
@@ -895,7 +940,7 @@ export function useMcatPractice() {
     viewIndex,
     atFrontier: history.length === 0 ? true : viewIndex >= history.length - 1,
     // setters / handlers
-    setEnabled,
+    setEnabledTypes,
     toggleLeafs,
     toggleLeaf,
     commitSelection,
