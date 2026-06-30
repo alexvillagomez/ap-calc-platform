@@ -68,6 +68,21 @@ export interface ConceptBlueprint {
   key_terms: string[];
   /** One imperative sentence stating the hard boundary, e.g. "Tests ONLY the meaning of the sign of ΔG; must NOT require any calculation involving enthalpy, entropy, temperature, or equilibrium constants." */
   boundary_statement: string;
+  /**
+   * OPTIONAL coverage contract — the complete enumerated set of facts this keyword
+   * MUST teach and test, none dropped. Fixes under-enumeration (e.g. a vitamin
+   * keyword that only taught "vitamin C is water-soluble" instead of the full B+C /
+   * A,D,E,K rule). Populated by a separate grounding phase; absent = no hard contract.
+   * TODO(depth): wire into blueprint generation once grounded in an external reference.
+   */
+  must_state_facts?: string[];
+  /**
+   * OPTIONAL classic distractor/misconception for this keyword — the single most
+   * common wrong-answer pattern. Surfaces in generation prompts to force coverage
+   * of the trap. Absent = omit from prompt.
+   * TODO(depth): generate from AAMC practice data, not model free-recall.
+   */
+  common_trap?: string;
 }
 
 // ─── Prompt formatter ─────────────────────────────────────────────────────────
@@ -78,6 +93,12 @@ export interface ConceptBlueprint {
  *
  * Returns `""` when `blueprint` is null or undefined so callers can always
  * use the return value unconditionally.
+ *
+ * NOTE: `must_state_facts` and `common_trap` are intentionally NOT rendered
+ * here. They are now rendered universally by `buildIdentityScopeBlock`
+ * (scopeIds.ts) which reaches every content generator. Rendering them here
+ * too would double-inject the block in paths that call both functions
+ * (generateSimilarQuestion, generateMcatFlashcards).
  */
 export function buildBlueprintBlock(
   blueprint: ConceptBlueprint | null | undefined
@@ -99,7 +120,7 @@ export function buildBlueprintBlock(
 
   const keyTermsLine = blueprint.key_terms.join(", ");
 
-  return [
+  const blocks: string[] = [
     "SCOPE CONTRACT (you MUST obey this exactly):",
     `IN SCOPE — test only these concepts:\n${inScopeBullets}`,
     `FORMULAS ALLOWED: ${formulasLine}`,
@@ -107,7 +128,9 @@ export function buildBlueprintBlock(
     `KEY TERMS: ${keyTermsLine}`,
     `BOUNDARY: ${blueprint.boundary_statement}`,
     "Any question or lesson content whose PRIMARY tested skill or required computation is out-of-scope is INVALID. You may NAME an out-of-scope concept as incidental context, but you must NOT build the question's reasoning, its worked solution, or the justification of the correct answer on an out-of-scope skill (e.g. if ionization/pKa is out of scope, do not justify an answer by reasoning about proton loss or charge at a given pH). Stay strictly inside the in-scope concepts.",
-  ].join("\n");
+  ];
+
+  return blocks.join("\n");
 }
 
 // ─── Generator internals ──────────────────────────────────────────────────────

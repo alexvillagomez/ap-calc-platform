@@ -1,0 +1,1136 @@
+[
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Orbital structure of the hydrogen atom, principal quantum number n, number of electrons per orbital",
+    "id": "chem-4e-orbital-structure-hydrogen",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Four quantum numbers: n, ℓ, mℓ, ms — allowed values and meaning",
+    "id": "chem-4e-four-quantum-numbers",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Shapes of s, p, and d orbitals",
+    "id": "chem-4e-orbital-shapes-spd",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Use of the Pauli Exclusion Principle",
+    "id": "chem-4e-pauli-exclusion-principle",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Aufbau principle and Hund's rule for filling orbitals",
+    "id": "chem-4e-aufbau-hunds-rule",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Conventional notation for electronic structure (electron configuration)",
+    "id": "chem-4e-electron-configuration-notation",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Electron configurations of ions",
+    "id": "chem-4e-electron-configuration-ions",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Paramagnetism and diamagnetism",
+    "id": "chem-4e-paramagnetism-diamagnetism",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Effective nuclear charge",
+    "id": "chem-4e-effective-nuclear-charge",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Table Classification and Variations",
+    "subtopic": "Alkali metals classification",
+    "id": "chem-4e-alkali-metals-classification",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Table Classification and Variations",
+    "subtopic": "Alkaline earth metals: their chemical characteristics",
+    "id": "chem-4e-alkaline-earth-metals",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Table Classification and Variations",
+    "subtopic": "Halogens: their chemical characteristics",
+    "id": "chem-4e-halogens-characteristics",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Table Classification and Variations",
+    "subtopic": "Noble gases: their physical and chemical characteristics",
+    "id": "chem-4e-noble-gases-characteristics",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Table Classification and Variations",
+    "subtopic": "Transition metals",
+    "id": "chem-4e-transition-metals",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Table Classification and Variations",
+    "subtopic": "Representative elements",
+    "id": "chem-4e-representative-elements",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Table Classification and Variations",
+    "subtopic": "Metals and nonmetals",
+    "id": "chem-4e-metals-nonmetals",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Table Classification and Variations",
+    "subtopic": "Oxygen group characteristics",
+    "id": "chem-4e-oxygen-group",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Trends",
+    "subtopic": "Valence electrons",
+    "id": "chem-4e-valence-electrons",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Trends",
+    "subtopic": "First and second ionization energy: definition and prediction from electronic structure",
+    "id": "chem-4e-ionization-energy",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Trends",
+    "subtopic": "Electron affinity: definition and variation with group and row",
+    "id": "chem-4e-electron-affinity",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Trends",
+    "subtopic": "Electronegativity: definition and comparative values",
+    "id": "chem-4e-electronegativity",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Trends",
+    "subtopic": "Electron shells and the sizes of atoms (atomic radius trend)",
+    "id": "chem-4e-atomic-radius-trend",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Periodic Trends",
+    "subtopic": "Electron shells and the sizes of ions (ionic radius trend)",
+    "id": "chem-4e-ionic-radius-trend",
+    "mcat_category_id": "mcat_chemistry_c1_atomic_structure_periodic_trends"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Covalent Bond",
+    "subtopic": "Ionic vs covalent vs metallic bonding; octet rule and exceptions",
+    "id": "chem-5b-bonding-types-octet-rule",
+    "mcat_category_id": "mcat_chemistry_c2_bonding_molecular_structure"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Covalent Bond",
+    "subtopic": "Lewis electron-dot formulas; resonance structures; formal charge; Lewis acids and bases",
+    "id": "chem-5b-lewis-dot-resonance-formal-charge",
+    "mcat_category_id": "mcat_chemistry_c2_bonding_molecular_structure"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Covalent Bond",
+    "subtopic": "Partial ionic character; role of electronegativity in charge distribution; dipole moment",
+    "id": "chem-5b-partial-ionic-character-dipole",
+    "mcat_category_id": "mcat_chemistry_c2_bonding_molecular_structure"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Covalent Bond",
+    "subtopic": "Bond polarity vs molecular polarity",
+    "id": "chem-5b-bond-polarity-vs-molecular-polarity",
+    "mcat_category_id": "mcat_chemistry_c2_bonding_molecular_structure"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Covalent Bond",
+    "subtopic": "σ and π bonds",
+    "id": "chem-5b-sigma-pi-bonds",
+    "mcat_category_id": "mcat_chemistry_c2_bonding_molecular_structure"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Covalent Bond",
+    "subtopic": "Bond order; effect on bond length and bond energies; rigidity in molecular structure",
+    "id": "chem-5b-bond-order-length-energy",
+    "mcat_category_id": "mcat_chemistry_c2_bonding_molecular_structure"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Covalent Bond",
+    "subtopic": "Hybrid orbitals: sp³, sp², sp and respective geometries",
+    "id": "chem-5b-hybrid-orbitals-sp3-sp2-sp",
+    "mcat_category_id": "mcat_chemistry_c2_bonding_molecular_structure"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Covalent Bond",
+    "subtopic": "VSEPR and prediction of molecular shapes (e.g., NH₃, H₂O, CO₂)",
+    "id": "chem-5b-vsepr-molecular-shapes",
+    "mcat_category_id": "mcat_chemistry_c2_bonding_molecular_structure"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Covalent Bond",
+    "subtopic": "Structural formulas for molecules involving H, C, N, O, F, S, P, Si, Cl",
+    "id": "chem-5b-structural-formulas-common-elements",
+    "mcat_category_id": "mcat_chemistry_c2_bonding_molecular_structure"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Covalent Bond",
+    "subtopic": "Delocalized electrons and resonance in ions and molecules",
+    "id": "chem-5b-delocalized-electrons-resonance",
+    "mcat_category_id": "mcat_chemistry_c2_bonding_molecular_structure"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Liquid Phase — Intermolecular Forces",
+    "subtopic": "Hydrogen bonding",
+    "id": "chem-5b-hydrogen-bonding",
+    "mcat_category_id": "mcat_chemistry_c3_intermolecular_forces_phases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Liquid Phase — Intermolecular Forces",
+    "subtopic": "Dipole interactions (dipole–dipole)",
+    "id": "chem-5b-dipole-dipole-interactions",
+    "mcat_category_id": "mcat_chemistry_c3_intermolecular_forces_phases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Liquid Phase — Intermolecular Forces",
+    "subtopic": "Van der Waals' forces (London dispersion forces)",
+    "id": "chem-5b-london-dispersion-forces",
+    "mcat_category_id": "mcat_chemistry_c3_intermolecular_forces_phases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Liquid Phase — Intermolecular Forces",
+    "subtopic": "Ion–dipole interactions",
+    "id": "chem-5b-ion-dipole-interactions",
+    "mcat_category_id": "mcat_chemistry_c3_intermolecular_forces_phases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Liquid Phase — Intermolecular Forces",
+    "subtopic": "Ranking IMF strength and physical properties controlled by IMFs (boiling/melting point, vapor pressure, viscosity, surface tension, 'like dissolves like')",
+    "id": "chem-5b-imf-strength-physical-properties",
+    "mcat_category_id": "mcat_chemistry_c3_intermolecular_forces_phases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Liquid Phase — Intermolecular Forces",
+    "subtopic": "Three states of matter and phase-transition terminology",
+    "id": "chem-5b-states-of-matter-phase-transitions",
+    "mcat_category_id": "mcat_chemistry_c3_intermolecular_forces_phases"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Stoichiometry",
+    "subtopic": "Molecular weight",
+    "id": "chem-4e-molecular-weight",
+    "mcat_category_id": "mcat_chemistry_c4_stoichiometry_reaction_types"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Stoichiometry",
+    "subtopic": "Empirical vs molecular formula",
+    "id": "chem-4e-empirical-molecular-formula",
+    "mcat_category_id": "mcat_chemistry_c4_stoichiometry_reaction_types"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Stoichiometry",
+    "subtopic": "Metric units commonly used in chemistry",
+    "id": "chem-4e-metric-units-chemistry",
+    "mcat_category_id": "mcat_chemistry_c4_stoichiometry_reaction_types"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Stoichiometry",
+    "subtopic": "Description of composition by percent mass",
+    "id": "chem-4e-percent-mass-composition",
+    "mcat_category_id": "mcat_chemistry_c4_stoichiometry_reaction_types"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Stoichiometry",
+    "subtopic": "Mole concept, Avogadro's number N_A; mole–mass–particle conversions",
+    "id": "chem-4e-mole-concept-avogadro",
+    "mcat_category_id": "mcat_chemistry_c4_stoichiometry_reaction_types"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Stoichiometry",
+    "subtopic": "Definition of density",
+    "id": "chem-4e-density-definition",
+    "mcat_category_id": "mcat_chemistry_c4_stoichiometry_reaction_types"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Stoichiometry",
+    "subtopic": "Oxidation number: assigning oxidation states; common oxidizing and reducing agents; disproportionation reactions",
+    "id": "chem-4e-oxidation-number-redox-agents",
+    "mcat_category_id": "mcat_chemistry_c4_stoichiometry_reaction_types"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Stoichiometry",
+    "subtopic": "Description of reactions by chemical equations: conventions; balancing equations including redox; limiting reactants; theoretical and percent yields",
+    "id": "chem-4e-chemical-equations-balancing-limiting-reactants",
+    "mcat_category_id": "mcat_chemistry_c4_stoichiometry_reaction_types"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Stoichiometry",
+    "subtopic": "Reaction-type classification (combination, decomposition, single/double displacement, combustion)",
+    "id": "chem-4e-reaction-type-classification",
+    "mcat_category_id": "mcat_chemistry_c4_stoichiometry_reaction_types"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Gas Phase",
+    "subtopic": "Absolute temperature, K, Kelvin scale",
+    "id": "chem-4b-absolute-temperature-kelvin",
+    "mcat_category_id": "mcat_chemistry_c5_gases_solutions"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Gas Phase",
+    "subtopic": "Pressure, simple mercury barometer",
+    "id": "chem-4b-pressure-mercury-barometer",
+    "mcat_category_id": "mcat_chemistry_c5_gases_solutions"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Gas Phase",
+    "subtopic": "Molar volume at 0°C and 1 atm = 22.4 L/mol; STP",
+    "id": "chem-4b-molar-volume-stp",
+    "mcat_category_id": "mcat_chemistry_c5_gases_solutions"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Gas Phase",
+    "subtopic": "Ideal Gas Law: PV=nRT; Boyle's Law; Charles' Law; Avogadro's Law; combined gas law and Gay-Lussac's law",
+    "id": "chem-4b-ideal-gas-law-boyle-charles-avogadro",
+    "mcat_category_id": "mcat_chemistry_c5_gases_solutions"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Gas Phase",
+    "subtopic": "Kinetic Molecular Theory of Gases; heat capacity at constant V and P; Boltzmann's Constant",
+    "id": "chem-4b-kinetic-molecular-theory",
+    "mcat_category_id": "mcat_chemistry_c5_gases_solutions"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Gas Phase",
+    "subtopic": "Deviation of real-gas behavior: qualitative; quantitative (Van der Waals' Equation)",
+    "id": "chem-4b-real-gas-deviation-van-der-waals",
+    "mcat_category_id": "mcat_chemistry_c5_gases_solutions"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Gas Phase",
+    "subtopic": "Partial pressure, mole fraction; Dalton's Law relating partial pressure to composition",
+    "id": "chem-4b-partial-pressure-daltons-law",
+    "mcat_category_id": "mcat_chemistry_c5_gases_solutions"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Gas Phase",
+    "subtopic": "Gas density from PV=nRT; Graham's law of effusion",
+    "id": "chem-4b-gas-density-grahams-law",
+    "mcat_category_id": "mcat_chemistry_c5_gases_solutions"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Ions in Solution",
+    "subtopic": "Anion, cation: common names, formulas, and charges for familiar ions",
+    "id": "chem-5a-anion-cation-names-formulas",
+    "mcat_category_id": "mcat_chemistry_c5_gases_solutions"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Ions in Solution",
+    "subtopic": "Hydration, the hydronium ion",
+    "id": "chem-5a-hydration-hydronium-ion",
+    "mcat_category_id": "mcat_chemistry_c5_gases_solutions"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Solution Composition",
+    "subtopic": "Units of concentration: molarity, molality, mole fraction, mass percent",
+    "id": "chem-5a-units-of-concentration",
+    "mcat_category_id": "mcat_chemistry_c5_gases_solutions"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Solution Composition",
+    "subtopic": "Dilution; dissolution and solvation; electrolytes",
+    "id": "chem-5a-dilution-dissolution-electrolytes",
+    "mcat_category_id": "mcat_chemistry_c5_gases_solutions"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Acid-Base Equilibria",
+    "subtopic": "Brønsted-Lowry definition of acid, base",
+    "id": "chem-5a-bronsted-lowry-acid-base",
+    "mcat_category_id": "mcat_chemistry_c6_acids_bases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Acid-Base Equilibria",
+    "subtopic": "Ionization of water; K_w; definition of pH; pH of pure water; pH/pOH relationship",
+    "id": "chem-5a-ionization-water-kw-ph",
+    "mcat_category_id": "mcat_chemistry_c6_acids_bases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Acid-Base Equilibria",
+    "subtopic": "Conjugate acids and bases",
+    "id": "chem-5a-conjugate-acids-bases",
+    "mcat_category_id": "mcat_chemistry_c6_acids_bases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Acid-Base Equilibria",
+    "subtopic": "Strong acids and bases; calculating pH of strong acids/bases",
+    "id": "chem-5a-strong-acids-bases-ph",
+    "mcat_category_id": "mcat_chemistry_c6_acids_bases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Acid-Base Equilibria",
+    "subtopic": "Weak acids and bases: dissociation with or without added salt; hydrolysis of salts; calculation of pH of salt solutions",
+    "id": "chem-5a-weak-acids-bases-salt-hydrolysis",
+    "mcat_category_id": "mcat_chemistry_c6_acids_bases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Acid-Base Equilibria",
+    "subtopic": "Equilibrium constants K_a and K_b; pK_a, pK_b",
+    "id": "chem-5a-ka-kb-pka-pkb",
+    "mcat_category_id": "mcat_chemistry_c6_acids_bases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Acid-Base Equilibria",
+    "subtopic": "Henderson–Hasselbalch equation; polyprotic acids",
+    "id": "chem-5a-henderson-hasselbalch-polyprotic",
+    "mcat_category_id": "mcat_chemistry_c6_acids_bases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Titration",
+    "subtopic": "Buffers: definition and concepts; influence on titration curves",
+    "id": "chem-5a-buffers-titration-curves",
+    "mcat_category_id": "mcat_chemistry_c6_acids_bases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Titration",
+    "subtopic": "Indicators",
+    "id": "chem-5a-indicators",
+    "mcat_category_id": "mcat_chemistry_c6_acids_bases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Titration",
+    "subtopic": "Neutralization; interpretation of titration curves; equivalence vs half-equivalence point",
+    "id": "chem-5a-neutralization-titration-curves-equivalence",
+    "mcat_category_id": "mcat_chemistry_c6_acids_bases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Titration",
+    "subtopic": "Redox titration",
+    "id": "chem-5a-redox-titration",
+    "mcat_category_id": "mcat_chemistry_c6_acids_bases"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes — Thermochemistry",
+    "subtopic": "Endothermic, exothermic reactions; enthalpy H; standard heats of reaction and formation",
+    "id": "chem-5e-enthalpy-heats-of-reaction-formation",
+    "mcat_category_id": "mcat_chemistry_c7_chemical_thermodynamics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes — Thermochemistry",
+    "subtopic": "Hess' Law of Heat Summation",
+    "id": "chem-5e-hess-law",
+    "mcat_category_id": "mcat_chemistry_c7_chemical_thermodynamics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes — Thermochemistry",
+    "subtopic": "Bond dissociation energy as related to heats of formation; estimating ΔH from bond energies",
+    "id": "chem-5e-bond-dissociation-energy-heats",
+    "mcat_category_id": "mcat_chemistry_c7_chemical_thermodynamics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes — Thermochemistry",
+    "subtopic": "Free energy G; ΔG=ΔH−TΔS and predicting spontaneity; how temperature flips spontaneity",
+    "id": "chem-5e-free-energy-gibbs-spontaneity",
+    "mcat_category_id": "mcat_chemistry_c7_chemical_thermodynamics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes — Thermochemistry",
+    "subtopic": "Spontaneous reactions and ΔG°; ΔG°=−RTlnK",
+    "id": "chem-5e-delta-g-standard-rtlnk",
+    "mcat_category_id": "mcat_chemistry_c7_chemical_thermodynamics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes — Thermochemistry",
+    "subtopic": "Second Law applied to reactions: entropy change of a reaction ΔS; standard enthalpy/entropy/free energy of formation",
+    "id": "chem-5e-entropy-second-law-reactions",
+    "mcat_category_id": "mcat_chemistry_c7_chemical_thermodynamics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Rate Processes — Kinetics",
+    "subtopic": "Reaction rate",
+    "id": "chem-5e-reaction-rate",
+    "mcat_category_id": "mcat_chemistry_c8_chemical_kinetics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Rate Processes — Kinetics",
+    "subtopic": "Dependence on concentration: rate law, rate constant, reaction order; determining rate law/order from data",
+    "id": "chem-5e-rate-law-rate-constant-order",
+    "mcat_category_id": "mcat_chemistry_c8_chemical_kinetics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Rate Processes — Kinetics",
+    "subtopic": "Rate-determining step; reaction mechanisms (elementary steps, intermediates)",
+    "id": "chem-5e-rate-determining-step-mechanism",
+    "mcat_category_id": "mcat_chemistry_c8_chemical_kinetics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Rate Processes — Kinetics",
+    "subtopic": "Activation energy; activated complex/transition state; energy profiles; reading a reaction-energy diagram",
+    "id": "chem-5e-activation-energy-transition-state",
+    "mcat_category_id": "mcat_chemistry_c8_chemical_kinetics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Rate Processes — Kinetics",
+    "subtopic": "Use of the Arrhenius Equation",
+    "id": "chem-5e-arrhenius-equation",
+    "mcat_category_id": "mcat_chemistry_c8_chemical_kinetics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Rate Processes — Kinetics",
+    "subtopic": "Kinetic control vs thermodynamic control of reactions",
+    "id": "chem-5e-kinetic-vs-thermodynamic-control",
+    "mcat_category_id": "mcat_chemistry_c8_chemical_kinetics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Rate Processes — Kinetics",
+    "subtopic": "Catalysts: how a catalyst lowers E_a without changing ΔG",
+    "id": "chem-5e-catalysts-activation-energy",
+    "mcat_category_id": "mcat_chemistry_c8_chemical_kinetics"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Rate Processes — Equilibrium",
+    "subtopic": "Equilibrium in reversible chemical reactions: Law of Mass Action; Equilibrium Constant; writing K_eq expressions (K_c, K_p)",
+    "id": "chem-5e-equilibrium-law-of-mass-action-kc-kp",
+    "mcat_category_id": "mcat_chemistry_c9_chemical_equilibrium"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Rate Processes — Equilibrium",
+    "subtopic": "Le Châtelier's Principle; reaction quotient Q vs K",
+    "id": "chem-5e-le-chatelier-reaction-quotient",
+    "mcat_category_id": "mcat_chemistry_c9_chemical_equilibrium"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Rate Processes — Equilibrium",
+    "subtopic": "Relationship of equilibrium constant and ΔG° (ΔG°=−RTlnK)",
+    "id": "chem-5e-equilibrium-constant-delta-g",
+    "mcat_category_id": "mcat_chemistry_c9_chemical_equilibrium"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Solubility",
+    "subtopic": "Solubility product constant K_sp; molar solubility ↔ K_sp calculations",
+    "id": "chem-5a-solubility-product-ksp",
+    "mcat_category_id": "mcat_chemistry_c9_chemical_equilibrium"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5A",
+    "aamc_code": "5A",
+    "topic": "Solubility",
+    "subtopic": "Common-ion effect; its use in laboratory separations; complex ion formation; complex ions and solubility; solubility and pH",
+    "id": "chem-5a-common-ion-effect-complex-ions-solubility",
+    "mcat_category_id": "mcat_chemistry_c9_chemical_equilibrium"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Electrochemistry",
+    "subtopic": "Electrolytic cell: electrolysis; anode, cathode; electrolyte; Faraday's Law; electron flow; oxidation and reduction at electrodes",
+    "id": "chem-4c-electrolytic-cell-faradays-law",
+    "mcat_category_id": "mcat_chemistry_c10_electrochemistry_redox"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Electrochemistry",
+    "subtopic": "Galvanic or Voltaic cells: half-reactions; standard reduction potentials; cell potential; direction of electron flow",
+    "id": "chem-4c-galvanic-cell-reduction-potentials",
+    "mcat_category_id": "mcat_chemistry_c10_electrochemistry_redox"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Electrochemistry",
+    "subtopic": "Standard reduction potentials and E°_cell; balancing redox half-reactions; ΔG°=−nFE°",
+    "id": "chem-4c-standard-reduction-potentials-delta-g-nfe",
+    "mcat_category_id": "mcat_chemistry_c10_electrochemistry_redox"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Electrochemistry",
+    "subtopic": "Concentration cell; Nernst equation",
+    "id": "chem-4c-concentration-cell-nernst-equation",
+    "mcat_category_id": "mcat_chemistry_c10_electrochemistry_redox"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Electrochemistry",
+    "subtopic": "Batteries: EMF, voltage; lead-storage batteries; nickel-cadmium batteries; galvanic vs electrolytic comparison",
+    "id": "chem-4c-batteries-emf-lead-storage-nicad",
+    "mcat_category_id": "mcat_chemistry_c10_electrochemistry_redox"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Stereochemistry of Covalently Bonded Molecules",
+    "subtopic": "Isomers: structural isomers; stereoisomers (diastereomers, enantiomers, cis-trans); conformational isomers",
+    "id": "chem-5b-isomers-structural-stereo-conformational",
+    "mcat_category_id": "mcat_chemistry_c11_organic_chemistry_structure_bonding_stereochemistry"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Stereochemistry of Covalently Bonded Molecules",
+    "subtopic": "Chirality and stereocenters; meso compounds",
+    "id": "chem-5b-chirality-stereocenters-meso",
+    "mcat_category_id": "mcat_chemistry_c11_organic_chemistry_structure_bonding_stereochemistry"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Stereochemistry of Covalently Bonded Molecules",
+    "subtopic": "Polarization of light, specific rotation (optical activity)",
+    "id": "chem-5b-optical-activity-specific-rotation",
+    "mcat_category_id": "mcat_chemistry_c11_organic_chemistry_structure_bonding_stereochemistry"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Stereochemistry of Covalently Bonded Molecules",
+    "subtopic": "Absolute and relative configuration; R and S conventions; E and Z conventions",
+    "id": "chem-5b-rs-ez-configuration-conventions",
+    "mcat_category_id": "mcat_chemistry_c11_organic_chemistry_structure_bonding_stereochemistry"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5B",
+    "aamc_code": "5B",
+    "topic": "Stereochemistry of Covalently Bonded Molecules",
+    "subtopic": "Fischer and Newman projections; chair/Newman conformational analysis",
+    "id": "chem-5b-fischer-newman-projections-conformational",
+    "mcat_category_id": "mcat_chemistry_c11_organic_chemistry_structure_bonding_stereochemistry"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Structure Identification — Organic",
+    "subtopic": "Functional-group identification and IUPAC nomenclature basics across families",
+    "id": "chem-5d-functional-group-iupac-nomenclature",
+    "mcat_category_id": "mcat_chemistry_c11_organic_chemistry_structure_bonding_stereochemistry"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Structure Identification — Organic",
+    "subtopic": "Hybridization in organic molecules; degrees of unsaturation",
+    "id": "chem-5d-hybridization-degrees-of-unsaturation",
+    "mcat_category_id": "mcat_chemistry_c11_organic_chemistry_structure_bonding_stereochemistry"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Structure Identification — Organic",
+    "subtopic": "Aromaticity (Hückel 4n+2 rule); polycyclic and heterocyclic aromatic compounds: structure",
+    "id": "chem-5d-aromaticity-huckel-heterocycles",
+    "mcat_category_id": "mcat_chemistry_c11_organic_chemistry_structure_bonding_stereochemistry"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Structure Identification — Organic",
+    "subtopic": "Amino acids: absolute configuration at α position; dipolar ions/zwitterion; classification; isoelectric point",
+    "id": "chem-5d-amino-acids-configuration-zwitterion-pi",
+    "mcat_category_id": "mcat_chemistry_c11_organic_chemistry_structure_bonding_stereochemistry"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Structure Identification — Organic",
+    "subtopic": "Carbohydrates: nomenclature and classification; common names; absolute configuration (D/L); cyclic structure and conformations of hexoses; epimers and anomers",
+    "id": "chem-5d-carbohydrates-nomenclature-dl-config-anomers",
+    "mcat_category_id": "mcat_chemistry_c11_organic_chemistry_structure_bonding_stereochemistry"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Structure Identification — Organic",
+    "subtopic": "Lipids: structural identification of triacylglycerols, free fatty acids, phospholipids, sphingolipids, waxes, fat-soluble vitamins, steroids, prostaglandins",
+    "id": "chem-5d-lipids-structural-identification",
+    "mcat_category_id": "mcat_chemistry_c11_organic_chemistry_structure_bonding_stereochemistry"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Structure Identification — Organic",
+    "subtopic": "Nucleotides and Nucleic Acids composition at organic level: sugar-phosphate backbone; pyrimidine/purine residues",
+    "id": "chem-5d-nucleotides-nucleic-acids-backbone-bases",
+    "mcat_category_id": "mcat_chemistry_c11_organic_chemistry_structure_bonding_stereochemistry"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Organic Reactions",
+    "subtopic": "Amino acids synthesis: Strecker synthesis; Gabriel synthesis",
+    "id": "chem-5d-amino-acid-synthesis-strecker-gabriel",
+    "mcat_category_id": "mcat_chemistry_c12_organic_chemistry_reactions_mechanisms"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Organic Reactions",
+    "subtopic": "Peptides and proteins reactions: sulfur linkage for cysteine/cystine; peptide-bond formation; hydrolysis",
+    "id": "chem-5d-peptide-bond-formation-hydrolysis-cysteine",
+    "mcat_category_id": "mcat_chemistry_c12_organic_chemistry_reactions_mechanisms"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Organic Reactions",
+    "subtopic": "Carbohydrates reactions: hydrolysis of glycoside linkage; keto-enol tautomerism; disaccharides/polysaccharides linkage",
+    "id": "chem-5d-carbohydrate-reactions-glycoside-tautomerism",
+    "mcat_category_id": "mcat_chemistry_c12_organic_chemistry_reactions_mechanisms"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Organic Reactions",
+    "subtopic": "Lipids reactions: free fatty acids saponification",
+    "id": "chem-5d-lipid-saponification",
+    "mcat_category_id": "mcat_chemistry_c12_organic_chemistry_reactions_mechanisms"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Organic Reactions",
+    "subtopic": "Aldehydes and Ketones: nucleophilic addition at C=O (acetal/hemiacetal; imine/enamine; hydride reagents; cyanohydrin); oxidation of aldehydes",
+    "id": "chem-5d-aldehydes-ketones-nucleophilic-addition",
+    "mcat_category_id": "mcat_chemistry_c12_organic_chemistry_reactions_mechanisms"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Organic Reactions",
+    "subtopic": "Enolate chemistry: keto-enol tautomerism/α-racemization; aldol condensation, retro-aldol; kinetic vs thermodynamic enolate",
+    "id": "chem-5d-enolate-chemistry-aldol-condensation",
+    "mcat_category_id": "mcat_chemistry_c12_organic_chemistry_reactions_mechanisms"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Organic Reactions",
+    "subtopic": "Alcohols: physical properties (acidity, hydrogen bonding); reactions (oxidation; substitution SN1 or SN2; protection; mesylate/tosylate preparation)",
+    "id": "chem-5d-alcohols-properties-reactions",
+    "mcat_category_id": "mcat_chemistry_c12_organic_chemistry_reactions_mechanisms"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Organic Reactions",
+    "subtopic": "SN1 vs SN2 mechanism; E1 vs E2 and Zaitsev's rule",
+    "id": "chem-5d-sn1-sn2-e1-e2-zaitsev",
+    "mcat_category_id": "mcat_chemistry_c12_organic_chemistry_reactions_mechanisms"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Organic Reactions",
+    "subtopic": "Carboxylic Acids: physical properties (acidity); carboxyl-group reactions (amides/lactam, esters/lactone, anhydride; reduction; decarboxylation); reactions at 2-position",
+    "id": "chem-5d-carboxylic-acids-reactions",
+    "mcat_category_id": "mcat_chemistry_c12_organic_chemistry_reactions_mechanisms"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Organic Reactions",
+    "subtopic": "Acid Derivatives (Anhydrides, Amides, Esters): nucleophilic acyl substitution; transesterification; hydrolysis of amides; relative reactivity; steric/electronic effects; strain (β-lactams)",
+    "id": "chem-5d-acid-derivatives-nucleophilic-acyl-substitution",
+    "mcat_category_id": "mcat_chemistry_c12_organic_chemistry_reactions_mechanisms"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5D",
+    "aamc_code": "5D",
+    "topic": "Organic Reactions",
+    "subtopic": "Phenols: oxidation and reduction (hydroquinones, ubiquinones); polycyclic and heterocyclic aromatic compounds: reactivity",
+    "id": "chem-5d-phenols-oxidation-reduction-aromatics-reactivity",
+    "mcat_category_id": "mcat_chemistry_c12_organic_chemistry_reactions_mechanisms"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5C",
+    "aamc_code": "5C",
+    "topic": "Separations and Purifications",
+    "subtopic": "Extraction: distribution of solute between two immiscible solvents",
+    "id": "chem-5c-extraction-solute-distribution",
+    "mcat_category_id": "mcat_chemistry_c13_separations_purification_spectroscopy"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5C",
+    "aamc_code": "5C",
+    "topic": "Separations and Purifications",
+    "subtopic": "Distillation",
+    "id": "chem-5c-distillation",
+    "mcat_category_id": "mcat_chemistry_c13_separations_purification_spectroscopy"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5C",
+    "aamc_code": "5C",
+    "topic": "Separations and Purifications",
+    "subtopic": "Chromatography: column (GLC, HPLC); paper; thin-layer",
+    "id": "chem-5c-chromatography-column-paper-tlc",
+    "mcat_category_id": "mcat_chemistry_c13_separations_purification_spectroscopy"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5C",
+    "aamc_code": "5C",
+    "topic": "Separations and Purifications",
+    "subtopic": "Separation and purification of peptides and proteins: electrophoresis; quantitative analysis; chromatography (size-exclusion, ion-exchange, affinity)",
+    "id": "chem-5c-protein-purification-electrophoresis-chromatography",
+    "mcat_category_id": "mcat_chemistry_c13_separations_purification_spectroscopy"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5C",
+    "aamc_code": "5C",
+    "topic": "Separations and Purifications",
+    "subtopic": "Racemic mixtures, separation of enantiomers",
+    "id": "chem-5c-racemic-mixtures-enantiomer-separation",
+    "mcat_category_id": "mcat_chemistry_c13_separations_purification_spectroscopy"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Molecular Structure and Absorption Spectra",
+    "subtopic": "Infrared region: intramolecular vibrations and rotations; characteristic group absorptions; fingerprint region",
+    "id": "chem-4d-infrared-spectroscopy-group-absorptions",
+    "mcat_category_id": "mcat_chemistry_c13_separations_purification_spectroscopy"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Molecular Structure and Absorption Spectra",
+    "subtopic": "Visible region: absorption gives complementary color; effect of structural changes on absorption",
+    "id": "chem-4d-visible-spectroscopy-complementary-color",
+    "mcat_category_id": "mcat_chemistry_c13_separations_purification_spectroscopy"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Molecular Structure and Absorption Spectra",
+    "subtopic": "Ultraviolet region: π-electron and nonbonding electron transitions; conjugated systems",
+    "id": "chem-4d-uv-spectroscopy-pi-electron-transitions",
+    "mcat_category_id": "mcat_chemistry_c13_separations_purification_spectroscopy"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Molecular Structure and Absorption Spectra",
+    "subtopic": "NMR spectroscopy: protons in magnetic field; equivalent protons; spin-spin splitting",
+    "id": "chem-4d-nmr-spectroscopy-spin-splitting",
+    "mcat_category_id": "mcat_chemistry_c13_separations_purification_spectroscopy"
+  }
+]

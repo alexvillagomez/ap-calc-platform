@@ -17,6 +17,7 @@
     "mcat:clean-unembedded": "tsx scripts/delete-unembedded-mcat.ts",
     "mcat:blueprints": "tsx scripts/backfill-mcat-blueprints.ts",
     "mcat:audit-scope": "tsx scripts/audit-mcat-scope.ts",
+    "mcat:enrich-depth": "tsx scripts/enrich-keyword-depth.ts",
     "math:validate": "tsx scripts/validate-math-taxonomy.ts",
     "math:seed": "tsx scripts/seed-math-taxonomy.ts",
     "math:embed": "tsx scripts/embed-math.ts",
@@ -28,7 +29,8 @@
     "questions:content": "tsx scripts/backfill-question-content.ts",
     "questions:distractors": "tsx scripts/backfill-distractor-data.ts",
     "questions:descriptions": "tsx scripts/enrich-question-descriptions.ts",
-    "umbrella:centroids": "tsx scripts/recompute-umbrella-embeddings.ts"
+    "umbrella:centroids": "tsx scripts/recompute-umbrella-embeddings.ts",
+    "openstax:ingest": "tsx scripts/ingest-openstax.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",

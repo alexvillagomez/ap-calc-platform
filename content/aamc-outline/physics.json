@@ -1,0 +1,1073 @@
+[
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Translational Motion",
+    "subtopic": "Units and dimensions",
+    "id": "phys-4a-units-dimensions",
+    "mcat_category_id": "mcat_physics_p1_kinematics_translational_motion"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Translational Motion",
+    "subtopic": "Vectors, components",
+    "id": "phys-4a-vectors-components",
+    "mcat_category_id": "mcat_physics_p1_kinematics_translational_motion"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Translational Motion",
+    "subtopic": "Vector addition",
+    "id": "phys-4a-vector-addition",
+    "mcat_category_id": "mcat_physics_p1_kinematics_translational_motion"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Translational Motion",
+    "subtopic": "Speed, velocity (average and instantaneous)",
+    "id": "phys-4a-speed-velocity",
+    "mcat_category_id": "mcat_physics_p1_kinematics_translational_motion"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Translational Motion",
+    "subtopic": "Acceleration",
+    "id": "phys-4a-acceleration",
+    "mcat_category_id": "mcat_physics_p1_kinematics_translational_motion"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Translational Motion",
+    "subtopic": "Scalars vs vectors; displacement vs distance",
+    "id": "phys-4a-scalars-vs-vectors",
+    "mcat_category_id": "mcat_physics_p1_kinematics_translational_motion"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Translational Motion",
+    "subtopic": "Constant-acceleration kinematic equations",
+    "id": "phys-4a-kinematic-equations",
+    "mcat_category_id": "mcat_physics_p1_kinematics_translational_motion"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Translational Motion",
+    "subtopic": "Free fall under gravity",
+    "id": "phys-4a-free-fall",
+    "mcat_category_id": "mcat_physics_p1_kinematics_translational_motion"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Translational Motion",
+    "subtopic": "Projectile motion",
+    "id": "phys-4a-projectile-motion",
+    "mcat_category_id": "mcat_physics_p1_kinematics_translational_motion"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Translational Motion",
+    "subtopic": "Position-time and velocity-time graphs",
+    "id": "phys-4a-position-velocity-graphs",
+    "mcat_category_id": "mcat_physics_p1_kinematics_translational_motion"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Force",
+    "subtopic": "Newton's First Law, inertia",
+    "id": "phys-4a-newtons-first-law",
+    "mcat_category_id": "mcat_physics_p2_forces_newton_s_laws"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Force",
+    "subtopic": "Newton's Second Law (F=ma)",
+    "id": "phys-4a-newtons-second-law",
+    "mcat_category_id": "mcat_physics_p2_forces_newton_s_laws"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Force",
+    "subtopic": "Newton's Third Law, forces equal and opposite",
+    "id": "phys-4a-newtons-third-law",
+    "mcat_category_id": "mcat_physics_p2_forces_newton_s_laws"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Force",
+    "subtopic": "Friction, static and kinetic",
+    "id": "phys-4a-friction",
+    "mcat_category_id": "mcat_physics_p2_forces_newton_s_laws"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Force",
+    "subtopic": "Free-body diagrams; mass vs weight; normal force; tension",
+    "id": "phys-4a-free-body-diagrams",
+    "mcat_category_id": "mcat_physics_p2_forces_newton_s_laws"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Force",
+    "subtopic": "Newton's law of universal gravitation",
+    "id": "phys-4a-universal-gravitation",
+    "mcat_category_id": "mcat_physics_p2_forces_newton_s_laws"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Force",
+    "subtopic": "Uniform circular motion and centripetal force",
+    "id": "phys-4a-circular-motion-centripetal",
+    "mcat_category_id": "mcat_physics_p2_forces_newton_s_laws"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Force",
+    "subtopic": "Applications on inclines",
+    "id": "phys-4a-incline-applications",
+    "mcat_category_id": "mcat_physics_p2_forces_newton_s_laws"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Equilibrium",
+    "subtopic": "Vector analysis of forces acting on a point object (translational equilibrium)",
+    "id": "phys-4a-translational-equilibrium",
+    "mcat_category_id": "mcat_physics_p3_equilibrium_torque_center_of_mass"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Equilibrium",
+    "subtopic": "Torques, lever arms (rotational equilibrium)",
+    "id": "phys-4a-torques-lever-arms",
+    "mcat_category_id": "mcat_physics_p3_equilibrium_torque_center_of_mass"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Force",
+    "subtopic": "Center of mass",
+    "id": "phys-4a-center-of-mass",
+    "mcat_category_id": "mcat_physics_p3_equilibrium_torque_center_of_mass"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Equilibrium",
+    "subtopic": "First and second conditions of equilibrium",
+    "id": "phys-4a-equilibrium-conditions",
+    "mcat_category_id": "mcat_physics_p3_equilibrium_torque_center_of_mass"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Equilibrium",
+    "subtopic": "Torque formula (τ=rF sinθ)",
+    "id": "phys-4a-torque-formula",
+    "mcat_category_id": "mcat_physics_p3_equilibrium_torque_center_of_mass"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Equilibrium",
+    "subtopic": "Stable vs unstable equilibrium; center of gravity",
+    "id": "phys-4a-stable-unstable-equilibrium",
+    "mcat_category_id": "mcat_physics_p3_equilibrium_torque_center_of_mass"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Work",
+    "subtopic": "Work done by a constant force: W=Fd cosθ",
+    "id": "phys-4a-work-constant-force",
+    "mcat_category_id": "mcat_physics_p4_work_energy_power"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Work",
+    "subtopic": "Mechanical advantage",
+    "id": "phys-4a-mechanical-advantage",
+    "mcat_category_id": "mcat_physics_p4_work_energy_power"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Work",
+    "subtopic": "Work-Kinetic Energy Theorem",
+    "id": "phys-4a-work-kinetic-energy-theorem",
+    "mcat_category_id": "mcat_physics_p4_work_energy_power"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Work",
+    "subtopic": "Conservative forces",
+    "id": "phys-4a-conservative-forces",
+    "mcat_category_id": "mcat_physics_p4_work_energy_power"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Energy of Point Object Systems",
+    "subtopic": "Kinetic Energy: KE=½mv²; units",
+    "id": "phys-4a-kinetic-energy",
+    "mcat_category_id": "mcat_physics_p4_work_energy_power"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Energy of Point Object Systems",
+    "subtopic": "Potential Energy: PE=mgh (gravitational, local)",
+    "id": "phys-4a-gravitational-potential-energy",
+    "mcat_category_id": "mcat_physics_p4_work_energy_power"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Energy of Point Object Systems",
+    "subtopic": "Potential Energy: PE=½kx² (spring)",
+    "id": "phys-4a-spring-potential-energy",
+    "mcat_category_id": "mcat_physics_p4_work_energy_power"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Energy of Point Object Systems",
+    "subtopic": "Conservation of energy",
+    "id": "phys-4a-conservation-of-energy",
+    "mcat_category_id": "mcat_physics_p4_work_energy_power"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Energy of Point Object Systems",
+    "subtopic": "Power, units",
+    "id": "phys-4a-power",
+    "mcat_category_id": "mcat_physics_p4_work_energy_power"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Fluids",
+    "subtopic": "Density, specific gravity",
+    "id": "phys-4b-density-specific-gravity",
+    "mcat_category_id": "mcat_physics_p5_fluids"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Fluids",
+    "subtopic": "Buoyancy, Archimedes' Principle",
+    "id": "phys-4b-buoyancy-archimedes",
+    "mcat_category_id": "mcat_physics_p5_fluids"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Fluids",
+    "subtopic": "Hydrostatic pressure; Pascal's Law",
+    "id": "phys-4b-hydrostatic-pressure-pascal",
+    "mcat_category_id": "mcat_physics_p5_fluids"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Fluids",
+    "subtopic": "Pressure vs depth: P=ρgh",
+    "id": "phys-4b-pressure-depth",
+    "mcat_category_id": "mcat_physics_p5_fluids"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Fluids",
+    "subtopic": "Viscosity: Poiseuille Flow",
+    "id": "phys-4b-viscosity-poiseuille",
+    "mcat_category_id": "mcat_physics_p5_fluids"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Fluids",
+    "subtopic": "Continuity equation (A·v=constant)",
+    "id": "phys-4b-continuity-equation",
+    "mcat_category_id": "mcat_physics_p5_fluids"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Fluids",
+    "subtopic": "Concept of turbulence at high velocities",
+    "id": "phys-4b-turbulence",
+    "mcat_category_id": "mcat_physics_p5_fluids"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Fluids",
+    "subtopic": "Surface tension",
+    "id": "phys-4b-surface-tension",
+    "mcat_category_id": "mcat_physics_p5_fluids"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Fluids",
+    "subtopic": "Bernoulli's equation",
+    "id": "phys-4b-bernoulli-equation",
+    "mcat_category_id": "mcat_physics_p5_fluids"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4B",
+    "aamc_code": "4B",
+    "topic": "Fluids",
+    "subtopic": "Venturi effect, pitot tube",
+    "id": "phys-4b-venturi-pitot",
+    "mcat_category_id": "mcat_physics_p5_fluids"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "Thermodynamic system; state function",
+    "id": "phys-5e-thermodynamic-system-state-function",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "Zeroth Law – concept of temperature",
+    "id": "phys-5e-zeroth-law-temperature",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "First Law – conservation of energy in thermodynamic processes",
+    "id": "phys-5e-first-law-conservation",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "PV diagram: work done = area under or enclosed by curve",
+    "id": "phys-5e-pv-diagram-work",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "Second Law – concept of entropy",
+    "id": "phys-5e-second-law-entropy",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "Measurement of heat changes (calorimetry), heat capacity, specific heat",
+    "id": "phys-5e-calorimetry-heat-capacity",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "Heat transfer – conduction, convection, radiation",
+    "id": "phys-5e-heat-transfer",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "Coefficient of expansion",
+    "id": "phys-5e-coefficient-expansion",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "Heat of fusion, heat of vaporization (latent heat, Q=mL)",
+    "id": "phys-5e-latent-heat",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "Phase diagram: pressure and temperature",
+    "id": "phys-5e-phase-diagram",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "Q=mcΔT calorimetry equation",
+    "id": "phys-5e-q-equals-mcdeltaT",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "Thermodynamic processes (isothermal, adiabatic, isobaric, isochoric)",
+    "id": "phys-5e-thermodynamic-processes",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "5",
+    "content_category": "5E",
+    "aamc_code": "5E",
+    "topic": "Energy Changes in Chemical Reactions — Thermodynamics",
+    "subtopic": "Heat engines and efficiency",
+    "id": "phys-5e-heat-engines-efficiency",
+    "mcat_category_id": "mcat_physics_p6_thermodynamics_heat"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Periodic Motion",
+    "subtopic": "Amplitude, frequency, phase",
+    "id": "phys-4a-amplitude-frequency-phase",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Periodic Motion",
+    "subtopic": "Transverse and longitudinal waves: wavelength and propagation speed",
+    "id": "phys-4a-transverse-longitudinal-waves",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Periodic Motion",
+    "subtopic": "Simple harmonic motion: mass-spring and simple pendulum",
+    "id": "phys-4a-simple-harmonic-motion",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Periodic Motion",
+    "subtopic": "Wave relation v=fλ",
+    "id": "phys-4a-wave-relation",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Periodic Motion",
+    "subtopic": "Superposition and interference",
+    "id": "phys-4a-superposition-interference",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4A",
+    "aamc_code": "4A",
+    "topic": "Periodic Motion",
+    "subtopic": "Standing waves and harmonics; beats",
+    "id": "phys-4a-standing-waves-harmonics",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Sound",
+    "subtopic": "Production of sound",
+    "id": "phys-4d-production-of-sound",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Sound",
+    "subtopic": "Relative speed of sound in solids, liquids, and gases",
+    "id": "phys-4d-speed-of-sound",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Sound",
+    "subtopic": "Intensity of sound, decibel units, log scale",
+    "id": "phys-4d-intensity-decibels",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Sound",
+    "subtopic": "Attenuation (damping)",
+    "id": "phys-4d-attenuation-damping",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Sound",
+    "subtopic": "Doppler Effect: moving sound source or observer; reflection of sound from a moving object",
+    "id": "phys-4d-doppler-effect",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Sound",
+    "subtopic": "Pitch",
+    "id": "phys-4d-pitch",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Sound",
+    "subtopic": "Resonance in pipes and strings",
+    "id": "phys-4d-resonance-pipes-strings",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Sound",
+    "subtopic": "Ultrasound",
+    "id": "phys-4d-ultrasound",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Sound",
+    "subtopic": "Shock waves",
+    "id": "phys-4d-shock-waves",
+    "mcat_category_id": "mcat_physics_p7_periodic_motion_waves_sound"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Light, Electromagnetic Radiation",
+    "subtopic": "Concept of interference; Young's double-slit experiment",
+    "id": "phys-4d-youngs-double-slit",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Light, Electromagnetic Radiation",
+    "subtopic": "Thin films, diffraction grating, single-slit diffraction",
+    "id": "phys-4d-thin-films-diffraction-grating",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Light, Electromagnetic Radiation",
+    "subtopic": "Other diffraction phenomena, X-ray diffraction",
+    "id": "phys-4d-x-ray-diffraction",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Light, Electromagnetic Radiation",
+    "subtopic": "Polarization of light: linear and circular",
+    "id": "phys-4d-polarization",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Light, Electromagnetic Radiation",
+    "subtopic": "Properties of electromagnetic radiation (velocity c; perpendicularly oscillating E and B fields)",
+    "id": "phys-4d-em-radiation-properties",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Light, Electromagnetic Radiation",
+    "subtopic": "Classification of electromagnetic spectrum, photon energy E=hf",
+    "id": "phys-4d-em-spectrum-photon-energy",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Light, Electromagnetic Radiation",
+    "subtopic": "Visual spectrum, color",
+    "id": "phys-4d-visual-spectrum-color",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Geometrical Optics",
+    "subtopic": "Reflection from plane surface: angle of incidence = angle of reflection",
+    "id": "phys-4d-reflection-plane-surface",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Geometrical Optics",
+    "subtopic": "Refraction, refractive index n; Snell's law",
+    "id": "phys-4d-refraction-snells-law",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Geometrical Optics",
+    "subtopic": "Dispersion, change of index of refraction with wavelength",
+    "id": "phys-4d-dispersion-index-wavelength",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Geometrical Optics",
+    "subtopic": "Conditions for total internal reflection",
+    "id": "phys-4d-total-internal-reflection",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Geometrical Optics",
+    "subtopic": "Spherical mirrors (center of curvature; focal length; real and virtual images)",
+    "id": "phys-4d-spherical-mirrors",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Geometrical Optics",
+    "subtopic": "Thin lenses (converging and diverging; 1/p + 1/q = 1/f; diopters)",
+    "id": "phys-4d-thin-lenses",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Geometrical Optics",
+    "subtopic": "Combination of lenses",
+    "id": "phys-4d-combination-of-lenses",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Geometrical Optics",
+    "subtopic": "Lens aberration",
+    "id": "phys-4d-lens-aberration",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4D",
+    "aamc_code": "4D",
+    "topic": "Geometrical Optics",
+    "subtopic": "Optical instruments including the human eye",
+    "id": "phys-4d-optical-instruments-human-eye",
+    "mcat_category_id": "mcat_physics_p8_light_geometrical_optics"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Electrostatics",
+    "subtopic": "Charge, conductors, charge conservation",
+    "id": "phys-4c-charge-conductors-conservation",
+    "mcat_category_id": "mcat_physics_p9_electrostatics_magnetism"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Electrostatics",
+    "subtopic": "Insulators",
+    "id": "phys-4c-insulators",
+    "mcat_category_id": "mcat_physics_p9_electrostatics_magnetism"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Electrostatics",
+    "subtopic": "Coulomb's Law (F=kq1q2/r²)",
+    "id": "phys-4c-coulombs-law",
+    "mcat_category_id": "mcat_physics_p9_electrostatics_magnetism"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Electrostatics",
+    "subtopic": "Electric field E (field lines; field due to charge distribution)",
+    "id": "phys-4c-electric-field",
+    "mcat_category_id": "mcat_physics_p9_electrostatics_magnetism"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Electrostatics",
+    "subtopic": "Electrostatic energy, electric potential at a point in space",
+    "id": "phys-4c-electrostatic-energy-potential",
+    "mcat_category_id": "mcat_physics_p9_electrostatics_magnetism"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Magnetism",
+    "subtopic": "Definition of magnetic field B",
+    "id": "phys-4c-magnetic-field-definition",
+    "mcat_category_id": "mcat_physics_p9_electrostatics_magnetism"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Magnetism",
+    "subtopic": "Motion of charged particles in magnetic fields; Lorentz force (F=qvBsinθ)",
+    "id": "phys-4c-lorentz-force",
+    "mcat_category_id": "mcat_physics_p9_electrostatics_magnetism"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Current I=ΔQ/Δt, sign conventions, units",
+    "id": "phys-4c-current",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Electromotive force, voltage",
+    "id": "phys-4c-emf-voltage",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Resistance: Ohm's Law (I=V/R)",
+    "id": "phys-4c-ohms-law",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Resistors in series",
+    "id": "phys-4c-resistors-series",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Resistors in parallel",
+    "id": "phys-4c-resistors-parallel",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Resistivity: ρ=RA/L",
+    "id": "phys-4c-resistivity",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Capacitance: parallel-plate capacitor",
+    "id": "phys-4c-parallel-plate-capacitor",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Energy of a charged capacitor",
+    "id": "phys-4c-capacitor-energy",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Capacitors in series",
+    "id": "phys-4c-capacitors-series",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Capacitors in parallel",
+    "id": "phys-4c-capacitors-parallel",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Dielectrics",
+    "id": "phys-4c-dielectrics",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Conductivity (metallic; electrolytic)",
+    "id": "phys-4c-conductivity",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Meters",
+    "id": "phys-4c-meters",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4C",
+    "aamc_code": "4C",
+    "topic": "Circuit Elements",
+    "subtopic": "Electric power dissipation (P=IV=I²R); EMF source and internal resistance",
+    "id": "phys-4c-power-dissipation-emf-internal-resistance",
+    "mcat_category_id": "mcat_physics_p10_circuits"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Atomic Nucleus",
+    "subtopic": "Atomic number, atomic weight",
+    "id": "phys-4e-atomic-number-weight",
+    "mcat_category_id": "mcat_physics_p11_atomic_nuclear_phenomena"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Atomic Nucleus",
+    "subtopic": "Neutrons, protons, isotopes",
+    "id": "phys-4e-neutrons-protons-isotopes",
+    "mcat_category_id": "mcat_physics_p11_atomic_nuclear_phenomena"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Atomic Nucleus",
+    "subtopic": "Nuclear forces, binding energy",
+    "id": "phys-4e-nuclear-forces-binding-energy",
+    "mcat_category_id": "mcat_physics_p11_atomic_nuclear_phenomena"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Atomic Nucleus",
+    "subtopic": "Radioactive decay: α, β, γ decay",
+    "id": "phys-4e-radioactive-decay-types",
+    "mcat_category_id": "mcat_physics_p11_atomic_nuclear_phenomena"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Atomic Nucleus",
+    "subtopic": "Half-life, exponential decay, semi-log plots",
+    "id": "phys-4e-half-life-exponential-decay",
+    "mcat_category_id": "mcat_physics_p11_atomic_nuclear_phenomena"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Atomic Nucleus",
+    "subtopic": "Mass spectrometer / mass spectroscopy",
+    "id": "phys-4e-mass-spectrometer",
+    "mcat_category_id": "mcat_physics_p11_atomic_nuclear_phenomena"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Ground state, excited states",
+    "id": "phys-4e-ground-excited-states",
+    "mcat_category_id": "mcat_physics_p11_atomic_nuclear_phenomena"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Absorption and emission line spectra",
+    "id": "phys-4e-absorption-emission-spectra",
+    "mcat_category_id": "mcat_physics_p11_atomic_nuclear_phenomena"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Bohr atom",
+    "id": "phys-4e-bohr-atom",
+    "mcat_category_id": "mcat_physics_p11_atomic_nuclear_phenomena"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Heisenberg Uncertainty Principle",
+    "id": "phys-4e-heisenberg-uncertainty",
+    "mcat_category_id": "mcat_physics_p11_atomic_nuclear_phenomena"
+  },
+  {
+    "foundational_concept": "4",
+    "content_category": "4E",
+    "aamc_code": "4E",
+    "topic": "Electronic Structure",
+    "subtopic": "Photoelectric effect",
+    "id": "phys-4e-photoelectric-effect",
+    "mcat_category_id": "mcat_physics_p11_atomic_nuclear_phenomena"
+  }
+]

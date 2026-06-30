@@ -1,0 +1,2063 @@
+[
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Sensory Processing",
+    "subtopic": "Threshold",
+    "id": "psyc-6a-sensory-threshold",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Sensory Processing",
+    "subtopic": "Weber's Law",
+    "id": "psyc-6a-webers-law",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Sensory Processing",
+    "subtopic": "Signal detection theory",
+    "id": "psyc-6a-signal-detection-theory",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Sensory Processing",
+    "subtopic": "Sensory adaptation",
+    "id": "psyc-6a-sensory-adaptation",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Sensory Processing",
+    "subtopic": "Psychophysics",
+    "id": "psyc-6a-psychophysics",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Sensory Receptors",
+    "subtopic": "Sensory pathways",
+    "id": "psyc-6a-sensory-pathways",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Sensory Receptors",
+    "subtopic": "Types of sensory receptors",
+    "id": "psyc-6a-types-of-sensory-receptors",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Vision",
+    "subtopic": "Structure and function of the eye",
+    "id": "psyc-6a-vision-eye-structure-function",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Vision",
+    "subtopic": "Visual pathways in the brain",
+    "id": "psyc-6a-visual-pathways-brain",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Vision",
+    "subtopic": "Parallel processing",
+    "id": "psyc-6a-parallel-processing",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Vision",
+    "subtopic": "Feature detection",
+    "id": "psyc-6a-feature-detection",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Hearing",
+    "subtopic": "Structure and function of the ear",
+    "id": "psyc-6a-ear-structure-function",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Hearing",
+    "subtopic": "Auditory pathways in the brain",
+    "id": "psyc-6a-auditory-pathways-brain",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Hearing",
+    "subtopic": "Sensory reception by hair cells",
+    "id": "psyc-6a-hair-cell-sensory-reception",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Other Senses",
+    "subtopic": "Somatosensation and pain perception",
+    "id": "psyc-6a-somatosensation-pain",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Other Senses",
+    "subtopic": "Taste and chemoreceptors",
+    "id": "psyc-6a-taste-chemoreceptors",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Other Senses",
+    "subtopic": "Olfactory cells",
+    "id": "psyc-6a-olfactory-cells",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Other Senses",
+    "subtopic": "Pheromones",
+    "id": "psyc-6a-pheromones",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Other Senses",
+    "subtopic": "Olfactory pathways in the brain",
+    "id": "psyc-6a-olfactory-pathways-brain",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Other Senses",
+    "subtopic": "Kinesthetic sense",
+    "id": "psyc-6a-kinesthetic-sense",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Other Senses",
+    "subtopic": "Vestibular sense",
+    "id": "psyc-6a-vestibular-sense",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Perception",
+    "subtopic": "Bottom-up and top-down processing",
+    "id": "psyc-6a-bottom-up-top-down-processing",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Perception",
+    "subtopic": "Perceptual organization (depth, form, motion, constancy)",
+    "id": "psyc-6a-perceptual-organization",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6A",
+    "aamc_code": "6A",
+    "topic": "Perception",
+    "subtopic": "Gestalt principles",
+    "id": "psyc-6a-gestalt-principles",
+    "mcat_category_id": "mcat_psychsoc_6a_sensing_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Attention",
+    "subtopic": "Selective attention",
+    "id": "psyc-6b-selective-attention",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Attention",
+    "subtopic": "Divided attention",
+    "id": "psyc-6b-divided-attention",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Cognition",
+    "subtopic": "Information-processing model",
+    "id": "psyc-6b-information-processing-model",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Cognition",
+    "subtopic": "Piaget's stages of cognitive development",
+    "id": "psyc-6b-piaget-stages",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Cognition",
+    "subtopic": "Cognitive changes in late adulthood",
+    "id": "psyc-6b-cognitive-changes-late-adulthood",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Cognition",
+    "subtopic": "Role of culture in cognitive development",
+    "id": "psyc-6b-culture-cognitive-development",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Cognition",
+    "subtopic": "Influence of heredity and environment on cognition",
+    "id": "psyc-6b-heredity-environment-cognition",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Cognition",
+    "subtopic": "Biological factors that affect cognition",
+    "id": "psyc-6b-biological-factors-cognition",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Cognition",
+    "subtopic": "Problem-solving types, barriers, and approaches",
+    "id": "psyc-6b-problem-solving-types-barriers",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Cognition",
+    "subtopic": "Heuristics and biases in decision-making",
+    "id": "psyc-6b-heuristics-biases",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Cognition",
+    "subtopic": "Theories of intelligence",
+    "id": "psyc-6b-theories-of-intelligence",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Cognition",
+    "subtopic": "Influence of heredity and environment on intellectual ability",
+    "id": "psyc-6b-heredity-environment-intelligence",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Cognition",
+    "subtopic": "Variations in intellectual ability",
+    "id": "psyc-6b-variations-intellectual-ability",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Consciousness",
+    "subtopic": "Alertness",
+    "id": "psyc-6b-alertness",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Consciousness",
+    "subtopic": "Sleep stages and sleep cycles",
+    "id": "psyc-6b-sleep-stages-cycles",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Consciousness",
+    "subtopic": "Sleep and circadian rhythms",
+    "id": "psyc-6b-sleep-circadian-rhythms",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Consciousness",
+    "subtopic": "Dreaming",
+    "id": "psyc-6b-dreaming",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Consciousness",
+    "subtopic": "Sleep-wake disorders",
+    "id": "psyc-6b-sleep-wake-disorders",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Consciousness",
+    "subtopic": "Hypnosis and meditation",
+    "id": "psyc-6b-hypnosis-meditation",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Consciousness",
+    "subtopic": "Types of consciousness-altering drugs and effects on nervous system and behavior",
+    "id": "psyc-6b-consciousness-altering-drugs",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Consciousness",
+    "subtopic": "Drug addiction and reward pathway",
+    "id": "psyc-6b-drug-addiction-reward-pathway",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Memory",
+    "subtopic": "Encoding process and processes that aid encoding",
+    "id": "psyc-6b-memory-encoding",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Memory",
+    "subtopic": "Types of memory storage (sensory, working, long-term)",
+    "id": "psyc-6b-memory-storage-types",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Memory",
+    "subtopic": "Semantic networks and spreading activation",
+    "id": "psyc-6b-semantic-networks-spreading-activation",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Memory",
+    "subtopic": "Recall, recognition, and relearning",
+    "id": "psyc-6b-recall-recognition-relearning",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Memory",
+    "subtopic": "Retrieval cues",
+    "id": "psyc-6b-retrieval-cues",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Memory",
+    "subtopic": "Role of emotion in retrieving memories",
+    "id": "psyc-6b-emotion-memory-retrieval",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Memory",
+    "subtopic": "Aging and memory; memory dysfunctions (Alzheimer's, Korsakoff's)",
+    "id": "psyc-6b-aging-memory-dysfunctions",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Memory",
+    "subtopic": "Decay, interference, and forgetting",
+    "id": "psyc-6b-decay-interference-forgetting",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Memory",
+    "subtopic": "Memory construction and source monitoring",
+    "id": "psyc-6b-memory-construction-source-monitoring",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Memory",
+    "subtopic": "Neural plasticity and long-term potentiation",
+    "id": "psyc-6b-neural-plasticity-ltp",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Language",
+    "subtopic": "Theories of language development (learning, nativist, interactionist)",
+    "id": "psyc-6b-language-development-theories",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Language",
+    "subtopic": "Influence of language on cognition",
+    "id": "psyc-6b-language-influence-on-cognition",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6B",
+    "aamc_code": "6B",
+    "topic": "Language",
+    "subtopic": "Brain areas that control language and speech",
+    "id": "psyc-6b-brain-areas-language-speech",
+    "mcat_category_id": "mcat_psychsoc_6b_making_sense_of_the_environment"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Emotion",
+    "subtopic": "Three components of emotion (cognitive, physiological, behavioral)",
+    "id": "psyc-6c-emotion-three-components",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Emotion",
+    "subtopic": "Universal emotions",
+    "id": "psyc-6c-universal-emotions",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Emotion",
+    "subtopic": "Adaptive role of emotion",
+    "id": "psyc-6c-adaptive-role-of-emotion",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Emotion",
+    "subtopic": "James-Lange theory of emotion",
+    "id": "psyc-6c-james-lange-theory",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Emotion",
+    "subtopic": "Cannon-Bard theory of emotion",
+    "id": "psyc-6c-cannon-bard-theory",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Emotion",
+    "subtopic": "Schachter-Singer two-factor theory",
+    "id": "psyc-6c-schachter-singer-theory",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Emotion",
+    "subtopic": "Brain regions involved in generation and experience of emotions",
+    "id": "psyc-6c-brain-regions-emotion",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Emotion",
+    "subtopic": "Role of limbic system in emotion",
+    "id": "psyc-6c-limbic-system-emotion",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Emotion",
+    "subtopic": "Emotion and autonomic nervous system; physiological markers of emotion",
+    "id": "psyc-6c-emotion-autonomic-nervous-system",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Stress",
+    "subtopic": "Appraisal and types of stressors",
+    "id": "psyc-6c-stress-appraisal-types",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Stress",
+    "subtopic": "Effects of stress on psychological functions",
+    "id": "psyc-6c-stress-psychological-effects",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Stress",
+    "subtopic": "Physiological, emotional, and behavioral stress outcomes",
+    "id": "psyc-6c-stress-outcomes-responses",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "6",
+    "content_category": "6C",
+    "aamc_code": "6C",
+    "topic": "Stress",
+    "subtopic": "Managing stress (exercise, relaxation, spirituality)",
+    "id": "psyc-6c-stress-management",
+    "mcat_category_id": "mcat_psychsoc_6c_responding_to_the_world"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Biological Bases of Behavior",
+    "subtopic": "Neurons and the reflex arc",
+    "id": "psyc-7a-neurons-reflex-arc",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Biological Bases of Behavior",
+    "subtopic": "Neurotransmitters",
+    "id": "psyc-7a-neurotransmitters",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Biological Bases of Behavior",
+    "subtopic": "Structure and function of the peripheral nervous system",
+    "id": "psyc-7a-peripheral-nervous-system",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Biological Bases of Behavior",
+    "subtopic": "Forebrain, midbrain, and hindbrain structure and function",
+    "id": "psyc-7a-brain-regions-structure-function",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Biological Bases of Behavior",
+    "subtopic": "Lateralization of cortical functions",
+    "id": "psyc-7a-lateralization-cortical-functions",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Biological Bases of Behavior",
+    "subtopic": "Methods used in studying the brain",
+    "id": "psyc-7a-methods-studying-brain",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Biological Bases of Behavior",
+    "subtopic": "The spinal cord",
+    "id": "psyc-7a-spinal-cord",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Biological Bases of Behavior",
+    "subtopic": "Neuronal communication and its influence on behavior",
+    "id": "psyc-7a-neuronal-communication-behavior",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Biological Bases of Behavior",
+    "subtopic": "Influence of neurotransmitters on behavior",
+    "id": "psyc-7a-neurotransmitters-influence-behavior",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "The Endocrine System",
+    "subtopic": "Components of the endocrine system",
+    "id": "psyc-7a-endocrine-system-components",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "The Endocrine System",
+    "subtopic": "Effects of the endocrine system on behavior",
+    "id": "psyc-7a-endocrine-system-behavior",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Behavioral Genetics",
+    "subtopic": "Genes, temperament, and heredity",
+    "id": "psyc-7a-genes-temperament-heredity",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Behavioral Genetics",
+    "subtopic": "Adaptive value of traits and behaviors",
+    "id": "psyc-7a-adaptive-value-traits-behaviors",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Behavioral Genetics",
+    "subtopic": "Interaction between heredity and environmental influences",
+    "id": "psyc-7a-heredity-environment-interaction",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Influence of Genetic and Environmental Factors on Behavior",
+    "subtopic": "Experience and behavior",
+    "id": "psyc-7a-experience-and-behavior",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Influence of Genetic and Environmental Factors on Behavior",
+    "subtopic": "Regulatory genes and behavior",
+    "id": "psyc-7a-regulatory-genes-behavior",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Influence of Genetic and Environmental Factors on Behavior",
+    "subtopic": "Genetically based behavioral variation in natural populations",
+    "id": "psyc-7a-genetic-behavioral-variation",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Human Physiological Development",
+    "subtopic": "Prenatal development",
+    "id": "psyc-7a-prenatal-development",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Human Physiological Development",
+    "subtopic": "Motor development",
+    "id": "psyc-7a-motor-development",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Human Physiological Development",
+    "subtopic": "Developmental changes in adolescence",
+    "id": "psyc-7a-adolescent-development",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Personality",
+    "subtopic": "Psychoanalytic perspective",
+    "id": "psyc-7a-personality-psychoanalytic",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Personality",
+    "subtopic": "Humanistic perspective",
+    "id": "psyc-7a-personality-humanistic",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Personality",
+    "subtopic": "Trait perspective",
+    "id": "psyc-7a-personality-trait",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Personality",
+    "subtopic": "Social cognitive perspective",
+    "id": "psyc-7a-personality-social-cognitive",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Personality",
+    "subtopic": "Biological perspective",
+    "id": "psyc-7a-personality-biological",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Personality",
+    "subtopic": "Behaviorist perspective",
+    "id": "psyc-7a-personality-behaviorist",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Personality",
+    "subtopic": "Situational approach to explaining behavior",
+    "id": "psyc-7a-personality-situational-approach",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Biomedical vs biopsychosocial approaches",
+    "id": "psyc-7a-biomedical-biopsychosocial-approaches",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Classifying psychological disorders and rates",
+    "id": "psyc-7a-classifying-disorders-rates",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Anxiety disorders",
+    "id": "psyc-7a-anxiety-disorders",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Obsessive-compulsive disorder",
+    "id": "psyc-7a-ocd",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Trauma- and stressor-related disorders",
+    "id": "psyc-7a-trauma-stressor-disorders",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Somatic symptom and related disorders",
+    "id": "psyc-7a-somatic-symptom-disorders",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Bipolar and related disorders",
+    "id": "psyc-7a-bipolar-disorders",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Depressive disorders",
+    "id": "psyc-7a-depressive-disorders",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Schizophrenia",
+    "id": "psyc-7a-schizophrenia",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Dissociative disorders",
+    "id": "psyc-7a-dissociative-disorders",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Personality disorders",
+    "id": "psyc-7a-personality-disorders",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Biological bases of schizophrenia and depression",
+    "id": "psyc-7a-biological-bases-schizophrenia-depression",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Biological bases of Alzheimer's and Parkinson's disease",
+    "id": "psyc-7a-biological-bases-alzheimers-parkinsons",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Psychological Disorders",
+    "subtopic": "Stem cell-based therapy to regenerate neurons",
+    "id": "psyc-7a-stem-cell-neuron-regeneration",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Motivation",
+    "subtopic": "Instinct, arousal, drives, and needs",
+    "id": "psyc-7a-motivation-instinct-arousal-drives-needs",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Motivation",
+    "subtopic": "Drive reduction theory and incentive theory",
+    "id": "psyc-7a-drive-reduction-incentive-theory",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Motivation",
+    "subtopic": "Other motivation theories (cognitive, need-based)",
+    "id": "psyc-7a-motivation-cognitive-need-based",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Motivation",
+    "subtopic": "Biological and sociocultural motivators (hunger, sex drive, substance addiction)",
+    "id": "psyc-7a-biological-sociocultural-motivators",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Attitudes",
+    "subtopic": "Components of attitudes (cognitive, affective, behavioral)",
+    "id": "psyc-7a-attitude-components",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Attitudes",
+    "subtopic": "Processes by which behavior influences attitudes (foot-in-the-door, role-playing)",
+    "id": "psyc-7a-behavior-influences-attitudes",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Attitudes",
+    "subtopic": "Processes by which attitudes influence behavior",
+    "id": "psyc-7a-attitudes-influence-behavior",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7A",
+    "aamc_code": "7A",
+    "topic": "Attitudes",
+    "subtopic": "Cognitive dissonance theory",
+    "id": "psyc-7a-cognitive-dissonance",
+    "mcat_category_id": "mcat_psychsoc_7a_individual_influences_on_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "How the Presence of Others Affects Individual Behavior",
+    "subtopic": "Social facilitation",
+    "id": "psyc-7b-social-facilitation",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "How the Presence of Others Affects Individual Behavior",
+    "subtopic": "Deindividuation",
+    "id": "psyc-7b-deindividuation",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "How the Presence of Others Affects Individual Behavior",
+    "subtopic": "Bystander effect",
+    "id": "psyc-7b-bystander-effect",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "How the Presence of Others Affects Individual Behavior",
+    "subtopic": "Social loafing",
+    "id": "psyc-7b-social-loafing",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "How the Presence of Others Affects Individual Behavior",
+    "subtopic": "Social control and peer pressure",
+    "id": "psyc-7b-social-control-peer-pressure",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "How the Presence of Others Affects Individual Behavior",
+    "subtopic": "Conformity",
+    "id": "psyc-7b-conformity",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "How the Presence of Others Affects Individual Behavior",
+    "subtopic": "Obedience",
+    "id": "psyc-7b-obedience",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "Group Decision-Making Processes",
+    "subtopic": "Group polarization",
+    "id": "psyc-7b-group-polarization",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "Group Decision-Making Processes",
+    "subtopic": "Groupthink",
+    "id": "psyc-7b-groupthink",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "Normative and Nonnormative Behavior",
+    "subtopic": "Social norms, sanctions, folkways, mores, and taboos",
+    "id": "psyc-7b-social-norms-sanctions-folkways",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "Normative and Nonnormative Behavior",
+    "subtopic": "Anomie",
+    "id": "psyc-7b-anomie",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "Normative and Nonnormative Behavior",
+    "subtopic": "Perspectives on deviance (differential association, labeling theory, strain theory)",
+    "id": "psyc-7b-perspectives-on-deviance",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "Normative and Nonnormative Behavior",
+    "subtopic": "Aspects of collective behavior (fads, mass hysteria, riots)",
+    "id": "psyc-7b-collective-behavior",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7B",
+    "aamc_code": "7B",
+    "topic": "Socialization",
+    "subtopic": "Agents of socialization (family, mass media, peers, workplace)",
+    "id": "psyc-7b-agents-of-socialization",
+    "mcat_category_id": "mcat_psychsoc_7b_social_processes_and_behavior"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Habituation and Dishabituation",
+    "subtopic": "Habituation and dishabituation",
+    "id": "psyc-7c-habituation-dishabituation",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Associative Learning",
+    "subtopic": "Classical conditioning: neutral, conditioned, and unconditioned stimuli and responses",
+    "id": "psyc-7c-classical-conditioning-stimuli-responses",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Associative Learning",
+    "subtopic": "Classical conditioning processes (acquisition, extinction, spontaneous recovery, generalization, discrimination)",
+    "id": "psyc-7c-classical-conditioning-processes",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Associative Learning",
+    "subtopic": "Operant conditioning: shaping and extinction",
+    "id": "psyc-7c-operant-conditioning-shaping-extinction",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Associative Learning",
+    "subtopic": "Reinforcement types (positive, negative, primary, conditional)",
+    "id": "psyc-7c-reinforcement-types",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Associative Learning",
+    "subtopic": "Reinforcement schedules (fixed-ratio, variable-ratio, fixed-interval, variable-interval)",
+    "id": "psyc-7c-reinforcement-schedules",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Associative Learning",
+    "subtopic": "Punishment and escape/avoidance learning",
+    "id": "psyc-7c-punishment-escape-avoidance",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Associative Learning",
+    "subtopic": "Role of cognitive processes in associative learning",
+    "id": "psyc-7c-cognitive-processes-associative-learning",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Associative Learning",
+    "subtopic": "Biological processes affecting associative learning (biological predispositions, instinctive drift)",
+    "id": "psyc-7c-biological-processes-associative-learning",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Observational Learning",
+    "subtopic": "Modeling",
+    "id": "psyc-7c-observational-learning-modeling",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Observational Learning",
+    "subtopic": "Mirror neurons and vicarious emotions",
+    "id": "psyc-7c-mirror-neurons-vicarious-emotions",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Observational Learning",
+    "subtopic": "Applications of observational learning",
+    "id": "psyc-7c-applications-observational-learning",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Theories of Attitude and Behavior Change",
+    "subtopic": "Elaboration likelihood model",
+    "id": "psyc-7c-elaboration-likelihood-model",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Theories of Attitude and Behavior Change",
+    "subtopic": "Social cognitive theory",
+    "id": "psyc-7c-social-cognitive-theory",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "7",
+    "content_category": "7C",
+    "aamc_code": "7C",
+    "topic": "Theories of Attitude and Behavior Change",
+    "subtopic": "Factors that affect attitude change (behavior, message/target characteristics, social factors)",
+    "id": "psyc-7c-factors-attitude-change",
+    "mcat_category_id": "mcat_psychsoc_7c_attitude_and_behavior_change"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8A",
+    "aamc_code": "8A",
+    "topic": "Self-Concept, Self-Identity, and Social Identity",
+    "subtopic": "Role of self-esteem, self-efficacy, and locus of control",
+    "id": "psyc-8a-self-esteem-efficacy-locus-control",
+    "mcat_category_id": "mcat_psychsoc_8a_self_identity"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8A",
+    "aamc_code": "8A",
+    "topic": "Self-Concept, Self-Identity, and Social Identity",
+    "subtopic": "Different types of identities (race/ethnicity, gender, age, sexual orientation, class)",
+    "id": "psyc-8a-types-of-identities",
+    "mcat_category_id": "mcat_psychsoc_8a_self_identity"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8A",
+    "aamc_code": "8A",
+    "topic": "Formation of Identity",
+    "subtopic": "Theories of identity development (gender, moral, psychosexual, social)",
+    "id": "psyc-8a-identity-development-theories",
+    "mcat_category_id": "mcat_psychsoc_8a_self_identity"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8A",
+    "aamc_code": "8A",
+    "topic": "Formation of Identity",
+    "subtopic": "Influence of individuals on identity (imitation, looking-glass self, role-taking)",
+    "id": "psyc-8a-individual-influence-on-identity",
+    "mcat_category_id": "mcat_psychsoc_8a_self_identity"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8A",
+    "aamc_code": "8A",
+    "topic": "Formation of Identity",
+    "subtopic": "Influence of groups on identity (reference group)",
+    "id": "psyc-8a-group-influence-on-identity",
+    "mcat_category_id": "mcat_psychsoc_8a_self_identity"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8A",
+    "aamc_code": "8A",
+    "topic": "Formation of Identity",
+    "subtopic": "Influence of culture and socialization on identity",
+    "id": "psyc-8a-culture-socialization-identity",
+    "mcat_category_id": "mcat_psychsoc_8a_self_identity"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8B",
+    "aamc_code": "8B",
+    "topic": "Attributing Behavior to Persons or Situations",
+    "subtopic": "Attributional processes and fundamental attribution error",
+    "id": "psyc-8b-attribution-fundamental-error",
+    "mcat_category_id": "mcat_psychsoc_8b_social_thinking"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8B",
+    "aamc_code": "8B",
+    "topic": "Attributing Behavior to Persons or Situations",
+    "subtopic": "Role of culture in attribution",
+    "id": "psyc-8b-culture-in-attribution",
+    "mcat_category_id": "mcat_psychsoc_8b_social_thinking"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8B",
+    "aamc_code": "8B",
+    "topic": "Attributing Behavior to Persons or Situations",
+    "subtopic": "How self-perceptions shape perceptions of others",
+    "id": "psyc-8b-self-perceptions-shape-other-perceptions",
+    "mcat_category_id": "mcat_psychsoc_8b_social_thinking"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8B",
+    "aamc_code": "8B",
+    "topic": "Attributing Behavior to Persons or Situations",
+    "subtopic": "How perceptions of environment shape perceptions of others",
+    "id": "psyc-8b-environment-perceptions-shape-other-perceptions",
+    "mcat_category_id": "mcat_psychsoc_8b_social_thinking"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8B",
+    "aamc_code": "8B",
+    "topic": "Prejudice and Bias",
+    "subtopic": "Power, prestige, class, emotion, and cognition in prejudice",
+    "id": "psyc-8b-power-prestige-prejudice",
+    "mcat_category_id": "mcat_psychsoc_8b_social_thinking"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8B",
+    "aamc_code": "8B",
+    "topic": "Prejudice and Bias",
+    "subtopic": "Stereotypes",
+    "id": "psyc-8b-stereotypes",
+    "mcat_category_id": "mcat_psychsoc_8b_social_thinking"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8B",
+    "aamc_code": "8B",
+    "topic": "Prejudice and Bias",
+    "subtopic": "Stigma",
+    "id": "psyc-8b-stigma",
+    "mcat_category_id": "mcat_psychsoc_8b_social_thinking"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8B",
+    "aamc_code": "8B",
+    "topic": "Prejudice and Bias",
+    "subtopic": "Ethnocentrism vs cultural relativism",
+    "id": "psyc-8b-ethnocentrism-cultural-relativism",
+    "mcat_category_id": "mcat_psychsoc_8b_social_thinking"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8B",
+    "aamc_code": "8B",
+    "topic": "Processes Related to Stereotypes",
+    "subtopic": "Self-fulfilling prophecy",
+    "id": "psyc-8b-self-fulfilling-prophecy",
+    "mcat_category_id": "mcat_psychsoc_8b_social_thinking"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8B",
+    "aamc_code": "8B",
+    "topic": "Processes Related to Stereotypes",
+    "subtopic": "Stereotype threat",
+    "id": "psyc-8b-stereotype-threat",
+    "mcat_category_id": "mcat_psychsoc_8b_social_thinking"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Elements of Social Interaction",
+    "subtopic": "Status: achieved and ascribed types",
+    "id": "psyc-8c-status-achieved-ascribed",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Elements of Social Interaction",
+    "subtopic": "Role conflict, role strain, and role exit",
+    "id": "psyc-8c-role-conflict-strain-exit",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Elements of Social Interaction",
+    "subtopic": "Primary and secondary groups; in-group vs out-group; group size (dyads, triads)",
+    "id": "psyc-8c-groups-ingroup-outgroup",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Elements of Social Interaction",
+    "subtopic": "Networks",
+    "id": "psyc-8c-networks",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Elements of Social Interaction",
+    "subtopic": "Formal organizations, bureaucracy, iron law of oligarchy, and McDonaldization",
+    "id": "psyc-8c-formal-organizations-bureaucracy",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Self-Presentation and Interacting With Others",
+    "subtopic": "Expressing and detecting emotion: role of gender and culture",
+    "id": "psyc-8c-expressing-detecting-emotion",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Self-Presentation and Interacting With Others",
+    "subtopic": "Presentation of self: impression management and dramaturgical approach",
+    "id": "psyc-8c-impression-management-dramaturgical",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Self-Presentation and Interacting With Others",
+    "subtopic": "Verbal and nonverbal communication",
+    "id": "psyc-8c-verbal-nonverbal-communication",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Self-Presentation and Interacting With Others",
+    "subtopic": "Animal signals and communication",
+    "id": "psyc-8c-animal-signals-communication",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Social Behavior",
+    "subtopic": "Attraction",
+    "id": "psyc-8c-social-behavior-attraction",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Social Behavior",
+    "subtopic": "Aggression",
+    "id": "psyc-8c-social-behavior-aggression",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Social Behavior",
+    "subtopic": "Attachment",
+    "id": "psyc-8c-social-behavior-attachment",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Social Behavior",
+    "subtopic": "Altruism",
+    "id": "psyc-8c-social-behavior-altruism",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Social Behavior",
+    "subtopic": "Social support",
+    "id": "psyc-8c-social-support",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Social Behavior",
+    "subtopic": "Foraging behavior and mating behavior in animals",
+    "id": "psyc-8c-animal-foraging-mating-behavior",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Social Behavior",
+    "subtopic": "Game theory applied to animal behavior",
+    "id": "psyc-8c-game-theory-animal-behavior",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Social Behavior",
+    "subtopic": "Inclusive fitness",
+    "id": "psyc-8c-inclusive-fitness",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Discrimination",
+    "subtopic": "Individual vs institutional discrimination",
+    "id": "psyc-8c-individual-institutional-discrimination",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Discrimination",
+    "subtopic": "Relationship between prejudice and discrimination",
+    "id": "psyc-8c-prejudice-discrimination-relationship",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "8",
+    "content_category": "8C",
+    "aamc_code": "8C",
+    "topic": "Discrimination",
+    "subtopic": "How power, prestige, and class facilitate discrimination",
+    "id": "psyc-8c-power-prestige-class-discrimination",
+    "mcat_category_id": "mcat_psychsoc_8c_social_interactions"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Theoretical Approaches",
+    "subtopic": "Microsociology vs macrosociology",
+    "id": "psyc-9a-micro-macro-sociology",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Theoretical Approaches",
+    "subtopic": "Functionalism",
+    "id": "psyc-9a-functionalism",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Theoretical Approaches",
+    "subtopic": "Conflict theory",
+    "id": "psyc-9a-conflict-theory",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Theoretical Approaches",
+    "subtopic": "Symbolic interactionism",
+    "id": "psyc-9a-symbolic-interactionism",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Theoretical Approaches",
+    "subtopic": "Social constructionism",
+    "id": "psyc-9a-social-constructionism",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Theoretical Approaches",
+    "subtopic": "Exchange-rational choice theory",
+    "id": "psyc-9a-exchange-rational-choice",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Theoretical Approaches",
+    "subtopic": "Feminist theory",
+    "id": "psyc-9a-feminist-theory",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Social Institutions",
+    "subtopic": "Education: hidden curriculum, teacher expectancy, educational segregation and stratification",
+    "id": "psyc-9a-education-institution",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Social Institutions",
+    "subtopic": "Family: forms of kinship, diversity in family forms, marriage and divorce, violence in family",
+    "id": "psyc-9a-family-institution",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Social Institutions",
+    "subtopic": "Religion: religiosity, types of religious organizations, religion and social change",
+    "id": "psyc-9a-religion-institution",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Social Institutions",
+    "subtopic": "Government and economy: power, authority, comparative systems, division of labor",
+    "id": "psyc-9a-government-economy-institution",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Social Institutions",
+    "subtopic": "Health and medicine: medicalization, sick role, health care delivery, illness experience, social epidemiology",
+    "id": "psyc-9a-health-medicine-institution",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Culture",
+    "subtopic": "Elements of culture (beliefs, language, rituals, symbols, values)",
+    "id": "psyc-9a-elements-of-culture",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Culture",
+    "subtopic": "Material vs symbolic culture",
+    "id": "psyc-9a-material-vs-symbolic-culture",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Culture",
+    "subtopic": "Culture lag and culture shock",
+    "id": "psyc-9a-culture-lag-shock",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Culture",
+    "subtopic": "Assimilation and multiculturalism",
+    "id": "psyc-9a-assimilation-multiculturalism",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Culture",
+    "subtopic": "Subcultures and countercultures",
+    "id": "psyc-9a-subcultures-countercultures",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Culture",
+    "subtopic": "Mass media and popular culture",
+    "id": "psyc-9a-mass-media-popular-culture",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9A",
+    "aamc_code": "9A",
+    "topic": "Culture",
+    "subtopic": "Evolution and human culture; transmission and diffusion",
+    "id": "psyc-9a-culture-evolution-diffusion",
+    "mcat_category_id": "mcat_psychsoc_9a_understanding_social_structure"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9B",
+    "aamc_code": "9B",
+    "topic": "Demographic Structure of Society",
+    "subtopic": "Age: aging and life course, age cohorts, social significance of aging",
+    "id": "psyc-9b-age-aging-life-course",
+    "mcat_category_id": "mcat_psychsoc_9b_demographic_characteristics"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9B",
+    "aamc_code": "9B",
+    "topic": "Demographic Structure of Society",
+    "subtopic": "Gender: sex vs gender, social construction of gender, gender segregation",
+    "id": "psyc-9b-gender-sex-social-construction",
+    "mcat_category_id": "mcat_psychsoc_9b_demographic_characteristics"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9B",
+    "aamc_code": "9B",
+    "topic": "Demographic Structure of Society",
+    "subtopic": "Race and ethnicity: social construction, racialization, racial formation",
+    "id": "psyc-9b-race-ethnicity-construction",
+    "mcat_category_id": "mcat_psychsoc_9b_demographic_characteristics"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9B",
+    "aamc_code": "9B",
+    "topic": "Demographic Structure of Society",
+    "subtopic": "Immigration status: patterns and intersections with race/ethnicity",
+    "id": "psyc-9b-immigration-status",
+    "mcat_category_id": "mcat_psychsoc_9b_demographic_characteristics"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9B",
+    "aamc_code": "9B",
+    "topic": "Demographic Structure of Society",
+    "subtopic": "Sexual orientation",
+    "id": "psyc-9b-sexual-orientation",
+    "mcat_category_id": "mcat_psychsoc_9b_demographic_characteristics"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9B",
+    "aamc_code": "9B",
+    "topic": "Demographic Shifts and Social Change",
+    "subtopic": "Theories of demographic change (Malthusian theory and demographic transition)",
+    "id": "psyc-9b-demographic-change-theories",
+    "mcat_category_id": "mcat_psychsoc_9b_demographic_characteristics"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9B",
+    "aamc_code": "9B",
+    "topic": "Demographic Shifts and Social Change",
+    "subtopic": "Population growth and decline (projections, population pyramids)",
+    "id": "psyc-9b-population-growth-decline",
+    "mcat_category_id": "mcat_psychsoc_9b_demographic_characteristics"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9B",
+    "aamc_code": "9B",
+    "topic": "Demographic Shifts and Social Change",
+    "subtopic": "Fertility and mortality rates; patterns in fertility and mortality",
+    "id": "psyc-9b-fertility-mortality-rates",
+    "mcat_category_id": "mcat_psychsoc_9b_demographic_characteristics"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9B",
+    "aamc_code": "9B",
+    "topic": "Demographic Shifts and Social Change",
+    "subtopic": "Push and pull factors in migration",
+    "id": "psyc-9b-push-pull-factors-migration",
+    "mcat_category_id": "mcat_psychsoc_9b_demographic_characteristics"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9B",
+    "aamc_code": "9B",
+    "topic": "Demographic Shifts and Social Change",
+    "subtopic": "Social movements: relative deprivation, organization, strategies and tactics",
+    "id": "psyc-9b-social-movements",
+    "mcat_category_id": "mcat_psychsoc_9b_demographic_characteristics"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9B",
+    "aamc_code": "9B",
+    "topic": "Demographic Shifts and Social Change",
+    "subtopic": "Globalization: contributing factors, perspectives, social changes",
+    "id": "psyc-9b-globalization",
+    "mcat_category_id": "mcat_psychsoc_9b_demographic_characteristics"
+  },
+  {
+    "foundational_concept": "9",
+    "content_category": "9B",
+    "aamc_code": "9B",
+    "topic": "Demographic Shifts and Social Change",
+    "subtopic": "Urbanization: industrialization, suburbanization, gentrification, urban renewal",
+    "id": "psyc-9b-urbanization",
+    "mcat_category_id": "mcat_psychsoc_9b_demographic_characteristics"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Spatial Inequality",
+    "subtopic": "Residential segregation",
+    "id": "psyc-10a-residential-segregation",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Spatial Inequality",
+    "subtopic": "Neighborhood safety and violence",
+    "id": "psyc-10a-neighborhood-safety-violence",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Spatial Inequality",
+    "subtopic": "Environmental justice and exposure to health risks",
+    "id": "psyc-10a-environmental-justice",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Social Class",
+    "subtopic": "Social class, socioeconomic status, class consciousness, and false consciousness",
+    "id": "psyc-10a-social-class-consciousness",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Social Class",
+    "subtopic": "Cultural capital and social capital",
+    "id": "psyc-10a-cultural-social-capital",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Social Class",
+    "subtopic": "Social reproduction",
+    "id": "psyc-10a-social-reproduction",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Social Class",
+    "subtopic": "Power, privilege, prestige, and intersectionality (race, gender, age)",
+    "id": "psyc-10a-power-privilege-intersectionality",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Social Class",
+    "subtopic": "Socioeconomic gradient in health and global inequalities",
+    "id": "psyc-10a-socioeconomic-gradient-health",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Social Class",
+    "subtopic": "Patterns of social mobility (intergenerational, intragenerational, vertical, horizontal)",
+    "id": "psyc-10a-social-mobility-patterns",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Social Class",
+    "subtopic": "Meritocracy",
+    "id": "psyc-10a-meritocracy",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Social Class",
+    "subtopic": "Poverty: relative and absolute poverty; social exclusion",
+    "id": "psyc-10a-poverty-relative-absolute",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Health Disparities",
+    "subtopic": "Class, gender, and race inequalities in health",
+    "id": "psyc-10a-health-disparities",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  },
+  {
+    "foundational_concept": "10",
+    "content_category": "10A",
+    "aamc_code": "10A",
+    "topic": "Health Care Disparities",
+    "subtopic": "Class, gender, and race inequalities in health care",
+    "id": "psyc-10a-health-care-disparities",
+    "mcat_category_id": "mcat_psychsoc_10a_social_inequality"
+  }
+]

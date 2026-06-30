@@ -1,0 +1,1163 @@
+[
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Proteins and Amino Acids — Structure",
+    "subtopic": "Amino acid general formula, acid-base properties, and dipolar ion (zwitterion) form",
+    "id": "bioc-1-1a-amino-acid-general-formula",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Proteins and Amino Acids — Structure",
+    "subtopic": "Classification of amino acids (nonpolar, polar, charged, aromatic, special cases)",
+    "id": "bioc-1-1a-amino-acid-classification",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Proteins and Amino Acids — Structure",
+    "subtopic": "Absolute configuration at the α carbon (L vs D; stereochemistry conventions)",
+    "id": "bioc-1-1a-amino-acid-alpha-configuration",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Proteins and Amino Acids — Structure",
+    "subtopic": "Reactions of amino acids with acids and bases; titration and pI",
+    "id": "bioc-1-1a-amino-acid-acid-base-reactions",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Proteins and Amino Acids — Structure",
+    "subtopic": "Peptide bond formation by condensation and hydrolysis of peptide bonds",
+    "id": "bioc-1-1a-peptide-bond-formation-hydrolysis",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Proteins and Amino Acids — Structure",
+    "subtopic": "Sulfur linkage for cysteine and cystine; disulfide bonds",
+    "id": "bioc-1-1a-cysteine-disulfide-bonds",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Proteins and Amino Acids — Structure",
+    "subtopic": "Peptide linkage polarity; resonance and partial double-bond character of peptide bond",
+    "id": "bioc-1-1a-peptide-bond-polarity-resonance",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Protein Structure and Function",
+    "subtopic": "Primary structure (amino acid sequence); secondary structure (α-helix, β-sheet, turns)",
+    "id": "bioc-1-1a-protein-primary-secondary-structure",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Protein Structure and Function",
+    "subtopic": "Tertiary and quaternary structure; forces stabilizing each level (hydrophobic, ionic, H-bond, disulfide)",
+    "id": "bioc-1-1a-protein-tertiary-quaternary-structure",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Protein Structure and Function",
+    "subtopic": "Common structural motifs in proteins and peptides (coiled-coil, β-barrel, zinc finger, leucine zipper)",
+    "id": "bioc-1-1a-protein-structural-motifs",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Protein Structure and Function",
+    "subtopic": "Simple, conjugated, and derived proteins; fibrous vs globular proteins",
+    "id": "bioc-1-1a-protein-types-fibrous-globular",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Protein Structure and Function",
+    "subtopic": "Denaturation of proteins: agents and consequences",
+    "id": "bioc-1-1a-protein-denaturation",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Protein Structure and Function",
+    "subtopic": "Non-enzymatic protein function (structural, transport, signaling, motor, immune)",
+    "id": "bioc-1-1a-non-enzymatic-protein-function",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1A",
+    "aamc_code": "1A",
+    "topic": "Protein Structure and Function",
+    "subtopic": "Myosin and actin as structural and motor protein examples",
+    "id": "bioc-1-1a-myosin-actin-motor-proteins",
+    "mcat_category_id": "mcat_biology_amino_acids_and_proteins"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Nucleic Acids — Structure and Function",
+    "subtopic": "Nucleotide composition, structure, and function (purines vs pyrimidines; phosphate, sugar, base)",
+    "id": "bioc-1-1b-nucleotide-structure-function",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Nucleic Acids — Structure and Function",
+    "subtopic": "DNA structure (double helix, antiparallel strands, base pairing, B-form) and RNA structure/types (mRNA, tRNA, rRNA)",
+    "id": "bioc-1-1b-dna-rna-structure",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Nucleic Acids — Structure and Function",
+    "subtopic": "Other nucleotide functions: ATP as energy currency; NAD+, FAD as electron carriers; cAMP as second messenger",
+    "id": "bioc-1-1b-nucleotide-other-functions-atp-nad-camp",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Gene Expression — Transcription",
+    "subtopic": "Transcription: mechanism, RNA polymerase, promoters, termination; mRNA processing (capping, polyadenylation, splicing)",
+    "id": "bioc-1-1b-transcription-mechanism-mrna-processing",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Gene Expression — Translation",
+    "subtopic": "Translation: ribosomes, tRNA charging, initiation/elongation/termination; genetic code (codons, wobble, degeneracy)",
+    "id": "bioc-1-1b-translation-genetic-code",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Gene Expression — Replication",
+    "subtopic": "DNA replication: semi-conservative model, origins, helicase, primase, DNA polymerase, Okazaki fragments, proofreading",
+    "id": "bioc-1-1b-dna-replication",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Gene Expression — Repair",
+    "subtopic": "DNA repair mechanisms (base excision, nucleotide excision, mismatch repair, double-strand break repair)",
+    "id": "bioc-1-1b-dna-repair-mechanisms",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Gene Expression — Recombinant DNA Techniques",
+    "subtopic": "PCR, restriction enzymes, gel electrophoresis, Southern/Northern blotting, hybridization probes",
+    "id": "bioc-1-1b-recombinant-dna-pcr-blotting",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Gene Expression — Recombinant DNA Techniques",
+    "subtopic": "Vectors, transfection, RFLP, DNA sequencing (Sanger, next-gen concepts)",
+    "id": "bioc-1-1b-vectors-transfection-rflp-sequencing",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Gene Expression — Prokaryotes vs Eukaryotes",
+    "subtopic": "Gene expression differences: operons (prokaryote); introns/exons, splicing, nuclear envelope (eukaryote); coupled transcription-translation",
+    "id": "bioc-1-1b-prokaryote-eukaryote-gene-expression",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Gene Expression — Post-Translational Modifications",
+    "subtopic": "Post-translational modifications (phosphorylation, glycosylation, ubiquitination, cleavage, signal peptides)",
+    "id": "bioc-1-1b-post-translational-modifications",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Eukaryotic Chromosome Organization",
+    "subtopic": "Chromatin structure, histone proteins, nucleosome, solenoid (30-nm fiber), supercoiling",
+    "id": "bioc-1-1b-chromatin-histone-nucleosome",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1B",
+    "aamc_code": "1B",
+    "topic": "Eukaryotic Chromosome Organization",
+    "subtopic": "Single-copy vs repetitive DNA; heterochromatin vs euchromatin; sister chromatids, centromeres, telomeres",
+    "id": "bioc-1-1b-heterochromatin-euchromatin-telomere",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Mendelian Genetics",
+    "subtopic": "Mendelian concepts: phenotype, genotype, gene, allele, dominant/recessive; Punnett square",
+    "id": "bioc-1-1c-mendelian-concepts-phenotype-genotype",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Mendelian Genetics — Meiosis and Gametogenesis",
+    "subtopic": "Meiosis I and II stages; comparison with mitosis; ploidy; segregation; independent assortment",
+    "id": "bioc-1-1c-meiosis-segregation-independent-assortment",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Mendelian Genetics — Meiosis and Gametogenesis",
+    "subtopic": "Crossing over and recombination; homologous chromosomes vs sister chromatids",
+    "id": "bioc-1-1c-crossing-over-recombination-homologs",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Mendelian Genetics — Alternative Inheritance Forms",
+    "subtopic": "Codominance, incomplete dominance, multiple alleles, pleiotropy, epistasis",
+    "id": "bioc-1-1c-codominance-incomplete-dominance-epistasis",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Mendelian Genetics — Gene Mapping",
+    "subtopic": "Recombination frequencies and chromosome mapping; linkage",
+    "id": "bioc-1-1c-gene-mapping-recombination-frequency",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Mendelian Genetics — Inheritance Patterns",
+    "subtopic": "Sex-linked characteristics; phenotypic sex determination (SRY gene, sex chromosomes); cytoplasmic/extranuclear inheritance (mitochondrial)",
+    "id": "bioc-1-1c-sex-linked-cytoplasmic-inheritance",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Mutations",
+    "subtopic": "Types of mutations: point, silent, missense, nonsense, frameshift; inversion, deletion, translocation",
+    "id": "bioc-1-1c-mutation-types-point-frameshift-chromosomal",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Mutations",
+    "subtopic": "Environmental mutagens; base-pair substitutions; random nature of mutations",
+    "id": "bioc-1-1c-environmental-mutagens-random-mutations",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Regulation of Gene Expression",
+    "subtopic": "Regulatory proteins (transcription factors, repressors, activators); prokaryotic operons (lac operon, trp operon)",
+    "id": "bioc-1-1c-gene-regulation-operons-tf",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Regulation of Gene Expression",
+    "subtopic": "Eukaryotic gene regulation: chromatin remodeling, DNA methylation, histone acetylation/methylation, X-inactivation",
+    "id": "bioc-1-1c-eukaryotic-epigenetic-regulation",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Regulation of Gene Expression",
+    "subtopic": "Oncogenes, proto-oncogenes, and tumor suppressor genes in gene regulation",
+    "id": "bioc-1-1c-oncogenes-tumor-suppressors-regulation",
+    "mcat_category_id": "mcat_biology_nucleic_acids_and_gene_expression"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Evolution",
+    "subtopic": "Natural selection: fitness, differential reproduction, rate of allele frequency change",
+    "id": "bioc-1-1c-natural-selection-fitness-allele-change",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Evolution",
+    "subtopic": "Hardy-Weinberg Principle: conditions, equations (p² + 2pq + q² = 1), use in population genetics",
+    "id": "bioc-1-1c-hardy-weinberg-principle",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Evolution",
+    "subtopic": "Adaptation: inbreeding effects, heterozygote advantage (sickle cell example)",
+    "id": "bioc-1-1c-adaptation-inbreeding-heterozygote-advantage",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Evolution",
+    "subtopic": "Speciation: prezygotic vs postzygotic isolation; hybridization",
+    "id": "bioc-1-1c-speciation-reproductive-isolation",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1C",
+    "aamc_code": "1C",
+    "topic": "Evolution",
+    "subtopic": "Genetic drift: founder effect and bottleneck effect",
+    "id": "bioc-1-1c-genetic-drift-founder-bottleneck",
+    "mcat_category_id": "mcat_biology_genetics_evolution_and_inheritance"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Bioenergetics — Free Energy",
+    "subtopic": "Free energy: ΔG = ΔH − TΔS; spontaneous vs nonspontaneous reactions; exergonic vs endergonic",
+    "id": "bioc-1-1d-free-energy-delta-g-spontaneity",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Bioenergetics — Free Energy",
+    "subtopic": "Coupled reactions; activation energy; enzymes and catalysis overview",
+    "id": "bioc-1-1d-coupled-reactions-activation-energy",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Bioenergetics — ATP and Phosphoryl Transfer",
+    "subtopic": "Phosphorylation-dephosphorylation; high-energy phosphate bonds; ATP hydrolysis ΔG; ATP as phosphate-group donor",
+    "id": "bioc-1-1d-atp-phosphoryl-transfer",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Bioenergetics — Biological Oxidation-Reduction",
+    "subtopic": "Half-reactions; standard reduction potential (E°); energetics of electron transfer; NADH/FADH₂ as carriers; energy released transferring from NADH to O₂",
+    "id": "bioc-1-1d-redox-reduction-potential-nadh",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Carbohydrate Metabolism — Glycolysis",
+    "subtopic": "Glycolysis: substrates, products (pyruvate, ATP, NADH), energetics, key enzymes, regulation; anaerobic fermentation (lactate, ethanol)",
+    "id": "bioc-1-1d-glycolysis-fermentation",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Carbohydrate Metabolism — Krebs Cycle",
+    "subtopic": "Krebs cycle (TCA): substrates (acetyl-CoA), products (CO₂, NADH, FADH₂, GTP), regulation, key enzymes",
+    "id": "bioc-1-1d-krebs-cycle-tca",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Carbohydrate Metabolism — Oxidative Phosphorylation",
+    "subtopic": "Mitochondrial electron transport chain (complexes I–IV); proton-motive force; ATP synthase; net ATP yield per glucose; uncouplers and coupling agents",
+    "id": "bioc-1-1d-oxidative-phosphorylation-etc",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Carbohydrate Metabolism — Gluconeogenesis",
+    "subtopic": "Gluconeogenesis: substrates (lactate, glycerol, amino acids), bypass enzymes, regulation vs glycolysis",
+    "id": "bioc-1-1d-gluconeogenesis",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Carbohydrate Metabolism — Glycogen Metabolism",
+    "subtopic": "Glycogenolysis and glycogenesis: substrates, products, key enzymes (glycogen phosphorylase, glycogen synthase), regulation",
+    "id": "bioc-1-1d-glycogen-metabolism",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Carbohydrate Metabolism — Pentose Phosphate Pathway",
+    "subtopic": "Pentose phosphate pathway: main products (NADPH, ribose-5-phosphate) and function (biosynthesis, antioxidant)",
+    "id": "bioc-1-1d-pentose-phosphate-pathway",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Carbohydrate Metabolism — Hormonal Regulation",
+    "subtopic": "Hormonal regulation of carbohydrate metabolism: insulin, glucagon, epinephrine pathways",
+    "id": "bioc-1-1d-carbohydrate-hormonal-regulation",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Lipid Metabolism — Structure and Classification",
+    "subtopic": "Lipid classification: triacylglycerols, phospholipids, sphingolipids, steroids, terpenes, waxes, prostaglandins, fat-soluble vitamins; structural vs functional lipids",
+    "id": "bioc-1-1d-lipid-classification-structure",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Lipid Metabolism — Digestion and Transport",
+    "subtopic": "Digestion, absorption, and transport of dietary fats (bile, micelles, chylomicrons, lipoproteins)",
+    "id": "bioc-1-1d-lipid-digestion-absorption-transport",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Lipid Metabolism — Fatty Acid Catabolism",
+    "subtopic": "β-oxidation of fatty acids: products (acetyl-CoA, NADH, FADH₂), energetics, location (mitochondrial matrix)",
+    "id": "bioc-1-1d-beta-oxidation-fatty-acids",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Lipid Metabolism — Ketone Bodies",
+    "subtopic": "Ketone body synthesis (ketogenesis) in liver; use by brain and heart during fasting/starvation",
+    "id": "bioc-1-1d-ketone-bodies-ketogenesis",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Lipid Metabolism — Fatty Acid Synthesis",
+    "subtopic": "Fatty acid synthesis: location (cytoplasm), acetyl-CoA carboxylase, malonyl-CoA, NADPH requirement; contrast with β-oxidation",
+    "id": "bioc-1-1d-fatty-acid-synthesis",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Amino Acid Metabolism",
+    "subtopic": "Amino acid catabolism: transamination, oxidative deamination; urea cycle (substrates, products, location)",
+    "id": "bioc-1-1d-amino-acid-catabolism-urea-cycle",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "1",
+    "content_category": "1D",
+    "aamc_code": "1D",
+    "topic": "Amino Acid Metabolism",
+    "subtopic": "Amino acids as biosynthetic precursors (neurotransmitters, heme, nucleotides); essential vs non-essential amino acids",
+    "id": "bioc-1-1d-amino-acid-biosynthetic-precursors-essential",
+    "mcat_category_id": "mcat_biology_bioenergetics_and_metabolism"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Plasma Membrane Structure",
+    "subtopic": "Fluid mosaic model; lipid bilayer composition; integral and peripheral membrane proteins",
+    "id": "bioc-2-2a-membrane-fluid-mosaic-model",
+    "mcat_category_id": "mcat_biology_cell_structure_membranes_and_transport"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Plasma Membrane Structure",
+    "subtopic": "Membrane receptors; glycoproteins and glycolipids; membrane asymmetry",
+    "id": "bioc-2-2a-membrane-receptors-glycoproteins",
+    "mcat_category_id": "mcat_biology_cell_structure_membranes_and_transport"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Membrane Transport",
+    "subtopic": "Simple diffusion; osmosis; osmotic pressure and tonicity (hypo-, iso-, hypertonic solutions)",
+    "id": "bioc-2-2a-diffusion-osmosis-tonicity",
+    "mcat_category_id": "mcat_biology_cell_structure_membranes_and_transport"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Membrane Transport",
+    "subtopic": "Facilitated diffusion (channel proteins, carrier proteins); active transport; cotransport; Na⁺/K⁺ ATPase pump",
+    "id": "bioc-2-2a-facilitated-diffusion-active-transport-na-k-pump",
+    "mcat_category_id": "mcat_biology_cell_structure_membranes_and_transport"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Membrane Transport",
+    "subtopic": "Endocytosis and exocytosis (phagocytosis, pinocytosis, receptor-mediated endocytosis)",
+    "id": "bioc-2-2a-endocytosis-exocytosis",
+    "mcat_category_id": "mcat_biology_cell_structure_membranes_and_transport"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Membrane-Bound Organelles",
+    "subtopic": "Mitochondria: inner/outer membrane, cristae, matrix; function in ATP synthesis; semi-autonomous (own DNA, self-replication)",
+    "id": "bioc-2-2a-mitochondria-structure-function",
+    "mcat_category_id": "mcat_biology_cell_structure_membranes_and_transport"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Membrane-Bound Organelles",
+    "subtopic": "Lysosomes: hydrolytic enzymes, compartmentalization, pH; lysosomal storage diseases concept",
+    "id": "bioc-2-2a-lysosomes-hydrolytic-function",
+    "mcat_category_id": "mcat_biology_cell_structure_membranes_and_transport"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Membrane-Bound Organelles",
+    "subtopic": "Endoplasmic reticulum: rough (protein synthesis, glycosylation) vs smooth (lipid synthesis, detoxification); secretory pathway",
+    "id": "bioc-2-2a-endoplasmic-reticulum-rough-smooth",
+    "mcat_category_id": "mcat_biology_cell_structure_membranes_and_transport"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Membrane-Bound Organelles",
+    "subtopic": "Golgi apparatus: cis/trans faces, vesicle trafficking, protein sorting and modification, secretory function",
+    "id": "bioc-2-2a-golgi-apparatus-vesicle-trafficking",
+    "mcat_category_id": "mcat_biology_cell_structure_membranes_and_transport"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Membrane-Bound Organelles",
+    "subtopic": "Nucleus: nuclear envelope, nuclear pores, nucleolus; genetic material organization",
+    "id": "bioc-2-2a-nucleus-nuclear-envelope-pores",
+    "mcat_category_id": "mcat_biology_cell_structure_membranes_and_transport"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Cytoskeleton",
+    "subtopic": "Cytoskeleton components: actin (microfilaments), microtubules, intermediate filaments; motor proteins (myosin, kinesin, dynein); cell motility and shape",
+    "id": "bioc-2-2a-cytoskeleton-actin-microtubules-motor-proteins",
+    "mcat_category_id": "mcat_biology_cell_structure_membranes_and_transport"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Bacteria",
+    "subtopic": "Prokaryotic cell structure: cell wall (peptidoglycan), pili, flagella, capsule, ribosome type; binary fission; plasmids",
+    "id": "bioc-2-2a-bacteria-prokaryotic-structure",
+    "mcat_category_id": "mcat_biology_prokaryotes_viruses_and_biotechnology"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Bacteria",
+    "subtopic": "Bacterial growth phases; endospore formation; gram-positive vs gram-negative distinction",
+    "id": "bioc-2-2a-bacteria-growth-endospore-gram",
+    "mcat_category_id": "mcat_biology_prokaryotes_viruses_and_biotechnology"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Fungi",
+    "subtopic": "Fungal characteristics: heterotrophic, chitin cell wall; unicellular (yeast) vs multicellular (mold); sexual and asexual reproduction",
+    "id": "bioc-2-2a-fungi-characteristics-reproduction",
+    "mcat_category_id": "mcat_biology_prokaryotes_viruses_and_biotechnology"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Viruses — Structure and Replication",
+    "subtopic": "Virus structure (capsid, envelope, genetic material — DNA vs RNA, ss vs ds); lytic vs lysogenic cycles; bacteriophage vs animal virus",
+    "id": "bioc-2-2a-virus-structure-lytic-lysogenic",
+    "mcat_category_id": "mcat_biology_prokaryotes_viruses_and_biotechnology"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Immunology",
+    "subtopic": "Innate vs adaptive immunity; first-line and second-line defenses; inflammation; complement system",
+    "id": "bioc-2-2a-innate-adaptive-immunity-overview",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Immunology",
+    "subtopic": "Antibody structure (heavy/light chains, variable/constant regions, Fab/Fc); antibody classes (IgG, IgM, IgA, IgE, IgD); diversity generation (VDJ recombination)",
+    "id": "bioc-2-2a-antibody-structure-diversity",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Immunology",
+    "subtopic": "B and T cell maturation; clonal selection and expansion; memory cells",
+    "id": "bioc-2-2a-b-t-cell-maturation-clonal-selection",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2A",
+    "aamc_code": "2A",
+    "topic": "Immunology",
+    "subtopic": "Antigen presentation: MHC class I (all nucleated cells, CD8 cytotoxic T) vs MHC class II (APCs, CD4 helper T); cell-mediated vs humoral immunity",
+    "id": "bioc-2-2a-mhc-antigen-presentation-cell-mediated-humoral",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Respiratory System",
+    "subtopic": "Gas exchange at alveoli; lung volumes and capacities (tidal, vital capacity, residual); pulmonary circulation; ventilation-perfusion matching",
+    "id": "bioc-2-2b-respiratory-gas-exchange-lung-volumes",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Respiratory System",
+    "subtopic": "Control of breathing: medullary rhythmicity, chemoreceptors (CO₂/pH, O₂); Bohr effect and oxygen-hemoglobin dissociation curve",
+    "id": "bioc-2-2b-breathing-control-chemoreceptors-bohr",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Circulatory System",
+    "subtopic": "Four-chambered heart anatomy; cardiac cycle (systole/diastole); conduction system (SA node, AV node, bundle of His, Purkinje fibers)",
+    "id": "bioc-2-2b-heart-anatomy-cardiac-cycle-conduction",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Circulatory System",
+    "subtopic": "Arteries, veins, capillaries: structure and function; blood pressure regulation; Starling forces at capillary beds",
+    "id": "bioc-2-2b-vessels-blood-pressure-starling",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Circulatory System",
+    "subtopic": "ABO and Rh blood type genetics and transfusion compatibility; blood clotting (coagulation cascade, platelets, fibrin)",
+    "id": "bioc-2-2b-blood-types-clotting-cascade",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Lymphatic System",
+    "subtopic": "Lymphatic system: lymph nodes, lymphatic vessels, fluid balance; role in immune surveillance and fat absorption (lacteals)",
+    "id": "bioc-2-2b-lymphatic-system-nodes-fluid-balance",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Digestive System",
+    "subtopic": "Gross anatomy of GI tract; digestion and absorption of carbohydrates, fats, and proteins; intestinal villi/microvilli",
+    "id": "bioc-2-2b-digestive-anatomy-digestion-absorption",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Digestive System",
+    "subtopic": "Gastric secretions (HCl, pepsin, mucus); liver (bile production, detox, glycogen storage); gallbladder (bile concentration); pancreas (digestive enzymes, bicarbonate)",
+    "id": "bioc-2-2b-gastric-secretions-liver-gallbladder-pancreas",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Digestive System",
+    "subtopic": "GI hormones: gastrin, secretin, CCK, GIP; large intestine function (water reabsorption, microbiome)",
+    "id": "bioc-2-2b-gi-hormones-large-intestine",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Excretory System",
+    "subtopic": "Kidney anatomy; nephron structure (glomerulus, proximal tubule, loop of Henle, distal tubule, collecting duct); filtration, reabsorption, secretion, excretion",
+    "id": "bioc-2-2b-kidney-nephron-filtration-reabsorption",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Excretory System",
+    "subtopic": "Urine composition; hormonal regulation: ADH (water reabsorption), aldosterone (Na⁺/K⁺), ANP (natriuresis); renin-angiotensin system",
+    "id": "bioc-2-2b-urine-adh-aldosterone-anp-raas",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Muscle System",
+    "subtopic": "Skeletal vs smooth vs cardiac muscle: structural and functional differences; sarcomere organization (actin, myosin, titin, Z-lines)",
+    "id": "bioc-2-2b-muscle-types-sarcomere-organization",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Muscle System",
+    "subtopic": "Sliding filament mechanism; troponin-tropomyosin complex; calcium role in contraction; cross-bridge cycle",
+    "id": "bioc-2-2b-sliding-filament-troponin-ca2-cross-bridge",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Muscle System",
+    "subtopic": "Neuromuscular junction: ACh release, end-plate potential; motor unit; slow-twitch (type I) vs fast-twitch (type II) fibers",
+    "id": "bioc-2-2b-neuromuscular-junction-motor-unit-fiber-types",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Skeletal System",
+    "subtopic": "Bone types (long, short, flat, irregular); bone composition (organic matrix: collagen; inorganic: hydroxyapatite); bone cells (osteoblast, osteoclast, osteocyte); endochondral ossification",
+    "id": "bioc-2-2b-bone-types-composition-cells-ossification",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Skeletal System",
+    "subtopic": "Joint types (fibrous, cartilaginous, synovial); joint function and range of motion",
+    "id": "bioc-2-2b-joint-types-function",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Skin",
+    "subtopic": "Skin layers: epidermis (stratum corneum, basale, spinosum, granulosum) and dermis; thermoregulation; sensory receptors; wound healing",
+    "id": "bioc-2-2b-skin-layers-thermoregulation-sensory",
+    "mcat_category_id": "mcat_biology_organ_systems_and_homeostasis"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Reproductive System",
+    "subtopic": "Male reproductive system: testes, spermatogenesis, testosterone regulation (HPG axis); structures (epididymis, vas deferens, prostate)",
+    "id": "bioc-2-2b-male-reproductive-spermatogenesis-hpg",
+    "mcat_category_id": "mcat_biology_cell_cycle_development_and_reproduction"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Reproductive System",
+    "subtopic": "Female reproductive system: ovary, oogenesis, folliculogenesis; menstrual cycle (follicular, ovulatory, luteal phases); FSH, LH, estrogen, progesterone",
+    "id": "bioc-2-2b-female-reproductive-oogenesis-menstrual-cycle",
+    "mcat_category_id": "mcat_biology_cell_cycle_development_and_reproduction"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2B",
+    "aamc_code": "2B",
+    "topic": "Reproductive System",
+    "subtopic": "Fertilization; implantation; placenta (gas exchange, nutrient transfer, hormone production: hCG, progesterone)",
+    "id": "bioc-2-2b-fertilization-implantation-placenta",
+    "mcat_category_id": "mcat_biology_cell_cycle_development_and_reproduction"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2C",
+    "aamc_code": "2C",
+    "topic": "Cell Cycle — Mitosis",
+    "subtopic": "Cell cycle phases: G₀, G₁, S, G₂, M; checkpoints (G₁/S, G₂/M, spindle assembly); cyclins and CDKs as regulators",
+    "id": "bioc-2-2c-cell-cycle-phases-checkpoints-cyclins",
+    "mcat_category_id": "mcat_biology_cell_cycle_development_and_reproduction"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2C",
+    "aamc_code": "2C",
+    "topic": "Cell Cycle — Mitosis",
+    "subtopic": "Mitosis stages: prophase, metaphase, anaphase, telophase; cytokinesis; cleavage furrow vs cell plate",
+    "id": "bioc-2-2c-mitosis-stages-cytokinesis",
+    "mcat_category_id": "mcat_biology_cell_cycle_development_and_reproduction"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2C",
+    "aamc_code": "2C",
+    "topic": "Cell Cycle — Meiosis",
+    "subtopic": "Meiosis I and II stages; crossing over (prophase I); nondisjunction and aneuploidy; ploidy changes",
+    "id": "bioc-2-2c-meiosis-nondisjunction-aneuploidy",
+    "mcat_category_id": "mcat_biology_cell_cycle_development_and_reproduction"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2C",
+    "aamc_code": "2C",
+    "topic": "Embryogenesis",
+    "subtopic": "Fertilization → cleavage → morula → blastula; gastrulation; three germ layers (ectoderm, mesoderm, endoderm) and their derivatives",
+    "id": "bioc-2-2c-embryogenesis-cleavage-gastrulation-germ-layers",
+    "mcat_category_id": "mcat_biology_cell_cycle_development_and_reproduction"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2C",
+    "aamc_code": "2C",
+    "topic": "Embryogenesis",
+    "subtopic": "Neurulation: neural plate, neural tube, neural crest cells and their fates; developmental principles (induction, competence, determination)",
+    "id": "bioc-2-2c-neurulation-neural-crest-developmental-principles",
+    "mcat_category_id": "mcat_biology_cell_cycle_development_and_reproduction"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2C",
+    "aamc_code": "2C",
+    "topic": "Oncogenes and Tumor Suppressors",
+    "subtopic": "Oncogenes (activating mutations, proto-oncogene conversion) and tumor suppressor genes (Rb, p53) as cell cycle regulators; cancer as loss of proliferation control",
+    "id": "bioc-2-2c-oncogenes-tumor-suppressors-cell-cycle",
+    "mcat_category_id": "mcat_biology_cell_cycle_development_and_reproduction"
+  },
+  {
+    "foundational_concept": "2",
+    "content_category": "2C",
+    "aamc_code": "2C",
+    "topic": "Stem Cells and Differentiation",
+    "subtopic": "Stem cell potency levels (totipotent, pluripotent, multipotent, unipotent); embryonic vs adult stem cells; therapeutic and research applications",
+    "id": "bioc-2-2c-stem-cells-potency-differentiation",
+    "mcat_category_id": "mcat_biology_cell_cycle_development_and_reproduction"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Nervous System — Divisions",
+    "subtopic": "CNS vs PNS divisions; somatic vs autonomic nervous system; sympathetic vs parasympathetic: neurotransmitters, effects, fight-or-flight vs rest-and-digest",
+    "id": "bioc-3-3a-nervous-system-divisions-autonomic",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Nervous System — Neuron Structure and Physiology",
+    "subtopic": "Neuron anatomy (cell body, dendrites, axon, myelin sheath); resting membrane potential: Na⁺/K⁺ concentrations, selective permeability, membrane potential (~−70 mV)",
+    "id": "bioc-3-3a-neuron-anatomy-resting-potential",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Nervous System — Neuron Structure and Physiology",
+    "subtopic": "Action potential: depolarization (Na⁺ influx), repolarization (K⁺ efflux), refractory periods (absolute/relative); all-or-none principle; saltatory conduction",
+    "id": "bioc-3-3a-action-potential-depolarization-repolarization",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Synaptic Transmission",
+    "subtopic": "Synapse types (chemical vs electrical); neurotransmitter release, binding, and receptor types (ionotropic vs metabotropic); EPSP and IPSP; spatial and temporal summation",
+    "id": "bioc-3-3a-synaptic-transmission-epsp-ipsp-summation",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Synaptic Transmission",
+    "subtopic": "Major neurotransmitters: acetylcholine, dopamine, norepinephrine, serotonin, GABA, glutamate, glycine; their general functions and target effects",
+    "id": "bioc-3-3a-neurotransmitters-types-functions",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Glial Cells",
+    "subtopic": "Glial cell types and functions: astrocytes, oligodendrocytes, Schwann cells, microglia, ependymal cells; blood-brain barrier",
+    "id": "bioc-3-3a-glial-cells-types-functions",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Sensory Reception",
+    "subtopic": "Visual system: photoreceptors (rods vs cones), retina organization, optic nerve; visual transduction (rhodopsin, cGMP, hyperpolarization)",
+    "id": "bioc-3-3a-visual-system-retina-photoreceptors",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Sensory Reception",
+    "subtopic": "Auditory system: cochlea, basilar membrane, hair cells; tonotopic organization; vestibular system (semicircular canals, otolith organs)",
+    "id": "bioc-3-3a-auditory-vestibular-hair-cells",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Sensory Reception",
+    "subtopic": "Olfactory and gustatory reception; olfactory receptor neurons; taste receptor types (sweet, sour, salty, bitter, umami); somatosensory pain pathways (nociceptors, dorsal horn, spinothalamic tract)",
+    "id": "bioc-3-3a-olfaction-gustation-pain-somatosensory",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Endocrine System — Hormones",
+    "subtopic": "Hormone classification: amino acid-derived (epinephrine, thyroid hormones), peptide (insulin, GH, ADH), steroid (cortisol, sex hormones); mechanisms of action",
+    "id": "bioc-3-3a-hormone-classification-mechanism-action",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Endocrine System — Hypothalamus–Pituitary Axis",
+    "subtopic": "Hypothalamus–anterior pituitary–target gland axis; releasing and inhibiting hormones; negative feedback loops; posterior pituitary (ADH, oxytocin direct release)",
+    "id": "bioc-3-3a-hypothalamus-pituitary-axis-feedback",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Endocrine System — Major Glands",
+    "subtopic": "Thyroid (T3/T4, calcitonin), parathyroid (PTH); calcium homeostasis; thyroid disorders concept (hypo/hyperthyroidism)",
+    "id": "bioc-3-3a-thyroid-parathyroid-calcium-homeostasis",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Endocrine System — Major Glands",
+    "subtopic": "Adrenal cortex (cortisol, aldosterone, androgens) and adrenal medulla (epinephrine, norepinephrine); stress response",
+    "id": "bioc-3-3a-adrenal-cortex-medulla-stress-response",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Endocrine System — Major Glands",
+    "subtopic": "Pancreas: insulin (β-cells, glucose uptake) and glucagon (α-cells, glycogenolysis/gluconeogenesis); diabetes concept; pineal gland (melatonin); gonads (estrogen, testosterone)",
+    "id": "bioc-3-3a-pancreas-insulin-glucagon-pineal-gonads",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3A",
+    "aamc_code": "3A",
+    "topic": "Endocrine System — Second Messenger Pathways",
+    "subtopic": "cAMP/PKA pathway (β-adrenergic, glucagon receptors); IP3/DAG/PKC pathway; receptor tyrosine kinase (insulin, growth factors); nuclear receptors (steroid hormones)",
+    "id": "bioc-3-3a-second-messenger-camp-pka-rtk-nuclear",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3B",
+    "aamc_code": "3B",
+    "topic": "Behavior — Reflexes",
+    "subtopic": "Reflex arcs: monosynaptic (stretch reflex) and polysynaptic (withdrawal reflex); afferent/efferent pathways; role of spinal cord",
+    "id": "bioc-3-3b-reflex-arcs-monosynaptic-polysynaptic",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3B",
+    "aamc_code": "3B",
+    "topic": "Behavior — Pain",
+    "subtopic": "Pain (nociception): nociceptors, pain fiber types (Aδ, C fibers), gate control theory, endogenous opioids (endorphins, enkephalins)",
+    "id": "bioc-3-3b-pain-nociception-gate-control-opioids",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3B",
+    "aamc_code": "3B",
+    "topic": "Behavior — Circadian Rhythms",
+    "subtopic": "Circadian rhythms: suprachiasmatic nucleus as biological clock; melatonin production and light regulation; jet lag and shift work disruption",
+    "id": "bioc-3-3b-circadian-rhythms-scn-melatonin",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3B",
+    "aamc_code": "3B",
+    "topic": "Behavior — Animal Behavior",
+    "subtopic": "Ethological concepts: fixed action patterns, sign stimuli, imprinting (critical periods), habituation, sensitization; innate vs learned behavior",
+    "id": "bioc-3-3b-animal-behavior-ethology-fixed-action-imprinting",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3B",
+    "aamc_code": "3B",
+    "topic": "Behavior — Animal Communication",
+    "subtopic": "Animal communication signals (visual, auditory, chemical/pheromones, tactile); honest vs deceptive signaling",
+    "id": "bioc-3-3b-animal-communication-signals-pheromones",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3B",
+    "aamc_code": "3B",
+    "topic": "Behavior — Reproductive Behavior",
+    "subtopic": "Reproductive behavior: pair bonding, parental care strategies; mate selection and sexual selection (intrasexual competition, intersexual choice)",
+    "id": "bioc-3-3b-reproductive-behavior-mate-selection-sexual-selection",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  },
+  {
+    "foundational_concept": "3",
+    "content_category": "3B",
+    "aamc_code": "3B",
+    "topic": "Behavior — Sociobiology",
+    "subtopic": "Sociobiology: altruism, inclusive fitness, kin selection (Hamilton's rule), reciprocal altruism; group living benefits and costs",
+    "id": "bioc-3-3b-sociobiology-altruism-kin-selection-inclusive-fitness",
+    "mcat_category_id": "mcat_biology_nervous_and_endocrine_systems"
+  }
+]

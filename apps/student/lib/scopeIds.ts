@@ -62,6 +62,17 @@ export interface KeywordScopeInfo {
   outOfScope: string[];
   /** Earlier-in-curriculum neighbor LABELS — already taught, assume & build on. */
   alreadyCovered: string[];
+  /**
+   * MCAT only — complete enumeration of facts the content MUST teach/test, none
+   * dropped (concept_blueprint.must_state_facts). Empty for math keywords (which
+   * have no must_state_facts field) — renders nothing when empty.
+   */
+  mustStateFacts: string[];
+  /**
+   * MCAT only — the single most common wrong-answer pattern for this keyword
+   * (concept_blueprint.common_trap). Null/empty = omit from prompt.
+   */
+  commonTrap: string | null;
 }
 
 const EMPTY_INFO: KeywordScopeInfo = {
@@ -70,6 +81,8 @@ const EMPTY_INFO: KeywordScopeInfo = {
   inScope: [],
   outOfScope: [],
   alreadyCovered: [],
+  mustStateFacts: [],
+  commonTrap: null,
 };
 
 /** Fields needed to rank a keyword in curriculum order. */
@@ -155,6 +168,11 @@ export async function loadKeywordScopeInfo(
         inScope: toStringArray(bp.in_scope_concepts),
         outOfScope: toStringArray(bp.out_of_scope),
         alreadyCovered: earlier.map((x) => x.label),
+        mustStateFacts: toStringArray(bp.must_state_facts),
+        commonTrap:
+          typeof bp.common_trap === "string" && bp.common_trap.trim()
+            ? bp.common_trap.trim()
+            : null,
       };
     });
   } catch {
@@ -190,6 +208,22 @@ export async function buildIdentityScopeBlock(
   const infos = await Promise.all(
     keywords.map((k) => loadKeywordScopeInfo(system, k.id))
   );
+
+  // Collect MUST-STATE FACTS across all keywords to render as a top-level block
+  // BEFORE the per-keyword list (generators see it first). Only MCAT keywords carry
+  // must_state_facts; math keywords have empty arrays, so the block is never emitted
+  // for math prompts — fully backward-compatible.
+  const allMustStateFacts: string[] = [];
+  const allCommonTraps: string[] = [];
+  for (const inf of infos) {
+    for (const f of inf.mustStateFacts) allMustStateFacts.push(f);
+    if (inf.commonTrap) allCommonTraps.push(inf.commonTrap);
+  }
+
+  const mustStateBlock =
+    allMustStateFacts.length > 0
+      ? `MUST-STATE FACTS — the content MUST teach/test ALL of the following, none dropped. Omitting any item is a coverage failure:\n${allMustStateFacts.map((f) => `  • ${f}`).join("\n")}${allCommonTraps.length > 0 ? `\nCOMMON TRAP: ${allCommonTraps.join(" | ")}` : ""}\n\n`
+      : "";
 
   const blocks = keywords
     .map((k, i) => {
@@ -230,5 +264,5 @@ export async function buildIdentityScopeBlock(
     keywords.length > 1 ? "these" : "this"
   }${weightsNote}:`;
 
-  return `${header}\n${blocks}`;
+  return `${mustStateBlock}${header}\n${blocks}`;
 }
