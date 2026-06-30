@@ -358,6 +358,21 @@ export function useMcatPractice() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /** Sign the user out and drop straight to the in-page login/sign-up popup
+   *  (no navigation). Clears the Supabase session, then flips `authRequired` so
+   *  page.tsx short-circuits to the LoginModal gate. A successful re-login does a
+   *  full reload (reloadAfterAuth), which re-inits all serve-loop state cleanly. */
+  const signOut = useCallback(async () => {
+    try {
+      await supabaseBrowser().auth.signOut();
+    } catch {
+      /* clearing the session is best-effort — show the gate regardless */
+    }
+    setActiveItem(null);
+    setAuthRequired(true);
+    setAuthChecked(true);
+  }, []);
+
   /** Re-run the session/taxonomy bootstrap after a successful in-page login. */
   const reloadAfterAuth = useCallback(() => {
     // The cookie session is now set; a full reload is the simplest correct
@@ -863,6 +878,7 @@ export function useMcatPractice() {
     authRequired,
     authChecked,
     reloadAfterAuth,
+    signOut,
     selectedLeafs,
     enabled,
     activeItem,

@@ -330,7 +330,15 @@ export function RefresherModal({
 }
 
 /* ── Profile dropdown ────────────────────────────────────────────────────── */
-export function ProfileMenu({ me, onClose }: { me: MeResponse | null; onClose: () => void }) {
+export function ProfileMenu({
+  me,
+  onClose,
+  onSignOut,
+}: {
+  me: MeResponse | null;
+  onClose: () => void;
+  onSignOut: () => void;
+}) {
   const u = me?.user;
   const name =
     u?.display_name ||
@@ -393,7 +401,7 @@ export function ProfileMenu({ me, onClose }: { me: MeResponse | null; onClose: (
           <MenuRow href="/profile" icon={<UserIcon size={16} stroke="#737373" />} label="Account settings" weight={500} />
         </div>
         <div style={{ height: 1, background: "#f0f0f0", margin: "8px -14px" }} />
-        <MenuRow href="/login" icon={<LogOutIcon size={16} stroke="#e11d48" />} label="Sign out" color="#e11d48" weight={600} />
+        <MenuRow onClick={onSignOut} icon={<LogOutIcon size={16} stroke="#e11d48" />} label="Sign out" color="#e11d48" weight={600} />
       </div>
     </div>
   );
@@ -401,38 +409,46 @@ export function ProfileMenu({ me, onClose }: { me: MeResponse | null; onClose: (
 
 function MenuRow({
   href,
+  onClick,
   icon,
   label,
   color = "#404040",
   weight = 600,
 }: {
-  href: string;
+  href?: string;
+  onClick?: () => void;
   icon: ReactNode;
   label: string;
   color?: string;
   weight?: number;
 }) {
+  const style: CSSProperties = {
+    display: "flex",
+    alignItems: "center",
+    gap: 11,
+    width: "100%",
+    padding: "9px 8px",
+    border: "none",
+    background: "transparent",
+    borderRadius: 9,
+    textAlign: "left",
+    textDecoration: "none",
+    cursor: "pointer",
+    fontSize: 13,
+    color,
+    fontWeight: weight,
+  };
+  // Button when an action is given (e.g. Sign out), link otherwise.
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className="ld-dock-row" style={style}>
+        {icon}
+        {label}
+      </button>
+    );
+  }
   return (
-    <a
-      href={href}
-      className="ld-dock-row"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 11,
-        width: "100%",
-        padding: "9px 8px",
-        border: "none",
-        background: "transparent",
-        borderRadius: 9,
-        textAlign: "left",
-        textDecoration: "none",
-        cursor: "pointer",
-        fontSize: 13,
-        color,
-        fontWeight: weight,
-      }}
-    >
+    <a href={href} className="ld-dock-row" style={style}>
       {icon}
       {label}
     </a>

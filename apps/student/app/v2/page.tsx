@@ -69,6 +69,7 @@ export default function V2StudyPage() {
     authRequired,
     authChecked,
     reloadAfterAuth,
+    signOut,
     selectedLeafs,
     activeItem,
     itemPhase,
@@ -525,7 +526,7 @@ export default function V2StudyPage() {
         </div>
 
         {/* Overlays */}
-        {profileOpen && <ProfileMenu me={me} onClose={() => setProfileOpen(false)} />}
+        {profileOpen && <ProfileMenu me={me} onClose={() => setProfileOpen(false)} onSignOut={signOut} />}
         {modal === "lesson" && (
           <LessonModal
             steps={lessonSteps}
