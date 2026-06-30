@@ -132,7 +132,10 @@ export interface SavedQueueItem {
 // ── Fetch helpers ───────────────────────────────────────────────────────────────
 
 export async function fetchTaxonomy(sessionId: string): Promise<TaxonomyCategory[]> {
-  const res = await fetch(`/api/mcat/taxonomy?session_id=${sessionId}`);
+  // section=biology + lean: the route returns ONLY Biology, drops keyword
+  // descriptions + the duplicate flat keywords array → ~3 MB down to a fraction.
+  // The app reads only the umbrella tree + scores; descriptions load on demand.
+  const res = await fetch(`/api/mcat/taxonomy?session_id=${sessionId}&section=biology&lean=1`);
   if (!res.ok) throw new Error(await res.text().catch(() => "Failed to load taxonomy"));
   const data = (await res.json()) as { categories?: TaxonomyCategory[] };
   return data.categories ?? [];

@@ -28,40 +28,53 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const sessionId = searchParams.get("session_id");
+  // Optional perf params (additive; omitting them preserves the original payload):
+  //   section=biology → only that section's categories+keywords are queried,
+  //                      paginated, and returned (the single-page app uses one).
+  //   lean=1          → drop description fields + the duplicate flat `keywords`
+  //                      array; the umbrella tree (+ scores) is all the app needs.
+  const section = searchParams.get("section");
+  const lean = searchParams.get("lean") === "1";
 
   // Read-only queries go to the read replica when SUPABASE_REPLICA_URL is set.
   const supabase = getReadClient();
 
-  // Shared taxonomy is identical for every MCAT user → cache it.
+  // Shared taxonomy is identical for every MCAT user → cache it. Section-scoped
+  // requests get their OWN cache entry so the cold build only paginates that
+  // section's keywords (Biology ≈ 600 rows / 1 page vs. all 2,348 / 3 pages).
+  const cacheKey = section ? `mcat:taxonomy:${section}` : "mcat:taxonomy";
   let base: TaxonomyBase;
   try {
-    base = await cached<TaxonomyBase>("mcat:taxonomy", TAXONOMY_TTL_MS, async () => {
-      const [categoriesRes, keywordRows] = await Promise.all([
-        supabase
-          .from("mcat_categories")
-          .select("id, section, label, description, order_index")
-          .order("order_index"),
-        // Paginate: the taxonomy exceeds PostgREST's 1000-row cap, so a single
-        // select would silently drop keywords from the browse/progress tree.
-        fetchAllPages<Record<string, unknown>>((from, to) =>
-          supabase
-            .from("mcat_keywords")
-            .select(
-              "id, category_id, label, description, tier, parent_keyword_id, order_index, yield_level"
-            )
-            .eq("status", "approved")
-            .order("order_index")
-            .order("id")
-            .range(from, to)
-        ),
-      ]);
+    base = await cached<TaxonomyBase>(cacheKey, TAXONOMY_TTL_MS, async () => {
+      const categoriesRes = await supabase
+        .from("mcat_categories")
+        .select("id, section, label, description, order_index")
+        .order("order_index");
 
       if (categoriesRes.error) {
         throw new Error(categoriesRes.error.message);
       }
 
+      let cats = categoriesRes.data ?? [];
+      if (section) cats = cats.filter((c) => c.section === section);
+      const catIds = cats.map((c) => c.id as string);
+
+      // Paginate: the taxonomy exceeds PostgREST's 1000-row cap, so a single
+      // select would silently drop keywords from the browse/progress tree.
+      const keywordRows = await fetchAllPages<Record<string, unknown>>((from, to) => {
+        let q = supabase
+          .from("mcat_keywords")
+          .select(
+            "id, category_id, label, description, tier, parent_keyword_id, order_index, yield_level"
+          )
+          .eq("status", "approved");
+        // Scope to the section's categories (small id list) when requested.
+        if (section) q = q.in("category_id", catIds);
+        return q.order("order_index").order("id").range(from, to);
+      });
+
       return {
-        categories: categoriesRes.data ?? [],
+        categories: cats,
         keywords: keywordRows,
       };
     });
@@ -128,7 +141,11 @@ export async function GET(request: Request) {
     });
 
     // ── Flat keywords array (original shape, for backward compat) ──────────
-    const flatKeywords = sorted.map((kw) => {
+    // Skipped in lean mode — it fully duplicates the umbrella tree below and the
+    // single-page app reads only `umbrellas`. Dropping it ~halves the payload.
+    const flatKeywords = lean
+      ? undefined
+      : sorted.map((kw) => {
       const st = stateMap.get(kw.id as string);
       const score = st?.score ?? null;
       const state = st?.state ?? null;
@@ -182,7 +199,7 @@ export async function GET(request: Request) {
         return {
           id: kw.id,
           label: kw.label,
-          description: kw.description,
+          ...(lean ? {} : { description: kw.description }),
           order_index: (kw.order_index as number) ?? 0,
           yield_level: (kw.yield_level as "high" | "medium" | "low" | null) ?? null,
           score,
@@ -217,7 +234,7 @@ export async function GET(request: Request) {
       return {
         id: umb.id,
         label: umb.label,
-        description: umb.description,
+        ...(lean ? {} : { description: umb.description }),
         yield_level: umbrellaYieldLevel,
         score: umbScore,
         total_attempts: umbSt?.total_attempts ?? 0,
@@ -233,10 +250,10 @@ export async function GET(request: Request) {
       id: cat.id,
       section: cat.section,
       label: cat.label,
-      description: cat.description,
+      ...(lean ? {} : { description: cat.description }),
       order_index: cat.order_index,
-      // Backward-compat flat keywords array
-      keywords: flatKeywords,
+      // Backward-compat flat keywords array (omitted when lean → undefined).
+      ...(flatKeywords ? { keywords: flatKeywords } : {}),
       // New umbrella tree
       umbrellas,
     };
