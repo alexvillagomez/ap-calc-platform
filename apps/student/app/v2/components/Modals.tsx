@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { useState, useCallback, type CSSProperties, type ReactNode } from "react";
 import MathText from "@/components/mcat/MathText";
 import { XIcon, LightbulbIcon, ArrowLeftIcon, ArrowRightIcon, CheckIcon, ChevronDownIcon, ChevronRightIcon, GridIcon, UserIcon, LogOutIcon, SettingsIcon, BookIcon, StarIcon } from "./icons";
 import { LessonHeader, LessonProgress, LessonExample, LessonSkeleton } from "./LessonView";
@@ -512,6 +512,199 @@ export function SettingsModal({
         </div>
       </div>
     </Backdrop>
+  );
+}
+
+/* ── Confidence self-assessment (umbrella-level seeding) ─────────────────── */
+
+type ConfidenceLevel = "New" | "Familiar" | "Confident";
+const CONFIDENCE_VALUES: Record<ConfidenceLevel, number | null> = {
+  New: null,     // skip — not seeded
+  Familiar: 0.5,
+  Confident: 0.9,
+};
+const CONFIDENCE_LEVELS: ConfidenceLevel[] = ["New", "Familiar", "Confident"];
+
+export function ConfidenceModal({
+  umbrellas,
+  onClose,
+  onSave,
+}: {
+  umbrellas: { id: string; label: string }[];
+  onClose: () => void;
+  onSave: (seeds: { keyword_id: string; confidence: number }[]) => void;
+}) {
+  const [levels, setLevels] = useState<Record<string, ConfidenceLevel>>(() => {
+    const init: Record<string, ConfidenceLevel> = {};
+    for (const u of umbrellas) init[u.id] = "New";
+    return init;
+  });
+
+  const setLevel = useCallback((id: string, level: ConfidenceLevel) => {
+    setLevels((prev) => ({ ...prev, [id]: level }));
+  }, []);
+
+  function handleSave() {
+    const seeds: { keyword_id: string; confidence: number }[] = [];
+    for (const u of umbrellas) {
+      const val = CONFIDENCE_VALUES[levels[u.id] ?? "New"];
+      if (val !== null) seeds.push({ keyword_id: u.id, confidence: val });
+    }
+    onSave(seeds);
+  }
+
+  return (
+    <Backdrop onClose={onClose}>
+      <div style={{ ...modalShell, width: 520, maxHeight: "90%" }}>
+        {/* Header */}
+        <div
+          style={{
+            flexShrink: 0,
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: 12,
+            padding: "20px 22px 14px",
+            borderBottom: "1px solid #f0f0f0",
+          }}
+        >
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 16, fontWeight: 700, color: "#171717" }}>How confident are you?</div>
+            <div style={{ fontSize: 12.5, color: "#737373", marginTop: 3, lineHeight: 1.45 }}>
+              Tell us what you already know — we&apos;ll start you there instead of from zero.
+            </div>
+          </div>
+          <CloseButton onClick={onClose} />
+        </div>
+
+        {/* Scrollable umbrella list */}
+        <div style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: "14px 22px" }}>
+          {umbrellas.length === 0 && (
+            <div style={{ fontSize: 13, color: "#a3a3a3" }}>No topics found.</div>
+          )}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {umbrellas.map((u) => (
+              <div
+                key={u.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 12,
+                  padding: "9px 12px",
+                  borderRadius: 11,
+                  background: "#fafafa",
+                  border: "1px solid #ececec",
+                }}
+              >
+                <span style={{ fontSize: 13, color: "#171717", fontWeight: 500, minWidth: 0, flex: 1 }}>
+                  {u.label}
+                </span>
+                <SegmentedControl
+                  id={u.id}
+                  value={levels[u.id] ?? "New"}
+                  onChange={setLevel}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div
+          style={{
+            flexShrink: 0,
+            padding: "14px 22px",
+            borderTop: "1px solid #f0f0f0",
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: 10,
+          }}
+        >
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              height: 38,
+              padding: "0 16px",
+              border: "1px solid #e5e5e5",
+              background: "#fff",
+              color: "#525252",
+              fontSize: 13,
+              fontWeight: 600,
+              borderRadius: 10,
+              cursor: "pointer",
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSave}
+            style={{
+              height: 38,
+              padding: "0 20px",
+              border: "none",
+              background: "#4f46e5",
+              color: "#fff",
+              fontSize: 13,
+              fontWeight: 600,
+              borderRadius: 10,
+              cursor: "pointer",
+            }}
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </Backdrop>
+  );
+}
+
+function SegmentedControl({
+  id,
+  value,
+  onChange,
+}: {
+  id: string;
+  value: ConfidenceLevel;
+  onChange: (id: string, level: ConfidenceLevel) => void;
+}) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        border: "1px solid #e5e5e5",
+        borderRadius: 8,
+        overflow: "hidden",
+        flexShrink: 0,
+      }}
+    >
+      {CONFIDENCE_LEVELS.map((level, i) => {
+        const active = value === level;
+        return (
+          <button
+            key={level}
+            type="button"
+            onClick={() => onChange(id, level)}
+            style={{
+              height: 30,
+              padding: "0 10px",
+              border: "none",
+              borderLeft: i > 0 ? "1px solid #e5e5e5" : "none",
+              background: active ? "#4f46e5" : "#fff",
+              color: active ? "#fff" : "#525252",
+              fontSize: 12,
+              fontWeight: active ? 700 : 500,
+              cursor: "pointer",
+              transition: "background 0.12s, color 0.12s",
+            }}
+          >
+            {level}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 

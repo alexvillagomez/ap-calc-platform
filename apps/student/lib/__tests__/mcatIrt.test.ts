@@ -564,8 +564,7 @@ expectTrue(
   expectTrue(
     "seedFromImport: step size > stepSize(10) — high uncertainty fast self-correction",
     // stepSize(IMPORT_SEED_ATTEMPTS=0.5) >> stepSize(10)
-    require("../courseEngine/mcatIrt").stepSize(IMPORT_SEED_ATTEMPTS) >
-      require("../courseEngine/mcatIrt").stepSize(10)
+    stepSize(IMPORT_SEED_ATTEMPTS) > stepSize(10)
   );
 }
 

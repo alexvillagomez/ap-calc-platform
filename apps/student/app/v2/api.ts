@@ -334,6 +334,42 @@ export async function saveQueue(
   }
 }
 
+// ── Progress import ────────────────────────────────────────────────────────────
+
+export async function fetchSeedProgress(
+  sessionId: string,
+  section: string,
+  seeds: { keyword_id: string; confidence: number }[]
+): Promise<{ keywords_seeded: number }> {
+  const res = await fetch("/api/mcat/seed-progress", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ session_id: sessionId, section, seeds }),
+  });
+  if (!res.ok) throw new Error(await res.text().catch(() => "Failed to seed progress"));
+  return (await res.json()) as { keywords_seeded: number };
+}
+
+export async function fetchAnkiImport(
+  sessionId: string,
+  section: string,
+  file: File
+): Promise<{ cards_parsed: number; cards_matched: number; cards_dropped: number; keywords_seeded: number }> {
+  const fd = new FormData();
+  fd.append("session_id", sessionId);
+  fd.append("section", section);
+  fd.append("file", file);
+  // No Content-Type header — let the browser set the multipart boundary.
+  const res = await fetch("/api/mcat/import", { method: "POST", body: fd });
+  if (!res.ok) throw new Error(await res.text().catch(() => "Failed to import Anki deck"));
+  return (await res.json()) as {
+    cards_parsed: number;
+    cards_matched: number;
+    cards_dropped: number;
+    keywords_seeded: number;
+  };
+}
+
 export async function fetchMe(): Promise<MeResponse | null> {
   try {
     const res = await fetch("/api/auth/me");

@@ -17,6 +17,8 @@
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
     "expr-eval": "^2.0.2",
+    "fflate": "^0.8.3",
+    "fzstd": "^0.1.1",
     "jszip": "^3.10.1",
     "katex": "^0.16.44",
     "lucide-react": "^0.577.0",

@@ -10,7 +10,7 @@
  * ./useOnDemand; this file only maps that data into the design's components.
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TopBar } from "./components/TopBar";
 import { LeftSidebar } from "./components/LeftSidebar";
 import { RightPanel } from "./components/RightPanel";
@@ -18,13 +18,14 @@ import { QuestionView } from "./components/QuestionView";
 import { FlashcardView } from "./components/FlashcardView";
 import { LessonView } from "./components/LessonView";
 import { HistoryNav, ForwardButton } from "./components/HistoryNav";
-import { MyProgressModal, LessonModal, RefresherModal, ProfileMenu, type MasteryNode } from "./components/Modals";
+import { MyProgressModal, LessonModal, RefresherModal, ProfileMenu, ConfidenceModal, SettingsModal, type MasteryNode } from "./components/Modals";
 import { LoginModal } from "./components/LoginModal";
 import type { StudyMode } from "./mockData";
 import { useMcatPractice, categoryLeafIds } from "./useMcatPractice";
 import { reportedMastery, benchmark, benchmarkProgressPct, tierLabel } from "@/lib/courseEngine/mcatIrt";
 import { useOnDemand } from "./useOnDemand";
 import type { TaxonomyCategory } from "./api";
+import { fetchSeedProgress, fetchAnkiImport } from "./api";
 
 export type StudyView = "questions" | "flashcards" | "lessons";
 
@@ -288,6 +289,37 @@ export default function V2StudyPage() {
   const [modal, setModal] = useState<null | "lesson" | "refresher">(null);
   const [pProgress, setPProgress] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [confidenceOpen, setConfidenceOpen] = useState(false);
+  const ankiInputRef = useRef<HTMLInputElement>(null);
+
+  // Flat umbrella list for ConfidenceModal — one entry per umbrella across all categories.
+  const umbrellaList = useMemo(
+    () => categories.flatMap((c) => (c.umbrellas ?? []).map((u) => ({ id: u.id, label: u.label }))),
+    [categories]
+  );
+
+  async function handleAnkiFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !sessionId) return;
+    e.target.value = ""; // clear so the same file can be re-selected
+    try {
+      const result = await fetchAnkiImport(sessionId, "biology" /* TODO: multi-section */, file);
+      alert(`Seeded ${result.keywords_seeded} topics from ${result.cards_matched} cards (${result.cards_parsed} parsed, ${result.cards_dropped} dropped).`);
+      reloadAfterAuth(); // refresh progress scores
+    } catch (err) {
+      alert(`Import failed: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  }
+
+  function handleImportAnki() {
+    ankiInputRef.current?.click();
+  }
+
+  function handleSetConfidence() {
+    setSettingsOpen(false);
+    setConfidenceOpen(true);
+  }
 
   function openLesson(kw: string | null) {
     const id = kw ?? currentKeywordId;
@@ -556,7 +588,43 @@ export default function V2StudyPage() {
         </div>
 
         {/* Overlays */}
-        {profileOpen && <ProfileMenu me={me} onClose={() => setProfileOpen(false)} onSignOut={signOut} />}
+        {/* Hidden file input for Anki .apkg import */}
+        <input
+          type="file"
+          accept=".apkg"
+          ref={ankiInputRef}
+          style={{ display: "none" }}
+          onChange={handleAnkiFileChange}
+        />
+        {profileOpen && (
+          <ProfileMenu
+            me={me}
+            onClose={() => setProfileOpen(false)}
+            onSignOut={signOut}
+            onOpenSettings={() => { setProfileOpen(false); setSettingsOpen(true); }}
+          />
+        )}
+        {settingsOpen && (
+          <SettingsModal
+            subject="MCAT"
+            sectionLabel="Biology"
+            onClose={() => setSettingsOpen(false)}
+            onImportAnki={handleImportAnki}
+            onSetConfidence={handleSetConfidence}
+          />
+        )}
+        {confidenceOpen && (
+          <ConfidenceModal
+            umbrellas={umbrellaList}
+            onClose={() => setConfidenceOpen(false)}
+            onSave={async (seeds) => {
+              if (!sessionId) return;
+              await fetchSeedProgress(sessionId, "biology" /* TODO: multi-section */, seeds);
+              reloadAfterAuth(); // TODO: softer refresh
+              setConfidenceOpen(false);
+            }}
+          />
+        )}
         {modal === "lesson" && (
           <LessonModal
             steps={lessonSteps}
