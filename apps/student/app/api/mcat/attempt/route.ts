@@ -2,15 +2,15 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
 import { computeNextReviewDate } from "@/lib/practiceAlgorithm";
+// State machine + rising-floor helpers stay on the shared engine for now; the
+// numeric mastery update is the MCAT-only IRT/Elo model (lib/courseEngine/mcatIrt.ts).
 import {
-  updateMasteryMap,
   isMastered,
-  difficultyTierFromScore,
-  MASTERY_START,
   updatedFloor,
   FLOOR_START,
   FLOOR_SPACED_MIN_MS,
 } from "@/lib/courseEngine/adaptive";
+import { applyAttempt, DEFAULT_ABILITY, type Outcome } from "@/lib/courseEngine/mcatIrt";
 import {
   autoResolvePriorities,
   logServerEvent,
@@ -197,7 +197,7 @@ export async function POST(request: Request) {
   const { data: existingStates } = await supabase
     .from("mcat_student_keyword_states")
     .select(
-      "keyword_id, score, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, spaced_review_due_at, spaced_review_count, floor, last_review_at"
+      "keyword_id, score, ability_attempts, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, spaced_review_due_at, spaced_review_count, floor, last_review_at"
     )
     .eq("session_id", session_id)
     .in("keyword_id", targetKwIds);
@@ -206,24 +206,35 @@ export async function POST(request: Request) {
     (existingStates ?? []).map((s) => [s.keyword_id as string, s])
   );
 
-  // Build current strengths map over the union of keywords
+  // Build current ability (θ) + evidence (attempts) maps over the union of keywords.
   const currentStrengths: Record<string, number> = Object.fromEntries(
     targetKwIds.map((id) => [
       id,
-      (existingMap.get(id)?.score as number) ?? MASTERY_START,
+      (existingMap.get(id)?.score as number) ?? DEFAULT_ABILITY,
+    ])
+  );
+  const currentAttempts: Record<string, number> = Object.fromEntries(
+    targetKwIds.map((id) => [
+      id,
+      (existingMap.get(id)?.ability_attempts as number) ?? 0,
     ])
   );
 
-  // Logarithmic, context-aware mastery update (lib/courseEngine/adaptive.ts).
-  // Source = question; difficulty tier from the stored 0–1 difficulty; dont_know
-  // applies a small downgrade inside the update.
-  const difficultyTier = difficultyTierFromScore(question.difficulty as number);
-  let newStrengths = updateMasteryMap(currentStrengths, filteredWeights, {
-    correct,
-    dontKnow: dont_know,
-    difficulty: difficultyTier,
-    source: "question",
+  // MCAT IRT/Elo update (lib/courseEngine/mcatIrt.ts): the item's difficulty `b`
+  // is mcat_questions.difficulty; ability moves per the logistic surprise scaled
+  // by each keyword's weight; the item's `b` drifts too (persisted below). A
+  // dont_know is a softened wrong inside applyAttempt and leaves `b` unchanged.
+  const outcome: Outcome = dont_know ? "dont_know" : correct ? "correct" : "wrong";
+  const applied = applyAttempt({
+    abilities: currentStrengths,
+    attemptsByKeyword: currentAttempts,
+    keywordWeights: filteredWeights,
+    b: (question.difficulty as number) ?? 0.5,
+    outcome,
   });
+  let newStrengths = applied.abilities;
+  const newAttempts = applied.attemptsByKeyword;
+  const newItemDifficulty = applied.b;
 
   // Post-refresher dampening: scale down only the positive gain of a correct
   // answer. Wrong answers and dont_know are unaffected (they already hurt).
@@ -312,6 +323,8 @@ export async function POST(request: Request) {
       keyword_id: kwId,
       category_id: kwToCat.get(kwId) ?? (question.category_id as string),
       score,
+      // IRT evidence count — drives the shrinking step size (uncertainty).
+      ability_attempts: newAttempts[kwId] ?? currentAttempts[kwId] ?? 0,
       total_attempts: totalAttempts,
       correct_attempts: correctAttempts,
       consecutive_correct: consecutiveCorrect,
@@ -336,6 +349,19 @@ export async function POST(request: Request) {
       "mcat/attempt: failed to upsert keyword states",
       upsertError.message
     );
+  }
+
+  // IRT — the item's difficulty `b` drifts too (both sides dynamic). Best-effort;
+  // applyAttempt leaves `b` unchanged on a dont_know, so this no-ops then. A tiny
+  // per-attempt step means last-write-wins across students is harmless.
+  if (newItemDifficulty !== ((question.difficulty as number) ?? 0.5)) {
+    const { error: diffErr } = await supabase
+      .from("mcat_questions")
+      .update({ difficulty: newItemDifficulty })
+      .eq("id", question_id);
+    if (diffErr) {
+      console.error("mcat/attempt: failed to drift item difficulty", diffErr.message);
+    }
   }
 
   // ── Priority auto-resolve + server-side answer metric (best-effort) ─────────

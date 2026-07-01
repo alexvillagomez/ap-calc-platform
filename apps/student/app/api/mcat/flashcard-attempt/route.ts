@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+// State machine + rising-floor helpers stay on the shared engine for now; the
+// numeric mastery update is the MCAT-only IRT/Elo model (lib/courseEngine/mcatIrt.ts).
 import {
-  updateMasteryMap,
   isMastered,
-  MASTERY_START,
   updatedFloor,
   FLOOR_START,
   FLOOR_SPACED_MIN_MS,
 } from "@/lib/courseEngine/adaptive";
+import { applyAttempt, DEFAULT_ABILITY, type Outcome } from "@/lib/courseEngine/mcatIrt";
 import { nextSrsState, type FlashcardResult } from "@/lib/flashcardSrs";
 import { getAuthUid } from "@/lib/supabaseServer";
 
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
   // Load flashcard
   const { data: flashcard, error: fcError } = await supabase
     .from("mcat_flashcards")
-    .select("keyword_weights, category_id")
+    .select("keyword_weights, category_id, difficulty")
     .eq("id", flashcard_id)
     .maybeSingle();
 
@@ -161,7 +162,7 @@ export async function POST(request: Request) {
   const { data: existingStates } = await supabase
     .from("mcat_student_keyword_states")
     .select(
-      "keyword_id, score, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, floor, last_review_at"
+      "keyword_id, score, ability_attempts, total_attempts, correct_attempts, consecutive_correct, dont_know_count, state, floor, last_review_at"
     )
     .eq("session_id", session_id)
     .in("keyword_id", Object.keys(filteredWeights));
@@ -173,19 +174,31 @@ export async function POST(request: Request) {
   const currentStrengths: Record<string, number> = Object.fromEntries(
     Object.keys(filteredWeights).map((id) => [
       id,
-      (existingMap.get(id)?.score as number) ?? MASTERY_START,
+      (existingMap.get(id)?.score as number) ?? DEFAULT_ABILITY,
+    ])
+  );
+  const currentAttempts: Record<string, number> = Object.fromEntries(
+    Object.keys(filteredWeights).map((id) => [
+      id,
+      (existingMap.get(id)?.ability_attempts as number) ?? 0,
     ])
   );
 
-  // Logarithmic mastery update (lib/courseEngine/adaptive.ts). Source = flashcard
-  // (worth less than a question; same universal state). got_it → correct;
-  // dont_know → small downgrade; missed_it → wrong. Neutral difficulty.
-  const newStrengths = updateMasteryMap(currentStrengths, filteredWeights, {
-    correct,
-    dontKnow: isDontKnow,
-    difficulty: "medium",
-    source: "flashcard",
+  // MCAT IRT/Elo update (lib/courseEngine/mcatIrt.ts). A flashcard's low stored
+  // difficulty `b` (~0.15) is what down-weights it now — recall is easy, so a
+  // correct card is weak evidence of high ability and a miss is strong evidence
+  // of a gap. got_it → correct, missed_it → wrong, dont_know → softened wrong.
+  const outcome: Outcome = isDontKnow ? "dont_know" : correct ? "correct" : "wrong";
+  const applied = applyAttempt({
+    abilities: currentStrengths,
+    attemptsByKeyword: currentAttempts,
+    keywordWeights: filteredWeights,
+    b: (flashcard.difficulty as number) ?? 0.15,
+    outcome,
   });
+  const newStrengths = applied.abilities;
+  const newAttempts = applied.attemptsByKeyword;
+  const newItemDifficulty = applied.b;
 
   const now = new Date().toISOString();
   const upserts = Object.keys(filteredWeights).map((kwId) => {
@@ -206,7 +219,7 @@ export async function POST(request: Request) {
     const consecutiveCorrect = correct ? prevConsecutive + 1 : 0;
     const dontKnowCount = prevDontKnow + (isDontKnow ? 1 : 0);
 
-    const score = Math.min(1, Math.max(0, newStrengths[kwId] ?? MASTERY_START));
+    const score = Math.min(1, Math.max(0, newStrengths[kwId] ?? DEFAULT_ABILITY));
     // Threshold-based mastery — no consecutive-correct gate.
     const state: "mastered" | "in_progress" =
       isMastered(score) ? "mastered" : "in_progress";
@@ -217,6 +230,8 @@ export async function POST(request: Request) {
       category_id:
         kwToCat.get(kwId) ?? (flashcard.category_id as string),
       score,
+      // IRT evidence count — drives the shrinking step size (uncertainty).
+      ability_attempts: newAttempts[kwId] ?? currentAttempts[kwId] ?? 0,
       total_attempts: totalAttempts,
       correct_attempts: correctAttempts,
       consecutive_correct: consecutiveCorrect,
@@ -239,6 +254,18 @@ export async function POST(request: Request) {
       "mcat/flashcard-attempt: failed to upsert keyword states",
       upsertError.message
     );
+  }
+
+  // IRT — the flashcard's difficulty `b` drifts too (both sides dynamic).
+  // Best-effort; unchanged on a dont_know. Cards stay near their low base.
+  if (newItemDifficulty !== ((flashcard.difficulty as number) ?? 0.15)) {
+    const { error: diffErr } = await supabase
+      .from("mcat_flashcards")
+      .update({ difficulty: newItemDifficulty })
+      .eq("id", flashcard_id);
+    if (diffErr) {
+      console.error("mcat/flashcard-attempt: failed to drift item difficulty", diffErr.message);
+    }
   }
 
   const keyword_states: Record<string, { score: number; state: string }> =

@@ -22,6 +22,7 @@ import { MyProgressModal, LessonModal, RefresherModal, ProfileMenu, type Mastery
 import { LoginModal } from "./components/LoginModal";
 import type { StudyMode } from "./mockData";
 import { useMcatPractice, categoryLeafIds } from "./useMcatPractice";
+import { reportedMastery, benchmark, benchmarkProgressPct, tierLabel } from "@/lib/courseEngine/mcatIrt";
 import { useOnDemand } from "./useOnDemand";
 import type { TaxonomyCategory } from "./api";
 
@@ -41,20 +42,39 @@ function buildLabelIndex(cats: TaxonomyCategory[]): Map<string, string> {
   return m;
 }
 
-const pctOf = (score?: number) => (typeof score === "number" ? Math.round(score * 100) : 0);
 const avgPct = (vals: number[]) => (vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : 0);
+
+// Uniform benchmark for now — yield-scaling + study-time growth are threaded later.
+// benchmark(time=0, yield=medium 0.5) ≈ 0.525 on the difficulty scale.
+const DISPLAY_BENCHMARK = benchmark(0, 0.5);
+
+/** A leaf keyword node: ring = % toward benchmark, plus a tier label. Unstarted
+ *  keywords (no score yet) show 0% and no tier. */
+function leafMasteryNode(id: string, name: string, score: number | undefined): MasteryNode {
+  if (typeof score !== "number") return { id, name, pct: 0 };
+  const bStar = reportedMastery(score);
+  return {
+    id,
+    name,
+    pct: benchmarkProgressPct(bStar, DISPLAY_BENCHMARK),
+    tier: tierLabel(bStar, DISPLAY_BENCHMARK),
+  };
+}
 
 /** Hierarchical mastery (category → umbrella → keyword) for the My-progress modal. */
 function buildMasteryTree(cats: TaxonomyCategory[], scores: Map<string, number>): MasteryNode[] {
   return cats.map((cat) => {
     const umbrellas: MasteryNode[] = (cat.umbrellas ?? []).map((u) => {
       if (u.children && u.children.length > 0) {
-        const kids: MasteryNode[] = u.children.map((c) => ({ id: c.id, name: c.label, pct: pctOf(scores.get(c.id)) }));
+        const kids: MasteryNode[] = u.children.map((c) => leafMasteryNode(c.id, c.label, scores.get(c.id)));
         return { id: u.id, name: u.label, pct: avgPct(kids.map((k) => k.pct)), children: kids };
       }
-      return { id: u.id, name: u.label, pct: pctOf(scores.get(u.id)) };
+      return leafMasteryNode(u.id, u.label, scores.get(u.id));
     });
-    const leafPcts = categoryLeafIds(cat).map((id) => pctOf(scores.get(id)));
+    const leafPcts = categoryLeafIds(cat).map((id) => {
+      const s = scores.get(id);
+      return typeof s === "number" ? benchmarkProgressPct(reportedMastery(s), DISPLAY_BENCHMARK) : 0;
+    });
     return { id: cat.id, name: cat.label, pct: avgPct(leafPcts), children: umbrellas };
   });
 }

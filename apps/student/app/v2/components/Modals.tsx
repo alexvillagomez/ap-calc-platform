@@ -2,7 +2,7 @@
 
 import { useState, type CSSProperties, type ReactNode } from "react";
 import MathText from "@/components/mcat/MathText";
-import { XIcon, LightbulbIcon, ArrowLeftIcon, ArrowRightIcon, CheckIcon, ChevronDownIcon, ChevronRightIcon, GridIcon, UserIcon, LogOutIcon } from "./icons";
+import { XIcon, LightbulbIcon, ArrowLeftIcon, ArrowRightIcon, CheckIcon, ChevronDownIcon, ChevronRightIcon, GridIcon, UserIcon, LogOutIcon, SettingsIcon, BookIcon, StarIcon } from "./icons";
 import { LessonHeader, LessonProgress, LessonExample, LessonSkeleton } from "./LessonView";
 import type { McatMicroStep, Refresher, MeResponse } from "../api";
 
@@ -11,6 +11,7 @@ export interface MasteryNode {
   id: string;
   name: string;
   pct: number;
+  tier?: "Building" | "Solid" | "Strong";
   children?: MasteryNode[];
 }
 
@@ -148,7 +149,27 @@ function ProgressRow({
             )}
             <span style={{ ...nameStyle, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{node.name}</span>
           </span>
-          <span style={{ fontSize: 11.5, color: "#737373", fontWeight: 600, flexShrink: 0 }}>{node.pct}%</span>
+          <span style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+            {node.tier && (
+              <span
+                style={{
+                  fontSize: 9.5,
+                  fontWeight: 700,
+                  letterSpacing: ".02em",
+                  textTransform: "uppercase",
+                  padding: "2px 6px",
+                  borderRadius: 6,
+                  color:
+                    node.tier === "Strong" ? "#047857" : node.tier === "Solid" ? "#4338ca" : "#737373",
+                  background:
+                    node.tier === "Strong" ? "#d1fae5" : node.tier === "Solid" ? "#e0e7ff" : "#f5f5f5",
+                }}
+              >
+                {node.tier}
+              </span>
+            )}
+            <span style={{ fontSize: 11.5, color: "#737373", fontWeight: 600 }}>{node.pct}%</span>
+          </span>
         </div>
         <div style={{ height: 5, borderRadius: 9999, background: "#f5f5f5", overflow: "hidden", marginLeft: 19 }}>
           <div
@@ -334,10 +355,16 @@ export function ProfileMenu({
   me,
   onClose,
   onSignOut,
+  onOpenSettings,
+  subject = "MCAT",
 }: {
   me: MeResponse | null;
   onClose: () => void;
   onSignOut: () => void;
+  /** Open the section-scoped settings overlay (import past progress, etc.). */
+  onOpenSettings?: () => void;
+  /** Current portal — drives the "<subject> settings" label. */
+  subject?: string;
 }) {
   const u = me?.user;
   const name =
@@ -398,10 +425,145 @@ export function ProfileMenu({
         <div style={{ height: 1, background: "#f0f0f0", margin: "0 -14px 8px" }} />
         <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
           <MenuRow href="/mcat" icon={<GridIcon size={16} stroke="#4f46e5" />} label="Select course" weight={600} />
+          {onOpenSettings && (
+            <MenuRow
+              onClick={() => { onClose(); onOpenSettings(); }}
+              icon={<SettingsIcon size={16} stroke="#4f46e5" />}
+              label={`${subject} settings`}
+              weight={600}
+            />
+          )}
           <MenuRow href="/profile" icon={<UserIcon size={16} stroke="#737373" />} label="Account settings" weight={500} />
         </div>
         <div style={{ height: 1, background: "#f0f0f0", margin: "8px -14px" }} />
         <MenuRow onClick={onSignOut} icon={<LogOutIcon size={16} stroke="#e11d48" />} label="Sign out" color="#e11d48" weight={600} />
+      </div>
+    </div>
+  );
+}
+
+/* ── Section-scoped settings (import past progress) ──────────────────────── */
+export function SettingsModal({
+  subject = "MCAT",
+  sectionLabel,
+  onClose,
+  onImportAnki,
+  onSetConfidence,
+}: {
+  /** Portal label — "MCAT" or "Math". Drives the heading. */
+  subject?: string;
+  /** Current section within the portal (e.g. "Biology"). Optional. */
+  sectionLabel?: string | null;
+  onClose: () => void;
+  /** Wired once the Anki import flow exists. */
+  onImportAnki?: () => void;
+  /** Wired once the manual confidence flow exists. */
+  onSetConfidence?: () => void;
+}) {
+  return (
+    <Backdrop onClose={onClose}>
+      <div style={{ ...modalShell, width: 520 }}>
+        {/* Header */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            padding: "18px 20px",
+            borderBottom: "1px solid #f0f0f0",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 11, minWidth: 0 }}>
+            <SettingsIcon size={18} stroke="#4f46e5" />
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: "#171717" }}>{subject} settings</div>
+              {sectionLabel && (
+                <div style={{ fontSize: 12, color: "#737373" }}>
+                  Bringing in progress for <strong style={{ color: "#4f46e5" }}>{sectionLabel}</strong>
+                </div>
+              )}
+            </div>
+          </div>
+          <CloseButton onClick={onClose} />
+        </div>
+
+        {/* Bring-in-progress section */}
+        <div style={{ padding: 18, display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".04em", color: "#a3a3a3", textTransform: "uppercase" }}>
+            Bring in past progress
+          </div>
+
+          <SettingsCard
+            icon={<BookIcon size={18} stroke="#4f46e5" />}
+            title="Import an Anki deck"
+            body="Upload an .apkg and we'll estimate how well you already know each topic from your review history. Your cards are never stored — only used to set your starting mastery."
+            cta="Import .apkg"
+            onClick={onImportAnki}
+          />
+
+          <SettingsCard
+            icon={<StarIcon size={18} stroke="#4f46e5" />}
+            title="How confident are you?"
+            body="Rate how well you already know each topic and we'll start you there instead of from zero. We'll still check a few questions to confirm."
+            cta="Rate my topics"
+            onClick={onSetConfidence}
+          />
+        </div>
+      </div>
+    </Backdrop>
+  );
+}
+
+function SettingsCard({
+  icon,
+  title,
+  body,
+  cta,
+  onClick,
+}: {
+  icon: ReactNode;
+  title: string;
+  body: string;
+  cta: string;
+  onClick?: () => void;
+}) {
+  const ready = typeof onClick === "function";
+  return (
+    <div
+      style={{
+        border: "1px solid #ececec",
+        borderRadius: 13,
+        padding: 14,
+        display: "flex",
+        gap: 12,
+        alignItems: "flex-start",
+        background: "#fafafa",
+      }}
+    >
+      <div style={{ marginTop: 1, flexShrink: 0 }}>{icon}</div>
+      <div style={{ minWidth: 0, flex: 1 }}>
+        <div style={{ fontSize: 14, fontWeight: 700, color: "#171717" }}>{title}</div>
+        <div style={{ fontSize: 12.5, color: "#666", lineHeight: 1.5, marginTop: 3 }}>{body}</div>
+        <button
+          type="button"
+          onClick={onClick}
+          disabled={!ready}
+          style={{
+            marginTop: 11,
+            height: 34,
+            padding: "0 14px",
+            borderRadius: 9,
+            border: "none",
+            background: ready ? "#4f46e5" : "#e5e5e5",
+            color: ready ? "#fff" : "#a3a3a3",
+            fontSize: 12.5,
+            fontWeight: 600,
+            cursor: ready ? "pointer" : "default",
+          }}
+        >
+          {ready ? cta : "Coming soon"}
+        </button>
       </div>
     </div>
   );

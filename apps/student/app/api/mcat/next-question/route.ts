@@ -24,6 +24,12 @@ import {
   decayedScore,
   type KeywordState,
 } from "@/lib/courseEngine/adaptive";
+import {
+  reportedMastery,
+  serveDifficulty,
+  SERVE_MIN,
+  SERVE_MAX,
+} from "@/lib/courseEngine/mcatIrt";
 
 export const runtime = "nodejs";
 
@@ -177,6 +183,9 @@ export async function POST(request: Request) {
     keyword_id?: string;
     keyword_ids?: string[];
     difficulty?: DifficultyTier;
+    /** Precise IRT serve difficulty (b* + stretch, 0–1). Takes precedence over the
+     *  adaptive base; ignored if an explicit `difficulty` tier is also given. */
+    target_difficulty?: number;
     /** Primary keyword ids of the last N questions served (most-recent last). */
     recent_keyword_ids?: string[];
     /** Normalised stems of questions already seen this session. */
@@ -301,12 +310,18 @@ export async function POST(request: Request) {
   let explicitTier: DifficultyTier | null = null;
 
   if (body.difficulty) {
+    // Explicit tier override (legacy /mcat pages, quiz, difficulty buttons).
     explicitTier = body.difficulty;
     effectiveTarget = TIER_TARGET[explicitTier];
+  } else if (typeof body.target_difficulty === "number") {
+    // Precise IRT serve difficulty computed by the caller (v2 loop): serve near
+    // b* + stretch. Used verbatim; tier is derived for generation/band logic.
+    effectiveTarget = clamp(body.target_difficulty, SERVE_MIN, SERVE_MAX);
   } else {
-    // Adaptive base
-    const base = 0.2 + avgStrength * 0.6;
-    // Escalation bump: max consecutive_correct among scoped keywords
+    // Adaptive (IRT): serve at the reported mastery b* of the scoped keywords,
+    // plus a small stretch (→ ~75–80% success), with consecutive-correct
+    // escalation on top. avgStrength is the average ability θ. The benchmark cap
+    // is deferred (SERVE_MAX = no cap) until per-keyword benchmarks land.
     const scopedKws = scopedKeywordIds
       ? keywords.filter((kw) => scopedKeywordIds.has(kw.id))
       : keyword_id
@@ -316,7 +331,8 @@ export async function POST(request: Request) {
       return Math.max(mx, consecutiveCorrectMap[kw.id] ?? 0);
     }, 0);
     const escalationBump = Math.min(0.15, 0.05 * maxConsecutive);
-    effectiveTarget = clamp(base + escalationBump, 0.2, 0.9);
+    const serveBase = serveDifficulty(reportedMastery(avgStrength), SERVE_MAX, false);
+    effectiveTarget = clamp(serveBase + escalationBump, SERVE_MIN, SERVE_MAX);
   }
 
   // Derive tier from effective target (used for generation and in-band boosting)

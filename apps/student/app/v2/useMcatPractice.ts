@@ -20,7 +20,8 @@ import { supabaseBrowser } from "@/lib/supabaseBrowser";
 import { awardFlashcard, awardQuiz } from "@/lib/points";
 import { recordFlashcardSeen, recordQuizAnswer } from "@/lib/grindMeter";
 import { pickKeyword, pickContentKind, type KeywordPick } from "@/lib/courseEngine/generalPractice";
-import { tierForMastery, MASTERY_ADVANCE } from "@/lib/courseEngine/adaptive";
+import { MASTERY_ADVANCE } from "@/lib/courseEngine/adaptive";
+import { reportedMastery, serveDifficulty, SERVE_MAX } from "@/lib/courseEngine/mcatIrt";
 import {
   fetchTaxonomy,
   fetchNextQuestion,
@@ -426,11 +427,19 @@ export function useMcatPractice() {
   async function loadQuestion(kwId: string): Promise<Question> {
     const score = scoresRef.current.get(kwId) ?? 0.5;
     const recentlyBad = (recentWrongRef.current.get(kwId) ?? 0) >= 1;
+    // IRT serve difficulty: serve at b* (reported mastery) + stretch so success
+    // sits ~75–80%; eased when the student is struggling. The benchmark cap is
+    // deferred (SERVE_MAX = no cap) until per-keyword benchmarks land (step 4).
+    const targetDifficulty = serveDifficulty(
+      reportedMastery(score),
+      SERVE_MAX,
+      recentlyBad
+    );
     return fetchNextQuestion({
       sessionId: sessionIdRef.current,
       categoryId: categoryOfRef.current.get(kwId),
       keywordId: kwId,
-      difficulty: tierForMastery(score, recentlyBad),
+      targetDifficulty,
       excludeIds: excludeRef.current,
     });
   }

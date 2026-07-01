@@ -145,7 +145,9 @@ export async function fetchNextQuestion(args: {
   sessionId: string;
   categoryId?: string;
   keywordId: string;
-  difficulty: "easy" | "medium" | "hard";
+  /** Precise IRT serve difficulty (b* + stretch, 0–1). The route serves stored
+   *  questions near this and generates at this band. */
+  targetDifficulty: number;
   excludeIds?: string[];
 }): Promise<Question> {
   const res = await fetch("/api/mcat/next-question", {
@@ -155,7 +157,7 @@ export async function fetchNextQuestion(args: {
       session_id: args.sessionId,
       category_id: args.categoryId,
       keyword_id: args.keywordId,
-      difficulty: args.difficulty,
+      target_difficulty: args.targetDifficulty,
       exclude_ids: args.excludeIds?.length ? args.excludeIds : undefined,
     }),
   });
